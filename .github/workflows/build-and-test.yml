@@ -18,7 +18,7 @@ on:
 jobs:
   build_and_test-spm:
     name: Build and Test Swift Package
-    uses: CardinalKit/.github/.github/workflows/build-and-test-xcodebuild-spm.yml@feature/schemeInput
+    uses: CardinalKit/.github/.github/workflows/build-and-test-xcodebuild-spm.yml@v1
     with:
       scheme: CardinalKit
       targetname: CardinalKit
@@ -30,7 +30,7 @@ jobs:
       scheme: Example
   create-and-upload-coverage-report:
     name: Create and Upload Coverage Report
-    needs: [build_and_test-spm]
+    needs: [build_and_test-spm, build_and_test-example-app]
     uses: CardinalKit/.github/.github/workflows/create-and-upload-coverage-report.yml@v1
     with:
       coveragereports: CardinalKit.xcresult Example.xcresult
