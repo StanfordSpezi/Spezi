@@ -7,8 +7,12 @@
 //
 
 
-/// Contains a nice text to say hello
+/// Open-source framework for rapid development of modern, interoperable digital health applications.
 public struct CardinalKit {
+    /// Creates a new instance of the CardinalKit manager
+    public init() {}
+    
+    
     /// Generates a greeting from the CardinalKitCardinalKit
     /// - Parameter name: The name that should be greeted, the default value is `"CardinalKit"`
     /// - Returns: The greeting created by the CardinalKit
