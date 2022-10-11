@@ -7,8 +7,9 @@
 //
 
 
-/// Contains a nice text to say hello
+/// Open-source framework for rapid development of modern, interoperable digital health applications.
 public struct CardinalKit {
+    /// Creates a new instance of the CardinalKit manager
     public init() {}
     
     
