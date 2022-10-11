@@ -1,0 +1,32 @@
+#
+# This source file is part of the CardinalKit open-source project
+#
+# SPDX-FileCopyrightText: 2022 CardinalKit and the project authors (see CONTRIBUTORS.md)
+#
+# SPDX-License-Identifier: MIT
+#
+
+# Swift Package Manager
+*.xcodeproj
+.swiftpm
+.build/
+.xcodebuild/
+coverage.lcov
+*.xcresult
+
+# IDE related folders
+.idea
+
+# Xcode User settings
+xcuserdata/
+
+# Other files
+.DS_Store
+.env
+
+# Documentation generation
+*.doccarchive
+docs/
+
+# Example Project
+!Example/Example.xcodeproj

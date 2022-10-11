@@ -1,0 +1,31 @@
+#
+# This source file is part of the CardinalKit open-source project
+#
+# SPDX-FileCopyrightText: 2022 CardinalKit and the project authors (see CONTRIBUTORS.md)
+#
+# SPDX-License-Identifier: MIT
+#
+
+name: Build and Test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build_and_test-spm:
+    name: Build and Test Swift Package
+    uses: CardinalKit/.github/.github/workflows/build-and-test-xcodebuild-spm.yml@v1
+    with:
+      packagename: CardinalKit
+  create-and-upload-coverage-report:
+    name: Create and Upload Coverage Report
+    needs: [build_and_test-spm]
+    uses: CardinalKit/.github/.github/workflows/create-and-upload-coverage-report.yml@v1
+    with:
+      coveragereports: CardinalKit.xcresult
+    secrets:
+      token: ${{ secrets.CODECOV_TOKEN }}
