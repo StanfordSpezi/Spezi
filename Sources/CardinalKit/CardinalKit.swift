@@ -9,6 +9,9 @@
 
 /// Contains a nice text to say hello
 public struct CardinalKit {
+    public init() {}
+    
+    
     /// Generates a greeting from the CardinalKitCardinalKit
     /// - Parameter name: The name that should be greeted, the default value is `"CardinalKit"`
     /// - Returns: The greeting created by the CardinalKit
