@@ -11,7 +11,7 @@
 		2F6D139828F5F384007C25D6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6D139728F5F384007C25D6 /* ContentView.swift */; };
 		2F6D139A28F5F386007C25D6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F6D139928F5F386007C25D6 /* Assets.xcassets */; };
 		2F6D13B128F5F386007C25D6 /* ExampleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6D13B028F5F386007C25D6 /* ExampleUITests.swift */; };
-		2F6D13C428F5F3BE007C25D6 /* CardinalKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2F6D13C328F5F3BE007C25D6 /* CardinalKit */; };
+		2F6D13C728F60BAD007C25D6 /* CardinalKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2F6D13C628F60BAD007C25D6 /* CardinalKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -31,7 +31,7 @@
 		2F6D139928F5F386007C25D6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2F6D13AC28F5F386007C25D6 /* ExampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ExampleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F6D13B028F5F386007C25D6 /* ExampleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleUITests.swift; sourceTree = "<group>"; };
-		2F6D13C128F5F3A6007C25D6 /* CardinalKitSPM */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = CardinalKitSPM; path = ../..; sourceTree = "<group>"; };
+		2F6D13C528F60BA4007C25D6 /* CardinalKitSPM */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = CardinalKitSPM; path = ..; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,7 +39,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2F6D13C428F5F3BE007C25D6 /* CardinalKit in Frameworks */,
+				2F6D13C728F60BAD007C25D6 /* CardinalKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -56,7 +56,7 @@
 		2F6D138928F5F384007C25D6 = {
 			isa = PBXGroup;
 			children = (
-				2F6D13C128F5F3A6007C25D6 /* CardinalKitSPM */,
+				2F6D13C528F60BA4007C25D6 /* CardinalKitSPM */,
 				2F6D139428F5F384007C25D6 /* Example */,
 				2F6D13AF28F5F386007C25D6 /* ExampleUITests */,
 				2F6D139328F5F384007C25D6 /* Products */,
@@ -115,7 +115,7 @@
 			);
 			name = Example;
 			packageProductDependencies = (
-				2F6D13C328F5F3BE007C25D6 /* CardinalKit */,
+				2F6D13C628F60BAD007C25D6 /* CardinalKit */,
 			);
 			productName = Example;
 			productReference = 2F6D139228F5F384007C25D6 /* Example.app */;
@@ -465,7 +465,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		2F6D13C328F5F3BE007C25D6 /* CardinalKit */ = {
+		2F6D13C628F60BAD007C25D6 /* CardinalKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = CardinalKit;
 		};
