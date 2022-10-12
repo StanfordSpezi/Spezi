@@ -11,30 +11,15 @@ import SwiftUI
 
 
 struct ContentView: View {
-    let cardinalKit = CardinalKit()
-    @MainActor @State var greeting: String?
-    
-    
     var body: some View {
         VStack {
             Image(systemName: "globe")
                 .imageScale(.large)
                 .foregroundColor(.accentColor)
-            Group {
-                if let greeting = greeting {
-                    Text(greeting)
-                } else {
-                    ProgressView()
-                }
-            }
+            Text("Hello, Paul!")
                 .frame(height: 40)
         }
             .padding()
-            .onAppear {
-                Task {
-                    greeting = try await cardinalKit.greet("Paul")
-                }
-            }
     }
 }
 

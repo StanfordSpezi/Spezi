@@ -12,12 +12,7 @@ import XCTest
 
 final class CardinalKitTests: XCTestCase {
     func testExample() async throws {
-        let cardinalKit = CardinalKit()
-        
-        let firstGreeting = try await cardinalKit.greet()
-        XCTAssertEqual(firstGreeting, "Hello, CardinalKit!")
-        
-        let secondGreeting = try await cardinalKit.greet("Paul")
-        XCTAssertEqual(secondGreeting, "Hello, Paul!")
+        let cardinalKit = CardinalKit(configuration: EmptyConfiguration())
+        await cardinalKit.logger.log("Unit Test")
     }
 }
