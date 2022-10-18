@@ -54,4 +54,9 @@ public class CardinalKitAppDelegate: NSObject, UIApplicationDelegate {
         cardinalKit.willFinishLaunchingWithOptions(application, launchOptions: launchOptions ?? [:], cardinalKit: cardinalKit)
         return true
     }
+    
+    
+    public func applicationWillTerminate(_ application: UIApplication) {
+        cardinalKit.applicationWillTerminate(application, cardinalKit: cardinalKit)
+    }
 }

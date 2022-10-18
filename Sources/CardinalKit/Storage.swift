@@ -19,12 +19,14 @@ import os
 /// Key used to identify stored elements in `Storage` instances.
 protocol StorageKey {
     /// The value type associated with the `StorageKey`.
-    associatedtype Value
+    associatedtype Value = Self
 }
 
 
 /// Type erasure for `Storage.Value`
 private protocol AnyStorageValue {
+    var anyValue: Any { get }
+    
     func shutdown(logger: Logger)
 }
 
@@ -34,6 +36,11 @@ actor Storage {
     private struct Value<T>: AnyStorageValue {
         var value: T
         var onShutdown: ((T) throws -> Void)?
+        
+        
+        var anyValue: Any {
+            value
+        }
         
         
         func shutdown(logger: Logger) {
@@ -79,6 +86,24 @@ actor Storage {
         }
         return value.value
     }
+    
+    /// Get the value corresponding to a key or stores and returns a value defined by the passed in default value.
+    /// - Parameter key: The metatype used as a key in the `Storage` instance.
+    /// - Returns: The value for the `key` stored in the `Storage` instance or the value defined by the passed in default value.
+    func get<Key: StorageKey>(_ key: Key.Type, default defaultValue: @autoclosure () -> Key.Value) -> Key.Value {
+        guard let value = self.storage[ObjectIdentifier(Key.self)] as? Value<Key.Value> else {
+            set(key, to: defaultValue())
+            return get(key, default: defaultValue())
+        }
+        return value.value
+    }
+    
+    /// Get all values in the `Storage` instance that conform to a specific type.
+    /// - Parameter allThatConformTo: The type that the returned instances should conform to.
+    /// - Returns: Returns an `Array` of all types in the `Storage` instance conforming to the specified type.
+    func get<Key>(allThatConformTo: Key.Type) -> [Key] {
+        storage.values.compactMap { $0.anyValue as? Key }
+    }
 
     /// Set a value for a key in the `Storage` instance.
     /// - Parameters:
@@ -108,17 +133,6 @@ actor Storage {
     func shutdown() {
         self.storage.values.forEach {
             $0.shutdown(logger: self.logger)
-        }
-    }
-    
-    
-    /// Get or set a value for a key in the `Storage` instance.
-    subscript<Key: StorageKey>(_ key: Key.Type) -> Key.Value? {
-        get {
-            self.get(Key.self)
-        }
-        set {
-            self.set(Key.self, to: newValue)
         }
     }
 }

@@ -32,9 +32,7 @@ import SwiftUI
 ///     }
 /// }
 /// ```
-public actor CardinalKit: ObservableObject, LifecycleHandler {
-    /// A collection of ``CardinalKit/CardinalKit`` `LifecycleHandler`s.
-    var handlers: [LifecycleHandler] = []
+public class CardinalKit: ObservableObject {
     /// A typesafe storage of different elements of an ``CardinalKit/CardinalKit`` instance.
     var storage: Storage
     /// Logger used to log events in the ``CardinalKit/CardinalKit`` instance.
@@ -48,5 +46,7 @@ public actor CardinalKit: ObservableObject, LifecycleHandler {
     ) {
         self.logger = logger
         self.storage = Storage(logger: logger)
+        
+        configuration.configure(self)
     }
 }
