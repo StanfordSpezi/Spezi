@@ -9,12 +9,12 @@
 import SwiftUI
 
 
-private struct CardinalKitViewModifier: ViewModifier {
+struct CardinalKitViewModifier: ViewModifier {
     @State
-    private var cardinalKit: CardinalKit
+    var cardinalKit: CardinalKit
     
     
-    init(cardinalKit: CardinalKit) {
+    fileprivate init(cardinalKit: CardinalKit) {
         self.cardinalKit = cardinalKit
     }
     

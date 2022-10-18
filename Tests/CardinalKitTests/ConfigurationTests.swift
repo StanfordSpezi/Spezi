@@ -7,84 +7,30 @@
 //
 
 @testable import CardinalKit
+import SwiftUI
 import XCTest
 
 
 final class ConfigurationTests: XCTestCase {
-    struct TestConfiguration: Configuration, Equatable {
-        let expectation: XCTestExpectation
-        
-        
-        func configure(_ cardinalKit: CardinalKit) {
-            expectation.fulfill()
+    class TestApplicationDelegate: CardinalKitAppDelegate {
+        override var configuration: Configuration {
+            TestConfiguration(expectation: configurationExpecation)
         }
     }
     
     
-    private func configuration(
-        condition: Bool,
-        firstTestExpection: XCTestExpectation,
-        secondTestExpection: XCTestExpectation,
-        ifTestExpection: XCTestExpectation,
-        elseTestExpection: XCTestExpectation
-    ) -> Configuration {
-        @ConfigurationBuilder
-        var configuration: Configuration {
-            TestConfiguration(expectation: firstTestExpection)
-            if condition {
-                TestConfiguration(expectation: secondTestExpection)
-            }
-            if condition {
-                TestConfiguration(expectation: ifTestExpection)
-            } else {
-                TestConfiguration(expectation: elseTestExpection)
-            }
-        }
-        return configuration
-    }
+    private static let configurationExpecation: XCTestExpectation = {
+        let expectation = XCTestExpectation(description: "Configuration")
+        expectation.assertForOverFulfill = true
+        return expectation
+    }()
     
     
-    func testConfigurationBuilderIf() async {
-        let firstTestExpection = XCTestExpectation(description: "FirstTestConfiguration")
-        firstTestExpection.assertForOverFulfill = true
-        let secondTestExpection = XCTestExpectation(description: "SecondTestConfiguration")
-        secondTestExpection.assertForOverFulfill = true
-        let ifTestExpection = XCTestExpectation(description: "IfTestConfiguration")
-        ifTestExpection.assertForOverFulfill = true
-        let elseTestExpection = XCTestExpectation(description: "ElseTestConfiguration")
-        elseTestExpection.isInverted = true
-        
-        let configuration = configuration(
-            condition: true,
-            firstTestExpection: firstTestExpection,
-            secondTestExpection: secondTestExpection,
-            ifTestExpection: ifTestExpection,
-            elseTestExpection: elseTestExpection
+    func testConfigurationFlow() throws {
+        _ = try XCTUnwrap(
+            Text("CardinalKit")
+                .cardinalKit(TestApplicationDelegate()) as? ModifiedContent<Text, CardinalKitViewModifier>
         )
-        
-        _ = CardinalKit(configuration: configuration)
-        wait(for: [firstTestExpection, secondTestExpection, ifTestExpection, elseTestExpection], timeout: 0.1)
-    }
-    
-    func testConfigurationBuilderElse() async {
-        let firstTestExpection = XCTestExpectation(description: "FirstTestConfiguration")
-        firstTestExpection.assertForOverFulfill = true
-        let secondTestExpection = XCTestExpectation(description: "SecondTestConfiguration")
-        secondTestExpection.isInverted = true
-        let ifTestExpection = XCTestExpectation(description: "IfTestConfiguration")
-        ifTestExpection.isInverted = true
-        let elseTestExpection = XCTestExpectation(description: "ElseTestConfiguration")
-        elseTestExpection.assertForOverFulfill = true
-        
-        let configuration = configuration(
-            condition: false,
-            firstTestExpection: firstTestExpection,
-            secondTestExpection: secondTestExpection,
-            ifTestExpection: ifTestExpection,
-            elseTestExpection: elseTestExpection
-        )
-        
-        _ = CardinalKit(configuration: configuration)
-        wait(for: [firstTestExpection, secondTestExpection, ifTestExpection, elseTestExpection], timeout: 0.1)
+        wait(for: [ConfigurationTests.configurationExpecation], timeout: 0.1)
     }
 }
