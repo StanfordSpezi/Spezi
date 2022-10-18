@@ -6,18 +6,47 @@
 // SPDX-License-Identifier: MIT
 //
 
+import os
+import SwiftUI
+
 
 /// Open-source framework for rapid development of modern, interoperable digital health applications.
-public struct CardinalKit {
+///
+/// Set up the CardinalKit framework in your `App` instance of your SwiftUI applicaton using the ``CardinalKitAppDelegate`` and the `@UIApplicationDelegateAdaptor` property wrapper.
+/// Use the ``SwiftUI/View/.cardinalKit(_: CardinalKitAppDelegate)`` view modifier to apply your CardinalKit configuration to the main view in your SwiftUI `Scene`:
+/// ```
+/// import CardinalKit
+/// import SwiftUI
+///
+///
+/// @main
+/// struct ExampleApp: App {
+///     @UIApplicationDelegateAdaptor(CardinalKitAppDelegate.self) var appDelegate
+///
+///
+///     var body: some Scene {
+///         WindowGroup {
+///             ContentView()
+///                 .cardinalKit(appDelegate)
+///         }
+///     }
+/// }
+/// ```
+public class CardinalKit: ObservableObject {
+    /// A typesafe storage of different elements of an ``CardinalKit/CardinalKit`` instance.
+    var storage: Storage
+    /// Logger used to log events in the ``CardinalKit/CardinalKit`` instance.
+    var logger: Logger
+    
+    
     /// Creates a new instance of the CardinalKit manager
-    public init() {}
-    
-    
-    /// Generates a greeting from the CardinalKitCardinalKit
-    /// - Parameter name: The name that should be greeted, the default value is `"CardinalKit"`
-    /// - Returns: The greeting created by the CardinalKit
-    public func greet(_ name: String = "CardinalKit") async throws -> String {
-        try await Task.sleep(nanoseconds: 500_000_000) // 0.5 seconds
-        return "Hello, \(name)!"
+    init(
+        configuration: Configuration,
+        _ logger: Logger = Logger(subsystem: "edu.stanford.cardinalkit", category: "cardinalkit")
+    ) {
+        self.logger = logger
+        self.storage = Storage(logger: logger)
+        
+        configuration.configure(self)
     }
 }

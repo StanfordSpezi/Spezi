@@ -6,14 +6,19 @@
 // SPDX-License-Identifier: MIT
 //
 
+import CardinalKit
 import SwiftUI
 
 
 @main
 struct ExampleApp: App {
+    @UIApplicationDelegateAdaptor(CardinalKitAppDelegate.self) var appDelegate
+    
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .cardinalKit(appDelegate)
         }
     }
 }
