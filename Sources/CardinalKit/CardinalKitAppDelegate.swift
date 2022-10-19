@@ -32,31 +32,36 @@ import SwiftUI
 /// }
 /// ```
 public class CardinalKitAppDelegate: NSObject, UIApplicationDelegate {
-    lazy var cardinalKit: CardinalKit = {
-        CardinalKit(configuration: configuration)
-    }()
-    
-    
-    /// The configuration of the CardinalKit framework.
-    ///
-    /// Use this configuration to define your different modules used in your CardinalKit-based application.
-    @ConfigurationBuilder
-    public var configuration: Configuration {
-        EmptyConfiguration()
+    var configuration: _Configuration {
+        _Configuration(standard: AnyStandard()) {
+            EmptyConfiguration<AnyStandard>()
+        }
     }
-    
     
     public func application(
         _ application: UIApplication,
-        // swiftlint:disable:next discouraged_optional_collection
         willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
-        cardinalKit.willFinishLaunchingWithOptions(application, launchOptions: launchOptions ?? [:], cardinalKit: cardinalKit)
+        configuration.anyCardinalKit.willFinishLaunchingWithOptions(application, launchOptions: launchOptions ?? [:])
         return true
     }
     
-    
     public func applicationWillTerminate(_ application: UIApplication) {
-        cardinalKit.applicationWillTerminate(application, cardinalKit: cardinalKit)
+        configuration.anyCardinalKit.applicationWillTerminate(application)
+    }
+}
+
+struct AnyStandard: Standard {}
+
+
+struct _Configuration {
+    let anyCardinalKit: AnyCardinalKit
+    
+    
+    init<S: Standard>(
+        standard: S,
+        @ConfigurationBuilder<S> _ configuration: () -> (Configuration)
+    ) {
+        self.anyCardinalKit = CardinalKit<S>(configuration: configuration())
     }
 }

@@ -13,7 +13,7 @@ import SwiftUI
 extension Array<LifecycleHandler>: StorageKey {}
 
 
-extension CardinalKit: LifecycleHandler {
+extension AnyCardinalKit {
     /// A collection of ``CardinalKit/CardinalKit`` `LifecycleHandler`s.
     var handlers: [LifecycleHandler] {
         get async {
@@ -25,17 +25,16 @@ extension CardinalKit: LifecycleHandler {
     // MARK: LifecycleHandler Functions
     func willFinishLaunchingWithOptions(
         _ application: UIApplication,
-        launchOptions: [UIApplication.LaunchOptionsKey: Any],
-        cardinalKit: CardinalKit
+        launchOptions: [UIApplication.LaunchOptionsKey: Any]
     ) {
         Task(priority: .userInitiated) {
-            await handlers.willFinishLaunchingWithOptions(application, launchOptions: launchOptions, cardinalKit: cardinalKit)
+            await handlers.willFinishLaunchingWithOptions(application, launchOptions: launchOptions)
         }
     }
     
-    func applicationWillTerminate(_ application: UIApplication, cardinalKit: CardinalKit) {
+    func applicationWillTerminate(_ application: UIApplication) {
         Task(priority: .userInitiated) {
-            await handlers.applicationWillTerminate(application, cardinalKit: cardinalKit)
+            await handlers.applicationWillTerminate(application)
         }
     }
 }

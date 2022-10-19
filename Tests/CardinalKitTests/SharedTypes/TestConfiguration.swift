@@ -10,11 +10,13 @@ import CardinalKit
 import XCTest
 
 
-struct TestConfiguration: Configuration, Equatable {
+struct TestConfiguration: StandardBasedConfiguration, Equatable {
+    typealias ResourceRepresentation = MockStandard
+    
     let expectation: XCTestExpectation
     
     
-    func configure(_ cardinalKit: CardinalKit) {
+    func configure(_ cardinalKit: CardinalKit<ResourceRepresentation>) {
         expectation.fulfill()
     }
 }

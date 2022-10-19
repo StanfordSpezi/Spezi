@@ -14,18 +14,66 @@
 //
 
 
-/// `Configuration`s are used to setup and configure different aspects of a ``CardinalKit/CardinalKit`` instance.
 public protocol Configuration {
-    /// The `configure(_: CardinalKit)` method can be used to perform any setup on a ``CardinalKit/CardinalKit`` instance.
-    /// - Parameter cardinalKit: The configurable ``CardinalKit/CardinalKit`` instance.
-    func configure(_ cardinalKit: CardinalKit)
+    func configure(_ any: Any) -> ()
+}
+
+class ConfigurationWrapper: Configuration {
+    private let configure: (Any) -> ()
+    
+    
+    init<C: StandardBasedConfiguration>(_ configuration: C) {
+        self.configure = { any in
+            guard let cardinalKit = any as? CardinalKit<C.ResourceRepresentation> else {
+                fatalError(
+                    """
+                    Error in the internal CardinalKit structure.
+                    A `Configuration` for a `CardinalKit` instance must match its internal `Standard`
+                    """
+                )
+            }
+            configuration.configure(cardinalKit)
+        }
+    }
+    
+    func configure(_ any: Any) {
+        configure(any)
+    }
 }
 
 
-extension Array: Configuration where Element == Configuration {
-    /// Recursively class the ``Configuration/configure(_:)`` method of an `Array`.
+/// `Configuration`s are used to setup and configure different aspects of a ``CardinalKit/CardinalKit`` instance.
+public protocol StandardBasedConfiguration: Configuration {
+    associatedtype ResourceRepresentation: Standard
+    
+    
+    /// The `configure(_: CardinalKit)` method can be used to perform any setup on a ``CardinalKit/CardinalKit`` instance.
     /// - Parameter cardinalKit: The configurable ``CardinalKit/CardinalKit`` instance.
-    public func configure(_ cardinalKit: CardinalKit) {
+    func configure(_ cardinalKit: CardinalKit<ResourceRepresentation>)
+}
+
+
+extension StandardBasedConfiguration {
+    public func configure(_ any: Any) {
+        ConfigurationWrapper(self).configure(any)
+    }
+}
+
+
+extension Array: Configuration where Element: StandardBasedConfiguration {
+    public func configure(_ any: Any) {
+        for anyConfiguration in self {
+            anyConfiguration.configure(any)
+        }
+    }
+}
+
+
+extension Array: StandardBasedConfiguration where Element: StandardBasedConfiguration {
+    public typealias ResourceRepresentation = Element.ResourceRepresentation
+    
+    
+    public func configure(_ cardinalKit: CardinalKit<Element.ResourceRepresentation>) {
         for configuration in self {
             configuration.configure(cardinalKit)
         }

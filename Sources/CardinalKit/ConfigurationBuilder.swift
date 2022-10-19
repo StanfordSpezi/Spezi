@@ -16,35 +16,28 @@
 
 /// A function builder used to aggregate multiple `Configuration`s
 @resultBuilder
-enum ConfigurationBuilder {
-    /// Builder function for multiple`Configuration`s
-    /// - Parameter configurations: A variadic number of `Configuration`s.
-    /// - Returns: A collection of `Configuration`s.
-    static func buildBlock(_ configurations: Configuration...) -> [Configuration] {
-        configurations
+public enum ConfigurationBuilder<S: Standard> {
+    static func buildPartialBlock<C: StandardBasedConfiguration>(first configuration: C) -> TupleConfiguration<S> where C.ResourceRepresentation == S {
+        TupleConfiguration(configuration)
     }
-    
-    
-    /// Builder function for conditional`Configuration`s
-    /// - Parameter configurations: A conditional `Configuration`.
-    /// - Returns: Either the `Configuration` within the branch if the condition evaluates to `true` or an `EmptyConfiguration`.
-    static func buildIf(_ configuration: Configuration?) -> Configuration {
-        configuration ?? EmptyConfiguration()
+
+    static func buildPartialBlock<C: StandardBasedConfiguration>(accumulated: TupleConfiguration<S>, next: C) -> TupleConfiguration<S> where C.ResourceRepresentation == S {
+        return TupleConfiguration(accumulated, next)
     }
-    
-    
+
+
     /// A method that enables the use of if-else statements for `Configuration`s
     /// - Parameter first: The `Configuration` within the if statement
     /// - Returns: The `Configuration` within the if statement
-    static func buildEither<C: Configuration>(first: C) -> C {
-        first
+    static func buildEither<C: StandardBasedConfiguration>(first: C) -> TupleConfiguration<S> where C.ResourceRepresentation == S {
+        TupleConfiguration(first)
     }
-    
-    
+
+
     /// A method that enables the use of if-else statements for `Configuration`s
     /// - Parameter second: The `Configuration` within the if statement
     /// - Returns: The `Configuration` within the if statement
-    static func buildEither<C: Configuration>(second: C) -> C {
-        second
+    static func buildEither<C: StandardBasedConfiguration>(second: C) -> TupleConfiguration<S> where C.ResourceRepresentation == S {
+        TupleConfiguration(second)
     }
 }

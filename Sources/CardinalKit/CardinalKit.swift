@@ -32,11 +32,19 @@ import SwiftUI
 ///     }
 /// }
 /// ```
-public class CardinalKit: ObservableObject {
+protocol AnyCardinalKit {
     /// A typesafe storage of different elements of an ``CardinalKit/CardinalKit`` instance.
-    var storage: Storage
+    var storage: Storage { get }
     /// Logger used to log events in the ``CardinalKit/CardinalKit`` instance.
-    var logger: Logger
+    var logger: Logger { get }
+}
+
+
+public class CardinalKit<S: Standard>: AnyCardinalKit, ObservableObject {
+    /// A typesafe storage of different elements of an ``CardinalKit/CardinalKit`` instance.
+    let storage: Storage
+    /// Logger used to log events in the ``CardinalKit/CardinalKit`` instance.
+    let logger: Logger
     
     
     /// Creates a new instance of the CardinalKit manager

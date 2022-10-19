@@ -17,13 +17,10 @@ final class ConfigurationBuilderTests: XCTestCase {
         secondTestExpection: XCTestExpectation,
         ifTestExpection: XCTestExpectation,
         elseTestExpection: XCTestExpectation
-    ) -> Configuration {
-        @ConfigurationBuilder
-        var configuration: Configuration {
+    ) -> some Configuration {
+        @ConfigurationBuilder<MockStandard>
+        var configuration: some Configuration {
             TestConfiguration(expectation: firstTestExpection)
-            if condition {
-                TestConfiguration(expectation: secondTestExpection)
-            }
             if condition {
                 TestConfiguration(expectation: ifTestExpection)
             } else {
@@ -52,7 +49,7 @@ final class ConfigurationBuilderTests: XCTestCase {
             elseTestExpection: elseTestExpection
         )
         
-        _ = CardinalKit(configuration: configuration)
+        _ = CardinalKit<MockStandard>(configuration: configuration)
         wait(for: [firstTestExpection, secondTestExpection, ifTestExpection, elseTestExpection], timeout: 0.1)
     }
     
@@ -74,7 +71,7 @@ final class ConfigurationBuilderTests: XCTestCase {
             elseTestExpection: elseTestExpection
         )
         
-        _ = CardinalKit(configuration: configuration)
+        _ = CardinalKit<MockStandard>(configuration: configuration)
         wait(for: [firstTestExpection, secondTestExpection, ifTestExpection, elseTestExpection], timeout: 0.1)
     }
 }

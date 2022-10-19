@@ -14,13 +14,11 @@ import SwiftUI
 protocol LifecycleHandler {
     func willFinishLaunchingWithOptions(
         _ application: UIApplication,
-        launchOptions: [UIApplication.LaunchOptionsKey: Any],
-        cardinalKit: CardinalKit
+        launchOptions: [UIApplication.LaunchOptionsKey: Any]
     )
     
     func applicationWillTerminate(
-        _ application: UIApplication,
-        cardinalKit: CardinalKit
+        _ application: UIApplication
     )
 }
 
@@ -28,13 +26,11 @@ protocol LifecycleHandler {
 extension LifecycleHandler {
     func willFinishLaunchingWithOptions(
         _ application: UIApplication,
-        launchOptions: [UIApplication.LaunchOptionsKey: Any],
-        cardinalKit: CardinalKit
+        launchOptions: [UIApplication.LaunchOptionsKey: Any]
     ) { }
     
     func applicationWillTerminate(
-        _ application: UIApplication,
-        cardinalKit: CardinalKit
+        _ application: UIApplication
     ) { }
 }
 
@@ -42,20 +38,18 @@ extension LifecycleHandler {
 extension Array: LifecycleHandler where Element == LifecycleHandler {
     func willFinishLaunchingWithOptions(
         _ application: UIApplication,
-        launchOptions: [UIApplication.LaunchOptionsKey: Any],
-        cardinalKit: CardinalKit
+        launchOptions: [UIApplication.LaunchOptionsKey: Any]
     ) {
         for lifecycleHandler in self {
-            lifecycleHandler.willFinishLaunchingWithOptions(application, launchOptions: launchOptions, cardinalKit: cardinalKit)
+            lifecycleHandler.willFinishLaunchingWithOptions(application, launchOptions: launchOptions)
         }
     }
     
     func applicationWillTerminate(
-        _ application: UIApplication,
-        cardinalKit: CardinalKit
+        _ application: UIApplication
     ) {
         for lifecycleHandler in self {
-            lifecycleHandler.applicationWillTerminate(application, cardinalKit: cardinalKit)
+            lifecycleHandler.applicationWillTerminate(application)
         }
     }
 }

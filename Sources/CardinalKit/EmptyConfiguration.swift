@@ -13,8 +13,43 @@
 // SPDX-License-Identifier: MIT
 //
 
+struct TupleConfiguration<S: Standard>: StandardBasedConfiguration {
+    typealias ResourceRepresentation = S
+    
+    let first: (any StandardBasedConfiguration)?
+    let second: (any StandardBasedConfiguration)?
+    
+    
+    init<C0: StandardBasedConfiguration, C1: StandardBasedConfiguration>(
+        _ first: C0,
+        _ second: C1
+    ) where C0.ResourceRepresentation == C1.ResourceRepresentation, C0.ResourceRepresentation == S {
+        self.first = first
+        self.second = second
+    }
+    
+    init<C: StandardBasedConfiguration>(_ first: C) where C.ResourceRepresentation == S {
+        self.first = first
+        self.second = nil
+    }
+    
+    init() {
+        self.first = nil
+        self.second = nil
+    }
+    
+    
+    func configure<S: Standard>(_ cardinalKit: CardinalKit<S>) {
+        first?.configure(cardinalKit)
+        second?.configure(cardinalKit)
+    }
+}
+
 
 /// An empty ``Configuration``.
-struct EmptyConfiguration: Configuration {
-    func configure(_ cardinalKit: CardinalKit) { }
+struct EmptyConfiguration<S: Standard>: StandardBasedConfiguration {
+    typealias ResourceRepresentation = S
+    
+    
+    func configure<S: Standard>(_ cardinalKit: CardinalKit<S>) { }
 }

@@ -12,7 +12,7 @@ import SwiftUI
 
 @main
 struct ExampleApp: App {
-    @UIApplicationDelegateAdaptor(CardinalKitAppDelegate.self) var appDelegate
+    @UIApplicationDelegateAdaptor(CardinalKitAppDelegate<ExampleAppStandard>.self) var appDelegate
     
     
     var body: some Scene {
@@ -22,3 +22,6 @@ struct ExampleApp: App {
         }
     }
 }
+
+
+struct ExampleAppStandard: Standard {}
