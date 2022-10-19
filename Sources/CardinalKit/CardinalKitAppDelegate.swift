@@ -32,35 +32,38 @@ import SwiftUI
 /// }
 /// ```
 public class CardinalKitAppDelegate: NSObject, UIApplicationDelegate {
-    var configuration: _Configuration {
-        _Configuration(standard: AnyStandard()) {
-            EmptyConfiguration<AnyStandard>()
-        }
+    private struct AnyStandard: Standard {}
+    
+    
+    private(set) lazy var cardinalKit: AnyCardinalKit = configuration.anyCardinalKit
+    
+    
+    public var configuration: CardinalKitConfiguration {
+        CardinalKitConfiguration(standard: AnyStandard()) { }
     }
+    
     
     public func application(
         _ application: UIApplication,
         willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
-        configuration.anyCardinalKit.willFinishLaunchingWithOptions(application, launchOptions: launchOptions ?? [:])
+        cardinalKit.willFinishLaunchingWithOptions(application, launchOptions: launchOptions ?? [:])
         return true
     }
     
     public func applicationWillTerminate(_ application: UIApplication) {
-        configuration.anyCardinalKit.applicationWillTerminate(application)
+        cardinalKit.applicationWillTerminate(application)
     }
 }
 
-struct AnyStandard: Standard {}
 
-
-struct _Configuration {
-    let anyCardinalKit: AnyCardinalKit
+public struct CardinalKitConfiguration {
+    fileprivate let anyCardinalKit: AnyCardinalKit
     
     
-    init<S: Standard>(
+    public init<S: Standard>(
         standard: S,
-        @ConfigurationBuilder<S> _ configuration: () -> (Configuration)
+        @ConfigurationBuilder<S> _ configuration: () -> (AnyConfiguration)
     ) {
         self.anyCardinalKit = CardinalKit<S>(configuration: configuration())
     }

@@ -102,7 +102,9 @@ actor Storage {
     /// - Parameter allThatConformTo: The type that the returned instances should conform to.
     /// - Returns: Returns an `Array` of all types in the `Storage` instance conforming to the specified type.
     func get<Key>(allThatConformTo: Key.Type) -> [Key] {
-        storage.values.compactMap { $0.anyValue as? Key }
+        storage.values.compactMap {
+            $0.anyValue as? Key
+        }
     }
 
     /// Set a value for a key in the `Storage` instance.

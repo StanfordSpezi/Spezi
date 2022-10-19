@@ -49,12 +49,12 @@ public class CardinalKit<S: Standard>: AnyCardinalKit, ObservableObject {
     
     /// Creates a new instance of the CardinalKit manager
     init(
-        configuration: Configuration,
+        configuration: AnyConfiguration,
         _ logger: Logger = Logger(subsystem: "edu.stanford.cardinalkit", category: "cardinalkit")
     ) {
         self.logger = logger
         self.storage = Storage(logger: logger)
         
-        configuration.configure(self)
+        configuration.configureAny(cardinalKit: self)
     }
 }

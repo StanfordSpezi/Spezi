@@ -33,7 +33,7 @@ extension View {
     /// - Parameter delegate: The `CardinalKitAppDelegate` used in the SwiftUI `App` instance.
     /// - Returns: A SwiftUI view configured using the CardinalKit framework
     public func cardinalKit(_ delegate: CardinalKitAppDelegate) -> some View {
-        let test: ModifiedContent<Self, CardinalKitViewModifier> = modifier(CardinalKitViewModifier(delegate.configuration.anyCardinalKit))
+        let test: ModifiedContent<Self, CardinalKitViewModifier> = modifier(CardinalKitViewModifier(delegate.cardinalKit))
         #warning("TODO: Figure out a way to apply different observable objects to the modified view!")
         return test
     }

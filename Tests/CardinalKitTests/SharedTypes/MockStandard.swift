@@ -12,8 +12,3 @@ import CardinalKit
 public struct MockStandard: Standard {
     public init() {}
 }
-
-
-public struct MockStandard2: Standard {
-    public init() {}
-}

@@ -17,27 +17,31 @@
 /// A function builder used to aggregate multiple `Configuration`s
 @resultBuilder
 public enum ConfigurationBuilder<S: Standard> {
-    static func buildPartialBlock<C: StandardBasedConfiguration>(first configuration: C) -> TupleConfiguration<S> where C.ResourceRepresentation == S {
-        TupleConfiguration(configuration)
+    public static func buildFinalResult(_ component: [AnyConfiguration]) -> AnyConfiguration {
+        component
+    }
+    
+    public static func buildExpression<C: Configuration>(_ expression: C) -> [AnyConfiguration] where C.ResourceRepresentation == S {
+        [expression]
+    }
+    
+    public static func buildBlock(_ components: AnyConfiguration...) -> [AnyConfiguration] {
+        components
+    }
+    
+    static func buildOptional(_ component: [AnyConfiguration]?) -> [AnyConfiguration] {
+        component ?? []
     }
 
-    static func buildPartialBlock<C: StandardBasedConfiguration>(accumulated: TupleConfiguration<S>, next: C) -> TupleConfiguration<S> where C.ResourceRepresentation == S {
-        return TupleConfiguration(accumulated, next)
+    static func buildEither(first: [AnyConfiguration]) -> [AnyConfiguration] {
+        first
     }
-
-
-    /// A method that enables the use of if-else statements for `Configuration`s
-    /// - Parameter first: The `Configuration` within the if statement
-    /// - Returns: The `Configuration` within the if statement
-    static func buildEither<C: StandardBasedConfiguration>(first: C) -> TupleConfiguration<S> where C.ResourceRepresentation == S {
-        TupleConfiguration(first)
+    
+    static func buildEither(second: [AnyConfiguration]) -> [AnyConfiguration] {
+        second
     }
-
-
-    /// A method that enables the use of if-else statements for `Configuration`s
-    /// - Parameter second: The `Configuration` within the if statement
-    /// - Returns: The `Configuration` within the if statement
-    static func buildEither<C: StandardBasedConfiguration>(second: C) -> TupleConfiguration<S> where C.ResourceRepresentation == S {
-        TupleConfiguration(second)
+    
+    public static func buildArray(_ components: [[AnyConfiguration]]) -> [AnyConfiguration] {
+        components.flatMap { $0 }
     }
 }

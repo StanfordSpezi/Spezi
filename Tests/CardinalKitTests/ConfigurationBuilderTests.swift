@@ -14,13 +14,20 @@ final class ConfigurationBuilderTests: XCTestCase {
     private func configuration(
         condition: Bool,
         firstTestExpection: XCTestExpectation,
-        secondTestExpection: XCTestExpectation,
+        loopTestExpection: XCTestExpectation,
+        conditionalTestExpection: XCTestExpectation,
         ifTestExpection: XCTestExpectation,
         elseTestExpection: XCTestExpectation
-    ) -> some Configuration {
+    ) -> AnyConfiguration {
         @ConfigurationBuilder<MockStandard>
-        var configuration: some Configuration {
+        var configuration: AnyConfiguration {
             TestConfiguration(expectation: firstTestExpection)
+            for _ in 0..<5 {
+                TestConfiguration(expectation: loopTestExpection)
+            }
+            if condition {
+                TestConfiguration(expectation: conditionalTestExpection)
+            }
             if condition {
                 TestConfiguration(expectation: ifTestExpection)
             } else {
@@ -34,8 +41,11 @@ final class ConfigurationBuilderTests: XCTestCase {
     func testConfigurationBuilderIf() async {
         let firstTestExpection = XCTestExpectation(description: "FirstTestConfiguration")
         firstTestExpection.assertForOverFulfill = true
-        let secondTestExpection = XCTestExpectation(description: "SecondTestConfiguration")
-        secondTestExpection.assertForOverFulfill = true
+        let loopTestExpection = XCTestExpectation(description: "LoopTestConfiguration")
+        loopTestExpection.expectedFulfillmentCount = 5
+        loopTestExpection.assertForOverFulfill = true
+        let conditionalTestExpection = XCTestExpectation(description: "ConditionalTestConfiguration")
+        conditionalTestExpection.assertForOverFulfill = true
         let ifTestExpection = XCTestExpectation(description: "IfTestConfiguration")
         ifTestExpection.assertForOverFulfill = true
         let elseTestExpection = XCTestExpectation(description: "ElseTestConfiguration")
@@ -44,20 +54,24 @@ final class ConfigurationBuilderTests: XCTestCase {
         let configuration = configuration(
             condition: true,
             firstTestExpection: firstTestExpection,
-            secondTestExpection: secondTestExpection,
+            loopTestExpection: loopTestExpection,
+            conditionalTestExpection: conditionalTestExpection,
             ifTestExpection: ifTestExpection,
             elseTestExpection: elseTestExpection
         )
         
         _ = CardinalKit<MockStandard>(configuration: configuration)
-        wait(for: [firstTestExpection, secondTestExpection, ifTestExpection, elseTestExpection], timeout: 0.1)
+        wait(for: [firstTestExpection, loopTestExpection, conditionalTestExpection, ifTestExpection, elseTestExpection], timeout: 0.01)
     }
     
     func testConfigurationBuilderElse() async {
         let firstTestExpection = XCTestExpectation(description: "FirstTestConfiguration")
         firstTestExpection.assertForOverFulfill = true
-        let secondTestExpection = XCTestExpectation(description: "SecondTestConfiguration")
-        secondTestExpection.isInverted = true
+        let loopTestExpection = XCTestExpectation(description: "LoopTestConfiguration")
+        loopTestExpection.expectedFulfillmentCount = 5
+        loopTestExpection.assertForOverFulfill = true
+        let conditionalTestExpection = XCTestExpectation(description: "ConditionalTestConfiguration")
+        conditionalTestExpection.isInverted = true
         let ifTestExpection = XCTestExpectation(description: "IfTestConfiguration")
         ifTestExpection.isInverted = true
         let elseTestExpection = XCTestExpectation(description: "ElseTestConfiguration")
@@ -66,12 +80,13 @@ final class ConfigurationBuilderTests: XCTestCase {
         let configuration = configuration(
             condition: false,
             firstTestExpection: firstTestExpection,
-            secondTestExpection: secondTestExpection,
+            loopTestExpection: loopTestExpection,
+            conditionalTestExpection: conditionalTestExpection,
             ifTestExpection: ifTestExpection,
             elseTestExpection: elseTestExpection
         )
         
         _ = CardinalKit<MockStandard>(configuration: configuration)
-        wait(for: [firstTestExpection, secondTestExpection, ifTestExpection, elseTestExpection], timeout: 0.1)
+        wait(for: [firstTestExpection, loopTestExpection, conditionalTestExpection, ifTestExpection, elseTestExpection], timeout: 0.01)
     }
 }
