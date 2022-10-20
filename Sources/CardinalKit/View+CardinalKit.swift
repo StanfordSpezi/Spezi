@@ -6,24 +6,47 @@
 // SPDX-License-Identifier: MIT
 //
 
+import Dispatch
+import Foundation
 import SwiftUI
 
 
 struct CardinalKitViewModifier: ViewModifier {
+    private static var observableObjectProviders: [ObservableObjectProvider]?
+    
+    
     fileprivate init(_ anyCardinalKit: AnyCardinalKit) {
+        guard CardinalKitViewModifier.observableObjectProviders == nil else {
+            assertionFailure(
+                """
+                The `cardinalKit(_:CardinalKitAppDelegate)` modifier is used multiple times.
+                The modifier should only be used once in your application.
+                """
+            )
+            return
+        }
         
+        let semaphore = DispatchSemaphore(value: 0)
+        Task {
+            CardinalKitViewModifier.observableObjectProviders = await anyCardinalKit.observableObjectProviders
+            semaphore.signal()
+        }
+        semaphore.wait()
     }
     
     
     func body(content: Content) -> some View {
-        #warning("TODO: Do we want to inject some content here?")
-        return content
-    }
-}
-
-extension ObservableObject {
-    func register<V: View>(to view: V) -> some View {
-        view.environmentObject(self)
+        guard let observableObjectProviders = CardinalKitViewModifier.observableObjectProviders else {
+            assertionFailure(
+                """
+                The `CardinalKitViewModifier`'s `body` function was called before we could obtain the `ObservableObjectProviders`s.
+                Investigate the call order in using the view modifier.
+                """
+            )
+            return AnyView(content)
+        }
+        
+        return AnyView(content.inject(observableObjectProviders: observableObjectProviders))
     }
 }
 
@@ -33,8 +56,6 @@ extension View {
     /// - Parameter delegate: The `CardinalKitAppDelegate` used in the SwiftUI `App` instance.
     /// - Returns: A SwiftUI view configured using the CardinalKit framework
     public func cardinalKit(_ delegate: CardinalKitAppDelegate) -> some View {
-        let test: ModifiedContent<Self, CardinalKitViewModifier> = modifier(CardinalKitViewModifier(delegate.cardinalKit))
-        #warning("TODO: Figure out a way to apply different observable objects to the modified view!")
-        return test
+        modifier(CardinalKitViewModifier(delegate.cardinalKit))
     }
 }
