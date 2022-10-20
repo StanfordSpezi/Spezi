@@ -13,17 +13,13 @@ import SwiftUI
 struct ExampleAppStandard: Standard {}
 
 
-class ExampleAppComponent: Component, LifecycleHandler, ObservableObjectComponent, ObservableObject {
+// swiftlint:disable:next generic_type_name
+class ExampleAppComponent<ResourceRepresentation: Standard>: Component, LifecycleHandler, ObservableObjectComponent, ObservableObject, StorageKey {
     var greeting: String
     
     
     init(greeting: String) {
         self.greeting = greeting
-    }
-    
-    
-    func configure(cardinalKit: CardinalKit<ExampleAppStandard>) {
-        cardinalKit.logger.debug("Configuration called")
     }
 }
 

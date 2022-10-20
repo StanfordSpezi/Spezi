@@ -11,7 +11,7 @@ import SwiftUI
 
 
 struct ContentView: View {
-    @EnvironmentObject var exampleAppComponent: ExampleAppComponent
+    @EnvironmentObject var exampleAppComponent: ExampleAppComponent<ExampleAppStandard>
     
     
     var body: some View {
@@ -30,6 +30,6 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
-            .environmentObject(ExampleAppComponent(greeting: "Hello, Paul!"))
+            .environmentObject(ExampleAppComponent<ExampleAppStandard>(greeting: "Hello, Paul!"))
     }
 }

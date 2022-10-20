@@ -32,3 +32,13 @@ extension Component {
         self.configure(cardinalKit: typedCardinalKit)
     }
 }
+
+
+extension Component where Self: StorageKey {
+    typealias Value = Self
+    
+    // swiftlint:disable:next missing_docs
+    public func configure(cardinalKit: CardinalKit<ResourceRepresentation>) {
+        cardinalKit.storage.set(Self.self, to: self as? Self.Value)
+    }
+}

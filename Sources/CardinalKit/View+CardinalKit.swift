@@ -12,7 +12,6 @@ import SwiftUI
 
 
 struct CardinalKitViewModifier: ViewModifier {
-    @State
     private var observableObjectProviders: [_AnyObservableObjectComponent]
     
     
