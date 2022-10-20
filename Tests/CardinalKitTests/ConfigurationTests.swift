@@ -11,39 +11,39 @@ import SwiftUI
 import XCTest
 
 
-final class ConfigurationTests: XCTestCase {
+final class ComponentTests: XCTestCase {
     class TestApplicationDelegate: CardinalKitAppDelegate {
-        override var configuration: CardinalKitConfiguration {
-            CardinalKitConfiguration(standard: MockStandard()) {
-                TestConfiguration(expectation: configurationExpecation)
+        override var configuration: Configuration {
+            Configuration(standard: MockStandard()) {
+                TestComponent(expectation: configurationExpecation)
             }
         }
     }
     
     
     private static let configurationExpecation: XCTestExpectation = {
-        let expectation = XCTestExpectation(description: "Configuration")
+        let expectation = XCTestExpectation(description: "Component")
         expectation.assertForOverFulfill = true
         return expectation
     }()
     
     
-    func testConfigurationFlow() throws {
+    func testComponentFlow() throws {
         _ = try XCTUnwrap(
             Text("CardinalKit")
                 .cardinalKit(TestApplicationDelegate()) as? ModifiedContent<Text, CardinalKitViewModifier>
         )
-        wait(for: [ConfigurationTests.configurationExpecation], timeout: 0.1)
+        wait(for: [ComponentTests.configurationExpecation], timeout: 0.1)
     }
     
-    func testWrongConfigurationType() throws {
+    func testWrongComponentType() throws {
         struct SomeOtherStandard: Standard {}
         
         let expectation = XCTestExpectation(description: "Should not call configure method.")
         expectation.isInverted = true
         
-        let testConfiguration = TestConfiguration<SomeOtherStandard>(expectation: expectation)
-        _ = CardinalKit<MockStandard>(configuration: testConfiguration)
+        let testComponent = TestComponent<SomeOtherStandard>(expectation: expectation)
+        _ = CardinalKit<MockStandard>(configuration: testComponent)
         
         wait(for: [expectation], timeout: 0.01)
     }

@@ -38,13 +38,14 @@ public class CardinalKitAppDelegate: NSObject, UIApplicationDelegate {
     private(set) lazy var cardinalKit: AnyCardinalKit = configuration.anyCardinalKit
     
     
-    public var configuration: CardinalKitConfiguration {
-        CardinalKitConfiguration(standard: AnyStandard()) { }
+    public var configuration: Configuration {
+        Configuration(standard: AnyStandard()) { }
     }
     
     
     public func application(
         _ application: UIApplication,
+        // swiftlint:disable:next discouraged_optional_collection
         willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
         cardinalKit.willFinishLaunchingWithOptions(application, launchOptions: launchOptions ?? [:])
@@ -53,18 +54,5 @@ public class CardinalKitAppDelegate: NSObject, UIApplicationDelegate {
     
     public func applicationWillTerminate(_ application: UIApplication) {
         cardinalKit.applicationWillTerminate(application)
-    }
-}
-
-
-public struct CardinalKitConfiguration {
-    fileprivate let anyCardinalKit: AnyCardinalKit
-    
-    
-    public init<S: Standard>(
-        standard: S,
-        @ConfigurationBuilder<S> _ configuration: () -> (AnyConfiguration)
-    ) {
-        self.anyCardinalKit = CardinalKit<S>(configuration: configuration())
     }
 }

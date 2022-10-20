@@ -25,8 +25,8 @@ extension AnyCardinalKit {
 
 
 extension View {
-    func inject(observableObjectProviders: [ObservableObjectProvider]) -> some View{
-        var injectedView: AnyView = AnyView(self)
+    func inject(observableObjectProviders: [ObservableObjectProvider]) -> some View {
+        var injectedView = AnyView(self)
         for observableObjectProvider in observableObjectProviders {
             injectedView = injectedView.inject(observableObjectProvider.modifier)
         }

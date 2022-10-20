@@ -10,6 +10,9 @@ import CardinalKit
 import SwiftUI
 
 
+struct ExampleAppStandard: Standard {}
+
+
 @main
 struct ExampleApp: App {
     @UIApplicationDelegateAdaptor(CardinalKitAppDelegate.self) var appDelegate
@@ -22,6 +25,3 @@ struct ExampleApp: App {
         }
     }
 }
-
-
-struct ExampleAppStandard: Standard {}

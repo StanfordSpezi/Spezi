@@ -9,6 +9,5 @@
 import Foundation
 
 
-public protocol Standard {
-    init()
-}
+/// A ``Standard`` defines a common representation of resources using by different `CardinalKit` components.
+public protocol Standard {}

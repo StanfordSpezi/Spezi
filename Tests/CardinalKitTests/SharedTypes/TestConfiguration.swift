@@ -10,7 +10,7 @@ import CardinalKit
 import XCTest
 
 
-struct TestConfiguration<S: Standard>: Configuration, Equatable {
+struct TestComponent<S: Standard>: Component, Equatable {
     typealias ResourceRepresentation = S
     
     let expectation: XCTestExpectation

@@ -12,7 +12,7 @@ import SwiftUI
 
 
 struct CardinalKitViewModifier: ViewModifier {
-    private static var observableObjectProviders: [ObservableObjectProvider]?
+    private static var observableObjectProviders: [ObservableObjectProvider]? // swiftlint:disable:this discouraged_optional_collection
     
     
     fileprivate init(_ anyCardinalKit: AnyCardinalKit) {
@@ -37,12 +37,6 @@ struct CardinalKitViewModifier: ViewModifier {
     
     func body(content: Content) -> some View {
         guard let observableObjectProviders = CardinalKitViewModifier.observableObjectProviders else {
-            assertionFailure(
-                """
-                The `CardinalKitViewModifier`'s `body` function was called before we could obtain the `ObservableObjectProviders`s.
-                Investigate the call order in using the view modifier.
-                """
-            )
             return AnyView(content)
         }
         
