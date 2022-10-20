@@ -11,113 +11,100 @@ import XCTest
 
 
 final class ComponentBuilderTests: XCTestCase {
-    private func configuration( // swiftlint:disable:this function_parameter_count
-        loopLimit: Int,
-        condition: Bool,
-        firstTestExpection: XCTestExpectation,
-        loopTestExpection: XCTestExpectation,
-        conditionalTestExpection: XCTestExpectation,
-        availableConditionalTestExpection: XCTestExpectation,
-        ifTestExpection: XCTestExpectation,
-        elseTestExpection: XCTestExpectation
-    ) -> _AnyComponent {
+    private struct Expectations {
+        weak var xctestCase: XCTestCase?
+        var firstTestExpection = Expectations.expecation(named: "FirstTestComponent")
+        var loopTestExpection = Expectations.expecation(named: "LoopTestComponent")
+        var conditionalTestExpection = Expectations.expecation(named: "ConditionalTestComponent")
+        var availableConditionalTestExpection = Expectations.expecation(named: "AvailableConditionalTestExpection")
+        var ifTestExpection = Expectations.expecation(named: "IfTestComponent")
+        var elseTestExpection = Expectations.expecation(named: "FirstTestComponent")
+        
+        
+        init(xctestCase: XCTestCase) {
+            self.xctestCase = xctestCase
+        }
+        
+        
+        private static func expecation(named: String) -> XCTestExpectation {
+            let expecation = XCTestExpectation(description: "FirstTestComponent")
+            expecation.assertForOverFulfill = true
+            return expecation
+        }
+        
+        func wait() throws {
+            guard let xctestCase else {
+                XCTFail("Weak reference to `XCTestCase` was disassembled.")
+                return
+            }
+            
+            xctestCase.wait(
+                for: [
+                    firstTestExpection,
+                    loopTestExpection,
+                    conditionalTestExpection,
+                    availableConditionalTestExpection,
+                    ifTestExpection,
+                    elseTestExpection
+                ]
+            )
+        }
+    }
+    
+    
+    private func configuration(loopLimit: Int, condition: Bool, expecations: Expectations) -> _AnyComponent {
         @ComponentBuilder<MockStandard>
         var configuration: _AnyComponent {
-            TestComponent(expectation: firstTestExpection)
+            TestComponent(expectation: expecations.firstTestExpection)
             for _ in 0..<loopLimit {
-                TestComponent(expectation: loopTestExpection)
+                TestComponent(expectation: expecations.loopTestExpection)
             }
             if condition {
-                TestComponent(expectation: conditionalTestExpection)
+                TestComponent(expectation: expecations.conditionalTestExpection)
             }
+            // The `#available(iOS 16, *)` mark is used to test `#available` in a result builder.
+            // The availability check is not part of any part of the CardinalKit API.
             if #available(iOS 16, *) { // swiftlint:disable:this deployment_target
-                TestComponent<MockStandard>(expectation: availableConditionalTestExpection)
+                TestComponent<MockStandard>(expectation: expecations.availableConditionalTestExpection)
             }
             if condition {
-                TestComponent(expectation: ifTestExpection)
+                TestComponent(expectation: expecations.ifTestExpection)
             } else {
-                TestComponent(expectation: elseTestExpection)
+                TestComponent(expectation: expecations.elseTestExpection)
             }
         }
         return configuration
     }
     
     
-    func testComponentBuilderIf() async {
-        let firstTestExpection = XCTestExpectation(description: "FirstTestComponent")
-        firstTestExpection.assertForOverFulfill = true
-        let loopTestExpection = XCTestExpectation(description: "LoopTestComponent")
-        loopTestExpection.expectedFulfillmentCount = 5
-        loopTestExpection.assertForOverFulfill = true
-        let conditionalTestExpection = XCTestExpectation(description: "ConditionalTestComponent")
-        conditionalTestExpection.assertForOverFulfill = true
-        let availableConditionalTestExpection = XCTestExpectation(description: "AvailableConditionalTestExpection")
-        availableConditionalTestExpection.assertForOverFulfill = true
-        let ifTestExpection = XCTestExpectation(description: "IfTestComponent")
-        ifTestExpection.assertForOverFulfill = true
-        let elseTestExpection = XCTestExpectation(description: "ElseTestComponent")
-        elseTestExpection.isInverted = true
+    func testComponentBuilderIf() throws {
+        let expecations = Expectations(xctestCase: self)
+        expecations.loopTestExpection.expectedFulfillmentCount = 5
+        expecations.elseTestExpection.isInverted = true
         
         let configuration = configuration(
             loopLimit: 5,
             condition: true,
-            firstTestExpection: firstTestExpection,
-            loopTestExpection: loopTestExpection,
-            conditionalTestExpection: conditionalTestExpection,
-            availableConditionalTestExpection: availableConditionalTestExpection,
-            ifTestExpection: ifTestExpection,
-            elseTestExpection: elseTestExpection
+            expecations: expecations
         )
         
         _ = CardinalKit<MockStandard>(configuration: configuration)
-        wait(
-            for: [
-                firstTestExpection,
-                loopTestExpection,
-                conditionalTestExpection,
-                availableConditionalTestExpection,
-                ifTestExpection,
-                elseTestExpection
-            ]
-        )
+        try expecations.wait()
     }
     
-    func testComponentBuilderElse() async {
-        let firstTestExpection = XCTestExpectation(description: "FirstTestComponent")
-        firstTestExpection.assertForOverFulfill = true
-        let loopTestExpection = XCTestExpectation(description: "LoopTestComponent")
-        loopTestExpection.expectedFulfillmentCount = 5
-        loopTestExpection.assertForOverFulfill = true
-        let conditionalTestExpection = XCTestExpectation(description: "ConditionalTestComponent")
-        conditionalTestExpection.isInverted = true
-        let availableConditionalTestExpection = XCTestExpectation(description: "AvailableConditionalTestExpection")
-        availableConditionalTestExpection.assertForOverFulfill = true
-        let ifTestExpection = XCTestExpectation(description: "IfTestComponent")
-        ifTestExpection.isInverted = true
-        let elseTestExpection = XCTestExpectation(description: "ElseTestComponent")
-        elseTestExpection.assertForOverFulfill = true
+    func testComponentBuilderElse() throws {
+        let expecations = Expectations(xctestCase: self)
+        expecations.conditionalTestExpection.isInverted = true
+        expecations.loopTestExpection.expectedFulfillmentCount = 3
+        expecations.ifTestExpection.isInverted = true
         
         let configuration = configuration(
-            loopLimit: 5,
+            loopLimit: 3,
             condition: false,
-            firstTestExpection: firstTestExpection,
-            loopTestExpection: loopTestExpection,
-            conditionalTestExpection: conditionalTestExpection,
-            availableConditionalTestExpection: availableConditionalTestExpection,
-            ifTestExpection: ifTestExpection,
-            elseTestExpection: elseTestExpection
+            expecations: expecations
         )
         
         _ = CardinalKit<MockStandard>(configuration: configuration)
-        wait(
-            for: [
-                firstTestExpection,
-                loopTestExpection,
-                conditionalTestExpection,
-                availableConditionalTestExpection,
-                ifTestExpection,
-                elseTestExpection
-            ]
-        )
+        try expecations.wait()
     }
 }

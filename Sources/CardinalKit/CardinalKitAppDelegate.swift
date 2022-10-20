@@ -45,6 +45,7 @@ open class CardinalKitAppDelegate: NSObject, UIApplicationDelegate {
     
     open func application(
         _ application: UIApplication,
+        // The usage of an optional collection is impossible to avoid as the function signature is defined by the `UIApplicationDelegate`
         // swiftlint:disable:next discouraged_optional_collection
         willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {

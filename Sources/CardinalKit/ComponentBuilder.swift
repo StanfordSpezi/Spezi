@@ -10,7 +10,7 @@
 @resultBuilder
 public enum ComponentBuilder<S: Standard> {
     /// If declared, provides contextual type information for statement expressions to translate them into partial results.
-    public static func buildExpression<C: Component>(_ expression: C) -> [_AnyComponent] where C.ResourceRepresentation == S {
+    public static func buildExpression<C: Component>(_ expression: C) -> [_AnyComponent] where C.ComponentStandard == S {
         [expression]
     }
     
@@ -21,6 +21,7 @@ public enum ComponentBuilder<S: Standard> {
     
     /// Enables support for `if` statements that do not have an `else`.
     public static func buildOptional(_ component: [_AnyComponent]?) -> [_AnyComponent] { // swiftlint:disable:this discouraged_optional_collection
+        // The optional collection is a requirement defined by @resultBuilder, we can not use a non-optional collection here.
         component ?? []
     }
 
