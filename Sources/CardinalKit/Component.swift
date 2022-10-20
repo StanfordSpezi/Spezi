@@ -23,9 +23,7 @@ public protocol Component: _AnyComponent {
 
 
 extension Component {
-    /// Type-erased version of ``Component/configure(cardinalKit:)``.
-    ///
-    /// - Parameter cardinalKit: A type-erased ``CardinalKit`` instance.
+    // swiftlint:disable:next missing_docs
     public func configureAny(cardinalKit: Any) {
         guard let typedCardinalKit = cardinalKit as? CardinalKit<ResourceRepresentation> else {
             return

@@ -11,7 +11,7 @@ import SwiftUI
 import XCTest
 
 
-final class ObservableObjectTests: XCTestCase {    
+final class ObservableObjectTests: XCTestCase {
     func testObservableObjectsRetrieval() throws {
         let expectation = XCTestExpectation(description: "Component")
         expectation.assertForOverFulfill = true

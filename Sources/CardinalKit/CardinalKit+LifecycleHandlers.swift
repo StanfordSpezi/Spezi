@@ -13,9 +13,7 @@ import SwiftUI
 extension AnyCardinalKit {
     /// A collection of ``CardinalKit/CardinalKit`` `LifecycleHandler`s.
     private var lifecycleHandler: [LifecycleHandler] {
-        get {
-            storage.get(allThatConformTo: LifecycleHandler.self)
-        }
+        storage.get(allThatConformTo: LifecycleHandler.self)
     }
     
     

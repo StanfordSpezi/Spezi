@@ -9,22 +9,6 @@
 import SwiftUI
 
 
-/// A ``Component`` can conform to ``ObservableObjectComponent`` to inject an ``ObservableObject`` in the SwiftUI view hierachy.
-public protocol ObservableObjectComponent: _AnyObservableObjectComponent {
-    associatedtype InjectedObject: ObservableObject
-    
-    
-    var observableObject: InjectedObject { get }
-}
-
-
-extension ObservableObjectComponent where Self: ObservableObject {
-    public var observableObject: Self {
-        self
-    }
-}
-
-
 private struct ObservableObjectInjectionViewModifier<O: ObservableObject>: ViewModifier {
     let observableObject: O
     
@@ -35,7 +19,26 @@ private struct ObservableObjectInjectionViewModifier<O: ObservableObject>: ViewM
 }
 
 
+/// A ``Component`` can conform to ``ObservableObjectComponent`` to inject an ``ObservableObject`` in the SwiftUI view hierachy.
+public protocol ObservableObjectComponent: _AnyObservableObjectComponent {
+    associatedtype InjectedObject: ObservableObject
+    
+    
+    /// The ``ObservableObject`` instance that should be injected in the SwiftUI environment.
+    var observableObject: InjectedObject { get }
+}
+
+
+extension ObservableObjectComponent where Self: ObservableObject {
+    // swiftlint:disable:next missing_docs
+    public var observableObject: Self {
+        self
+    }
+}
+
+
 extension ObservableObjectComponent {
+    // swiftlint:disable:next missing_docs
     public var viewModifier: any ViewModifier {
         ObservableObjectInjectionViewModifier(observableObject: observableObject)
     }

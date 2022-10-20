@@ -15,15 +15,15 @@ class TestApplicationDelegate: CardinalKitAppDelegate {
     let expectation: XCTestExpectation
     
     
-    init(expectation: XCTestExpectation) {
-        self.expectation = expectation
-        super.init()
-    }
-    
-    
     override var configuration: Configuration {
         Configuration(standard: MockStandard()) {
             TestComponent(expectation: expectation)
         }
+    }
+    
+    
+    init(expectation: XCTestExpectation) {
+        self.expectation = expectation
+        super.init()
     }
 }

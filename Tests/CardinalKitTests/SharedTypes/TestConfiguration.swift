@@ -12,10 +12,10 @@ import XCTest
 
 
 struct TestComponent<S: Standard>: Component, ObservableObjectComponent, StorageKey, Equatable {
-    class TestObservableObject: ObservableObject {}
-
-    
     typealias ResourceRepresentation = S
+    
+    
+    class TestObservableObject: ObservableObject {}
     
     
     let expectation: XCTestExpectation
