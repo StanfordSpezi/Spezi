@@ -6,30 +6,31 @@
 // SPDX-License-Identifier: MIT
 //
 
+import Dispatch
+import Foundation
 import SwiftUI
 
 
 struct CardinalKitViewModifier: ViewModifier {
-    @State
-    var cardinalKit: CardinalKit
+    private var observableObjectProviders: [_AnyObservableObjectComponent]
     
     
-    fileprivate init(cardinalKit: CardinalKit) {
-        self.cardinalKit = cardinalKit
+    fileprivate init(_ anyCardinalKit: AnyCardinalKit) {
+        self.observableObjectProviders = anyCardinalKit.observableObjectProviders
     }
     
     
     func body(content: Content) -> some View {
-        content
-            .environmentObject(cardinalKit)
+        AnyView(content.inject(observableObjectProviders: observableObjectProviders))
     }
 }
+
 
 extension View {
     /// Use the `cardinalKit()` `View` modifier to configure CardinalKit for your application.
     /// - Parameter delegate: The `CardinalKitAppDelegate` used in the SwiftUI `App` instance.
     /// - Returns: A SwiftUI view configured using the CardinalKit framework
     public func cardinalKit(_ delegate: CardinalKitAppDelegate) -> some View {
-        modifier(CardinalKitViewModifier(cardinalKit: delegate.cardinalKit))
+        modifier(CardinalKitViewModifier(delegate.cardinalKit))
     }
 }

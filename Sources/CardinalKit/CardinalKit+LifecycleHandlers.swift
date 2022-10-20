@@ -10,32 +10,22 @@ import os
 import SwiftUI
 
 
-extension Array<LifecycleHandler>: StorageKey {}
-
-
-extension CardinalKit: LifecycleHandler {
+extension AnyCardinalKit {
     /// A collection of ``CardinalKit/CardinalKit`` `LifecycleHandler`s.
-    var handlers: [LifecycleHandler] {
-        get async {
-            await storage.get(allThatConformTo: LifecycleHandler.self)
-        }
+    private var lifecycleHandler: [LifecycleHandler] {
+        storage.get(allThatConformTo: LifecycleHandler.self)
     }
     
     
     // MARK: LifecycleHandler Functions
     func willFinishLaunchingWithOptions(
         _ application: UIApplication,
-        launchOptions: [UIApplication.LaunchOptionsKey: Any],
-        cardinalKit: CardinalKit
+        launchOptions: [UIApplication.LaunchOptionsKey: Any]
     ) {
-        Task(priority: .userInitiated) {
-            await handlers.willFinishLaunchingWithOptions(application, launchOptions: launchOptions, cardinalKit: cardinalKit)
-        }
+        lifecycleHandler.willFinishLaunchingWithOptions(application, launchOptions: launchOptions)
     }
     
-    func applicationWillTerminate(_ application: UIApplication, cardinalKit: CardinalKit) {
-        Task(priority: .userInitiated) {
-            await handlers.applicationWillTerminate(application, cardinalKit: cardinalKit)
-        }
+    func applicationWillTerminate(_ application: UIApplication) {
+        lifecycleHandler.applicationWillTerminate(application)
     }
 }

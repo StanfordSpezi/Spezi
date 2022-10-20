@@ -17,7 +17,7 @@ import os
 
 
 /// Key used to identify stored elements in `Storage` instances.
-protocol StorageKey {
+public protocol StorageKey {
     /// The value type associated with the `StorageKey`.
     associatedtype Value = Self
 }
@@ -32,7 +32,7 @@ private protocol AnyStorageValue {
 
 
 /// A typesafe storage of arbitrary key value information
-actor Storage {
+public class Storage {
     private struct Value<T>: AnyStorageValue {
         var value: T
         var onShutdown: ((T) throws -> Void)?
@@ -73,14 +73,14 @@ actor Storage {
     /// Check if  the `Storage` instance contains a key.
     /// - Parameter key: The metatype used as a key in the `Storage` instance.
     /// - Returns: `true` of the `Storage` instance contains a value for the `key`. `false` if there is no value present.
-    func contains<Key>(_ key: Key.Type) -> Bool {
+    public func contains<Key>(_ key: Key.Type) -> Bool {
         self.storage.keys.contains(ObjectIdentifier(Key.self))
     }
 
     /// Get the value corresponding to a key.
     /// - Parameter key: The metatype used as a key in the `Storage` instance.
     /// - Returns: The value for the `key` stored in the `Storage` instance.
-    func get<Key: StorageKey>(_ key: Key.Type) -> Key.Value? {
+    public func get<Key: StorageKey>(_ key: Key.Type) -> Key.Value? {
         guard let value = self.storage[ObjectIdentifier(Key.self)] as? Value<Key.Value> else {
             return nil
         }
@@ -90,7 +90,7 @@ actor Storage {
     /// Get the value corresponding to a key or stores and returns a value defined by the passed in default value.
     /// - Parameter key: The metatype used as a key in the `Storage` instance.
     /// - Returns: The value for the `key` stored in the `Storage` instance or the value defined by the passed in default value.
-    func get<Key: StorageKey>(_ key: Key.Type, default defaultValue: @autoclosure () -> Key.Value) -> Key.Value {
+    public func get<Key: StorageKey>(_ key: Key.Type, default defaultValue: @autoclosure () -> Key.Value) -> Key.Value {
         guard let value = self.storage[ObjectIdentifier(Key.self)] as? Value<Key.Value> else {
             set(key, to: defaultValue())
             return get(key, default: defaultValue())
@@ -101,8 +101,10 @@ actor Storage {
     /// Get all values in the `Storage` instance that conform to a specific type.
     /// - Parameter allThatConformTo: The type that the returned instances should conform to.
     /// - Returns: Returns an `Array` of all types in the `Storage` instance conforming to the specified type.
-    func get<Key>(allThatConformTo: Key.Type) -> [Key] {
-        storage.values.compactMap { $0.anyValue as? Key }
+    public func get<Key>(allThatConformTo: Key.Type) -> [Key] {
+        storage.values.compactMap {
+            $0.anyValue as? Key
+        }
     }
 
     /// Set a value for a key in the `Storage` instance.
@@ -110,7 +112,7 @@ actor Storage {
     ///   - key: he metatype used as a key in the `Storage` instance.
     ///   - value: The value that will be stored for the `key` stored in the `Storage` instance.
     ///   - onShutdown: An optional closure that is called when the `Storage` is shut down.
-    func set<Key: StorageKey>(
+    public func set<Key: StorageKey>(
         _ key: Key.Type,
         to value: Key.Value?,
         onShutdown: ((Key.Value) throws -> Void)? = nil

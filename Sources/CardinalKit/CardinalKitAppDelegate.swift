@@ -31,32 +31,28 @@ import SwiftUI
 ///     }
 /// }
 /// ```
-public class CardinalKitAppDelegate: NSObject, UIApplicationDelegate {
-    lazy var cardinalKit: CardinalKit = {
-        CardinalKit(configuration: configuration)
-    }()
+open class CardinalKitAppDelegate: NSObject, UIApplicationDelegate {
+    private struct AnyStandard: Standard {}
     
     
-    /// The configuration of the CardinalKit framework.
-    ///
-    /// Use this configuration to define your different modules used in your CardinalKit-based application.
-    @ConfigurationBuilder
-    public var configuration: Configuration {
-        EmptyConfiguration()
+    private(set) lazy var cardinalKit: AnyCardinalKit = configuration.anyCardinalKit
+    
+    
+    open var configuration: Configuration {
+        Configuration(standard: AnyStandard()) { }
     }
     
     
-    public func application(
+    open func application(
         _ application: UIApplication,
         // swiftlint:disable:next discouraged_optional_collection
         willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
-        cardinalKit.willFinishLaunchingWithOptions(application, launchOptions: launchOptions ?? [:], cardinalKit: cardinalKit)
+        cardinalKit.willFinishLaunchingWithOptions(application, launchOptions: launchOptions ?? [:])
         return true
     }
     
-    
-    public func applicationWillTerminate(_ application: UIApplication) {
-        cardinalKit.applicationWillTerminate(application, cardinalKit: cardinalKit)
+    open func applicationWillTerminate(_ application: UIApplication) {
+        cardinalKit.applicationWillTerminate(application)
     }
 }

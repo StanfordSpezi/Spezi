@@ -11,26 +11,27 @@ import SwiftUI
 import XCTest
 
 
-final class ConfigurationTests: XCTestCase {
-    class TestApplicationDelegate: CardinalKitAppDelegate {
-        override var configuration: Configuration {
-            TestConfiguration(expectation: configurationExpecation)
-        }
-    }
-    
-    
-    private static let configurationExpecation: XCTestExpectation = {
-        let expectation = XCTestExpectation(description: "Configuration")
+final class ComponentTests: XCTestCase {
+    func testComponentFlow() throws {
+        let expectation = XCTestExpectation(description: "Component")
         expectation.assertForOverFulfill = true
-        return expectation
-    }()
-    
-    
-    func testConfigurationFlow() throws {
+        
         _ = try XCTUnwrap(
             Text("CardinalKit")
-                .cardinalKit(TestApplicationDelegate()) as? ModifiedContent<Text, CardinalKitViewModifier>
+                .cardinalKit(TestApplicationDelegate(expectation: expectation)) as? ModifiedContent<Text, CardinalKitViewModifier>
         )
-        wait(for: [ConfigurationTests.configurationExpecation], timeout: 0.1)
+        wait(for: [expectation])
+    }
+    
+    func testWrongComponentType() throws {
+        struct SomeOtherStandard: Standard {}
+        
+        let expectation = XCTestExpectation(description: "Should not call configure method.")
+        expectation.isInverted = true
+        
+        let testComponent = TestComponent<SomeOtherStandard>(expectation: expectation)
+        _ = CardinalKit<MockStandard>(configuration: testComponent)
+        
+        wait(for: [expectation])
     }
 }

@@ -32,21 +32,29 @@ import SwiftUI
 ///     }
 /// }
 /// ```
-public class CardinalKit: ObservableObject {
+protocol AnyCardinalKit {
     /// A typesafe storage of different elements of an ``CardinalKit/CardinalKit`` instance.
-    var storage: Storage
+    var storage: Storage { get }
     /// Logger used to log events in the ``CardinalKit/CardinalKit`` instance.
-    var logger: Logger
+    var logger: Logger { get }
+}
+
+
+public class CardinalKit<S: Standard>: AnyCardinalKit, ObservableObject {
+    /// A typesafe storage of different elements of an ``CardinalKit/CardinalKit`` instance.
+    public let storage: Storage
+    /// Logger used to log events in the ``CardinalKit/CardinalKit`` instance.
+    public let logger: Logger
     
     
     /// Creates a new instance of the CardinalKit manager
     init(
-        configuration: Configuration,
+        configuration: _AnyComponent,
         _ logger: Logger = Logger(subsystem: "edu.stanford.cardinalkit", category: "cardinalkit")
     ) {
         self.logger = logger
         self.storage = Storage(logger: logger)
         
-        configuration.configure(self)
+        configuration.configureAny(cardinalKit: self)
     }
 }
