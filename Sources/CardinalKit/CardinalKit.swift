@@ -42,9 +42,9 @@ protocol AnyCardinalKit {
 
 public class CardinalKit<S: Standard>: AnyCardinalKit, ObservableObject {
     /// A typesafe storage of different elements of an ``CardinalKit/CardinalKit`` instance.
-    let storage: Storage
+    public let storage: Storage
     /// Logger used to log events in the ``CardinalKit/CardinalKit`` instance.
-    let logger: Logger
+    public let logger: Logger
     
     
     /// Creates a new instance of the CardinalKit manager

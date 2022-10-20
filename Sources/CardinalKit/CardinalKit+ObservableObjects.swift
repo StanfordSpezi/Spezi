@@ -9,26 +9,21 @@
 import SwiftUI
 
 
-protocol ObservableObjectProvider {
-    var modifier: any ViewModifier { get }
-}
-
-
 extension AnyCardinalKit {
     /// A collection of ``CardinalKit/CardinalKit`` `LifecycleHandler`s.
-    var observableObjectProviders: [ObservableObjectProvider] {
-        get async {
-            await storage.get(allThatConformTo: ObservableObjectProvider.self)
+    var observableObjectProviders: [_AnyObservableObjectComponent] {
+        get {
+            storage.get(allThatConformTo: _AnyObservableObjectComponent.self)
         }
     }
 }
 
 
 extension View {
-    func inject(observableObjectProviders: [ObservableObjectProvider]) -> some View {
+    func inject(observableObjectProviders: [_AnyObservableObjectComponent]) -> some View {
         var injectedView = AnyView(self)
         for observableObjectProvider in observableObjectProviders {
-            injectedView = injectedView.inject(observableObjectProvider.modifier)
+            injectedView = injectedView.inject(observableObjectProvider.viewModifier)
         }
         return injectedView
     }

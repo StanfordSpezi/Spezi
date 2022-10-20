@@ -13,8 +13,8 @@ import SwiftUI
 extension AnyCardinalKit {
     /// A collection of ``CardinalKit/CardinalKit`` `LifecycleHandler`s.
     private var lifecycleHandler: [LifecycleHandler] {
-        get async {
-            await storage.get(allThatConformTo: LifecycleHandler.self)
+        get {
+            storage.get(allThatConformTo: LifecycleHandler.self)
         }
     }
     
@@ -24,14 +24,10 @@ extension AnyCardinalKit {
         _ application: UIApplication,
         launchOptions: [UIApplication.LaunchOptionsKey: Any]
     ) {
-        Task(priority: .userInitiated) {
-            await lifecycleHandler.willFinishLaunchingWithOptions(application, launchOptions: launchOptions)
-        }
+        lifecycleHandler.willFinishLaunchingWithOptions(application, launchOptions: launchOptions)
     }
     
     func applicationWillTerminate(_ application: UIApplication) {
-        Task(priority: .userInitiated) {
-            await lifecycleHandler.applicationWillTerminate(application)
-        }
+        lifecycleHandler.applicationWillTerminate(application)
     }
 }

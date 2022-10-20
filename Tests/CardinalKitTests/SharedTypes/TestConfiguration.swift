@@ -7,16 +7,27 @@
 //
 
 import CardinalKit
+import SwiftUI
 import XCTest
 
 
-struct TestComponent<S: Standard>: Component, Equatable {
+struct TestComponent<S: Standard>: Component, ObservableObjectComponent, StorageKey, Equatable {
+    class TestObservableObject: ObservableObject {}
+
+    
     typealias ResourceRepresentation = S
+    
     
     let expectation: XCTestExpectation
     
     
+    var observableObject: TestObservableObject {
+        TestObservableObject()
+    }
+    
+    
     func configure(cardinalKit: CardinalKit<ResourceRepresentation>) {
+        cardinalKit.storage.set(TestComponent.self, to: self)
         expectation.fulfill()
     }
 }

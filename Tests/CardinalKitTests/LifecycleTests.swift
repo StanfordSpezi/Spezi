@@ -10,7 +10,7 @@
 import XCTest
 
 
-private class TestLifecycleHandler: LifecycleHandler, StorageKey {
+private class TestLifecycleHandler: Component, LifecycleHandler, StorageKey {
     let expectationWillFinishLaunchingWithOption: XCTestExpectation
     let expectationApplicationWillTerminate: XCTestExpectation
     
@@ -18,6 +18,11 @@ private class TestLifecycleHandler: LifecycleHandler, StorageKey {
     init(expectationWillFinishLaunchingWithOption: XCTestExpectation, expectationApplicationWillTerminate: XCTestExpectation) {
         self.expectationWillFinishLaunchingWithOption = expectationWillFinishLaunchingWithOption
         self.expectationApplicationWillTerminate = expectationApplicationWillTerminate
+    }
+    
+    
+    func configure(cardinalKit: CardinalKit<MockStandard>) {
+        cardinalKit.storage.set(Self.self, to: self)
     }
     
     
@@ -33,44 +38,44 @@ private class TestLifecycleHandler: LifecycleHandler, StorageKey {
     }
 }
 
-private class EmpfyLifecycleHandler: LifecycleHandler, StorageKey {}
 
+private class EmpfyLifecycleHandler: Component, LifecycleHandler, StorageKey {
+    func configure(cardinalKit: CardinalKit<MockStandard>) {
+        cardinalKit.storage.set(Self.self, to: self)
+    }
+}
 
-extension AnyCardinalKit { // swiftlint:disable:this file_types_order
-    fileprivate var testLifecycleHandler: TestLifecycleHandler? {
-        get async {
-            await storage.get(TestLifecycleHandler.self)
+private class TestLifecycleHandlerApplicationDelegate: CardinalKitAppDelegate {
+    let expectationWillFinishLaunchingWithOption: XCTestExpectation
+    let expectationApplicationWillTerminate: XCTestExpectation
+    
+    
+    override var configuration: Configuration {
+        Configuration(standard: MockStandard()) {
+            TestLifecycleHandler(
+                expectationWillFinishLaunchingWithOption: expectationWillFinishLaunchingWithOption,
+                expectationApplicationWillTerminate: expectationApplicationWillTerminate
+            )
+            EmpfyLifecycleHandler()
         }
     }
     
     
-    fileprivate func setTestLifecycleHandler(_ testLifecycleHandler: TestLifecycleHandler) async {
-        await storage.set(TestLifecycleHandler.self, to: testLifecycleHandler)
-    }
-    
-    fileprivate func setEmptyLifecycleHandler(_ emptyLifecycleHandler: EmpfyLifecycleHandler) async {
-        await storage.set(EmpfyLifecycleHandler.self, to: emptyLifecycleHandler)
+    init(expectationWillFinishLaunchingWithOption: XCTestExpectation, expectationApplicationWillTerminate: XCTestExpectation) {
+        self.expectationWillFinishLaunchingWithOption = expectationWillFinishLaunchingWithOption
+        self.expectationApplicationWillTerminate = expectationApplicationWillTerminate
     }
 }
 
 
 final class LifecycleTests: XCTestCase {
-    class TestApplicationDelegate: CardinalKitAppDelegate {}
-    
-    
     func testUIApplicationLifecycleMethods() async throws {
-        let testApplicationDelegate = await TestApplicationDelegate()
-        let cardinalKit = await testApplicationDelegate.cardinalKit
-        
         let expectationWillFinishLaunchingWithOption = XCTestExpectation(description: "WillFinishLaunchingWithOptions")
         let expectationApplicationWillTerminate = XCTestExpectation(description: "ApplicationWillTerminate")
-        let testLifecycleHandler = TestLifecycleHandler(
+        let testApplicationDelegate = await TestLifecycleHandlerApplicationDelegate(
             expectationWillFinishLaunchingWithOption: expectationWillFinishLaunchingWithOption,
             expectationApplicationWillTerminate: expectationApplicationWillTerminate
         )
-        
-        await cardinalKit.setTestLifecycleHandler(testLifecycleHandler)
-        await cardinalKit.setEmptyLifecycleHandler(EmpfyLifecycleHandler())
         
         let willFinishLaunchingWithOptions = try await testApplicationDelegate.application(
             UIApplication.shared,

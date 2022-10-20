@@ -11,12 +11,15 @@ import SwiftUI
 
 
 struct ContentView: View {
+    @EnvironmentObject var exampleAppComponent: ExampleAppComponent
+    
+    
     var body: some View {
         VStack {
             Image(systemName: "globe")
                 .imageScale(.large)
                 .foregroundColor(.accentColor)
-            Text("Hello, Paul!")
+            Text(exampleAppComponent.greeting)
                 .frame(height: 40)
         }
             .padding()
@@ -27,5 +30,6 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+            .environmentObject(ExampleAppComponent(greeting: "Hello, Paul!"))
     }
 }

@@ -31,19 +31,19 @@ import SwiftUI
 ///     }
 /// }
 /// ```
-public class CardinalKitAppDelegate: NSObject, UIApplicationDelegate {
+open class CardinalKitAppDelegate: NSObject, UIApplicationDelegate {
     private struct AnyStandard: Standard {}
     
     
     private(set) lazy var cardinalKit: AnyCardinalKit = configuration.anyCardinalKit
     
     
-    public var configuration: Configuration {
+    open var configuration: Configuration {
         Configuration(standard: AnyStandard()) { }
     }
     
     
-    public func application(
+    open func application(
         _ application: UIApplication,
         // swiftlint:disable:next discouraged_optional_collection
         willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
@@ -52,7 +52,7 @@ public class CardinalKitAppDelegate: NSObject, UIApplicationDelegate {
         return true
     }
     
-    public func applicationWillTerminate(_ application: UIApplication) {
+    open func applicationWillTerminate(_ application: UIApplication) {
         cardinalKit.applicationWillTerminate(application)
     }
 }

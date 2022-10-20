@@ -12,28 +12,15 @@ import XCTest
 
 
 final class ComponentTests: XCTestCase {
-    class TestApplicationDelegate: CardinalKitAppDelegate {
-        override var configuration: Configuration {
-            Configuration(standard: MockStandard()) {
-                TestComponent(expectation: configurationExpecation)
-            }
-        }
-    }
-    
-    
-    private static let configurationExpecation: XCTestExpectation = {
+    func testComponentFlow() throws {
         let expectation = XCTestExpectation(description: "Component")
         expectation.assertForOverFulfill = true
-        return expectation
-    }()
-    
-    
-    func testComponentFlow() throws {
+        
         _ = try XCTUnwrap(
             Text("CardinalKit")
-                .cardinalKit(TestApplicationDelegate()) as? ModifiedContent<Text, CardinalKitViewModifier>
+                .cardinalKit(TestApplicationDelegate(expectation: expectation)) as? ModifiedContent<Text, CardinalKitViewModifier>
         )
-        wait(for: [ComponentTests.configurationExpecation], timeout: 0.1)
+        wait(for: [expectation], timeout: 0.01)
     }
     
     func testWrongComponentType() throws {

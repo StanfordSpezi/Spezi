@@ -12,35 +12,17 @@ import SwiftUI
 
 
 struct CardinalKitViewModifier: ViewModifier {
-    private static var observableObjectProviders: [ObservableObjectProvider]? // swiftlint:disable:this discouraged_optional_collection
+    @State
+    private var observableObjectProviders: [_AnyObservableObjectComponent]
     
     
     fileprivate init(_ anyCardinalKit: AnyCardinalKit) {
-        guard CardinalKitViewModifier.observableObjectProviders == nil else {
-            assertionFailure(
-                """
-                The `cardinalKit(_:CardinalKitAppDelegate)` modifier is used multiple times.
-                The modifier should only be used once in your application.
-                """
-            )
-            return
-        }
-        
-        let semaphore = DispatchSemaphore(value: 0)
-        Task {
-            CardinalKitViewModifier.observableObjectProviders = await anyCardinalKit.observableObjectProviders
-            semaphore.signal()
-        }
-        semaphore.wait()
+        self.observableObjectProviders = anyCardinalKit.observableObjectProviders
     }
     
     
     func body(content: Content) -> some View {
-        guard let observableObjectProviders = CardinalKitViewModifier.observableObjectProviders else {
-            return AnyView(content)
-        }
-        
-        return AnyView(content.inject(observableObjectProviders: observableObjectProviders))
+        AnyView(content.inject(observableObjectProviders: observableObjectProviders))
     }
 }
 

@@ -5,13 +5,6 @@
 //
 // SPDX-License-Identifier: MIT
 //
-//
-// This code is based on the Apodini (https://github.com/Apodini/Apodini) project.
-//
-// SPDX-FileCopyrightText: 2019-2021 Paul Schmiedmayer and the Apodini project authors
-//
-// SPDX-License-Identifier: MIT
-//
 
 
 /// A ``Component`` defines
@@ -28,8 +21,12 @@ public protocol Component: _AnyComponent {
     func configure(cardinalKit: CardinalKit<ResourceRepresentation>)
 }
 
+
 extension Component {
-    func configureAny(cardinalKit: Any) {
+    /// Type-erased version of ``Component/configure(cardinalKit:)``.
+    ///
+    /// - Parameter cardinalKit: A type-erased ``CardinalKit`` instance.
+    public func configureAny(cardinalKit: Any) {
         guard let typedCardinalKit = cardinalKit as? CardinalKit<ResourceRepresentation> else {
             return
         }

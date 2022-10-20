@@ -17,6 +17,7 @@ final class ComponentBuilderTests: XCTestCase {
         firstTestExpection: XCTestExpectation,
         loopTestExpection: XCTestExpectation,
         conditionalTestExpection: XCTestExpectation,
+        availableConditionalTestExpection: XCTestExpectation,
         ifTestExpection: XCTestExpectation,
         elseTestExpection: XCTestExpectation
     ) -> _AnyComponent {
@@ -28,6 +29,9 @@ final class ComponentBuilderTests: XCTestCase {
             }
             if condition {
                 TestComponent(expectation: conditionalTestExpection)
+            }
+            if #available(iOS 16.0.1, *) {
+                TestComponent<MockStandard>(expectation: availableConditionalTestExpection)
             }
             if condition {
                 TestComponent(expectation: ifTestExpection)
@@ -47,6 +51,8 @@ final class ComponentBuilderTests: XCTestCase {
         loopTestExpection.assertForOverFulfill = true
         let conditionalTestExpection = XCTestExpectation(description: "ConditionalTestComponent")
         conditionalTestExpection.assertForOverFulfill = true
+        let availableConditionalTestExpection = XCTestExpectation(description: "AvailableConditionalTestExpection")
+        availableConditionalTestExpection.assertForOverFulfill = true
         let ifTestExpection = XCTestExpectation(description: "IfTestComponent")
         ifTestExpection.assertForOverFulfill = true
         let elseTestExpection = XCTestExpectation(description: "ElseTestComponent")
@@ -58,12 +64,23 @@ final class ComponentBuilderTests: XCTestCase {
             firstTestExpection: firstTestExpection,
             loopTestExpection: loopTestExpection,
             conditionalTestExpection: conditionalTestExpection,
+            availableConditionalTestExpection: availableConditionalTestExpection,
             ifTestExpection: ifTestExpection,
             elseTestExpection: elseTestExpection
         )
         
         _ = CardinalKit<MockStandard>(configuration: configuration)
-        wait(for: [firstTestExpection, loopTestExpection, conditionalTestExpection, ifTestExpection, elseTestExpection], timeout: 0.01)
+        wait(
+            for: [
+                firstTestExpection,
+                loopTestExpection,
+                conditionalTestExpection,
+                availableConditionalTestExpection,
+                ifTestExpection,
+                elseTestExpection
+            ],
+            timeout: 0.01
+        )
     }
     
     func testComponentBuilderElse() async {
@@ -74,6 +91,8 @@ final class ComponentBuilderTests: XCTestCase {
         loopTestExpection.assertForOverFulfill = true
         let conditionalTestExpection = XCTestExpectation(description: "ConditionalTestComponent")
         conditionalTestExpection.isInverted = true
+        let availableConditionalTestExpection = XCTestExpectation(description: "AvailableConditionalTestExpection")
+        availableConditionalTestExpection.assertForOverFulfill = true
         let ifTestExpection = XCTestExpectation(description: "IfTestComponent")
         ifTestExpection.isInverted = true
         let elseTestExpection = XCTestExpectation(description: "ElseTestComponent")
@@ -85,11 +104,22 @@ final class ComponentBuilderTests: XCTestCase {
             firstTestExpection: firstTestExpection,
             loopTestExpection: loopTestExpection,
             conditionalTestExpection: conditionalTestExpection,
+            availableConditionalTestExpection: availableConditionalTestExpection,
             ifTestExpection: ifTestExpection,
             elseTestExpection: elseTestExpection
         )
         
         _ = CardinalKit<MockStandard>(configuration: configuration)
-        wait(for: [firstTestExpection, loopTestExpection, conditionalTestExpection, ifTestExpection, elseTestExpection], timeout: 0.01)
+        wait(
+            for: [
+                firstTestExpection,
+                loopTestExpection,
+                conditionalTestExpection,
+                availableConditionalTestExpection,
+                ifTestExpection,
+                elseTestExpection
+            ],
+            timeout: 0.01
+        )
     }
 }

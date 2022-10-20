@@ -11,7 +11,7 @@ import SwiftUI
 
 
 /// Delegate methods related to the  ``UIApplication`` and ``CardinalKit/CardinalKit`` lifecycle
-protocol LifecycleHandler {
+public protocol LifecycleHandler {
     func willFinishLaunchingWithOptions(
         _ application: UIApplication,
         launchOptions: [UIApplication.LaunchOptionsKey: Any]
@@ -24,19 +24,19 @@ protocol LifecycleHandler {
 
 
 extension LifecycleHandler {
-    func willFinishLaunchingWithOptions(
+    public func willFinishLaunchingWithOptions(
         _ application: UIApplication,
         launchOptions: [UIApplication.LaunchOptionsKey: Any]
     ) { }
     
-    func applicationWillTerminate(
+    public func applicationWillTerminate(
         _ application: UIApplication
     ) { }
 }
 
 
 extension Array: LifecycleHandler where Element == LifecycleHandler {
-    func willFinishLaunchingWithOptions(
+    public func willFinishLaunchingWithOptions(
         _ application: UIApplication,
         launchOptions: [UIApplication.LaunchOptionsKey: Any]
     ) {
@@ -45,7 +45,7 @@ extension Array: LifecycleHandler where Element == LifecycleHandler {
         }
     }
     
-    func applicationWillTerminate(
+    public func applicationWillTerminate(
         _ application: UIApplication
     ) {
         for lifecycleHandler in self {
