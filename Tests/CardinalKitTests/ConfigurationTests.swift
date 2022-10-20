@@ -20,7 +20,7 @@ final class ComponentTests: XCTestCase {
             Text("CardinalKit")
                 .cardinalKit(TestApplicationDelegate(expectation: expectation)) as? ModifiedContent<Text, CardinalKitViewModifier>
         )
-        wait(for: [expectation], timeout: 0.01)
+        wait(for: [expectation])
     }
     
     func testWrongComponentType() throws {
@@ -32,6 +32,6 @@ final class ComponentTests: XCTestCase {
         let testComponent = TestComponent<SomeOtherStandard>(expectation: expectation)
         _ = CardinalKit<MockStandard>(configuration: testComponent)
         
-        wait(for: [expectation], timeout: 0.01)
+        wait(for: [expectation])
     }
 }

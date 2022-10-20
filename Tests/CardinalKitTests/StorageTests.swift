@@ -168,7 +168,7 @@ final class StorageTests: XCTestCase {
         storage.shutdown()
         storage.clear()
         
-        wait(for: [structShutdownExpectation, classShutdownExpectation], timeout: 0.1)
+        wait(for: [structShutdownExpectation, classShutdownExpectation])
         
         let newerContentOfStorageTestStorageStruct = storage.get(TestStorageStruct.self)
         XCTAssertNil(newerContentOfStorageTestStorageStruct)

@@ -78,8 +78,7 @@ final class ComponentBuilderTests: XCTestCase {
                 availableConditionalTestExpection,
                 ifTestExpection,
                 elseTestExpection
-            ],
-            timeout: 0.01
+            ]
         )
     }
     
@@ -118,8 +117,7 @@ final class ComponentBuilderTests: XCTestCase {
                 availableConditionalTestExpection,
                 ifTestExpection,
                 elseTestExpection
-            ],
-            timeout: 0.01
+            ]
         )
     }
 }

@@ -83,10 +83,10 @@ final class LifecycleTests: XCTestCase {
         )
         XCTAssertTrue(willFinishLaunchingWithOptions)
         
-        wait(for: [expectationWillFinishLaunchingWithOption], timeout: 0.1)
+        wait(for: [expectationWillFinishLaunchingWithOption])
         
         await testApplicationDelegate.applicationWillTerminate(UIApplication.shared)
         
-        wait(for: [expectationApplicationWillTerminate], timeout: 0.1)
+        wait(for: [expectationApplicationWillTerminate])
     }
 }
