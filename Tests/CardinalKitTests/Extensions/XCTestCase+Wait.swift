@@ -11,6 +11,6 @@ import XCTest
 
 extension XCTestCase {
     func wait(for testExpectations: [XCTestExpectation]) {
-        wait(for: testExpectations, timeout: 0.05)
+        wait(for: testExpectations, timeout: 0.01)
     }
 }

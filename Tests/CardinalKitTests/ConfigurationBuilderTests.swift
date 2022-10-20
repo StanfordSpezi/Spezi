@@ -30,7 +30,7 @@ final class ComponentBuilderTests: XCTestCase {
             if condition {
                 TestComponent(expectation: conditionalTestExpection)
             }
-            if #available(iOS 16.0.1, *) {
+            if #available(iOS 16, *) { // swiftlint:disable:this deployment_target
                 TestComponent<MockStandard>(expectation: availableConditionalTestExpection)
             }
             if condition {
