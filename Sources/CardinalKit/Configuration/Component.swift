@@ -6,12 +6,10 @@
 // SPDX-License-Identifier: MIT
 //
 
-
 /// A ``Component`` defines
 public protocol Component: _AnyComponent {
     /// A ``Component/ComponentStandard`` defines what ``Standard`` the component supports.
     associatedtype ComponentStandard: Standard
-    
     
     /// The ``Component/configure(cardinalKit:)`` method is called on the initialization of the CardinalKit instance to perform a lightweight configuration of the component.
     ///
