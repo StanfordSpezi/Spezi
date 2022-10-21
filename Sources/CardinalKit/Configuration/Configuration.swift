@@ -18,8 +18,8 @@ public struct Configuration {
     ///   - components: The ``Component``s used in the CardinalKit project. You can define the ``Component``s using the ``ComponentBuilder`` result builder.
     public init<S: Standard>(
         standard: S,
-        @ComponentBuilder<S> _ components: () -> (_AnyComponent)
+        @ComponentBuilder<S> _ components: () -> ([_AnyComponent])
     ) {
-        self.anyCardinalKit = CardinalKit<S>(configuration: components())
+        self.anyCardinalKit = CardinalKit<S>(components: components())
     }
 }

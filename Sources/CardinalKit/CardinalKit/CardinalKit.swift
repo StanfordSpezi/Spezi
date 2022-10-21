@@ -10,6 +10,15 @@ import os
 import SwiftUI
 
 
+/// Type-erased version of a ``CardinalKit`` instance used internally in CardinalKit.
+protocol AnyCardinalKit {
+    /// A typesafe storage of different elements of an ``CardinalKit/CardinalKit`` instance.
+    var storage: Storage { get }
+    /// Logger used to log events in the ``CardinalKit/CardinalKit`` instance.
+    var logger: Logger { get }
+}
+
+
 /// Open-source framework for rapid development of modern, interoperable digital health applications.
 ///
 /// Set up the CardinalKit framework in your `App` instance of your SwiftUI applicaton using the ``CardinalKitAppDelegate`` and the `@UIApplicationDelegateAdaptor` property wrapper.
@@ -32,14 +41,6 @@ import SwiftUI
 ///     }
 /// }
 /// ```
-protocol AnyCardinalKit {
-    /// A typesafe storage of different elements of an ``CardinalKit/CardinalKit`` instance.
-    var storage: Storage { get }
-    /// Logger used to log events in the ``CardinalKit/CardinalKit`` instance.
-    var logger: Logger { get }
-}
-
-
 public class CardinalKit<S: Standard>: AnyCardinalKit, ObservableObject {
     /// A typesafe storage of different elements of an ``CardinalKit/CardinalKit`` instance.
     public let storage: Storage
@@ -49,12 +50,13 @@ public class CardinalKit<S: Standard>: AnyCardinalKit, ObservableObject {
     
     /// Creates a new instance of the CardinalKit manager
     init(
-        configuration: _AnyComponent,
+        components: [_AnyComponent],
         _ logger: Logger = Logger(subsystem: "edu.stanford.cardinalkit", category: "cardinalkit")
     ) {
         self.logger = logger
         self.storage = Storage(logger: logger)
         
-        configuration.configureAny(cardinalKit: self)
+        let sortedComponents = DependencyManager(components).sortedComponents
+        sortedComponents.configureAny(cardinalKit: self)
     }
 }

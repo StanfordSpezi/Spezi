@@ -15,8 +15,8 @@ public enum ComponentBuilder<S: Standard> {
     }
     
     /// Required by every result builder to build combined results from statement blocks.
-    public static func buildBlock(_ components: _AnyComponent...) -> [_AnyComponent] {
-        components
+    public static func buildBlock(_ components: [_AnyComponent]...) -> [_AnyComponent] {
+        components.flatMap { $0 }
     }
     
     /// Enables support for `if` statements that do not have an `else`.
@@ -46,7 +46,7 @@ public enum ComponentBuilder<S: Standard> {
     }
     
     /// If declared, this will be called on the partial result from the outermost block statement to produce the final returned result.
-    public static func buildFinalResult(_ component: [_AnyComponent]) -> _AnyComponent {
+    public static func buildFinalResult(_ component: [_AnyComponent]) -> [_AnyComponent] {
         component
     }
 }

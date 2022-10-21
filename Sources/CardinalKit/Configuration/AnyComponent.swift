@@ -19,8 +19,8 @@ public protocol _AnyComponent {
 }
 
 
-extension Array: _AnyComponent where Element == _AnyComponent {
-    public func configureAny(cardinalKit: Any) {
+extension Array where Element == _AnyComponent {
+    func configureAny(cardinalKit: Any) {
         forEach {
             $0.configureAny(cardinalKit: cardinalKit)
         }

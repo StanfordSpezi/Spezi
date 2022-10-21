@@ -52,9 +52,9 @@ final class ComponentBuilderTests: XCTestCase {
     }
     
     
-    private func configuration(loopLimit: Int, condition: Bool, expecations: Expectations) -> _AnyComponent {
+    private func components(loopLimit: Int, condition: Bool, expecations: Expectations) -> [_AnyComponent] {
         @ComponentBuilder<MockStandard>
-        var configuration: _AnyComponent {
+        var components: [_AnyComponent] {
             TestComponent(expectation: expecations.firstTestExpection)
             for _ in 0..<loopLimit {
                 TestComponent(expectation: expecations.loopTestExpection)
@@ -73,7 +73,7 @@ final class ComponentBuilderTests: XCTestCase {
                 TestComponent(expectation: expecations.elseTestExpection)
             }
         }
-        return configuration
+        return components
     }
     
     
@@ -82,13 +82,13 @@ final class ComponentBuilderTests: XCTestCase {
         expecations.loopTestExpection.expectedFulfillmentCount = 5
         expecations.elseTestExpection.isInverted = true
         
-        let configuration = configuration(
+        let components = components(
             loopLimit: 5,
             condition: true,
             expecations: expecations
         )
         
-        _ = CardinalKit<MockStandard>(configuration: configuration)
+        _ = CardinalKit<MockStandard>(components: components)
         try expecations.wait()
     }
     
@@ -98,13 +98,13 @@ final class ComponentBuilderTests: XCTestCase {
         expecations.loopTestExpection.expectedFulfillmentCount = 3
         expecations.ifTestExpection.isInverted = true
         
-        let configuration = configuration(
+        let components = components(
             loopLimit: 3,
             condition: false,
             expecations: expecations
         )
         
-        _ = CardinalKit<MockStandard>(configuration: configuration)
+        _ = CardinalKit<MockStandard>(components: components)
         try expecations.wait()
     }
 }
