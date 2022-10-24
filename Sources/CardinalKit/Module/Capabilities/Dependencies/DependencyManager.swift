@@ -21,29 +21,84 @@ public class DependencyManager {
         sortedComponents = components.filter { !($0 is DependingComponent) }
         dependingComponents = components.compactMap { $0 as? (DependingComponent & _AnyComponent) }
         
-        // `passedAllRequirements` then calls the dependency resolution mechanism on the next element in the `dependingComponents`.
-        dependingComponents.first?.dependencyResolution(self)
+        // Start the dependency resolution on the first component.
+        if let nextComponent = dependingComponents.first {
+            push(nextComponent)
+        }
     }
     
     
-    func require<T: Component>(_ type: T.Type, defaultValue: @autoclosure () -> (T)) {
-        #warning(
-            """
-            TODO:
-            1. Ensure that all components dependend are found in the sortedComponents type.
-            2. If not, search the dependingComponents for the component.
-                - If present, push it on the recursiveSearch stack and start the resolution for this component.
-                - If a circle is detected abort
-                - Once finished, pop the element from the recursiveSearch stack.
-            3. If no component is found, use the default value.
-            """
-        )
+    /// <#Description#>
+    /// - Parameters:
+    ///   - dependencyType: <#dependencyType description#>
+    ///   - defaultValue: <#defaultValue description#>
+    public func require<T: Component>(_ dependencyType: T.Type, defaultValue: @autoclosure () -> (T)) {
+        // 1. Return if thedepending component is found in the `sortedComponents` collection.
+        if sortedComponents.contains(where: { type(of: $0) is T }) {
+            return
+        }
+        
+        // 2. Search for the required component is fonud in the `dependingComponents` collection.
+        // If not, use the default value calling the `defaultValue` autoclosure.
+        guard let foundInDependingComponents = dependingComponents.first(where: { type(of: $0) is T }) else {
+            sortedComponents.append(defaultValue())
+            return
+        }
+        
+        // Detect circles in the `recursiveSearch` collection.
+        guard !recursiveSearch.contains(where: { type(of: $0) is T }) else {
+            let dependencyChain = recursiveSearch.map({ String(describing: type(of: $0)) }).joined(separator: ", ")
+            guard let lastDependency = recursiveSearch.last else {
+                preconditionFailure(
+                    """
+                    The `DependencyManager` has detected a depenency cycle of your CardinalKit components.
+                    There is not last element in the `recursiveSearch` property.
+                    
+                    Note this precondition should never be triggered as we have entered the guard due to a `contains(where: Element)` statement that returned a result.
+                    It is here to trigger future failures in case this method gets refactored and to fail with a clear statement.
+                    """
+                )
+            }
+            preconditionFailure(
+                """
+                The `DependencyManager` has detected a depenency cycle of your CardinalKit components.
+                The current dependency chain is: \(dependencyChain). The \(String(describing: type(of: lastDependency))) required a type already present in the dependency chain.
+                
+                Please ensure that the components you use or develop can not trigger a dependency cycle.
+                """
+            )
+        }
+        
+        // If there is no cycle, resolved the dependencies of the component found in the `dependingComponents`.
+        push(foundInDependingComponents)
     }
     
-    func passedAllRequirements(_ dependingComponent: DependingComponent) {
+    /// <#Description#>
+    /// - Parameter dependingComponent: <#dependingComponent description#>
+    public func passedAllRequirements(_ dependingComponent: DependingComponent) {
+        guard !recursiveSearch.isEmpty else {
+            preconditionFailure(
+                """
+                A component's `dependencyResolution(_:DependencyManager)` function must only be called by a `DependencyManager`.
+                The `passedAllRequirements` must only be called on the `DependencyManager` passed into the `dependencyResolution(_:DependencyManager)` function.
+                """
+            )
+        }
+        let component = recursiveSearch.removeLast()
+        
+        guard component === dependingComponent else {
+            preconditionFailure(
+                """
+                A component's `dependencyResolution(_:DependencyManager)` function must only be called by a `DependencyManager`.
+                The `passedAllRequirements` must only be called on the `DependencyManager` passed into the `dependencyResolution(_:DependencyManager)` function.
+                """
+            )
+        }
+        
+        
         let dependingComponentsCount = dependingComponents.count
         dependingComponents.removeAll(where: { $0 === dependingComponent })
-        assert(
+        precondition(
             dependingComponentsCount - 1 == dependingComponents.count,
             """
             Only call `passedAllRequirements` in the `dependencyResolution(_: DependencyManager)` function of your `DependingComponent`.
@@ -51,20 +106,25 @@ public class DependencyManager {
         )
         
         guard let dependingComponent = dependingComponent as? _AnyComponent else {
-            assertionFailure(
+            preconditionFailure(
                 """
                 A `DependingComponent` must also conform to `Component`.
                 Please ensure that \(String(describing: type(of: dependingComponent))) conforms to `Component`.
                 """
             )
-            return
         }
         
         sortedComponents.append(dependingComponent)
         
         // Call the dependency resolution mechanism on the next element in the `dependingComponents` if we are not in a recursive serach.
-        if recursiveSearch.isEmpty {
-            dependingComponents.first?.dependencyResolution(self)
+        if recursiveSearch.isEmpty, let nextComponent = dependingComponents.first {
+            push(nextComponent)
         }
+    }
+    
+    
+    private func push(_ component: DependingComponent & _AnyComponent) {
+        recursiveSearch.append(component)
+        component.dependencyResolution(self)
     }
 }

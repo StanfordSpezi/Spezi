@@ -44,6 +44,7 @@ class CredentialsStorage<ComponentStandard: Standard>: Module {
         self.synchronizable = synchronizable
     }
     
+    #warning("Add methods to store, update, delete, and get keys for encrypting local data.")
     
     func store(credentials: Credentials, server: String? = nil) throws {
         // This method uses code provided by the Apple Developer documentation at
