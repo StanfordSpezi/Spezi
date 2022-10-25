@@ -47,14 +47,18 @@ public class DependencyManager {
         
         // Detect circles in the `recursiveSearch` collection.
         guard !recursiveSearch.contains(where: { type(of: $0) is T }) else {
-            let dependencyChain = recursiveSearch.map({ String(describing: type(of: $0)) }).joined(separator: ", ")
+            let dependencyChain = recursiveSearch
+                .map { String(describing: type(of: $0)) }
+                .joined(separator: ", ")
+            
             guard let lastDependency = recursiveSearch.last else {
                 preconditionFailure(
                     """
                     The `DependencyManager` has detected a depenency cycle of your CardinalKit components.
                     There is not last element in the `recursiveSearch` property.
                     
-                    Note this precondition should never be triggered as we have entered the guard due to a `contains(where: Element)` statement that returned a result.
+                    Note this precondition should never be triggered as we have entered the guard due to a
+                    `contains(where: Element)` statement that returned a result.
                     It is here to trigger future failures in case this method gets refactored and to fail with a clear statement.
                     """
                 )
@@ -80,7 +84,8 @@ public class DependencyManager {
             preconditionFailure(
                 """
                 A component's `dependencyResolution(_:DependencyManager)` function must only be called by a `DependencyManager`.
-                The `passedAllRequirements` must only be called on the `DependencyManager` passed into the `dependencyResolution(_:DependencyManager)` function.
+                The `passedAllRequirements` must only be called on the `DependencyManager` passed into
+                the `dependencyResolution(_:DependencyManager)` function.
                 """
             )
         }
@@ -90,7 +95,8 @@ public class DependencyManager {
             preconditionFailure(
                 """
                 A component's `dependencyResolution(_:DependencyManager)` function must only be called by a `DependencyManager`.
-                The `passedAllRequirements` must only be called on the `DependencyManager` passed into the `dependencyResolution(_:DependencyManager)` function.
+                The `passedAllRequirements` must only be called on the `DependencyManager` passed into
+                the `dependencyResolution(_:DependencyManager)` function.
                 """
             )
         }
