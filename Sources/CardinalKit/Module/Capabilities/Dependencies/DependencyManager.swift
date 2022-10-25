@@ -34,20 +34,17 @@ public class DependencyManager {
     ///   - defaultValue: <#defaultValue description#>
     func require<T: Component>(_ dependencyType: T.Type, defaultValue: @autoclosure () -> (T)) {
         // 1. Return if thedepending component is found in the `sortedComponents` collection.
-        if sortedComponents.contains(where: { type(of: $0) is T }) {
+        if sortedComponents.contains(where: { type(of: $0) == T.self }) {
             return
         }
         
         // 2. Search for the required component is fonud in the `dependingComponents` collection.
         // If not, use the default value calling the `defaultValue` autoclosure.
-        guard let foundInDependingComponents = dependingComponents.first(where: { type(of: $0) is T }) else {
+        guard let foundInDependingComponents = dependingComponents.first(where: { type(of: $0) == T.self }) else {
             let newComponent = defaultValue()
             
-            defer {
-                sortedComponents.append(newComponent)
-            }
-            
             guard let newDependingComponent = newComponent as? (any DependingComponent & _AnyComponent) else {
+                sortedComponents.append(newComponent)
                 return
             }
             
@@ -58,7 +55,7 @@ public class DependencyManager {
         }
         
         // Detect circles in the `recursiveSearch` collection.
-        guard !recursiveSearch.contains(where: { type(of: $0) is T }) else {
+        guard !recursiveSearch.contains(where: { type(of: $0) == T.self }) else {
             let dependencyChain = recursiveSearch
                 .map { String(describing: type(of: $0)) }
                 .joined(separator: ", ")
@@ -122,15 +119,6 @@ public class DependencyManager {
             Only call `passedAllRequirements` in the `dependencyResolution(_: DependencyManager)` function of your `DependingComponent`.
             """
         )
-        
-        guard let dependingComponent = dependingComponent as? _AnyComponent else {
-            preconditionFailure(
-                """
-                A `DependingComponent` must also conform to `Component`.
-                Please ensure that \(String(describing: type(of: dependingComponent))) conforms to `Component`.
-                """
-            )
-        }
         
         sortedComponents.append(dependingComponent)
         

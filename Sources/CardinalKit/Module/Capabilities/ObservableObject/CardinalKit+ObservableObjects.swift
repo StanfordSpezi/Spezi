@@ -12,7 +12,7 @@ import SwiftUI
 extension AnyCardinalKit {
     /// A collection of ``CardinalKit/CardinalKit`` `LifecycleHandler`s.
     var observableObjectProviders: [_AnyObservableObjectComponent] {
-        storage.get(allThatConformTo: _AnyObservableObjectComponent.self)
+        typedCollection.get(allThatConformTo: _AnyObservableObjectComponent.self)
     }
 }
 
