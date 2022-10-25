@@ -9,18 +9,14 @@
 import Foundation
 
 
+#warning("TODO: Make DependingComponent's passing a computed property with a result builder!")
 /// <#Description#>
-public protocol DependingComponent: AnyObject {
-    /// <#Description#>
-    /// - Parameter dependencyManager: <#dependencyManager description#>
-    func dependencyResolution(_ dependencyManager: DependencyManager)
+public protocol DependingComponent: Component, AnyObject {
+    @DependencyBuilder<ComponentStandard>
+    var dependencies: [any Dependency] { get }
 }
 
 
 extension DependingComponent {
-    // A documentation for this methodd exists in the `DependingComponent` type which SwiftLint doesn't recognize.
-    // swiftlint:disable:next missing_docs
-    public func dependencyResolution(_ dependencyManager: DependencyManager) {
-        dependencyManager.passedAllRequirements(self)
-    }
+    var dependencies: [any Dependency] { [] }
 }

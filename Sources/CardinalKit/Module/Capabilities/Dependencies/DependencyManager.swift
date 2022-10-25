@@ -12,14 +12,14 @@ public class DependencyManager {
     /// <#Description#>
     var sortedComponents: [_AnyComponent]
     /// <#Description#>
-    private var dependingComponents: [DependingComponent & _AnyComponent]
+    private var dependingComponents: [any DependingComponent & _AnyComponent]
     /// <#Description#>
-    private var recursiveSearch: [DependingComponent & _AnyComponent] = []
+    private var recursiveSearch: [any DependingComponent & _AnyComponent] = []
     
     
     init(_ components: [_AnyComponent]) {
-        sortedComponents = components.filter { !($0 is DependingComponent) }
-        dependingComponents = components.compactMap { $0 as? (DependingComponent & _AnyComponent) }
+        sortedComponents = components.filter { !($0 is (any DependingComponent)) }
+        dependingComponents = components.compactMap { $0 as? (any DependingComponent & _AnyComponent) }
         
         // Start the dependency resolution on the first component.
         if let nextComponent = dependingComponents.first {
@@ -32,7 +32,7 @@ public class DependencyManager {
     /// - Parameters:
     ///   - dependencyType: <#dependencyType description#>
     ///   - defaultValue: <#defaultValue description#>
-    public func require<T: Component>(_ dependencyType: T.Type, defaultValue: @autoclosure () -> (T)) {
+    func require<T: Component>(_ dependencyType: T.Type, defaultValue: @autoclosure () -> (T)) {
         // 1. Return if thedepending component is found in the `sortedComponents` collection.
         if sortedComponents.contains(where: { type(of: $0) is T }) {
             return
@@ -41,7 +41,19 @@ public class DependencyManager {
         // 2. Search for the required component is fonud in the `dependingComponents` collection.
         // If not, use the default value calling the `defaultValue` autoclosure.
         guard let foundInDependingComponents = dependingComponents.first(where: { type(of: $0) is T }) else {
-            sortedComponents.append(defaultValue())
+            let newComponent = defaultValue()
+            
+            defer {
+                sortedComponents.append(newComponent)
+            }
+            
+            guard let newDependingComponent = newComponent as? (any DependingComponent & _AnyComponent) else {
+                return
+            }
+            
+            dependingComponents.insert(newDependingComponent, at: 0)
+            push(newDependingComponent)
+            
             return
         }
         
@@ -79,7 +91,7 @@ public class DependencyManager {
     
     /// <#Description#>
     /// - Parameter dependingComponent: <#dependingComponent description#>
-    public func passedAllRequirements(_ dependingComponent: DependingComponent) {
+    private func resolvedAllDependencies(_ dependingComponent: any DependingComponent) {
         guard !recursiveSearch.isEmpty else {
             preconditionFailure(
                 """
@@ -129,8 +141,11 @@ public class DependencyManager {
     }
     
     
-    private func push(_ component: DependingComponent & _AnyComponent) {
+    private func push(_ component: any DependingComponent & _AnyComponent) {
         recursiveSearch.append(component)
-        component.dependencyResolution(self)
+        for dependency in component.dependencies {
+            dependency.visit(dependencyManager: self)
+        }
+        resolvedAllDependencies(component)
     }
 }
