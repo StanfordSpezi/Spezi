@@ -18,5 +18,7 @@ public protocol DependingComponent: Component, AnyObject {
 
 
 extension DependingComponent {
-    var dependencies: [any Dependency] { [] }
+    // A documentation for this methodd exists in the `DependingComponent` type which SwiftLint doesn't recognize.
+    // swiftlint:disable:next missing_docs
+    public var dependencies: [any Dependency] { [] }
 }
