@@ -10,17 +10,18 @@
 @resultBuilder
 public enum ComponentBuilder<S: Standard> {
     /// If declared, provides contextual type information for statement expressions to translate them into partial results.
-    public static func buildExpression<C: Component>(_ expression: C) -> [_AnyComponent] where C.ResourceRepresentation == S {
+    public static func buildExpression<C: Component>(_ expression: C) -> [_AnyComponent] where C.ComponentStandard == S {
         [expression]
     }
     
     /// Required by every result builder to build combined results from statement blocks.
-    public static func buildBlock(_ components: _AnyComponent...) -> [_AnyComponent] {
-        components
+    public static func buildBlock(_ components: [_AnyComponent]...) -> [_AnyComponent] {
+        components.flatMap { $0 }
     }
     
     /// Enables support for `if` statements that do not have an `else`.
     public static func buildOptional(_ component: [_AnyComponent]?) -> [_AnyComponent] { // swiftlint:disable:this discouraged_optional_collection
+        // The optional collection is a requirement defined by @resultBuilder, we can not use a non-optional collection here.
         component ?? []
     }
 
@@ -45,7 +46,7 @@ public enum ComponentBuilder<S: Standard> {
     }
     
     /// If declared, this will be called on the partial result from the outermost block statement to produce the final returned result.
-    public static func buildFinalResult(_ component: [_AnyComponent]) -> _AnyComponent {
+    public static func buildFinalResult(_ component: [_AnyComponent]) -> [_AnyComponent] {
         component
     }
 }

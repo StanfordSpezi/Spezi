@@ -30,6 +30,7 @@ public protocol ObservableObjectComponent: _AnyObservableObjectComponent {
 
 
 extension ObservableObjectComponent where Self: ObservableObject {
+    // A documentation for this methodd exists in the `_AnyObservableObjectComponent` type which SwiftLint doesn't recognize.
     // swiftlint:disable:next missing_docs
     public var observableObject: Self {
         self
@@ -38,6 +39,7 @@ extension ObservableObjectComponent where Self: ObservableObject {
 
 
 extension ObservableObjectComponent {
+    // A documentation for this methodd exists in the `ObservableObjectComponent` type which SwiftLint doesn't recognize.
     // swiftlint:disable:next missing_docs
     public var viewModifier: any ViewModifier {
         ObservableObjectInjectionViewModifier(observableObject: observableObject)

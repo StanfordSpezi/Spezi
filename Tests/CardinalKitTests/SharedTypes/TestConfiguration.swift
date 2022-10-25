@@ -12,7 +12,7 @@ import XCTest
 
 
 struct TestComponent<S: Standard>: Component, ObservableObjectComponent, StorageKey, Equatable {
-    typealias ResourceRepresentation = S
+    typealias ComponentStandard = S
     
     
     class TestObservableObject: ObservableObject {}
@@ -26,7 +26,7 @@ struct TestComponent<S: Standard>: Component, ObservableObjectComponent, Storage
     }
     
     
-    func configure(cardinalKit: CardinalKit<ResourceRepresentation>) {
+    func configure(cardinalKit: CardinalKit<ComponentStandard>) {
         cardinalKit.storage.set(TestComponent.self, to: self)
         expectation.fulfill()
     }

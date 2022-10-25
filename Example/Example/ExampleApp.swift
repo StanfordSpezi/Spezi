@@ -13,8 +13,7 @@ import SwiftUI
 struct ExampleAppStandard: Standard {}
 
 
-// swiftlint:disable:next generic_type_name
-class ExampleAppComponent<ResourceRepresentation: Standard>: Component, LifecycleHandler, ObservableObjectComponent, ObservableObject, StorageKey {
+class ExampleAppComponent<ComponentStandard: Standard>: Module {
     var greeting: String
     
     

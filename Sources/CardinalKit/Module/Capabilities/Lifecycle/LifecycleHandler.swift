@@ -35,12 +35,14 @@ public protocol LifecycleHandler {
 
 
 extension LifecycleHandler {
+    // A documentation for this methodd exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
     // swiftlint:disable:next missing_docs
     public func willFinishLaunchingWithOptions(
         _ application: UIApplication,
         launchOptions: [UIApplication.LaunchOptionsKey: Any]
     ) { }
     
+    // A documentation for this methodd exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
     // swiftlint:disable:next missing_docs
     public func applicationWillTerminate(
         _ application: UIApplication
