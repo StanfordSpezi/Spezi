@@ -38,7 +38,7 @@ public class DependencyManager {
             return
         }
         
-        // 2. Search for the required component is fonud in the `dependingComponents` collection.
+        // 2. Search for the required component is found in the `dependingComponents` collection.
         // If not, use the default value calling the `defaultValue` autoclosure.
         guard let foundInDependingComponents = dependingComponents.first(where: { type(of: $0) == T.self }) else {
             let newComponent = defaultValue()
@@ -60,26 +60,19 @@ public class DependencyManager {
                 .map { String(describing: type(of: $0)) }
                 .joined(separator: ", ")
             
-            guard let lastDependency = recursiveSearch.last else {
-                preconditionFailure(
-                    """
-                    The `DependencyManager` has detected a depenency cycle of your CardinalKit components.
-                    There is not last element in the `recursiveSearch` property.
-                    
-                    Note this precondition should never be triggered as we have entered the guard due to a
-                    `contains(where: Element)` statement that returned a result.
-                    It is here to trigger future failures in case this method gets refactored and to fail with a clear statement.
-                    """
-                )
-            }
-            preconditionFailure(
+            // The last element must exist as we entered the statement using a successful `contains` statement.
+            // There is not chance to recover here: If there is a crash here, we would fail in the precondition statement in the next line anyways
+            let lastElement = recursiveSearch.last! // swiftlint:disable:this force_unwrapping
+            precondition(
+                false, // Nescessary to call our version of the `precondition` function to use this in unit testing.
                 """
                 The `DependencyManager` has detected a depenency cycle of your CardinalKit components.
-                The current dependency chain is: \(dependencyChain). The \(String(describing: type(of: lastDependency))) required a type already present in the dependency chain.
+                The current dependency chain is: \(dependencyChain). The \(String(describing: type(of: lastElement))) required a type already present in the dependency chain.
                 
                 Please ensure that the components you use or develop can not trigger a dependency cycle.
                 """
             )
+            return
         }
         
         // If there is no cycle, resolved the dependencies of the component found in the `dependingComponents`.
@@ -90,24 +83,14 @@ public class DependencyManager {
     /// - Parameter dependingComponent: <#dependingComponent description#>
     private func resolvedAllDependencies(_ dependingComponent: any DependingComponent) {
         guard !recursiveSearch.isEmpty else {
-            preconditionFailure(
-                """
-                A component's `dependencyResolution(_:DependencyManager)` function must only be called by a `DependencyManager`.
-                The `passedAllRequirements` must only be called on the `DependencyManager` passed into
-                the `dependencyResolution(_:DependencyManager)` function.
-                """
-            )
+            precondition(false, "Internal logic error in the `DependencyManager`")
+            return
         }
         let component = recursiveSearch.removeLast()
         
         guard component === dependingComponent else {
-            preconditionFailure(
-                """
-                A component's `dependencyResolution(_:DependencyManager)` function must only be called by a `DependencyManager`.
-                The `passedAllRequirements` must only be called on the `DependencyManager` passed into
-                the `dependencyResolution(_:DependencyManager)` function.
-                """
-            )
+            precondition(false, "Internal logic error in the `DependencyManager`")
+            return
         }
         
         

@@ -10,6 +10,7 @@
 import SwiftUI
 import XCTest
 
+
 private struct TestStandard: Standard {}
 
 private class TestComponent1<ComponentStandard: Standard>: DependingComponent {
@@ -39,9 +40,22 @@ private class TestComponent5<ComponentStandard: Standard>: DependingComponent {}
 
 private class TestComponent6<ComponentStandard: Standard>: Component {}
 
-private class TestComponentCircle<ComponentStandard: Standard>: Component, DependingComponent {
+private class TestComponent7<ComponentStandard: Standard>: DependingComponent {
     var dependencies: [any Dependency] {
-        Depends(on: TestComponent1<ComponentStandard>.self, defaultValue: TestComponent1())
+        Depends(on: TestComponent1<ComponentStandard>.self, defaultValue: TestComponent1<ComponentStandard>())
+    }
+}
+
+
+private class TestComponentCircle1<ComponentStandard: Standard>: Component, DependingComponent {
+    var dependencies: [any Dependency] {
+        Depends(on: TestComponentCircle2<ComponentStandard>.self, defaultValue: TestComponentCircle2())
+    }
+}
+
+private class TestComponentCircle2<ComponentStandard: Standard>: Component, DependingComponent {
+    var dependencies: [any Dependency] {
+        Depends(on: TestComponentCircle1<ComponentStandard>.self, defaultValue: TestComponentCircle1())
     }
 }
 
@@ -57,11 +71,13 @@ final class DependencyTests: XCTestCase {
         let components: [_AnyComponent] = [
             TestComponent6<MockStandard>(),
             TestComponent1<MockStandard>(),
-            TestComponent1<TestStandard>()
+            TestComponent7<MockStandard>(),
+            TestComponent1<TestStandard>(),
+            TestComponent7<TestStandard>()
         ]
         let sortedComponents = DependencyManager(components).sortedComponents
         
-        XCTAssertEqual(sortedComponents.count, 11)
+        XCTAssertEqual(sortedComponents.count, 13)
         
         XCTAssertTrue(type(of: sortedComponents[0]) == TestComponent6<MockStandard>.self)
         XCTAssertTrue(type(of: sortedComponents[1]) == TestComponent5<MockStandard>.self)
@@ -69,18 +85,19 @@ final class DependencyTests: XCTestCase {
         XCTAssertTrue(type(of: sortedComponents[3]) == TestComponent3<MockStandard>.self)
         XCTAssertTrue(type(of: sortedComponents[4]) == TestComponent2<MockStandard>.self)
         XCTAssertTrue(type(of: sortedComponents[5]) == TestComponent1<MockStandard>.self)
-        XCTAssertTrue(type(of: sortedComponents[6]) == TestComponent5<TestStandard>.self)
-        XCTAssertTrue(type(of: sortedComponents[7]) == TestComponent4<TestStandard>.self)
-        XCTAssertTrue(type(of: sortedComponents[8]) == TestComponent3<TestStandard>.self)
-        XCTAssertTrue(type(of: sortedComponents[9]) == TestComponent2<TestStandard>.self)
-        XCTAssertTrue(type(of: sortedComponents[10]) == TestComponent1<TestStandard>.self)
+        XCTAssertTrue(type(of: sortedComponents[6]) == TestComponent7<MockStandard>.self)
+        XCTAssertTrue(type(of: sortedComponents[7]) == TestComponent5<TestStandard>.self)
+        XCTAssertTrue(type(of: sortedComponents[8]) == TestComponent4<TestStandard>.self)
+        XCTAssertTrue(type(of: sortedComponents[9]) == TestComponent3<TestStandard>.self)
+        XCTAssertTrue(type(of: sortedComponents[10]) == TestComponent2<TestStandard>.self)
+        XCTAssertTrue(type(of: sortedComponents[11]) == TestComponent1<TestStandard>.self)
+        XCTAssertTrue(type(of: sortedComponents[12]) == TestComponent7<TestStandard>.self)
     }
     
-    func testComponentDependencyMultipleTimes() throws {
+    func testAlreadyInDependableComponents() throws {
         let components: [_AnyComponent] = [
-            TestComponent4<MockStandard>(),
-            TestComponent4<MockStandard>(),
-            TestComponent4<MockStandard>()
+            TestComponent2<MockStandard>(),
+            TestComponent5<MockStandard>()
         ]
         let sortedComponents = DependencyManager(components).sortedComponents
         
@@ -88,8 +105,23 @@ final class DependencyTests: XCTestCase {
         
         XCTAssertTrue(type(of: sortedComponents[0]) == TestComponent5<MockStandard>.self)
         XCTAssertTrue(type(of: sortedComponents[1]) == TestComponent4<MockStandard>.self)
+        XCTAssertTrue(type(of: sortedComponents[2]) == TestComponent3<MockStandard>.self)
+        XCTAssertTrue(type(of: sortedComponents[3]) == TestComponent2<MockStandard>.self)
+    }
+    
+    func testComponentDependencyMultipleTimes() throws {
+        let components: [_AnyComponent] = [
+            TestComponent5<MockStandard>(),
+            TestComponent4<MockStandard>(),
+            TestComponent4<MockStandard>()
+        ]
+        let sortedComponents = DependencyManager(components).sortedComponents
+        
+        XCTAssertEqual(sortedComponents.count, 3)
+        
+        XCTAssertTrue(type(of: sortedComponents[0]) == TestComponent5<MockStandard>.self)
+        XCTAssertTrue(type(of: sortedComponents[1]) == TestComponent4<MockStandard>.self)
         XCTAssertTrue(type(of: sortedComponents[2]) == TestComponent4<MockStandard>.self)
-        XCTAssertTrue(type(of: sortedComponents[3]) == TestComponent4<MockStandard>.self)
     }
     
     func testComponentDependencyChainMultipleTimes() throws {
@@ -132,5 +164,28 @@ final class DependencyTests: XCTestCase {
         XCTAssertTrue(type(of: sortedComponents[0]) == TestComponent5<MockStandard>.self)
         XCTAssertTrue(type(of: sortedComponents[1]) == TestComponent5<MockStandard>.self)
         XCTAssertTrue(type(of: sortedComponents[2]) == TestComponent5<MockStandard>.self)
+    }
+    
+    func testComponentCycle() throws {
+        let expectation = XCTestExpectation(description: "Precondition is called")
+        expectation.expectedFulfillmentCount = 3
+        expectation.assertForOverFulfill = true
+        
+        CardinalKitAssert.injected = CardinalKitAssert(
+            precondition: { condition, message, _, _  in
+                print("Precondition: \(condition()): \"\(message())\"")
+                expectation.fulfill()
+            }
+        )
+        
+        let components: [_AnyComponent] = [
+            TestComponentCircle1<MockStandard>()
+        ]
+        
+        _ = DependencyManager(components).sortedComponents
+        
+        wait(for: [expectation])
+        
+        CardinalKitAssert.reset()
     }
 }
