@@ -15,7 +15,7 @@ public class TestApplicationDelegate: CardinalKitAppDelegate {
     let expectation: XCTestExpectation
     
     
-    public override var configuration: Configuration {
+    override public var configuration: Configuration {
         Configuration(standard: MockStandard()) {
             TestComponent(expectation: expectation)
         }
