@@ -9,5 +9,5 @@
 import SwiftUI
 
 
-/// A ``Module`` is a larger ``Component`` that is a ``LifecycleHandler``, persisted in the ``CardinalKit`` instance's ``CardinalKit/CardinalKit/storage`` (using a conformance to ``StorageKey``), injected in the SwiftUI view hierachy (``ObservableObjectComponent`` & ``ObservableObject``), and defined ``Component`` dependencies using ``DependingComponent``.
-public typealias Module = Component & LifecycleHandler & ObservableObjectComponent & ObservableObject & StorageKey & DependingComponent
+/// A ``Module`` is a larger ``Component`` that is a ``LifecycleHandler``, persisted in the ``CardinalKit`` instance's ``CardinalKit/CardinalKit/typedCollection`` (using a conformance to ``TypedCollectionKey``), injected in the SwiftUI view hierachy (``ObservableObjectComponent`` & ``ObservableObject``), and defined ``Component`` dependencies using ``DependingComponent``.
+public typealias Module = Component & LifecycleHandler & ObservableObjectComponent & ObservableObject & TypedCollectionKey & DependingComponent

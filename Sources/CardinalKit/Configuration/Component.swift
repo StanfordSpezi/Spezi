@@ -7,7 +7,7 @@
 //
 
 /// A ``Component`` defines
-public protocol Component: _AnyComponent {
+public protocol Component: _AnyComponent, TypedCollectionKey {
     /// A ``Component/ComponentStandard`` defines what ``Standard`` the component supports.
     associatedtype ComponentStandard: Standard
     
@@ -33,13 +33,10 @@ extension Component {
 }
 
 
-extension Component where Self: StorageKey {
-    typealias Value = Self
-    
-    
+extension Component {
     // A documentation for this methodd exists in the `Component` type which SwiftLint doesn't recognize.
     // swiftlint:disable:next missing_docs
     public func configure(cardinalKit: CardinalKit<ComponentStandard>) {
-        cardinalKit.storage.set(Self.self, to: self as? Self.Value)
+        cardinalKit.typedCollection.set(Self.self, to: self as? Self.Value)
     }
 }

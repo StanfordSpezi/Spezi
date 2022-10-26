@@ -12,8 +12,8 @@ import SwiftUI
 
 /// Type-erased version of a ``CardinalKit`` instance used internally in CardinalKit.
 protocol AnyCardinalKit {
-    /// A typesafe storage of different elements of an ``CardinalKit/CardinalKit`` instance.
-    var storage: Storage { get }
+    /// A typesafe typedCollection of different elements of an ``CardinalKit/CardinalKit`` instance.
+    var typedCollection: TypedCollection { get }
     /// Logger used to log events in the ``CardinalKit/CardinalKit`` instance.
     var logger: Logger { get }
 }
@@ -42,8 +42,8 @@ protocol AnyCardinalKit {
 /// }
 /// ```
 public class CardinalKit<S: Standard>: AnyCardinalKit, ObservableObject {
-    /// A typesafe storage of different elements of an ``CardinalKit/CardinalKit`` instance.
-    public let storage: Storage
+    /// A typesafe typedCollection of different elements of an ``CardinalKit/CardinalKit`` instance.
+    public let typedCollection: TypedCollection
     /// Logger used to log events in the ``CardinalKit/CardinalKit`` instance.
     public let logger: Logger
     
@@ -54,9 +54,9 @@ public class CardinalKit<S: Standard>: AnyCardinalKit, ObservableObject {
         _ logger: Logger = Logger(subsystem: "edu.stanford.cardinalkit", category: "cardinalkit")
     ) {
         self.logger = logger
-        self.storage = Storage(logger: logger)
+        self.typedCollection = TypedCollection(logger: logger)
         
-        let sortedComponents = DependencyManager(components).sortedComponents
+        let sortedComponents = _DependencyManager(components).sortedComponents
         sortedComponents.configureAny(cardinalKit: self)
     }
 }

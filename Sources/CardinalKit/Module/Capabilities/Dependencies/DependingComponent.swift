@@ -9,18 +9,24 @@
 import Foundation
 
 
-/// <#Description#>
-public protocol DependingComponent: AnyObject {
-    /// <#Description#>
-    /// - Parameter dependencyManager: <#dependencyManager description#>
-    func dependencyResolution(_ dependencyManager: DependencyManager)
+/// A ``DependingComponent`` can define the dependencies to other ``Component``s using the ``DependingComponent/dependencies-67sug`` computed property.
+///
+/// A ``DependingComponent`` can define the dependencies using the ``Depends`` type:
+/// ```
+/// private class ExampleComponent<ComponentStandard: Standard>: DependingComponent {
+///    var dependencies: [any Dependency] {
+///         Depends(on: ExampleComponentDependency<ComponentStandard>.self, defaultValue: ExampleComponentDependency())
+///     }
+/// }
+/// ```
+public protocol DependingComponent: Component, AnyObject {
+    @DependencyBuilder<ComponentStandard>
+    var dependencies: [any Dependency] { get }
 }
 
 
 extension DependingComponent {
     // A documentation for this methodd exists in the `DependingComponent` type which SwiftLint doesn't recognize.
     // swiftlint:disable:next missing_docs
-    public func dependencyResolution(_ dependencyManager: DependencyManager) {
-        dependencyManager.passedAllRequirements(self)
-    }
+    public var dependencies: [any Dependency] { [] }
 }
