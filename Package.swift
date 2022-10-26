@@ -31,7 +31,10 @@ let package = Package(
             ]
         ),
         .target(
-            name: "XCTCardinalKit"
+            name: "XCTCardinalKit",
+            dependencies: [
+                .target(name: "CardinalKit")
+            ]
         ),
         .testTarget(
             name: "CardinalKitTests",
