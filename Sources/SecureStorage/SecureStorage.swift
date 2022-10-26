@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
+import CardinalKit
 import CryptoKit
 import Foundation
 import LocalAuthentication
