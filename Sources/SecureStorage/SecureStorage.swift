@@ -16,34 +16,12 @@ import Security
 /// The ``SecureStorage`` serves as a resuable ``Module`` that can be used to store store small chunks of data such as credentials and keys.
 ///
 /// The storing of credentials and keys follows the Keychain documentation provided by Apple: https://developer.apple.com/documentation/security/keychain_services/keychain_items/using_the_keychain_to_manage_user_secrets.
-class SecureStorage<ComponentStandard: Standard>: Module {
-    struct Credentials {
-        var username: String
-        var password: String
-    }
-    
-    enum SecureStorageError: Error {
-        case createFailed(CFError? = nil)
-        case notFound
-        /// If you try to use an access group to which your app doesn’t belong, the operation fails and returns the `doesNotBelongToAccessGroup` error.
-        ///
-        /// Please refer to https://developer.apple.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps
-        /// for more information about KeyChain access groups.
-        /// Remove the  ``CredentialsStorage`` `accessGroup` configuration value if you do not intend to use KeyChain access groups.
-        case doesNotBelongToAccessGroup
-        case unexpectedCredentialsData
-        case keychainError(status: OSStatus)
-    }
-    
-    
+public class SecureStorage<ComponentStandard: Standard>: Module {
     private let accessGroup: String?
     private let synchronizable: Bool
     
     
-    init(
-        accessGroup: String? = nil,
-        synchronizable: Bool = false
-    ) {
+    public init(accessGroup: String? = nil, synchronizable: Bool = false) {
         self.accessGroup = accessGroup
         self.synchronizable = synchronizable
     }
@@ -51,7 +29,7 @@ class SecureStorage<ComponentStandard: Standard>: Module {
     
     // MARK: Key Handling
     
-    func createKey(_ tag: String, userPresence: Bool = false) throws -> SecKey {
+    public func createKey(_ tag: String, userPresence: Bool = false) throws -> SecKey {
         // The key generation code follows
         // https://developer.apple.com/documentation/security/certificate_key_and_trust_services/keys/protecting_keys_with_the_secure_enclave
         // and
@@ -87,8 +65,8 @@ class SecureStorage<ComponentStandard: Standard>: Module {
         
         // Check that the device has a Secure Enclave
         if SecureEnclave.isAvailable {
-          // Generate private key in Secure Enclave
-          attributes[kSecAttrTokenID as String] = kSecAttrTokenIDSecureEnclave
+            // Generate private key in Secure Enclave
+            attributes[kSecAttrTokenID as String] = kSecAttrTokenIDSecureEnclave
         }
         
         var error: Unmanaged<CFError>?
@@ -100,7 +78,7 @@ class SecureStorage<ComponentStandard: Standard>: Module {
         return publicKey
     }
     
-    func retrievePublicKey(forTag tag: String) throws -> SecKey {
+    public func retrievePublicKey(forTag tag: String) throws -> SecKey {
         // This method follows
         // https://developer.apple.com/documentation/security/certificate_key_and_trust_services/keys/storing_keys_in_the_keychain
         // for guidance.
@@ -120,7 +98,7 @@ class SecureStorage<ComponentStandard: Standard>: Module {
         return publicKey
     }
     
-    func deleteKeys(forTag tag: String) throws {
+    public func deleteKeys(forTag tag: String) throws {
         try execute(SecItemDelete(keyQuery(forTag: tag) as CFDictionary))
     }
     
@@ -136,7 +114,7 @@ class SecureStorage<ComponentStandard: Standard>: Module {
     
     // MARK: Credentials Handling
     
-    func store(credentials: Credentials, server: String? = nil) throws {
+    public func store(credentials: Credentials, server: String? = nil) throws {
         // This method uses code provided by the Apple Developer documentation at
         // https://developer.apple.com/documentation/security/keychain_services/keychain_items/adding_a_password_to_the_keychain.
         
@@ -147,13 +125,13 @@ class SecureStorage<ComponentStandard: Standard>: Module {
         try execute(SecItemAdd(query as CFDictionary, nil))
     }
     
-    func deleteCredentials(_ username: String?, server: String?) throws {
+    public func deleteCredentials(_ username: String?, server: String?) throws {
         let query = queryFor(username, server: server)
         
         try execute(SecItemDelete(query as CFDictionary))
     }
     
-    func updateCredentials( // swiftlint:disable:this function_default_parameter_at_end
+    public func updateCredentials( // swiftlint:disable:this function_default_parameter_at_end
         // The server parameter belongs to the `username` and therefore should be located next to the `username`.
         _ username: String,
         server: String? = nil,
@@ -171,7 +149,7 @@ class SecureStorage<ComponentStandard: Standard>: Module {
         try execute(SecItemUpdate(query as CFDictionary, updateQuery as CFDictionary))
     }
     
-    func retrieveCredentials(_ username: String?, server: String?) throws -> Credentials? {
+    public func retrieveCredentials(_ username: String?, server: String?) throws -> Credentials? {
         // This method uses code provided by the Apple Developer documentation at
         // https://developer.apple.com/documentation/security/keychain_services/keychain_items/searching_for_keychain_items
         
@@ -181,7 +159,13 @@ class SecureStorage<ComponentStandard: Standard>: Module {
         query[kSecReturnData as String] = true
         
         var item: CFTypeRef?
-        try execute(SecItemCopyMatching(query as CFDictionary, &item))
+        do {
+            try execute(SecItemCopyMatching(query as CFDictionary, &item))
+        } catch SecureStorageError.notFound {
+            return nil
+        } catch {
+            throw error
+        }
         
         guard let existingItem = item as? [String: Any],
               let passwordData = existingItem[kSecValueData as String] as? Data,
@@ -201,7 +185,7 @@ class SecureStorage<ComponentStandard: Standard>: Module {
             throw SecureStorageError.notFound
         }
         guard status != errSecMissingEntitlement else {
-            throw SecureStorageError.doesNotBelongToAccessGroup
+            throw SecureStorageError.missingEntitlement
         }
         guard status == errSecSuccess else {
             throw SecureStorageError.keychainError(status: status)

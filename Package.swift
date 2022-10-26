@@ -42,13 +42,6 @@ let package = Package(
                 .target(name: "CardinalKit"),
                 .target(name: "XCTCardinalKit")
             ]
-        ),
-        .testTarget(
-            name: "SecureStorageTests",
-            dependencies: [
-                .target(name: "SecureStorage"),
-                .target(name: "XCTCardinalKit")
-            ]
         )
     ]
 )

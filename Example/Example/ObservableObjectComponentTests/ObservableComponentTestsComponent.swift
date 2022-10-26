@@ -6,12 +6,14 @@
 // SPDX-License-Identifier: MIT
 //
 
-@testable import SecureStorage
-import XCTCardinalKit
+import CardinalKit
 
 
-final class DependencyBuilderTests: XCTestCase {
-    func testSecureStorageCredentials() {
-        let secureStorage = SecureStorage<MockStandard>()
+class ObservableComponentTestsComponent<ComponentStandard: Standard>: Module {
+    var greeting: String
+    
+    
+    init(greeting: String) {
+        self.greeting = greeting
     }
 }

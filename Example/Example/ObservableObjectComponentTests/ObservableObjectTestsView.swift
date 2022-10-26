@@ -10,8 +10,8 @@ import CardinalKit
 import SwiftUI
 
 
-struct ContentView: View {
-    @EnvironmentObject var exampleAppComponent: ExampleAppComponent<ExampleAppStandard>
+struct ObservableObjectTestsView: View {
+    @EnvironmentObject var exampleAppComponent: ObservableComponentTestsComponent<UITestsAppStandard>
     
     
     var body: some View {
@@ -29,7 +29,7 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
-            .environmentObject(ExampleAppComponent<ExampleAppStandard>(greeting: "Hello, Paul!"))
+        ObservableObjectTestsView()
+            .environmentObject(ObservableComponentTestsComponent<UITestsAppStandard>(greeting: "Hello, Paul!"))
     }
 }
