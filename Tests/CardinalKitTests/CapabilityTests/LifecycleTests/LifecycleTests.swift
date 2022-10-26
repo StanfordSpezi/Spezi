@@ -10,7 +10,7 @@
 import XCTest
 
 
-private class TestLifecycleHandler: Component, LifecycleHandler, StorageKey {
+private class TestLifecycleHandler: Component, LifecycleHandler, TypedCollectionKey {
     let expectationWillFinishLaunchingWithOption: XCTestExpectation
     let expectationApplicationWillTerminate: XCTestExpectation
     
@@ -22,7 +22,7 @@ private class TestLifecycleHandler: Component, LifecycleHandler, StorageKey {
     
     
     func configure(cardinalKit: CardinalKit<MockStandard>) {
-        cardinalKit.storage.set(Self.self, to: self)
+        cardinalKit.typedCollection.set(Self.self, to: self)
     }
     
     
@@ -39,9 +39,9 @@ private class TestLifecycleHandler: Component, LifecycleHandler, StorageKey {
 }
 
 
-private class EmpfyLifecycleHandler: Component, LifecycleHandler, StorageKey {
+private class EmpfyLifecycleHandler: Component, LifecycleHandler, TypedCollectionKey {
     func configure(cardinalKit: CardinalKit<MockStandard>) {
-        cardinalKit.storage.set(Self.self, to: self)
+        cardinalKit.typedCollection.set(Self.self, to: self)
     }
 }
 

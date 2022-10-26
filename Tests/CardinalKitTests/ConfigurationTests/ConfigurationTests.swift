@@ -30,7 +30,7 @@ final class ComponentTests: XCTestCase {
         expectation.isInverted = true
         
         let testComponent = TestComponent<SomeOtherStandard>(expectation: expectation)
-        _ = CardinalKit<MockStandard>(configuration: testComponent)
+        _ = CardinalKit<MockStandard>(components: [testComponent])
         
         wait(for: [expectation])
     }
