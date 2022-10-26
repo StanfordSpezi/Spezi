@@ -9,8 +9,16 @@
 import Foundation
 
 
-#warning("TODO: Make DependingComponent's passing a computed property with a result builder!")
-/// <#Description#>
+/// A ``DependingComponent`` can define the dependencies to other ``Component``s using the ``DependingComponent/dependencies-67sug`` computed property.
+///
+/// A ``DependingComponent`` can define the dependencies using the ``Depends`` type:
+/// ```
+/// private class ExampleComponent<ComponentStandard: Standard>: DependingComponent {
+///    var dependencies: [any Dependency] {
+///         Depends(on: ExampleComponentDependency<ComponentStandard>.self, defaultValue: ExampleComponentDependency())
+///     }
+/// }
+/// ```
 public protocol DependingComponent: Component, AnyObject {
     @DependencyBuilder<ComponentStandard>
     var dependencies: [any Dependency] { get }

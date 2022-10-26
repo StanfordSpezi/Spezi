@@ -7,7 +7,7 @@
 //
 
 
-/// <#Description#>
+/// A ``DependencyBuilder`` can be used to collect ``Dependency`` instances in a ``DependingComponent``
 @resultBuilder
 public enum DependencyBuilder<S: Standard> {
     /// If declared, provides contextual type information for statement expressions to translate them into partial results.

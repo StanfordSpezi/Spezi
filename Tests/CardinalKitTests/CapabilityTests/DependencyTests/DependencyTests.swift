@@ -75,7 +75,7 @@ final class DependencyTests: XCTestCase {
             TestComponent1<TestStandard>(),
             TestComponent7<TestStandard>()
         ]
-        let sortedComponents = DependencyManager(components).sortedComponents
+        let sortedComponents = _DependencyManager(components).sortedComponents
         
         XCTAssertEqual(sortedComponents.count, 13)
         
@@ -99,7 +99,7 @@ final class DependencyTests: XCTestCase {
             TestComponent2<MockStandard>(),
             TestComponent5<MockStandard>()
         ]
-        let sortedComponents = DependencyManager(components).sortedComponents
+        let sortedComponents = _DependencyManager(components).sortedComponents
         
         XCTAssertEqual(sortedComponents.count, 4)
         
@@ -115,7 +115,7 @@ final class DependencyTests: XCTestCase {
             TestComponent4<MockStandard>(),
             TestComponent4<MockStandard>()
         ]
-        let sortedComponents = DependencyManager(components).sortedComponents
+        let sortedComponents = _DependencyManager(components).sortedComponents
         
         XCTAssertEqual(sortedComponents.count, 3)
         
@@ -129,7 +129,7 @@ final class DependencyTests: XCTestCase {
             TestComponent2<MockStandard>(),
             TestComponent2<MockStandard>()
         ]
-        let sortedComponents = DependencyManager(components).sortedComponents
+        let sortedComponents = _DependencyManager(components).sortedComponents
         
         XCTAssertEqual(sortedComponents.count, 5)
         
@@ -143,7 +143,7 @@ final class DependencyTests: XCTestCase {
     
     func testComponentNoDependency() throws {
         let components: [_AnyComponent] = [TestComponent5<MockStandard>(), TestComponent5<TestStandard>()]
-        let sortedComponents = DependencyManager(components).sortedComponents
+        let sortedComponents = _DependencyManager(components).sortedComponents
         
         XCTAssertEqual(sortedComponents.count, 2)
         
@@ -157,7 +157,7 @@ final class DependencyTests: XCTestCase {
             TestComponent5<MockStandard>(),
             TestComponent5<MockStandard>()
         ]
-        let sortedComponents = DependencyManager(components).sortedComponents
+        let sortedComponents = _DependencyManager(components).sortedComponents
         
         XCTAssertEqual(sortedComponents.count, 3)
         
@@ -182,7 +182,7 @@ final class DependencyTests: XCTestCase {
             TestComponentCircle1<MockStandard>()
         ]
         
-        _ = DependencyManager(components).sortedComponents
+        _ = _DependencyManager(components).sortedComponents
         
         wait(for: [expectation])
         

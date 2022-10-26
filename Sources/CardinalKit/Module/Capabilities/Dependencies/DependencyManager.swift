@@ -7,13 +7,15 @@
 //
 
 
-/// <#Description#>
-public class DependencyManager {
-    /// <#Description#>
+/// A ``DependencyManager`` in CardinalKit is used to gather information about dependencies of a ``DependingComponent``.
+public class _DependencyManager { // swiftlint:disable:this type_name
+    // We want the _DependencyManager type to be hidden from autocompletion and document generation.
+    // Therefore, we use the `_` prefix.
+    /// Collection of sorted components after resolving all dependencies.
     var sortedComponents: [_AnyComponent]
-    /// <#Description#>
+    /// Collection of all ``DependingComponent``s that are not yet processed.
     private var dependingComponents: [any DependingComponent & _AnyComponent]
-    /// <#Description#>
+    /// Collection used to keep track of ``DependingComponent``s in the recursive search.
     private var recursiveSearch: [any DependingComponent & _AnyComponent] = []
     
     
@@ -28,10 +30,6 @@ public class DependencyManager {
     }
     
     
-    /// <#Description#>
-    /// - Parameters:
-    ///   - dependencyType: <#dependencyType description#>
-    ///   - defaultValue: <#defaultValue description#>
     func require<T: Component>(_ dependencyType: T.Type, defaultValue: @autoclosure () -> (T)) {
         // 1. Return if thedepending component is found in the `sortedComponents` collection.
         if sortedComponents.contains(where: { type(of: $0) == T.self }) {
@@ -79,8 +77,6 @@ public class DependencyManager {
         push(foundInDependingComponents)
     }
     
-    /// <#Description#>
-    /// - Parameter dependingComponent: <#dependingComponent description#>
     private func resolvedAllDependencies(_ dependingComponent: any DependingComponent) {
         guard !recursiveSearch.isEmpty else {
             precondition(false, "Internal logic error in the `DependencyManager`")
@@ -115,7 +111,7 @@ public class DependencyManager {
     private func push(_ component: any DependingComponent & _AnyComponent) {
         recursiveSearch.append(component)
         for dependency in component.dependencies {
-            dependency.visit(dependencyManager: self)
+            dependency._visit(dependencyManager: self)
         }
         resolvedAllDependencies(component)
     }
