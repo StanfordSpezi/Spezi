@@ -29,6 +29,7 @@ public class _DependencyManager { // swiftlint:disable:this type_name
         }
     }
     
+    
     func require<T: Component>(_ dependencyType: T.Type, defaultValue: @autoclosure () -> (T)) {
         // 1. Return if thedepending component is found in the `sortedComponents` collection.
         if sortedComponents.contains(where: { type(of: $0) == T.self }) {
