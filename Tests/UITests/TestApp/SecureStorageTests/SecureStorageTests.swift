@@ -62,8 +62,8 @@ final class SecureStorageTests {
         try secureStorage.deleteKeys(forTag: "MyKey")
         try XCTAssertNil(try secureStorage.retrievePublicKey(forTag: "MyKey"))
         
-        try secureStorage.createKey("MyKey", userPresence: false)
-        try secureStorage.createKey("MyKey", userPresence: false)
+        try secureStorage.createKey("MyKey")
+        try secureStorage.createKey("MyKey")
         
         let privateKey = try XCTUnwrap(secureStorage.retrievePrivateKey(forTag: "MyKey"))
         let publicKey = try XCTUnwrap(secureStorage.retrievePublicKey(forTag: "MyKey"))

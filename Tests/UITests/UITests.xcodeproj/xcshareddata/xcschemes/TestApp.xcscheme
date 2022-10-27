@@ -34,14 +34,14 @@
             BlueprintIdentifier = "CardinalKit"
             BuildableName = "CardinalKit"
             BlueprintName = "CardinalKit"
-            ReferencedContainer = "container:..">
+            ReferencedContainer = "container:../..">
          </BuildableReference>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "SecureStorage"
             BuildableName = "SecureStorage"
             BlueprintName = "SecureStorage"
-            ReferencedContainer = "container:..">
+            ReferencedContainer = "container:../..">
          </BuildableReference>
       </CodeCoverageTargets>
       <Testables>
