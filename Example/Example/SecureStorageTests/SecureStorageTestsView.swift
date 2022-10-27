@@ -19,12 +19,12 @@ struct SecureStorageTestsView: View {
                 let secureStorageTests = SecureStorageTests()
                 
                 do {
+                    try secureStorageTests.testCredentials()
                     try secureStorageTests.testInternetCredentials()
+                    testState = "Passed"
                 } catch {
                     testState = "Failed: \(error)"
                 }
-                
-                testState = "Passed"
             }
     }
 }

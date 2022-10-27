@@ -114,7 +114,7 @@ public class SecureStorage<ComponentStandard: Standard>: Module {
     
     // MARK: Credentials Handling
     
-    public func store(credentials: Credentials, server: String? = nil) throws {
+    public func store(credentials: Credentials, server: String? = nil, removeDuplicate: Bool = true) throws {
         // This method uses code provided by the Apple Developer documentation at
         // https://developer.apple.com/documentation/security/keychain_services/keychain_items/adding_a_password_to_the_keychain.
         
@@ -122,10 +122,17 @@ public class SecureStorage<ComponentStandard: Standard>: Module {
         query[kSecValueData as String] = Data(credentials.password.utf8)
         query[kSecAttrSynchronizable as String] = synchronizable as CFBoolean
         
-        try execute(SecItemAdd(query as CFDictionary, nil))
+        do {
+            try execute(SecItemAdd(query as CFDictionary, nil))
+        } catch let SecureStorageError.keychainError(status) where status == -25299 && removeDuplicate {
+            try deleteCredentials(credentials.username, server: server)
+            try store(credentials: credentials, server: server, removeDuplicate: false)
+        } catch {
+            throw error
+        }
     }
     
-    public func deleteCredentials(_ username: String?, server: String?) throws {
+    public func deleteCredentials(_ username: String, server: String? = nil) throws {
         let query = queryFor(username, server: server)
         
         try execute(SecItemDelete(query as CFDictionary))
@@ -136,20 +143,14 @@ public class SecureStorage<ComponentStandard: Standard>: Module {
         _ username: String,
         server: String? = nil,
         newCredentials: Credentials,
-        newServer: String? = nil
+        newServer: String? = nil,
+        removeDuplicate: Bool = true
     ) throws {
-        // This method uses code provided by the Apple Developer documentation at
-        // https://developer.apple.com/documentation/security/keychain_services/keychain_items/updating_and_deleting_keychain_items
-        
-        let query = queryFor(username, server: server)
-        
-        var updateQuery = queryFor(newCredentials.username, server: newServer)
-        updateQuery[kSecAttrSynchronizable as String] = synchronizable as CFBoolean
-        
-        try execute(SecItemUpdate(query as CFDictionary, updateQuery as CFDictionary))
+        try deleteCredentials(username, server: server)
+        try store(credentials: newCredentials, server: newServer, removeDuplicate: removeDuplicate)
     }
     
-    public func retrieveCredentials(_ username: String?, server: String?) throws -> Credentials? {
+    public func retrieveCredentials(_ username: String, server: String? = nil) throws -> Credentials? {
         // This method uses code provided by the Apple Developer documentation at
         // https://developer.apple.com/documentation/security/keychain_services/keychain_items/searching_for_keychain_items
         
@@ -192,16 +193,12 @@ public class SecureStorage<ComponentStandard: Standard>: Module {
         }
     }
     
-    private func queryFor(_ account: String?, server: String?) -> [String: Any] {
+    private func queryFor(_ account: String, server: String?) -> [String: Any] {
         // This method uses code provided by the Apple Developer documentation at
         // https://developer.apple.com/documentation/security/keychain_services/keychain_items/using_the_keychain_to_manage_user_secrets
         
         var query: [String: Any] = [:]
-        
-        // Only append the account attribute if we got passed a non-nil account by the caller.
-        if let account {
-            query[kSecAttrAccount as String] = account
-        }
+        query[kSecAttrAccount as String] = account
         
         // Only append the accessGroup attribute if the `CredentialsStore` is configured to use KeyChain access groups
         if let accessGroup {
