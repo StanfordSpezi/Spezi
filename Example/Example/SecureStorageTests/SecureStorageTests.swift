@@ -6,9 +6,9 @@
 // SPDX-License-Identifier: MIT
 //
 
+import Foundation
 import SecureStorage
 import Security
-import Foundation
 
 
 final class SecureStorageTests {
@@ -78,7 +78,7 @@ final class SecureStorageTests {
         
         var encryptError: Unmanaged<CFError>?
         guard let cipherText = SecKeyCreateEncryptedData(publicKey, algorithm, plainText as CFData, &encryptError) as Data? else {
-            throw encryptError!.takeRetainedValue() as Error
+            throw XCTestFailure()
         }
         
         guard SecKeyIsAlgorithmSupported(privateKey, .decrypt, algorithm) else {
@@ -87,7 +87,7 @@ final class SecureStorageTests {
         
         var decryptError: Unmanaged<CFError>?
         guard let clearText = SecKeyCreateDecryptedData(privateKey, algorithm, cipherText as CFData, &decryptError) as Data? else {
-            throw decryptError!.takeRetainedValue() as Error
+            throw XCTestFailure()
         }
         
         try XCTAssertEqual(plainText, clearText)
