@@ -28,6 +28,22 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES"
       codeCoverageEnabled = "YES">
+      <CodeCoverageTargets>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "CardinalKit"
+            BuildableName = "CardinalKit"
+            BlueprintName = "CardinalKit"
+            ReferencedContainer = "container:..">
+         </BuildableReference>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "SecureStorage"
+            BuildableName = "SecureStorage"
+            BlueprintName = "SecureStorage"
+            ReferencedContainer = "container:..">
+         </BuildableReference>
+      </CodeCoverageTargets>
       <Testables>
          <TestableReference
             skipped = "NO">

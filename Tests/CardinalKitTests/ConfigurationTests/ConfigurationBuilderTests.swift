@@ -7,7 +7,7 @@
 //
 
 @testable import CardinalKit
-import XCTest
+import XCTCardinalKit
 
 
 final class ComponentBuilderTests: XCTestCase {

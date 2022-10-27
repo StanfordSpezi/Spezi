@@ -7,7 +7,7 @@
 //
 
 import CardinalKit
-import XCTest
+import XCTCardinalKit
 
 
 private class TestComponent1<ComponentStandard: Standard>: Component {}

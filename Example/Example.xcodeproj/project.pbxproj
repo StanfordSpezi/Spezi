@@ -7,11 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2F6D139628F5F384007C25D6 /* ExampleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6D139528F5F384007C25D6 /* ExampleApp.swift */; };
-		2F6D139828F5F384007C25D6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6D139728F5F384007C25D6 /* ContentView.swift */; };
+		2F6D139828F5F384007C25D6 /* ObservableObjectTestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6D139728F5F384007C25D6 /* ObservableObjectTestsView.swift */; };
 		2F6D139A28F5F386007C25D6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F6D139928F5F386007C25D6 /* Assets.xcassets */; };
-		2F6D13B128F5F386007C25D6 /* ExampleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6D13B028F5F386007C25D6 /* ExampleUITests.swift */; };
 		2F6D13C728F60BAD007C25D6 /* CardinalKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2F6D13C628F60BAD007C25D6 /* CardinalKit */; };
+		2F9F07E02909067B00CDC598 /* SecureStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 2F9F07DF2909067B00CDC598 /* SecureStorage */; };
+		2F9F07E2290906A200CDC598 /* SecureStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9F07E1290906A200CDC598 /* SecureStorageTests.swift */; };
+		2F9F07E5290906E200CDC598 /* SecureStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9F07E4290906E200CDC598 /* SecureStorageTests.swift */; };
+		2F9F07E7290907C600CDC598 /* XCTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9F07E6290907C600CDC598 /* XCTest.swift */; };
+		2F9F07E929090A3F00CDC598 /* UITestsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9F07E829090A3F00CDC598 /* UITestsApp.swift */; };
+		2F9F07EC29090AC200CDC598 /* ObservableComponentTestsComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9F07EB29090AC200CDC598 /* ObservableComponentTestsComponent.swift */; };
+		2F9F07EF29090AFF00CDC598 /* UITestsAppStandard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9F07EE29090AFF00CDC598 /* UITestsAppStandard.swift */; };
+		2F9F07F129090B0500CDC598 /* UITestsAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9F07F029090B0500CDC598 /* UITestsAppDelegate.swift */; };
+		2F9F07F329090B6200CDC598 /* SecureStorageTestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9F07F229090B6200CDC598 /* SecureStorageTestsView.swift */; };
+		2F9F07F529090BA900CDC598 /* ObservableObjectComponentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9F07F429090BA900CDC598 /* ObservableObjectComponentTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -26,12 +34,19 @@
 
 /* Begin PBXFileReference section */
 		2F6D139228F5F384007C25D6 /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		2F6D139528F5F384007C25D6 /* ExampleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleApp.swift; sourceTree = "<group>"; };
-		2F6D139728F5F384007C25D6 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		2F6D139728F5F384007C25D6 /* ObservableObjectTestsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservableObjectTestsView.swift; sourceTree = "<group>"; };
 		2F6D139928F5F386007C25D6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2F6D13AC28F5F386007C25D6 /* ExampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ExampleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		2F6D13B028F5F386007C25D6 /* ExampleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleUITests.swift; sourceTree = "<group>"; };
 		2F6D13C528F60BA4007C25D6 /* CardinalKitSPM */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = CardinalKitSPM; path = ..; sourceTree = "<group>"; };
+		2F9F07E1290906A200CDC598 /* SecureStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureStorageTests.swift; sourceTree = "<group>"; };
+		2F9F07E4290906E200CDC598 /* SecureStorageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecureStorageTests.swift; sourceTree = "<group>"; };
+		2F9F07E6290907C600CDC598 /* XCTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTest.swift; sourceTree = "<group>"; };
+		2F9F07E829090A3F00CDC598 /* UITestsApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UITestsApp.swift; path = Example/UITestsApp.swift; sourceTree = SOURCE_ROOT; };
+		2F9F07EB29090AC200CDC598 /* ObservableComponentTestsComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservableComponentTestsComponent.swift; sourceTree = "<group>"; };
+		2F9F07EE29090AFF00CDC598 /* UITestsAppStandard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestsAppStandard.swift; sourceTree = "<group>"; };
+		2F9F07F029090B0500CDC598 /* UITestsAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestsAppDelegate.swift; sourceTree = "<group>"; };
+		2F9F07F229090B6200CDC598 /* SecureStorageTestsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureStorageTestsView.swift; sourceTree = "<group>"; };
+		2F9F07F429090BA900CDC598 /* ObservableObjectComponentTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservableObjectComponentTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -40,6 +55,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F6D13C728F60BAD007C25D6 /* CardinalKit in Frameworks */,
+				2F9F07E02909067B00CDC598 /* SecureStorage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -76,8 +92,10 @@
 		2F6D139428F5F384007C25D6 /* Example */ = {
 			isa = PBXGroup;
 			children = (
-				2F6D139528F5F384007C25D6 /* ExampleApp.swift */,
-				2F6D139728F5F384007C25D6 /* ContentView.swift */,
+				2F9F07ED29090AF500CDC598 /* Shared */,
+				2F9F07EA29090A9F00CDC598 /* ObservableObjectComponentTests */,
+				2F9F07E3290906D100CDC598 /* SecureStorageTests */,
+				2F9F07E829090A3F00CDC598 /* UITestsApp.swift */,
 				2F6D139928F5F386007C25D6 /* Assets.xcassets */,
 			);
 			path = Example;
@@ -86,7 +104,8 @@
 		2F6D13AF28F5F386007C25D6 /* ExampleUITests */ = {
 			isa = PBXGroup;
 			children = (
-				2F6D13B028F5F386007C25D6 /* ExampleUITests.swift */,
+				2F9F07F429090BA900CDC598 /* ObservableObjectComponentTests.swift */,
+				2F9F07E1290906A200CDC598 /* SecureStorageTests.swift */,
 			);
 			path = ExampleUITests;
 			sourceTree = "<group>";
@@ -96,6 +115,34 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		2F9F07E3290906D100CDC598 /* SecureStorageTests */ = {
+			isa = PBXGroup;
+			children = (
+				2F9F07E4290906E200CDC598 /* SecureStorageTests.swift */,
+				2F9F07F229090B6200CDC598 /* SecureStorageTestsView.swift */,
+			);
+			path = SecureStorageTests;
+			sourceTree = "<group>";
+		};
+		2F9F07EA29090A9F00CDC598 /* ObservableObjectComponentTests */ = {
+			isa = PBXGroup;
+			children = (
+				2F6D139728F5F384007C25D6 /* ObservableObjectTestsView.swift */,
+				2F9F07EB29090AC200CDC598 /* ObservableComponentTestsComponent.swift */,
+			);
+			path = ObservableObjectComponentTests;
+			sourceTree = "<group>";
+		};
+		2F9F07ED29090AF500CDC598 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				2F9F07E6290907C600CDC598 /* XCTest.swift */,
+				2F9F07EE29090AFF00CDC598 /* UITestsAppStandard.swift */,
+				2F9F07F029090B0500CDC598 /* UITestsAppDelegate.swift */,
+			);
+			path = Shared;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -116,6 +163,7 @@
 			name = Example;
 			packageProductDependencies = (
 				2F6D13C628F60BAD007C25D6 /* CardinalKit */,
+				2F9F07DF2909067B00CDC598 /* SecureStorage */,
 			);
 			productName = Example;
 			productReference = 2F6D139228F5F384007C25D6 /* Example.app */;
@@ -200,8 +248,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2F6D139828F5F384007C25D6 /* ContentView.swift in Sources */,
-				2F6D139628F5F384007C25D6 /* ExampleApp.swift in Sources */,
+				2F9F07EC29090AC200CDC598 /* ObservableComponentTestsComponent.swift in Sources */,
+				2F9F07F329090B6200CDC598 /* SecureStorageTestsView.swift in Sources */,
+				2F6D139828F5F384007C25D6 /* ObservableObjectTestsView.swift in Sources */,
+				2F9F07E929090A3F00CDC598 /* UITestsApp.swift in Sources */,
+				2F9F07F129090B0500CDC598 /* UITestsAppDelegate.swift in Sources */,
+				2F9F07E7290907C600CDC598 /* XCTest.swift in Sources */,
+				2F9F07EF29090AFF00CDC598 /* UITestsAppStandard.swift in Sources */,
+				2F9F07E5290906E200CDC598 /* SecureStorageTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -209,7 +263,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2F6D13B128F5F386007C25D6 /* ExampleUITests.swift in Sources */,
+				2F9F07F529090BA900CDC598 /* ObservableObjectComponentTests.swift in Sources */,
+				2F9F07E2290906A200CDC598 /* SecureStorageTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -468,6 +523,10 @@
 		2F6D13C628F60BAD007C25D6 /* CardinalKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = CardinalKit;
+		};
+		2F9F07DF2909067B00CDC598 /* SecureStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SecureStorage;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -8,21 +8,21 @@
 
 import CardinalKit
 import SwiftUI
-import XCTest
+@_exported import XCTest
 
 
-class TestApplicationDelegate: CardinalKitAppDelegate {
+public class TestApplicationDelegate: CardinalKitAppDelegate {
     let expectation: XCTestExpectation
     
     
-    override var configuration: Configuration {
+    override public var configuration: Configuration {
         Configuration(standard: MockStandard()) {
             TestComponent(expectation: expectation)
         }
     }
     
     
-    init(expectation: XCTestExpectation) {
+    public init(expectation: XCTestExpectation) {
         self.expectation = expectation
         super.init()
     }

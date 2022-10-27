@@ -8,25 +8,19 @@
 
 import CardinalKit
 import SwiftUI
-import XCTest
+@_exported import XCTest
 
 
-struct TestComponent<S: Standard>: Component, ObservableObjectComponent, TypedCollectionKey, Equatable {
-    typealias ComponentStandard = S
-    
-    
-    class TestObservableObject: ObservableObject {}
-    
-    
+public class TestComponent<ComponentStandard: Standard>: ObservableObject, Component, ObservableObjectComponent {
     let expectation: XCTestExpectation
     
     
-    var observableObject: TestObservableObject {
-        TestObservableObject()
+    public init(expectation: XCTestExpectation) {
+        self.expectation = expectation
     }
     
     
-    func configure(cardinalKit: CardinalKit<ComponentStandard>) {
+    public func configure(cardinalKit: CardinalKit<ComponentStandard>) {
         cardinalKit.typedCollection.set(TestComponent.self, to: self)
         expectation.fulfill()
     }

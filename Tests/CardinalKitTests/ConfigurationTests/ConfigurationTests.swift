@@ -8,7 +8,7 @@
 
 @testable import CardinalKit
 import SwiftUI
-import XCTest
+import XCTCardinalKit
 
 
 final class ComponentTests: XCTestCase {

@@ -17,16 +17,30 @@ let package = Package(
         .iOS(.v16)
     ],
     products: [
-        .library(name: "CardinalKit", targets: ["CardinalKit"])
+        .library(name: "CardinalKit", targets: ["CardinalKit"]),
+        .library(name: "SecureStorage", targets: ["SecureStorage"])
     ],
     targets: [
         .target(
             name: "CardinalKit"
         ),
+        .target(
+            name: "SecureStorage",
+            dependencies: [
+                .target(name: "CardinalKit")
+            ]
+        ),
+        .target(
+            name: "XCTCardinalKit",
+            dependencies: [
+                .target(name: "CardinalKit")
+            ]
+        ),
         .testTarget(
             name: "CardinalKitTests",
             dependencies: [
-                .target(name: "CardinalKit")
+                .target(name: "CardinalKit"),
+                .target(name: "XCTCardinalKit")
             ]
         )
     ]

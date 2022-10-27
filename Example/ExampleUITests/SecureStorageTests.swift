@@ -9,7 +9,7 @@
 import XCTest
 
 
-final class ExampleUITests: XCTestCase {
+final class SecureStorageTests: XCTestCase {
     override func setUpWithError() throws {
         try super.setUpWithError()
         
@@ -17,11 +17,12 @@ final class ExampleUITests: XCTestCase {
     }
     
 
-    func testExample() throws {
+    func testSecureStorage() throws {
         let app = XCUIApplication()
         app.launch()
         
-        XCTAssertTrue(app.images["Globe"].exists)
-        XCTAssertTrue(app.staticTexts["Hello, Paul!"].waitForExistence(timeout: 2))
+        app.tabBars["Tab Bar"].buttons["SecureStorageTests"].tap()
+        
+        XCTAssertTrue(app.staticTexts["Passed"].waitForExistence(timeout: 2))
     }
 }
