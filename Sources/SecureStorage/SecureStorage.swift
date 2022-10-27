@@ -29,7 +29,8 @@ public class SecureStorage<ComponentStandard: Standard>: Module {
     
     // MARK: Key Handling
     
-    public func createKey(_ tag: String, userPresence: Bool = false) throws -> SecKey {
+    @discardableResult
+    public func createKey(_ tag: String, size: Int = 256, userPresence: Bool = false) throws -> SecKey {
         // The key generation code follows
         // https://developer.apple.com/documentation/security/certificate_key_and_trust_services/keys/protecting_keys_with_the_secure_enclave
         // and
@@ -54,7 +55,7 @@ public class SecureStorage<ComponentStandard: Standard>: Module {
         
         var attributes: [String: Any] = [
             kSecAttrKeyType as String: kSecAttrKeyTypeECSECPrimeRandom,
-            kSecAttrKeySizeInBits as String: 256,
+            kSecAttrKeySizeInBits as String: size as CFNumber,
             kSecAttrTokenID as String: kSecAttrTokenIDSecureEnclave,
             kSecPrivateKeyAttrs as String: [
                 kSecAttrIsPermanent as String: true,
@@ -78,28 +79,43 @@ public class SecureStorage<ComponentStandard: Standard>: Module {
         return publicKey
     }
     
-    public func retrievePublicKey(forTag tag: String) throws -> SecKey {
+    public func retrievePrivateKey(forTag tag: String) throws -> SecKey? {
         // This method follows
         // https://developer.apple.com/documentation/security/certificate_key_and_trust_services/keys/storing_keys_in_the_keychain
         // for guidance.
         
         var item: CFTypeRef?
-        try execute(SecItemCopyMatching(keyQuery(forTag: tag) as CFDictionary, &item))
+        do {
+            try execute(SecItemCopyMatching(keyQuery(forTag: tag) as CFDictionary, &item))
+        } catch SecureStorageError.notFound {
+            return nil
+        } catch {
+            throw error
+        }
         
         // Unfortunately we have to do a force cast here.
         // The compiler complains that "Conditional downcast to CoreFoundation type 'SecKey' will always succeed"
         // if we use `item as? SecKey`.
-        let privateKey = (item as! SecKey) // swiftlint:disable:this force_cast
-        
-        guard let publicKey = SecKeyCopyPublicKey(privateKey) else {
-            throw SecureStorageError.notFound
+        return (item as! SecKey) // swiftlint:disable:this force_cast
+    }
+    
+    public func retrievePublicKey(forTag tag: String) throws -> SecKey? {
+        guard let privateKey = try retrievePrivateKey(forTag: tag),
+              let publicKey = SecKeyCopyPublicKey(privateKey) else {
+            return nil
         }
         
         return publicKey
     }
     
     public func deleteKeys(forTag tag: String) throws {
-        try execute(SecItemDelete(keyQuery(forTag: tag) as CFDictionary))
+        do {
+            try execute(SecItemDelete(keyQuery(forTag: tag) as CFDictionary))
+        } catch SecureStorageError.notFound {
+            return
+        } catch {
+            throw error
+        }
     }
     
     private func keyQuery(forTag tag: String) -> [String: Any] {

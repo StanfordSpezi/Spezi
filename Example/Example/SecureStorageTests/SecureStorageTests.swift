@@ -7,6 +7,8 @@
 //
 
 import SecureStorage
+import Security
+import Foundation
 
 
 final class SecureStorageTests {
@@ -52,5 +54,46 @@ final class SecureStorageTests {
         
         try secureStorage.deleteCredentials("@CardinalKit", server: "stanford.edu")
         try XCTAssertNil(try secureStorage.retrieveCredentials("@CardinalKit", server: "stanford.edu"))
+    }
+    
+    func testKeys() throws {
+        let secureStorage = SecureStorage<UITestsAppStandard>()
+        
+        try secureStorage.deleteKeys(forTag: "MyKey")
+        try XCTAssertNil(try secureStorage.retrievePublicKey(forTag: "MyKey"))
+        
+        try secureStorage.createKey("MyKey", userPresence: false)
+        try secureStorage.createKey("MyKey", userPresence: false)
+        
+        let privateKey = try XCTUnwrap(secureStorage.retrievePrivateKey(forTag: "MyKey"))
+        let publicKey = try XCTUnwrap(secureStorage.retrievePublicKey(forTag: "MyKey"))
+        
+        let algorithm: SecKeyAlgorithm = .eciesEncryptionCofactorX963SHA256AESGCM
+        
+        guard SecKeyIsAlgorithmSupported(publicKey, .encrypt, algorithm) else {
+            throw XCTestFailure()
+        }
+        
+        let plainText = Data("CardinalKit & Paul Schmiedmayer".utf8)
+        
+        var encryptError: Unmanaged<CFError>?
+        guard let cipherText = SecKeyCreateEncryptedData(publicKey, algorithm, plainText as CFData, &encryptError) as Data? else {
+            throw encryptError!.takeRetainedValue() as Error
+        }
+        
+        guard SecKeyIsAlgorithmSupported(privateKey, .decrypt, algorithm) else {
+            throw XCTestFailure()
+        }
+        
+        var decryptError: Unmanaged<CFError>?
+        guard let clearText = SecKeyCreateDecryptedData(privateKey, algorithm, cipherText as CFData, &decryptError) as Data? else {
+            throw decryptError!.takeRetainedValue() as Error
+        }
+        
+        try XCTAssertEqual(plainText, clearText)
+        print("Decryped: \(String(decoding: clearText, as: UTF8.self))")
+        
+        try secureStorage.deleteKeys(forTag: "MyKey")
+        try XCTAssertNil(try secureStorage.retrievePublicKey(forTag: "MyKey"))
     }
 }

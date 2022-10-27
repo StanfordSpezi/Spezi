@@ -23,6 +23,12 @@ struct XCTestFailure: Error, CustomStringConvertible {
 }
 
 
+func XCTAssert(_ condition: @autoclosure () -> Bool, file: StaticString = #file, line: Int = #line) throws {
+    guard condition() else {
+        throw XCTestFailure(file: file, line: line)
+    }
+}
+
 func XCTAssertEqual<E: Equatable>(_ lhs: E, _ rhs: E, file: StaticString = #file, line: Int = #line) throws {
     guard lhs == rhs else {
         throw XCTestFailure(file: file, line: line)
