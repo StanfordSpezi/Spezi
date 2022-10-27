@@ -11,7 +11,7 @@ import SwiftUI
 
 
 struct ObservableObjectTestsView: View {
-    @EnvironmentObject var exampleAppComponent: ObservableComponentTestsComponent<UITestsAppStandard>
+    @EnvironmentObject var testAppComponent: ObservableComponentTestsComponent<UITestsAppStandard>
     
     
     var body: some View {
@@ -19,7 +19,7 @@ struct ObservableObjectTestsView: View {
             Image(systemName: "globe")
                 .imageScale(.large)
                 .foregroundColor(.accentColor)
-            Text(exampleAppComponent.greeting)
+            Text(testAppComponent.greeting)
                 .frame(height: 40)
         }
             .padding()
