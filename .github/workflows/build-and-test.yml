@@ -21,17 +21,17 @@ jobs:
     uses: CardinalKit/.github/.github/workflows/build-and-test-xcodebuild-spm.yml@v1
     with:
       scheme: CardinalKit-Package
-  build_and_test-example-app:
-    name: Build and Test Example App
+  build_and_test-uitests:
+    name: Build and Test UITests
     uses: CardinalKit/.github/.github/workflows/build-and-test-xcodebuild.yml@v1
     with:
-      xcodeprojname: Example/Example.xcodeproj
-      scheme: Example
+      xcodeprojname: Tests/UITests/UITests.xcodeproj
+      scheme: TestApp
   create-and-upload-coverage-report:
     name: Create and Upload Coverage Report
-    needs: [build_and_test-spm, build_and_test-example-app]
+    needs: [build_and_test-spm, build_and_test-uitests]
     uses: CardinalKit/.github/.github/workflows/create-and-upload-coverage-report.yml@v1
     with:
-      coveragereports: CardinalKit-Package.xcresult Example.xcresult
+      coveragereports: CardinalKit-Package.xcresult TestApp.xcresult
     secrets:
       token: ${{ secrets.CODECOV_TOKEN }}

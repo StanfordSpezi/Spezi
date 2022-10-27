@@ -28,5 +28,5 @@ xcuserdata/
 *.doccarchive
 docs/
 
-# Example Project
-!Example.xcodeproj
+# UITests Project
+!UITests.xcodeproj
