@@ -109,7 +109,7 @@ final class XCTRuntimeAssertionsTests: XCTestCase {
         
         do {
             try XCTRuntimePrecondition {
-                "Hello Paul 👋"
+                print("Hello Paul 👋")
             }
         } catch let error as XCTFail {
             XCTAssertTrue(error.message.contains("The precondition was called multiple times."))
