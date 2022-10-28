@@ -19,7 +19,8 @@ import Security
 public class SecureStorage<ComponentStandard: Standard>: Module {
     /// The ``SecureStorage`` serves as a resuable ``Module`` that can be used to store store small chunks of data such as credentials and keys.
     ///
-    /// The storing of credentials and keys follows the Keychain documentation provided by Apple: https://developer.apple.com/documentation/security/keychain_services/keychain_items/using_the_keychain_to_manage_user_secrets.
+    /// The storing of credentials and keys follows the Keychain documentation provided by Apple:
+    /// https://developer.apple.com/documentation/security/keychain_services/keychain_items/using_the_keychain_to_manage_user_secrets.
     public init() {}
     
     
@@ -131,8 +132,10 @@ public class SecureStorage<ComponentStandard: Standard>: Module {
     /// - Parameters:
     ///   - credentials: The ``Credentials`` stored in the Keychain.
     ///   - server: The server associated with the credentials.
-    ///   - removeDuplicate: A flag indicating if any existing key for the `username` and `server` combination should be overwritten when storing the credentials.
-    ///   - storageScope: The ``StorageScope`` of the stored credentials. The ``StorageScope/secureEnclave(userPresence:)`` option is not supported for credentials.
+    ///   - removeDuplicate: A flag indicating if any existing key for the `username` and `server`
+    ///                      combination should be overwritten when storing the credentials.
+    ///   - storageScope: The ``StorageScope`` of the stored credentials.
+    ///                   The ``StorageScope/secureEnclave(userPresence:)`` option is not supported for credentials.
     public func store(
         credentials: Credentials,
         server: String? = nil,
@@ -180,7 +183,8 @@ public class SecureStorage<ComponentStandard: Standard>: Module {
     ///   - server: The server associated with the old credentials.
     ///   - newCredentials: The new ``Credentials`` that should be stored in the Keychain.
     ///   - newServer: The server associated with the new credentials.
-    ///   - removeDuplicate: A flag indicating if any existing key for the `username` of the new credentials and `newServer` combination should be overwritten when storing the credentials.
+    ///   - removeDuplicate: A flag indicating if any existing key for the `username` of the new credentials and `newServer`
+    ///                      combination should be overwritten when storing the credentials.
     ///   - storageScope: The ``StorageScope`` of the newly stored credentials.
     public func updateCredentials( // swiftlint:disable:this function_default_parameter_at_end
         // The server parameter belongs to the `username` and therefore should be located next to the `username`.
