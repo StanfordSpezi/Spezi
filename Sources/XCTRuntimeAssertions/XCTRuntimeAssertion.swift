@@ -5,15 +5,66 @@
 //
 // SPDX-License-Identifier: MIT
 //
-//
-// This source file is based on the Swift open-source project: https://github.com/apple/swift/blob/main/stdlib/public/core/Assert.swift
-//
-// Copyright (c) 2014 - 2017 Apple Inc. and the Swift project authors
-// Licensed under Apache License v2.0 with Runtime Library Exception
-//
-// See https://swift.org/LICENSE.txt for license information
-// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
-//
+
+#if DEBUG
+/// `XCTRuntimeAssertion` allows you to test assertions of types that use the `assert` and `assertionFailure` functions of the `XCTRuntimeAssertions` target.
+/// - Parameters:
+///   - validateRuntimeAssertion: An optional closure that can be used to furhter validate the messages passed to the
+///                               `assert` and `assertionFailure` functions of the `XCTRuntimeAssertions` target.
+///   - expectedFulfillmentCount: The expected fulfillment count on how often the `assert` and `assertionFailure` functions of
+///                               the `XCTRuntimeAssertions` target are called. The defailt value is 1.
+///   - message: A message that is posted on failure.
+///   - file: The file where the failure occurs. The default is the filename of the test case where you call this function.
+///   - line: The line number where the failure occurs. The default is the line number where you call this function.
+///   - expression: The expression that is evaluated.
+/// - Throws: Throws an `XCTFail` error if the expection does not trigger a runtime assertion with the parameters defined above.
+/// - Returns: The value of the function if it did not throw an error as it did not trigger a runtime assertion with the parameters defined above.
+public func XCTRuntimeAssertion<T>(
+    validateRuntimeAssertion: ((String) -> Void)? = nil,
+    expectedFulfillmentCount: Int = 1,
+    _ message: @autoclosure () -> String = "",
+    file: StaticString = #filePath,
+    line: UInt = #line,
+    _ expression: @escaping () throws -> T
+) throws -> T {
+    var fulfillmentCount: Int = 0
+    
+    XCTRuntimeAssertionInjector.injected = XCTRuntimeAssertionInjector(
+        assert: { condition, message, _, _  in
+            if condition() {
+                let message = message() // We execute the message closure independent of the availability of the `validateRuntimeAssertion` closure.
+                validateRuntimeAssertion?(message)
+                fulfillmentCount += 1
+            }
+        }
+    )
+    
+    var result: Result<T, Error>
+    do {
+        result = .success(try expression())
+    } catch {
+        result = .failure(error)
+    }
+    
+    XCTRuntimeAssertionInjector.reset()
+    
+    if fulfillmentCount != expectedFulfillmentCount {
+        throw XCTFail(
+            message: """
+            Measured an fulfillment count of \(fulfillmentCount), expected \(expectedFulfillmentCount).
+            \(message()) at \(file):\(line)
+            """
+        )
+    }
+    
+    switch result {
+    case let .success(returnValue):
+        return returnValue
+    case let .failure(error):
+        throw error
+    }
+}
+
 
 /// Performs a traditional C-style assert with an optional message.
 ///
@@ -48,43 +99,7 @@ public func assert(
     file: StaticString = #file,
     line: UInt = #line
 ) {
-    CardinalKitAssert.injected.assert(condition, message, file, line)
-}
-
-/// Checks a necessary condition for making forward progress.
-///
-/// Use this function to detect conditions that must prevent the program from
-/// proceeding, even in shipping code.
-///
-/// * In playgrounds and `-Onone` builds (the default for Xcode's Debug
-///   configuration): If `condition` evaluates to `false`, stop program
-///   execution in a debuggable state after printing `message`.
-///
-/// * In `-O` builds (the default for Xcode's Release configuration): If
-///   `condition` evaluates to `false`, stop program execution.
-///
-/// * In `-Ounchecked` builds, `condition` is not evaluated, but the optimizer
-///   may assume that it *always* evaluates to `true`. Failure to satisfy that
-///   assumption is a serious programming error.
-///
-/// - Parameters:
-///   - condition: The condition to test. `condition` is not evaluated in
-///     `-Ounchecked` builds.
-///   - message: A string to print if `condition` is evaluated to `false` in a
-///     playground or `-Onone` build. The default is an empty string.
-///   - file: The file name to print with `message` if the precondition fails.
-///     The default is the file where `precondition(_:_:file:line:)` is
-///     called.
-///   - line: The line number to print along with `message` if the assertion
-///     fails. The default is the line number where
-///     `precondition(_:_:file:line:)` is called.
-public func precondition(
-    _ condition: @autoclosure () -> Bool,
-    _ message: @autoclosure () -> String = String(),
-    file: StaticString = #file,
-    line: UInt = #line
-) {
-    CardinalKitAssert.injected.precondition(condition, message, file, line)
+    XCTRuntimeAssertionInjector.injected.assert(condition, message, file, line)
 }
 
 /// Indicates that an internal sanity check failed.
@@ -113,5 +128,6 @@ public func assertionFailure(
     file: StaticString = #file,
     line: UInt = #line
 ) {
-    CardinalKitAssert.injected.assert({ false }, message, file, line)
+    XCTRuntimeAssertionInjector.injected.assert({ true }, message, file, line)
 }
+#endif

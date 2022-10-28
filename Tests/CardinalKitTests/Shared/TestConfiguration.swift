@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
+#if DEBUG
 import CardinalKit
 import SwiftUI
 @_exported import XCTest
@@ -25,3 +26,4 @@ public class TestComponent<ComponentStandard: Standard>: ObservableObject, Compo
         expectation.fulfill()
     }
 }
+#endif

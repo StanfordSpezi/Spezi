@@ -23,6 +23,6 @@ final class SecureStorageTests: XCTestCase {
         
         app.tabBars["Tab Bar"].buttons["SecureStorageTests"].tap()
         
-        XCTAssertTrue(app.staticTexts["Passed"].waitForExistence(timeout: 2))
+        XCTAssertTrue(app.staticTexts["Passed"].waitForExistence(timeout: 0.2))
     }
 }

@@ -6,6 +6,8 @@
 // SPDX-License-Identifier: MIT
 //
 
+import XCTRuntimeAssertions
+
 
 /// A ``DependencyManager`` in CardinalKit is used to gather information about dependencies of a ``DependingComponent``.
 public class _DependencyManager { // swiftlint:disable:this type_name
@@ -61,8 +63,7 @@ public class _DependencyManager { // swiftlint:disable:this type_name
             // The last element must exist as we entered the statement using a successful `contains` statement.
             // There is not chance to recover here: If there is a crash here, we would fail in the precondition statement in the next line anyways
             let lastElement = recursiveSearch.last! // swiftlint:disable:this force_unwrapping
-            precondition(
-                false, // Nescessary to call our version of the `precondition` function to use this in unit testing.
+            preconditionFailure(
                 """
                 The `DependencyManager` has detected a depenency cycle of your CardinalKit components.
                 The current dependency chain is: \(dependencyChain). The \(String(describing: type(of: lastElement))) required a type already present in the dependency chain.
@@ -70,7 +71,6 @@ public class _DependencyManager { // swiftlint:disable:this type_name
                 Please ensure that the components you use or develop can not trigger a dependency cycle.
                 """
             )
-            return
         }
         
         // If there is no cycle, resolved the dependencies of the component found in the `dependingComponents`.
@@ -79,14 +79,12 @@ public class _DependencyManager { // swiftlint:disable:this type_name
     
     private func resolvedAllDependencies(_ dependingComponent: any DependingComponent) {
         guard !recursiveSearch.isEmpty else {
-            precondition(false, "Internal logic error in the `DependencyManager`")
-            return
+            preconditionFailure("Internal logic error in the `DependencyManager`")
         }
         let component = recursiveSearch.removeLast()
         
         guard component === dependingComponent else {
-            precondition(false, "Internal logic error in the `DependencyManager`")
-            return
+            preconditionFailure("Internal logic error in the `DependencyManager`")
         }
         
         
@@ -94,9 +92,7 @@ public class _DependencyManager { // swiftlint:disable:this type_name
         dependingComponents.removeAll(where: { $0 === dependingComponent })
         precondition(
             dependingComponentsCount - 1 == dependingComponents.count,
-            """
-            Only call `passedAllRequirements` in the `dependencyResolution(_: DependencyManager)` function of your `DependingComponent`.
-            """
+            "Only call `passedAllRequirements` in the `dependencyResolution(_: DependencyManager)` function of your `DependingComponent`."
         )
         
         sortedComponents.append(dependingComponent)

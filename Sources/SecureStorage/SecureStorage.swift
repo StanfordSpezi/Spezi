@@ -11,6 +11,7 @@ import CryptoKit
 import Foundation
 import LocalAuthentication
 import Security
+import XCTRuntimeAssertions
 
 
 /// The ``SecureStorage`` serves as a resuable ``Module`` that can be used to store store small chunks of data such as credentials and keys.

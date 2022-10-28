@@ -15,14 +15,17 @@ public protocol _AnyComponent {
     /// Type-erased version of ``Component/configure(cardinalKit:)``.
     ///
     /// - Parameter cardinalKit: A type-erased ``CardinalKit`` instance.
-    func configureAny(cardinalKit: Any)
+    func _configureAny(cardinalKit: Any) // swiftlint:disable:this identifier_name
+    // We want the visit function to be hidden from autocompletion and document generation. Therefore, we use the `_` prefix.
 }
 
 
 extension Array where Element == _AnyComponent {
-    func configureAny(cardinalKit: Any) {
+    // We want the visit function to be hidden from autocompletion and document generation. Therefore, we use the `_` prefix.
+    // swiftlint:disable:next identifier_name
+    func _configureAny(cardinalKit: Any) {
         forEach {
-            $0.configureAny(cardinalKit: cardinalKit)
+            $0._configureAny(cardinalKit: cardinalKit)
         }
     }
 }

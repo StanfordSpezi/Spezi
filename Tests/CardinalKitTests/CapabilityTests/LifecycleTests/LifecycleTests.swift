@@ -7,7 +7,8 @@
 //
 
 @testable import CardinalKit
-import XCTCardinalKit
+import XCTest
+import XCTRuntimeAssertions
 
 
 private class TestLifecycleHandler: Component, LifecycleHandler, TypedCollectionKey {
