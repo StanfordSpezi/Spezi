@@ -64,15 +64,7 @@ public func XCTRuntimePrecondition<T>(
         throw XCTFail(
             message: """
             The precondition was called multiple times.
-            \(message()) at \(file):\(line)
-            """
-        )
-    }
-    
-    if let result {
-        throw XCTFail(
-            message: """
-            The expression passed to XCTRuntimeAssertion returned a valid value: \(result)
+            The expression passed to XCTRuntimeAssertion returned the following value: \(String(describing: result))
             \(message()) at \(file):\(line)
             """
         )

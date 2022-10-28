@@ -51,7 +51,7 @@ public func XCTRuntimeAssertion<T>(
     if fulfillmentCount != expectedFulfillmentCount {
         throw XCTFail(
             message: """
-            Expected an fulfillment count of \(fulfillmentCount), expected \(expectedFulfillmentCount).
+            Measured an fulfillment count of \(fulfillmentCount), expected \(expectedFulfillmentCount).
             \(message()) at \(file):\(line)
             """
         )

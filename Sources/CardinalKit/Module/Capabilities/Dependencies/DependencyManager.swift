@@ -92,9 +92,7 @@ public class _DependencyManager { // swiftlint:disable:this type_name
         dependingComponents.removeAll(where: { $0 === dependingComponent })
         precondition(
             dependingComponentsCount - 1 == dependingComponents.count,
-            """
-            Only call `passedAllRequirements` in the `dependencyResolution(_: DependencyManager)` function of your `DependingComponent`.
-            """
+            "Only call `passedAllRequirements` in the `dependencyResolution(_: DependencyManager)` function of your `DependingComponent`."
         )
         
         sortedComponents.append(dependingComponent)
