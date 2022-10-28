@@ -60,7 +60,7 @@ final class XCTRuntimeAssertionsTests: XCTestCase {
         
         do {
             let result = try XCTRuntimeAssertion {
-                return "Hello Paul 👋"
+                "Hello Paul 👋"
             }
             XCTAssertEqual(result, "Hello Paul 👋")
         } catch let error as XCTFail {
@@ -109,7 +109,7 @@ final class XCTRuntimeAssertionsTests: XCTestCase {
         
         do {
             try XCTRuntimePrecondition {
-                return "Hello Paul 👋"
+                "Hello Paul 👋"
             }
         } catch let error as XCTFail {
             XCTAssertTrue(error.message.contains("Hello Paul 👋"))
