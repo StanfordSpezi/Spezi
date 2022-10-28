@@ -28,6 +28,13 @@ let package = Package(
                 .target(name: "XCTRuntimeAssertions")
             ]
         ),
+        .testTarget(
+            name: "CardinalKitTests",
+            dependencies: [
+                .target(name: "CardinalKit"),
+                .target(name: "XCTRuntimeAssertions")
+            ]
+        ),
         .target(
             name: "SecureStorage",
             dependencies: [
@@ -39,9 +46,8 @@ let package = Package(
             name: "XCTRuntimeAssertions"
         ),
         .testTarget(
-            name: "CardinalKitTests",
+            name: "XCTRuntimeAssertionsTests",
             dependencies: [
-                .target(name: "CardinalKit"),
                 .target(name: "XCTRuntimeAssertions")
             ]
         )
