@@ -18,6 +18,7 @@ final class SecureStorageTests {
         
         var serverCredentials = Credentials(username: "@PSchmiedmayer", password: "CardinalKitInventor")
         try secureStorage.store(credentials: serverCredentials)
+        try secureStorage.store(credentials: serverCredentials, storageScope: .keychainSynchronizable)
         try secureStorage.store(credentials: serverCredentials, storageScope: .keychainSynchronizable) // Overwrite existing credentials.
         
         let retrievedCredentials = try XCTUnwrap(secureStorage.retrieveCredentials("@PSchmiedmayer"))
@@ -41,11 +42,12 @@ final class SecureStorageTests {
         
         var serverCredentials = Credentials(username: "@PSchmiedmayer", password: "CardinalKitInventor")
         try secureStorage.store(credentials: serverCredentials, server: "twitter.com")
+        try secureStorage.store(credentials: serverCredentials, server: "twitter.com") // Overwrite existing credentials.
         try secureStorage.store(
             credentials: serverCredentials,
             server: "twitter.com",
             storageScope: .keychainSynchronizable
-        ) // Overwrite existing credentials.
+        )
         
         let retrievedCredentials = try XCTUnwrap(secureStorage.retrieveCredentials("@PSchmiedmayer", server: "twitter.com"))
         try XCTAssertEqual(serverCredentials, retrievedCredentials)
