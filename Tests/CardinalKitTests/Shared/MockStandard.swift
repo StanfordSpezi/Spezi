@@ -6,9 +6,11 @@
 // SPDX-License-Identifier: MIT
 //
 
+#if DEBUG
 import CardinalKit
 
 
 public struct MockStandard: Standard {
     public init() {}
 }
+#endif

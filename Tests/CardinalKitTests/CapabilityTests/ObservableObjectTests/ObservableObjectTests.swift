@@ -8,7 +8,8 @@
 
 @testable import CardinalKit
 import SwiftUI
-import XCTCardinalKit
+import XCTest
+import XCTRuntimeAssertions
 
 
 final class ObservableObjectTests: XCTestCase {

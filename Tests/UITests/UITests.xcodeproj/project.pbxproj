@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2F6051CC290C5BDC0003D458 /* XCTRuntimeAssertions in Frameworks */ = {isa = PBXBuildFile; productRef = 2F6051CB290C5BDC0003D458 /* XCTRuntimeAssertions */; };
+		2F67A5BA290C69640092CAD6 /* SecureStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 2F67A5B9290C69640092CAD6 /* SecureStorage */; };
 		2F6D139828F5F384007C25D6 /* ObservableObjectTestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6D139728F5F384007C25D6 /* ObservableObjectTestsView.swift */; };
 		2F6D139A28F5F386007C25D6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F6D139928F5F386007C25D6 /* Assets.xcassets */; };
 		2F9F07E2290906A200CDC598 /* SecureStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9F07E1290906A200CDC598 /* SecureStorageTests.swift */; };
@@ -19,7 +21,6 @@
 		2F9F07F529090BA900CDC598 /* ObservableObjectComponentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9F07F429090BA900CDC598 /* ObservableObjectComponentTests.swift */; };
 		2FA7382C290ADFAA007ACEB9 /* TestApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA7382B290ADFAA007ACEB9 /* TestApp.swift */; };
 		2FC42FD9290ADD8800B08F18 /* CardinalKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2FC42FD8290ADD8800B08F18 /* CardinalKit */; };
-		2FC42FDB290ADD8800B08F18 /* SecureStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 2FC42FDA290ADD8800B08F18 /* SecureStorage */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,8 +55,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F67A5BA290C69640092CAD6 /* SecureStorage in Frameworks */,
 				2FC42FD9290ADD8800B08F18 /* CardinalKit in Frameworks */,
-				2FC42FDB290ADD8800B08F18 /* SecureStorage in Frameworks */,
+				2F6051CC290C5BDC0003D458 /* XCTRuntimeAssertions in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -163,7 +165,8 @@
 			name = TestApp;
 			packageProductDependencies = (
 				2FC42FD8290ADD8800B08F18 /* CardinalKit */,
-				2FC42FDA290ADD8800B08F18 /* SecureStorage */,
+				2F6051CB290C5BDC0003D458 /* XCTRuntimeAssertions */,
+				2F67A5B9290C69640092CAD6 /* SecureStorage */,
 			);
 			productName = Example;
 			productReference = 2F6D139228F5F384007C25D6 /* TestApp.app */;
@@ -403,6 +406,7 @@
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 637867499T;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_TESTING_SEARCH_PATHS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -432,6 +436,7 @@
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 637867499T;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_TESTING_SEARCH_PATHS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -522,13 +527,17 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		2F6051CB290C5BDC0003D458 /* XCTRuntimeAssertions */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = XCTRuntimeAssertions;
+		};
+		2F67A5B9290C69640092CAD6 /* SecureStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SecureStorage;
+		};
 		2FC42FD8290ADD8800B08F18 /* CardinalKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = CardinalKit;
-		};
-		2FC42FDA290ADD8800B08F18 /* SecureStorage */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = SecureStorage;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

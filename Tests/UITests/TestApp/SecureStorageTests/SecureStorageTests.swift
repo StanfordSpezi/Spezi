@@ -10,6 +10,7 @@
 import Foundation
 import SecureStorage
 import Security
+import XCTRuntimeAssertions
 
 
 final class SecureStorageTests {
@@ -65,22 +66,12 @@ final class SecureStorageTests {
     }
     
     func testCredentialsNotWorkingWithSecureEnclave() throws {
-        var expecation: Int = 0
-        
-        CardinalKitAssert.injected = CardinalKitAssert(
-            assert: { condition, message, _, _  in
-                print("Precondition: \(condition()): \"\(message())\"")
-                expecation += 1
-            }
-        )
-        
         let secureStorage = SecureStorage<UITestsAppStandard>()
         let serverCredentials = Credentials(username: "@PSchmiedmayer", password: "CardinalKitInventor")
-        try secureStorage.store(credentials: serverCredentials, server: "twitter.com")
-        
-        try XCTAssertEqual(expecation, 1)
-        
-        CardinalKitAssert.reset()
+
+        try XCTRuntimeAssertion {
+            try secureStorage.store(credentials: serverCredentials, server: "twitter.com")
+        }
     }
     
     func testKeys() throws {

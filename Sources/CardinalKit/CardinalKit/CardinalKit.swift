@@ -57,6 +57,6 @@ public class CardinalKit<S: Standard>: AnyCardinalKit, ObservableObject {
         self.typedCollection = TypedCollection(logger: logger)
         
         let sortedComponents = _DependencyManager(components).sortedComponents
-        sortedComponents.configureAny(cardinalKit: self)
+        sortedComponents._configureAny(cardinalKit: self)
     }
 }

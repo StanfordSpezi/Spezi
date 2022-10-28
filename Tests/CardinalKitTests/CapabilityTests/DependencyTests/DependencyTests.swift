@@ -8,7 +8,8 @@
 
 @testable import CardinalKit
 import SwiftUI
-import XCTCardinalKit
+import XCTest
+import XCTRuntimeAssertions
 
 
 private struct TestStandard: Standard {}
@@ -167,25 +168,12 @@ final class DependencyTests: XCTestCase {
     }
     
     func testComponentCycle() throws {
-        let expectation = XCTestExpectation(description: "Precondition is called")
-        expectation.expectedFulfillmentCount = 3
-        expectation.assertForOverFulfill = true
-        
-        CardinalKitAssert.injected = CardinalKitAssert(
-            precondition: { condition, message, _, _  in
-                print("Precondition: \(condition()): \"\(message())\"")
-                expectation.fulfill()
-            }
-        )
-        
         let components: [_AnyComponent] = [
             TestComponentCircle1<MockStandard>()
         ]
         
-        _ = _DependencyManager(components).sortedComponents
-        
-        wait(for: [expectation])
-        
-        CardinalKitAssert.reset()
+        try XCTRuntimePrecondition {
+            _ = _DependencyManager(components).sortedComponents
+        }
     }
 }

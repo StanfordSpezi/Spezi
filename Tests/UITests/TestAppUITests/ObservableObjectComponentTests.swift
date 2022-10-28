@@ -24,6 +24,6 @@ final class ObservableObjectComponentTests: XCTestCase {
         app.tabBars["Tab Bar"].buttons["ObservableObjectTests"].tap()
         
         XCTAssertTrue(app.images["Globe"].exists)
-        XCTAssertTrue(app.staticTexts["Hello, Paul!"].waitForExistence(timeout: 2))
+        XCTAssertTrue(app.staticTexts["Hello, Paul!"].waitForExistence(timeout: 0.1))
     }
 }

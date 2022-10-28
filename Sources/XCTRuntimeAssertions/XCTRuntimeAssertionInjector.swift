@@ -6,8 +6,9 @@
 // SPDX-License-Identifier: MIT
 //
 
-class CardinalKitAssert {
-    static var injected = CardinalKitAssert()
+#if DEBUG
+class XCTRuntimeAssertionInjector {
+    static var injected = XCTRuntimeAssertionInjector()
     
     
     let assert: (() -> Bool, () -> String, StaticString, UInt) -> Void
@@ -24,6 +25,7 @@ class CardinalKitAssert {
     
     
     static func reset() {
-        injected = CardinalKitAssert()
+        injected = XCTRuntimeAssertionInjector()
     }
 }
+#endif

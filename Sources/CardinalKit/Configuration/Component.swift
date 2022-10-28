@@ -22,8 +22,8 @@ public protocol Component: _AnyComponent, TypedCollectionKey {
 
 extension Component {
     // A documentation for this methodd exists in the `_AnyComponent` type which SwiftLint doesn't recognize.
-    // swiftlint:disable:next missing_docs
-    public func configureAny(cardinalKit: Any) {
+    // swiftlint:disable:next missing_docs identifier_name
+    public func _configureAny(cardinalKit: Any) {
         guard let typedCardinalKit = cardinalKit as? CardinalKit<ComponentStandard> else {
             return
         }

@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
+#if DEBUG
 import CardinalKit
 import SwiftUI
 @_exported import XCTest
@@ -27,3 +28,4 @@ public class TestApplicationDelegate: CardinalKitAppDelegate {
         super.init()
     }
 }
+#endif
