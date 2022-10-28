@@ -10,7 +10,9 @@ import CryptoKit
 import Security
 
 
-enum SecureStorageError: Error {
+/// An `Error` thrown by the ``SecureStorage``.
+public enum SecureStorageError: Error {
+    /// Creation of a new element failed with a `CFError`.
     case createFailed(CFError? = nil)
     case notFound
     /// The error is thrown if an entitlement is missing to use the KeyChain.
@@ -22,6 +24,8 @@ enum SecureStorageError: Error {
     /// for more information about KeyChain access groups.
     /// Remove the  ``CredentialsStorage`` `accessGroup` configuration value if you do not intend to use KeyChain access groups.
     case missingEntitlement
+    /// The ``SecureStorage`` is unable to decode the information obtained into a credentials.
     case unexpectedCredentialsData
+    /// The ``SecureStorage`` encountered a Keychain error when interacting with the Keychain.
     case keychainError(status: OSStatus)
 }
