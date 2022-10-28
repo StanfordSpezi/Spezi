@@ -64,7 +64,6 @@ final class XCTRuntimeAssertionsTests: XCTestCase {
             }
             XCTAssertEqual(result, "Hello Paul 👋")
         } catch let error as XCTFail {
-            print("LOG: \(error.message)")
             XCTAssertTrue(error.message.contains("Measured an fulfillment count of 0, expected 1."))
         }
         
@@ -73,7 +72,6 @@ final class XCTRuntimeAssertionsTests: XCTestCase {
                 throw XCTRuntimeAssertionNotTriggeredError()
             }
         } catch let error as XCTFail {
-            print("LOG: \(error.description)")
             XCTAssertTrue(error.description.contains("Measured an fulfillment count of 0, expected 1."))
         }
     }
@@ -114,8 +112,7 @@ final class XCTRuntimeAssertionsTests: XCTestCase {
                 "Hello Paul 👋"
             }
         } catch let error as XCTFail {
-            print("LOG: \(error.message)")
-            XCTAssertTrue(error.message.contains("Hello Paul 👋"))
+            XCTAssertTrue(error.message.contains("The precondition was called multiple times."))
         }
         
         do {
@@ -123,8 +120,7 @@ final class XCTRuntimeAssertionsTests: XCTestCase {
                 throw XCTRuntimePreconditionNotTriggeredError()
             }
         } catch let error as XCTFail {
-            print("LOG: \(error.description)")
-            XCTAssertTrue(error.description.contains("XCTRuntimePreconditionNotTriggeredError"))
+            XCTAssertTrue(error.description.contains("The precondition was called multiple times."))
         }
     }
 }

@@ -20,13 +20,13 @@ import Foundation
 ///   - line: The line number where the failure occurs. The default is the line number where you call this function.
 ///   - expression: The expression that is evaluated.
 /// - Throws: Throws an `XCTFail` error if the expection does not trigger a runtime assertion with the parameters defined above.
-public func XCTRuntimePrecondition<T>(
+public func XCTRuntimePrecondition(
     validateRuntimeAssertion: ((String) -> Void)? = nil,
     timeout: Double = 0.01,
     _ message: @autoclosure () -> String = "",
     file: StaticString = #filePath,
     line: UInt = #line,
-    _ expression: @escaping () throws -> T
+    _ expression: @escaping () throws -> Void
 ) throws {
     var fulfillmentCount: Int = 0
     
@@ -41,15 +41,12 @@ public func XCTRuntimePrecondition<T>(
         }
     )
     
-    var result: Result<T, Error>?
     // We have to run the operation on a `DispatchQueue` as we have to call `RunLoop.current.run()` in the `preconditionFailure` call.
     let dispatchQueue = DispatchQueue.global(qos: .userInitiated)
     let expressionWorkItem = DispatchWorkItem {
         do {
-            result = .success(try expression())
-        } catch {
-            result = .failure(error)
-        }
+            try expression()
+        } catch {}
     }
     dispatchQueue.async(execute: expressionWorkItem)
     
@@ -64,7 +61,6 @@ public func XCTRuntimePrecondition<T>(
         throw XCTFail(
             message: """
             The precondition was called multiple times.
-            The expression passed to XCTRuntimeAssertion returned the following value: \(String(describing: result))
             \(message()) at \(file):\(line)
             """
         )
