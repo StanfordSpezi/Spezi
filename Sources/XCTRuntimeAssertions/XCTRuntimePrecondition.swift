@@ -56,15 +56,11 @@ public func XCTRuntimePrecondition<T>(
     // We don't use:
     // `wait(for: [expectation], timeout: timeout)`
     // here as we need to make the method independent of XCTestCase to also use it in our TestApp UITest target which fails if you import XCTest.
-    switch expressionWorkItem.wait(timeout: DispatchTime(uptimeNanoseconds: UInt64(1_000_000 * timeout))) {
-    case .success:
-        break
-    case .timedOut:
-        expressionWorkItem.cancel()
-    }
+    usleep(useconds_t(1_000_000 * timeout))
+    expressionWorkItem.cancel()
     dispatchQueue.suspend()
     
-    if fulfillmentCount != 0 {
+    if fulfillmentCount != 1 {
         throw XCTFail(
             message: """
             The precondition was called multiple times.

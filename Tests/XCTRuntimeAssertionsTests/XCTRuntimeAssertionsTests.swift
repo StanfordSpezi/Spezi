@@ -50,7 +50,6 @@ final class XCTRuntimeAssertionsTests: XCTestCase {
             validateRuntimeAssertion: {
                 XCTAssertEqual("preconditionFailure()", $0)
             },
-            timeout: 0.02,
             "testXCTRuntimePrecondition"
         ) {
             precondition(number == 42, "preconditionFailure()")
