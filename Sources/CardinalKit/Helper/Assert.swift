@@ -42,7 +42,7 @@
 ///   - line: The line number to print along with `message` if the assertion
 ///     fails. The default is the line number where `assert(_:_:file:line:)`
 ///     is called.
-func assert(
+public func assert(
     _ condition: @autoclosure () -> Bool,
     _ message: @autoclosure () -> String = String(),
     file: StaticString = #file,
@@ -78,7 +78,7 @@ func assert(
 ///   - line: The line number to print along with `message` if the assertion
 ///     fails. The default is the line number where
 ///     `precondition(_:_:file:line:)` is called.
-func precondition(
+public func precondition(
     _ condition: @autoclosure () -> Bool,
     _ message: @autoclosure () -> String = String(),
     file: StaticString = #file,
@@ -108,7 +108,7 @@ func precondition(
 ///     where `assertionFailure(_:file:line:)` is called.
 ///   - line: The line number to print along with `message`. The default is the
 ///     line number where `assertionFailure(_:file:line:)` is called.
-func assertionFailure(
+public func assertionFailure(
     _ message: @autoclosure () -> String = String(),
     file: StaticString = #file,
     line: UInt = #line

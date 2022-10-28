@@ -10,13 +10,13 @@ import Security
 
 
 /// <#Description#>
-public enum StorageScope {
+public enum StorageScope: Equatable {
     /// <#Description#>
     case secureEnclave(userPresence: Bool = false)
     /// <#Description#>
     case keychain(userPresence: Bool = false, accessGroup: String? = nil)
     /// <#Description#>
-    case keychainSynchronizable(userPresence: Bool = false, accessGroup: String? = nil)
+    case keychainSynchronizable(accessGroup: String? = nil)
     
     
     /// <#Description#>
@@ -29,23 +29,29 @@ public enum StorageScope {
     
     var userPresence: Bool {
         switch self {
-        case let .secureEnclave(userPresence), let .keychain(userPresence, _), let .keychainSynchronizable(userPresence, _):
+        case let .secureEnclave(userPresence), let .keychain(userPresence, _):
             return userPresence
+        case .keychainSynchronizable:
+            return false
         }
     }
     
     var accessGroup: String? {
         switch self {
-        case let .keychain(_, accessGroup), let .keychainSynchronizable(_, accessGroup):
+        case let .keychain(_, accessGroup), let .keychainSynchronizable(accessGroup):
             return accessGroup
-        default:
+        case .secureEnclave:
             return nil
         }
     }
     
-    var accessControl: SecAccessControl {
+    var accessControl: SecAccessControl? {
         get throws {
             // Follows https://developer.apple.com/documentation/security/keychain_services/keychain_items/restricting_keychain_item_accessibility
+            guard case .keychainSynchronizable = self else {
+                return nil
+            }
+            
             var secAccessControlCreateFlags: SecAccessControlCreateFlags = []
             let protection: CFTypeRef
             if self.userPresence {
