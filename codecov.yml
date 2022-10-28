@@ -8,7 +8,6 @@
 
 ignore:
 - "Tests"
-- "Example"
 
 codecov:
   require_ci_to_pass: yes
@@ -31,7 +30,7 @@ coverage:
         # Choose a minimum coverage ratio that the commit must meet to be considered a success
         target: auto
         # Allow the coverage to drop by X%, and posting a success status.
-        threshold: 0%
+        threshold: 0.1%
 
 parsers:
   gcov:

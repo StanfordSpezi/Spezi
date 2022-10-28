@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
+@testable import CardinalKit
 import Foundation
 import SecureStorage
 import Security
@@ -17,10 +18,12 @@ final class SecureStorageTests {
         
         var serverCredentials = Credentials(username: "@PSchmiedmayer", password: "CardinalKitInventor")
         try secureStorage.store(credentials: serverCredentials)
-        try secureStorage.store(credentials: serverCredentials) // Overwrite existing credentials.
+        try secureStorage.store(credentials: serverCredentials, storageScope: .keychainSynchronizable)
+        try secureStorage.store(credentials: serverCredentials, storageScope: .keychainSynchronizable) // Overwrite existing credentials.
         
         let retrievedCredentials = try XCTUnwrap(secureStorage.retrieveCredentials("@PSchmiedmayer"))
         try XCTAssertEqual(serverCredentials, retrievedCredentials)
+        try XCTAssertEqual(serverCredentials.id, retrievedCredentials.id)
         
         
         serverCredentials = Credentials(username: "@CardinalKit", password: "Paul")
@@ -40,6 +43,11 @@ final class SecureStorageTests {
         var serverCredentials = Credentials(username: "@PSchmiedmayer", password: "CardinalKitInventor")
         try secureStorage.store(credentials: serverCredentials, server: "twitter.com")
         try secureStorage.store(credentials: serverCredentials, server: "twitter.com") // Overwrite existing credentials.
+        try secureStorage.store(
+            credentials: serverCredentials,
+            server: "twitter.com",
+            storageScope: .keychainSynchronizable
+        )
         
         let retrievedCredentials = try XCTUnwrap(secureStorage.retrieveCredentials("@PSchmiedmayer", server: "twitter.com"))
         try XCTAssertEqual(serverCredentials, retrievedCredentials)
@@ -56,14 +64,34 @@ final class SecureStorageTests {
         try XCTAssertNil(try secureStorage.retrieveCredentials("@CardinalKit", server: "stanford.edu"))
     }
     
+    func testCredentialsNotWorkingWithSecureEnclave() throws {
+        var expecation: Int = 0
+        
+        CardinalKitAssert.injected = CardinalKitAssert(
+            assert: { condition, message, _, _  in
+                print("Precondition: \(condition()): \"\(message())\"")
+                expecation += 1
+            }
+        )
+        
+        let secureStorage = SecureStorage<UITestsAppStandard>()
+        let serverCredentials = Credentials(username: "@PSchmiedmayer", password: "CardinalKitInventor")
+        try secureStorage.store(credentials: serverCredentials, server: "twitter.com")
+        
+        try XCTAssertEqual(expecation, 1)
+        
+        CardinalKitAssert.reset()
+    }
+    
     func testKeys() throws {
         let secureStorage = SecureStorage<UITestsAppStandard>()
         
         try secureStorage.deleteKeys(forTag: "MyKey")
         try XCTAssertNil(try secureStorage.retrievePublicKey(forTag: "MyKey"))
         
-        try secureStorage.createKey("MyKey", userPresence: false)
-        try secureStorage.createKey("MyKey", userPresence: false)
+        try secureStorage.createKey("MyKey", storageScope: .keychain)
+        try secureStorage.createKey("MyKey", storageScope: .keychainSynchronizable)
+        try secureStorage.createKey("MyKey")
         
         let privateKey = try XCTUnwrap(secureStorage.retrievePrivateKey(forTag: "MyKey"))
         let publicKey = try XCTUnwrap(secureStorage.retrievePublicKey(forTag: "MyKey"))

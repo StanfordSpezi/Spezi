@@ -21,6 +21,7 @@ struct SecureStorageTestsView: View {
                 do {
                     try secureStorageTests.testCredentials()
                     try secureStorageTests.testInternetCredentials()
+                    try secureStorageTests.testCredentialsNotWorkingWithSecureEnclave()
                     try secureStorageTests.testKeys()
                     testState = "Passed"
                 } catch {
