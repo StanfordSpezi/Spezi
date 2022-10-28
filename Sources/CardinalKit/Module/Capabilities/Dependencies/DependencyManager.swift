@@ -56,11 +56,17 @@ public class _DependencyManager { // swiftlint:disable:this type_name
         
         // Detect circles in the `recursiveSearch` collection.
         guard !recursiveSearch.contains(where: { type(of: $0) == T.self }) else {
-            let dependencyChain = recursiveSearch.map { String(describing: type(of: $0)) }.joined(separator: ", ")
+            let dependencyChain = recursiveSearch
+                .map { String(describing: type(of: $0)) }
+                .joined(separator: ", ")
+            
+            // The last element must exist as we entered the statement using a successful `contains` statement.
+            // There is not chance to recover here: If there is a crash here, we would fail in the precondition statement in the next line anyways
+            let lastElement = recursiveSearch.last! // swiftlint:disable:this force_unwrapping
             preconditionFailure(
                 """
                 The `DependencyManager` has detected a depenency cycle of your CardinalKit components.
-                The current dependency chain is: \(dependencyChain). The \(String(describing: type(of: recursiveSearch.last.unsafelyUnwrapped))) required a type already present in the dependency chain.
+                The current dependency chain is: \(dependencyChain). The \(String(describing: type(of: lastElement))) required a type already present in the dependency chain.
                 
                 Please ensure that the components you use or develop can not trigger a dependency cycle.
                 """
