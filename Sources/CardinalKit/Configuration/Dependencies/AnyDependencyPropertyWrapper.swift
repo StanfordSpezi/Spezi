@@ -6,9 +6,6 @@
 // SPDX-License-Identifier: MIT
 //
 
-import Foundation
-
-
 protocol AnyDependencyPropertyWrapper: AnyObject {
     associatedtype AnyDependencyPropertyWrapperStandard: Standard
     

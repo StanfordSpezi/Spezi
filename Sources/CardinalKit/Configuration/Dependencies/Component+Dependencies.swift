@@ -6,9 +6,6 @@
 // SPDX-License-Identifier: MIT
 //
 
-import Foundation
-
-
 extension _AnyComponent {
     var dependencies: [any AnyDependencyPropertyWrapper] {
         let mirror = Mirror(reflecting: self)

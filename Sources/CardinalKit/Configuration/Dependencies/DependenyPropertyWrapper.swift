@@ -9,7 +9,7 @@
 import XCTRuntimeAssertions
 
 
-/// <#Description#>
+/// Refer to ``Component/Dependency`` for information on how to use the `@Dependency` property wrapper. Do not use the `_DependencyPropertyWrapper` directly.
 @propertyWrapper
 public class _DependencyPropertyWrapper<C: Component, S: Standard>: AnyDependencyPropertyWrapper where C.ComponentStandard == S {
     // swiftlint:disable:previous type_name
@@ -21,7 +21,7 @@ public class _DependencyPropertyWrapper<C: Component, S: Standard>: AnyDependenc
     private let defaultValue: () -> C
     var dependency: C?
     
-    /// <#Description#>
+    /// The dependency that is resolved by ``CardinalKit``
     public var wrappedValue: C {
         guard let dependency else {
             preconditionFailure(
@@ -35,7 +35,7 @@ public class _DependencyPropertyWrapper<C: Component, S: Standard>: AnyDependenc
     }
     
     
-    /// <#Description#>
+    /// Refer to ``Component/Dependency`` for information on how to use the `@Dependency` property wrapper. Do not use the `_DependencyPropertyWrapper` directly.
     public init(wrappedValue defaultValue: @escaping @autoclosure () -> C) {
         self.defaultValue = defaultValue
     }
