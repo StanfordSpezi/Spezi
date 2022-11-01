@@ -9,29 +9,56 @@
 import XCTRuntimeAssertions
 
 
-/// A ``DependencyManager`` in CardinalKit is used to gather information about dependencies of a ``DependingComponent``.
+/// A ``DependencyManager`` in CardinalKit is used to gather information about components with dependencies.
 public class _DependencyManager { // swiftlint:disable:this type_name
     // We want the _DependencyManager type to be hidden from autocompletion and document generation.
     // Therefore, we use the `_` prefix.
     /// Collection of sorted components after resolving all dependencies.
     var sortedComponents: [_AnyComponent]
-    /// Collection of all ``DependingComponent``s that are not yet processed.
-    private var dependingComponents: [any DependingComponent & _AnyComponent]
-    /// Collection used to keep track of ``DependingComponent``s in the recursive search.
-    private var recursiveSearch: [any DependingComponent & _AnyComponent] = []
+    /// Collection of all omponents with dependencies that are not yet processed.
+    private var componentsWithDependencies: [_AnyComponent]
+    /// Collection used to keep track of components with dependencies in the recursive search.
+    private var recursiveSearch: [_AnyComponent] = []
     
     
+    /// A ``DependencyManager`` in CardinalKit is used to gather information about components with dependencies.
+    /// - Parameter components: The components that should be resolved.
     init(_ components: [_AnyComponent]) {
-        sortedComponents = components.filter { !($0 is (any DependingComponent)) }
-        dependingComponents = components.compactMap { $0 as? (any DependingComponent & _AnyComponent) }
+        sortedComponents = components.filter { $0.dependencies.isEmpty }
+        componentsWithDependencies = components.filter { !$0.dependencies.isEmpty }
         
         // Start the dependency resolution on the first component.
-        if let nextComponent = dependingComponents.first {
+        if let nextComponent = componentsWithDependencies.first {
             push(nextComponent)
+        }
+        
+        for sortedComponent in sortedComponents {
+            for dependency in sortedComponent.dependencies {
+                dependency.inject(dependencyManager: self)
+            }
         }
     }
     
     
+    /// Injects a dependency into a `_DependencyPropertyWrapper` that is resolved in the `sortedComponents`.
+    /// - Parameters:
+    ///   - dependencyType: The type of the dependency that should be injected.
+    ///   - dependencyPropertyWrapper: `_DependencyPropertyWrapper` that the dependency should be injected into.
+    func inject<C: Component, S: Standard>(
+        _ dependencyType: C.Type,
+        into dependencyPropertyWrapper: _DependencyPropertyWrapper<C, S>
+    ) where C.ComponentStandard == S {
+        guard let foundInSortedComponents = sortedComponents.first(where: { type(of: $0) == C.self }) as? C else {
+            preconditionFailure("Could not find the injectable component in the `sortedComponents`.")
+        }
+        
+        dependencyPropertyWrapper.dependency = foundInSortedComponents
+    }
+    
+    /// Communicate a requirement to a `_DependencyManager`
+    /// - Parameters:
+    ///   - dependencyType: The type of the dependency that should be resolved.
+    ///   - defaultValue: A default instance of the dependency that is used when the `dependencyType` is not present in the `sortedComponents` or `componentsWithDependencies`.
     func require<T: Component>(_ dependencyType: T.Type, defaultValue: @autoclosure () -> (T)) {
         // 1. Return if thedepending component is found in the `sortedComponents` collection.
         if sortedComponents.contains(where: { type(of: $0) == T.self }) {
@@ -40,16 +67,16 @@ public class _DependencyManager { // swiftlint:disable:this type_name
         
         // 2. Search for the required component is found in the `dependingComponents` collection.
         // If not, use the default value calling the `defaultValue` autoclosure.
-        guard let foundInDependingComponents = dependingComponents.first(where: { type(of: $0) == T.self }) else {
+        guard let foundInComponentsWithDependencies = componentsWithDependencies.first(where: { type(of: $0) == T.self }) else {
             let newComponent = defaultValue()
             
-            guard let newDependingComponent = newComponent as? (any DependingComponent & _AnyComponent) else {
+            guard !newComponent.dependencies.isEmpty else {
                 sortedComponents.append(newComponent)
                 return
             }
             
-            dependingComponents.insert(newDependingComponent, at: 0)
-            push(newDependingComponent)
+            componentsWithDependencies.insert(newComponent, at: 0)
+            push(newComponent)
             
             return
         }
@@ -74,10 +101,10 @@ public class _DependencyManager { // swiftlint:disable:this type_name
         }
         
         // If there is no cycle, resolved the dependencies of the component found in the `dependingComponents`.
-        push(foundInDependingComponents)
+        push(foundInComponentsWithDependencies)
     }
     
-    private func resolvedAllDependencies(_ dependingComponent: any DependingComponent) {
+    private func resolvedAllDependencies(_ dependingComponent: _AnyComponent) {
         guard !recursiveSearch.isEmpty else {
             preconditionFailure("Internal logic error in the `DependencyManager`")
         }
@@ -88,26 +115,26 @@ public class _DependencyManager { // swiftlint:disable:this type_name
         }
         
         
-        let dependingComponentsCount = dependingComponents.count
-        dependingComponents.removeAll(where: { $0 === dependingComponent })
+        let dependingComponentsCount = componentsWithDependencies.count
+        componentsWithDependencies.removeAll(where: { $0 === dependingComponent })
         precondition(
-            dependingComponentsCount - 1 == dependingComponents.count,
-            "Only call `passedAllRequirements` in the `dependencyResolution(_: DependencyManager)` function of your `DependingComponent`."
+            dependingComponentsCount - 1 == componentsWithDependencies.count,
+            "Unexpected reduction of components. Esure that all your components conform to the same `Standard`"
         )
         
         sortedComponents.append(dependingComponent)
         
         // Call the dependency resolution mechanism on the next element in the `dependingComponents` if we are not in a recursive serach.
-        if recursiveSearch.isEmpty, let nextComponent = dependingComponents.first {
+        if recursiveSearch.isEmpty, let nextComponent = componentsWithDependencies.first {
             push(nextComponent)
         }
     }
     
     
-    private func push(_ component: any DependingComponent & _AnyComponent) {
+    private func push(_ component: _AnyComponent) {
         recursiveSearch.append(component)
         for dependency in component.dependencies {
-            dependency._visit(dependencyManager: self)
+            dependency.gatherDependency(dependencyManager: self)
         }
         resolvedAllDependencies(component)
     }

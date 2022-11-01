@@ -6,7 +6,6 @@
 // SPDX-License-Identifier: MIT
 //
 
-#if DEBUG
 import CardinalKit
 import SwiftUI
 @_exported import XCTest
@@ -16,7 +15,7 @@ public class TestComponent<ComponentStandard: Standard>: ObservableObject, Compo
     let expectation: XCTestExpectation
     
     
-    public init(expectation: XCTestExpectation) {
+    public init(expectation: XCTestExpectation = XCTestExpectation()) {
         self.expectation = expectation
     }
     
@@ -26,4 +25,3 @@ public class TestComponent<ComponentStandard: Standard>: ObservableObject, Compo
         expectation.fulfill()
     }
 }
-#endif
