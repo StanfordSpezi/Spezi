@@ -49,13 +49,7 @@ public class _DependencyManager { // swiftlint:disable:this type_name
         into dependencyPropertyWrapper: _DependencyPropertyWrapper<C, S>
     ) where C.ComponentStandard == S {
         guard let foundInSortedComponents = sortedComponents.first(where: { type(of: $0) == C.self }) as? C else {
-            preconditionFailure(
-                """
-                Could not find the injectable component in the `sortedComponents`.
-                Please ensure that the inject function is called after all requirements are passed to the `_DependencyManager` using
-                the `require<T: Component>(_: T.Type, defaultValue: T)` function.
-                """
-            )
+            preconditionFailure("Could not find the injectable component in the `sortedComponents`.")
         }
         
         dependencyPropertyWrapper.dependency = foundInSortedComponents
