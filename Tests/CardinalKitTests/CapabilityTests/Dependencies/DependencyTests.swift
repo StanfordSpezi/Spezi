@@ -16,16 +16,16 @@ private struct TestStandard: Standard {}
 
 private class TestComponent1<ComponentStandard: Standard>: Component {
     @_DependencyPropertyWrapper var testComponent2 = TestComponent2<ComponentStandard>()
-    @_DependencyPropertyWrapper var testComponent3 = TestComponent3<ComponentStandard>()
+    @_DependencyPropertyWrapper var testComponent3: TestComponent3<ComponentStandard>
 }
 
 private class TestComponent2<ComponentStandard: Standard>: Component {
     @_DependencyPropertyWrapper var testComponent4 = TestComponent4<ComponentStandard>()
     @_DependencyPropertyWrapper var testComponent5 = TestComponent5<ComponentStandard>()
-    @_DependencyPropertyWrapper var testComponent3 = TestComponent3<ComponentStandard>()
+    @_DependencyPropertyWrapper var testComponent3: TestComponent3<ComponentStandard>
 }
 
-private class TestComponent3<ComponentStandard: Standard>: Component {}
+private final class TestComponent3<ComponentStandard: Standard>: Component, DefaultInitializable {}
 
 private class TestComponent4<ComponentStandard: Standard>: Component {
     @_DependencyPropertyWrapper var testComponent5 = TestComponent5<ComponentStandard>()

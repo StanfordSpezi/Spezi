@@ -11,7 +11,7 @@ import SecureStorage
 import Security
 
 
-/// <#Description#>
+/// The ``LocalStorageSetting`` enables configuring how data in the ``LocalStorage/LocalStorage`` module can be stored and retrieved.
 public enum LocalStorageSetting {
     /// Encryped using a `eciesEncryptionCofactorX963SHA256AESGCM` key: private key for encryption and a public key for decryption.
     case unencryped(excludedFromBackup: Bool = true)

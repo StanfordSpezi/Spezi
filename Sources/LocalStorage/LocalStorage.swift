@@ -12,8 +12,13 @@ import SecureStorage
 import Security
 
 
-/// <#Description#>
-public class LocalStorage<ComponentStandard: Standard>: Module {
+/// The   ``LocalStorage/`` module enables the on-disk storage of data in mobile applications.
+/// The module relies on the `SecureStorage` module to enable an encrypted on-disk storage as defined by the ``LocalStorageSetting`` configuration.
+///
+/// Use ``LocalStorage/LocalStorage/store(_:storageKey:settings:)`` to store elements on disk and define the settings using a ``LocalStorageSetting`` instance.
+///
+/// Use ``LocalStorage/LocalStorage/read(_:storageKey:settings:)`` to read elements on disk which are decoded as define by  passed in  ``LocalStorageSetting`` instance.
+public class LocalStorage<ComponentStandard: Standard>: Module, DefaultInitializable {
     private let encryptionAlgorithm: SecKeyAlgorithm = .eciesEncryptionCofactorX963SHA256AESGCM
     @Dependency private var secureStorage = SecureStorage()
     
@@ -34,16 +39,16 @@ public class LocalStorage<ComponentStandard: Standard>: Module {
     }
     
     
-    /// <#Description#>
-    public init() {}
+    /// The ``LocalStorage`` initializer.
+    public required init() {}
     
     
-    /// <#Description#>
+    /// Use ``LocalStorage/LocalStorage/store(_:storageKey:settings:)`` to store elements on disk and define the settings using a ``LocalStorageSetting`` instance.
     /// - Parameters:
-    ///   - element: <#element description#>
-    ///   - storageKey: <#storageKey description#>
-    ///   - settings: <#settings description#>
-    public func store<C: Codable>(
+    ///   - element: The element that should be stored conforming to `Encodable`
+    ///   - storageKey: An optional storage key to identify the file.
+    ///   - settings: The ``LocalStorageSetting``s applied to the file on disk.
+    public func store<C: Encodable>(
         _ element: C,
         storageKey: String? = nil,
         settings: LocalStorageSetting = .encrypedUsingKeyChain()
@@ -94,12 +99,12 @@ public class LocalStorage<ComponentStandard: Standard>: Module {
     }
     
     
-    /// <#Description#>
+    /// Use ``LocalStorage/LocalStorage/read(_:storageKey:settings:)`` to read elements on disk which are decoded as define by  passed in  ``LocalStorageSetting`` instance.
     /// - Parameters:
-    ///   - storageKey: <#storageKey description#>
-    ///   - settings: <#settings description#>
-    /// - Returns: <#description#>
-    public func read<C: Codable>(
+    ///   - storageKey: An optional storage key to identify the file.
+    ///   - settings: The ``LocalStorageSetting``s used to retrieve the file on disk.
+    /// - Returns: The element conforming to `Decodable`.
+    public func read<C: Decodable>(
         _ type: C.Type = C.self,
         storageKey: String? = nil,
         settings: LocalStorageSetting = .encrypedUsingKeyChain()
@@ -123,6 +128,37 @@ public class LocalStorage<ComponentStandard: Standard>: Module {
         return try JSONDecoder().decode(C.self, from: decryptedData)
     }
     
+    
+    /// Use ``LocalStorage/LocalStorage/delete(storageKey:)`` to deletes a file stored on disk identified by the `storageKey`.
+    /// - Parameters:
+    ///   - storageKey: An optional storage key to identify the file.
+    public func delete(storageKey: String) throws {
+        try delete(String.self, storageKey: storageKey)
+    }
+    
+    /// Use ``LocalStorage/LocalStorage/delete(storageKey:)`` to deletes a file stored on disk defined by a  `Decodable` type that is used to derive the storage key.
+    /// - Parameters:
+    ///   - type: The `Decodable` type that is used to derive the storage key from.
+    public func delete<C: Encodable>(_ type: C.Type = C.self) throws {
+        try delete(C.self, storageKey: nil)
+    }
+    
+    
+    private func delete<C: Encodable>(
+        _ type: C.Type = C.self,
+        storageKey: String? = nil
+    ) throws {
+        let fileURL = fileURL(from: storageKey, type: C.self)
+        let fileManager = FileManager()
+        
+        if fileManager.fileExists(atPath: fileURL.absoluteString) {
+            do {
+                try fileManager.removeItem(atPath: fileURL.absoluteString)
+            } catch {
+                throw LocalStorageError.deletionNotPossible
+            }
+        }
+    }
     
     private func fileURL<C>(from storageKey: String? = nil, type: C.Type = C.self) -> URL {
         let storageKey = storageKey ?? String(describing: C.self)

@@ -36,5 +36,8 @@ final class LocalStorageTests: XCTestCase {
         let storedLetter: Letter = try localStorage.read(settings: .unencryped())
         
         XCTAssertEqual(letter, storedLetter)
+        
+        try localStorage.delete(Letter.self)
+        try localStorage.delete(storageKey: "Letter")
     }
 }
