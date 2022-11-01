@@ -41,6 +41,12 @@ public class _DependencyPropertyWrapper<C: Component, S: Standard>: AnyDependenc
     }
     
     
+    /// Refer to ``Component/Dependency`` for information on how to use the `@Dependency` property wrapper. Do not use the `_DependencyPropertyWrapper` directly.
+    public init() where C: DefaultInitializable {
+        self.defaultValue = { C() }
+    }
+    
+    
     func gatherDependency(dependencyManager: _DependencyManager) {
         dependencyManager.require(C.self, defaultValue: defaultValue())
     }

@@ -9,8 +9,8 @@
 import Security
 
 
-/// The ``StorageScope`` defines how secure data is stored by the ``SecureStorage`` component.
-public enum StorageScope: Equatable {
+/// The ``SecureStorageScope`` defines how secure data is stored by the ``SecureStorage`` component.
+public enum SecureStorageScope: Equatable, Identifiable {
     /// Store the element in the Secure Enclave
     case secureEnclave(userPresence: Bool = false)
     /// Store the element in the Keychain
@@ -38,6 +38,23 @@ public enum StorageScope: Equatable {
     /// Store the element in the Keychain and enable it to be synchronizable between different instances of user devices.
     public static let keychainSynchronizable = keychainSynchronizable()
     
+    
+    public var id: String {
+        switch self {
+        case let .keychain(userPresence, accessGroup):
+            guard let accessGroup else {
+                return "keychain.\(userPresence)"
+            }
+            return "keychain.\(userPresence).\(accessGroup)"
+        case let .keychainSynchronizable(accessGroup):
+            guard let accessGroup else {
+                return "keychainSynchronizable"
+            }
+            return "keychainSynchronizable.\(accessGroup)"
+        case .secureEnclave:
+            return "secureEnclave"
+        }
+    }
     
     var userPresence: Bool {
         switch self {

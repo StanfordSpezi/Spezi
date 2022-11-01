@@ -50,6 +50,13 @@
             BlueprintName = "XCTRuntimeAssertions"
             ReferencedContainer = "container:../..">
          </BuildableReference>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "LocalStorage"
+            BuildableName = "LocalStorage"
+            BlueprintName = "LocalStorage"
+            ReferencedContainer = "container:../..">
+         </BuildableReference>
       </CodeCoverageTargets>
       <Testables>
          <TestableReference

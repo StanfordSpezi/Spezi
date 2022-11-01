@@ -17,12 +17,12 @@ import XCTRuntimeAssertions
 /// The ``SecureStorage`` serves as a resuable ``Module`` that can be used to store store small chunks of data such as credentials and keys.
 ///
 /// The storing of credentials and keys follows the Keychain documentation provided by Apple: https://developer.apple.com/documentation/security/keychain_services/keychain_items/using_the_keychain_to_manage_user_secrets.
-public class SecureStorage<ComponentStandard: Standard>: Module {
+public class SecureStorage<ComponentStandard: Standard>: Module, DefaultInitializable {
     /// The ``SecureStorage`` serves as a resuable ``Module`` that can be used to store store small chunks of data such as credentials and keys.
     ///
     /// The storing of credentials and keys follows the Keychain documentation provided by Apple:
     /// https://developer.apple.com/documentation/security/keychain_services/keychain_items/using_the_keychain_to_manage_user_secrets.
-    public init() {}
+    public required init() {}
     
     
     // MARK: - Key Handling
@@ -31,10 +31,10 @@ public class SecureStorage<ComponentStandard: Standard>: Module {
     /// - Parameters:
     ///   - tag: The tag used to identify the key in the keychain or the secure enclave.
     ///   - size: The size of the key in bits. The default value is 256 bits.
-    ///   - storageScope: The  ``StorageScope`` used to store the newly generate key.
-    /// - Returns: Returns the `SecKey` generated and stored in the keychain or the secure enclave.
+    ///   - storageScope: The  ``SecureStorageScope`` used to store the newly generate key.
+    /// - Returns: Returns the `SecKey` private key generated and stored in the keychain or the secure enclave.
     @discardableResult
-    public func createKey(_ tag: String, size: Int = 256, storageScope: StorageScope = .secureEnclave) throws -> SecKey {
+    public func createKey(_ tag: String, size: Int = 256, storageScope: SecureStorageScope = .secureEnclave) throws -> SecKey {
         // The key generation code follows
         // https://developer.apple.com/documentation/security/certificate_key_and_trust_services/keys/protecting_keys_with_the_secure_enclave
         // and
@@ -63,11 +63,11 @@ public class SecureStorage<ComponentStandard: Standard>: Module {
         
         var error: Unmanaged<CFError>?
         guard let privateKey = SecKeyCreateRandomKey(attributes as CFDictionary, &error),
-              let publicKey = SecKeyCopyPublicKey(privateKey) else {
+              SecKeyCopyPublicKey(privateKey) != nil else {
             throw SecureStorageError.createFailed(error?.takeRetainedValue())
         }
         
-        return publicKey
+        return privateKey
     }
     
     /// Retrieves a private key stored in the keychain or the secure enclave identified by a `tag`.
@@ -135,13 +135,13 @@ public class SecureStorage<ComponentStandard: Standard>: Module {
     ///   - server: The server associated with the credentials.
     ///   - removeDuplicate: A flag indicating if any existing key for the `username` and `server`
     ///                      combination should be overwritten when storing the credentials.
-    ///   - storageScope: The ``StorageScope`` of the stored credentials.
-    ///                   The ``StorageScope/secureEnclave(userPresence:)`` option is not supported for credentials.
+    ///   - storageScope: The ``SecureStorageScope`` of the stored credentials.
+    ///                   The ``SecureStorageScope/secureEnclave(userPresence:)`` option is not supported for credentials.
     public func store(
         credentials: Credentials,
         server: String? = nil,
         removeDuplicate: Bool = true,
-        storageScope: StorageScope = .keychain
+        storageScope: SecureStorageScope = .keychain
     ) throws {
         // This method uses code provided by the Apple Developer documentation at
         // https://developer.apple.com/documentation/security/keychain_services/keychain_items/adding_a_password_to_the_keychain.
@@ -186,7 +186,7 @@ public class SecureStorage<ComponentStandard: Standard>: Module {
     ///   - newServer: The server associated with the new credentials.
     ///   - removeDuplicate: A flag indicating if any existing key for the `username` of the new credentials and `newServer`
     ///                      combination should be overwritten when storing the credentials.
-    ///   - storageScope: The ``StorageScope`` of the newly stored credentials.
+    ///   - storageScope: The ``SecureStorageScope`` of the newly stored credentials.
     public func updateCredentials( // swiftlint:disable:this function_default_parameter_at_end
         // The server parameter belongs to the `username` and therefore should be located next to the `username`.
         _ username: String,
@@ -194,7 +194,7 @@ public class SecureStorage<ComponentStandard: Standard>: Module {
         newCredentials: Credentials,
         newServer: String? = nil,
         removeDuplicate: Bool = true,
-        storageScope: StorageScope = .keychain
+        storageScope: SecureStorageScope = .keychain
     ) throws {
         try deleteCredentials(username, server: server)
         try store(credentials: newCredentials, server: newServer, removeDuplicate: removeDuplicate, storageScope: storageScope)

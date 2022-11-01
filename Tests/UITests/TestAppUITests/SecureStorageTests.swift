@@ -16,12 +16,12 @@ final class SecureStorageTests: XCTestCase {
         continueAfterFailure = false
     }
     
-
+    
     func testSecureStorage() throws {
         let app = XCUIApplication()
         app.launch()
         
-        app.tabBars["Tab Bar"].buttons["SecureStorageTests"].tap()
+        app.collectionViews.buttons["SecureStorage"].tap()
         
         XCTAssertTrue(app.staticTexts["Passed"].waitForExistence(timeout: 0.2))
     }
