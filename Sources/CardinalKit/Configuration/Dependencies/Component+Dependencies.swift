@@ -31,7 +31,7 @@ extension Component {
     ///
     /// A ``Component`` can define the dependencies using the ``@Dependency`` property wrapper:
     /// ```
-    /// private class ExampleComponent<ComponentStandard: Standard>: DependingComponent {
+    /// class ExampleComponent<ComponentStandard: Standard>: Component {
     ///     @Dependency var exampleComponentDependency = ExampleComponentDependency()
     /// }
     /// ```
