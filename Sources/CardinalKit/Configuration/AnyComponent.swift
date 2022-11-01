@@ -11,7 +11,7 @@
 ///
 /// Due to Swift constraints, this type needs to be public.
 /// The underscore before the type indicates to documentation builders to ignore the type and auto-completion in, e.g., Xcode to not suggest the type.
-public protocol _AnyComponent {
+public protocol _AnyComponent: AnyObject {
     /// Type-erased version of ``Component/configure(cardinalKit:)``.
     ///
     /// - Parameter cardinalKit: A type-erased ``CardinalKit`` instance.
