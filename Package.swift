@@ -19,6 +19,7 @@ let package = Package(
     products: [
         .library(name: "CardinalKit", targets: ["CardinalKit"]),
         .library(name: "SecureStorage", targets: ["SecureStorage"]),
+        .library(name: "LocalStorage", targets: ["LocalStorage"]),
         .library(name: "XCTRuntimeAssertions", targets: ["XCTRuntimeAssertions"])
     ],
     targets: [
@@ -40,6 +41,19 @@ let package = Package(
             dependencies: [
                 .target(name: "CardinalKit"),
                 .target(name: "XCTRuntimeAssertions")
+            ]
+        ),
+        .target(
+            name: "LocalStorage",
+            dependencies: [
+                .target(name: "CardinalKit"),
+                .target(name: "SecureStorage")
+            ]
+        ),
+        .testTarget(
+            name: "LocalStorageTests",
+            dependencies: [
+                .target(name: "LocalStorage")
             ]
         ),
         .target(

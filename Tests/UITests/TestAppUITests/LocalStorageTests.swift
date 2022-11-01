@@ -9,7 +9,7 @@
 import XCTest
 
 
-final class ObservableObjectComponentTests: XCTestCase {
+final class LocalStorageTests: XCTestCase {
     override func setUpWithError() throws {
         try super.setUpWithError()
         
@@ -17,13 +17,12 @@ final class ObservableObjectComponentTests: XCTestCase {
     }
     
     
-    func testObservableObjectComponent() throws {
+    func testLocalStorage() throws {
         let app = XCUIApplication()
         app.launch()
         
-        app.collectionViews.buttons["ObservableObject"].tap()
+        app.collectionViews.buttons["LocalStorage"].tap()
         
-        XCTAssertTrue(app.images["Globe"].exists)
-        XCTAssertTrue(app.staticTexts["Hello, Paul!"].waitForExistence(timeout: 0.1))
+        XCTAssertTrue(app.staticTexts["Passed"].waitForExistence(timeout: 0.2))
     }
 }

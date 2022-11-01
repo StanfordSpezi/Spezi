@@ -7,6 +7,8 @@
 //
 
 import CardinalKit
+import LocalStorage
+import SecureStorage
 import SwiftUI
 
 
@@ -14,6 +16,8 @@ class UITestsAppDelegate: CardinalKitAppDelegate {
     override var configuration: Configuration {
         Configuration(standard: UITestsAppStandard()) {
             ObservableComponentTestsComponent(greeting: "Hello, Paul!")
+            SecureStorage()
+            LocalStorage()
         }
     }
 }

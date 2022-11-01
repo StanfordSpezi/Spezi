@@ -11,24 +11,43 @@ import SwiftUI
 
 @main
 struct UITestsApp: App {
+    enum Tests: String, CaseIterable, Identifiable {
+        case localStorage = "LocalStorage"
+        case observableObject = "ObservableObject"
+        case secureStorage = "SecureStorage"
+        
+        
+        var id: RawValue {
+            self.rawValue
+        }
+        
+        @ViewBuilder
+        var view: some View {
+            switch self {
+            case .localStorage:
+                LocalStorageTestsView()
+            case .observableObject:
+                ObservableObjectTestsView()
+            case .secureStorage:
+                SecureStorageTestsView()
+            }
+        }
+    }
+    
+    
     @UIApplicationDelegateAdaptor(UITestsAppDelegate.self) var appDelegate
     
     
     var body: some Scene {
         WindowGroup {
-            TabView {
-                Text("UITestsApp")
-                    .tabItem {
-                        Label("Home", systemImage: "house")
+            NavigationStack {
+                List(Tests.allCases) { test in
+                    NavigationLink(test.rawValue, value: test)
+                }
+                    .navigationDestination(for: Tests.self) { test in
+                        test.view
                     }
-                ObservableObjectTestsView()
-                    .tabItem {
-                        Label("ObservableObjectTests", systemImage: "eyeglasses")
-                    }
-                SecureStorageTestsView()
-                    .tabItem {
-                        Label("SecureStorageTests", systemImage: "lock")
-                    }
+                    .navigationTitle("UITest")
             }
                 .cardinalKit(appDelegate)
         }
