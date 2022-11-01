@@ -63,11 +63,11 @@ public class SecureStorage<ComponentStandard: Standard>: Module {
         
         var error: Unmanaged<CFError>?
         guard let privateKey = SecKeyCreateRandomKey(attributes as CFDictionary, &error),
-              let publicKey = SecKeyCopyPublicKey(privateKey) else {
+              SecKeyCopyPublicKey(privateKey) != nil else {
             throw SecureStorageError.createFailed(error?.takeRetainedValue())
         }
         
-        return publicKey
+        return privateKey
     }
     
     /// Retrieves a private key stored in the keychain or the secure enclave identified by a `tag`.
