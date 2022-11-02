@@ -12,10 +12,10 @@ import SecureStorage
 import SwiftUI
 
 
-class UITestsAppDelegate: CardinalKitAppDelegate {
+class TestAppDelegate: CardinalKitAppDelegate {
     override var configuration: Configuration {
-        Configuration(standard: UITestsAppStandard()) {
-            ObservableComponentTestsComponent(greeting: "Hello, Paul!")
+        Configuration(standard: TestAppStandard()) {
+            ObservableComponentTestsComponent(message: "Passed")
             SecureStorage()
             LocalStorage()
         }

@@ -9,4 +9,4 @@
 import CardinalKit
 
 
-struct UITestsAppStandard: Standard {}
+struct TestAppStandard: Standard {}

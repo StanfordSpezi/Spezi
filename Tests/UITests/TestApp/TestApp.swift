@@ -21,6 +21,7 @@ struct UITestsApp: App {
             self.rawValue
         }
         
+        @MainActor
         @ViewBuilder
         var view: some View {
             switch self {
@@ -35,7 +36,7 @@ struct UITestsApp: App {
     }
     
     
-    @UIApplicationDelegateAdaptor(UITestsAppDelegate.self) var appDelegate
+    @UIApplicationDelegateAdaptor(TestAppDelegate.self) var appDelegate
     
     
     var body: some Scene {

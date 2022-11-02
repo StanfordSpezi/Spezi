@@ -12,27 +12,11 @@ import SwiftUI
 
 
 struct LocalStorageTestsView: View {
-    @EnvironmentObject var localStorage: LocalStorage<UITestsAppStandard>
-    @EnvironmentObject var secureStorage: SecureStorage<UITestsAppStandard>
-    @State var testState = "Running ..."
+    @EnvironmentObject var localStorage: LocalStorage<TestAppStandard>
+    @EnvironmentObject var secureStorage: SecureStorage<TestAppStandard>
     
     
     var body: some View {
-        Text(testState)
-            .onAppear {
-                let secureStorageTests = LocalStorageTests(localStorage: localStorage, secureStorage: secureStorage)
-                
-                do {
-                    try secureStorageTests.testLocalStorageTestEncrypedManualKeys()
-                    // Call test methods multiple times to test retrieval of keys.
-                    try secureStorageTests.testLocalStorageTestEncrypedKeychain()
-                    try secureStorageTests.testLocalStorageTestEncrypedKeychain()
-                    try secureStorageTests.testLocalStorageTestEncrypedSecureEnclave()
-                    try secureStorageTests.testLocalStorageTestEncrypedSecureEnclave()
-                    testState = "Passed"
-                } catch {
-                    testState = "Failed: \(error)"
-                }
-            }
+        TestAppView(testCase: LocalStorageTests(localStorage: localStorage, secureStorage: secureStorage))
     }
 }

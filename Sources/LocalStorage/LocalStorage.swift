@@ -27,7 +27,7 @@ public class LocalStorage<ComponentStandard: Standard>: Module, DefaultInitializ
         // We store the files in the application support directory as described in
         // https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/FileSystemProgrammingGuide/FileSystemOverview/FileSystemOverview.html
         let paths = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)
-        let localStoragePath = paths[0].appendingPathComponent("LocalStorage")
+        let localStoragePath = paths[0].appendingPathComponent("edu.stanford.cardinalkit/LocalStorage")
         if !FileManager.default.fileExists(atPath: localStoragePath.path) {
             do {
                 try FileManager.default.createDirectory(atPath: localStoragePath.path, withIntermediateDirectories: true, attributes: nil)
@@ -52,22 +52,23 @@ public class LocalStorage<ComponentStandard: Standard>: Module, DefaultInitializ
         _ element: C,
         storageKey: String? = nil,
         settings: LocalStorageSetting = .encrypedUsingKeyChain()
-    ) throws {
+    ) async throws {
         var fileURL = fileURL(from: storageKey, type: C.self)
-        let fileManager = FileManager()
-        let fileExistsAlready = fileManager.fileExists(atPath: fileURL.absoluteString)
+        let fileExistsAlready = FileManager.default.fileExists(atPath: fileURL.path)
         
         // Called at the end of each execution path
         // We can not use defer as the function can potentlially throw an error.
         func setResourceValues() throws {
             do {
-                var resourceValues = URLResourceValues()
-                resourceValues.isExcludedFromBackup = true
-                try fileURL.setResourceValues(resourceValues)
+                if settings.excludedFromBackup {
+                    var resourceValues = URLResourceValues()
+                    resourceValues.isExcludedFromBackup = true
+                    try fileURL.setResourceValues(resourceValues)
+                }
             } catch {
                 // Revert a written file if it did not exist before.
                 if !fileExistsAlready {
-                    try fileManager.removeItem(atPath: fileURL.absoluteString)
+                    try FileManager.default.removeItem(atPath: fileURL.path)
                 }
                 throw LocalStorageError.couldNotExcludedFromBackup
             }
@@ -108,8 +109,9 @@ public class LocalStorage<ComponentStandard: Standard>: Module, DefaultInitializ
         _ type: C.Type = C.self,
         storageKey: String? = nil,
         settings: LocalStorageSetting = .encrypedUsingKeyChain()
-    ) throws -> C {
-        let data = try Data(contentsOf: fileURL(from: storageKey, type: C.self))
+    ) async throws -> C {
+        let fileURL = fileURL(from: storageKey, type: C.self)
+        let data = try Data(contentsOf: fileURL)
         
         // Determin if the data should be decrypted or not:
         guard let keys = try settings.keys(from: secureStorage) else {
@@ -132,28 +134,27 @@ public class LocalStorage<ComponentStandard: Standard>: Module, DefaultInitializ
     /// Use ``LocalStorage/LocalStorage/delete(storageKey:)`` to deletes a file stored on disk identified by the `storageKey`.
     /// - Parameters:
     ///   - storageKey: An optional storage key to identify the file.
-    public func delete(storageKey: String) throws {
-        try delete(String.self, storageKey: storageKey)
+    public func delete(storageKey: String) async throws {
+        try await delete(String.self, storageKey: storageKey)
     }
     
     /// Use ``LocalStorage/LocalStorage/delete(storageKey:)`` to deletes a file stored on disk defined by a  `Decodable` type that is used to derive the storage key.
     /// - Parameters:
     ///   - type: The `Decodable` type that is used to derive the storage key from.
-    public func delete<C: Encodable>(_ type: C.Type = C.self) throws {
-        try delete(C.self, storageKey: nil)
+    public func delete<C: Encodable>(_ type: C.Type = C.self) async throws {
+        try await delete(C.self, storageKey: nil)
     }
     
     
     private func delete<C: Encodable>(
         _ type: C.Type = C.self,
         storageKey: String? = nil
-    ) throws {
-        let fileURL = fileURL(from: storageKey, type: C.self)
-        let fileManager = FileManager()
+    ) async throws {
+        let fileURL = self.fileURL(from: storageKey, type: C.self)
         
-        if fileManager.fileExists(atPath: fileURL.absoluteString) {
+        if FileManager.default.fileExists(atPath: fileURL.path) {
             do {
-                try fileManager.removeItem(atPath: fileURL.absoluteString)
+                try FileManager.default.removeItem(atPath: fileURL.path)
             } catch {
                 throw LocalStorageError.deletionNotPossible
             }

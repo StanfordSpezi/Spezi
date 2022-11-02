@@ -27,17 +27,17 @@ final class LocalStorageTests: XCTestCase {
     }
     
     
-    func testLocalStorage() throws {
-        let cardinalKit = LocalStorageTestsAppDelegate().cardinalKit
+    func testLocalStorage() async throws {
+        let cardinalKit = await LocalStorageTestsAppDelegate().cardinalKit
         let localStorage = try XCTUnwrap(cardinalKit.typedCollection[LocalStorage<LocalStorageTestStandard>.self])
         
         let letter = Letter(greeting: "Hello Paul 👋\(String(repeating: "🚀", count: Int.random(in: 0...10)))")
-        try localStorage.store(letter, settings: .unencryped())
-        let storedLetter: Letter = try localStorage.read(settings: .unencryped())
+        try await localStorage.store(letter, settings: .unencryped())
+        let storedLetter: Letter = try await localStorage.read(settings: .unencryped())
         
         XCTAssertEqual(letter, storedLetter)
         
-        try localStorage.delete(Letter.self)
-        try localStorage.delete(storageKey: "Letter")
+        try await localStorage.delete(Letter.self)
+        try await localStorage.delete(storageKey: "Letter")
     }
 }
