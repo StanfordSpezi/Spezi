@@ -6,29 +6,42 @@
 // SPDX-License-Identifier: MIT
 //
 
+import CryptoKit
 @testable import LocalStorage
 import SecureStorage
 import XCTRuntimeAssertions
 
 
-final class LocalStorageTests {
+final class LocalStorageTests: TestAppTestCase {
     struct Letter: Codable, Equatable {
         let greeting: String
     }
     
     
-    let localStorage: LocalStorage<UITestsAppStandard>
-    let secureStorage: SecureStorage<UITestsAppStandard>
+    let localStorage: LocalStorage<TestAppStandard>
+    let secureStorage: SecureStorage<TestAppStandard>
     
     
     init(
-        localStorage: LocalStorage<UITestsAppStandard>,
-        secureStorage: SecureStorage<UITestsAppStandard>
+        localStorage: LocalStorage<TestAppStandard>,
+        secureStorage: SecureStorage<TestAppStandard>
     ) {
         self.localStorage = localStorage
         self.secureStorage = secureStorage
     }
     
+    
+    func runTests() async throws {
+        try await testLocalStorageTestEncrypedManualKeys()
+        // Call test methods multiple times to test retrieval of keys.
+        try await testLocalStorageTestEncrypedKeychain()
+        try await testLocalStorageTestEncrypedKeychain()
+        
+        if SecureEnclave.isAvailable {
+            try await testLocalStorageTestEncrypedSecureEnclave()
+            try await testLocalStorageTestEncrypedSecureEnclave()
+        }
+    }
     
     func testLocalStorageTestEncrypedManualKeys() async throws {
         let privateKey = try secureStorage.retrievePrivateKey(forTag: "LocalStorageTests") ?? secureStorage.createKey("LocalStorageTests")

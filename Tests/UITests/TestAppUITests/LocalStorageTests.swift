@@ -9,22 +9,8 @@
 import XCTest
 
 
-final class LocalStorageTests: XCTestCase {
-    override func setUpWithError() throws {
-        try super.setUpWithError()
-        
-        continueAfterFailure = true
-    }
-    
-    
+final class LocalStorageTests: TestAppUITests {
     func testLocalStorage() throws {
-        let app = XCUIApplication()
-        app.launch()
-        
-        app.collectionViews.buttons["LocalStorage"].tap()
-        
-        XCTAssertTrue(app.staticTexts["Passed"].waitForExistence(timeout: 5))
-        
-        print(app.staticTexts.debugDescription)
+        try runTestAppUITests(feature: "LocalStorage", timeout: 3)
     }
 }

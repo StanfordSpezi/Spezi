@@ -10,14 +10,26 @@
 import CryptoKit
 import Foundation
 import SecureStorage
-import Security
 import XCTRuntimeAssertions
 
 
-final class SecureStorageTests {
+final class SecureStorageTests: TestAppTestCase {
+    let secureStorage: SecureStorage<TestAppStandard>
+    
+    
+    init(secureStorage: SecureStorage<TestAppStandard>) {
+        self.secureStorage = secureStorage
+    }
+    
+    
+    func runTests() async throws {
+        try testCredentials()
+        try testInternetCredentials()
+        try testCredentialsNotWorkingWithSecureEnclave()
+        try testKeys()
+    }
+    
     func testCredentials() throws {
-        let secureStorage = SecureStorage<UITestsAppStandard>()
-        
         var serverCredentials = Credentials(username: "@PSchmiedmayer", password: "CardinalKitInventor")
         try secureStorage.store(credentials: serverCredentials)
         try secureStorage.store(credentials: serverCredentials, storageScope: .keychainSynchronizable)
@@ -40,8 +52,6 @@ final class SecureStorageTests {
     }
     
     func testInternetCredentials() throws {
-        let secureStorage = SecureStorage<UITestsAppStandard>()
-        
         var serverCredentials = Credentials(username: "@PSchmiedmayer", password: "CardinalKitInventor")
         try secureStorage.store(credentials: serverCredentials, server: "twitter.com")
         try secureStorage.store(credentials: serverCredentials, server: "twitter.com") // Overwrite existing credentials.
@@ -67,17 +77,14 @@ final class SecureStorageTests {
     }
     
     func testCredentialsNotWorkingWithSecureEnclave() throws {
-        let secureStorage = SecureStorage<UITestsAppStandard>()
         let serverCredentials = Credentials(username: "@PSchmiedmayer", password: "CardinalKitInventor")
 
         try XCTRuntimeAssertion {
-            try secureStorage.store(credentials: serverCredentials, server: "twitter.com")
+            try self.secureStorage.store(credentials: serverCredentials, server: "twitter.com")
         }
     }
     
     func testKeys() throws {
-        let secureStorage = SecureStorage<UITestsAppStandard>()
-        
         try secureStorage.deleteKeys(forTag: "MyKey")
         try XCTAssertNil(try secureStorage.retrievePublicKey(forTag: "MyKey"))
         

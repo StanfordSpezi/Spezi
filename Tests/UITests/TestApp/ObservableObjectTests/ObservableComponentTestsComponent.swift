@@ -7,13 +7,14 @@
 //
 
 import CardinalKit
+import SwiftUI
 
 
 class ObservableComponentTestsComponent<ComponentStandard: Standard>: Module {
-    var greeting: String
+    var message: String
     
     
-    init(greeting: String) {
-        self.greeting = greeting
+    init(message: String) {
+        self.message = message
     }
 }

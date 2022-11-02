@@ -9,21 +9,8 @@
 import XCTest
 
 
-final class ObservableObjectComponentTests: XCTestCase {
-    override func setUpWithError() throws {
-        try super.setUpWithError()
-        
-        continueAfterFailure = false
-    }
-    
-    
-    func testObservableObjectComponent() throws {
-        let app = XCUIApplication()
-        app.launch()
-        
-        app.collectionViews.buttons["ObservableObject"].tap()
-        
-        XCTAssertTrue(app.images["Globe"].exists)
-        XCTAssertTrue(app.staticTexts["Hello, Paul!"].waitForExistence(timeout: 0.1))
+final class ObservableObjectComponentTests: TestAppUITests {
+    func testLocalStorage() throws {
+        try runTestAppUITests(feature: "ObservableObject", timeout: 0.1)
     }
 }

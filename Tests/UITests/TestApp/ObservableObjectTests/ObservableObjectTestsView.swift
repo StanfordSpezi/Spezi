@@ -6,15 +6,14 @@
 // SPDX-License-Identifier: MIT
 //
 
-import SecureStorage
 import SwiftUI
 
 
-struct SecureStorageTestsView: View {
-    @EnvironmentObject var secureStorage: SecureStorage<TestAppStandard>
+struct ObservableObjectTestsView: View {
+    @EnvironmentObject var testAppComponent: ObservableComponentTestsComponent<TestAppStandard>
     
     
     var body: some View {
-        TestAppView(testCase: SecureStorageTests(secureStorage: secureStorage))
+        TestAppView(testCase: ObservableObjectTests(testAppComponent: testAppComponent))
     }
 }

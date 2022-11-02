@@ -6,39 +6,17 @@
 // SPDX-License-Identifier: MIT
 //
 
-import CryptoKit
 import LocalStorage
 import SecureStorage
 import SwiftUI
 
 
 struct LocalStorageTestsView: View {
-    @EnvironmentObject var localStorage: LocalStorage<UITestsAppStandard>
-    @EnvironmentObject var secureStorage: SecureStorage<UITestsAppStandard>
-    @State var testState = "Running ..."
+    @EnvironmentObject var localStorage: LocalStorage<TestAppStandard>
+    @EnvironmentObject var secureStorage: SecureStorage<TestAppStandard>
     
     
     var body: some View {
-        Text(testState)
-            .onAppear {
-                let secureStorageTests = LocalStorageTests(localStorage: localStorage, secureStorage: secureStorage)
-                
-                Task {
-                    do {
-                        try await secureStorageTests.testLocalStorageTestEncrypedManualKeys()
-                        // Call test methods multiple times to test retrieval of keys.
-                        try await secureStorageTests.testLocalStorageTestEncrypedKeychain()
-                        try await secureStorageTests.testLocalStorageTestEncrypedKeychain()
-                        
-                        if SecureEnclave.isAvailable {
-                            try await secureStorageTests.testLocalStorageTestEncrypedSecureEnclave()
-                            try await secureStorageTests.testLocalStorageTestEncrypedSecureEnclave()
-                        }
-                        testState = "Passed"
-                    } catch {
-                        testState = "Failed: \(error)"
-                    }
-                }
-            }
+        TestAppView(testCase: LocalStorageTests(localStorage: localStorage, secureStorage: secureStorage))
     }
 }
