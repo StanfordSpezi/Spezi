@@ -23,6 +23,18 @@ public enum LocalStorageSetting {
     case encrypedUsingKeyChain(userPresence: Bool = false, excludedFromBackup: Bool = true)
     
     
+    var excludedFromBackup: Bool {
+        switch self {
+        case let .unencryped(excludedFromBackup),
+             let .encryped(_, _, excludedFromBackup),
+             let .encrypedUsingKeyChain(_, excludedFromBackup):
+            return excludedFromBackup
+        case .encrypedUsingSecureEnclave:
+            return true
+        }
+    }
+    
+    
     func keys<S: Standard>(from secureStorage: SecureStorage<S>) throws -> (privateKey: SecKey, publicKey: SecKey)? {
         let secureStorageScope: SecureStorageScope
         switch self {

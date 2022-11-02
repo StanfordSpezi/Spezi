@@ -7,7 +7,7 @@
 //
 
 /// A ``Component`` defines
-public protocol Component: _AnyComponent, TypedCollectionKey {
+public protocol Component<ComponentStandard>: _AnyComponent, TypedCollectionKey {
     /// A ``Component/ComponentStandard`` defines what ``Standard`` the component supports.
     associatedtype ComponentStandard: Standard
     

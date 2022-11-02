@@ -60,9 +60,11 @@ public class LocalStorage<ComponentStandard: Standard>: Module, DefaultInitializ
         // We can not use defer as the function can potentlially throw an error.
         func setResourceValues() throws {
             do {
-                var resourceValues = URLResourceValues()
-                resourceValues.isExcludedFromBackup = true
-                try fileURL.setResourceValues(resourceValues)
+                if settings.excludedFromBackup {
+                    var resourceValues = URLResourceValues()
+                    resourceValues.isExcludedFromBackup = true
+                    try fileURL.setResourceValues(resourceValues)
+                }
             } catch {
                 // Revert a written file if it did not exist before.
                 if !fileExistsAlready {
