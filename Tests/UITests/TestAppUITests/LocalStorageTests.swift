@@ -23,6 +23,6 @@ final class LocalStorageTests: XCTestCase {
         
         app.collectionViews.buttons["LocalStorage"].tap()
         
-        XCTAssertTrue(app.staticTexts["Passed"].waitForExistence(timeout: 0.2))
+        XCTAssertTrue(app.staticTexts["Passed"].waitForExistence(timeout: 0.5))
     }
 }
