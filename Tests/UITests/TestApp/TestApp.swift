@@ -21,6 +21,7 @@ struct UITestsApp: App {
             self.rawValue
         }
         
+        @MainActor
         @ViewBuilder
         var view: some View {
             switch self {
