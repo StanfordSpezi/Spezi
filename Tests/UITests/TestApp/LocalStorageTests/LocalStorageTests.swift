@@ -30,7 +30,7 @@ final class LocalStorageTests {
     }
     
     
-    func testLocalStorageTestEncrypedManualKeys() throws {
+    func testLocalStorageTestEncrypedManualKeys() async throws {
         let privateKey = try secureStorage.retrievePrivateKey(forTag: "LocalStorageTests") ?? secureStorage.createKey("LocalStorageTests")
         guard let publicKey = try secureStorage.retrievePublicKey(forTag: "LocalStorageTests") else {
             throw XCTestFailure()
@@ -38,26 +38,26 @@ final class LocalStorageTests {
         
         let letter = Letter(greeting: "Hello Paul 👋\(String(repeating: "🚀", count: Int.random(in: 0...10)))")
         
-        try localStorage.store(letter, settings: .encryped(privateKey: privateKey, publicKey: publicKey))
-        let storedLetter: Letter = try localStorage.read(settings: .encryped(privateKey: privateKey, publicKey: publicKey))
+        try await localStorage.store(letter, settings: .encryped(privateKey: privateKey, publicKey: publicKey))
+        let storedLetter: Letter = try await localStorage.read(settings: .encryped(privateKey: privateKey, publicKey: publicKey))
         
         try XCTAssertEqual(letter, storedLetter)
     }
     
-    func testLocalStorageTestEncrypedKeychain() throws {
+    func testLocalStorageTestEncrypedKeychain() async throws {
         let letter = Letter(greeting: "Hello Paul 👋\(String(repeating: "🚀", count: Int.random(in: 0...10)))")
 
-        try localStorage.store(letter, settings: .encrypedUsingKeyChain())
-        let storedLetter: Letter = try localStorage.read(settings: .encrypedUsingKeyChain())
+        try await localStorage.store(letter, settings: .encrypedUsingKeyChain())
+        let storedLetter: Letter = try await localStorage.read(settings: .encrypedUsingKeyChain())
 
         try XCTAssertEqual(letter, storedLetter)
     }
 
-    func testLocalStorageTestEncrypedSecureEnclave() throws {
+    func testLocalStorageTestEncrypedSecureEnclave() async throws {
         let letter = Letter(greeting: "Hello Paul 👋\(String(repeating: "🚀", count: Int.random(in: 0...10)))")
         
-        try localStorage.store(letter, settings: .encrypedUsingSecureEnclave())
-        let storedLetter: Letter = try localStorage.read(settings: .encrypedUsingSecureEnclave())
+        try await localStorage.store(letter, settings: .encrypedUsingSecureEnclave())
+        let storedLetter: Letter = try await localStorage.read(settings: .encrypedUsingSecureEnclave())
         
         try XCTAssertEqual(letter, storedLetter)
     }

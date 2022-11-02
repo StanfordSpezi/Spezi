@@ -22,16 +22,18 @@ struct LocalStorageTestsView: View {
             .onAppear {
                 let secureStorageTests = LocalStorageTests(localStorage: localStorage, secureStorage: secureStorage)
                 
-                do {
-                    try secureStorageTests.testLocalStorageTestEncrypedManualKeys()
-                    // Call test methods multiple times to test retrieval of keys.
-                    try secureStorageTests.testLocalStorageTestEncrypedKeychain()
-                    try secureStorageTests.testLocalStorageTestEncrypedKeychain()
-                    try secureStorageTests.testLocalStorageTestEncrypedSecureEnclave()
-                    try secureStorageTests.testLocalStorageTestEncrypedSecureEnclave()
-                    testState = "Passed"
-                } catch {
-                    testState = "Failed: \(error)"
+                Task {
+                    do {
+                        try await secureStorageTests.testLocalStorageTestEncrypedManualKeys()
+                        // Call test methods multiple times to test retrieval of keys.
+                        try await secureStorageTests.testLocalStorageTestEncrypedKeychain()
+                        try await secureStorageTests.testLocalStorageTestEncrypedKeychain()
+                        try await secureStorageTests.testLocalStorageTestEncrypedSecureEnclave()
+                        try await secureStorageTests.testLocalStorageTestEncrypedSecureEnclave()
+                        testState = "Passed"
+                    } catch {
+                        testState = "Failed: \(error)"
+                    }
                 }
             }
     }
