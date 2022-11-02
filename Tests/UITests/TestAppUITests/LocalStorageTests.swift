@@ -13,7 +13,7 @@ final class LocalStorageTests: XCTestCase {
     override func setUpWithError() throws {
         try super.setUpWithError()
         
-        continueAfterFailure = false
+        continueAfterFailure = true
     }
     
     
@@ -23,6 +23,8 @@ final class LocalStorageTests: XCTestCase {
         
         app.collectionViews.buttons["LocalStorage"].tap()
         
-        XCTAssertTrue(app.staticTexts["Passed"].waitForExistence(timeout: 1.0))
+        XCTAssertTrue(app.staticTexts["Passed"].waitForExistence(timeout: 0.25))
+        
+        print(app.staticTexts.debugDescription)
     }
 }

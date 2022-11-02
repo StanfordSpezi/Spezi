@@ -7,6 +7,7 @@
 //
 
 @testable import CardinalKit
+import CryptoKit
 import Foundation
 import SecureStorage
 import Security
@@ -82,7 +83,9 @@ final class SecureStorageTests {
         
         try secureStorage.createKey("MyKey", storageScope: .keychain)
         try secureStorage.createKey("MyKey", storageScope: .keychainSynchronizable)
-        try secureStorage.createKey("MyKey")
+        if SecureEnclave.isAvailable {
+            try secureStorage.createKey("MyKey", storageScope: .secureEnclave)
+        }
         
         let privateKey = try XCTUnwrap(secureStorage.retrievePrivateKey(forTag: "MyKey"))
         let publicKey = try XCTUnwrap(secureStorage.retrievePublicKey(forTag: "MyKey"))
@@ -113,6 +116,7 @@ final class SecureStorageTests {
         print("Decryped: \(String(decoding: clearText, as: UTF8.self))")
         
         try secureStorage.deleteKeys(forTag: "MyKey")
+        try XCTAssertNil(try secureStorage.retrievePrivateKey(forTag: "MyKey"))
         try XCTAssertNil(try secureStorage.retrievePublicKey(forTag: "MyKey"))
     }
 }

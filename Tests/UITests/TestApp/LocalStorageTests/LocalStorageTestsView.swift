@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
+import CryptoKit
 import LocalStorage
 import SecureStorage
 import SwiftUI
@@ -28,8 +29,11 @@ struct LocalStorageTestsView: View {
                         // Call test methods multiple times to test retrieval of keys.
                         try await secureStorageTests.testLocalStorageTestEncrypedKeychain()
                         try await secureStorageTests.testLocalStorageTestEncrypedKeychain()
-                        try await secureStorageTests.testLocalStorageTestEncrypedSecureEnclave()
-                        try await secureStorageTests.testLocalStorageTestEncrypedSecureEnclave()
+                        
+                        if SecureEnclave.isAvailable {
+                            try await secureStorageTests.testLocalStorageTestEncrypedSecureEnclave()
+                            try await secureStorageTests.testLocalStorageTestEncrypedSecureEnclave()
+                        }
                         testState = "Passed"
                     } catch {
                         testState = "Failed: \(error)"
