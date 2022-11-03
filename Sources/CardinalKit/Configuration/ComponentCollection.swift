@@ -17,11 +17,4 @@ public class ComponentCollection<ComponentsStandard: Standard> {
     init(elements: [any Component<ComponentsStandard>]) {
         self.elements = elements
     }
-    
-    
-    func configure(cardinalKit: CardinalKit<ComponentsStandard>) {
-        for element in elements {
-            element.configure(cardinalKit: cardinalKit)
-        }
-    }
 }
