@@ -12,7 +12,7 @@ import XCTest
 import XCTRuntimeAssertions
 
 
-private struct TestStandard: Standard {}
+private actor TestStandard: Standard {}
 
 private class TestComponent1<ComponentStandard: Standard>: Component {
     @Dependency var testComponent2 = TestComponent2<ComponentStandard>()

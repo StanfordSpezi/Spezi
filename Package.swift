@@ -18,8 +18,8 @@ let package = Package(
     ],
     products: [
         .library(name: "CardinalKit", targets: ["CardinalKit"]),
-        .library(name: "SecureStorage", targets: ["SecureStorage"]),
         .library(name: "LocalStorage", targets: ["LocalStorage"]),
+        .library(name: "SecureStorage", targets: ["SecureStorage"]),
         .library(name: "XCTRuntimeAssertions", targets: ["XCTRuntimeAssertions"])
     ],
     targets: [

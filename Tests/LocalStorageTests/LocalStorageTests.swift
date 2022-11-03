@@ -12,7 +12,7 @@ import XCTest
 
 
 final class LocalStorageTests: XCTestCase {
-    struct LocalStorageTestStandard: Standard {}
+    actor LocalStorageTestStandard: Standard {}
     
     struct Letter: Codable, Equatable {
         let greeting: String

@@ -20,8 +20,7 @@ public class TestComponent<ComponentStandard: Standard>: ObservableObject, Compo
     }
     
     
-    public func configure(cardinalKit: CardinalKit<ComponentStandard>) {
-        cardinalKit.typedCollection.set(TestComponent.self, to: self)
+    public func configure() {
         expectation.fulfill()
     }
 }

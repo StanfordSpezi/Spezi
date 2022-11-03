@@ -10,7 +10,12 @@
 import CardinalKit
 
 
-public struct MockStandard: Standard {
+public actor MockStandard: Standard {
     public init() {}
+    
+    
+    func fulfill(expectation: XCTestExpectation) {
+        expectation.fulfill()
+    }
 }
 #endif

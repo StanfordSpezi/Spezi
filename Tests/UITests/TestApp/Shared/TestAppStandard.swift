@@ -9,4 +9,4 @@
 import CardinalKit
 
 
-struct TestAppStandard: Standard {}
+actor TestAppStandard: Standard {}
