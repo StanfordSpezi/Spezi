@@ -61,4 +61,10 @@ final class StandardTests: XCTestCase {
         
         wait(for: [expectation], timeout: 0.01)
     }
+    
+    func testInjectionPrecondition() throws {
+        try XCTRuntimePrecondition {
+            _ = _StandardPropertyWrapper<MockStandard>().wrappedValue
+        }
+    }
 }
