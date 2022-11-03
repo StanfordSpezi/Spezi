@@ -32,14 +32,14 @@ import SwiftUI
 /// }
 /// ```
 open class CardinalKitAppDelegate: NSObject, UIApplicationDelegate {
-    private struct AnyStandard: Standard {}
+    private struct DefaultStandard: Standard {}
     
     
-    private(set) lazy var cardinalKit: AnyCardinalKit = configuration.anyCardinalKit
+    private(set) lazy var cardinalKit: AnyCardinalKit = configuration.cardinalKit
     
     
     open var configuration: Configuration {
-        Configuration(standard: AnyStandard()) { }
+        Configuration(standard: DefaultStandard()) { }
     }
     
     

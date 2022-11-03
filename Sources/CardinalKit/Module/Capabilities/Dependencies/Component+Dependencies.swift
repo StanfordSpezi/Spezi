@@ -6,13 +6,13 @@
 // SPDX-License-Identifier: MIT
 //
 
-extension _AnyComponent {
-    var dependencies: [any AnyDependencyPropertyWrapper] {
+extension Component {
+    var dependencies: [any DependencyInjectable<ComponentStandard>] {
         let mirror = Mirror(reflecting: self)
-        var dependencies: [any AnyDependencyPropertyWrapper] = []
+        var dependencies: [any DependencyInjectable<ComponentStandard>] = []
         
         for child in mirror.children {
-            guard let dependencyPropertyWrapper = child.value as? any AnyDependencyPropertyWrapper else {
+            guard let dependencyPropertyWrapper = child.value as? any DependencyInjectable<ComponentStandard> else {
                 continue
             }
             dependencies.append(dependencyPropertyWrapper)

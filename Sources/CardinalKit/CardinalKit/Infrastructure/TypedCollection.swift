@@ -17,7 +17,7 @@ import os
 
 
 /// Key used to identify stored elements in `TypedCollection` instances.
-public protocol TypedCollectionKey {
+public protocol TypedCollectionKey<Value> {
     /// The value type associated with the `TypedCollectionKey`.
     associatedtype Value = Self
 }

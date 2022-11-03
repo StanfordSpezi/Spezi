@@ -12,10 +12,10 @@ import SwiftUI
 
 
 struct CardinalKitViewModifier: ViewModifier {
-    private var observableObjectProviders: [_AnyObservableObjectComponent]
+    var observableObjectProviders: [any ObservableObjectComponent]
     
     
-    fileprivate init(_ anyCardinalKit: AnyCardinalKit) {
+    init(_ anyCardinalKit: AnyCardinalKit) {
         self.observableObjectProviders = anyCardinalKit.observableObjectProviders
     }
     

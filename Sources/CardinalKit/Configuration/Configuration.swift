@@ -7,19 +7,19 @@
 //
 
 
-/// A ``Configuration`` defines the ``Standard`` and ``Component``s that are used in a CardinalKit project.
+///// A ``Configuration`` defines the ``Standard`` and ``Component``s that are used in a CardinalKit project.
 public struct Configuration {
-    let anyCardinalKit: AnyCardinalKit
+    let cardinalKit: AnyCardinalKit
     
-    
+
     /// A ``Configuration`` defines the ``Standard`` and ``Component``s that are used in a CardinalKit project.
     /// - Parameters:
     ///   - standard: The ``Standard`` that is used in the CardinalKit project.
     ///   - components: The ``Component``s used in the CardinalKit project. You can define the ``Component``s using the ``ComponentBuilder`` result builder.
     public init<S: Standard>(
         standard: S,
-        @ComponentBuilder<S> _ components: () -> ([_AnyComponent])
+        @ComponentBuilder<S> _ components: () -> (ComponentCollection<S>)
     ) {
-        self.anyCardinalKit = CardinalKit<S>(components: components())
+        self.cardinalKit = CardinalKit<S>(standard: standard, components: components().elements)
     }
 }
