@@ -22,16 +22,16 @@ extension Component {
 extension Component {
     /// Defines access to the shared ``Standard`` actor.
     ///
-    /// A ``Component`` can define the injection of a ``Standard`` using the ``@SharedStandard`` property wrapper:
+    /// A ``Component`` can define the injection of a ``Standard`` using the ``@StandardActor`` property wrapper:
     /// ```
     /// class ExampleComponent: Component {
     ///     typealias ComponentStandard = ExampleStandard
     ///
-    ///     @SharedStandard var standard: ExampleStandard
+    ///     @StandardActor var standard: ExampleStandard
     /// }
     /// ```
     ///
     /// You can access the wrapped value of the ``Standard`` after the ``Component`` is configured using ``Component/configure()``,
     /// e.g. in the ``LifecycleHandler/willFinishLaunchingWithOptions(_:launchOptions:)`` function.
-    public typealias SharedStandard = _StandardPropertyWrapper<ComponentStandard>
+    public typealias StandardActor = _StandardPropertyWrapper<ComponentStandard>
 }

@@ -17,7 +17,7 @@ final class StandardTests: XCTestCase {
         typealias ComponentStandard = MockStandard
         
         
-        @SharedStandard var standard: MockStandard
+        @StandardActor var standard: MockStandard
         let expectation: XCTestExpectation
         
         

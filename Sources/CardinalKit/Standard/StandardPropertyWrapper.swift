@@ -9,7 +9,7 @@
 import XCTRuntimeAssertions
 
 
-/// Refer to ``Component/SharedStandard`` for information on how to use the `@SharedStandard` property wrapper. Do not use the `_StandardPropertyWrapper` directly.
+/// Refer to ``Component/StandardActor`` for information on how to use the `@StandardActor` property wrapper. Do not use the `_StandardPropertyWrapper` directly.
 @propertyWrapper
 public class _StandardPropertyWrapper<S: Standard> {
     // swiftlint:disable:previous type_name
@@ -33,7 +33,7 @@ public class _StandardPropertyWrapper<S: Standard> {
     }
     
     
-    /// Refer to ``Component/SharedStandard`` for information on how to use the `@SharedStandard` property wrapper. Do not use the `_StandardPropertyWrapper` directly.
+    /// Refer to ``Component/StandardActor`` for information on how to use the `@StandardActor` property wrapper. Do not use the `_StandardPropertyWrapper` directly.
     public init() { }
     
     
