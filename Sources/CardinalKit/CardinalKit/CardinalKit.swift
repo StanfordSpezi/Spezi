@@ -32,7 +32,7 @@ import SwiftUI
 ///     }
 /// }
 /// ```
-public class CardinalKit<S: Standard>: AnyCardinalKit, ObservableObject {
+public actor CardinalKit<S: Standard>: AnyCardinalKit, ObservableObject {
     /// A typesafe typedCollection of different elements of an ``CardinalKit/CardinalKit`` instance.
     public let typedCollection: TypedCollection
     /// Logger used to log events in the ``CardinalKit/CardinalKit`` instance.
@@ -50,9 +50,15 @@ public class CardinalKit<S: Standard>: AnyCardinalKit, ObservableObject {
         self.typedCollection = TypedCollection(logger: logger)
         self.standard = standard
         
-        let sortedComponents = DependencyManager(components).sortedComponents
+        var componentsAndStandard = components
+        componentsAndStandard.append(standard)
+        
+        let sortedComponents = DependencyManager(componentsAndStandard).sortedComponents
+        
         for component in sortedComponents {
-            component.configure(cardinalKit: self)
+            component.inject(standard: standard)
+            component.configure()
+            component.saveInTypedCollection(cardinalKit: self)
         }
     }
 }

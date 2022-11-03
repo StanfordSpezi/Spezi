@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:/Users/paulshmiedmayer/Downloads/CardinalKitSPM/Example/UITests.xcodeproj">
+      location = "self:">
    </FileRef>
 </Workspace>

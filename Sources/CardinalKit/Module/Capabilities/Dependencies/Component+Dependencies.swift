@@ -40,7 +40,7 @@ extension Component {
     /// }
     /// ```
     ///
-    /// You can access the wrapped value of the ``Dependency`` after the ``Component`` is configured using ``Component/configure(cardinalKit:)-38pyu``,
-    /// e.g. in the ``LifecycleHandler/willFinishLaunchingWithOptions(_:launchOptions:)-lsab`` function.
+    /// You can access the wrapped value of the ``Dependency`` after the ``Component`` is configured using ``Component/configure()``,
+    /// e.g. in the ``LifecycleHandler/willFinishLaunchingWithOptions(_:launchOptions:)`` function.
     public typealias Dependency<C: Component> = _DependencyPropertyWrapper<C, ComponentStandard> where C.ComponentStandard == ComponentStandard
 }

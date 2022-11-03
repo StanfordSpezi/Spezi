@@ -12,6 +12,9 @@ import XCTRuntimeAssertions
 
 
 private class TestLifecycleHandler: Component, LifecycleHandler, TypedCollectionKey {
+    typealias ComponentStandard = MockStandard
+    
+    
     let expectationWillFinishLaunchingWithOption: XCTestExpectation
     let expectationApplicationWillTerminate: XCTestExpectation
     
@@ -19,11 +22,6 @@ private class TestLifecycleHandler: Component, LifecycleHandler, TypedCollection
     init(expectationWillFinishLaunchingWithOption: XCTestExpectation, expectationApplicationWillTerminate: XCTestExpectation) {
         self.expectationWillFinishLaunchingWithOption = expectationWillFinishLaunchingWithOption
         self.expectationApplicationWillTerminate = expectationApplicationWillTerminate
-    }
-    
-    
-    func configure(cardinalKit: CardinalKit<MockStandard>) {
-        cardinalKit.typedCollection.set(Self.self, to: self)
     }
     
     
@@ -41,9 +39,7 @@ private class TestLifecycleHandler: Component, LifecycleHandler, TypedCollection
 
 
 private class EmpfyLifecycleHandler: Component, LifecycleHandler, TypedCollectionKey {
-    func configure(cardinalKit: CardinalKit<MockStandard>) {
-        cardinalKit.typedCollection.set(Self.self, to: self)
-    }
+    typealias ComponentStandard = MockStandard
 }
 
 private class TestLifecycleHandlerApplicationDelegate: CardinalKitAppDelegate {
