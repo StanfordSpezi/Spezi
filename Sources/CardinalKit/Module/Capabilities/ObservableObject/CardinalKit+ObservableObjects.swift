@@ -11,14 +11,14 @@ import SwiftUI
 
 extension AnyCardinalKit {
     /// A collection of ``CardinalKit/CardinalKit`` `LifecycleHandler`s.
-    var observableObjectProviders: [_AnyObservableObjectComponent] {
-        typedCollection.get(allThatConformTo: _AnyObservableObjectComponent.self)
+    var observableObjectProviders: [any ObservableObjectComponent] {
+        typedCollection.get(allThatConformTo: (any ObservableObjectComponent).self)
     }
 }
 
 
 extension View {
-    func inject(observableObjectProviders: [_AnyObservableObjectComponent]) -> some View {
+    func inject(observableObjectProviders: [any ObservableObjectComponent]) -> some View {
         var injectedView = AnyView(self)
         for observableObjectProvider in observableObjectProviders {
             injectedView = injectedView.inject(observableObjectProvider.viewModifier)
@@ -26,7 +26,7 @@ extension View {
         return injectedView
     }
     
-    private func inject<M: ViewModifier>(_ modifier: M) -> AnyView {
+    private func inject(_ modifier: some ViewModifier) -> AnyView {
         AnyView(self.modifier(modifier))
     }
 }

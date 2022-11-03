@@ -53,9 +53,9 @@ final class ComponentBuilderTests: XCTestCase {
     }
     
     
-    private func components(loopLimit: Int, condition: Bool, expecations: Expectations) -> [_AnyComponent] {
+    private func components(loopLimit: Int, condition: Bool, expecations: Expectations) -> ComponentCollection<MockStandard> {
         @ComponentBuilder<MockStandard>
-        var components: [_AnyComponent] {
+        var components: ComponentCollection<MockStandard> {
             TestComponent(expectation: expecations.firstTestExpection)
             for _ in 0..<loopLimit {
                 TestComponent(expectation: expecations.loopTestExpection)
@@ -89,7 +89,7 @@ final class ComponentBuilderTests: XCTestCase {
             expecations: expecations
         )
         
-        _ = CardinalKit<MockStandard>(components: components)
+        _ = CardinalKit<MockStandard>(standard: MockStandard(), components: components.elements)
         try expecations.wait()
     }
     
@@ -105,7 +105,7 @@ final class ComponentBuilderTests: XCTestCase {
             expecations: expecations
         )
         
-        _ = CardinalKit<MockStandard>(components: components)
+        _ = CardinalKit<MockStandard>(standard: MockStandard(), components: components.elements)
         try expecations.wait()
     }
 }

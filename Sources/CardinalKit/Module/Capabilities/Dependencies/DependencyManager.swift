@@ -10,20 +10,18 @@ import XCTRuntimeAssertions
 
 
 /// A ``DependencyManager`` in CardinalKit is used to gather information about components with dependencies.
-public class _DependencyManager { // swiftlint:disable:this type_name
-    // We want the _DependencyManager type to be hidden from autocompletion and document generation.
-    // Therefore, we use the `_` prefix.
+class DependencyManager<S: Standard> {
     /// Collection of sorted components after resolving all dependencies.
-    var sortedComponents: [_AnyComponent]
+    var sortedComponents: [any Component<S>]
     /// Collection of all omponents with dependencies that are not yet processed.
-    private var componentsWithDependencies: [_AnyComponent]
+    private var componentsWithDependencies: [any Component<S>]
     /// Collection used to keep track of components with dependencies in the recursive search.
-    private var recursiveSearch: [_AnyComponent] = []
+    private var recursiveSearch: [any Component<S>] = []
     
     
     /// A ``DependencyManager`` in CardinalKit is used to gather information about components with dependencies.
     /// - Parameter components: The components that should be resolved.
-    init(_ components: [_AnyComponent]) {
+    init(_ components: [any Component<S>]) {
         sortedComponents = components.filter { $0.dependencies.isEmpty }
         componentsWithDependencies = components.filter { !$0.dependencies.isEmpty }
         
@@ -55,19 +53,19 @@ public class _DependencyManager { // swiftlint:disable:this type_name
         dependencyPropertyWrapper.dependency = foundInSortedComponents
     }
     
-    /// Communicate a requirement to a `_DependencyManager`
+    /// Communicate a requirement to a `DependencyManager`
     /// - Parameters:
     ///   - dependencyType: The type of the dependency that should be resolved.
     ///   - defaultValue: A default instance of the dependency that is used when the `dependencyType` is not present in the `sortedComponents` or `componentsWithDependencies`.
-    func require<T: Component>(_ dependencyType: T.Type, defaultValue: @autoclosure () -> (T)) {
+    func require<C: Component>(_ dependencyType: C.Type, defaultValue: @autoclosure () -> (C)) where C.ComponentStandard == S {
         // 1. Return if thedepending component is found in the `sortedComponents` collection.
-        if sortedComponents.contains(where: { type(of: $0) == T.self }) {
+        if sortedComponents.contains(where: { type(of: $0) == C.self }) {
             return
         }
         
         // 2. Search for the required component is found in the `dependingComponents` collection.
         // If not, use the default value calling the `defaultValue` autoclosure.
-        guard let foundInComponentsWithDependencies = componentsWithDependencies.first(where: { type(of: $0) == T.self }) else {
+        guard let foundInComponentsWithDependencies = componentsWithDependencies.first(where: { type(of: $0) == C.self }) else {
             let newComponent = defaultValue()
             
             guard !newComponent.dependencies.isEmpty else {
@@ -82,7 +80,7 @@ public class _DependencyManager { // swiftlint:disable:this type_name
         }
         
         // Detect circles in the `recursiveSearch` collection.
-        guard !recursiveSearch.contains(where: { type(of: $0) == T.self }) else {
+        guard !recursiveSearch.contains(where: { type(of: $0) == C.self }) else {
             let dependencyChain = recursiveSearch
                 .map { String(describing: type(of: $0)) }
                 .joined(separator: ", ")
@@ -104,7 +102,7 @@ public class _DependencyManager { // swiftlint:disable:this type_name
         push(foundInComponentsWithDependencies)
     }
     
-    private func resolvedAllDependencies(_ dependingComponent: _AnyComponent) {
+    private func resolvedAllDependencies(_ dependingComponent: any Component<S>) {
         guard !recursiveSearch.isEmpty else {
             preconditionFailure("Internal logic error in the `DependencyManager`")
         }
@@ -131,7 +129,7 @@ public class _DependencyManager { // swiftlint:disable:this type_name
     }
     
     
-    private func push(_ component: _AnyComponent) {
+    private func push(_ component: any Component<S>) {
         recursiveSearch.append(component)
         for dependency in component.dependencies {
             dependency.gatherDependency(dependencyManager: self)

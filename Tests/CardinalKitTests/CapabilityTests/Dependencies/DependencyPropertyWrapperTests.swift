@@ -10,7 +10,7 @@ import CardinalKit
 import XCTRuntimeAssertions
 
 
-final class DependencyPropertyWrapperTests: XCTestCase {
+final class DependencyInjectableTests: XCTestCase {
     func testInjectionPrecondition() throws {
         try XCTRuntimePrecondition {
             _ = _DependencyPropertyWrapper<TestComponent, MockStandard>(wrappedValue: TestComponent()).wrappedValue

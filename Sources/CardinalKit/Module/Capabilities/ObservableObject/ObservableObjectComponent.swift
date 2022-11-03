@@ -20,7 +20,8 @@ private struct ObservableObjectInjectionViewModifier<O: ObservableObject>: ViewM
 
 
 /// A ``Component`` can conform to ``ObservableObjectComponent`` to inject an ``ObservableObject`` in the SwiftUI view hierachy.
-public protocol ObservableObjectComponent: _AnyObservableObjectComponent {
+public protocol ObservableObjectComponent {
+    /// The ``ObservableObjectComponent/InjectedObject`` defines the type that will be injected into the SwiftUI environment.
     associatedtype InjectedObject: ObservableObject
     
     
@@ -30,7 +31,7 @@ public protocol ObservableObjectComponent: _AnyObservableObjectComponent {
 
 
 extension ObservableObjectComponent where Self: ObservableObject {
-    // A documentation for this methodd exists in the `_AnyObservableObjectComponent` type which SwiftLint doesn't recognize.
+    // A documentation for this methodd exists in the `ObservableObjectComponent` type which SwiftLint doesn't recognize.
     // swiftlint:disable:next missing_docs
     public var observableObject: Self {
         self
@@ -39,9 +40,7 @@ extension ObservableObjectComponent where Self: ObservableObject {
 
 
 extension ObservableObjectComponent {
-    // A documentation for this methodd exists in the `ObservableObjectComponent` type which SwiftLint doesn't recognize.
-    // swiftlint:disable:next missing_docs
-    public var viewModifier: any ViewModifier {
+    var viewModifier: some ViewModifier {
         ObservableObjectInjectionViewModifier(observableObject: observableObject)
     }
 }

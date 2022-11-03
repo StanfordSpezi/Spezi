@@ -23,16 +23,4 @@ final class ComponentTests: XCTestCase {
         )
         wait(for: [expectation])
     }
-    
-    func testWrongComponentType() throws {
-        struct SomeOtherStandard: Standard {}
-        
-        let expectation = XCTestExpectation(description: "Should not call configure method.")
-        expectation.isInverted = true
-        
-        let testComponent = TestComponent<SomeOtherStandard>(expectation: expectation)
-        _ = CardinalKit<MockStandard>(components: [testComponent])
-        
-        wait(for: [expectation])
-    }
 }
