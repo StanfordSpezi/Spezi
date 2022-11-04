@@ -18,6 +18,7 @@ let package = Package(
     ],
     products: [
         .library(name: "CardinalKit", targets: ["CardinalKit"]),
+        .library(name: "HealthKitDataSource", targets: ["HealthKitDataSource"]),
         .library(name: "LocalStorage", targets: ["LocalStorage"]),
         .library(name: "SecureStorage", targets: ["SecureStorage"]),
         .library(name: "XCTRuntimeAssertions", targets: ["XCTRuntimeAssertions"])
@@ -37,10 +38,9 @@ let package = Package(
             ]
         ),
         .target(
-            name: "SecureStorage",
+            name: "HealthKitDataSource",
             dependencies: [
-                .target(name: "CardinalKit"),
-                .target(name: "XCTRuntimeAssertions")
+                .target(name: "CardinalKit")
             ]
         ),
         .target(
@@ -54,6 +54,13 @@ let package = Package(
             name: "LocalStorageTests",
             dependencies: [
                 .target(name: "LocalStorage")
+            ]
+        ),
+        .target(
+            name: "SecureStorage",
+            dependencies: [
+                .target(name: "CardinalKit"),
+                .target(name: "XCTRuntimeAssertions")
             ]
         ),
         .target(

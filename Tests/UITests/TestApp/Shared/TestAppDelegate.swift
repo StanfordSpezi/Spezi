@@ -7,6 +7,8 @@
 //
 
 import CardinalKit
+import HealthKit
+import HealthKitDataSource
 import LocalStorage
 import SecureStorage
 import SwiftUI
@@ -16,6 +18,9 @@ class TestAppDelegate: CardinalKitAppDelegate {
     override var configuration: Configuration {
         Configuration(standard: TestAppStandard()) {
             ObservableComponentTestsComponent(message: "Passed")
+            if HKHealthStore.isHealthDataAvailable() {
+                HealthKitDataSource()
+            }
             SecureStorage()
             LocalStorage()
         }
