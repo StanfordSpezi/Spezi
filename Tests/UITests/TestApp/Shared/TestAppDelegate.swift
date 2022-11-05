@@ -19,7 +19,7 @@ class TestAppDelegate: CardinalKitAppDelegate {
         Configuration(standard: TestAppStandard()) {
             ObservableComponentTestsComponent(message: "Passed")
             if HKHealthStore.isHealthDataAvailable() {
-                HealthKitDataSource()
+                ECGHealthKitDataSource()
             }
             SecureStorage()
             LocalStorage()
