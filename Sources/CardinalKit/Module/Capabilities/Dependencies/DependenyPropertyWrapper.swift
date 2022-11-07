@@ -9,17 +9,15 @@
 import XCTRuntimeAssertions
 
 
+
 /// Refer to ``Component/Dependency`` for information on how to use the `@Dependency` property wrapper. Do not use the `_DependencyPropertyWrapper` directly.
 @propertyWrapper
-public class _DependencyPropertyWrapper<C: Component, S: Standard>: DependencyInjectable where C.ComponentStandard == S {
+public class _DependencyPropertyWrapper<C: Component, S: Standard>: ComponentProperty where C.ComponentStandard == S {
     // swiftlint:disable:previous type_name
     // We want the _DependencyPropertyWrapper type to be hidden from autocompletion and document generation.
     
-    typealias DependencyInjectableStandard = S
-    
-    
-    private let defaultValue: () -> C
-    var dependency: C?
+    public let defaultValue: () -> C
+    public var dependency: C?
     
     /// The dependency that is resolved by ``CardinalKit``
     public var wrappedValue: C {
@@ -47,11 +45,11 @@ public class _DependencyPropertyWrapper<C: Component, S: Standard>: DependencyIn
     }
     
     
-    func gatherDependency(dependencyManager: DependencyManager<S>) {
+    public func gatherDependency(dependencyManager: DependencyManager<S>) {
         dependencyManager.require(C.self, defaultValue: defaultValue())
     }
     
-    func inject(dependencyManager: DependencyManager<S>) {
+    public func inject(dependencyManager: DependencyManager<S>) {
         dependencyManager.inject(C.self, into: self)
     }
 }

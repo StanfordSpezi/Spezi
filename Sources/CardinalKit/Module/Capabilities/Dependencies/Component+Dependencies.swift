@@ -6,22 +6,6 @@
 // SPDX-License-Identifier: MIT
 //
 
-extension Component {
-    var dependencies: [any DependencyInjectable<ComponentStandard>] {
-        let mirror = Mirror(reflecting: self)
-        var dependencies: [any DependencyInjectable<ComponentStandard>] = []
-        
-        for child in mirror.children {
-            guard let dependencyPropertyWrapper = child.value as? any DependencyInjectable<ComponentStandard> else {
-                continue
-            }
-            dependencies.append(dependencyPropertyWrapper)
-        }
-        
-        return dependencies
-    }
-}
-
 
 extension Component {
     /// Defines a dependency to an other ``Component``.
@@ -43,4 +27,7 @@ extension Component {
     /// You can access the wrapped value of the ``Dependency`` after the ``Component`` is configured using ``Component/configure()``,
     /// e.g. in the ``LifecycleHandler/willFinishLaunchingWithOptions(_:launchOptions:)`` function.
     public typealias Dependency<C: Component> = _DependencyPropertyWrapper<C, ComponentStandard> where C.ComponentStandard == ComponentStandard
+    
+    
+    public typealias DynamicDependencies = _DynamicDependenciesPropertyWrapper<ComponentStandard>
 }

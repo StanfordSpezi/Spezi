@@ -26,10 +26,18 @@ public class ECGHealthKitDataSource<ComponentStandard: Standard>: Component, Dat
     typealias DataStream = AsyncThrowingStream<Electrocardiogram, Error>
     
     
-    @Dependency var healthKitDataSource = HealthKitDataSource(sampleType: HKObjectType.electrocardiogramType())
+    let autoStart: Bool
+    @Dependency var healthKitDataSource = HealthKitUpdatingDataSource(sampleType: HKObjectType.electrocardiogramType())
     
     
-    public init() { }
+    public init(autoStart: Bool = false) {
+        self.autoStart = autoStart
+    }
+    
+    
+    public func configure() {
+        healthKitDataSource.autoStart = true
+    }
     
     
     lazy var dataSource: DataStream = {
