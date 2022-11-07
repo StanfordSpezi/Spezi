@@ -11,11 +11,6 @@
 @resultBuilder
 public enum ComponentBuilder<S: Standard> {
     /// If declared, provides contextual type information for statement expressions to translate them into partial results.
-    public static func buildExpression(_ expression: ComponentCollection<S>) -> [any Component<S>] {
-        expression.elements
-    }
-    
-    /// If declared, provides contextual type information for statement expressions to translate them into partial results.
     public static func buildExpression<C: Component>(_ expression: C) -> [any Component<S>] where C.ComponentStandard == S {
         [expression]
     }

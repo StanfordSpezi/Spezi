@@ -29,5 +29,5 @@ extension Component {
     public typealias Dependency<C: Component> = _DependencyPropertyWrapper<C, ComponentStandard> where C.ComponentStandard == ComponentStandard
     
     
-    public typealias DynamicDependencies = _DynamicDependenciesPropertyWrapper<ComponentStandard>
+    // public typealias DynamicDependencies = _DynamicDependenciesPropertyWrapper<ComponentStandard>
 }

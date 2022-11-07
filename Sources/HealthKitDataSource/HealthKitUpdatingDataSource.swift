@@ -14,7 +14,8 @@ import SwiftUI
 class HealthKitUpdatingDataSource<ComponentStandard: Standard, SampleType: CorrelatingSampleType>: Component, LifecycleHandler, DataSource {
     typealias DataStream = AsyncThrowingStream<SampleType.Sample, Error>
     
-    @DynamicDependencies var healthKitComponents: [any Component<ComponentStandard>]
+    @Dependency var healthKitHealthStoreComponent = HealthKitHealthStore()
+    // @DynamicDependencies var healthKitComponents: [any Component<ComponentStandard>]
     private let sampleType: SampleType
     public var autoStart: Bool
     private var anchor: HKQueryAnchor? = nil
@@ -23,19 +24,8 @@ class HealthKitUpdatingDataSource<ComponentStandard: Standard, SampleType: Corre
     private(set) var dataSource: DataStream
     
     
-    var healthKitHealthStore: HealthKitHealthStore<ComponentStandard> {
-        guard let healthKitHealthStore = healthKitComponents.compactMap({ $0 as? HealthKitHealthStore<ComponentStandard> }).first else {
-            preconditionFailure(
-                """
-                Internal logic error on the `HealthKitUpdatingDataSource`.
-                One of the `healthKitComponents` must be a `HealthKitHealthStore` instance as defined in the initializer.
-                """
-            )
-        }
-        return healthKitHealthStore
-    }
     var healthStore: HKHealthStore {
-        return healthKitHealthStore.healthStore
+        return healthKitHealthStoreComponent.healthStore
     }
     
     
@@ -43,20 +33,10 @@ class HealthKitUpdatingDataSource<ComponentStandard: Standard, SampleType: Corre
         self.sampleType = sampleType
         self.autoStart = autoStart
         
-        self._healthKitComponents = DynamicDependencies(
-            componentProperties: [
-                Dependency(wrappedValue: HealthKitHealthStore())
-            ]
-        )
-        
         // We initalize the dataSource and immediatly override it to ensure that is does not contain an optional value.
         dataSource = AsyncThrowingStream { _ in }
         dataSource = AsyncThrowingStream { continuation in
             self.continuation = continuation
-        }
-        
-        for healthKitComponent in healthKitComponents {
-            
         }
     }
     
@@ -66,7 +46,7 @@ class HealthKitUpdatingDataSource<ComponentStandard: Standard, SampleType: Corre
     ) async {
         let anchorDescriptor = HKAnchoredObjectQueryDescriptor(
             predicates: [
-                .sample(type: sampleType, predicate: predicate ?? healthKitHealthStore.predicateStarting())
+                .sample(type: sampleType, predicate: predicate ?? healthKitHealthStoreComponent.predicateStarting())
             ],
             anchor: anchor
         )
@@ -112,7 +92,7 @@ class HealthKitUpdatingDataSource<ComponentStandard: Standard, SampleType: Corre
         // Create the descriptor.
         let sampleQueryDescriptor = HKSampleQueryDescriptor(
             predicates:[
-                .sample(type: sampleType, predicate: predicate ?? healthKitHealthStore.predicateStarting())
+                .sample(type: sampleType, predicate: predicate ?? healthKitHealthStoreComponent.predicateStarting())
             ],
             sortDescriptors: [
                 SortDescriptor(\.endDate, order: .reverse)

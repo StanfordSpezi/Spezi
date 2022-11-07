@@ -7,7 +7,7 @@
 //
 
 
-public protocol ComponentProperty<PropertyStandard>: DependencyDescriptor, AnyObject {
+protocol ComponentProperty<PropertyStandard>: DependencyDescriptor, AnyObject {
     associatedtype ComponentType: Component where ComponentType.ComponentStandard == PropertyStandard
     
     

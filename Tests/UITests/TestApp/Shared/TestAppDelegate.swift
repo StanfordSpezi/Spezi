@@ -18,13 +18,13 @@ class TestAppDelegate: CardinalKitAppDelegate {
     override var configuration: Configuration {
         Configuration(standard: TestAppStandard()) {
             ObservableComponentTestsComponent(message: "Passed")
-            if HKHealthStore.isHealthDataAvailable() {
-                HealthKit(
-                    [
-                        Collect(type: HKQuantityType.electrocardiogramType())
-                    ]
-                )
-            }
+//            if HKHealthStore.isHealthDataAvailable() {
+//                HealthKit(
+//                    [
+//                        Collect(type: HKQuantityType.electrocardiogramType())
+//                    ]
+//                )
+//            }
             SecureStorage()
             LocalStorage()
         }
