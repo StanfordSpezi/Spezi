@@ -8,20 +8,4 @@
 
 
 /// A ``Standard`` defines a common representation of resources using by different `CardinalKit` components.
-public protocol Standard<BaseType>: Actor, Component where ComponentStandard == Self {
-    associatedtype BaseType: Identifiable
-    
-    
-    func registerDataSource(_ asyncSequence: some TypedAsyncSequence<DataSourceElement<BaseType>>)
-}
-
-
-extension Standard {
-    public func registerDataSource(asyncStream: AsyncStream<DataSourceElement<BaseType>>) {
-        registerDataSource(asyncStream)
-    }
-    
-    public func registerDataSource(asyncThrowingStream: AsyncThrowingStream<DataSourceElement<BaseType>, Error>) {
-        registerDataSource(asyncThrowingStream)
-    }
-}
+public protocol Standard<BaseType>: Actor, Component, DataSourceRegistry where ComponentStandard == Self { }

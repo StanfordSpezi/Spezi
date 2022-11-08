@@ -10,7 +10,7 @@
 /// A ``ComponentCollection`` defines a collection of ``Component``s that can utilize the `ComponentsStandard`.
 ///
 /// You can not create a ``ComponentCollection`` yourself. Please use the ``ComponentBuilder`` to create a ``ComponentCollection``.
-open class ComponentCollection<ComponentsStandard: Standard> {
+public class ComponentCollection<ComponentsStandard: Standard> {
     let elements: [any Component<ComponentsStandard>]
     
     

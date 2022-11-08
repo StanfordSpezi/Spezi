@@ -35,21 +35,21 @@ enum HealthKitType {
     }
 }
 
-protocol DataSource {
-    associatedtype Data
-    associatedtype DataSourceError: Error = Never
-    
-    typealias DataStream = AsyncThrowingStream<Data, DataSourceError>
-    
-    
-    var dataSource: DataStream { get }
-}
+//protocol DataSource {
+//    associatedtype Data
+//    associatedtype DataSourceError: Error = Never
+//
+//    typealias DataStream = AsyncThrowingStream<Data, DataSourceError>
+//
+//
+//    var dataSource: DataStream { get }
+//}
 
 enum HealthKitDataSourceError: Error {
     case healthDataIsNotAvailable
 }
 
-public class OLDECGHealthKitDataSource<ComponentStandard: Standard>: Component, LifecycleHandler, DataSource {
+public class OLDECGHealthKitDataSource<ComponentStandard: Standard>: Component, LifecycleHandler {
     typealias DataStream = AsyncThrowingStream<HKElectrocardiogram, Error>
     
     

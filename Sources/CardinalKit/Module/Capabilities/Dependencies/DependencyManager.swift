@@ -50,7 +50,7 @@ public class DependencyManager<S: Standard> {
             preconditionFailure("Could not find the injectable component in the `sortedComponents`.")
         }
         
-        anyDependency.dependency = foundInSortedComponents
+        anyDependency.inject(dependency: foundInSortedComponents)
     }
     
     /// Communicate a requirement to a `DependencyManager`

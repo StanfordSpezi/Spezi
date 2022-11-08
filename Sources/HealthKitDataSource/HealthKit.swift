@@ -59,12 +59,11 @@ public struct CollectECG: HealthKitDataSourceDescription {
 }
 
 
-public class HealthKit<ComponentStandard: Standard>: ComponentCollection<ComponentStandard> {
-    public init(_ healthKitDataSourceDescriptions: [HealthKitDataSourceDescription]) {
-        super.init(elements:
-            healthKitDataSourceDescriptions.compactMap {
-                $0.component(ComponentStandard.self)
-            }
-        )
+public class HealthKit<ComponentStandard: Standard> {
+    public init(
+        _ healthKitDataSourceDescriptions: [HealthKitDataSourceDescription],
+        @DataSourceRegistryAdapterBuilder<ComponentStandard> _ adapter: () -> (any DataSourceRegistryAdapter<HKSample, ComponentStandard.BaseType>)
+    ) {
+        fatalError("")
     }
 }

@@ -17,7 +17,7 @@ public class _DependencyPropertyWrapper<C: Component, S: Standard>: ComponentPro
     // We want the _DependencyPropertyWrapper type to be hidden from autocompletion and document generation.
     
     public let defaultValue: () -> C
-    public var dependency: C?
+    private var dependency: C?
     
     /// The dependency that is resolved by ``CardinalKit``
     public var wrappedValue: C {
@@ -51,5 +51,13 @@ public class _DependencyPropertyWrapper<C: Component, S: Standard>: ComponentPro
     
     public func inject(dependencyManager: DependencyManager<S>) {
         dependencyManager.inject(C.self, into: self)
+    }
+    
+    public func inject(dependency: C) {
+        precondition(
+            self.dependency == nil,
+            "Already injected a component: \(String(describing: dependency))"
+        )
+        self.dependency = dependency
     }
 }

@@ -7,10 +7,12 @@
 //
 
 
-protocol ComponentProperty<PropertyStandard>: DependencyDescriptor, AnyObject {
+public protocol ComponentProperty<PropertyStandard>: DependencyDescriptor, AnyObject {
     associatedtype ComponentType: Component where ComponentType.ComponentStandard == PropertyStandard
     
     
     var defaultValue: () -> ComponentType { get }
-    var dependency: ComponentType? { get set }
+    var wrappedValue: ComponentType { get }
+    
+    func inject(dependency: ComponentType)
 }

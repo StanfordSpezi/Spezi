@@ -11,7 +11,7 @@ import HealthKit
 import SwiftUI
 
 
-class HealthKitUpdatingDataSource<ComponentStandard: Standard, SampleType: CorrelatingSampleType>: Component, LifecycleHandler, DataSource {
+class HealthKitUpdatingDataSource<ComponentStandard: Standard, SampleType: CorrelatingSampleType>: Component, LifecycleHandler {
     typealias DataStream = AsyncThrowingStream<SampleType.Sample, Error>
     
     @Dependency var healthKitHealthStoreComponent = HealthKitHealthStore()

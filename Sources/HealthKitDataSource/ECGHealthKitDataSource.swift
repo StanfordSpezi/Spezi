@@ -22,7 +22,7 @@ struct Electrocardiogram {
 }
 
 
-public class ECGHealthKitDataSource<ComponentStandard: Standard>: Component, DataSource, LifecycleHandler {
+public class ECGHealthKitDataSource<ComponentStandard: Standard>: Component, LifecycleHandler {
     typealias DataStream = AsyncThrowingStream<Electrocardiogram, Error>
     
     
@@ -86,7 +86,7 @@ public class ECGHealthKitDataSource<ComponentStandard: Standard>: Component, Dat
     
     
     public func willFinishLaunchingWithOptions(_ application: UIApplication, launchOptions: [UIApplication.LaunchOptionsKey : Any]) {
-        #warning("Remove after thesting")
+        #warning("Remove after testing")
         Task {
             await self.healthKitDataSource.beginDataDelivery()
             print(dataSource)

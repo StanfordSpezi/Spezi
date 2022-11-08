@@ -23,9 +23,6 @@ let package = Package(
         .library(name: "SecureStorage", targets: ["SecureStorage"]),
         .library(name: "XCTRuntimeAssertions", targets: ["XCTRuntimeAssertions"])
     ],
-    dependencies: [
-        .package(url: "https://github.com/apple/swift-async-algorithms", exact: "0.0.3")
-    ],
     targets: [
         .target(
             name: "CardinalKit",
@@ -43,8 +40,7 @@ let package = Package(
         .target(
             name: "HealthKitDataSource",
             dependencies: [
-                .target(name: "CardinalKit"),
-                .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
+                .target(name: "CardinalKit")
             ]
         ),
         .target(
