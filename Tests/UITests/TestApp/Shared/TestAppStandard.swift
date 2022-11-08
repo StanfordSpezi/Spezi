@@ -7,7 +7,6 @@
 //
 
 import CardinalKit
-import Foundation
 
 
 actor TestAppStandard: Standard { }

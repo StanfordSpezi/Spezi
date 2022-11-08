@@ -7,7 +7,6 @@
 //
 
 import CardinalKit
-import HealthKit
 import LocalStorage
 import SecureStorage
 import SwiftUI
