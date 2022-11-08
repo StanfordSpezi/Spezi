@@ -10,6 +10,8 @@
 import Foundation
 
 
+private var fulfillmentCounts: [String: Int] = [:]
+
 /// `XCTRuntimePrecondition` allows you to test assertions of types that use the `precondition` and `preconditionFailure` functions of the `XCTRuntimeAssertions` target.
 /// - Parameters:
 ///   - validateRuntimeAssertion: An optional closure that can be used to furhter validate the messages passed to the
@@ -28,21 +30,23 @@ public func XCTRuntimePrecondition(
     line: UInt = #line,
     _ expression: @escaping () throws -> Void
 ) throws {
-    var fulfillmentCount: Int = 0
+    // We have to run the operation on a `DispatchQueue` as we have to call `RunLoop.current.run()` in the `preconditionFailure` call.
+    let dispatchQueue = DispatchQueue(label: UUID().description)
+    fulfillmentCounts[dispatchQueue.label] = 0
     
     XCTRuntimeAssertionInjector.injected = XCTRuntimeAssertionInjector(
         precondition: { condition, message, _, _  in
             if condition() {
                 let message = message() // We execute the message closure independent of the availability of the `validateRuntimeAssertion` closure.
                 validateRuntimeAssertion?(message)
-                fulfillmentCount += 1
+                // If the default value is chosen we are calling a fulfillmentCount that has not been setup yet
+                // Using 1 guarantees a fail at the later checks.
+                fulfillmentCounts[dispatchQueue.label, default: 1] += 1
                 neverReturn()
             }
         }
     )
     
-    // We have to run the operation on a `DispatchQueue` as we have to call `RunLoop.current.run()` in the `preconditionFailure` call.
-    let dispatchQueue = DispatchQueue.global(qos: .userInitiated)
     let expressionWorkItem = DispatchWorkItem {
         do {
             try expression()
@@ -57,7 +61,7 @@ public func XCTRuntimePrecondition(
     expressionWorkItem.cancel()
     dispatchQueue.suspend()
     
-    if fulfillmentCount != 1 {
+    if fulfillmentCounts[dispatchQueue.label] != 1 {
         throw XCTFail(
             message: """
             The precondition was called multiple times.
@@ -66,6 +70,7 @@ public func XCTRuntimePrecondition(
         )
     }
     
+    fulfillmentCounts[dispatchQueue.label] = nil
     XCTRuntimeAssertionInjector.reset()
 }
 
