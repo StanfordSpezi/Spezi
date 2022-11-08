@@ -6,27 +6,17 @@
 // SPDX-License-Identifier: MIT
 //
 
-import CardinalKit
 import HealthKit
-import SwiftUI
+import CardinalKit
 
 
-public actor HealthKitObserver<ComponentStandard: Standard>: Component, LifecycleHandler {
-    @Dependency var healthKitHealthStoreComponent = HealthKitHealthStore()
-    var activeObservations: [HKObjectType: Int] = [:]
-    
-    
-    var healthStore: HKHealthStore {
-        healthKitHealthStoreComponent.healthStore
-    }
-    
-    
-    public init() {}
+extension HKHealthStore {
+    static var activeObservations: [HKObjectType: Int] = [:]
     
     
     public func startObservation(
         for sampleTypes: Set<HKSampleType>,
-        predicate: NSPredicate? = nil
+        withPredicate predicate: NSPredicate? = nil
     ) -> AsyncThrowingStream<(Set<HKSampleType>, HKObserverQueryCompletionHandler), Error> {
         AsyncThrowingStream { continuation in
             Task {
@@ -39,7 +29,7 @@ public actor HealthKitObserver<ComponentStandard: Standard>: Component, Lifecycl
                 var queryDescriptors: [HKQueryDescriptor] = []
                 for sampleType in sampleTypes {
                     queryDescriptors.append(
-                        HKQueryDescriptor(sampleType: sampleType, predicate: predicate ?? healthKitHealthStoreComponent.predicateStarting())
+                        HKQueryDescriptor(sampleType: sampleType, predicate: predicate)
                     )
                 }
                 
@@ -54,11 +44,11 @@ public actor HealthKitObserver<ComponentStandard: Standard>: Component, Lifecycl
                     continuation.yield((samples, completionHandler))
                 }
                 
-                healthStore.execute(observerQuery)
+                self.execute(observerQuery)
                 
                 continuation.onTermination = { @Sendable _ in
+                    self.stop(observerQuery)
                     Task {
-                        await self.healthStore.stop(observerQuery)
                         await self.disableBackgroundDelivery(for: sampleTypes)
                     }
                 }
@@ -67,33 +57,39 @@ public actor HealthKitObserver<ComponentStandard: Standard>: Component, Lifecycl
     }
     
     
-    private func enableBackgroundDelivery(for objectTypes: Set<HKObjectType>) async throws {
-        try await healthStore.requestAuthorization(toShare: [], read: objectTypes as Set<HKObjectType>)
+    func enableBackgroundDelivery(
+        for objectTypes: Set<HKObjectType>,
+        frequency: HKUpdateFrequency = .immediate
+    ) async throws {
+        try await self.requestAuthorization(toShare: [], read: objectTypes as Set<HKObjectType>)
         
         var enabledObjectTypes: Set<HKObjectType> = []
         do {
             for objectType in objectTypes {
-                try await healthStore.enableBackgroundDelivery(for: objectType, frequency: .immediate)
+                try await self.enableBackgroundDelivery(for: objectType, frequency: frequency)
                 enabledObjectTypes.insert(objectType)
-                activeObservations[objectType] = activeObservations[objectType, default: 0] + 1
+                HKHealthStore.activeObservations[objectType] = HKHealthStore.activeObservations[objectType, default: 0] + 1
             }
         } catch {
             // Revert all changes as enable background delivery for the object types failed.
-            disableBackgroundDelivery(for: enabledObjectTypes)
+            await disableBackgroundDelivery(for: enabledObjectTypes)
         }
     }
     
-    private func disableBackgroundDelivery(for objectTypes: Set<HKObjectType>) {
+    
+    func disableBackgroundDelivery(
+        for objectTypes: Set<HKObjectType>
+    ) async {
         for objectType in objectTypes {
-            if let activeObservation = self.activeObservations[objectType] {
+            if let activeObservation = HKHealthStore.activeObservations[objectType] {
                 let newActiveObservation = activeObservation - 1
                 if newActiveObservation <= 0 {
-                    self.activeObservations[objectType] = nil
-                    Task {
-                        try await self.healthStore.disableBackgroundDelivery(for: objectType)
-                    }
+                    HKHealthStore.activeObservations[objectType] = nil
+                    do {
+                        try await self.disableBackgroundDelivery(for: objectType)
+                    } catch {}
                 } else {
-                    self.activeObservations[objectType] = newActiveObservation
+                    HKHealthStore.activeObservations[objectType] = newActiveObservation
                 }
             }
         }

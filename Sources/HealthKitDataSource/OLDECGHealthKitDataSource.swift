@@ -6,7 +6,6 @@
 // SPDX-License-Identifier: MIT
 //
 
-import AsyncAlgorithms
 import CardinalKit
 import HealthKit
 import SwiftUI
