@@ -11,11 +11,12 @@ import Foundation
 
 
 actor TestAppStandard: Standard {
+    typealias BaseType = TestAppStandardDataSourceElement
+    
+    
     struct TestAppStandardDataSourceElement: Identifiable {
         let id: UUID
     }
-    
-    typealias BaseType = TestAppStandardDataSourceElement
     
     
     func registerDataSource(_ asyncSequence: some TypedAsyncSequence<DataSourceElement<BaseType>>) {

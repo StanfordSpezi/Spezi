@@ -26,7 +26,7 @@ private actor TwoDataSourceRegistryAdapterChain<
     }
     
     
-    public func transform(
+    func transform(
         _ asyncSequence: some TypedAsyncSequence<DataSourceElement<InputType>>
     ) async -> any TypedAsyncSequence<DataSourceElement<OutputType>> {
         let firstDataSourceRegistryTransformation = await firstDataSourceRegistryAdapter.transform(asyncSequence)
@@ -56,7 +56,7 @@ private actor ThreeDataSourceRegistryAdapterChain<
     }
     
     
-    public func transform(
+    func transform(
         _ asyncSequence: some TypedAsyncSequence<DataSourceElement<InputType>>
     ) async -> any TypedAsyncSequence<DataSourceElement<OutputType>> {
         let firstDataSourceRegistryTransformation = await firstDataSourceRegistryAdapter.transform(asyncSequence)
@@ -69,13 +69,13 @@ private actor ThreeDataSourceRegistryAdapterChain<
 /// A function builder used to generate data source registry adapter chains.
 @resultBuilder
 public enum DataSourceRegistryAdapterBuilder<S: Standard> {
-    static func buildBlock<InputType: Identifiable, OutputType: Identifiable>(
+    public static func buildBlock<InputType: Identifiable, OutputType: Identifiable>(
         _ dataSourceRegistryAdapter: any DataSourceRegistryAdapter<InputType, OutputType>
     ) -> any DataSourceRegistryAdapter<InputType, OutputType> where OutputType == S.BaseType {
         dataSourceRegistryAdapter
     }
     
-    static func buildBlock<InputType: Identifiable, Intermediate: Identifiable, OutputType: Identifiable>(
+    public static func buildBlock<InputType: Identifiable, Intermediate: Identifiable, OutputType: Identifiable>(
         _ firstDataSourceRegistryAdapter: any DataSourceRegistryAdapter<InputType, Intermediate>,
         _ secondDataSourceRegistryAdapter: any DataSourceRegistryAdapter<Intermediate, OutputType>
     ) -> any DataSourceRegistryAdapter<InputType, OutputType> where OutputType == S.BaseType {
@@ -85,7 +85,7 @@ public enum DataSourceRegistryAdapterBuilder<S: Standard> {
         )
     }
     
-    static func buildBlock<InputType: Identifiable, Intermediate1: Identifiable, Intermediate2: Identifiable, OutputType: Identifiable>(
+    public static func buildBlock<InputType: Identifiable, Intermediate1: Identifiable, Intermediate2: Identifiable, OutputType: Identifiable>(
         _ firstDataSourceRegistryAdapter: any DataSourceRegistryAdapter<InputType, Intermediate1>,
         _ secondDataSourceRegistryAdapter: any DataSourceRegistryAdapter<Intermediate1, Intermediate2>,
         _ thirdDataSourceRegistryAdapter: any DataSourceRegistryAdapter<Intermediate2, OutputType>

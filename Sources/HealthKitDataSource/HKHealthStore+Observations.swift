@@ -6,8 +6,8 @@
 // SPDX-License-Identifier: MIT
 //
 
-import HealthKit
 import CardinalKit
+import HealthKit
 
 
 extension HKHealthStore {

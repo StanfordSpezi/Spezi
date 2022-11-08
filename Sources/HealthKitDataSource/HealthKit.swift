@@ -11,39 +11,32 @@ import HealthKit
 
 
 public protocol HealthKitDataSourceDescription {
-    func dependency<S: Standard>(healthStore: HKHealthStore) -> any ComponentProperty<S>
+    func dependency<S: Standard>(healthStore: HKHealthStore, adapter: HealthKit<S>.Adapter) -> any ComponentProperty<S>
 }
 
 
-public struct Collect<SampleType: CorrelatingSampleType>: HealthKitDataSourceDescription {
-    let type: SampleType
+public struct Collect<SampleType: HKSampleType>: HealthKitDataSourceDescription {
+    let sampleType: SampleType
     let deliverySetting: HealthKitDeliverySetting
     
     
-    public init(type: SampleType, deliverySetting: HealthKitDeliverySetting = .manual) {
-        self.type = type
+    public init(sampleType: SampleType, deliverySetting: HealthKitDeliverySetting = .manual) {
+        self.sampleType = sampleType
         self.deliverySetting = deliverySetting
     }
 
 
-    public func dependency<S: Standard>(healthStore: HKHealthStore) -> any ComponentProperty<S> {
-        fatalError("Not implemented")
+    public func dependency<S: Standard>(healthStore: HKHealthStore, adapter: HealthKit<S>.Adapter) -> any ComponentProperty<S> {
+        _DependencyPropertyWrapper(
+            wrappedValue: HealthKitDataSource(
+                healthStore: healthStore,
+                sampleType: sampleType,
+                deliverySetting: deliverySetting,
+                adapter: adapter
+            )
+        )
     }
 }
-
-//public struct CollectECG: HealthKitDataSourceDescription {
-//    let autoStart: Bool
-//
-//
-//    public init(autoStart: Bool = false) {
-//        self.autoStart = autoStart
-//    }
-//
-//
-//    public func component<ComponentStandard: Standard>(_ standard: ComponentStandard.Type = ComponentStandard.self) -> any Component {
-//        ECGHealthKitDataSource<ComponentStandard>(autoStart: true)
-//    }
-//}
 
 
 public class HealthKit<ComponentStandard: Standard>: Component {
@@ -72,11 +65,15 @@ public class HealthKit<ComponentStandard: Standard>: Component {
         )
         
         let healthStore = HKHealthStore()
+        let adapter = adapter()
         
-        self.adapter = adapter()
         self._healthKitComponents = DynamicDependencies(
-            componentProperties: healthKitDataSourceDescriptions.map { $0.dependency(healthStore: healthStore) }
+            componentProperties: healthKitDataSourceDescriptions
+                .map {
+                    $0.dependency(healthStore: healthStore, adapter: adapter)
+                }
         )
+        self.adapter = adapter
         self.healthStore = healthStore
     }
 }

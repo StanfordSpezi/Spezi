@@ -23,7 +23,7 @@ public enum HealthKitDeliveryStartSetting: Equatable {
 }
 
 
-public class HealthKitDataSource<ComponentStandard: Standard, SampleType: CorrelatingSampleType>: Component, LifecycleHandler {
+public class HealthKitDataSource<ComponentStandard: Standard, SampleType: HKSampleType>: Component, LifecycleHandler {
     let healthStore: HKHealthStore
     
     let sampleType: SampleType
@@ -37,10 +37,10 @@ public class HealthKitDataSource<ComponentStandard: Standard, SampleType: Correl
     @StandardActor var standard: ComponentStandard
     
     
-    public required init(
+    public required init( // swiftlint:disable:this function_default_parameter_at_end
         healthStore: HKHealthStore,
         sampleType: SampleType,
-        predicate: NSPredicate? = nil,
+        predicate: NSPredicate? = nil, // We order the parameters in a logical order and therefore don't put the predicate at the end here.
         deliverySetting: HealthKitDeliverySetting,
         adapter: HealthKit<ComponentStandard>.Adapter
     ) {
@@ -61,21 +61,19 @@ public class HealthKitDataSource<ComponentStandard: Standard, SampleType: Correl
         case .manual:
             let healthKitSamples = healthStore.sampleQueryStream(for: sampleType, withPredicate: predicate)
             await standard.registerDataSource(adapter.transform(healthKitSamples))
-            break
         case .anchorQuery:
             active = true
             let healthKitSamples = await healthStore.anchoredObjectQuery(for: sampleType)
             await standard.registerDataSource(adapter.transform(healthKitSamples))
-            break
         case .background:
             active = true
             let healthKitSamples = healthStore.startObservation(for: [sampleType])
-                .flatMap { types in
+                .flatMap { _ in
                     AsyncThrowingStream { continuation in
                         Task {
                             let results = try await self.healthStore.anchoredObjectQuery(for: self.sampleType, using: self.anchor)
-                            self.anchor = results.1
-                            for result in results.0 {
+                            self.anchor = results.anchor
+                            for result in results.elements {
                                 continuation.yield(result)
                             }
                             continuation.finish()
@@ -83,7 +81,6 @@ public class HealthKitDataSource<ComponentStandard: Standard, SampleType: Correl
                     }
                 }
             await standard.registerDataSource(adapter.transform(healthKitSamples))
-            break
         }
     }
 }

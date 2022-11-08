@@ -63,7 +63,7 @@ extension HKHealthStore {
         for sampleType: HKSampleType,
         using anchor: HKQueryAnchor? = nil,
         withPredicate predicate: NSPredicate? = nil
-    ) async throws -> ([DataSourceElement<HKSample>], HKQueryAnchor) {
+    ) async throws -> (elements: [DataSourceElement<HKSample>], anchor: HKQueryAnchor) {
         let anchorDescriptor = anchorDescriptor(sampleType: sampleType, predicate: predicate, anchor: anchor)
         
         let result = try await anchorDescriptor.result(for: self)
@@ -96,5 +96,3 @@ extension HKHealthStore {
         )
     }
 }
-
-
