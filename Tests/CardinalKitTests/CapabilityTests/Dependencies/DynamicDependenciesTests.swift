@@ -82,14 +82,6 @@ private enum DynamicDependenciesTestCase: CaseIterable {
     }
 }
 
-extension Array where Element == any Component<MockStandard> {
-    func componentOfType<C: Component>(_ componentType: C.Type = C.self, expectedNumber: Int = 1) throws -> C {
-        let typedComponents = compactMap { $0 as? C }
-        XCTAssertEqual(typedComponents.count, expectedNumber)
-        return try XCTUnwrap(typedComponents.first)
-    }
-}
-
 private class TestComponent1: Component {
     typealias ComponentStandard = MockStandard
     
