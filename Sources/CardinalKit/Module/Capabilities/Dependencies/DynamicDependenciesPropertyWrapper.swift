@@ -6,11 +6,11 @@
 // SPDX-License-Identifier: MIT
 //
 
-//extension ComponentProperty {
+// extension ComponentProperty {
 //    var anyComponent: (any Component<PropertyStandard>)? {
 //        dependency
 //    }
-//}
+// }
 
 @propertyWrapper
 public class _DynamicDependenciesPropertyWrapper<S: Standard>: DependencyDescriptor {

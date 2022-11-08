@@ -7,14 +7,14 @@
 //
 
 
-//extension Component {
+// extension Component {
 //    // A documentation for this methodd exists in the `Component` type which SwiftLint doesn't recognize.
 //    // swiftlint:disable:next missing_docs
 //    public func configure() {}
-//}
+// }
 
 
-//extension Component {
+// extension Component {
 //    func saveInTypedCollection(cardinalKit: CardinalKit<ComponentStandard>) {
 //        if let typedCollectionKey = self as? (any TypedCollectionKey) {
 //            Self.save(typedCollectionKey: typedCollectionKey, saveInTypedCollectionOfCardinalKit: cardinalKit)
@@ -27,4 +27,4 @@
 //    ) {
 //        cardinalKit.typedCollection.set(T.self, to: typedCollectionKey as? T.Value)
 //    }
-//}
+// }

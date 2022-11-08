@@ -32,7 +32,7 @@ class HealthKitDataSource<ComponentStandard: Standard, SampleType: CorrelatingSa
     ) async throws -> [SampleType.Sample] {
         // Create the descriptor.
         let sampleQueryDescriptor = HKSampleQueryDescriptor(
-            predicates:[
+            predicates: [
                 .sample(type: sampleType, predicate: predicate ?? healthKitHealthStoreComponent.predicateStarting())
             ],
             sortDescriptors: [

@@ -18,14 +18,14 @@ class HealthKitUpdatingDataSource<ComponentStandard: Standard, SampleType: Corre
     // @DynamicDependencies var healthKitComponents: [any Component<ComponentStandard>]
     private let sampleType: SampleType
     public var autoStart: Bool
-    private var anchor: HKQueryAnchor? = nil
-    private var continuation: DataStream.Continuation? = nil
-    private var queryTask: Task<Void, Error>? = nil
+    private var anchor: HKQueryAnchor?
+    private var continuation: DataStream.Continuation?
+    private var queryTask: Task<Void, Error>?
     private(set) var dataSource: DataStream
     
     
     var healthStore: HKHealthStore {
-        return healthKitHealthStoreComponent.healthStore
+        healthKitHealthStoreComponent.healthStore
     }
     
     
@@ -91,7 +91,7 @@ class HealthKitUpdatingDataSource<ComponentStandard: Standard, SampleType: Corre
     ) async throws -> [SampleType.Sample] {
         // Create the descriptor.
         let sampleQueryDescriptor = HKSampleQueryDescriptor(
-            predicates:[
+            predicates: [
                 .sample(type: sampleType, predicate: predicate ?? healthKitHealthStoreComponent.predicateStarting())
             ],
             sortDescriptors: [
@@ -104,7 +104,7 @@ class HealthKitUpdatingDataSource<ComponentStandard: Standard, SampleType: Corre
     }
     
     
-    func willFinishLaunchingWithOptions(_ application: UIApplication, launchOptions: [UIApplication.LaunchOptionsKey : Any]) {
+    func willFinishLaunchingWithOptions(_ application: UIApplication, launchOptions: [UIApplication.LaunchOptionsKey: Any]) {
         if autoStart {
             Task {
                 await beginDataDelivery()

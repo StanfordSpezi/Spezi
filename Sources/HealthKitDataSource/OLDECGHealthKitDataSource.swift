@@ -35,7 +35,7 @@ enum HealthKitType {
     }
 }
 
-//protocol DataSource {
+// protocol DataSource {
 //    associatedtype Data
 //    associatedtype DataSourceError: Error = Never
 //
@@ -43,7 +43,7 @@ enum HealthKitType {
 //
 //
 //    var dataSource: DataStream { get }
-//}
+// }
 
 enum HealthKitDataSourceError: Error {
     case healthDataIsNotAvailable
@@ -55,9 +55,9 @@ public class OLDECGHealthKitDataSource<ComponentStandard: Standard>: Component, 
     
     private let healthStore = HKHealthStore()
     private let typeToRead: HKObjectType
-    private var anchor: HKQueryAnchor? = nil
-    private var continuation: DataStream.Continuation? = nil
-    private var queryTask: Task<Void, Error>? = nil
+    private var anchor: HKQueryAnchor?
+    private var continuation: DataStream.Continuation?
+    private var queryTask: Task<Void, Error>?
     private(set) var dataSource: DataStream
     
     
@@ -88,7 +88,7 @@ public class OLDECGHealthKitDataSource<ComponentStandard: Standard>: Component, 
         }
     }
     
-    public func willFinishLaunchingWithOptions(_ application: UIApplication, launchOptions: [UIApplication.LaunchOptionsKey : Any]) {
+    public func willFinishLaunchingWithOptions(_ application: UIApplication, launchOptions: [UIApplication.LaunchOptionsKey: Any]) {
         Task {
             do {
                 try await healthStore.requestAuthorization(toShare: [], read: [
@@ -142,13 +142,13 @@ public class OLDECGHealthKitDataSource<ComponentStandard: Standard>: Component, 
                     withStart: Date(),
                     end: nil,
                     options: [
-                        .strictStartDate,
+                        .strictStartDate
                     ]
                 )
                 
                 let queryDescriptor = HKQueryDescriptor(sampleType: .electrocardiogramType(), predicate: fromNow)
                 
-                let observerQuery = HKObserverQuery(queryDescriptors: [queryDescriptor]) { observerQuery, samples, completionHandler, error in
+                let observerQuery = HKObserverQuery(queryDescriptors: [queryDescriptor]) { _, samples, completionHandler, error in
                     guard error == nil,
                           let samples else {
                         continuation.finish(throwing: error)
@@ -174,18 +174,17 @@ public class OLDECGHealthKitDataSource<ComponentStandard: Standard>: Component, 
     }
     
     func queryForElectrocardiogramType() async {
-        
         let fromNow = HKQuery.predicateForSamples(
             withStart: Date(),
             end: nil,
             options: [
-                .strictStartDate,
+                .strictStartDate
             ]
         )
         
         // Create the descriptor.
         let descriptor = HKSampleQueryDescriptor(
-            predicates:[.sample(type: .electrocardiogramType(), predicate: fromNow)],
+            predicates: [.sample(type: .electrocardiogramType(), predicate: fromNow)],
             sortDescriptors: [SortDescriptor(\.endDate, order: .reverse)],
             limit: 10
         )
@@ -221,7 +220,7 @@ public class OLDECGHealthKitDataSource<ComponentStandard: Standard>: Component, 
                         
                         // Create the descriptor.
                         let sampleQueryDescriptor = HKSampleQueryDescriptor(
-                            predicates:[.sample(type: sampleType, predicate: predicate)],
+                            predicates: [.sample(type: sampleType, predicate: predicate)],
                             sortDescriptors: []
                         )
                         
@@ -238,7 +237,6 @@ public class OLDECGHealthKitDataSource<ComponentStandard: Standard>: Component, 
                         } else {
                             print("\(String(describing: sampleType)): \(String(describing: samples))")
                         }
-                        
                     }
                 }
                 

@@ -85,7 +85,7 @@ public class ECGHealthKitDataSource<ComponentStandard: Standard>: Component, Lif
     }()
     
     
-    public func willFinishLaunchingWithOptions(_ application: UIApplication, launchOptions: [UIApplication.LaunchOptionsKey : Any]) {
+    public func willFinishLaunchingWithOptions(_ application: UIApplication, launchOptions: [UIApplication.LaunchOptionsKey: Any]) {
         #warning("Remove after testing")
         Task {
             await self.healthKitDataSource.beginDataDelivery()
@@ -93,4 +93,3 @@ public class ECGHealthKitDataSource<ComponentStandard: Standard>: Component, Lif
         }
     }
 }
-

@@ -35,7 +35,7 @@ public class HealthKitHealthStore<ComponentStandard: Standard>: Component {
             withStart: date,
             end: nil,
             options: [
-                .strictStartDate,
+                .strictStartDate
             ]
         )
     }
