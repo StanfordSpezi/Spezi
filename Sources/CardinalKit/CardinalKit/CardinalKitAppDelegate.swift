@@ -32,17 +32,7 @@ import SwiftUI
 /// }
 /// ```
 open class CardinalKitAppDelegate: NSObject, UIApplicationDelegate {
-    private actor DefaultStandard: Standard {
-        typealias BaseType = StandardType
-        
-        
-        struct StandardType: Identifiable {
-            var id: UUID
-        }
-        
-        
-        func registerDataSource(_ asyncSequence: some TypedAsyncSequence<DataSourceElement<BaseType>>) { }
-    }
+    private actor DefaultStandard: Standard { }
     
     
     private(set) lazy var cardinalKit: AnyCardinalKit = configuration.cardinalKit

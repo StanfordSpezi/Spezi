@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2F01E8CC29148D120089C46B /* HealthKitDataSource in Frameworks */ = {isa = PBXBuildFile; productRef = 2F01E8CB29148D120089C46B /* HealthKitDataSource */; };
 		2F6051CC290C5BDC0003D458 /* XCTRuntimeAssertions in Frameworks */ = {isa = PBXBuildFile; productRef = 2F6051CB290C5BDC0003D458 /* XCTRuntimeAssertions */; };
 		2F67A5BA290C69640092CAD6 /* SecureStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 2F67A5B9290C69640092CAD6 /* SecureStorage */; };
 		2F6D139A28F5F386007C25D6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F6D139928F5F386007C25D6 /* Assets.xcassets */; };
@@ -75,7 +74,6 @@
 			files = (
 				2FB77B9E2910EF13009FDDE2 /* LocalStorage in Frameworks */,
 				2F67A5BA290C69640092CAD6 /* SecureStorage in Frameworks */,
-				2F01E8CC29148D120089C46B /* HealthKitDataSource in Frameworks */,
 				2FC42FD9290ADD8800B08F18 /* CardinalKit in Frameworks */,
 				2F6051CC290C5BDC0003D458 /* XCTRuntimeAssertions in Frameworks */,
 			);
@@ -205,7 +203,6 @@
 				2F6051CB290C5BDC0003D458 /* XCTRuntimeAssertions */,
 				2F67A5B9290C69640092CAD6 /* SecureStorage */,
 				2FB77B9D2910EF13009FDDE2 /* LocalStorage */,
-				2F01E8CB29148D120089C46B /* HealthKitDataSource */,
 			);
 			productName = Example;
 			productReference = 2F6D139228F5F384007C25D6 /* TestApp.app */;
@@ -581,10 +578,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		2F01E8CB29148D120089C46B /* HealthKitDataSource */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = HealthKitDataSource;
-		};
 		2F6051CB290C5BDC0003D458 /* XCTRuntimeAssertions */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = XCTRuntimeAssertions;
