@@ -42,7 +42,8 @@ public func XCTRuntimeAssertion<T>(
                 }
                 
                 if condition() {
-                    let message = message() // We execute the message closure independent of the availability of the `validateRuntimeAssertion` closure.
+                    // We execute the message closure independent of the availability of the `validateRuntimeAssertion` closure.
+                    let message = message()
                     validateRuntimeAssertion?(message)
                     fulfillmentCount += 1
                 }
