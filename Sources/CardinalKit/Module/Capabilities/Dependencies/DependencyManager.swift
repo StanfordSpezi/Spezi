@@ -10,7 +10,7 @@ import XCTRuntimeAssertions
 
 
 /// A ``DependencyManager`` in CardinalKit is used to gather information about components with dependencies.
-class DependencyManager<S: Standard> {
+public class DependencyManager<S: Standard> {
     /// Collection of sorted components after resolving all dependencies.
     var sortedComponents: [any Component<S>]
     /// Collection of all omponents with dependencies that are not yet processed.
@@ -22,8 +22,8 @@ class DependencyManager<S: Standard> {
     /// A ``DependencyManager`` in CardinalKit is used to gather information about components with dependencies.
     /// - Parameter components: The components that should be resolved.
     init(_ components: [any Component<S>]) {
-        sortedComponents = components.filter { $0.dependencies.isEmpty }
-        componentsWithDependencies = components.filter { !$0.dependencies.isEmpty }
+        sortedComponents = components.filter { $0.dependencyDescriptors.isEmpty }
+        componentsWithDependencies = components.filter { !$0.dependencyDescriptors.isEmpty }
         
         // Start the dependency resolution on the first component.
         if let nextComponent = componentsWithDependencies.first {
@@ -31,7 +31,7 @@ class DependencyManager<S: Standard> {
         }
         
         for sortedComponent in sortedComponents {
-            for dependency in sortedComponent.dependencies {
+            for dependency in sortedComponent.dependencyDescriptors {
                 dependency.inject(dependencyManager: self)
             }
         }
@@ -42,15 +42,15 @@ class DependencyManager<S: Standard> {
     /// - Parameters:
     ///   - dependencyType: The type of the dependency that should be injected.
     ///   - dependencyPropertyWrapper: `_DependencyPropertyWrapper` that the dependency should be injected into.
-    func inject<C: Component, S: Standard>(
-        _ dependencyType: C.Type,
-        into dependencyPropertyWrapper: _DependencyPropertyWrapper<C, S>
-    ) where C.ComponentStandard == S {
-        guard let foundInSortedComponents = sortedComponents.first(where: { type(of: $0) == C.self }) as? C else {
+    func inject<D: ComponentDependency>(
+        _ dependencyType: D.ComponentType.Type,
+        into anyDependency: D
+    ) where D.PropertyStandard == S {
+        guard let foundInSortedComponents = sortedComponents.first(where: { type(of: $0) == D.ComponentType.self }) as? D.ComponentType else {
             preconditionFailure("Could not find the injectable component in the `sortedComponents`.")
         }
         
-        dependencyPropertyWrapper.dependency = foundInSortedComponents
+        anyDependency.inject(dependency: foundInSortedComponents)
     }
     
     /// Communicate a requirement to a `DependencyManager`
@@ -68,7 +68,7 @@ class DependencyManager<S: Standard> {
         guard let foundInComponentsWithDependencies = componentsWithDependencies.first(where: { type(of: $0) == C.self }) else {
             let newComponent = defaultValue()
             
-            guard !newComponent.dependencies.isEmpty else {
+            guard !newComponent.dependencyDescriptors.isEmpty else {
                 sortedComponents.append(newComponent)
                 return
             }
@@ -131,7 +131,7 @@ class DependencyManager<S: Standard> {
     
     private func push(_ component: any Component<S>) {
         recursiveSearch.append(component)
-        for dependency in component.dependencies {
+        for dependency in component.dependencyDescriptors {
             dependency.gatherDependency(dependencyManager: self)
         }
         resolvedAllDependencies(component)

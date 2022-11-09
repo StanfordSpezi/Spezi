@@ -32,7 +32,7 @@ import SwiftUI
 /// }
 /// ```
 open class CardinalKitAppDelegate: NSObject, UIApplicationDelegate {
-    private actor DefaultStandard: Standard {}
+    private actor DefaultStandard: Standard { }
     
     
     private(set) lazy var cardinalKit: AnyCardinalKit = configuration.cardinalKit
