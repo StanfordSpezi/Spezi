@@ -32,6 +32,7 @@ import SwiftUI
 /// }
 /// ```
 open class CardinalKitAppDelegate: NSObject, UIApplicationDelegate {
+<<<<<<< HEAD
     private actor DefaultStandard: Standard {
         typealias BaseType = StandardType
         
@@ -43,6 +44,9 @@ open class CardinalKitAppDelegate: NSObject, UIApplicationDelegate {
         
         func registerDataSource(_ asyncSequence: some TypedAsyncSequence<DataSourceElement<BaseType>>) { }
     }
+=======
+    private actor DefaultStandard: Standard { }
+>>>>>>> main
     
     
     private(set) lazy var cardinalKit: AnyCardinalKit = configuration.cardinalKit
