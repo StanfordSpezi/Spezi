@@ -12,7 +12,17 @@ import XCTest
 
 
 final class LocalStorageTests: XCTestCase {
-    actor LocalStorageTestStandard: Standard {}
+    private actor LocalStorageTestStandard: Standard {
+        typealias BaseType = StandardType
+        
+        
+        struct StandardType: Identifiable {
+            var id: UUID
+        }
+        
+        
+        func registerDataSource(_ asyncSequence: some TypedAsyncSequence<DataSourceElement<BaseType>>) { }
+    }
     
     struct Letter: Codable, Equatable {
         let greeting: String
