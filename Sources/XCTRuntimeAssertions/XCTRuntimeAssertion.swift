@@ -7,6 +7,9 @@
 //
 
 #if DEBUG
+import Foundation
+
+
 /// `XCTRuntimeAssertion` allows you to test assertions of types that use the `assert` and `assertionFailure` functions of the `XCTRuntimeAssertions` target.
 /// - Parameters:
 ///   - validateRuntimeAssertion: An optional closure that can be used to furhter validate the messages passed to the
@@ -28,9 +31,15 @@ public func XCTRuntimeAssertion<T>(
     _ expression: @escaping () throws -> T
 ) throws -> T {
     var fulfillmentCount: Int = 0
+    let xctRuntimeAssertionId = UUID()
     
     XCTRuntimeAssertionInjector.injected = XCTRuntimeAssertionInjector(
-        assert: { condition, message, _, _  in
+        id: xctRuntimeAssertionId,
+        assert: { id, condition, message, _, _  in
+            guard id == xctRuntimeAssertionId else {
+                return
+            }
+            
             if condition() {
                 let message = message() // We execute the message closure independent of the availability of the `validateRuntimeAssertion` closure.
                 validateRuntimeAssertion?(message)
@@ -99,7 +108,7 @@ public func assert(
     file: StaticString = #file,
     line: UInt = #line
 ) {
-    XCTRuntimeAssertionInjector.injected.assert(condition, message, file, line)
+    XCTRuntimeAssertionInjector.injected.assert(condition, message: message, file: file, line: line)
 }
 
 /// Indicates that an internal sanity check failed.
@@ -128,6 +137,6 @@ public func assertionFailure(
     file: StaticString = #file,
     line: UInt = #line
 ) {
-    XCTRuntimeAssertionInjector.injected.assert({ true }, message, file, line)
+    XCTRuntimeAssertionInjector.injected.assert({ true }, message: message, file: file, line: line)
 }
 #endif

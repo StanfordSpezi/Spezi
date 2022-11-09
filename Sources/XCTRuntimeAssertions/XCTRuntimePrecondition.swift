@@ -10,8 +10,6 @@
 import Foundation
 
 
-private var fulfillmentCounts: [String: Int] = [:]
-
 /// `XCTRuntimePrecondition` allows you to test assertions of types that use the `precondition` and `preconditionFailure` functions of the `XCTRuntimeAssertions` target.
 /// - Parameters:
 ///   - validateRuntimeAssertion: An optional closure that can be used to furhter validate the messages passed to the
@@ -30,18 +28,22 @@ public func XCTRuntimePrecondition(
     line: UInt = #line,
     _ expression: @escaping () throws -> Void
 ) throws {
+    let xctRuntimeAssertionId = UUID()
     // We have to run the operation on a `DispatchQueue` as we have to call `RunLoop.current.run()` in the `preconditionFailure` call.
-    let dispatchQueue = DispatchQueue(label: UUID().description)
-    fulfillmentCounts[dispatchQueue.label] = 0
+    let dispatchQueue = DispatchQueue(label: "XCTRuntimePrecondition-\(xctRuntimeAssertionId)")
+    var fulfillmentCount: Int = 0
     
     XCTRuntimeAssertionInjector.injected = XCTRuntimeAssertionInjector(
-        precondition: { condition, message, _, _  in
+        id: xctRuntimeAssertionId,
+        precondition: { id, condition, message, _, _  in
+            guard id == xctRuntimeAssertionId else {
+                return
+            }
+            
             if condition() {
                 let message = message() // We execute the message closure independent of the availability of the `validateRuntimeAssertion` closure.
                 validateRuntimeAssertion?(message)
-                // If the default value is chosen we are calling a fulfillmentCount that has not been setup yet
-                // Using 1 guarantees a fail at the later checks.
-                fulfillmentCounts[dispatchQueue.label, default: 1] += 1
+                fulfillmentCount += 1
                 neverReturn()
             }
         }
@@ -59,9 +61,8 @@ public func XCTRuntimePrecondition(
     // here as we need to make the method independent of XCTestCase to also use it in our TestApp UITest target which fails if you import XCTest.
     usleep(useconds_t(1_000_000 * timeout))
     expressionWorkItem.cancel()
-    dispatchQueue.suspend()
     
-    if fulfillmentCounts[dispatchQueue.label] != 1 {
+    if fulfillmentCount != 1 {
         throw XCTFail(
             message: """
             The precondition was called multiple times.
@@ -70,7 +71,6 @@ public func XCTRuntimePrecondition(
         )
     }
     
-    fulfillmentCounts[dispatchQueue.label] = nil
     XCTRuntimeAssertionInjector.reset()
 }
 
@@ -114,7 +114,7 @@ public func precondition(
     file: StaticString = #file,
     line: UInt = #line
 ) {
-    XCTRuntimeAssertionInjector.injected.precondition(condition, message, file, line)
+    XCTRuntimeAssertionInjector.injected.precondition(condition, message: message, file: file, line: line)
 }
 
 /// Indicates that a precondition was violated.
@@ -149,7 +149,7 @@ public func preconditionFailure(
     file: StaticString = #file,
     line: UInt = #line
 ) -> Never {
-    XCTRuntimeAssertionInjector.injected.precondition({ true }, message, file, line)
+    XCTRuntimeAssertionInjector.injected.precondition({ true }, message: message, file: file, line: line)
     neverReturn()
 }
 #endif
