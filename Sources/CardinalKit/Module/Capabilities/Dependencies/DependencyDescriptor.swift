@@ -6,13 +6,6 @@
 // SPDX-License-Identifier: MIT
 //
 
-<<<<<<< HEAD
-public protocol DependencyDescriptor<PropertyStandard> {
-    associatedtype PropertyStandard: Standard
-    
-    
-    func gatherDependency(dependencyManager: DependencyManager<PropertyStandard>)
-=======
 
 /// The ``DependencyDescriptor`` protocol is the base for any property wrapper used to describe ``Component`` dependencies.
 /// It is generally not needed to implement types conforming to ``DependencyDescriptor`` when using CardinalKit.
@@ -26,7 +19,6 @@ public protocol DependencyDescriptor<PropertyStandard> {
     /// Used by the ``DependencyManager`` to gather dependency information.
     func gatherDependency(dependencyManager: DependencyManager<PropertyStandard>)
     /// Used by the ``DependencyManager`` to inject resolved dependency information into a ``DependencyDescriptor``.
->>>>>>> main
     func inject(dependencyManager: DependencyManager<PropertyStandard>)
 }
 

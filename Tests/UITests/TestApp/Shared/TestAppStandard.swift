@@ -10,7 +10,6 @@ import CardinalKit
 import Foundation
 
 
-<<<<<<< HEAD
 actor TestAppStandard: Standard {
     typealias BaseType = TestAppStandardDataSourceElement
     
@@ -36,6 +35,3 @@ actor TestAppStandard: Standard {
         }
     }
 }
-=======
-actor TestAppStandard: Standard { }
->>>>>>> main
