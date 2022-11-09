@@ -33,19 +33,21 @@ public func XCTRuntimeAssertion<T>(
     var fulfillmentCount: Int = 0
     let xctRuntimeAssertionId = UUID()
     
-    XCTRuntimeAssertionInjector.injected = XCTRuntimeAssertionInjector(
-        id: xctRuntimeAssertionId,
-        assert: { id, condition, message, _, _  in
-            guard id == xctRuntimeAssertionId else {
-                return
+    XCTRuntimeAssertionInjector.inject(
+        runtimeAssertionInjector: XCTRuntimeAssertionInjector(
+            id: xctRuntimeAssertionId,
+            assert: { id, condition, message, _, _  in
+                guard id == xctRuntimeAssertionId else {
+                    return
+                }
+                
+                if condition() {
+                    let message = message() // We execute the message closure independent of the availability of the `validateRuntimeAssertion` closure.
+                    validateRuntimeAssertion?(message)
+                    fulfillmentCount += 1
+                }
             }
-            
-            if condition() {
-                let message = message() // We execute the message closure independent of the availability of the `validateRuntimeAssertion` closure.
-                validateRuntimeAssertion?(message)
-                fulfillmentCount += 1
-            }
-        }
+        )
     )
     
     var result: Result<T, Error>
@@ -55,7 +57,7 @@ public func XCTRuntimeAssertion<T>(
         result = .failure(error)
     }
     
-    XCTRuntimeAssertionInjector.reset()
+    XCTRuntimeAssertionInjector.removeRuntimeAssertionInjector(withId: xctRuntimeAssertionId)
     
     if fulfillmentCount != expectedFulfillmentCount {
         throw XCTFail(
@@ -108,7 +110,7 @@ public func assert(
     file: StaticString = #file,
     line: UInt = #line
 ) {
-    XCTRuntimeAssertionInjector.injected.assert(condition, message: message, file: file, line: line)
+    XCTRuntimeAssertionInjector.assert(condition, message: message, file: file, line: line)
 }
 
 /// Indicates that an internal sanity check failed.
@@ -137,6 +139,6 @@ public func assertionFailure(
     file: StaticString = #file,
     line: UInt = #line
 ) {
-    XCTRuntimeAssertionInjector.injected.assert({ true }, message: message, file: file, line: line)
+    XCTRuntimeAssertionInjector.assert({ true }, message: message, file: file, line: line)
 }
 #endif

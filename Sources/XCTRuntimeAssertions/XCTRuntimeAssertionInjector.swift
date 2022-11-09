@@ -11,7 +11,8 @@ import Foundation
 
 
 class XCTRuntimeAssertionInjector {
-    static var injected = XCTRuntimeAssertionInjector(id: UUID())
+    private static var injected: [XCTRuntimeAssertionInjector] = []
+    
     
     let id: UUID
     private let _assert: (UUID, () -> Bool, () -> String, StaticString, UInt) -> Void
@@ -62,17 +63,26 @@ class XCTRuntimeAssertionInjector {
         }
     }
     
-    static func reset() {
-        injected = XCTRuntimeAssertionInjector(id: UUID())
+    
+    static func inject(runtimeAssertionInjector: XCTRuntimeAssertionInjector) {
+        injected.append(runtimeAssertionInjector)
+    }
+    
+    static func removeRuntimeAssertionInjector(withId id: UUID) {
+        injected.removeAll(where: { $0.id == id })
     }
     
     
-    func assert(_ condition: () -> Bool, message: () -> String, file: StaticString, line: UInt) {
-        self._assert(id, condition, message, file, line)
+    static func assert(_ condition: () -> Bool, message: () -> String, file: StaticString, line: UInt) {
+        for runtimeAssertionInjector in injected {
+            runtimeAssertionInjector._assert(runtimeAssertionInjector.id, condition, message, file, line)
+        }
     }
     
-    func precondition(_ condition: () -> Bool, message: () -> String, file: StaticString, line: UInt) {
-        self._precondition(id, condition, message, file, line)
+    static func precondition(_ condition: () -> Bool, message: () -> String, file: StaticString, line: UInt) {
+        for runtimeAssertionInjector in injected {
+            runtimeAssertionInjector._precondition(runtimeAssertionInjector.id, condition, message, file, line)
+        }
     }
 }
 #endif

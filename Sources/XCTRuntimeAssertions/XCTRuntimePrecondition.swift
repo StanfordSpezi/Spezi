@@ -33,20 +33,22 @@ public func XCTRuntimePrecondition(
     let dispatchQueue = DispatchQueue(label: "XCTRuntimePrecondition-\(xctRuntimeAssertionId)")
     var fulfillmentCount: Int = 0
     
-    XCTRuntimeAssertionInjector.injected = XCTRuntimeAssertionInjector(
-        id: xctRuntimeAssertionId,
-        precondition: { id, condition, message, _, _  in
-            guard id == xctRuntimeAssertionId else {
-                return
+    XCTRuntimeAssertionInjector.inject(
+        runtimeAssertionInjector: XCTRuntimeAssertionInjector(
+            id: xctRuntimeAssertionId,
+            precondition: { id, condition, message, _, _  in
+                guard id == xctRuntimeAssertionId else {
+                    return
+                }
+                
+                if condition() {
+                    let message = message() // We execute the message closure independent of the availability of the `validateRuntimeAssertion` closure.
+                    validateRuntimeAssertion?(message)
+                    fulfillmentCount += 1
+                    neverReturn()
+                }
             }
-            
-            if condition() {
-                let message = message() // We execute the message closure independent of the availability of the `validateRuntimeAssertion` closure.
-                validateRuntimeAssertion?(message)
-                fulfillmentCount += 1
-                neverReturn()
-            }
-        }
+        )
     )
     
     let expressionWorkItem = DispatchWorkItem {
@@ -71,7 +73,7 @@ public func XCTRuntimePrecondition(
         )
     }
     
-    XCTRuntimeAssertionInjector.reset()
+    XCTRuntimeAssertionInjector.removeRuntimeAssertionInjector(withId: xctRuntimeAssertionId)
 }
 
 private func neverReturn() -> Never {
@@ -114,7 +116,7 @@ public func precondition(
     file: StaticString = #file,
     line: UInt = #line
 ) {
-    XCTRuntimeAssertionInjector.injected.precondition(condition, message: message, file: file, line: line)
+    XCTRuntimeAssertionInjector.precondition(condition, message: message, file: file, line: line)
 }
 
 /// Indicates that a precondition was violated.
@@ -149,7 +151,7 @@ public func preconditionFailure(
     file: StaticString = #file,
     line: UInt = #line
 ) -> Never {
-    XCTRuntimeAssertionInjector.injected.precondition({ true }, message: message, file: file, line: line)
+    XCTRuntimeAssertionInjector.precondition({ true }, message: message, file: file, line: line)
     neverReturn()
 }
 #endif
