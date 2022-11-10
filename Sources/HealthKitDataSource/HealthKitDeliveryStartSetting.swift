@@ -12,5 +12,6 @@ public enum HealthKitDeliveryStartSetting: Equatable {
     /// <#Description#>
     case manual
     /// <#Description#>
-    case applicationWillLaunch
+    case afterAuthorizationAndApplicationWillLaunch // swiftlint:disable:this identifier_name
+    // We use a name longer than 40 characters to indicate the full depth of this setting.
 }

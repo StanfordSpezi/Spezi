@@ -120,7 +120,6 @@ final class SecureStorageTests: TestAppTestCase {
         }
         
         try XCTAssertEqual(plainText, clearText)
-        print("Decryped: \(String(decoding: clearText, as: UTF8.self))")
         
         try secureStorage.deleteKeys(forTag: "MyKey")
         try XCTAssertNil(try secureStorage.retrievePrivateKey(forTag: "MyKey"))

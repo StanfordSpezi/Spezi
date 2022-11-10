@@ -8,6 +8,7 @@
 
 import CardinalKit
 import HealthKit
+import SwiftUI
 
 
 /// <#Description#>
@@ -20,6 +21,7 @@ public class HealthKit<ComponentStandard: Standard>: Component {
     let healthKitDataSourceDescriptions: [HealthKitDataSourceDescription]
     let adapter: Adapter
     @DynamicDependencies var healthKitComponents: [any Component<ComponentStandard>]
+    @AppStorage("CardinalKit.HealthKit.didAskForAuthorization") var didAskForAuthorization = false
     
     
     /// <#Description#>
@@ -66,5 +68,11 @@ public class HealthKit<ComponentStandard: Standard>: Component {
         }
         
         try await healthStore.requestAuthorization(toShare: [], read: dataTypes)
+        
+        didAskForAuthorization = true
+        
+        for healthKitComponent in healthKitComponents.compactMap({ $0 as? (any HealthKitComponent) }) {
+            healthKitComponent.askedForAuthorization()
+        }
     }
 }

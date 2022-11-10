@@ -8,9 +8,10 @@
 
 import CardinalKit
 import HealthKit
+import SwiftUI
 
 
-class HealthKitDataSource<ComponentStandard: Standard, SampleType: HKSampleType>: Component, LifecycleHandler {
+class HealthKitDataSource<ComponentStandard: Standard, SampleType: HKSampleType>: HealthKitComponent {
     let healthStore: HKHealthStore
     
     let sampleType: SampleType
@@ -18,6 +19,7 @@ class HealthKitDataSource<ComponentStandard: Standard, SampleType: HKSampleType>
     let deliverySetting: HealthKitDeliverySetting
     let adapter: HealthKit<ComponentStandard>.Adapter
     
+    var didFinishLaunchingWithOptions = false
     var active = false
     var anchor: HKQueryAnchor?
     
@@ -39,8 +41,34 @@ class HealthKitDataSource<ComponentStandard: Standard, SampleType: HKSampleType>
     }
     
     
+    func askedForAuthorization() {
+        guard deliverySetting != .manual && !active && !didFinishLaunchingWithOptions else {
+            return
+        }
+        
+        Task {
+            await triggerDataSourceCollection()
+        }
+    }
+    
+    func willFinishLaunchingWithOptions(_ application: UIApplication, launchOptions: [UIApplication.LaunchOptionsKey: Any]) {
+        defer {
+            didFinishLaunchingWithOptions = true
+        }
+        
+        switch deliverySetting {
+        case let .anchorQuery(startSetting) where startSetting == .afterAuthorizationAndApplicationWillLaunch,
+             let .background(startSetting) where startSetting == .afterAuthorizationAndApplicationWillLaunch:
+            Task {
+                await triggerDataSourceCollection()
+            }
+        default:
+            break
+        }
+    }
+    
     func triggerDataSourceCollection() async {
-        guard deliverySetting != .manual, !active else {
+        guard deliverySetting == .manual || !active else {
             return
         }
         

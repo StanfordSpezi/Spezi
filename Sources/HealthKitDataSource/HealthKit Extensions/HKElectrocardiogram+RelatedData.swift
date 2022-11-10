@@ -16,12 +16,10 @@ extension HKElectrocardiogram {
     typealias VoltageMeasurements = [(TimeInterval, HKQuantity)]
     
     
-    func symptoms(from healthStore: HKHealthStore) async throws -> Symptoms {
-        let predicate = HKQuery.predicateForObjectsAssociated(electrocardiogram: self)
-        
+    static let correlatedSymptomTypes: [HKCategoryType] = {
         // We disable the SwiftLint force unwrap rule here as all initializers use Apple's constants.
         // swiftlint:disable force_unwrapping
-        let sampleTypes: [HKCategoryType] = [
+        [
             HKSampleType.categoryType(forIdentifier: HKCategoryTypeIdentifier.rapidPoundingOrFlutteringHeartbeat)!,
             HKSampleType.categoryType(forIdentifier: HKCategoryTypeIdentifier.skippedHeartbeat)!,
             HKSampleType.categoryType(forIdentifier: HKCategoryTypeIdentifier.fatigue)!,
@@ -31,13 +29,18 @@ extension HKElectrocardiogram {
             HKSampleType.categoryType(forIdentifier: HKCategoryTypeIdentifier.dizziness)!
         ]
         // swiftlint:enable force_unwrapping
+    }()
+    
+    
+    func symptoms(from healthStore: HKHealthStore) async throws -> Symptoms {
+        let predicate = HKQuery.predicateForObjectsAssociated(electrocardiogram: self)
         
-        try await healthStore.requestAuthorization(toShare: [], read: Set<HKObjectType>(sampleTypes))
+        try await healthStore.requestAuthorization(toShare: [], read: Set<HKObjectType>(HKElectrocardiogram.correlatedSymptomTypes))
         
         var symptoms: Symptoms = [:]
         
         if symptomsStatus == .present {
-            for sampleType in sampleTypes {
+            for sampleType in HKElectrocardiogram.correlatedSymptomTypes {
                 guard let sample = try await healthStore.sampleQuery(for: sampleType, withPredicate: predicate).first,
                       let categorySample = sample as? HKCategorySample else {
                     continue
