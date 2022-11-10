@@ -11,7 +11,7 @@ import HealthKit
 
 
 public protocol HealthKitDataSourceDescription {
-    func dependency<S: Standard>(healthStore: HKHealthStore, adapter: HealthKit<S>.Adapter) -> any ComponentProperty<S>
+    func dependency<S: Standard>(healthStore: HKHealthStore, adapter: HealthKit<S>.Adapter) -> any ComponentDependency<S>
 }
 
 
@@ -26,7 +26,7 @@ public struct Collect<SampleType: HKSampleType>: HealthKitDataSourceDescription 
     }
 
 
-    public func dependency<S: Standard>(healthStore: HKHealthStore, adapter: HealthKit<S>.Adapter) -> any ComponentProperty<S> {
+    public func dependency<S: Standard>(healthStore: HKHealthStore, adapter: HealthKit<S>.Adapter) -> any ComponentDependency<S> {
         _DependencyPropertyWrapper(
             wrappedValue: HealthKitDataSource(
                 healthStore: healthStore,

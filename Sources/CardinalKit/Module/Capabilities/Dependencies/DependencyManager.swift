@@ -42,7 +42,7 @@ public class DependencyManager<S: Standard> {
     /// - Parameters:
     ///   - dependencyType: The type of the dependency that should be injected.
     ///   - dependencyPropertyWrapper: `_DependencyPropertyWrapper` that the dependency should be injected into.
-    func inject<D: ComponentProperty>(
+    func inject<D: ComponentDependency>(
         _ dependencyType: D.ComponentType.Type,
         into anyDependency: D
     ) where D.PropertyStandard == S {

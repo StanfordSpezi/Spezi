@@ -7,6 +7,7 @@
 //
 
 
+/// A typed version of the `AsyncSequence` protocol used to constraint the element of an `AsyncSequence`.
 public protocol TypedAsyncSequence<Element>: Sendable, AsyncSequence { }
 
 extension AsyncStream: TypedAsyncSequence {}

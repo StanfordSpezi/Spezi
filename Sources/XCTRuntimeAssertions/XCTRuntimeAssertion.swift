@@ -7,6 +7,9 @@
 //
 
 #if DEBUG
+import Foundation
+
+
 /// `XCTRuntimeAssertion` allows you to test assertions of types that use the `assert` and `assertionFailure` functions of the `XCTRuntimeAssertions` target.
 /// - Parameters:
 ///   - validateRuntimeAssertion: An optional closure that can be used to furhter validate the messages passed to the
@@ -28,15 +31,24 @@ public func XCTRuntimeAssertion<T>(
     _ expression: @escaping () throws -> T
 ) throws -> T {
     var fulfillmentCount: Int = 0
+    let xctRuntimeAssertionId = UUID()
     
-    XCTRuntimeAssertionInjector.injected = XCTRuntimeAssertionInjector(
-        assert: { condition, message, _, _  in
-            if condition() {
-                let message = message() // We execute the message closure independent of the availability of the `validateRuntimeAssertion` closure.
-                validateRuntimeAssertion?(message)
-                fulfillmentCount += 1
+    XCTRuntimeAssertionInjector.inject(
+        runtimeAssertionInjector: XCTRuntimeAssertionInjector(
+            id: xctRuntimeAssertionId,
+            assert: { id, condition, message, _, _  in
+                guard id == xctRuntimeAssertionId else {
+                    return
+                }
+                
+                if condition() {
+                    // We execute the message closure independent of the availability of the `validateRuntimeAssertion` closure.
+                    let message = message()
+                    validateRuntimeAssertion?(message)
+                    fulfillmentCount += 1
+                }
             }
-        }
+        )
     )
     
     var result: Result<T, Error>
@@ -46,7 +58,7 @@ public func XCTRuntimeAssertion<T>(
         result = .failure(error)
     }
     
-    XCTRuntimeAssertionInjector.reset()
+    XCTRuntimeAssertionInjector.removeRuntimeAssertionInjector(withId: xctRuntimeAssertionId)
     
     if fulfillmentCount != expectedFulfillmentCount {
         throw XCTFail(
@@ -99,7 +111,7 @@ public func assert(
     file: StaticString = #file,
     line: UInt = #line
 ) {
-    XCTRuntimeAssertionInjector.injected.assert(condition, message, file, line)
+    XCTRuntimeAssertionInjector.assert(condition, message: message, file: file, line: line)
 }
 
 /// Indicates that an internal sanity check failed.
@@ -128,6 +140,6 @@ public func assertionFailure(
     file: StaticString = #file,
     line: UInt = #line
 ) {
-    XCTRuntimeAssertionInjector.injected.assert({ true }, message, file, line)
+    XCTRuntimeAssertionInjector.assert({ true }, message: message, file: file, line: line)
 }
 #endif

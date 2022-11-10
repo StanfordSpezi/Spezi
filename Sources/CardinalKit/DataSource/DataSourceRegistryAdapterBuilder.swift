@@ -1,8 +1,9 @@
 //
-//  File.swift
-//  
+// This source file is part of the CardinalKit open-source project
 //
-//  Created by Paul Shmiedmayer on 11/7/22.
+// SPDX-FileCopyrightText: 2022 CardinalKit and the project authors (see CONTRIBUTORS.md)
+//
+// SPDX-License-Identifier: MIT
 //
 
 import Foundation
@@ -69,12 +70,14 @@ private actor ThreeDataSourceRegistryAdapterChain<
 /// A function builder used to generate data source registry adapter chains.
 @resultBuilder
 public enum DataSourceRegistryAdapterBuilder<S: Standard> {
+    /// Required by every result builder to build combined results from statement blocks.
     public static func buildBlock<InputType: Identifiable, OutputType: Identifiable>(
         _ dataSourceRegistryAdapter: any DataSourceRegistryAdapter<InputType, OutputType>
     ) -> any DataSourceRegistryAdapter<InputType, OutputType> where OutputType == S.BaseType {
         dataSourceRegistryAdapter
     }
     
+    /// Required by every result builder to build combined results from statement blocks.
     public static func buildBlock<InputType: Identifiable, Intermediate: Identifiable, OutputType: Identifiable>(
         _ firstDataSourceRegistryAdapter: any DataSourceRegistryAdapter<InputType, Intermediate>,
         _ secondDataSourceRegistryAdapter: any DataSourceRegistryAdapter<Intermediate, OutputType>
@@ -85,6 +88,7 @@ public enum DataSourceRegistryAdapterBuilder<S: Standard> {
         )
     }
     
+    /// Required by every result builder to build combined results from statement blocks.
     public static func buildBlock<InputType: Identifiable, Intermediate1: Identifiable, Intermediate2: Identifiable, OutputType: Identifiable>(
         _ firstDataSourceRegistryAdapter: any DataSourceRegistryAdapter<InputType, Intermediate1>,
         _ secondDataSourceRegistryAdapter: any DataSourceRegistryAdapter<Intermediate1, Intermediate2>,

@@ -6,12 +6,9 @@
 // SPDX-License-Identifier: MIT
 //
 
-// extension ComponentProperty {
-//    var anyComponent: (any Component<PropertyStandard>)? {
-//        dependency
-//    }
-// }
 
+/// Refer to ``Component/DynamicDependencies`` for information on how to use the `@DynamicDependencies` property wrapper.
+/// Do not use the `_DynamicDependenciesPropertyWrapper` directly.
 @propertyWrapper
 public class _DynamicDependenciesPropertyWrapper<S: Standard>: DependencyDescriptor {
     // swiftlint:disable:previous type_name
@@ -24,12 +21,12 @@ public class _DynamicDependenciesPropertyWrapper<S: Standard>: DependencyDescrip
         }
     }
     
-    private var componentProperties: [any ComponentProperty<S>]
+    private var componentProperties: [any ComponentDependency<S>]
     
     
     /// Refer to ``Component/DynamicDependencies`` for information on how to use the `@DynamicDependencies` property wrapper.
     /// Do not use the `_DynamicDependenciesPropertyWrapper` directly.
-    public init(componentProperties: @escaping @autoclosure () -> ([any ComponentProperty<S>])) {
+    public init(componentProperties: @escaping @autoclosure () -> ([any ComponentDependency<S>])) {
         self.componentProperties = componentProperties()
     }
     
@@ -40,7 +37,7 @@ public class _DynamicDependenciesPropertyWrapper<S: Standard>: DependencyDescrip
         }
     }
     
-    private func garther<D: ComponentProperty>(_ componentProperty: D, in dependencyManager: DependencyManager<S>) where D.PropertyStandard == S {
+    private func garther<D: ComponentDependency>(_ componentProperty: D, in dependencyManager: DependencyManager<S>) where D.PropertyStandard == S {
         dependencyManager.require(D.ComponentType.self, defaultValue: componentProperty.defaultValue())
     }
     
@@ -50,7 +47,7 @@ public class _DynamicDependenciesPropertyWrapper<S: Standard>: DependencyDescrip
         }
     }
     
-    private func inject<D: ComponentProperty>(
+    private func inject<D: ComponentDependency>(
         dependencyManager: DependencyManager<S>,
         into componentProperty: D
     ) where D.PropertyStandard == S {
