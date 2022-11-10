@@ -6,37 +6,5 @@
 // SPDX-License-Identifier: MIT
 //
 
-#if DEBUG
-import CardinalKit
 
-
-actor MockStandard: Standard {
-    typealias BaseType = TestAppStandardDataSourceElement
-    
-    
-    struct TestAppStandardDataSourceElement: Identifiable {
-        let id: UUID
-    }
-    
-    
-    func registerDataSource(_ asyncSequence: some TypedAsyncSequence<DataSourceElement<BaseType>>) {
-        Task {
-            do {
-                for try await element in asyncSequence {
-                    switch element {
-                    case let .addition(newElement):
-                        print("Added \(newElement)")
-                    case let .removal(deletedElementId):
-                        print("Removed element with \(deletedElementId)")
-                    }
-                }
-            } catch {
-            }
-        }
-    }
-    
-    func fulfill(expectation: XCTestExpectation) {
-        expectation.fulfill()
-    }
-}
-#endif
+typealias MockStandard = TypedMockStandard<String>

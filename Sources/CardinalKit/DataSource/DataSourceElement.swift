@@ -14,4 +14,27 @@ public enum DataSourceElement<Element: Identifiable> {
     case addition(Element)
     /// An element was removed by the data source.
     case removal(Element.ID)
+    
+    
+    var id: Element.ID {
+        switch self {
+        case let .addition(element):
+            return element.id
+        case let .removal(elementId):
+            return elementId
+        }
+    }
+    
+    
+    func map<I: Identifiable>(
+        element elementMap: (Element) -> I,
+        id idMap: (Element.ID) -> I.ID
+    ) -> DataSourceElement<I> {
+        switch self {
+        case let .addition(element):
+            return .addition(elementMap(element))
+        case let .removal(elementId):
+            return .removal(idMap(elementId))
+        }
+    }
 }
