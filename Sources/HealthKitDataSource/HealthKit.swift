@@ -17,6 +17,7 @@ public class HealthKit<ComponentStandard: Standard>: Component {
     
     
     let healthStore: HKHealthStore
+    let healthKitDataSourceDescriptions: [HealthKitDataSourceDescription]
     let adapter: Adapter
     @DynamicDependencies var healthKitComponents: [any Component<ComponentStandard>]
     
@@ -26,7 +27,7 @@ public class HealthKit<ComponentStandard: Standard>: Component {
     ///   - healthKitDataSourceDescriptions: <#healthKitDataSourceDescriptions description#>
     ///   - adapter: <#adapter description#>
     public init(
-        _ healthKitDataSourceDescriptions: [HealthKitDataSourceDescription],
+        @HealthKitDataSourceDescriptionBuilder _ healthKitDataSourceDescriptions: () -> ([HealthKitDataSourceDescription]),
         @DataSourceRegistryAdapterBuilder<ComponentStandard> adapter: () -> (Adapter)
     ) {
         precondition(
@@ -43,6 +44,7 @@ public class HealthKit<ComponentStandard: Standard>: Component {
         
         let healthStore = HKHealthStore()
         let adapter = adapter()
+        let healthKitDataSourceDescriptions = healthKitDataSourceDescriptions()
         
         self._healthKitComponents = DynamicDependencies(
             componentProperties: healthKitDataSourceDescriptions
@@ -51,6 +53,18 @@ public class HealthKit<ComponentStandard: Standard>: Component {
                 }
         )
         self.adapter = adapter
+        self.healthKitDataSourceDescriptions = healthKitDataSourceDescriptions
         self.healthStore = healthStore
+    }
+    
+    
+    /// <#Description#>
+    public func askForAuthorization() async throws {
+        var dataTypes: Set<HKSampleType> = []
+        for healthKitDataSourceDescription in healthKitDataSourceDescriptions {
+            dataTypes = dataTypes.union(healthKitDataSourceDescription.sampleTypes)
+        }
+        
+        try await healthStore.requestAuthorization(toShare: [], read: dataTypes)
     }
 }

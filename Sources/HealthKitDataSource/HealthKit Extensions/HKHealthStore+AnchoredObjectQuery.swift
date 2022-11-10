@@ -30,6 +30,8 @@ extension HKHealthStore {
     ) async -> any TypedAsyncSequence<DataSourceElement<HKSample>> {
         AsyncThrowingStream { continuation in
             Task {
+                try await self.requestAuthorization(toShare: [], read: [sampleType])
+                
                 var anchor: HKQueryAnchor?
                 let anchorDescriptor = anchorDescriptor(sampleType: sampleType, predicate: predicate, anchor: anchor)
                 
@@ -64,6 +66,8 @@ extension HKHealthStore {
         using anchor: HKQueryAnchor? = nil,
         withPredicate predicate: NSPredicate? = nil
     ) async throws -> (elements: [DataSourceElement<HKSample>], anchor: HKQueryAnchor) {
+        try await self.requestAuthorization(toShare: [], read: [sampleType])
+        
         let anchorDescriptor = anchorDescriptor(sampleType: sampleType, predicate: predicate, anchor: anchor)
         
         let result = try await anchorDescriptor.result(for: self)

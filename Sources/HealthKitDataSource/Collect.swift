@@ -16,6 +16,11 @@ public struct Collect<SampleType: HKSampleType>: HealthKitDataSourceDescription 
     let deliverySetting: HealthKitDeliverySetting
     
     
+    public var sampleTypes: Set<HKSampleType> {
+        [sampleType]
+    }
+    
+    
     /// <#Description#>
     /// - Parameters:
     ///   - sampleType: <#sampleType description#>

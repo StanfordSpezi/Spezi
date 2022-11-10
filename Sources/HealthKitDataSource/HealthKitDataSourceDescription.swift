@@ -13,6 +13,9 @@ import HealthKit
 /// <#Description#>
 public protocol HealthKitDataSourceDescription {
     /// <#Description#>
+    var sampleTypes: Set<HKSampleType> { get }
+    
+    /// <#Description#>
     /// - Parameters:
     ///   - healthStore: <#healthStore description#>
     ///   - adapter: <#adapter description#>

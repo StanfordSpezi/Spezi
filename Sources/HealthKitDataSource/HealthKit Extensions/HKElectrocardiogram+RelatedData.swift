@@ -32,6 +32,8 @@ extension HKElectrocardiogram {
         ]
         // swiftlint:enable force_unwrapping
         
+        try await healthStore.requestAuthorization(toShare: [], read: Set<HKObjectType>(sampleTypes))
+        
         var symptoms: Symptoms = [:]
         
         if symptomsStatus == .present {
