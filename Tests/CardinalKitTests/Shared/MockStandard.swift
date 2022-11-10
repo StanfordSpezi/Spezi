@@ -6,16 +6,5 @@
 // SPDX-License-Identifier: MIT
 //
 
-#if DEBUG
-import CardinalKit
 
-
-public actor MockStandard: Standard {
-    public init() {}
-    
-    
-    func fulfill(expectation: XCTestExpectation) {
-        expectation.fulfill()
-    }
-}
-#endif
+typealias MockStandard = TypedMockStandard<String>

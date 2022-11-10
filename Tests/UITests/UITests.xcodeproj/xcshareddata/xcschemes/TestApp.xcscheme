@@ -38,6 +38,13 @@
          </BuildableReference>
          <BuildableReference
             BuildableIdentifier = "primary"
+            BlueprintIdentifier = "LocalStorage"
+            BuildableName = "LocalStorage"
+            BlueprintName = "LocalStorage"
+            ReferencedContainer = "container:../..">
+         </BuildableReference>
+         <BuildableReference
+            BuildableIdentifier = "primary"
             BlueprintIdentifier = "SecureStorage"
             BuildableName = "SecureStorage"
             BlueprintName = "SecureStorage"
@@ -48,13 +55,6 @@
             BlueprintIdentifier = "XCTRuntimeAssertions"
             BuildableName = "XCTRuntimeAssertions"
             BlueprintName = "XCTRuntimeAssertions"
-            ReferencedContainer = "container:../..">
-         </BuildableReference>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "LocalStorage"
-            BuildableName = "LocalStorage"
-            BlueprintName = "LocalStorage"
             ReferencedContainer = "container:../..">
          </BuildableReference>
       </CodeCoverageTargets>

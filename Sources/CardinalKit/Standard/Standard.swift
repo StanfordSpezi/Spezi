@@ -8,4 +8,4 @@
 
 
 /// A ``Standard`` defines a common representation of resources using by different `CardinalKit` components.
-public protocol Standard: Actor, Component where ComponentStandard == Self { }
+public protocol Standard<BaseType>: Actor, Component, DataSourceRegistry where ComponentStandard == Self { }
