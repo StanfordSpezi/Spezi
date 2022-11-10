@@ -14,7 +14,7 @@ extension HKHealthStore {
     static var activeObservations: [HKObjectType: Int] = [:]
     
     
-    public func startObservation(
+    func startObservation(
         for sampleTypes: Set<HKSampleType>,
         withPredicate predicate: NSPredicate? = nil
     ) -> AsyncThrowingStream<(Set<HKSampleType>, HKObserverQueryCompletionHandler), Error> {

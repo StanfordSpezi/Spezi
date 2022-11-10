@@ -10,20 +10,7 @@ import CardinalKit
 import HealthKit
 
 
-public enum HealthKitDeliverySetting: Equatable {
-    case manual
-    case anchorQuery(HealthKitDeliveryStartSetting)
-    case background(HealthKitDeliveryStartSetting)
-}
-
-
-public enum HealthKitDeliveryStartSetting: Equatable {
-    case manual
-    case applicationWillLaunch
-}
-
-
-public class HealthKitDataSource<ComponentStandard: Standard, SampleType: HKSampleType>: Component, LifecycleHandler {
+class HealthKitDataSource<ComponentStandard: Standard, SampleType: HKSampleType>: Component, LifecycleHandler {
     let healthStore: HKHealthStore
     
     let sampleType: SampleType
@@ -37,7 +24,7 @@ public class HealthKitDataSource<ComponentStandard: Standard, SampleType: HKSamp
     @StandardActor var standard: ComponentStandard
     
     
-    public required init( // swiftlint:disable:this function_default_parameter_at_end
+    required init( // swiftlint:disable:this function_default_parameter_at_end
         healthStore: HKHealthStore,
         sampleType: SampleType,
         predicate: NSPredicate? = nil, // We order the parameters in a logical order and therefore don't put the predicate at the end here.

@@ -10,36 +10,9 @@ import CardinalKit
 import HealthKit
 
 
-public protocol HealthKitDataSourceDescription {
-    func dependency<S: Standard>(healthStore: HKHealthStore, adapter: HealthKit<S>.Adapter) -> any ComponentDependency<S>
-}
-
-
-public struct Collect<SampleType: HKSampleType>: HealthKitDataSourceDescription {
-    let sampleType: SampleType
-    let deliverySetting: HealthKitDeliverySetting
-    
-    
-    public init(sampleType: SampleType, deliverySetting: HealthKitDeliverySetting = .manual) {
-        self.sampleType = sampleType
-        self.deliverySetting = deliverySetting
-    }
-
-
-    public func dependency<S: Standard>(healthStore: HKHealthStore, adapter: HealthKit<S>.Adapter) -> any ComponentDependency<S> {
-        _DependencyPropertyWrapper(
-            wrappedValue: HealthKitDataSource(
-                healthStore: healthStore,
-                sampleType: sampleType,
-                deliverySetting: deliverySetting,
-                adapter: adapter
-            )
-        )
-    }
-}
-
-
+/// <#Description#>
 public class HealthKit<ComponentStandard: Standard>: Component {
+    /// <#Description#>
     public typealias Adapter = any DataSourceRegistryAdapter<HKSample, ComponentStandard.BaseType>
     
     
@@ -48,9 +21,13 @@ public class HealthKit<ComponentStandard: Standard>: Component {
     @DynamicDependencies var healthKitComponents: [any Component<ComponentStandard>]
     
     
+    /// <#Description#>
+    /// - Parameters:
+    ///   - healthKitDataSourceDescriptions: <#healthKitDataSourceDescriptions description#>
+    ///   - adapter: <#adapter description#>
     public init(
         _ healthKitDataSourceDescriptions: [HealthKitDataSourceDescription],
-        @DataSourceRegistryAdapterBuilder<ComponentStandard> _ adapter: () -> (Adapter)
+        @DataSourceRegistryAdapterBuilder<ComponentStandard> adapter: () -> (Adapter)
     ) {
         precondition(
             HKHealthStore.isHealthDataAvailable(),

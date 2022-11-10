@@ -14,7 +14,7 @@ public class ComponentCollection<ComponentsStandard: Standard> {
     let elements: [any Component<ComponentsStandard>]
     
     
-    public init(elements: [any Component<ComponentsStandard>]) {
+    init(elements: [any Component<ComponentsStandard>]) {
         self.elements = elements
     }
 }
