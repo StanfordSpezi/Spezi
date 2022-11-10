@@ -23,13 +23,6 @@ final class DataSourceTests: XCTestCase {
         init(_ dynamicDependencies: DynamicDependencies) {
             self._dynamicDependencies = dynamicDependencies
         }
-//
-//
-//        private static func transform<C: Component>(
-//            component: C
-//        ) -> Dependency<C> where C.ComponentStandard == ComponentStandard {
-//            Dependency(wrappedValue: component)
-//        }
     }
     
     class DataSourceTestComponent<T: Identifiable, MockStandardType: Hashable>: Component, LifecycleHandler {
