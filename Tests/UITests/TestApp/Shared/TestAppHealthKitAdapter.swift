@@ -7,7 +7,7 @@
 //
 
 import CardinalKit
-import HealthKit
+@preconcurrency import HealthKit
 
 
 actor TestAppHealthKitAdapter: SingleValueDataSourceRegistryAdapter {
@@ -16,10 +16,10 @@ actor TestAppHealthKitAdapter: SingleValueDataSourceRegistryAdapter {
     
     
     func transform(element: HKSample) -> TestAppStandard.BaseType {
-        TestAppStandard.BaseType(id: element.id)
+        TestAppStandard.BaseType(id: element.sampleType.identifier)
     }
     
-    func transform(id: UUID) -> UUID {
-        id
+    func transform(id: UUID) -> String {
+        "Removed Element!"
     }
 }

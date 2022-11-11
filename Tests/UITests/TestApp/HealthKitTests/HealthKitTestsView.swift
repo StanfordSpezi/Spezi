@@ -6,12 +6,16 @@
 // SPDX-License-Identifier: MIT
 //
 
+import Combine
 import HealthKitDataSource
 import SwiftUI
 
 
 struct HealthKitTestsView: View {
     @EnvironmentObject var healthKitComponent: HealthKit<TestAppStandard>
+    @EnvironmentObject var standard: TestAppStandard
+    @State var dataSourceElements: String = ""
+    @State var cancellable: AnyCancellable?
     
     
     var body: some View {
@@ -21,7 +25,22 @@ struct HealthKitTestsView: View {
         Button("Trigger data source collection") {
             triggerDataSourceCollection()
         }
+        HStack {
+            Text(dataSourceElements)
+        }
+            .onAppear {
+                cancellable = standard.objectWillChange.sink {
+                    Task { @MainActor in
+                        let dataSourceElements = await standard.dataSourceElements.map { $0.id }
+                        self.dataSourceElements = dataSourceElements.joined(separator: "\n")
+                    }
+                }
+            }
+            .onDisappear {
+                cancellable?.cancel()
+            }
     }
+    
     
     private func askForAuthorization() {
         Task {

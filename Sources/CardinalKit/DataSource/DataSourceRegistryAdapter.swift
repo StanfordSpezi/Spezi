@@ -12,9 +12,9 @@
 /// Use the ``DataSourceRegistryAdapterBuilder`` to offer developers to option to pass in a `DataSourceRegistryAdapter` instance to your components.
 public protocol DataSourceRegistryAdapter<InputType, OutputType>: Actor {
     /// The input of the ``DataSourceRegistryAdapter``
-    associatedtype InputType: Identifiable
+    associatedtype InputType: Identifiable, Sendable where InputType.ID: Sendable
     /// The output of the ``DataSourceRegistryAdapter``
-    associatedtype OutputType: Identifiable
+    associatedtype OutputType: Identifiable, Sendable where OutputType.ID: Sendable
     
     
     /// Transforms any `TypedAsyncSequence<DataSourceElement<InputType>>` to an `TypedAsyncSequence` with

@@ -31,6 +31,7 @@
 		2FB77BA12910EF4A009FDDE2 /* LocalStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB77BA02910EF4A009FDDE2 /* LocalStorageTests.swift */; };
 		2FB77BA52910F84D009FDDE2 /* LocalStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB77BA42910F84D009FDDE2 /* LocalStorageTests.swift */; };
 		2FC2C406291D84A600712676 /* HealthKitTestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC2C405291D84A600712676 /* HealthKitTestsView.swift */; };
+		2FC2C408291DCC8200712676 /* HealthKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC2C407291DCC8200712676 /* HealthKitTests.swift */; };
 		2FC42FD9290ADD8800B08F18 /* CardinalKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2FC42FD8290ADD8800B08F18 /* CardinalKit */; };
 /* End PBXBuildFile section */
 
@@ -69,6 +70,7 @@
 		2FB77BA02910EF4A009FDDE2 /* LocalStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalStorageTests.swift; sourceTree = "<group>"; };
 		2FB77BA42910F84D009FDDE2 /* LocalStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalStorageTests.swift; sourceTree = "<group>"; };
 		2FC2C405291D84A600712676 /* HealthKitTestsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitTestsView.swift; sourceTree = "<group>"; };
+		2FC2C407291DCC8200712676 /* HealthKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitTests.swift; sourceTree = "<group>"; };
 		2FC42FD7290ADD5E00B08F18 /* CardinalKitSPM */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = CardinalKitSPM; path = ../..; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -138,6 +140,7 @@
 				2F9F07E1290906A200CDC598 /* SecureStorageTests.swift */,
 				2FB77BA42910F84D009FDDE2 /* LocalStorageTests.swift */,
 				2F8A431229130A8C005D2B8F /* TestAppUITests.swift */,
+				2FC2C407291DCC8200712676 /* HealthKitTests.swift */,
 			);
 			path = TestAppUITests;
 			sourceTree = "<group>";
@@ -330,6 +333,7 @@
 				2F8A431329130A8C005D2B8F /* TestAppUITests.swift in Sources */,
 				2F9F07E2290906A200CDC598 /* SecureStorageTests.swift in Sources */,
 				2FB77BA52910F84D009FDDE2 /* LocalStorageTests.swift in Sources */,
+				2FC2C408291DCC8200712676 /* HealthKitTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
