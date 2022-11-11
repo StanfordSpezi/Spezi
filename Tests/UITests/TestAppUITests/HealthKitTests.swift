@@ -73,48 +73,48 @@ final class HealthKitTests: TestAppUITests {
         }
         
         
-        func navigateToElement() {
+        func navigateToElement() throws {
             let healthApp = XCUIApplication(bundleIdentifier: "com.apple.Health")
             
             if healthApp.navigationBars["Browse"].buttons["Cancel"].exists {
                 healthApp.navigationBars["Browse"].buttons["Cancel"].tap()
             }
-            XCTAssert(findOverviewInCollectionView(in: healthApp))
+            try findOverviewInCollectionView(in: healthApp)
         }
         
-        private func findOverviewInCollectionView(in healthApp: XCUIApplication) -> Bool {
+        private func findOverviewInCollectionView(in healthApp: XCUIApplication) throws {
             let findByNamePredicate = NSPredicate(format: "label CONTAINS[cd] %@", self.category)
             let findByNamePredicateStaticText = healthApp.collectionViews.staticTexts.element(matching: findByNamePredicate).firstMatch
             let findByNamePredicateImage = healthApp.collectionViews.images.element(matching: findByNamePredicate).firstMatch
             
-            if findByNamePredicateStaticText.exists {
+            if findByNamePredicateStaticText.waitForExistence(timeout: 3) {
                 findByNamePredicateStaticText.tap()
-            } else if findByNamePredicateImage.exists {
+            } else if findByNamePredicateImage.waitForExistence(timeout: 3) {
                 findByNamePredicateImage.tap()
             } else {
-                return false
+                XCTFail("Failed not find element in collection view: \(healthApp.staticTexts.allElementsBoundByIndex)")
+                throw XCTestError(.failureWhileWaiting)
             }
             
-            return findElementInCollectionView(in: healthApp)
+            try findElementInCollectionView(in: healthApp)
         }
         
-        private func findElementInCollectionView(in healthApp: XCUIApplication) -> Bool {
+        private func findElementInCollectionView(in healthApp: XCUIApplication) throws {
             let findByRawValuePredicate = NSPredicate(format: "label CONTAINS[cd] %@", rawValue)
             var findByRawValuePredicateElement = healthApp.collectionViews.staticTexts.element(matching: findByRawValuePredicate).firstMatch
             
-            guard findByRawValuePredicateElement.exists else {
+            guard findByRawValuePredicateElement.waitForExistence(timeout: 3) else {
                 healthApp.collectionViews.firstMatch.swipeUp(velocity: .slow)
                 findByRawValuePredicateElement = healthApp.collectionViews.staticTexts.element(matching: findByRawValuePredicate).firstMatch
-                if findByRawValuePredicateElement.exists {
+                if findByRawValuePredicateElement.waitForExistence(timeout: 3) {
                     findByRawValuePredicateElement.tap()
-                    return true
+                    return
                 }
-                return false
+                XCTFail("Failed not find element in collection view: \(healthApp.staticTexts.allElementsBoundByIndex)")
+                throw XCTestError(.failureWhileWaiting)
             }
             
             findByRawValuePredicateElement.tap()
-            
-            return true
         }
         
         func addData() {
@@ -143,11 +143,11 @@ final class HealthKitTests: TestAppUITests {
         let app = XCUIApplication()
         app.launch()
         
-        exitAppAndOpenHealth(.electrocardiograms)
-        exitAppAndOpenHealth(.steps)
-        exitAppAndOpenHealth(.pushes)
-        exitAppAndOpenHealth(.restingHeartRate)
-        exitAppAndOpenHealth(.activeEnergy)
+        try exitAppAndOpenHealth(.electrocardiograms)
+        try exitAppAndOpenHealth(.steps)
+        try exitAppAndOpenHealth(.pushes)
+        try exitAppAndOpenHealth(.restingHeartRate)
+        try exitAppAndOpenHealth(.activeEnergy)
         
         app.collectionViews.buttons["HealthKit"].tap()
         
@@ -176,7 +176,7 @@ final class HealthKitTests: TestAppUITests {
             HealthDataType.NumberOfHKTypeNames(activeEnergy: 1, restingHeartRate: 1, electrocardiograms: 1, steps: 1, pushes: 1)
         )
         
-        exitAppAndOpenHealth(.electrocardiograms)
+        try exitAppAndOpenHealth(.electrocardiograms)
         
         sleep(1)
         
@@ -185,7 +185,7 @@ final class HealthKitTests: TestAppUITests {
             HealthDataType.NumberOfHKTypeNames(activeEnergy: 1, restingHeartRate: 1, electrocardiograms: 2, steps: 1, pushes: 1)
         )
         
-        exitAppAndOpenHealth(.steps)
+        try exitAppAndOpenHealth(.steps)
         
         sleep(1)
         
@@ -194,7 +194,7 @@ final class HealthKitTests: TestAppUITests {
             HealthDataType.NumberOfHKTypeNames(activeEnergy: 1, restingHeartRate: 1, electrocardiograms: 2, steps: 2, pushes: 1)
         )
         
-        exitAppAndOpenHealth(.pushes)
+        try exitAppAndOpenHealth(.pushes)
         
         sleep(1)
         
@@ -203,7 +203,7 @@ final class HealthKitTests: TestAppUITests {
             HealthDataType.NumberOfHKTypeNames(activeEnergy: 1, restingHeartRate: 1, electrocardiograms: 2, steps: 2, pushes: 2)
         )
         
-        exitAppAndOpenHealth(.restingHeartRate)
+        try exitAppAndOpenHealth(.restingHeartRate)
         
         sleep(1)
         
@@ -212,7 +212,7 @@ final class HealthKitTests: TestAppUITests {
             HealthDataType.NumberOfHKTypeNames(activeEnergy: 1, restingHeartRate: 1, electrocardiograms: 2, steps: 2, pushes: 2)
         )
         
-        exitAppAndOpenHealth(.activeEnergy)
+        try exitAppAndOpenHealth(.activeEnergy)
         
         sleep(1)
         
@@ -232,15 +232,17 @@ final class HealthKitTests: TestAppUITests {
     }
     
     
-    func exitAppAndOpenHealth(_ healthDataType: HealthDataType) {
+    func exitAppAndOpenHealth(_ healthDataType: HealthDataType) throws {
         XCUIDevice.shared.press(.home)
         
         addUIInterruptionMonitor(withDescription: "System Dialog") { alert in
-            if alert.buttons["Allow"].exists {
-                alert.buttons["Allow"].tap()
-                return true
+            guard alert.buttons["Allow"].exists else {
+                XCTFail("Failed not dismiss alert: \(alert.staticTexts.allElementsBoundByIndex)")
+                return false
             }
-            return false
+            
+            alert.buttons["Allow"].tap()
+            return true
         }
         
         let healthApp = XCUIApplication(bundleIdentifier: "com.apple.Health")
@@ -256,13 +258,26 @@ final class HealthKitTests: TestAppUITests {
         
         healthApp.tabBars["Tab Bar"].buttons["Browse"].tap()
         
-        healthDataType.navigateToElement()
+        try healthDataType.navigateToElement()
+        
+        guard healthApp.navigationBars.firstMatch.buttons["Add Data"].waitForExistence(timeout: 3) else {
+            XCTFail("Failed to identify the Add Data Button: \(healthApp.buttons.allElementsBoundByIndex)")
+            XCTFail("Failed to identify the Add Data Button: \(healthApp.staticTexts.allElementsBoundByIndex)")
+            throw XCTestError(.failureWhileWaiting)
+        }
         
         healthApp.navigationBars.firstMatch.buttons["Add Data"].tap()
         
         healthDataType.addData()
         
+        guard healthApp.navigationBars.firstMatch.buttons["Add"].waitForExistence(timeout: 3) else {
+            XCTFail("Failed to identify the Add button: \(healthApp.buttons.allElementsBoundByIndex)")
+            XCTFail("Failed to identify the Add button: \(healthApp.staticTexts.allElementsBoundByIndex)")
+            throw XCTestError(.failureWhileWaiting)
+        }
+        
         healthApp.navigationBars.firstMatch.buttons["Add"].tap()
+        
         healthApp.terminate()
         
         let testApp = XCUIApplication()
