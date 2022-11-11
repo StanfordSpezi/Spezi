@@ -44,16 +44,10 @@ final class HealthKitTests: TestAppUITests {
         
         var category: String {
             switch self {
-            case .activeEnergy:
+            case .activeEnergy, .steps, .pushes:
                 return "Activity"
-            case .restingHeartRate:
+            case .restingHeartRate, .electrocardiograms:
                 return "Heart"
-            case .electrocardiograms:
-                return "Heart"
-            case .steps:
-                return "Activity"
-            case .pushes:
-                return "Activity"
             }
         }
         
@@ -84,35 +78,32 @@ final class HealthKitTests: TestAppUITests {
         
         private func findCategoryAndElement(in healthApp: XCUIApplication) throws {
             // Find category:
-            let findByNamePredicate = NSPredicate(format: "label CONTAINS[cd] %@", self.category)
-            let findByNamePredicateStaticText = healthApp.staticTexts.element(matching: findByNamePredicate).firstMatch
-            let findByNamePredicateImage = healthApp.images.element(matching: findByNamePredicate).firstMatch
+            let categoryStaticTextPredicate = NSPredicate(format: "label CONTAINS[cd] %@", category)
+            let categoryStaticText = healthApp.staticTexts.element(matching: categoryStaticTextPredicate).firstMatch
             
-            if findByNamePredicateStaticText.waitForExistence(timeout: 3) {
-                findByNamePredicateStaticText.tap()
-            } else if findByNamePredicateImage.waitForExistence(timeout: 3) {
-                findByNamePredicateImage.tap()
+            if categoryStaticText.waitForExistence(timeout: 1) {
+                categoryStaticText.tap()
             } else {
                 XCTFail("Failed to find category: \(healthApp.staticTexts.allElementsBoundByIndex)")
                 throw XCTestError(.failureWhileWaiting)
             }
             
             // Find element:
-            let findByRawValuePredicate = NSPredicate(format: "label CONTAINS[cd] %@", rawValue)
-            var findByRawValuePredicateElement = healthApp.staticTexts.element(matching: findByRawValuePredicate).firstMatch
+            let elementStaticTextPredicate = NSPredicate(format: "label CONTAINS[cd] %@", rawValue)
+            var elementStaticText = healthApp.staticTexts.element(matching: elementStaticTextPredicate).firstMatch
             
-            guard findByRawValuePredicateElement.waitForExistence(timeout: 3) else {
+            guard elementStaticText.waitForExistence(timeout: 3) else {
                 healthApp.firstMatch.swipeUp(velocity: .slow)
-                findByRawValuePredicateElement = healthApp.staticTexts.element(matching: findByRawValuePredicate).firstMatch
-                if findByRawValuePredicateElement.waitForExistence(timeout: 3) {
-                    findByRawValuePredicateElement.tap()
+                elementStaticText = healthApp.buttons.element(matching: elementStaticTextPredicate).firstMatch
+                if elementStaticText.waitForExistence(timeout: 3) {
+                    elementStaticText.tap()
                     return
                 }
                 XCTFail("Failed to find element in category: \(healthApp.staticTexts.allElementsBoundByIndex)")
                 throw XCTestError(.failureWhileWaiting)
             }
             
-            findByRawValuePredicateElement.tap()
+            elementStaticText.tap()
         }
         
         func addData() {
@@ -138,95 +129,103 @@ final class HealthKitTests: TestAppUITests {
     }
     
     func testHealthKit() throws { // swiftlint:disable:this function_body_length
-        let app = XCUIApplication()
-        app.launch()
-        
-        try exitAppAndOpenHealth(.electrocardiograms)
-        try exitAppAndOpenHealth(.steps)
-        try exitAppAndOpenHealth(.pushes)
-        try exitAppAndOpenHealth(.restingHeartRate)
-        try exitAppAndOpenHealth(.activeEnergy)
-        
-        app.buttons["HealthKit"].tap()
-        
-        _ = app.buttons["Ask for authorization"].waitForExistence(timeout: 1)
-        app.buttons["Ask for authorization"].tap()
-        
-        _ = app.navigationBars["Health Access"].waitForExistence(timeout: 10)
-        if app.navigationBars["Health Access"].waitForExistence(timeout: 10) {
-            app.tables.staticTexts["Turn On All"].tap()
-            app.navigationBars["Health Access"].buttons["Allow"].tap()
+        do {
+            let app = XCUIApplication()
+            app.launch()
+            
+            try exitAppAndOpenHealth(.electrocardiograms)
+            try exitAppAndOpenHealth(.steps)
+            try exitAppAndOpenHealth(.pushes)
+            try exitAppAndOpenHealth(.restingHeartRate)
+            try exitAppAndOpenHealth(.activeEnergy)
+            
+            app.buttons["HealthKit"].tap()
+            
+            _ = app.buttons["Ask for authorization"].waitForExistence(timeout: 1)
+            app.buttons["Ask for authorization"].tap()
+            
+            _ = app.navigationBars["Health Access"].waitForExistence(timeout: 10)
+            if app.navigationBars["Health Access"].waitForExistence(timeout: 10) {
+                app.tables.staticTexts["Turn On All"].tap()
+                app.navigationBars["Health Access"].buttons["Allow"].tap()
+            }
+            
+            sleep(2)
+            
+            XCTAssertEqual(
+                HealthDataType.numberOfHKTypeNames(in: app),
+                HealthDataType.NumberOfHKTypeNames(activeEnergy: 1, restingHeartRate: 0, electrocardiograms: 1, steps: 1, pushes: 1)
+            )
+            
+            app.buttons["Trigger data source collection"].tap()
+            
+            sleep(2)
+            
+            XCTAssertEqual(
+                HealthDataType.numberOfHKTypeNames(in: app),
+                HealthDataType.NumberOfHKTypeNames(activeEnergy: 1, restingHeartRate: 1, electrocardiograms: 1, steps: 1, pushes: 1)
+            )
+            
+            try exitAppAndOpenHealth(.electrocardiograms)
+            
+            sleep(1)
+            
+            XCTAssertEqual(
+                HealthDataType.numberOfHKTypeNames(in: app),
+                HealthDataType.NumberOfHKTypeNames(activeEnergy: 1, restingHeartRate: 1, electrocardiograms: 2, steps: 1, pushes: 1)
+            )
+            
+            try exitAppAndOpenHealth(.steps)
+            
+            sleep(1)
+            
+            XCTAssertEqual(
+                HealthDataType.numberOfHKTypeNames(in: app),
+                HealthDataType.NumberOfHKTypeNames(activeEnergy: 1, restingHeartRate: 1, electrocardiograms: 2, steps: 2, pushes: 1)
+            )
+            
+            try exitAppAndOpenHealth(.pushes)
+            
+            sleep(1)
+            
+            XCTAssertEqual(
+                HealthDataType.numberOfHKTypeNames(in: app),
+                HealthDataType.NumberOfHKTypeNames(activeEnergy: 1, restingHeartRate: 1, electrocardiograms: 2, steps: 2, pushes: 2)
+            )
+            
+            try exitAppAndOpenHealth(.restingHeartRate)
+            
+            sleep(1)
+            
+            XCTAssertEqual(
+                HealthDataType.numberOfHKTypeNames(in: app),
+                HealthDataType.NumberOfHKTypeNames(activeEnergy: 1, restingHeartRate: 1, electrocardiograms: 2, steps: 2, pushes: 2)
+            )
+            
+            try exitAppAndOpenHealth(.activeEnergy)
+            
+            sleep(1)
+            
+            XCTAssertEqual(
+                HealthDataType.numberOfHKTypeNames(in: app),
+                HealthDataType.NumberOfHKTypeNames(activeEnergy: 2, restingHeartRate: 1, electrocardiograms: 2, steps: 2, pushes: 2)
+            )
+            
+            app.buttons["Trigger data source collection"].tap()
+            
+            sleep(1)
+            
+            XCTAssertEqual(
+                HealthDataType.numberOfHKTypeNames(in: app),
+                HealthDataType.NumberOfHKTypeNames(activeEnergy: 2, restingHeartRate: 2, electrocardiograms: 2, steps: 2, pushes: 2)
+            )
+        } catch {
+            let screenshot = XCUIScreen.main.screenshot()
+            let fullScreenshotAttachment = XCTAttachment(screenshot: screenshot)
+            fullScreenshotAttachment.lifetime = .keepAlways
+            
+            add(fullScreenshotAttachment)
         }
-        
-        sleep(2)
-        
-        XCTAssertEqual(
-            HealthDataType.numberOfHKTypeNames(in: app),
-            HealthDataType.NumberOfHKTypeNames(activeEnergy: 1, restingHeartRate: 0, electrocardiograms: 1, steps: 1, pushes: 1)
-        )
-        
-        app.buttons["Trigger data source collection"].tap()
-        
-        sleep(2)
-        
-        XCTAssertEqual(
-            HealthDataType.numberOfHKTypeNames(in: app),
-            HealthDataType.NumberOfHKTypeNames(activeEnergy: 1, restingHeartRate: 1, electrocardiograms: 1, steps: 1, pushes: 1)
-        )
-        
-        try exitAppAndOpenHealth(.electrocardiograms)
-        
-        sleep(1)
-        
-        XCTAssertEqual(
-            HealthDataType.numberOfHKTypeNames(in: app),
-            HealthDataType.NumberOfHKTypeNames(activeEnergy: 1, restingHeartRate: 1, electrocardiograms: 2, steps: 1, pushes: 1)
-        )
-        
-        try exitAppAndOpenHealth(.steps)
-        
-        sleep(1)
-        
-        XCTAssertEqual(
-            HealthDataType.numberOfHKTypeNames(in: app),
-            HealthDataType.NumberOfHKTypeNames(activeEnergy: 1, restingHeartRate: 1, electrocardiograms: 2, steps: 2, pushes: 1)
-        )
-        
-        try exitAppAndOpenHealth(.pushes)
-        
-        sleep(1)
-        
-        XCTAssertEqual(
-            HealthDataType.numberOfHKTypeNames(in: app),
-            HealthDataType.NumberOfHKTypeNames(activeEnergy: 1, restingHeartRate: 1, electrocardiograms: 2, steps: 2, pushes: 2)
-        )
-        
-        try exitAppAndOpenHealth(.restingHeartRate)
-        
-        sleep(1)
-        
-        XCTAssertEqual(
-            HealthDataType.numberOfHKTypeNames(in: app),
-            HealthDataType.NumberOfHKTypeNames(activeEnergy: 1, restingHeartRate: 1, electrocardiograms: 2, steps: 2, pushes: 2)
-        )
-        
-        try exitAppAndOpenHealth(.activeEnergy)
-        
-        sleep(1)
-        
-        XCTAssertEqual(
-            HealthDataType.numberOfHKTypeNames(in: app),
-            HealthDataType.NumberOfHKTypeNames(activeEnergy: 2, restingHeartRate: 1, electrocardiograms: 2, steps: 2, pushes: 2)
-        )
-        
-        app.buttons["Trigger data source collection"].tap()
-        
-        sleep(1)
-        
-        XCTAssertEqual(
-            HealthDataType.numberOfHKTypeNames(in: app),
-            HealthDataType.NumberOfHKTypeNames(activeEnergy: 2, restingHeartRate: 2, electrocardiograms: 2, steps: 2, pushes: 2)
-        )
     }
     
     
