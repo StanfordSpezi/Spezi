@@ -229,7 +229,7 @@ final class HealthKitTests: TestAppUITests {
     }
     
     
-    func exitAppAndOpenHealth(_ healthDataType: HealthDataType) throws {
+    private func exitAppAndOpenHealth(_ healthDataType: HealthDataType) throws {
         XCUIDevice.shared.press(.home)
         
         addUIInterruptionMonitor(withDescription: "System Dialog") { alert in
