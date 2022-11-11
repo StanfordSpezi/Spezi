@@ -42,6 +42,21 @@ final class HealthKitTests: TestAppUITests {
             }
         }
         
+        var category: String {
+            switch self {
+            case .activeEnergy:
+                return "Activity"
+            case .restingHeartRate:
+                return "Heart"
+            case .electrocardiograms:
+                return "Heart"
+            case .steps:
+                return "Activity"
+            case .pushes:
+                return "Activity"
+            }
+        }
+        
         
         static func numberOfHKTypeNames(in healthApp: XCUIApplication) -> NumberOfHKTypeNames {
             NumberOfHKTypeNames(
@@ -61,64 +76,45 @@ final class HealthKitTests: TestAppUITests {
         func navigateToElement() { // swiftlint:disable:this cyclomatic_complexity
             let healthApp = XCUIApplication(bundleIdentifier: "com.apple.Health")
             
-            healthApp.navigationBars["Browse"].searchFields["Search"].tap()
-            let clearTestButton = healthApp.navigationBars["Browse"].searchFields["Search"].buttons["Clear text"]
-            if clearTestButton.exists {
-                clearTestButton.tap()
-            }
-            healthApp.navigationBars["Browse"].searchFields["Search"].typeText(rawValue)
-            
-            if !findElementInCollectionView(in: healthApp) {
+            if healthApp.navigationBars["Browse"].buttons["Cancel"].exists {
                 healthApp.navigationBars["Browse"].buttons["Cancel"].tap()
-                
-                switch self {
-                case .activeEnergy:
-                    healthApp.collectionViews.staticTexts["UIA.Health.Browse.HKDisplayCategoryIdentifierFitness.Title"].tap()
-                    if !findElementInCollectionView(in: healthApp) {
-                        healthApp.collectionViews.staticTexts["Active Energy"].tap()
-                    }
-                case .restingHeartRate:
-                    healthApp.collectionViews.staticTexts["UIA.Health.Browse.HKDisplayCategoryIdentifierHeart.Title"].tap()
-                    if !findElementInCollectionView(in: healthApp) {
-                        healthApp.collectionViews.firstMatch.swipeUp(velocity: .slow)
-                        healthApp.collectionViews.staticTexts["Resting Heart Rate"].tap()
-                    }
-                case .electrocardiograms:
-                    healthApp.collectionViews.staticTexts["UIA.Health.Browse.HKDisplayCategoryIdentifierHeart.Title"].tap()
-                    if !findElementInCollectionView(in: healthApp) {
-                        healthApp.collectionViews.firstMatch.swipeUp(velocity: .slow)
-                        healthApp.collectionViews.staticTexts["Electrocardiograms (ECG)"].tap()
-                    }
-                case .steps:
-                    healthApp.collectionViews.staticTexts["UIA.Health.Browse.HKDisplayCategoryIdentifierFitness.Title"].tap()
-                    if !findElementInCollectionView(in: healthApp) {
-                        healthApp.collectionViews.firstMatch.swipeUp(velocity: .slow)
-                        healthApp.collectionViews.staticTexts["Steps"].tap()
-                    }
-                case .pushes:
-                    healthApp.collectionViews.staticTexts["UIA.Health.Browse.HKDisplayCategoryIdentifierFitness.Title"].tap()
-                    if !findElementInCollectionView(in: healthApp) {
-                        healthApp.collectionViews.firstMatch.swipeUp(velocity: .slow)
-                        healthApp.collectionViews.staticTexts["Pushes"].tap()
-                    }
-                }
             }
+            XCTAssert(findOverviewInCollectionView(in: healthApp))
+        }
+        
+        private func findOverviewInCollectionView(in healthApp: XCUIApplication) -> Bool {
+            let findByNamePredicate = NSPredicate(format: "label CONTAINS[cd] %@", self.category)
+            let findByNamePredicateStaticText = healthApp.collectionViews.staticTexts.element(matching: findByNamePredicate).firstMatch
+            let findByNamePredicateImage = healthApp.collectionViews.images.element(matching: findByNamePredicate).firstMatch
+            
+            if findByNamePredicateStaticText.exists {
+                findByNamePredicateStaticText.tap()
+            } else if findByNamePredicateImage.exists {
+                findByNamePredicateImage.tap()
+            } else {
+                return false
+            }
+            
+            return findElementInCollectionView(in: healthApp)
         }
         
         private func findElementInCollectionView(in healthApp: XCUIApplication) -> Bool {
-            let findByNamePredicate = NSPredicate(format: "label CONTAINS[cd] %@", rawValue)
-            let headerTitlePredicate = NSPredicate(format: "label CONTAINS[cd] %@", "Header.Title")
-            let findByNamePredicateElement = healthApp.collectionViews.staticTexts.element(matching: findByNamePredicate).firstMatch
-            let headerTitlePredicateElement = healthApp.collectionViews.staticTexts.element(matching: headerTitlePredicate).firstMatch
+            let findByRawValuePredicate = NSPredicate(format: "label CONTAINS[cd] %@", rawValue)
+            var findByRawValuePredicateElement = healthApp.collectionViews.staticTexts.element(matching: findByRawValuePredicate).firstMatch
             
-            if findByNamePredicateElement.exists {
-                findByNamePredicateElement.tap()
-                return true
-            } else if headerTitlePredicateElement.exists {
-                headerTitlePredicateElement.tap()
-                return true
+            guard findByRawValuePredicateElement.exists else {
+                healthApp.collectionViews.firstMatch.swipeUp(velocity: .slow)
+                findByRawValuePredicateElement = healthApp.collectionViews.staticTexts.element(matching: findByRawValuePredicate).firstMatch
+                if findByRawValuePredicateElement.exists {
+                    findByRawValuePredicateElement.tap()
+                    return true
+                }
+                return false
             }
-            return false
+            
+            findByRawValuePredicateElement.tap()
+            
+            return true
         }
         
         func addData() {
@@ -146,7 +142,7 @@ final class HealthKitTests: TestAppUITests {
     func testHealthKit() throws { // swiftlint:disable:this function_body_length
         let app = XCUIApplication()
         app.launch()
-
+        
         exitAppAndOpenHealth(.electrocardiograms)
         exitAppAndOpenHealth(.steps)
         exitAppAndOpenHealth(.pushes)
@@ -155,8 +151,9 @@ final class HealthKitTests: TestAppUITests {
         
         app.collectionViews.buttons["HealthKit"].tap()
         
+        _ = app.buttons["Ask for authorization"].waitForExistence(timeout: 1)
         app.buttons["Ask for authorization"].tap()
-
+        
         _ = app.navigationBars["Health Access"].waitForExistence(timeout: 10)
         if app.navigationBars["Health Access"].waitForExistence(timeout: 10) {
             app.tables.staticTexts["Turn On All"].tap()
@@ -169,65 +166,65 @@ final class HealthKitTests: TestAppUITests {
             HealthDataType.numberOfHKTypeNames(in: app),
             HealthDataType.NumberOfHKTypeNames(activeEnergy: 1, restingHeartRate: 0, electrocardiograms: 1, steps: 1, pushes: 1)
         )
-                
+        
         app.buttons["Trigger data source collection"].tap()
-
+        
         sleep(2)
-
+        
         XCTAssertEqual(
             HealthDataType.numberOfHKTypeNames(in: app),
             HealthDataType.NumberOfHKTypeNames(activeEnergy: 1, restingHeartRate: 1, electrocardiograms: 1, steps: 1, pushes: 1)
         )
-
+        
         exitAppAndOpenHealth(.electrocardiograms)
-
+        
         sleep(1)
-
+        
         XCTAssertEqual(
             HealthDataType.numberOfHKTypeNames(in: app),
             HealthDataType.NumberOfHKTypeNames(activeEnergy: 1, restingHeartRate: 1, electrocardiograms: 2, steps: 1, pushes: 1)
         )
-
+        
         exitAppAndOpenHealth(.steps)
-
+        
         sleep(1)
-
+        
         XCTAssertEqual(
             HealthDataType.numberOfHKTypeNames(in: app),
             HealthDataType.NumberOfHKTypeNames(activeEnergy: 1, restingHeartRate: 1, electrocardiograms: 2, steps: 2, pushes: 1)
         )
-
+        
         exitAppAndOpenHealth(.pushes)
-
+        
         sleep(1)
-
+        
         XCTAssertEqual(
             HealthDataType.numberOfHKTypeNames(in: app),
             HealthDataType.NumberOfHKTypeNames(activeEnergy: 1, restingHeartRate: 1, electrocardiograms: 2, steps: 2, pushes: 2)
         )
-
+        
         exitAppAndOpenHealth(.restingHeartRate)
-
+        
         sleep(1)
-
+        
         XCTAssertEqual(
             HealthDataType.numberOfHKTypeNames(in: app),
             HealthDataType.NumberOfHKTypeNames(activeEnergy: 1, restingHeartRate: 1, electrocardiograms: 2, steps: 2, pushes: 2)
         )
-
+        
         exitAppAndOpenHealth(.activeEnergy)
-
+        
         sleep(1)
-
+        
         XCTAssertEqual(
             HealthDataType.numberOfHKTypeNames(in: app),
             HealthDataType.NumberOfHKTypeNames(activeEnergy: 2, restingHeartRate: 1, electrocardiograms: 2, steps: 2, pushes: 2)
         )
-
+        
         app.buttons["Trigger data source collection"].tap()
-
+        
         sleep(1)
-
+        
         XCTAssertEqual(
             HealthDataType.numberOfHKTypeNames(in: app),
             HealthDataType.NumberOfHKTypeNames(activeEnergy: 2, restingHeartRate: 2, electrocardiograms: 2, steps: 2, pushes: 2)
@@ -260,7 +257,7 @@ final class HealthKitTests: TestAppUITests {
         healthApp.tabBars["Tab Bar"].buttons["Browse"].tap()
         
         healthDataType.navigateToElement()
-
+        
         healthApp.navigationBars.firstMatch.buttons["Add Data"].tap()
         
         healthDataType.addData()
