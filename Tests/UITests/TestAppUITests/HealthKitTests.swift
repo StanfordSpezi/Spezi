@@ -69,7 +69,7 @@ final class HealthKitTests: TestAppUITests {
         }
         
         static func numberOfHKTypeNames(in healthApp: XCUIApplication, ofType type: HealthDataType) -> Int {
-            healthApp.collectionViews.staticTexts.allElementsBoundByIndex.filter { $0.label.contains(type.hkTypeNames) } .count
+            healthApp.staticTexts.allElementsBoundByIndex.filter { $0.label.contains(type.hkTypeNames) } .count
         }
         
         
@@ -79,38 +79,36 @@ final class HealthKitTests: TestAppUITests {
             if healthApp.navigationBars["Browse"].buttons["Cancel"].exists {
                 healthApp.navigationBars["Browse"].buttons["Cancel"].tap()
             }
-            try findOverviewInCollectionView(in: healthApp)
+            try findCategoryAndElement(in: healthApp)
         }
         
-        private func findOverviewInCollectionView(in healthApp: XCUIApplication) throws {
+        private func findCategoryAndElement(in healthApp: XCUIApplication) throws {
+            // Find category:
             let findByNamePredicate = NSPredicate(format: "label CONTAINS[cd] %@", self.category)
-            let findByNamePredicateStaticText = healthApp.collectionViews.staticTexts.element(matching: findByNamePredicate).firstMatch
-            let findByNamePredicateImage = healthApp.collectionViews.images.element(matching: findByNamePredicate).firstMatch
+            let findByNamePredicateStaticText = healthApp.staticTexts.element(matching: findByNamePredicate).firstMatch
+            let findByNamePredicateImage = healthApp.images.element(matching: findByNamePredicate).firstMatch
             
             if findByNamePredicateStaticText.waitForExistence(timeout: 3) {
                 findByNamePredicateStaticText.tap()
             } else if findByNamePredicateImage.waitForExistence(timeout: 3) {
                 findByNamePredicateImage.tap()
             } else {
-                XCTFail("Failed not find element in collection view: \(healthApp.staticTexts.allElementsBoundByIndex)")
+                XCTFail("Failed to find category: \(healthApp.staticTexts.allElementsBoundByIndex)")
                 throw XCTestError(.failureWhileWaiting)
             }
             
-            try findElementInCollectionView(in: healthApp)
-        }
-        
-        private func findElementInCollectionView(in healthApp: XCUIApplication) throws {
+            // Find element:
             let findByRawValuePredicate = NSPredicate(format: "label CONTAINS[cd] %@", rawValue)
-            var findByRawValuePredicateElement = healthApp.collectionViews.staticTexts.element(matching: findByRawValuePredicate).firstMatch
+            var findByRawValuePredicateElement = healthApp.staticTexts.element(matching: findByRawValuePredicate).firstMatch
             
             guard findByRawValuePredicateElement.waitForExistence(timeout: 3) else {
-                healthApp.collectionViews.firstMatch.swipeUp(velocity: .slow)
-                findByRawValuePredicateElement = healthApp.collectionViews.staticTexts.element(matching: findByRawValuePredicate).firstMatch
+                healthApp.firstMatch.swipeUp(velocity: .slow)
+                findByRawValuePredicateElement = healthApp.staticTexts.element(matching: findByRawValuePredicate).firstMatch
                 if findByRawValuePredicateElement.waitForExistence(timeout: 3) {
                     findByRawValuePredicateElement.tap()
                     return
                 }
-                XCTFail("Failed not find element in collection view: \(healthApp.staticTexts.allElementsBoundByIndex)")
+                XCTFail("Failed to find element in category: \(healthApp.staticTexts.allElementsBoundByIndex)")
                 throw XCTestError(.failureWhileWaiting)
             }
             
@@ -149,7 +147,7 @@ final class HealthKitTests: TestAppUITests {
         try exitAppAndOpenHealth(.restingHeartRate)
         try exitAppAndOpenHealth(.activeEnergy)
         
-        app.collectionViews.buttons["HealthKit"].tap()
+        app.buttons["HealthKit"].tap()
         
         _ = app.buttons["Ask for authorization"].waitForExistence(timeout: 1)
         app.buttons["Ask for authorization"].tap()
