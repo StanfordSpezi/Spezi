@@ -73,7 +73,7 @@ final class HealthKitTests: TestAppUITests {
         }
         
         
-        func navigateToElement() { // swiftlint:disable:this cyclomatic_complexity
+        func navigateToElement() {
             let healthApp = XCUIApplication(bundleIdentifier: "com.apple.Health")
             
             if healthApp.navigationBars["Browse"].buttons["Cancel"].exists {
