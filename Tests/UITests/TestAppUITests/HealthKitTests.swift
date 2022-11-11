@@ -254,6 +254,11 @@ final class HealthKitTests: TestAppUITests {
             healthApp.staticTexts["Continue"].tap()
         }
         
+        guard healthApp.tabBars["Tab Bar"].buttons["Browse"].waitForExistence(timeout: 3) else {
+            XCTFail("Failed to identify the Add Data Button: \(healthApp.staticTexts.allElementsBoundByIndex)")
+            throw XCTestError(.failureWhileWaiting)
+        }
+        
         healthApp.tabBars["Tab Bar"].buttons["Browse"].tap()
         
         try healthDataType.navigateToElement()
