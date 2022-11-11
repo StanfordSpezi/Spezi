@@ -8,7 +8,7 @@
 
 
 /// A ``Component`` defines
-public protocol Component<ComponentStandard>: AnyObject, TypedCollectionKey {
+public protocol Component<ComponentStandard>: AnyObject, TypedCollectionKey where Value == Self {
     /// A ``Component/ComponentStandard`` defines what ``Standard`` the component supports.
     associatedtype ComponentStandard: Standard
     
@@ -21,7 +21,7 @@ public protocol Component<ComponentStandard>: AnyObject, TypedCollectionKey {
 
 extension Component {
     func saveInTypedCollection(cardinalKit: CardinalKit<ComponentStandard>) {
-        cardinalKit.typedCollection.set(Self.self, to: self as? Self.Value)
+        cardinalKit.typedCollection.set(Self.self, to: self)
     }
     
     // A documentation for this methodd exists in the `Component` type which SwiftLint doesn't recognize.

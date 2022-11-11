@@ -17,6 +17,47 @@ final class HealthKitTests: TestAppUITests {
         case steps = "Steps"
         case pushes = "Pushes"
         
+        
+        struct NumberOfHKTypeNames: Equatable {
+            let activeEnergy: Int
+            let restingHeartRate: Int
+            let electrocardiograms: Int
+            let steps: Int
+            let pushes: Int
+        }
+        
+        
+        var hkTypeNames: String {
+            switch self {
+            case .activeEnergy:
+                return "HKQuantityTypeIdentifierActiveEnergyBurned"
+            case .restingHeartRate:
+                return "HKQuantityTypeIdentifierRestingHeartRate"
+            case .electrocardiograms:
+                return "HKDataTypeIdentifierElectrocardiogram"
+            case .steps:
+                return "HKQuantityTypeIdentifierStepCount"
+            case .pushes:
+                return "HKQuantityTypeIdentifierPushCount"
+            }
+        }
+        
+        
+        static func numberOfHKTypeNames(in healthApp: XCUIApplication) -> NumberOfHKTypeNames {
+            NumberOfHKTypeNames(
+                activeEnergy: numberOfHKTypeNames(in: healthApp, ofType: .activeEnergy),
+                restingHeartRate: numberOfHKTypeNames(in: healthApp, ofType: .restingHeartRate),
+                electrocardiograms: numberOfHKTypeNames(in: healthApp, ofType: .electrocardiograms),
+                steps: numberOfHKTypeNames(in: healthApp, ofType: .steps),
+                pushes: numberOfHKTypeNames(in: healthApp, ofType: .pushes)
+            )
+        }
+        
+        static func numberOfHKTypeNames(in healthApp: XCUIApplication, ofType type: HealthDataType) -> Int {
+            healthApp.collectionViews.staticTexts.allElementsBoundByIndex.filter { $0.label.contains(type.hkTypeNames) } .count
+        }
+        
+        
         func navigateToElement() { // swiftlint:disable:this cyclomatic_complexity
             let healthApp = XCUIApplication(bundleIdentifier: "com.apple.Health")
             
@@ -102,32 +143,95 @@ final class HealthKitTests: TestAppUITests {
         }
     }
     
-    func testHealthKit() throws {
+    func testHealthKit() throws { // swiftlint:disable:this function_body_length
         let app = XCUIApplication()
         app.launch()
-        
-        app.collectionViews.buttons["HealthKit"].tap()
-        
-        app.buttons["Ask for authorization"].tap()
 
-        if app.tables.staticTexts["Turn On All"].waitForExistence(timeout: 2) {
-            app.tables.staticTexts["Turn On All"].tap()
-            app.navigationBars["Health Access"].buttons["Allow"].tap()
-        }
-        
-//        exitAppAndOpenHealth(.electrocardiograms)
-//        exitAppAndOpenHealth(.steps)
-//        exitAppAndOpenHealth(.pushes)
-//        exitAppAndOpenHealth(.restingHeartRate)
-//        exitAppAndOpenHealth(.activeEnergy)
-        
-        app.buttons["Trigger data source collection"].tap()
-        
         exitAppAndOpenHealth(.electrocardiograms)
         exitAppAndOpenHealth(.steps)
         exitAppAndOpenHealth(.pushes)
         exitAppAndOpenHealth(.restingHeartRate)
         exitAppAndOpenHealth(.activeEnergy)
+        
+        app.collectionViews.buttons["HealthKit"].tap()
+        
+        app.buttons["Ask for authorization"].tap()
+
+        _ = app.navigationBars["Health Access"].waitForExistence(timeout: 10)
+        if app.navigationBars["Health Access"].waitForExistence(timeout: 10) {
+            app.tables.staticTexts["Turn On All"].tap()
+            app.navigationBars["Health Access"].buttons["Allow"].tap()
+        }
+        
+        sleep(2)
+        
+        XCTAssertEqual(
+            HealthDataType.numberOfHKTypeNames(in: app),
+            HealthDataType.NumberOfHKTypeNames(activeEnergy: 1, restingHeartRate: 0, electrocardiograms: 1, steps: 1, pushes: 1)
+        )
+                
+        app.buttons["Trigger data source collection"].tap()
+
+        sleep(2)
+
+        XCTAssertEqual(
+            HealthDataType.numberOfHKTypeNames(in: app),
+            HealthDataType.NumberOfHKTypeNames(activeEnergy: 1, restingHeartRate: 1, electrocardiograms: 1, steps: 1, pushes: 1)
+        )
+
+        exitAppAndOpenHealth(.electrocardiograms)
+
+        sleep(1)
+
+        XCTAssertEqual(
+            HealthDataType.numberOfHKTypeNames(in: app),
+            HealthDataType.NumberOfHKTypeNames(activeEnergy: 1, restingHeartRate: 1, electrocardiograms: 2, steps: 1, pushes: 1)
+        )
+
+        exitAppAndOpenHealth(.steps)
+
+        sleep(1)
+
+        XCTAssertEqual(
+            HealthDataType.numberOfHKTypeNames(in: app),
+            HealthDataType.NumberOfHKTypeNames(activeEnergy: 1, restingHeartRate: 1, electrocardiograms: 2, steps: 2, pushes: 1)
+        )
+
+        exitAppAndOpenHealth(.pushes)
+
+        sleep(1)
+
+        XCTAssertEqual(
+            HealthDataType.numberOfHKTypeNames(in: app),
+            HealthDataType.NumberOfHKTypeNames(activeEnergy: 1, restingHeartRate: 1, electrocardiograms: 2, steps: 2, pushes: 2)
+        )
+
+        exitAppAndOpenHealth(.restingHeartRate)
+
+        sleep(1)
+
+        XCTAssertEqual(
+            HealthDataType.numberOfHKTypeNames(in: app),
+            HealthDataType.NumberOfHKTypeNames(activeEnergy: 1, restingHeartRate: 1, electrocardiograms: 2, steps: 2, pushes: 2)
+        )
+
+        exitAppAndOpenHealth(.activeEnergy)
+
+        sleep(1)
+
+        XCTAssertEqual(
+            HealthDataType.numberOfHKTypeNames(in: app),
+            HealthDataType.NumberOfHKTypeNames(activeEnergy: 2, restingHeartRate: 1, electrocardiograms: 2, steps: 2, pushes: 2)
+        )
+
+        app.buttons["Trigger data source collection"].tap()
+
+        sleep(1)
+
+        XCTAssertEqual(
+            HealthDataType.numberOfHKTypeNames(in: app),
+            HealthDataType.NumberOfHKTypeNames(activeEnergy: 2, restingHeartRate: 2, electrocardiograms: 2, steps: 2, pushes: 2)
+        )
     }
     
     

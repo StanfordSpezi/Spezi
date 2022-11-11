@@ -12,15 +12,20 @@ import SwiftUI
 
 
 /// <#Description#>
-public class HealthKit<ComponentStandard: Standard>: Component, ObservableObject, ObservableObjectComponent {
+public final class HealthKit<ComponentStandard: Standard>: Component, ObservableObject, ObservableObjectComponent {
     /// <#Description#>
     public typealias Adapter = any DataSourceRegistryAdapter<HKSample, ComponentStandard.BaseType>
     
     
+    @StandardActor var standard: ComponentStandard
+    
     let healthStore: HKHealthStore
     let healthKitDataSourceDescriptions: [HealthKitDataSourceDescription]
     let adapter: Adapter
-    @DynamicDependencies var healthKitComponents: [any Component<ComponentStandard>]
+    lazy var healthKitComponents: [any HealthKitDataSource] = {
+        healthKitDataSourceDescriptions
+            .map { $0.dataSource(healthStore: healthStore, standard: standard, adapter: adapter) }
+    }()
     
     
     /// <#Description#>
@@ -47,12 +52,6 @@ public class HealthKit<ComponentStandard: Standard>: Component, ObservableObject
         let adapter = adapter()
         let healthKitDataSourceDescriptions = healthKitDataSourceDescriptions()
         
-        self._healthKitComponents = DynamicDependencies(
-            componentProperties: healthKitDataSourceDescriptions
-                .map {
-                    $0.dependency(healthStore: healthStore, adapter: adapter)
-                }
-        )
         self.adapter = adapter
         self.healthKitDataSourceDescriptions = healthKitDataSourceDescriptions
         self.healthStore = healthStore
@@ -76,7 +75,7 @@ public class HealthKit<ComponentStandard: Standard>: Component, ObservableObject
         
         UserDefaults.standard.set(sampleTypes.map { $0.identifier }, forKey: UserDefaults.Keys.healthKitRequestedSampleTypes)
         
-        for healthKitComponent in healthKitComponents.compactMap({ $0 as? (any HealthKitComponent) }) {
+        for healthKitComponent in healthKitComponents {
             healthKitComponent.askedForAuthorization()
         }
     }
@@ -85,7 +84,7 @@ public class HealthKit<ComponentStandard: Standard>: Component, ObservableObject
     /// <#Description#>
     public func triggerDataSourceCollection() async {
         await withTaskGroup(of: Void.self) { group in
-            for healthKitComponent in healthKitComponents.compactMap({ $0 as? (any HealthKitComponent) }) {
+            for healthKitComponent in healthKitComponents {
                 group.addTask {
                     await healthKitComponent.triggerDataSourceCollection()
                 }

@@ -11,7 +11,7 @@ import XCTest
 import XCTRuntimeAssertions
 
 
-private class TestLifecycleHandler: Component, LifecycleHandler, TypedCollectionKey {
+private final class TestLifecycleHandler: Component, LifecycleHandler, TypedCollectionKey {
     typealias ComponentStandard = MockStandard
     
     
@@ -38,7 +38,7 @@ private class TestLifecycleHandler: Component, LifecycleHandler, TypedCollection
 }
 
 
-private class EmpfyLifecycleHandler: Component, LifecycleHandler, TypedCollectionKey {
+private final class EmpfyLifecycleHandler: Component, LifecycleHandler, TypedCollectionKey {
     typealias ComponentStandard = MockStandard
 }
 

@@ -15,10 +15,12 @@ public protocol HealthKitDataSourceDescription {
     /// <#Description#>
     var sampleTypes: Set<HKSampleType> { get }
     
+    
     /// <#Description#>
     /// - Parameters:
     ///   - healthStore: <#healthStore description#>
+    ///   - standard: <#standard description#>
     ///   - adapter: <#adapter description#>
     /// - Returns: <#description#>
-    func dependency<S: Standard>(healthStore: HKHealthStore, adapter: HealthKit<S>.Adapter) -> any ComponentDependency<S>
+    func dataSource<S: Standard>(healthStore: HKHealthStore, standard: S, adapter: HealthKit<S>.Adapter) -> HealthKitDataSource
 }

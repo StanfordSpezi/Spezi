@@ -20,25 +20,25 @@ class TestAppDelegate: CardinalKitAppDelegate {
             ObservableComponentTestsComponent(message: "Passed")
             if HKHealthStore.isHealthDataAvailable() {
                 HealthKit {
-                    Collect(
-                        sampleType: HKQuantityType.electrocardiogramType(),
+                    CollectSample(
+                        HKQuantityType.electrocardiogramType(),
                         deliverySetting: .background(.manual)
                     )
-                    Collect(
-                        sampleType: HKQuantityType(.stepCount),
+                    CollectSample(
+                        HKQuantityType(.stepCount),
                         deliverySetting: .background(.afterAuthorizationAndApplicationWillLaunch)
                     )
-                    Collect(
-                        sampleType: HKQuantityType(.pushCount),
+                    CollectSample(
+                        HKQuantityType(.pushCount),
                         deliverySetting: .anchorQuery(.manual)
                     )
-                    Collect(
-                        sampleType: HKQuantityType(.activeEnergyBurned),
+                    CollectSample(
+                        HKQuantityType(.activeEnergyBurned),
                         deliverySetting: .anchorQuery(.afterAuthorizationAndApplicationWillLaunch)
                     )
-                    Collect(
-                        sampleType: HKQuantityType(.restingHeartRate),
-                        deliverySetting: .manual
+                    CollectSample(
+                        HKQuantityType(.restingHeartRate),
+                        deliverySetting: .manual()
                     )
                 } adapter: {
                     TestAppHealthKitAdapter()

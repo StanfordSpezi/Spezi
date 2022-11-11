@@ -10,7 +10,7 @@ import CardinalKit
 import SwiftUI
 
 
-class ObservableComponentTestsComponent<ComponentStandard: Standard>: Module {
+final class ObservableComponentTestsComponent<ComponentStandard: Standard>: Module {
     var message: String
     
     

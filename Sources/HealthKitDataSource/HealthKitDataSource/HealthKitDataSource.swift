@@ -11,13 +11,13 @@ import HealthKit
 import SwiftUI
 
 
-protocol HealthKitComponent: Component, LifecycleHandler {
+public protocol HealthKitDataSource: LifecycleHandler {
     func askedForAuthorization()
     func triggerDataSourceCollection() async
 }
 
 
-extension HealthKitComponent {
+extension HealthKitDataSource {
     func askedForAuthorization(for sampleType: HKSampleType) -> Bool {
         let requestedSampleTypes = Set(UserDefaults.standard.stringArray(forKey: UserDefaults.Keys.healthKitRequestedSampleTypes) ?? [])
         return requestedSampleTypes.contains(sampleType.identifier)

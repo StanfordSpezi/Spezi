@@ -11,8 +11,9 @@ import HealthKit
 import SwiftUI
 
 
-class HealthKitDataSource<ComponentStandard: Standard, SampleType: HKSampleType>: HealthKitComponent {
+final class HealthKitSampleDataSource<ComponentStandard: Standard, SampleType: HKSampleType>: HealthKitDataSource {
     let healthStore: HKHealthStore
+    let standard: ComponentStandard
     
     let sampleType: SampleType
     let predicate: NSPredicate?
@@ -23,8 +24,6 @@ class HealthKitDataSource<ComponentStandard: Standard, SampleType: HKSampleType>
     var active = false
     var anchor: HKQueryAnchor?
     
-    @StandardActor var standard: ComponentStandard
-    
     
     var anchorUserDefaultsKey: String {
         UserDefaults.Keys.healthKitAnchorPrefix.appending(sampleType.identifier)
@@ -33,12 +32,14 @@ class HealthKitDataSource<ComponentStandard: Standard, SampleType: HKSampleType>
     
     required init( // swiftlint:disable:this function_default_parameter_at_end
         healthStore: HKHealthStore,
+        standard: ComponentStandard,
         sampleType: SampleType,
         predicate: NSPredicate? = nil, // We order the parameters in a logical order and therefore don't put the predicate at the end here.
         deliverySetting: HealthKitDeliverySetting,
         adapter: HealthKit<ComponentStandard>.Adapter
     ) {
         self.healthStore = healthStore
+        self.standard = standard
         self.sampleType = sampleType
         self.predicate = predicate
         self.deliverySetting = deliverySetting

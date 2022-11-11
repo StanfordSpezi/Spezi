@@ -13,7 +13,7 @@ import XCTRuntimeAssertions
 
 
 final class DataSourceTests: XCTestCase {
-    private class DataSourceTestComponentInjector<T: Hashable>: Component {
+    private final class DataSourceTestComponentInjector<T: Hashable>: Component {
         typealias ComponentStandard = TypedMockStandard<T>
         
         
@@ -25,7 +25,7 @@ final class DataSourceTests: XCTestCase {
         }
     }
     
-    class DataSourceTestComponent<T: Identifiable, MockStandardType: Hashable>: Component, LifecycleHandler {
+    final class DataSourceTestComponent<T: Identifiable, MockStandardType: Hashable>: Component, LifecycleHandler {
         typealias ComponentStandard = TypedMockStandard<MockStandardType>
         
         

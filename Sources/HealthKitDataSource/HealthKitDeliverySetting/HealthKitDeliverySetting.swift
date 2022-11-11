@@ -17,14 +17,6 @@ public enum HealthKitDeliverySetting: Equatable {
     case background(HealthKitDeliveryStartSetting = .afterAuthorizationAndApplicationWillLaunch, safeAnchor: Bool = true)
     
     
-    /// <#Description#>
-    public static let manual = HealthKitDeliverySetting.manual()
-    /// <#Description#>
-    public static let anchorQuery = HealthKitDeliverySetting.anchorQuery()
-    /// <#Description#>
-    public static let background = HealthKitDeliverySetting.background()
-    
-    
     var saveAnchor: Bool {
         switch self {
         case let .manual(safeAnchor):

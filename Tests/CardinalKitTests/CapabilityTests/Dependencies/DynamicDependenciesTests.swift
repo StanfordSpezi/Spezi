@@ -82,7 +82,7 @@ private enum DynamicDependenciesTestCase: CaseIterable {
     }
 }
 
-private class TestComponent1: Component {
+private final class TestComponent1: Component {
     typealias ComponentStandard = MockStandard
     
     @DynamicDependencies var dynamicDependencies: [any Component<ComponentStandard>]
@@ -100,15 +100,15 @@ private class TestComponent1: Component {
     }
 }
 
-private class TestComponent2<ComponentStandard: Standard>: Component {}
+private final class TestComponent2<ComponentStandard: Standard>: Component {}
 
-private class TestComponent3<ComponentStandard: Standard>: Component {}
+private final class TestComponent3<ComponentStandard: Standard>: Component {}
 
-private class TestComponentCircle1<ComponentStandard: Standard>: Component {
+private final class TestComponentCircle1<ComponentStandard: Standard>: Component {
     @Dependency var testComponentCircle2 = TestComponentCircle2<ComponentStandard>()
 }
 
-private class TestComponentCircle2<ComponentStandard: Standard>: Component {
+private final class TestComponentCircle2<ComponentStandard: Standard>: Component {
     @Dependency var testComponentCircle1 = TestComponentCircle1<ComponentStandard>()
 }
 
