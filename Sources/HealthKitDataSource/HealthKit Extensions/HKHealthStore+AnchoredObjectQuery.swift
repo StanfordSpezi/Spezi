@@ -24,7 +24,7 @@ extension HKHealthStore {
     }
     
     
-    func anchoredObjectQuery(
+    func anchoredContinousObjectQuery(
         for sampleType: HKSampleType,
         withPredicate predicate: NSPredicate? = nil
     ) async -> any TypedAsyncSequence<DataSourceElement<HKSample>> {
@@ -61,7 +61,7 @@ extension HKHealthStore {
     }
     
     
-    func anchoredObjectQuery(
+    func anchoredSingleObjectQuery(
         for sampleType: HKSampleType,
         using anchor: HKQueryAnchor? = nil,
         withPredicate predicate: NSPredicate? = nil

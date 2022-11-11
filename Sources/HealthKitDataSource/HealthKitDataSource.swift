@@ -26,6 +26,11 @@ class HealthKitDataSource<ComponentStandard: Standard, SampleType: HKSampleType>
     @StandardActor var standard: ComponentStandard
     
     
+    var anchorUserDefaultsKey: String {
+        UserDefaults.Keys.healthKitAnchorPrefix.appending(sampleType.identifier)
+    }
+    
+    
     required init( // swiftlint:disable:this function_default_parameter_at_end
         healthStore: HKHealthStore,
         sampleType: SampleType,
@@ -38,11 +43,20 @@ class HealthKitDataSource<ComponentStandard: Standard, SampleType: HKSampleType>
         self.predicate = predicate
         self.deliverySetting = deliverySetting
         self.adapter = adapter
+        
+        if deliverySetting.saveAnchor {
+            guard let userDefaultsData = UserDefaults.standard.data(forKey: anchorUserDefaultsKey),
+                  let newAnchor = try? NSKeyedUnarchiver.unarchivedObject(ofClass: HKQueryAnchor.self, from: userDefaultsData) else {
+                return
+            }
+            
+            self.anchor = newAnchor
+        }
     }
     
     
     func askedForAuthorization() {
-        guard deliverySetting != .manual && !active && !didFinishLaunchingWithOptions else {
+        guard askedForAuthorization(for: sampleType) && !deliverySetting.isManual && !active && !didFinishLaunchingWithOptions else {
             return
         }
         
@@ -56,9 +70,13 @@ class HealthKitDataSource<ComponentStandard: Standard, SampleType: HKSampleType>
             didFinishLaunchingWithOptions = true
         }
         
+        guard askedForAuthorization(for: sampleType) else {
+            return
+        }
+        
         switch deliverySetting {
-        case let .anchorQuery(startSetting) where startSetting == .afterAuthorizationAndApplicationWillLaunch,
-             let .background(startSetting) where startSetting == .afterAuthorizationAndApplicationWillLaunch:
+        case let .anchorQuery(startSetting, _) where startSetting == .afterAuthorizationAndApplicationWillLaunch,
+             let .background(startSetting, _) where startSetting == .afterAuthorizationAndApplicationWillLaunch:
             Task {
                 await triggerDataSourceCollection()
             }
@@ -67,35 +85,54 @@ class HealthKitDataSource<ComponentStandard: Standard, SampleType: HKSampleType>
         }
     }
     
+    func applicationWillTerminate(_ application: UIApplication) {
+        if deliverySetting.saveAnchor {
+            guard let anchor,
+                  let data = try? NSKeyedArchiver.archivedData(withRootObject: anchor, requiringSecureCoding: true) else {
+                return
+            }
+            
+            UserDefaults.standard.set(data, forKey: UserDefaults.Keys.healthKitAnchorPrefix.appending(sampleType.identifier))
+        }
+    }
+    
     func triggerDataSourceCollection() async {
-        guard deliverySetting == .manual || !active else {
+        guard deliverySetting.isManual || !active else {
             return
         }
         
         switch deliverySetting {
         case .manual:
-            let healthKitSamples = healthStore.sampleQueryStream(for: sampleType, withPredicate: predicate)
-            await standard.registerDataSource(adapter.transform(healthKitSamples))
+            await standard.registerDataSource(adapter.transform(anchoredSingleObjectQuery()))
         case .anchorQuery:
             active = true
-            let healthKitSamples = await healthStore.anchoredObjectQuery(for: sampleType)
+            let healthKitSamples = await healthStore.anchoredContinousObjectQuery(for: sampleType, withPredicate: predicate)
             await standard.registerDataSource(adapter.transform(healthKitSamples))
         case .background:
             active = true
-            let healthKitSamples = healthStore.startObservation(for: [sampleType])
+            let healthKitSamples = healthStore.startObservation(for: [sampleType], withPredicate: predicate)
                 .flatMap { _ in
-                    AsyncThrowingStream { continuation in
-                        Task {
-                            let results = try await self.healthStore.anchoredObjectQuery(for: self.sampleType, using: self.anchor)
-                            self.anchor = results.anchor
-                            for result in results.elements {
-                                continuation.yield(result)
-                            }
-                            continuation.finish()
-                        }
-                    }
+                    self.anchoredSingleObjectQuery()
                 }
             await standard.registerDataSource(adapter.transform(healthKitSamples))
+        }
+    }
+    
+    
+    private func anchoredSingleObjectQuery() -> AsyncThrowingStream<DataSourceElement<HKSample>, Error> {
+        AsyncThrowingStream { continuation in
+            Task {
+                let results = try await healthStore.anchoredSingleObjectQuery(
+                    for: self.sampleType,
+                    using: self.anchor,
+                    withPredicate: predicate
+                )
+                self.anchor = results.anchor
+                for result in results.elements {
+                    continuation.yield(result)
+                }
+                continuation.finish()
+            }
         }
     }
 }

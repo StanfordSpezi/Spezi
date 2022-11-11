@@ -30,6 +30,7 @@
 		2FB77B9E2910EF13009FDDE2 /* LocalStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 2FB77B9D2910EF13009FDDE2 /* LocalStorage */; };
 		2FB77BA12910EF4A009FDDE2 /* LocalStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB77BA02910EF4A009FDDE2 /* LocalStorageTests.swift */; };
 		2FB77BA52910F84D009FDDE2 /* LocalStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB77BA42910F84D009FDDE2 /* LocalStorageTests.swift */; };
+		2FC2C406291D84A600712676 /* HealthKitTestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC2C405291D84A600712676 /* HealthKitTestsView.swift */; };
 		2FC42FD9290ADD8800B08F18 /* CardinalKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2FC42FD8290ADD8800B08F18 /* CardinalKit */; };
 /* End PBXBuildFile section */
 
@@ -67,6 +68,7 @@
 		2FA7382B290ADFAA007ACEB9 /* TestApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestApp.swift; sourceTree = "<group>"; };
 		2FB77BA02910EF4A009FDDE2 /* LocalStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalStorageTests.swift; sourceTree = "<group>"; };
 		2FB77BA42910F84D009FDDE2 /* LocalStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalStorageTests.swift; sourceTree = "<group>"; };
+		2FC2C405291D84A600712676 /* HealthKitTestsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitTestsView.swift; sourceTree = "<group>"; };
 		2FC42FD7290ADD5E00B08F18 /* CardinalKitSPM */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = CardinalKitSPM; path = ../..; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -121,6 +123,7 @@
 				2F8A431E291316D2005D2B8F /* SecureStorageTests */,
 				2F8A431D291316CD005D2B8F /* ObservableObjectTests */,
 				2F8A431C291316C8005D2B8F /* LocalStorageTests */,
+				2FC2C404291D848600712676 /* HealthKitTests */,
 				2F9F07ED29090AF500CDC598 /* Shared */,
 				2FA7382B290ADFAA007ACEB9 /* TestApp.swift */,
 				2F6D139928F5F386007C25D6 /* Assets.xcassets */,
@@ -185,6 +188,14 @@
 				2F8A431829130CA7005D2B8F /* TestAppTestCase.swift */,
 			);
 			path = Shared;
+			sourceTree = "<group>";
+		};
+		2FC2C404291D848600712676 /* HealthKitTests */ = {
+			isa = PBXGroup;
+			children = (
+				2FC2C405291D84A600712676 /* HealthKitTestsView.swift */,
+			);
+			path = HealthKitTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -304,6 +315,7 @@
 				2F9F07F129090B0500CDC598 /* TestAppDelegate.swift in Sources */,
 				2FB77BA12910EF4A009FDDE2 /* LocalStorageTests.swift in Sources */,
 				2F8A432029131704005D2B8F /* SecureStorageTestsView.swift in Sources */,
+				2FC2C406291D84A600712676 /* HealthKitTestsView.swift in Sources */,
 				2F9F07E7290907C600CDC598 /* XCTest.swift in Sources */,
 				2F2A354F291CCF74000E8373 /* TestAppHealthKitAdapter.swift in Sources */,
 				2F9F07E5290906E200CDC598 /* SecureStorageTests.swift in Sources */,

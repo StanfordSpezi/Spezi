@@ -15,6 +15,7 @@ struct UITestsApp: App {
         case localStorage = "LocalStorage"
         case observableObject = "ObservableObject"
         case secureStorage = "SecureStorage"
+        case healthKit = "HealthKit"
         
         
         var id: RawValue {
@@ -31,6 +32,8 @@ struct UITestsApp: App {
                 ObservableObjectTestsView()
             case .secureStorage:
                 SecureStorageTestsView()
+            case .healthKit:
+                HealthKitTestsView()
             }
         }
     }

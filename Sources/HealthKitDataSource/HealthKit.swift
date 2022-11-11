@@ -12,7 +12,7 @@ import SwiftUI
 
 
 /// <#Description#>
-public class HealthKit<ComponentStandard: Standard>: Component {
+public class HealthKit<ComponentStandard: Standard>: Component, ObservableObject, ObservableObjectComponent {
     /// <#Description#>
     public typealias Adapter = any DataSourceRegistryAdapter<HKSample, ComponentStandard.BaseType>
     
@@ -21,7 +21,6 @@ public class HealthKit<ComponentStandard: Standard>: Component {
     let healthKitDataSourceDescriptions: [HealthKitDataSourceDescription]
     let adapter: Adapter
     @DynamicDependencies var healthKitComponents: [any Component<ComponentStandard>]
-    @AppStorage("CardinalKit.HealthKit.didAskForAuthorization") var didAskForAuthorization = false
     
     
     /// <#Description#>
@@ -62,17 +61,36 @@ public class HealthKit<ComponentStandard: Standard>: Component {
     
     /// <#Description#>
     public func askForAuthorization() async throws {
-        var dataTypes: Set<HKSampleType> = []
+        var sampleTypes: Set<HKSampleType> = []
+        
         for healthKitDataSourceDescription in healthKitDataSourceDescriptions {
-            dataTypes = dataTypes.union(healthKitDataSourceDescription.sampleTypes)
+            sampleTypes = sampleTypes.union(healthKitDataSourceDescription.sampleTypes)
         }
         
-        try await healthStore.requestAuthorization(toShare: [], read: dataTypes)
+        let requestedSampleTypes = Set(UserDefaults.standard.stringArray(forKey: UserDefaults.Keys.healthKitRequestedSampleTypes) ?? [])
+        guard !Set(sampleTypes.map { $0.identifier }).isSubset(of: requestedSampleTypes) else {
+            return
+        }
         
-        didAskForAuthorization = true
+        try await healthStore.requestAuthorization(toShare: [], read: sampleTypes)
+        
+        UserDefaults.standard.set(sampleTypes.map { $0.identifier }, forKey: UserDefaults.Keys.healthKitRequestedSampleTypes)
         
         for healthKitComponent in healthKitComponents.compactMap({ $0 as? (any HealthKitComponent) }) {
             healthKitComponent.askedForAuthorization()
+        }
+    }
+    
+    
+    /// <#Description#>
+    public func triggerDataSourceCollection() async {
+        await withTaskGroup(of: Void.self) { group in
+            for healthKitComponent in healthKitComponents.compactMap({ $0 as? (any HealthKitComponent) }) {
+                group.addTask {
+                    await healthKitComponent.triggerDataSourceCollection()
+                }
+            }
+            await group.waitForAll()
         }
     }
 }

@@ -25,7 +25,7 @@ public struct Collect<SampleType: HKSampleType>: HealthKitDataSourceDescription 
     /// - Parameters:
     ///   - sampleType: <#sampleType description#>
     ///   - deliverySetting: <#deliverySetting description#>
-    public init(sampleType: SampleType, deliverySetting: HealthKitDeliverySetting = .manual) {
+    public init(sampleType: SampleType, deliverySetting: HealthKitDeliverySetting = .manual()) {
         self.sampleType = sampleType
         self.deliverySetting = deliverySetting
     }

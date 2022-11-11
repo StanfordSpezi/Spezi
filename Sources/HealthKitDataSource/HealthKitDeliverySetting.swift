@@ -10,9 +10,38 @@
 /// <#Description#>
 public enum HealthKitDeliverySetting: Equatable {
     /// <#Description#>
-    case manual
+    case manual(safeAnchor: Bool = true)
     /// <#Description#>
-    case anchorQuery(HealthKitDeliveryStartSetting)
+    case anchorQuery(HealthKitDeliveryStartSetting = .afterAuthorizationAndApplicationWillLaunch, safeAnchor: Bool = true)
     /// <#Description#>
-    case background(HealthKitDeliveryStartSetting)
+    case background(HealthKitDeliveryStartSetting = .afterAuthorizationAndApplicationWillLaunch, safeAnchor: Bool = true)
+    
+    
+    /// <#Description#>
+    public static let manual = HealthKitDeliverySetting.manual()
+    /// <#Description#>
+    public static let anchorQuery = HealthKitDeliverySetting.anchorQuery()
+    /// <#Description#>
+    public static let background = HealthKitDeliverySetting.background()
+    
+    
+    var saveAnchor: Bool {
+        switch self {
+        case let .manual(safeAnchor):
+            return safeAnchor
+        case let .anchorQuery(_, safeAnchor):
+            return safeAnchor
+        case let .background(_, safeAnchor):
+            return safeAnchor
+        }
+    }
+    
+    var isManual: Bool {
+        switch self {
+        case .manual:
+            return true
+        default:
+            return false
+        }
+    }
 }

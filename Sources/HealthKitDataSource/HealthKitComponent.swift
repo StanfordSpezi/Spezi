@@ -7,17 +7,19 @@
 //
 
 import CardinalKit
+import HealthKit
 import SwiftUI
 
 
 protocol HealthKitComponent: Component, LifecycleHandler {
     func askedForAuthorization()
+    func triggerDataSourceCollection() async
 }
 
 
 extension HealthKitComponent {
-    var askedForAuthorization: Bool {
-        @AppStorage("CardinalKit.HealthKit.didAskForAuthorization") var didAskForAuthorization = false
-        return didAskForAuthorization
+    func askedForAuthorization(for sampleType: HKSampleType) -> Bool {
+        let requestedSampleTypes = Set(UserDefaults.standard.stringArray(forKey: UserDefaults.Keys.healthKitRequestedSampleTypes) ?? [])
+        return requestedSampleTypes.contains(sampleType.identifier)
     }
 }
