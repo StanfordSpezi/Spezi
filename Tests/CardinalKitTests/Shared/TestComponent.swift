@@ -11,7 +11,7 @@ import SwiftUI
 @_exported import XCTest
 
 
-public class TestComponent<ComponentStandard: Standard>: ObservableObject, Component, ObservableObjectComponent {
+public final class TestComponent<ComponentStandard: Standard>: ObservableObject, Component, ObservableObjectComponent {
     let expectation: XCTestExpectation
     
     

@@ -10,12 +10,21 @@ import CardinalKit
 import Foundation
 
 
-actor TestAppStandard: Standard {
+actor TestAppStandard: Standard, ObservableObjectComponent, ObservableObject {
     typealias BaseType = TestAppStandardDataSourceElement
     
     
     struct TestAppStandardDataSourceElement: Identifiable {
-        let id: UUID
+        let id: String
+    }
+    
+    
+    var dataSourceElements: [DataSourceElement<BaseType>] = [] {
+        willSet {
+            Task { @MainActor in
+                self.objectWillChange.send()
+            }
+        }
     }
     
     
@@ -29,8 +38,10 @@ actor TestAppStandard: Standard {
                     case let .removal(deletedElementId):
                         print("Removed element with \(deletedElementId)")
                     }
+                    dataSourceElements.append(element)
                 }
             } catch {
+                dataSourceElements = [.removal(error.localizedDescription)]
             }
         }
     }

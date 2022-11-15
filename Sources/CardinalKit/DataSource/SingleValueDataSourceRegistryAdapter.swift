@@ -25,7 +25,9 @@ public protocol SingleValueDataSourceRegistryAdapter<InputType, OutputType>: Dat
 
 
 extension SingleValueDataSourceRegistryAdapter {
-    func transform(
+    // A documentation for this methodd exists in the `DataSourceRegistryAdapter` type which SwiftLint doesn't recognize.
+    // swiftlint:disable:next missing_docs
+    public func transform(
         _ asyncSequence: some TypedAsyncSequence<DataSourceElement<InputType>>
     ) async -> any TypedAsyncSequence<DataSourceElement<OutputType>> {
         asyncSequence.map { [self] element in

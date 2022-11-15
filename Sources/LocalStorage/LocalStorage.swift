@@ -18,7 +18,7 @@ import Security
 /// Use ``LocalStorage/LocalStorage/store(_:storageKey:settings:)`` to store elements on disk and define the settings using a ``LocalStorageSetting`` instance.
 ///
 /// Use ``LocalStorage/LocalStorage/read(_:storageKey:settings:)`` to read elements on disk which are decoded as define by  passed in  ``LocalStorageSetting`` instance.
-public class LocalStorage<ComponentStandard: Standard>: Module, DefaultInitializable {
+public final class LocalStorage<ComponentStandard: Standard>: Module, DefaultInitializable {
     private let encryptionAlgorithm: SecKeyAlgorithm = .eciesEncryptionCofactorX963SHA256AESGCM
     @Dependency private var secureStorage = SecureStorage()
     

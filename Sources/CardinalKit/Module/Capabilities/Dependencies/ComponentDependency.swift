@@ -7,7 +7,7 @@
 //
 
 
-/// A ``ComponentProperty`` defines the interface of a ``Component/Dependency`` propety wrapper.
+/// A ``ComponentDependency`` defines the interface of a ``Component/Dependency`` propety wrapper.
 public protocol ComponentDependency<PropertyStandard>: DependencyDescriptor, AnyObject {
     /// The type of the component that is defined as a dependency.
     associatedtype ComponentType: Component where ComponentType.ComponentStandard == PropertyStandard

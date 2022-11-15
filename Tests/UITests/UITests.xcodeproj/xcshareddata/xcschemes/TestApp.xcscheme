@@ -57,6 +57,13 @@
             BlueprintName = "XCTRuntimeAssertions"
             ReferencedContainer = "container:../..">
          </BuildableReference>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "HealthKitDataSource"
+            BuildableName = "HealthKitDataSource"
+            BlueprintName = "HealthKitDataSource"
+            ReferencedContainer = "container:../..">
+         </BuildableReference>
       </CodeCoverageTargets>
       <Testables>
          <TestableReference

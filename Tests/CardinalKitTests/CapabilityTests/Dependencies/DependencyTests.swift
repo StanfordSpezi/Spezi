@@ -12,12 +12,12 @@ import XCTest
 import XCTRuntimeAssertions
 
 
-private class TestComponent1<ComponentStandard: Standard>: Component {
+private final class TestComponent1<ComponentStandard: Standard>: Component {
     @Dependency var testComponent2 = TestComponent2<ComponentStandard>()
     @Dependency var testComponent3: TestComponent3<ComponentStandard>
 }
 
-private class TestComponent2<ComponentStandard: Standard>: Component {
+private final class TestComponent2<ComponentStandard: Standard>: Component {
     @Dependency var testComponent4 = TestComponent4<ComponentStandard>()
     @Dependency var testComponent5 = TestComponent5<ComponentStandard>()
     @Dependency var testComponent3: TestComponent3<ComponentStandard>
@@ -25,27 +25,27 @@ private class TestComponent2<ComponentStandard: Standard>: Component {
 
 private final class TestComponent3<ComponentStandard: Standard>: Component, DefaultInitializable {}
 
-private class TestComponent4<ComponentStandard: Standard>: Component {
+private final class TestComponent4<ComponentStandard: Standard>: Component {
     @Dependency var testComponent5 = TestComponent5<ComponentStandard>()
 }
 
-private class TestComponent5<ComponentStandard: Standard>: Component {}
+private final class TestComponent5<ComponentStandard: Standard>: Component {}
 
-private class TestComponent6<ComponentStandard: Standard>: Component {}
+private final class TestComponent6<ComponentStandard: Standard>: Component {}
 
-private class TestComponent7<ComponentStandard: Standard>: Component {
+private final class TestComponent7<ComponentStandard: Standard>: Component {
     @Dependency var testComponent1 = TestComponent1<ComponentStandard>()
 }
 
-private class TestComponentCircle1<ComponentStandard: Standard>: Component {
+private final class TestComponentCircle1<ComponentStandard: Standard>: Component {
     @Dependency var testComponentCircle2 = TestComponentCircle2<ComponentStandard>()
 }
 
-private class TestComponentCircle2<ComponentStandard: Standard>: Component {
+private final class TestComponentCircle2<ComponentStandard: Standard>: Component {
     @Dependency var testComponentCircle1 = TestComponentCircle1<ComponentStandard>()
 }
 
-private class TestComponentItself<ComponentStandard: Standard>: Component {
+private final class TestComponentItself<ComponentStandard: Standard>: Component {
     @Dependency var testComponentItself = TestComponentItself<ComponentStandard>()
 }
 

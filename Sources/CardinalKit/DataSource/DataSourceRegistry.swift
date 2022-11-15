@@ -12,7 +12,7 @@
 /// Use ``DataSourceRegistryAdapter``s to transform data of different data sources.
 public protocol DataSourceRegistry<BaseType>: Actor {
     /// The ``DataSourceRegistry/BaseType`` that all data sources should provide.
-    associatedtype BaseType: Identifiable
+    associatedtype BaseType: Identifiable, Sendable where BaseType.ID: Sendable
     
     
     /// Registers a new data source for the ``DataSourceRegistry``.

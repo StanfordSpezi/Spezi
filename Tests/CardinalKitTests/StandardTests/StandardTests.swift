@@ -13,7 +13,7 @@ import XCTRuntimeAssertions
 
 
 final class StandardTests: XCTestCase {
-    class StandardInjectionTestComponent: Component {
+    final class StandardInjectionTestComponent: Component {
         typealias ComponentStandard = MockStandard
         
         
