@@ -33,7 +33,7 @@ struct UsernamePasswordLoginServiceButton<Content: View>: View {
 }
 
 
-struct SwiftUIView_Previews: PreviewProvider {
+struct UsernamePasswordLoginServiceButton_Previews: PreviewProvider {
     static var previews: some View {
         UsernamePasswordLoginServiceButton() {
             Image(systemName: "ellipsis.rectangle")

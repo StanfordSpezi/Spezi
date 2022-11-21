@@ -99,7 +99,7 @@ struct UsernamePasswordLoginView<Header: View, Footer: View>: View {
                         .disableAutocorrection(true)
                         .onSubmit {
                             usernameValidation()
-                        }
+                        } 
                 }
                     .contentShape(Rectangle())
                     .onTapGesture {
@@ -150,6 +150,7 @@ struct UsernamePasswordLoginView<Header: View, Footer: View>: View {
             }
                 .padding(.leading, 16)
             Divider()
+                .padding(.top, 10)
             Button(action: loginButtonPressed) {
                 Text(viewLocalization.loginButtonTitle)
                     .padding(6)
