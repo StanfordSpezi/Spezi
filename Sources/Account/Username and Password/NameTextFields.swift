@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct NameTextFields: View {
-    enum Field: Hashable {
+    private enum Field: Hashable {
         case givenName
         case familyName
     }
     
     
-    @Binding var name: PersonNameComponents
+    @Binding private var name: PersonNameComponents
     @FocusState private var focusedField: Field?
     
     
@@ -53,6 +53,7 @@ struct NameTextFields: View {
                 }
             Divider()
                 .gridCellUnsizedAxes(.horizontal)
+                .padding(.bottom, 5)
             GridRow {
                 Text("NAME_TEXT_FIELD_FAMILY_NAME", bundle: .module)
                     .fontWeight(.semibold)
@@ -69,7 +70,13 @@ struct NameTextFields: View {
                 }
         }
     }
+    
+    
+    init(name: Binding<PersonNameComponents>) {
+        self._name = name
+    }
 }
+
 
 struct NameTextFields_Previews: PreviewProvider {
     @State private static var name = PersonNameComponents()
@@ -79,11 +86,11 @@ struct NameTextFields_Previews: PreviewProvider {
         VStack {
             Form {
                 NameTextFields(name: $name)
-                    .border(.red)
+                    .padding(.vertical, -16)
             }
                 .frame(height: 200)
             NameTextFields(name: $name)
-                .border(.red)
+                .padding(32)
         }
         .background(Color(.systemGroupedBackground))
     }

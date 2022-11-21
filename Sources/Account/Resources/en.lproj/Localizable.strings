@@ -24,3 +24,11 @@
 "LOGIN_EAP_USERNAME_TITLE" = "Email";
 "LOGIN_EAP_USERNAME_PLACEHOLDER" = "Enter your email ...";
 "LOGIN_EAP_EMAIL_VERIFICATION_ERROR" = "The entered email is not valid.";
+
+
+// Gender Identity
+"GENDER_IDENTITY_FEMALE" = "Female";
+"GENDER_IDENTITY_MALE" = "Male";
+"GENDER_IDENTITY_TRANSGENDER" = "Transgender";
+"GENDER_IDENTITY_NON_BINARY" = "Non-binary";
+"GENDER_IDENTITY_PREFER_NOT_TO_STATE" = "Prefer not to state";

@@ -22,6 +22,7 @@ struct GenderIdentityPicker: View {
             Text(String(localized: "GENDER_IDENTITY", bundle: .module))
                 .fontWeight(.semibold)
         }
+        .border(.red)
     }
 }
 
@@ -29,9 +30,17 @@ struct GenderIdentityPicker: View {
 struct GenderIdentityPicker_Previews: PreviewProvider {
     @State private static var genderIdentity: GenderIdentity = .preferNotToState
     
+    
     static var previews: some View {
-        Form {
+        VStack {
+            Form {
+                GenderIdentityPicker(genderIdentity: $genderIdentity)
+                    .padding(.vertical, -16)
+            }
+                .frame(height: 200)
             GenderIdentityPicker(genderIdentity: $genderIdentity)
+                .padding(32)
         }
+        .background(Color(.systemGroupedBackground))
     }
 }
