@@ -1,0 +1,26 @@
+//
+// This source file is part of the CardinalKit open-source project
+//
+// SPDX-FileCopyrightText: 2022 CardinalKit and the project authors (see CONTRIBUTORS.md)
+//
+// SPDX-License-Identifier: MIT
+//
+
+"LOGIN" = "Login";
+
+// Username Password Login View
+"LOGIN_UAP_BUTTON_TITLE" = "Username and Password";
+"LOGIN_UAP_NAVIGATION_TITLE" = "Login";
+"LOGIN_UAP_USERNAME_TITLE" = "Username";
+"LOGIN_UAP_PASSWORD_TITLE" = "Password";
+"LOGIN_UAP_USERNAME_PLACEHOLDER" = "Enter your username ...";
+"LOGIN_UAP_PASSWORD_PLACEHOLDER" = "Enter your password ...";
+"LOGIN_UAP_LOGIN_BUTTON_TITLE" = "Login";
+"LOGIN_UAP_DEFAULT_ERROR" = "Login Failed";
+
+
+// Email Password Login View
+"LOGIN_EAP_BUTTON_TITLE" = "Email and Password";
+"LOGIN_EAP_USERNAME_TITLE" = "Email";
+"LOGIN_EAP_USERNAME_PLACEHOLDER" = "Enter your email ...";
+"LOGIN_EAP_EMAIL_VERIFICATION_ERROR" = "Please enter a valid email";

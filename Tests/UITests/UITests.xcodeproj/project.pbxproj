@@ -33,6 +33,7 @@
 		2FC2C406291D84A600712676 /* HealthKitTestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC2C405291D84A600712676 /* HealthKitTestsView.swift */; };
 		2FC2C408291DCC8200712676 /* HealthKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC2C407291DCC8200712676 /* HealthKitTests.swift */; };
 		2FC42FD9290ADD8800B08F18 /* CardinalKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2FC42FD8290ADD8800B08F18 /* CardinalKit */; };
+		2FD68DE3292971730043AB73 /* Account in Frameworks */ = {isa = PBXBuildFile; productRef = 2FD68DE2292971730043AB73 /* Account */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,6 +80,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2FD68DE3292971730043AB73 /* Account in Frameworks */,
 				2FB77B9E2910EF13009FDDE2 /* LocalStorage in Frameworks */,
 				2F67A5BA290C69640092CAD6 /* SecureStorage in Frameworks */,
 				2F01E8CC29148D120089C46B /* HealthKitDataSource in Frameworks */,
@@ -223,6 +225,7 @@
 				2F67A5B9290C69640092CAD6 /* SecureStorage */,
 				2FB77B9D2910EF13009FDDE2 /* LocalStorage */,
 				2F01E8CB29148D120089C46B /* HealthKitDataSource */,
+				2FD68DE2292971730043AB73 /* Account */,
 			);
 			productName = Example;
 			productReference = 2F6D139228F5F384007C25D6 /* TestApp.app */;
@@ -620,6 +623,10 @@
 		2FC42FD8290ADD8800B08F18 /* CardinalKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = CardinalKit;
+		};
+		2FD68DE2292971730043AB73 /* Account */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Account;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

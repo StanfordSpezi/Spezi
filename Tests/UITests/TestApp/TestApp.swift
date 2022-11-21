@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import Account
 
 
 @main
@@ -45,13 +46,15 @@ struct UITestsApp: App {
     var body: some Scene {
         WindowGroup {
             NavigationStack {
-                List(Tests.allCases) { test in
-                    NavigationLink(test.rawValue, value: test)
-                }
-                    .navigationDestination(for: Tests.self) { test in
-                        test.view
-                    }
-                    .navigationTitle("UITest")
+                Login()
+                    .environmentObject(Account())
+//                List(Tests.allCases) { test in
+//                    NavigationLink(test.rawValue, value: test)
+//                }
+//                    .navigationDestination(for: Tests.self) { test in
+//                        test.view
+//                    }
+//                    .navigationTitle("UITest")
             }
                 .cardinalKit(appDelegate)
         }

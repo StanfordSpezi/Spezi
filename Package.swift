@@ -13,10 +13,12 @@ import PackageDescription
 
 let package = Package(
     name: "CardinalKit",
+    defaultLocalization: "en",
     platforms: [
         .iOS(.v16)
     ],
     products: [
+        .library(name: "Account", targets: ["Account"]),
         .library(name: "CardinalKit", targets: ["CardinalKit"]),
         .library(name: "HealthKitDataSource", targets: ["HealthKitDataSource"]),
         .library(name: "LocalStorage", targets: ["LocalStorage"]),
@@ -24,6 +26,15 @@ let package = Package(
         .library(name: "XCTRuntimeAssertions", targets: ["XCTRuntimeAssertions"])
     ],
     targets: [
+        .target(
+            name: "Account",
+            dependencies: [
+                .target(name: "CardinalKit")
+            ],
+            resources: [
+                .process("Resources")
+            ]
+        ),
         .target(
             name: "CardinalKit",
             dependencies: [

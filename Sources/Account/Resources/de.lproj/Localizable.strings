@@ -1,0 +1,19 @@
+//
+// This source file is part of the CardinalKit open-source project
+//
+// SPDX-FileCopyrightText: 2022 CardinalKit and the project authors (see CONTRIBUTORS.md)
+//
+// SPDX-License-Identifier: MIT
+//
+
+"LOGIN" = "Anmelden";
+
+
+// Username Password Login View
+"LOGIN_UAP_NAVIGATION_TITLE" = "Anmelden";
+"LOGIN_UAP_USERNAME_TITLE" = "Benutzername";
+"LOGIN_UAP_PASSWORD_TITLE" = "Passwort";
+"LOGIN_UAP_USERNAME_PLACEHOLDER" = "Benutzername eingeben ...";
+"LOGIN_UAP_PASSWORD_PLACEHOLDER" = "Passwort eingeben ...";
+"LOGIN_UAP_LOGIN_BUTTON_TITLE" = "Anmelden";
+"LOGIN_UAP_DEFAULT_ERROR" = "Anmelden Fehlgeschlagen";

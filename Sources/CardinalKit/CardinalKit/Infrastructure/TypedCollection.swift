@@ -22,6 +22,16 @@ public protocol TypedCollectionKey<Value> {
     associatedtype Value = Self
 }
 
+extension TypedCollectionKey {
+    func saveInTypedCollection(cardinalKit: AnyCardinalKit) {
+        guard let value = self as? Value else {
+            return
+        }
+        
+        cardinalKit.typedCollection.set(Self.self, to: value)
+    }
+}
+
 
 /// Type erasure for `TypedCollection.Value`
 private protocol AnyTypedCollectionValue {
