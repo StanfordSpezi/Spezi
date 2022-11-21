@@ -14,7 +14,7 @@ open class Account: ObservableObject, ObservableObjectComponent, TypedCollection
     public typealias Value = Account
     
     
-    open lazy var loginServices: [any AccountService] = [
+    open lazy var accountServices: [any AccountService] = [
         UsernamePasswordLoginService(account: self),
         EmailPasswordLoginService(account: self)
     ]

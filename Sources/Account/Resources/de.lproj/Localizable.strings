@@ -8,8 +8,8 @@
 
 "LOGIN" = "Anmelden";
 
-
 // Username Password Login View
+"LOGIN_UAP_BUTTON_TITLE" = "Benutzername und Passwort";
 "LOGIN_UAP_NAVIGATION_TITLE" = "Anmelden";
 "LOGIN_UAP_USERNAME_TITLE" = "Benutzername";
 "LOGIN_UAP_PASSWORD_TITLE" = "Passwort";
@@ -17,3 +17,10 @@
 "LOGIN_UAP_PASSWORD_PLACEHOLDER" = "Passwort eingeben ...";
 "LOGIN_UAP_LOGIN_BUTTON_TITLE" = "Anmelden";
 "LOGIN_UAP_DEFAULT_ERROR" = "Anmelden Fehlgeschlagen";
+
+
+// Email Password Login View
+"LOGIN_EAP_BUTTON_TITLE" = "E-Mail and Passwort";
+"LOGIN_EAP_USERNAME_TITLE" = "E-Mail";
+"LOGIN_EAP_USERNAME_PLACEHOLDER" = "E-Mail eingeben ...";
+"LOGIN_EAP_EMAIL_VERIFICATION_ERROR" = "Die eingegebene E-Mail ist nicht korrekt.";

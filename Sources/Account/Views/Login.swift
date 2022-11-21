@@ -23,7 +23,7 @@ public struct Login<Header: View>: View {
                     header
                     Spacer(minLength: 0)
                     VStack(spacing: 16) {
-                        ForEach(account.loginServices, id: \.id) { loginService in
+                        ForEach(account.accountServices, id: \.id) { loginService in
                             loginService.loginButton
                         }
                     }

@@ -23,4 +23,4 @@
 "LOGIN_EAP_BUTTON_TITLE" = "Email and Password";
 "LOGIN_EAP_USERNAME_TITLE" = "Email";
 "LOGIN_EAP_USERNAME_PLACEHOLDER" = "Enter your email ...";
-"LOGIN_EAP_EMAIL_VERIFICATION_ERROR" = "Please enter a valid email";
+"LOGIN_EAP_EMAIL_VERIFICATION_ERROR" = "The entered email is not valid.";
