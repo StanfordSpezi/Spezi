@@ -15,8 +15,8 @@ enum GenderIdentity: Int, CaseIterable, Identifiable, Hashable {
     case preferNotToState
     
     
-    var id: Self {
-        self
+    var id: RawValue {
+        rawValue
     }
     
     var localizedDescription: String {

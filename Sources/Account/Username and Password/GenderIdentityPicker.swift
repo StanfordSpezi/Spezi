@@ -10,32 +10,36 @@ import SwiftUI
 
 
 struct GenderIdentityPicker: View {
-    @Binding var genderIdentity: GenderIdentity
+    @Binding private var genderIdentity: GenderIdentity
     
     
     var body: some View {
         Picker(selection: $genderIdentity) {
             ForEach(GenderIdentity.allCases) { genderIdentity in
                 Text(genderIdentity.localizedDescription)
+                    .id(genderIdentity.id)
             }
         } label: {
             Text(String(localized: "GENDER_IDENTITY", bundle: .module))
                 .fontWeight(.semibold)
         }
-        .border(.red)
+    }
+    
+    
+    init(genderIdentity: Binding<GenderIdentity>) {
+        self._genderIdentity = genderIdentity
     }
 }
 
 
 struct GenderIdentityPicker_Previews: PreviewProvider {
-    @State private static var genderIdentity: GenderIdentity = .preferNotToState
+    @State private static var genderIdentity: GenderIdentity = .male
     
     
     static var previews: some View {
         VStack {
             Form {
                 GenderIdentityPicker(genderIdentity: $genderIdentity)
-                    .padding(.vertical, -16)
             }
                 .frame(height: 200)
             GenderIdentityPicker(genderIdentity: $genderIdentity)

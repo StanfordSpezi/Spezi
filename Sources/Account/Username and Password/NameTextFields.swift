@@ -37,37 +37,22 @@ struct NameTextFields: View {
     
     var body: some View {
         Grid {
-            GridRow {
-                Text("NAME_TEXT_FIELD_GIVEN_NAME", bundle: .module)
-                    .fontWeight(.semibold)
-                    .gridColumnAlignment(.leading)
-                TextField(String(localized: "NAME_TEXT_FIELD_GIVEN_NAME_PLACEHOLDER", bundle: .module), text: givenNameBinding)
-                    .frame(maxWidth: .infinity)
-                    .focused($focusedField, equals: .givenName)
-                    .textInputAutocapitalization(.never)
-                    .disableAutocorrection(true)
-            }
-                .contentShape(Rectangle())
-                .onTapGesture {
-                    focusedField = .givenName
-                }
+            TextGridRow(
+                text: givenNameBinding,
+                focusedField: _focusedField,
+                title: "NAME_TEXT_FIELD_GIVEN_NAME",
+                placeholder: "NAME_TEXT_FIELD_GIVEN_NAME_PLACEHOLDER",
+                fieldIdentifier: .givenName
+            )
             Divider()
                 .gridCellUnsizedAxes(.horizontal)
-                .padding(.bottom, 5)
-            GridRow {
-                Text("NAME_TEXT_FIELD_FAMILY_NAME", bundle: .module)
-                    .fontWeight(.semibold)
-                    .gridColumnAlignment(.leading)
-                TextField(String(localized: "NAME_TEXT_FIELD_FAMILY_NAME_PLACEHOLDER", bundle: .module), text: familyNameBinding)
-                    .frame(maxWidth: .infinity)
-                    .focused($focusedField, equals: .familyName)
-                    .textInputAutocapitalization(.never)
-                    .disableAutocorrection(true)
-            }
-                .contentShape(Rectangle())
-                .onTapGesture {
-                    focusedField = .familyName
-                }
+            TextGridRow(
+                text: familyNameBinding,
+                focusedField: _focusedField,
+                title: "NAME_TEXT_FIELD_FAMILY_NAME",
+                placeholder: "NAME_TEXT_FIELD_FAMILY_NAME_PLACEHOLDER",
+                fieldIdentifier: .familyName
+            )
         }
     }
     
@@ -86,9 +71,8 @@ struct NameTextFields_Previews: PreviewProvider {
         VStack {
             Form {
                 NameTextFields(name: $name)
-                    .padding(.vertical, -16)
             }
-                .frame(height: 200)
+                .frame(height: 300)
             NameTextFields(name: $name)
                 .padding(32)
         }

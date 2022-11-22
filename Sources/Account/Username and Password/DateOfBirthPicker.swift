@@ -40,8 +40,14 @@ struct DateOfBirthPicker_Previews: PreviewProvider {
     
     
     static var previews: some View {
-        Form {
+        VStack {
+            Form {
+                DateOfBirthPicker(date: $date)
+            }
+                .frame(height: 200)
             DateOfBirthPicker(date: $date)
+                .padding(32)
         }
+        .background(Color(.systemGroupedBackground))
     }
 }

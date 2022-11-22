@@ -7,7 +7,7 @@
 //
 
 import SwiftUI
-import Account
+@testable import Account
 
 
 @main
@@ -43,11 +43,38 @@ struct UITestsApp: App {
     @UIApplicationDelegateAdaptor(TestAppDelegate.self) var appDelegate
     
     
+    @State private var username: String = ""
+    @State private var password: String = ""
+    @State private var valid: Bool = false
+    
+    
+    private var validationRules: [ValidationRule] {
+        guard let regex = try? Regex("^[a-zA-Z]+$") else {
+            return []
+        }
+        
+        return [
+            ValidationRule(
+                regex: regex,
+                message: "Validation failed: Required only letters."
+            )
+        ]
+    }
+    
+    
+    
     var body: some Scene {
         WindowGroup {
             NavigationStack {
-                Login()
-                    .environmentObject(Account())
+                Form {
+                    UsernamePasswordFields(
+                        username: $username,
+                        password: $password,
+                        valid: $valid,
+                        usernameValidationRules: validationRules,
+                        passwordValidationRules: validationRules
+                    )
+                }
 //                List(Tests.allCases) { test in
 //                    NavigationLink(test.rawValue, value: test)
 //                }
