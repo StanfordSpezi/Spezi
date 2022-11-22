@@ -75,6 +75,7 @@ struct TextGridRow_Previews: PreviewProvider {
                         title: "Text",
                         placeholder: "Placeholder ..."
                     )
+                    Divider()
                     TextGridRow(
                         text: $text,
                         focusedField: _focusedField,
@@ -91,6 +92,7 @@ struct TextGridRow_Previews: PreviewProvider {
                     title: "Text",
                     placeholder: "Placeholder ..."
                 )
+                Divider()
                 TextGridRow(
                     text: $text,
                     focusedField: _focusedField,
