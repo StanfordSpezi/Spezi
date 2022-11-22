@@ -66,15 +66,8 @@ struct UITestsApp: App {
     var body: some Scene {
         WindowGroup {
             NavigationStack {
-                Form {
-                    UsernamePasswordFields(
-                        username: $username,
-                        password: $password,
-                        valid: $valid,
-                        usernameValidationRules: validationRules,
-                        passwordValidationRules: validationRules
-                    )
-                }
+                Login()
+                    .environmentObject(Account())
 //                List(Tests.allCases) { test in
 //                    NavigationLink(test.rawValue, value: test)
 //                }

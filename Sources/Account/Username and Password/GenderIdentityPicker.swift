@@ -39,10 +39,14 @@ struct GenderIdentityPicker_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
             Form {
-                GenderIdentityPicker(genderIdentity: $genderIdentity)
+                Grid {
+                    GenderIdentityPicker(genderIdentity: $genderIdentity)
+                }
             }
                 .frame(height: 200)
-            GenderIdentityPicker(genderIdentity: $genderIdentity)
+            Grid {
+                GenderIdentityPicker(genderIdentity: $genderIdentity)
+            }
                 .padding(32)
         }
         .background(Color(.systemGroupedBackground))

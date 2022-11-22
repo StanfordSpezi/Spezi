@@ -87,7 +87,7 @@ struct VerifyableTextFieldGridRow<Description: View, TextField: View>: View {
     private func validation() {
         debounceTask = Task {
             // Wait 0.5 seconds until you start the validation.
-            try? await Task.sleep(for: .seconds(0.5))
+            try? await Task.sleep(for: .seconds(0.2))
             
             guard !Task.isCancelled else {
                 return
@@ -111,39 +111,12 @@ struct VerifyableTextFieldGridRow<Description: View, TextField: View>: View {
     }
     
     private func updateValid() {
-        valid = text.isEmpty || !validationResults.isEmpty
-    }
-}
-
-struct DescriptionGridRow<Description: View, Content: View>: View {
-    private let description: Description
-    private let content: Content
-    
-    
-    var body: some View {
-        GridRow {
-            description
-                .fontWeight(.semibold)
-                .gridColumnAlignment(.leading)
-                .fixedSize(horizontal: false, vertical: true)
-            content
-                .frame(maxWidth: .infinity)
-        }
-            .contentShape(Rectangle())
-    }
-    
-    
-    init(
-        @ViewBuilder description: () -> Description,
-        @ViewBuilder content: () -> Content
-    ) {
-        self.description = description()
-        self.content = content()
+        valid = !text.isEmpty && validationResults.isEmpty
     }
 }
 
 
-struct VerifyableTextGridRow_Previews: PreviewProvider {
+struct VerifyableTextFieldGridRow_Previews: PreviewProvider {
     private enum Field: Hashable {
         case first
         case second

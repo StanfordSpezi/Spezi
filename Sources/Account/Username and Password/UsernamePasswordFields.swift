@@ -37,11 +37,6 @@ struct UsernamePasswordFields: View {
         }
     }
     
-    enum Field: Hashable {
-        case username
-        case password
-    }
-    
     enum PresentationType: Hashable {
         case login
         case signUp
@@ -53,7 +48,7 @@ struct UsernamePasswordFields: View {
     private let passwordValidationRules: [ValidationRule]
     private let presentationType: PresentationType
     
-    @FocusState var focusedField: Field?
+    @FocusState var focusedField: LoginAndSignUpFields?
     
     @EnvironmentObject private var usernamePasswordLoginService: UsernamePasswordLoginService
     
@@ -61,79 +56,50 @@ struct UsernamePasswordFields: View {
     @Binding private var username: String
     @Binding private var password: String
     
-    @State private var usernameValidationResults: [String] = []
-    @State private var passwordValidationResults: [String] = []
+    @State private var usernameValid: Bool = false
+    @State private var passwordValid: Bool = false
     
     
     var body: some View {
-        Grid(horizontalSpacing: 16, verticalSpacing: 0) {
-            GridRow {
+        Group {
+            VerifyableTextFieldGridRow(
+                text: $username,
+                valid: $usernameValid,
+                validationRules: usernameValidationRules
+            ) {
                 Text(viewLocalization.usernameTitle)
-                    .fontWeight(.semibold)
-                    .gridColumnAlignment(.leading)
-                    .fixedSize(horizontal: false, vertical: true)
-                TextField(viewLocalization.usernamePlaceholder, text: $username)
-                    .frame(maxWidth: .infinity)
-                    .focused($focusedField, equals: .username)
+            } textField: { binding in
+                TextField(text: binding) {
+                    Text(viewLocalization.usernamePlaceholder)
+                }
+                    .autocorrectionDisabled(true)
                     .textInputAutocapitalization(.never)
-                    .disableAutocorrection(true)
-                    .onSubmit {
-                        usernameValidation()
-                    }
+                    .keyboardType(.emailAddress)
+                    .textContentType(.username)
             }
-                .contentShape(Rectangle())
-                .onTapGesture {
-                    focusedField = .username
-                }
-                .padding(.top, 8)
-            GridRow {
-                Spacer(minLength: 0)
-                VStack {
-                    ForEach(usernameValidationResults, id: \.self) { message in
-                        Text(message)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-                }
-                    .gridColumnAlignment(.leading)
-                    .font(.footnote)
-                    .foregroundColor(.red)
-            }
+                .onTapFocus(focusedField: _focusedField, fieldIdentifier: .username)
             Divider()
-                .gridCellUnsizedAxes(.horizontal)
-                .padding(.bottom, 5)
-            GridRow {
+            VerifyableTextFieldGridRow(
+                text: $password,
+                valid: $passwordValid,
+                validationRules: passwordValidationRules
+            ) {
                 Text(viewLocalization.passwordTitle)
-                    .fontWeight(.semibold)
-                    .gridColumnAlignment(.leading)
-                    .fixedSize(horizontal: false, vertical: true)
-                SecureField(viewLocalization.passwordPlaceholder, text: $password)
-                    .frame(maxWidth: .infinity)
-                    .focused($focusedField, equals: .password)
-                    .onSubmit {
-                        passwordValidation()
-                    }
-            }
-                .contentShape(Rectangle())
-                .onTapGesture {
-                    focusedField = .password
+            } textField: { binding in
+                TextField(text: binding) {
+                    Text(viewLocalization.passwordPlaceholder)
                 }
-                .padding(.top, 4)
-            GridRow {
-                Spacer(minLength: 0)
-                VStack {
-                    ForEach(passwordValidationResults, id: \.self) { message in
-                        Text(message)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-                }
-                    .gridColumnAlignment(.leading)
-                    .font(.footnote)
-                    .foregroundColor(.red)
+                    .autocorrectionDisabled(true)
+                    .textInputAutocapitalization(.never)
+                    .textContentType(.password)
             }
+                .onTapFocus(focusedField: _focusedField, fieldIdentifier: .password)
         }
-            .onChange(of: focusedField) { _ in
-                usernameValidation()
-                passwordValidation()
+            .onChange(of: usernameValid) { _ in
+                updateValid()
+            }
+            .onChange(of: passwordValid) { _ in
+                updateValid()
             }
     }
     
@@ -142,6 +108,7 @@ struct UsernamePasswordFields: View {
         username: Binding<String>,
         password: Binding<String>,
         valid: Binding<Bool>,
+        focusState: FocusState<LoginAndSignUpFields?> = FocusState<LoginAndSignUpFields?>(),
         viewLocalization: UsernamePasswordLoginViewLocalization = .default,
         usernameValidationRules: [ValidationRule] = [],
         passwordValidationRules: [ValidationRule] = [],
@@ -150,6 +117,7 @@ struct UsernamePasswordFields: View {
         self._username = username
         self._password = password
         self._valid = valid
+        self._focusedField = focusState
         self.viewLocalization = viewLocalization
         self.usernameValidationRules = usernameValidationRules
         self.passwordValidationRules = passwordValidationRules
@@ -157,41 +125,8 @@ struct UsernamePasswordFields: View {
     }
     
     
-    private func usernameValidation() {
-        withAnimation(.easeInOut(duration: 0.2)) {
-            defer {
-                updateValid()
-            }
-            
-            guard !username.isEmpty else {
-                usernameValidationResults = []
-                return
-            }
-            
-            usernameValidationResults = usernameValidationRules.compactMap { $0.validate(username) }
-        }
-    }
-    
-    private func passwordValidation() {
-        withAnimation(.easeInOut(duration: 0.2)) {
-            defer {
-                updateValid()
-            }
-            
-            guard !password.isEmpty else {
-                passwordValidationResults = []
-                return
-            }
-            
-            passwordValidationResults = passwordValidationRules.compactMap { $0.validate(password) }
-        }
-    }
-    
     private func updateValid() {
-        valid = username.isEmpty
-            || password.isEmpty
-            || !usernameValidationResults.isEmpty
-            || !passwordValidationResults.isEmpty
+        valid = usernameValid && passwordValid
     }
 }
 
@@ -218,13 +153,15 @@ struct UsernamePasswordFields_Previews: PreviewProvider {
     
     static var previews: some View {
         Form {
-            UsernamePasswordFields(
-                username: $username,
-                password: $password,
-                valid: $valid,
-                usernameValidationRules: validationRules,
-                passwordValidationRules: validationRules
-            )
+            Grid(horizontalSpacing: 8, verticalSpacing: 8) {
+                UsernamePasswordFields(
+                    username: $username,
+                    password: $password,
+                    valid: $valid,
+                    usernameValidationRules: validationRules,
+                    passwordValidationRules: validationRules
+                )
+            }
         }
     }
 }

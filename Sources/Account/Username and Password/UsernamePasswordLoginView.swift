@@ -61,12 +61,6 @@ private enum UsernamePasswordLoginViewState: Equatable {
 
 
 struct UsernamePasswordLoginView<Header: View, Footer: View>: View {
-    enum Field: Hashable {
-        case username
-        case password
-    }
-    
-    
     private let viewLocalization: UsernamePasswordLoginViewLocalization
     private let usernameValidationRules: [ValidationRule]
     private let passwordValidationRules: [ValidationRule]
@@ -76,10 +70,9 @@ struct UsernamePasswordLoginView<Header: View, Footer: View>: View {
     @EnvironmentObject private var usernamePasswordLoginService: UsernamePasswordLoginService
     
     @State private var username: String = ""
-    @State private var usernameValidationResults: [String] = []
     @State private var password: String = ""
-    @State private var passwordValidationResults: [String] = []
-    @FocusState private var focusedField: Field?
+    @State private var valid: Bool = false
+    @FocusState private var focusedField: LoginAndSignUpFields?
     @State private var state: UsernamePasswordLoginViewState = .idle
     
     
@@ -87,70 +80,21 @@ struct UsernamePasswordLoginView<Header: View, Footer: View>: View {
         ScrollView {
             header
             Divider()
-            Grid(horizontalSpacing: 16, verticalSpacing: 0) {
-                GridRow {
-                    Text(viewLocalization.usernameTitle)
-                        .fontWeight(.semibold)
-                        .gridColumnAlignment(.leading)
-                    TextField(viewLocalization.usernamePlaceholder, text: $username)
-                        .frame(maxWidth: .infinity)
-                        .focused($focusedField, equals: .username)
-                        .textInputAutocapitalization(.never)
-                        .disableAutocorrection(true)
-                        .onSubmit {
-                            usernameValidation()
-                        } 
-                }
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        focusedField = .username
-                    }
-                    .padding(.vertical, 8)
-                GridRow {
-                    Spacer(minLength: 0)
-                    HStack() {
-                        ForEach(usernameValidationResults, id: \.self) { message in
-                            Text(message)
-                        }
-                    }
-                        .gridColumnAlignment(.leading)
-                        .font(.footnote)
-                        .foregroundColor(.red)
-                }
-                Divider()
-                    .padding(.vertical, 10)
-                GridRow {
-                    Text(viewLocalization.passwordTitle)
-                        .fontWeight(.semibold)
-                        .gridColumnAlignment(.leading)
-                    SecureField(viewLocalization.passwordPlaceholder, text: $password)
-                        .frame(maxWidth: .infinity)
-                        .focused($focusedField, equals: .password)
-                        .onSubmit {
-                            passwordValidation()
-                        }
-                }
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        focusedField = .password
-                    }
-                    .padding(.vertical, 10)
-                    .padding(.bottom, -0.1)
-                GridRow {
-                    Spacer(minLength: 0)
-                    HStack() {
-                        ForEach(passwordValidationResults, id: \.self) { message in
-                            Text(message)
-                        }
-                    }
-                        .gridColumnAlignment(.leading)
-                        .font(.footnote)
-                        .foregroundColor(.red)
-                }
+            Grid(horizontalSpacing: 16, verticalSpacing: 16) {
+                UsernamePasswordFields(
+                    username: $username,
+                    password: $password,
+                    valid: $valid,
+                    focusState: _focusedField,
+                    viewLocalization: viewLocalization,
+                    usernameValidationRules: usernameValidationRules,
+                    passwordValidationRules: passwordValidationRules,
+                    presentationType: .login
+                )
             }
                 .padding(.leading, 16)
+                .padding(.vertical, 12)
             Divider()
-                .padding(.top, 10)
             Button(action: loginButtonPressed) {
                 Text(viewLocalization.loginButtonTitle)
                     .padding(6)
@@ -175,10 +119,6 @@ struct UsernamePasswordLoginView<Header: View, Footer: View>: View {
             .onTapGesture {
                 focusedField = nil
             }
-            .onChange(of: focusedField) { _ in
-                usernameValidation()
-                passwordValidation()
-            }
     }
     
     private var errorAlertBinding: Binding<Bool> {
@@ -194,11 +134,7 @@ struct UsernamePasswordLoginView<Header: View, Footer: View>: View {
     }
     
     private var loginButtonDisabled: Bool {
-        state == .processing
-            || username.isEmpty
-            || password.isEmpty
-            || !usernameValidationResults.isEmpty
-            || !passwordValidationResults.isEmpty
+        state == .processing || !valid
     }
     
     
@@ -236,28 +172,6 @@ struct UsernamePasswordLoginView<Header: View, Footer: View>: View {
             withAnimation(.easeIn(duration: 0.2)) {
                 state = .idle
             }
-        }
-    }
-    
-    private func usernameValidation() {
-        withAnimation(.easeInOut(duration: 0.2)) {
-            guard !username.isEmpty else {
-                usernameValidationResults = []
-                return
-            }
-            
-            usernameValidationResults = usernameValidationRules.compactMap { $0.validate(username) }
-        }
-    }
-    
-    private func passwordValidation() {
-        withAnimation(.easeInOut(duration: 0.2)) {
-            guard !password.isEmpty else {
-                passwordValidationResults = []
-                return
-            }
-            
-            passwordValidationResults = passwordValidationRules.compactMap { $0.validate(password) }
         }
     }
 }

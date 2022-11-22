@@ -41,6 +41,8 @@ struct NameTextFields: View {
                 Text("NAME_TEXT_FIELD_GIVEN_NAME", bundle: .module)
             } content: {
                 TextField(String(localized: "NAME_TEXT_FIELD_GIVEN_NAME_PLACEHOLDER", bundle: .module), text: givenNameBinding)
+                    .autocorrectionDisabled(true)
+                    .textInputAutocapitalization(.never)
                     .textContentType(.givenName)
             }
                 .onTapFocus(focusedField: _focusedField, fieldIdentifier: .givenName)
@@ -50,6 +52,8 @@ struct NameTextFields: View {
                 Text("NAME_TEXT_FIELD_FAMILY_NAME", bundle: .module)
             } content: {
                 TextField(String(localized: "NAME_TEXT_FIELD_FAMILY_NAME_PLACEHOLDER", bundle: .module), text: givenNameBinding)
+                    .autocorrectionDisabled(true)
+                    .textInputAutocapitalization(.never)
                     .textContentType(.familyName)
             }
                 .onTapFocus(focusedField: _focusedField, fieldIdentifier: .givenName)
