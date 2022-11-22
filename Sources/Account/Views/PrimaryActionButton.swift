@@ -1,13 +1,14 @@
 //
-//  SwiftUIView.swift
-//  
+// This source file is part of the CardinalKit open-source project
 //
-//  Created by Paul Shmiedmayer on 11/20/22.
+// SPDX-FileCopyrightText: 2022 CardinalKit and the project authors (see CONTRIBUTORS.md)
+//
+// SPDX-License-Identifier: MIT
 //
 
 import SwiftUI
 
-struct UsernamePasswordLoginServiceButton<Content: View>: View {
+struct PrimaryActionButton<Content: View>: View {
     private let content: Content
     
     
@@ -35,7 +36,7 @@ struct UsernamePasswordLoginServiceButton<Content: View>: View {
 
 struct UsernamePasswordLoginServiceButton_Previews: PreviewProvider {
     static var previews: some View {
-        UsernamePasswordLoginServiceButton() {
+        PrimaryActionButton() {
             Image(systemName: "ellipsis.rectangle")
                 .font(.title2)
             Text("LOGIN_UAP_BUTTON_TITLE", bundle: .module)

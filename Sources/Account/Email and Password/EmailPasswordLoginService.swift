@@ -28,7 +28,7 @@ class EmailPasswordLoginService: UsernamePasswordLoginService {
         AnyView(
             NavigationLink {
                 UsernamePasswordLoginView(
-                    viewLocalization: UsernamePasswordLoginViewLocalization(
+                    localization: UsernamePasswordLoginView.Localization(
                         usernameTitle: String(localized: "LOGIN_EAP_USERNAME_TITLE", bundle: .module),
                         usernamePlaceholder: String(localized: "LOGIN_EAP_USERNAME_PLACEHOLDER", bundle: .module)
                     ),
@@ -36,7 +36,7 @@ class EmailPasswordLoginService: UsernamePasswordLoginService {
                 )
                     .environmentObject(self as UsernamePasswordLoginService)
             } label: {
-                UsernamePasswordLoginServiceButton {
+                PrimaryActionButton {
                     Image(systemName: "envelope.fill")
                         .font(.title2)
                     Text("LOGIN_EAP_BUTTON_TITLE", bundle: .module)

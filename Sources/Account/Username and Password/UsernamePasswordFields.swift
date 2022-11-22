@@ -1,49 +1,22 @@
 //
-//  SwiftUIView.swift
-//  
+// This source file is part of the CardinalKit open-source project
 //
-//  Created by Paul Shmiedmayer on 11/21/22.
+// SPDX-FileCopyrightText: 2022 CardinalKit and the project authors (see CONTRIBUTORS.md)
+//
+// SPDX-License-Identifier: MIT
 //
 
 import SwiftUI
 
 
 struct UsernamePasswordFields: View {
-    public struct Localization {
-        public let usernameTitle: String
-        public let passwordTitle: String
-        public let usernamePlaceholder: String
-        public let passwordPlaceholder: String
-        
-        
-        public static let `default` = Localization(
-            usernameTitle: String(localized: "LOGIN_UAP_USERNAME_TITLE", bundle: .module),
-            passwordTitle: String(localized: "LOGIN_UAP_PASSWORD_TITLE", bundle: .module),
-            usernamePlaceholder: String(localized: "LOGIN_UAP_USERNAME_PLACEHOLDER", bundle: .module),
-            passwordPlaceholder: String(localized: "LOGIN_UAP_PASSWORD_PLACEHOLDER", bundle: .module)
-        )
-        
-        
-        public init(
-            usernameTitle: String = `default`.usernameTitle,
-            passwordTitle: String = `default`.passwordTitle,
-            usernamePlaceholder: String = `default`.usernamePlaceholder,
-            passwordPlaceholder: String = `default`.passwordPlaceholder
-        ) {
-            self.usernameTitle = usernameTitle
-            self.passwordTitle = passwordTitle
-            self.usernamePlaceholder = usernamePlaceholder
-            self.passwordPlaceholder = passwordPlaceholder
-        }
-    }
-    
     enum PresentationType: Hashable {
         case login
         case signUp
     }
     
     
-    private let viewLocalization: UsernamePasswordLoginViewLocalization
+    private let localization: Localization
     private let usernameValidationRules: [ValidationRule]
     private let passwordValidationRules: [ValidationRule]
     private let presentationType: PresentationType
@@ -56,8 +29,11 @@ struct UsernamePasswordFields: View {
     @Binding private var username: String
     @Binding private var password: String
     
+    @State private var passwordRepeat: String = ""
+    
     @State private var usernameValid: Bool = false
     @State private var passwordValid: Bool = false
+    @State private var passwordRepeatValid: Bool = false
     
     
     var body: some View {
@@ -67,10 +43,10 @@ struct UsernamePasswordFields: View {
                 valid: $usernameValid,
                 validationRules: usernameValidationRules
             ) {
-                Text(viewLocalization.usernameTitle)
+                Text(localization.usernameTitle)
             } textField: { binding in
                 TextField(text: binding) {
-                    Text(viewLocalization.usernamePlaceholder)
+                    Text(localization.usernamePlaceholder)
                 }
                     .autocorrectionDisabled(true)
                     .textInputAutocapitalization(.never)
@@ -84,16 +60,46 @@ struct UsernamePasswordFields: View {
                 valid: $passwordValid,
                 validationRules: passwordValidationRules
             ) {
-                Text(viewLocalization.passwordTitle)
+                Text(localization.passwordTitle)
             } textField: { binding in
-                TextField(text: binding) {
-                    Text(viewLocalization.passwordPlaceholder)
+                SecureField(text: binding) {
+                    Text(localization.passwordPlaceholder)
                 }
                     .autocorrectionDisabled(true)
                     .textInputAutocapitalization(.never)
-                    .textContentType(.password)
+                    .textContentType(presentationType == .login ? .password : .newPassword)
             }
                 .onTapFocus(focusedField: _focusedField, fieldIdentifier: .password)
+            if presentationType == .signUp {
+                Divider()
+                VerifyableTextFieldGridRow(
+                    text: $passwordRepeat,
+                    valid: $passwordRepeatValid,
+                    validationRules: passwordValidationRules
+                ) {
+                    Text(localization.passwordRepeatTitle)
+                } textField: { binding in
+                    VStack {
+                        SecureField(text: binding) {
+                            Text(localization.passwordRepeatPlaceholder)
+                        }
+                            .autocorrectionDisabled(true)
+                            .textInputAutocapitalization(.never)
+                            .textContentType(.newPassword)
+                        if password != passwordRepeat && !passwordRepeat.isEmpty {
+                            HStack {
+                                Text(localization.passwordRepeatNotEqual)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                    .gridColumnAlignment(.leading)
+                                    .font(.footnote)
+                                    .foregroundColor(.red)
+                                Spacer(minLength: 0)
+                            }
+                        }
+                    }
+                }
+                    .onTapFocus(focusedField: _focusedField, fieldIdentifier: .password)
+            }
         }
             .onChange(of: usernameValid) { _ in
                 updateValid()
@@ -109,7 +115,7 @@ struct UsernamePasswordFields: View {
         password: Binding<String>,
         valid: Binding<Bool>,
         focusState: FocusState<LoginAndSignUpFields?> = FocusState<LoginAndSignUpFields?>(),
-        viewLocalization: UsernamePasswordLoginViewLocalization = .default,
+        localization: Localization = .default,
         usernameValidationRules: [ValidationRule] = [],
         passwordValidationRules: [ValidationRule] = [],
         presentationType: PresentationType = .login
@@ -118,7 +124,7 @@ struct UsernamePasswordFields: View {
         self._password = password
         self._valid = valid
         self._focusedField = focusState
-        self.viewLocalization = viewLocalization
+        self.localization = localization
         self.usernameValidationRules = usernameValidationRules
         self.passwordValidationRules = passwordValidationRules
         self.presentationType = presentationType
@@ -126,7 +132,15 @@ struct UsernamePasswordFields: View {
     
     
     private func updateValid() {
-        valid = usernameValid && passwordValid
+        switch presentationType {
+        case .login:
+            valid = usernameValid && passwordValid
+        case .signUp:
+            valid = usernameValid
+                && passwordValid
+                && passwordRepeatValid
+                && password == passwordRepeat
+        }
     }
 }
 
@@ -153,14 +167,28 @@ struct UsernamePasswordFields_Previews: PreviewProvider {
     
     static var previews: some View {
         Form {
-            Grid(horizontalSpacing: 8, verticalSpacing: 8) {
-                UsernamePasswordFields(
-                    username: $username,
-                    password: $password,
-                    valid: $valid,
-                    usernameValidationRules: validationRules,
-                    passwordValidationRules: validationRules
-                )
+            Section {
+                Grid(horizontalSpacing: 8, verticalSpacing: 8) {
+                    UsernamePasswordFields(
+                        username: $username,
+                        password: $password,
+                        valid: $valid,
+                        usernameValidationRules: validationRules,
+                        passwordValidationRules: validationRules
+                    )
+                }
+            }
+            Section {
+                Grid(horizontalSpacing: 8, verticalSpacing: 8) {
+                    UsernamePasswordFields(
+                        username: $username,
+                        password: $password,
+                        valid: $valid,
+                        usernameValidationRules: validationRules,
+                        passwordValidationRules: validationRules,
+                        presentationType: .signUp
+                    )
+                }
             }
         }
     }

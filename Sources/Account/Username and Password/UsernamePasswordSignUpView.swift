@@ -1,8 +1,9 @@
 //
-//  SwiftUIView.swift
-//  
+// This source file is part of the CardinalKit open-source project
 //
-//  Created by Paul Shmiedmayer on 11/20/22.
+// SPDX-FileCopyrightText: 2022 CardinalKit and the project authors (see CONTRIBUTORS.md)
+//
+// SPDX-License-Identifier: MIT
 //
 
 import SwiftUI

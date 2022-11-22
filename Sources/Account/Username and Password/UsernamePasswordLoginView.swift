@@ -9,63 +9,12 @@
 import SwiftUI
 
 
-private enum UsernamePasswordLoginViewState: Equatable {
-    case idle
-    case processing
-    case error(Error)
-    
-    
-    var errorTitle: String {
-        switch self {
-        case let .error(error as LocalizedError):
-            return error.errorDescription
-                ?? String(localized: "LOGIN_UAP_DEFAULT_ERROR", bundle: .module)
-        default:
-            return String(localized: "LOGIN_UAP_DEFAULT_ERROR", bundle: .module)
-        }
-    }
-    
-    var errorDescription: String {
-        switch self {
-        case let .error(error as LocalizedError):
-            var errorDescription = ""
-            if let failureReason = error.failureReason {
-                errorDescription.append("\(failureReason)\n\n")
-            }
-            if let helpAnchor = error.helpAnchor {
-                errorDescription.append("\(helpAnchor)\n\n")
-            }
-            if let recoverySuggestion = error.recoverySuggestion {
-                errorDescription.append("\(recoverySuggestion)\n\n")
-            }
-            if errorDescription.isEmpty {
-                errorDescription = error.localizedDescription
-            }
-            return errorDescription
-        case let .error(error):
-            return error.localizedDescription
-        default:
-            return ""
-        }
-    }
-    
-    static func == (lhs: UsernamePasswordLoginViewState, rhs: UsernamePasswordLoginViewState) -> Bool {
-        switch (lhs, rhs) {
-        case (.idle, .idle), (.processing, .processing), (.error, .error):
-            return true
-        default:
-            return false
-        }
-    }
-}
-
-
-struct UsernamePasswordLoginView<Header: View, Footer: View>: View {
-    private let viewLocalization: UsernamePasswordLoginViewLocalization
+struct UsernamePasswordLoginView: View {
+    private let localization: Localization
     private let usernameValidationRules: [ValidationRule]
     private let passwordValidationRules: [ValidationRule]
-    private let header: Header
-    private let footer: Footer
+    private let header: AnyView
+    private let footer: AnyView
     
     @EnvironmentObject private var usernamePasswordLoginService: UsernamePasswordLoginService
     
@@ -73,7 +22,7 @@ struct UsernamePasswordLoginView<Header: View, Footer: View>: View {
     @State private var password: String = ""
     @State private var valid: Bool = false
     @FocusState private var focusedField: LoginAndSignUpFields?
-    @State private var state: UsernamePasswordLoginViewState = .idle
+    @State private var state: ViewState = .idle
     
     
     var body: some View {
@@ -86,17 +35,17 @@ struct UsernamePasswordLoginView<Header: View, Footer: View>: View {
                     password: $password,
                     valid: $valid,
                     focusState: _focusedField,
-                    viewLocalization: viewLocalization,
+                    localization: localization.usernamePasswordFieldsLocalization,
                     usernameValidationRules: usernameValidationRules,
                     passwordValidationRules: passwordValidationRules,
-                    presentationType: .login
+                    presentationType: .signUp
                 )
             }
                 .padding(.leading, 16)
                 .padding(.vertical, 12)
             Divider()
             Button(action: loginButtonPressed) {
-                Text(viewLocalization.loginButtonTitle)
+                Text(localization.loginButtonTitle)
                     .padding(6)
                     .frame(maxWidth: .infinity)
                     .opacity(state == .processing ? 0.0 : 1.0)
@@ -111,7 +60,7 @@ struct UsernamePasswordLoginView<Header: View, Footer: View>: View {
                 .padding()
             footer
         }
-            .navigationTitle(viewLocalization.navigationTitle)
+            .navigationTitle(localization.navigationTitle)
             .navigationBarBackButtonHidden(state == .processing)
             .alert(state.errorTitle, isPresented: errorAlertBinding) {
                 Text(state.errorDescription)
@@ -138,18 +87,18 @@ struct UsernamePasswordLoginView<Header: View, Footer: View>: View {
     }
     
     
-    init(
-        viewLocalization: UsernamePasswordLoginViewLocalization = .default,
+    init<Header: View, Footer: View>(
+        localization: Localization = .default,
         usernameValidationRules: [ValidationRule] = [],
         passwordValidationRules: [ValidationRule] = [],
         @ViewBuilder header: () -> Header = { EmptyView() },
         @ViewBuilder footer: () -> Footer = { EmptyView() }
     ) {
-        self.viewLocalization = viewLocalization
+        self.localization = localization
         self.usernameValidationRules = usernameValidationRules
         self.passwordValidationRules = passwordValidationRules
-        self.header = header()
-        self.footer = footer()
+        self.header = AnyView(header())
+        self.footer = AnyView(footer())
     }
     
     
