@@ -8,134 +8,28 @@
 import SwiftUI
 
 
-struct VerifyableTextGridRow<FocusedField: Hashable>: View {
-    private let title: String
-    private let placeholder: String
-    private let fieldIdentifier: FocusedField
-    private let validationRules: [ValidationRule]
-    
-    
-    @Binding private var text: String
-    @FocusState private var focusedField: FocusedField?
-    @Binding private var valid: Bool
-    
-    @State private var validationResults: [String] = []
-    
-    
-    var body: some View {
-        DescriptionGridRow {
-            Text(title)
-        } content: {
-            VStack(spacing: 0) {
-                TextField(placeholder, text: $text)
-                    .focused($focusedField, equals: fieldIdentifier)
-                    .textInputAutocapitalization(.never)
-                    .autocorrectionDisabled(true)
-                    .frame(maxWidth: .infinity)
-                    .onSubmit {
-                        validation()
-                    }
-                HStack {
-                    VStack(alignment: .leading) {
-                        ForEach(validationResults, id: \.self) { message in
-                            Text(message)
-                                .fixedSize(horizontal: false, vertical: true)
-                        }
-                    }
-                        .gridColumnAlignment(.leading)
-                        .font(.footnote)
-                        .foregroundColor(.red)
-                    Spacer(minLength: 0)
-                }
-            }
-        }
-            .onTapGesture {
-                focusedField = fieldIdentifier
-            }
-            .onChange(of: focusedField) { _ in
-                validation()
-            }
-        
-    }
-    
-    
-    init(
-        text: Binding<String>,
-        focusedField: FocusState<FocusedField?>,
-        valid: Binding<Bool>,
-        title: String,
-        placeholder: String,
-        fieldIdentifier: FocusedField,
-        validationRules: [ValidationRule] = []
-    ) {
-        self._text = text
-        self._focusedField = focusedField
-        self._valid = valid
-        self.title = title
-        self.placeholder = placeholder
-        self.fieldIdentifier = fieldIdentifier
-        self.validationRules = validationRules
-    }
-    
-    init(
-        text: Binding<String>,
-        valid: Binding<Bool>,
-        title: String,
-        placeholder: String,
-        validationRules: [ValidationRule] = []
-    ) where FocusedField == UUID {
-        self._text = text
-        self._focusedField = FocusState<FocusedField?>()
-        self._valid = valid
-        self.title = title
-        self.placeholder = placeholder
-        self.fieldIdentifier = UUID()
-        self.validationRules = validationRules
-    }
-    
-    
-    private func validation() {
-        withAnimation(.easeInOut(duration: 0.2)) {
-            defer {
-                updateValid()
-            }
-            
-            guard !text.isEmpty else {
-                validationResults = []
-                return
-            }
-            
-            validationResults = validationRules.compactMap { $0.validate(text) }
-        }
-    }
-    
-    private func updateValid() {
-        valid = text.isEmpty || !validationResults.isEmpty
-    }
-}
-
-struct VerifyableTextFieldTextFieldGridRow<FocusedField: Hashable, Description: View, TextField: View>: View {
+struct VerifyableTextFieldGridRow<Description: View, TextField: View>: View {
     private let description: Description
     private let textField: TextField
-    private let fieldIdentifier: FocusedField
     private let validationRules: [ValidationRule]
     
     @Binding private var text: String
-    @FocusState private var focusedField: FocusedField?
     @Binding private var valid: Bool
     
+    @State private var debounceTask: Task<Void, Never>? {
+        willSet {
+            self.debounceTask?.cancel()
+        }
+    }
     @State private var validationResults: [String] = []
     
     
     var body: some View {
         DescriptionGridRow {
             description
-                .fixedSize(horizontal: false, vertical: true)
         } content: {
             VStack {
                 textField
-                    .focused($focusedField, equals: fieldIdentifier)
-                    .frame(maxWidth: .infinity)
                     .onSubmit {
                         validation()
                     }
@@ -153,29 +47,22 @@ struct VerifyableTextFieldTextFieldGridRow<FocusedField: Hashable, Description: 
                 }
             }
         }
-            .onTapGesture {
-                focusedField = fieldIdentifier
-            }
-            .onChange(of: focusedField) { _ in
+            .onChange(of: text) { _ in
                 validation()
             }
-        
+            .onTapFocus()
     }
     
     
     init(
         text: Binding<String>,
-        focusedField: FocusState<FocusedField?>,
         valid: Binding<Bool>,
-        fieldIdentifier: FocusedField,
         validationRules: [ValidationRule] = [],
         @ViewBuilder description: () -> Description,
         @ViewBuilder textField: (Binding<String>) -> TextField
     ) {
         self._text = text
-        self._focusedField = focusedField
         self._valid = valid
-        self.fieldIdentifier = fieldIdentifier
         self.validationRules = validationRules
         self.description = description()
         self.textField = textField(text)
@@ -185,31 +72,12 @@ struct VerifyableTextFieldTextFieldGridRow<FocusedField: Hashable, Description: 
         text: Binding<String>,
         valid: Binding<Bool>,
         validationRules: [ValidationRule] = [],
-        @ViewBuilder description: () -> Description,
-        @ViewBuilder textField: (Binding<String>) -> TextField
-    ) where FocusedField == UUID {
-        self.init(
-            text: text,
-            focusedField: FocusState<FocusedField?>(),
-            valid: valid,
-            fieldIdentifier: UUID(),
-            description: description,
-            textField: textField
-        )
-    }
-    
-    init(
-        text: Binding<String>,
-        valid: Binding<Bool>,
-        validationRules: [ValidationRule] = [],
         description: String,
         @ViewBuilder textField: (Binding<String>) -> TextField
-    ) where FocusedField == UUID, Description == Text {
+    ) where Description == Text {
         self.init(
             text: text,
-            focusedField: FocusState<FocusedField?>(),
             valid: valid,
-            fieldIdentifier: UUID(),
             description: { Text(description) },
             textField: textField
         )
@@ -217,17 +85,28 @@ struct VerifyableTextFieldTextFieldGridRow<FocusedField: Hashable, Description: 
     
     
     private func validation() {
-        withAnimation(.easeInOut(duration: 0.2)) {
-            defer {
-                updateValid()
-            }
+        debounceTask = Task {
+            // Wait 0.5 seconds until you start the validation.
+            try? await Task.sleep(for: .seconds(0.5))
             
-            guard !text.isEmpty else {
-                validationResults = []
+            guard !Task.isCancelled else {
                 return
             }
             
-            validationResults = validationRules.compactMap { $0.validate(text) }
+            SwiftUI.withAnimation(.easeInOut(duration: 0.2)) {
+                defer {
+                    updateValid()
+                }
+                
+                guard !text.isEmpty else {
+                    validationResults = []
+                    return
+                }
+                
+                validationResults = validationRules.compactMap { $0.validate(text) }
+            }
+            
+            self.debounceTask = nil
         }
     }
     
@@ -280,7 +159,7 @@ struct VerifyableTextGridRow_Previews: PreviewProvider {
         VStack {
             Form {
                 Grid(horizontalSpacing: 8, verticalSpacing: 8) {
-                    VerifyableTextFieldTextFieldGridRow(
+                    VerifyableTextFieldGridRow(
                         text: $text,
                         valid: $valid
                     ) {
@@ -290,8 +169,9 @@ struct VerifyableTextGridRow_Previews: PreviewProvider {
                             Text("Placeholder ...")
                         }
                     }
+                        .onTapFocus()
                     Divider()
-                    VerifyableTextFieldTextFieldGridRow(
+                    VerifyableTextFieldGridRow(
                         text: $text,
                         valid: $valid,
                         description: "Secure Text"
@@ -300,14 +180,13 @@ struct VerifyableTextGridRow_Previews: PreviewProvider {
                             Text("Secure Placeholder ...")
                         }
                     }
+                        .onTapFocus()
                 }
             }
             Grid(horizontalSpacing: 8, verticalSpacing: 8) {
-                VerifyableTextFieldTextFieldGridRow(
+                VerifyableTextFieldGridRow(
                     text: $text,
-                    focusedField: _focusedField,
-                    valid: $valid,
-                    fieldIdentifier: .first
+                    valid: $valid
                 ) {
                     Text("Text")
                 } textField: { binding in
@@ -315,12 +194,11 @@ struct VerifyableTextGridRow_Previews: PreviewProvider {
                         Text("Placeholder ...")
                     }
                 }
+                    .onTapFocus(focusedField: _focusedField, fieldIdentifier: .first)
                 Divider()
-                VerifyableTextFieldTextFieldGridRow(
+                VerifyableTextFieldGridRow(
                     text: $text,
-                    focusedField: _focusedField,
-                    valid: $valid,
-                    fieldIdentifier: .second
+                    valid: $valid
                 ) {
                     Text("Text")
                 } textField: { binding in
@@ -328,6 +206,7 @@ struct VerifyableTextGridRow_Previews: PreviewProvider {
                         Text("Secure Placeholder ...")
                     }
                 }
+                    .onTapFocus(focusedField: _focusedField, fieldIdentifier: .first)
             }
                 .padding(32)
         }

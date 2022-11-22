@@ -37,22 +37,22 @@ struct NameTextFields: View {
     
     var body: some View {
         Grid {
-            TextGridRow(
-                text: givenNameBinding,
-                focusedField: _focusedField,
-                title: "NAME_TEXT_FIELD_GIVEN_NAME",
-                placeholder: "NAME_TEXT_FIELD_GIVEN_NAME_PLACEHOLDER",
-                fieldIdentifier: .givenName
-            )
+            DescriptionGridRow {
+                Text("NAME_TEXT_FIELD_GIVEN_NAME", bundle: .module)
+            } content: {
+                TextField(String(localized: "NAME_TEXT_FIELD_GIVEN_NAME_PLACEHOLDER", bundle: .module), text: givenNameBinding)
+                    .textContentType(.givenName)
+            }
+                .onTapFocus(focusedField: _focusedField, fieldIdentifier: .givenName)
             Divider()
                 .gridCellUnsizedAxes(.horizontal)
-            TextGridRow(
-                text: familyNameBinding,
-                focusedField: _focusedField,
-                title: "NAME_TEXT_FIELD_FAMILY_NAME",
-                placeholder: "NAME_TEXT_FIELD_FAMILY_NAME_PLACEHOLDER",
-                fieldIdentifier: .familyName
-            )
+            DescriptionGridRow {
+                Text("NAME_TEXT_FIELD_FAMILY_NAME", bundle: .module)
+            } content: {
+                TextField(String(localized: "NAME_TEXT_FIELD_FAMILY_NAME_PLACEHOLDER", bundle: .module), text: givenNameBinding)
+                    .textContentType(.familyName)
+            }
+                .onTapFocus(focusedField: _focusedField, fieldIdentifier: .givenName)
         }
     }
     
