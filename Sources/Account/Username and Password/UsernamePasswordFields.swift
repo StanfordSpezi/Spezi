@@ -98,7 +98,7 @@ struct UsernamePasswordFields: View {
                         }
                     }
                 }
-                    .onTapFocus(focusedField: _focusedField, fieldIdentifier: .password)
+                    .onTapFocus(focusedField: _focusedField, fieldIdentifier: .passwordRepeat)
             }
         }
             .onChange(of: usernameValid) { _ in
