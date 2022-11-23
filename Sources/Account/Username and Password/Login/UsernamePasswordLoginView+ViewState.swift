@@ -9,54 +9,52 @@
 import Foundation
 
 
-extension UsernamePasswordLoginView {
-    enum ViewState: Equatable {
-        case idle
-        case processing
-        case error(Error)
-        
-        
-        var errorTitle: String {
-            switch self {
-            case let .error(error as LocalizedError):
-                return error.errorDescription
-                ?? String(localized: "LOGIN_UAP_DEFAULT_ERROR", bundle: .module)
-            default:
-                return String(localized: "LOGIN_UAP_DEFAULT_ERROR", bundle: .module)
-            }
+enum AccountViewState: Equatable {
+    case idle
+    case processing
+    case error(Error)
+    
+    
+    var errorTitle: String {
+        switch self {
+        case let .error(error as LocalizedError):
+            return error.errorDescription
+            ?? String(localized: "LOGIN_UAP_DEFAULT_ERROR", bundle: .module)
+        default:
+            return String(localized: "LOGIN_UAP_DEFAULT_ERROR", bundle: .module)
         }
-        
-        var errorDescription: String {
-            switch self {
-            case let .error(error as LocalizedError):
-                var errorDescription = ""
-                if let failureReason = error.failureReason {
-                    errorDescription.append("\(failureReason)\n\n")
-                }
-                if let helpAnchor = error.helpAnchor {
-                    errorDescription.append("\(helpAnchor)\n\n")
-                }
-                if let recoverySuggestion = error.recoverySuggestion {
-                    errorDescription.append("\(recoverySuggestion)\n\n")
-                }
-                if errorDescription.isEmpty {
-                    errorDescription = error.localizedDescription
-                }
-                return errorDescription
-            case let .error(error):
-                return error.localizedDescription
-            default:
-                return ""
+    }
+    
+    var errorDescription: String {
+        switch self {
+        case let .error(error as LocalizedError):
+            var errorDescription = ""
+            if let failureReason = error.failureReason {
+                errorDescription.append("\(failureReason)\n\n")
             }
+            if let helpAnchor = error.helpAnchor {
+                errorDescription.append("\(helpAnchor)\n\n")
+            }
+            if let recoverySuggestion = error.recoverySuggestion {
+                errorDescription.append("\(recoverySuggestion)\n\n")
+            }
+            if errorDescription.isEmpty {
+                errorDescription = error.localizedDescription
+            }
+            return errorDescription
+        case let .error(error):
+            return error.localizedDescription
+        default:
+            return ""
         }
-        
-        static func == (lhs: ViewState, rhs: ViewState) -> Bool {
-            switch (lhs, rhs) {
-            case (.idle, .idle), (.processing, .processing), (.error, .error):
-                return true
-            default:
-                return false
-            }
+    }
+    
+    static func == (lhs: AccountViewState, rhs: AccountViewState) -> Bool {
+        switch (lhs, rhs) {
+        case (.idle, .idle), (.processing, .processing), (.error, .error):
+            return true
+        default:
+            return false
         }
     }
 }

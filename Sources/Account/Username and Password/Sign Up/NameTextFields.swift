@@ -9,14 +9,8 @@
 import SwiftUI
 
 struct NameTextFields: View {
-    private enum Field: Hashable {
-        case givenName
-        case familyName
-    }
-    
-    
     @Binding private var name: PersonNameComponents
-    @FocusState private var focusedField: Field?
+    @FocusState private var focusedField: LoginAndSignUpFields?
     
     
     private var givenNameBinding: Binding<String> {
@@ -57,13 +51,17 @@ struct NameTextFields: View {
                     .textInputAutocapitalization(.never)
                     .textContentType(.familyName)
             }
-                .onTapFocus(focusedField: _focusedField, fieldIdentifier: .givenName)
+                .onTapFocus(focusedField: _focusedField, fieldIdentifier: .familyName)
         }
     }
     
     
-    init(name: Binding<PersonNameComponents>) {
+    init(
+        name: Binding<PersonNameComponents>,
+        focusState: FocusState<LoginAndSignUpFields?> = FocusState<LoginAndSignUpFields?>()
+    ) {
         self._name = name
+        self._focusedField = focusState
     }
 }
 

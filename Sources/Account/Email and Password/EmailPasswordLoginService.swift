@@ -36,7 +36,7 @@ class EmailPasswordLoginService: UsernamePasswordLoginService {
                 )
                     .environmentObject(self as UsernamePasswordLoginService)
             } label: {
-                PrimaryActionButton {
+                AccountServiceButton {
                     Image(systemName: "envelope.fill")
                         .font(.title2)
                     Text("LOGIN_EAP_BUTTON_TITLE", bundle: .module)

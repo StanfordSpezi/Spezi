@@ -22,7 +22,7 @@ struct UsernamePasswordLoginView: View {
     @State private var password: String = ""
     @State private var valid: Bool = false
     @FocusState private var focusedField: LoginAndSignUpFields?
-    @State private var state: ViewState = .idle
+    @State private var state: AccountViewState = .idle
     
     
     var body: some View {
@@ -38,7 +38,7 @@ struct UsernamePasswordLoginView: View {
                     localization: localization.usernamePasswordFieldsLocalization,
                     usernameValidationRules: usernameValidationRules,
                     passwordValidationRules: passwordValidationRules,
-                    presentationType: .signUp
+                    presentationType: .login
                 )
             }
                 .padding(.leading, 16)

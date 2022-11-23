@@ -17,7 +17,6 @@ struct SignUpOptions: OptionSet {
     static let name = SignUpOptions(rawValue: 1 << 1)
     static let genderIdentity = SignUpOptions(rawValue: 1 << 2)
     static let dateOfBirth = SignUpOptions(rawValue: 1 << 3)
-    static let phoneNumber = SignUpOptions(rawValue: 1 << 4)
     
-    static let `default`: SignUpOptions = [.usernameAndPassword, .name]
+    static let `default`: SignUpOptions = [.usernameAndPassword, .name, .genderIdentity, .dateOfBirth]
 }

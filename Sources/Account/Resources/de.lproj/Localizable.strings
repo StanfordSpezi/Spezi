@@ -13,10 +13,14 @@
 "LOGIN_UAP_NAVIGATION_TITLE" = "Anmelden";
 "LOGIN_UAP_USERNAME_TITLE" = "Benutzername";
 "LOGIN_UAP_PASSWORD_TITLE" = "Passwort";
+"LOGIN_UAP_PASSWORD_REPEAT_TITLE" = "Passwort
+Wiederholen";
 "LOGIN_UAP_USERNAME_PLACEHOLDER" = "Benutzername eingeben ...";
 "LOGIN_UAP_PASSWORD_PLACEHOLDER" = "Passwort eingeben ...";
+"LOGIN_UAP_PASSWORD_REPEAT_PLACEHOLDER" = "Passwort wiederholen ...";
 "LOGIN_UAP_LOGIN_BUTTON_TITLE" = "Anmelden";
 "LOGIN_UAP_DEFAULT_ERROR" = "Anmelden Fehlgeschlagen";
+"LOGIN_UAP_PASSWORD_REPEAT_NOT_EQUAL" = "Die eingegebenen Passwörter sind nicht gleich.";
 
 
 // Email Password Login View
@@ -24,3 +28,11 @@
 "LOGIN_EAP_USERNAME_TITLE" = "E-Mail";
 "LOGIN_EAP_USERNAME_PLACEHOLDER" = "E-Mail eingeben ...";
 "LOGIN_EAP_EMAIL_VERIFICATION_ERROR" = "Die eingegebene E-Mail ist nicht korrekt.";
+
+
+// Gender Identity
+"GENDER_IDENTITY_FEMALE" = "Weiblich";
+"GENDER_IDENTITY_MALE" = "Männlich";
+"GENDER_IDENTITY_TRANSGENDER" = "Transgender";
+"GENDER_IDENTITY_NON_BINARY" = "Nicht-binär";
+"GENDER_IDENTITY_PREFER_NOT_TO_STATE" = "Keine Angabe";

@@ -15,54 +15,138 @@ struct UsernamePasswordSignUpView: View {
     }
     
     
-    let signUpOptions: SignUpOptions
-    @State var username: String = ""
+    private let usernameValidationRules: [ValidationRule]
+    private let passwordValidationRules: [ValidationRule]
+    private let header: AnyView
+    private let footer: AnyView
+    private let signUpOptions: SignUpOptions
+    
+    @EnvironmentObject private var usernamePasswordLoginService: UsernamePasswordLoginService
+    
+    @State private var username = ""
+    @State private var password = ""
+    @State private var name = PersonNameComponents()
+    @State private var dateOfBirth = Date()
+    @State private var genderIdentity: GenderIdentity = .preferNotToState
+    @State private var state: AccountViewState = .idle
+    
+    @State private var valid: Bool = false
+    @FocusState private var focusedField: LoginAndSignUpFields?
     
     
     var body: some View {
         Form {
-            Section {
-                Grid(alignment: .leading) {
-                    GridRow {
-                        Text("USERNAME", bundle: .module)
-                            .fontWeight(.semibold)
-                        TextField(String(localized: "USERNAME", bundle: .module), text: $username)
+            header
+            if signUpOptions.contains(.usernameAndPassword) {
+                Section {
+                    Grid(alignment: .leading) {
+                        UsernamePasswordFields(
+                            username: $username,
+                            password: $password,
+                            valid: $valid,
+                            focusState: _focusedField,
+                            localization: .default,
+                            usernameValidationRules: usernameValidationRules,
+                            passwordValidationRules: passwordValidationRules,
+                            presentationType: .signUp
+                        )
                     }
-                        .padding(.top, -11 + Constants.formVerticalPadding)
-                        .padding(.bottom, Constants.formVerticalPadding)
-                    Divider()
-                    GridRow {
-                        Text("PASSWORD", bundle: .module)
-                            .fontWeight(.semibold)
-                        TextField(String(localized: "PASSWORD", bundle: .module), text: $username)
-                    }
-                        .padding(.vertical, Constants.formVerticalPadding)
-                    Divider()
-                    GridRow {
-                        Text("CONFIRM_PASSWORD", bundle: .module)
-                            .fontWeight(.semibold)
-                        TextField(String(localized: "CONFIRM_PASSWORD", bundle: .module), text: $username)
-                    }
-                        .padding(.top, Constants.formVerticalPadding)
-                        .padding(.bottom, -11 + Constants.formVerticalPadding)
+                } header: {
+                    Text("SU_USERNAME_AND_PASSWORD_SECTION", bundle: .module)
                 }
-            } header: {
-                Text("USERNAME_AND_PASSWORD_SECTION", bundle: .module)
             }
-            Section {
-                Text("")
+            if signUpOptions.contains(.name) {
+                Section {
+                    NameTextFields(name: $name, focusState: _focusedField)
+                } header: {
+                    Text("SU_NAME_SECTION", bundle: .module)
+                }
             }
+            if signUpOptions.contains(.dateOfBirth) {
+                Section {
+                    DateOfBirthPicker(date: $dateOfBirth)
+                } header: {
+                    Text("SU_DATE_OF_BIRTH_SECTION", bundle: .module)
+                }
+            }
+            if signUpOptions.contains(.genderIdentity) {
+                Section {
+                    GenderIdentityPicker(genderIdentity: $genderIdentity)
+                } header: {
+                    Text("SU_GENDER_IDENTIFY_SECTION", bundle: .module)
+                }
+            }
+            Button(action: signUpButtonPressed) {
+                Text("SU_BUTTON_TITLE")
+                    .padding(6)
+                    .frame(maxWidth: .infinity)
+                    .opacity(state == .processing ? 0.0 : 1.0)
+                    .overlay {
+                        if state == .processing {
+                            ProgressView()
+                                .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                        }
+                    }
+            }
+                .buttonStyle(.borderedProminent)
+                //.disabled(signUpButtonDisabled)
+                .padding()
+                .padding(-34)
+                .listRowBackground(Color.clear)
+            footer
         }
+            .navigationTitle("SU_NAVIGATION_TITLE")
     }
     
     
-    init(signUpOptions: SignUpOptions = .default) {
+    private var signUpButtonDisabled: Bool {
+        state == .processing || !valid
+    }
+    
+    
+    init<Header: View, Footer: View>(
+        signUpOptions: SignUpOptions = .default,
+        usernameValidationRules: [ValidationRule] = [],
+        passwordValidationRules: [ValidationRule] = [],
+        @ViewBuilder header: () -> Header = { EmptyView() },
+        @ViewBuilder footer: () -> Footer = { EmptyView() }
+    ) {
         self.signUpOptions = signUpOptions
+        self.usernameValidationRules = usernameValidationRules
+        self.passwordValidationRules = passwordValidationRules
+        self.header = AnyView(header())
+        self.footer = AnyView(footer())
+    }
+    
+    
+    private func signUpButtonPressed() {
+        guard !(state == .processing) else {
+            return
+        }
+        
+        withAnimation(.easeOut(duration: 0.2)) {
+            focusedField = .none
+            state = .processing
+        }
+        
+        Task {
+            do {
+                try await usernamePasswordLoginService.login(username: username, password: password)
+            } catch {
+                state = .error(error)
+            }
+            withAnimation(.easeIn(duration: 0.2)) {
+                state = .idle
+            }
+        }
     }
 }
 
 struct UsernamePasswordSignUpView_Previews: PreviewProvider {
     static var previews: some View {
-        UsernamePasswordSignUpView()
+        NavigationStack {
+            UsernamePasswordSignUpView()
+                .environmentObject(UsernamePasswordLoginService(account: Account()))
+        }
     }
 }

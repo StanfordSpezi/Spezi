@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct PrimaryActionButton<Content: View>: View {
+struct AccountServiceButton<Content: View>: View {
     private let content: Content
     
     
@@ -36,7 +36,7 @@ struct PrimaryActionButton<Content: View>: View {
 
 struct UsernamePasswordLoginServiceButton_Previews: PreviewProvider {
     static var previews: some View {
-        PrimaryActionButton() {
+        AccountServiceButton() {
             Image(systemName: "ellipsis.rectangle")
                 .font(.title2)
             Text("LOGIN_UAP_BUTTON_TITLE", bundle: .module)

@@ -11,9 +11,24 @@ import SwiftUI
 
 struct GenderIdentityPicker: View {
     @Binding private var genderIdentity: GenderIdentity
-    
+    @FocusState private var focusedField: LoginAndSignUpFields?
     
     var body: some View {
+//        Menu {
+//            ForEach(GenderIdentity.allCases) { genderIdentity in
+//                Button(genderIdentity.localizedDescription) {
+//                    self.genderIdentity = genderIdentity
+//                }
+//            }
+//        } label: {
+//            HStack {
+//                Text(genderIdentity.localizedDescription)
+//                Image(systemName: "chevron.up.chevron.down")
+//                    .font(.footnote)
+//            }
+//                .foregroundColor(.secondary)
+//        }
+//        .contentShape(Rectangle())
         Picker(selection: $genderIdentity) {
             ForEach(GenderIdentity.allCases) { genderIdentity in
                 Text(genderIdentity.localizedDescription)

@@ -20,7 +20,7 @@ class UsernamePasswordLoginService: AccountService, ObservableObject {
                 UsernamePasswordLoginView()
                     .environmentObject(self as UsernamePasswordLoginService)
             } label: {
-                PrimaryActionButton {
+                AccountServiceButton {
                     Image(systemName: "ellipsis.rectangle")
                         .font(.title2)
                     Text("LOGIN_UAP_BUTTON_TITLE", bundle: .module)

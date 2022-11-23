@@ -13,10 +13,14 @@
 "LOGIN_UAP_NAVIGATION_TITLE" = "Login";
 "LOGIN_UAP_USERNAME_TITLE" = "Username";
 "LOGIN_UAP_PASSWORD_TITLE" = "Password";
+"LOGIN_UAP_PASSWORD_REPEAT_TITLE" = "Repeat
+Password";
 "LOGIN_UAP_USERNAME_PLACEHOLDER" = "Enter your username ...";
 "LOGIN_UAP_PASSWORD_PLACEHOLDER" = "Enter your password ...";
+"LOGIN_UAP_PASSWORD_REPEAT_PLACEHOLDER" = "Reenter your password ...";
 "LOGIN_UAP_LOGIN_BUTTON_TITLE" = "Login";
 "LOGIN_UAP_DEFAULT_ERROR" = "Login Failed";
+"LOGIN_UAP_PASSWORD_REPEAT_NOT_EQUAL" = "The entered passwords are not equal.";
 
 
 // Email Password Login View
