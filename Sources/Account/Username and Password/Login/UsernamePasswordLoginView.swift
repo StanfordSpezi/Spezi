@@ -10,7 +10,6 @@ import SwiftUI
 
 
 struct UsernamePasswordLoginView: View {
-    private let localization: Localization
     private let usernameValidationRules: [ValidationRule]
     private let passwordValidationRules: [ValidationRule]
     private let header: AnyView
@@ -24,28 +23,67 @@ struct UsernamePasswordLoginView: View {
     @FocusState private var focusedField: LoginAndSignUpFields?
     @State private var state: AccountViewState = .idle
     
+    private let localization: ConfigurableLocalization<Localization.Login>
+    
+    
+    private var loginButtonTitle: String {
+        switch localization {
+        case .environment:
+            return usernamePasswordLoginService.localization.login.buttonTitle
+        case let .value(login):
+            return login.buttonTitle
+        }
+    }
+    
+    private var navigationTitle: String {
+        switch localization {
+        case .environment:
+            return usernamePasswordLoginService.localization.login.navigationTitle
+        case let .value(login):
+            return login.navigationTitle
+        }
+    }
     
     var body: some View {
         ScrollView {
             header
             Divider()
             Grid(horizontalSpacing: 16, verticalSpacing: 16) {
-                UsernamePasswordFields(
-                    username: $username,
-                    password: $password,
-                    valid: $valid,
-                    focusState: _focusedField,
-                    localization: localization.usernamePasswordFieldsLocalization,
-                    usernameValidationRules: usernameValidationRules,
-                    passwordValidationRules: passwordValidationRules,
-                    presentationType: .login
-                )
+                switch localization {
+                case .environment:
+                    UsernamePasswordFields(
+                        username: $username,
+                        password: $password,
+                        valid: $valid,
+                        focusState: _focusedField,
+                        usernameValidationRules: usernameValidationRules,
+                        passwordValidationRules: passwordValidationRules,
+                        presentationType: .login(.environment)
+                    )
+                case let .value(login):
+                    UsernamePasswordFields(
+                        username: $username,
+                        password: $password,
+                        valid: $valid,
+                        focusState: _focusedField,
+                        usernameValidationRules: usernameValidationRules,
+                        passwordValidationRules: passwordValidationRules,
+                        presentationType: .login(
+                            .value(
+                                (
+                                    login.username,
+                                    login.password
+                                )
+                            )
+                        )
+                    )
+                }
             }
                 .padding(.leading, 16)
                 .padding(.vertical, 12)
             Divider()
             Button(action: loginButtonPressed) {
-                Text(localization.loginButtonTitle)
+                Text(loginButtonTitle)
                     .padding(6)
                     .frame(maxWidth: .infinity)
                     .opacity(state == .processing ? 0.0 : 1.0)
@@ -60,7 +98,7 @@ struct UsernamePasswordLoginView: View {
                 .padding()
             footer
         }
-            .navigationTitle(localization.navigationTitle)
+            .navigationTitle(navigationTitle)
             .navigationBarBackButtonHidden(state == .processing)
             .alert(state.errorTitle, isPresented: errorAlertBinding) {
                 Text(state.errorDescription)
@@ -88,17 +126,17 @@ struct UsernamePasswordLoginView: View {
     
     
     init<Header: View, Footer: View>(
-        localization: Localization = .default,
         usernameValidationRules: [ValidationRule] = [],
         passwordValidationRules: [ValidationRule] = [],
         @ViewBuilder header: () -> Header = { EmptyView() },
-        @ViewBuilder footer: () -> Footer = { EmptyView() }
+        @ViewBuilder footer: () -> Footer = { EmptyView() },
+        localization: ConfigurableLocalization<Localization.Login> = .environment
     ) {
-        self.localization = localization
         self.usernameValidationRules = usernameValidationRules
         self.passwordValidationRules = passwordValidationRules
         self.header = AnyView(header())
         self.footer = AnyView(footer())
+        self.localization = localization
     }
     
     

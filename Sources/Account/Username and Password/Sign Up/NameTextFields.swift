@@ -8,9 +8,34 @@
 
 import SwiftUI
 
+
 struct NameTextFields: View {
     @Binding private var name: PersonNameComponents
     @FocusState private var focusedField: LoginAndSignUpFields?
+    @EnvironmentObject var localizationEnvironmentObject: UsernamePasswordLoginService
+    private let localization: ConfigurableLocalization<(
+        givenName: Localization.Field,
+        familyName: Localization.Field
+    )>
+    
+    
+    private var givenName: Localization.Field {
+        switch localization {
+        case .environment:
+            return localizationEnvironmentObject.localization.signUp.givenName
+        case let .value((givenName, _)):
+            return givenName
+        }
+    }
+    
+    private var familyName: Localization.Field {
+        switch localization {
+        case .environment:
+            return localizationEnvironmentObject.localization.signUp.familyName
+        case let .value((_, familyName)):
+            return familyName
+        }
+    }
     
     
     private var givenNameBinding: Binding<String> {
@@ -58,10 +83,23 @@ struct NameTextFields: View {
     
     init(
         name: Binding<PersonNameComponents>,
+        focusState: FocusState<LoginAndSignUpFields?> = FocusState<LoginAndSignUpFields?>(),
+        givenName: Localization.Field,
+        familyName: Localization.Field
+    ) {
+        self._name = name
+        self._focusedField = focusState
+        self.localization = .value((givenName, familyName))
+    }
+    
+    
+    init(
+        name: Binding<PersonNameComponents>,
         focusState: FocusState<LoginAndSignUpFields?> = FocusState<LoginAndSignUpFields?>()
     ) {
         self._name = name
         self._focusedField = focusState
+        self.localization = .environment
     }
 }
 
@@ -79,6 +117,7 @@ struct NameTextFields_Previews: PreviewProvider {
             NameTextFields(name: $name)
                 .padding(32)
         }
-        .background(Color(.systemGroupedBackground))
+            .environmentObject(UsernamePasswordLoginService(account: Account()))
+            .background(Color(.systemGroupedBackground))
     }
 }

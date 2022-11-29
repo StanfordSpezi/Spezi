@@ -30,8 +30,10 @@ struct UsernamePasswordSignUpView: View {
     @State private var genderIdentity: GenderIdentity = .preferNotToState
     @State private var state: AccountViewState = .idle
     
-    @State private var valid: Bool = false
+    @State private var usernamePasswordValid: Bool = false
     @FocusState private var focusedField: LoginAndSignUpFields?
+    
+    private let localization: ConfigurableLocalization<Localization.SignUp>
     
     
     var body: some View {
@@ -40,16 +42,37 @@ struct UsernamePasswordSignUpView: View {
             if signUpOptions.contains(.usernameAndPassword) {
                 Section {
                     Grid(alignment: .leading) {
-                        UsernamePasswordFields(
-                            username: $username,
-                            password: $password,
-                            valid: $valid,
-                            focusState: _focusedField,
-                            localization: .default,
-                            usernameValidationRules: usernameValidationRules,
-                            passwordValidationRules: passwordValidationRules,
-                            presentationType: .signUp
-                        )
+                        switch localization {
+                        case .environment:
+                            UsernamePasswordFields(
+                                username: $username,
+                                password: $password,
+                                valid: $usernamePasswordValid,
+                                focusState: _focusedField,
+                                usernameValidationRules: usernameValidationRules,
+                                passwordValidationRules: passwordValidationRules,
+                                presentationType: .signUp(.environment)
+                            )
+                        case let .value(signUp):
+                            UsernamePasswordFields(
+                                username: $username,
+                                password: $password,
+                                valid: $usernamePasswordValid,
+                                focusState: _focusedField,
+                                usernameValidationRules: usernameValidationRules,
+                                passwordValidationRules: passwordValidationRules,
+                                presentationType: .signUp(
+                                    .value(
+                                        (
+                                            signUp.username,
+                                            signUp.password,
+                                            signUp.passwordRepeat,
+                                            signUp.passwordNotEqualError
+                                        )
+                                    )
+                                )
+                            )
+                        }
                     }
                 } header: {
                     Text("SU_USERNAME_AND_PASSWORD_SECTION", bundle: .module)
@@ -89,7 +112,7 @@ struct UsernamePasswordSignUpView: View {
                     }
             }
                 .buttonStyle(.borderedProminent)
-                //.disabled(signUpButtonDisabled)
+                .disabled(signUpButtonDisabled)
                 .padding()
                 .padding(-34)
                 .listRowBackground(Color.clear)
@@ -100,7 +123,7 @@ struct UsernamePasswordSignUpView: View {
     
     
     private var signUpButtonDisabled: Bool {
-        state == .processing || !valid
+        state == .processing || !usernamePasswordValid
     }
     
     
@@ -109,13 +132,15 @@ struct UsernamePasswordSignUpView: View {
         usernameValidationRules: [ValidationRule] = [],
         passwordValidationRules: [ValidationRule] = [],
         @ViewBuilder header: () -> Header = { EmptyView() },
-        @ViewBuilder footer: () -> Footer = { EmptyView() }
+        @ViewBuilder footer: () -> Footer = { EmptyView() },
+        localization: ConfigurableLocalization<Localization.SignUp> = .environment
     ) {
         self.signUpOptions = signUpOptions
         self.usernameValidationRules = usernameValidationRules
         self.passwordValidationRules = passwordValidationRules
         self.header = AnyView(header())
         self.footer = AnyView(footer())
+        self.localization = localization
     }
     
     
@@ -141,6 +166,7 @@ struct UsernamePasswordSignUpView: View {
         }
     }
 }
+
 
 struct UsernamePasswordSignUpView_Previews: PreviewProvider {
     static var previews: some View {

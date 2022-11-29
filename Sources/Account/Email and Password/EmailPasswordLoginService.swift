@@ -19,19 +19,25 @@ class EmailPasswordLoginService: UsernamePasswordLoginService {
         return [
             ValidationRule(
                 regex: regex,
-                message: String(localized: "LOGIN_EAP_EMAIL_VERIFICATION_ERROR", bundle: .module)
+                message: String(localized: "EAP_EMAIL_VERIFICATION_ERROR", bundle: .module)
             )
         ]
+    }
+    
+    
+    override var localization: Localization {
+        let usernameField = Localization.Field(title: "EAP_LOGIN_USERNAME_TITLE", placeholder: "EAP_LOGIN_USERNAME_PLACEHOLDER")
+        return Localization(
+            login: .init(username: usernameField),
+            signUp: .init(username: usernameField),
+            resetPassword: .init(username: usernameField)
+        )
     }
     
     override var loginButton: AnyView {
         AnyView(
             NavigationLink {
                 UsernamePasswordLoginView(
-                    localization: UsernamePasswordLoginView.Localization(
-                        usernameTitle: String(localized: "LOGIN_EAP_USERNAME_TITLE", bundle: .module),
-                        usernamePlaceholder: String(localized: "LOGIN_EAP_USERNAME_PLACEHOLDER", bundle: .module)
-                    ),
                     usernameValidationRules: validationRules
                 )
                     .environmentObject(self as UsernamePasswordLoginService)
@@ -39,7 +45,7 @@ class EmailPasswordLoginService: UsernamePasswordLoginService {
                 AccountServiceButton {
                     Image(systemName: "envelope.fill")
                         .font(.title2)
-                    Text("LOGIN_EAP_BUTTON_TITLE", bundle: .module)
+                    Text("EAP_BUTTON_TITLE", bundle: .module)
                 }
             }
         )

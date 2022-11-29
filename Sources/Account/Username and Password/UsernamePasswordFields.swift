@@ -10,13 +10,74 @@ import SwiftUI
 
 
 struct UsernamePasswordFields: View {
-    enum PresentationType: Hashable {
-        case login
-        case signUp
+    enum PresentationType {
+        case login(ConfigurableLocalization<(
+            username: Localization.Field,
+            password: Localization.Field
+        )>)
+        case signUp(ConfigurableLocalization<(
+            username: Localization.Field,
+            password: Localization.Field,
+            passwordRepeat: Localization.Field,
+            passwordNotEqualError: String
+        )>)
+        
+        
+        var login: Bool {
+            if case .login(_) = self {
+                return true
+            } else {
+                return false
+            }
+        }
+        
+        var signUp: Bool {
+            if case .signUp(_) = self {
+                return true
+            } else {
+                return false
+            }
+        }
+        
+        
+        var username: Localization.Field? {
+            switch self {
+            case let .login(.value((username, _))), let .signUp(.value((username, _, _, _))):
+                return username
+            default:
+                return nil
+            }
+        }
+        
+        var password: Localization.Field? {
+            switch self {
+            case let .login(.value((_, password))), let .signUp(.value((_, password, _, _))):
+                return password
+            default:
+                return nil
+            }
+        }
+        
+        var passwordRepeat: Localization.Field? {
+            switch self {
+            case let .signUp(.value((_, _, passwordRepeat, _))):
+                return passwordRepeat
+            default:
+                return nil
+            }
+        }
+        
+        var passwordNotEqualError: String? {
+            switch self {
+            case let .signUp(.value((_, _, _, passwordNotEqualError))):
+                return passwordNotEqualError
+            default:
+                return nil
+            }
+        }
     }
     
     
-    private let localization: Localization
     private let usernameValidationRules: [ValidationRule]
     private let passwordValidationRules: [ValidationRule]
     private let presentationType: PresentationType
@@ -36,6 +97,60 @@ struct UsernamePasswordFields: View {
     @State private var passwordRepeatValid: Bool = false
     
     
+    private var usernameField: Localization.Field {
+        if let usernameField = presentationType.username {
+            return usernameField
+        } else {
+            switch presentationType {
+            case .login:
+                return usernamePasswordLoginService.localization.login.username
+            case .signUp:
+                return usernamePasswordLoginService.localization.signUp.username
+            }
+        }
+    }
+    
+    private var passwordField: Localization.Field {
+        if let passwordField = presentationType.password {
+            return passwordField
+        } else {
+            switch presentationType {
+            case .login:
+                return usernamePasswordLoginService.localization.login.password
+            case .signUp:
+                return usernamePasswordLoginService.localization.signUp.password
+            }
+        }
+    }
+    
+    
+    private var passwordRepeatField: Localization.Field {
+        if let passwordRepeatField = presentationType.passwordRepeat {
+            return passwordRepeatField
+        } else {
+            switch presentationType {
+            case .login:
+                preconditionFailure("The password repeat field should never be shown in the login presentation type.")
+            case .signUp:
+                return usernamePasswordLoginService.localization.signUp.passwordRepeat
+            }
+        }
+    }
+    
+    private var passwordNotEqualError: String {
+        if let passwordNotEqualError = presentationType.passwordNotEqualError {
+            return passwordNotEqualError
+        } else {
+            switch presentationType {
+            case .login:
+                preconditionFailure("The password not equal error should never be shown in the login presentation type.")
+            case .signUp:
+                return usernamePasswordLoginService.localization.signUp.passwordNotEqualError
+            }
+        }
+    }
+    
+    
     var body: some View {
         Group {
             VerifyableTextFieldGridRow(
@@ -43,10 +158,10 @@ struct UsernamePasswordFields: View {
                 valid: $usernameValid,
                 validationRules: usernameValidationRules
             ) {
-                Text(localization.usernameTitle)
+                Text(usernameField.title)
             } textField: { binding in
                 TextField(text: binding) {
-                    Text(localization.usernamePlaceholder)
+                    Text(usernameField.placeholder)
                 }
                     .autocorrectionDisabled(true)
                     .textInputAutocapitalization(.never)
@@ -60,35 +175,35 @@ struct UsernamePasswordFields: View {
                 valid: $passwordValid,
                 validationRules: passwordValidationRules
             ) {
-                Text(localization.passwordTitle)
+                Text(passwordField.title)
             } textField: { binding in
                 SecureField(text: binding) {
-                    Text(localization.passwordPlaceholder)
+                    Text(passwordField.placeholder)
                 }
                     .autocorrectionDisabled(true)
                     .textInputAutocapitalization(.never)
-                    .textContentType(presentationType == .login ? .password : .newPassword)
+                    .textContentType(presentationType.login ? .password : .newPassword)
             }
                 .onTapFocus(focusedField: _focusedField, fieldIdentifier: .password)
-            if presentationType == .signUp {
+            if presentationType.signUp {
                 Divider()
                 VerifyableTextFieldGridRow(
                     text: $passwordRepeat,
                     valid: $passwordRepeatValid,
                     validationRules: passwordValidationRules
                 ) {
-                    Text(localization.passwordRepeatTitle)
+                    Text(passwordRepeatField.title)
                 } textField: { binding in
                     VStack {
                         SecureField(text: binding) {
-                            Text(localization.passwordRepeatPlaceholder)
+                            Text(passwordRepeatField.placeholder)
                         }
                             .autocorrectionDisabled(true)
                             .textInputAutocapitalization(.never)
                             .textContentType(.newPassword)
                         if password != passwordRepeat && !passwordRepeat.isEmpty {
                             HStack {
-                                Text(localization.passwordRepeatNotEqual)
+                                Text(passwordNotEqualError)
                                     .fixedSize(horizontal: false, vertical: true)
                                     .gridColumnAlignment(.leading)
                                     .font(.footnote)
@@ -115,16 +230,14 @@ struct UsernamePasswordFields: View {
         password: Binding<String>,
         valid: Binding<Bool>,
         focusState: FocusState<LoginAndSignUpFields?> = FocusState<LoginAndSignUpFields?>(),
-        localization: Localization = .default,
         usernameValidationRules: [ValidationRule] = [],
         passwordValidationRules: [ValidationRule] = [],
-        presentationType: PresentationType = .login
+        presentationType: PresentationType = .login(.environment)
     ) {
         self._username = username
         self._password = password
         self._valid = valid
         self._focusedField = focusState
-        self.localization = localization
         self.usernameValidationRules = usernameValidationRules
         self.passwordValidationRules = passwordValidationRules
         self.presentationType = presentationType
@@ -186,10 +299,11 @@ struct UsernamePasswordFields_Previews: PreviewProvider {
                         valid: $valid,
                         usernameValidationRules: validationRules,
                         passwordValidationRules: validationRules,
-                        presentationType: .signUp
+                        presentationType: .signUp(.environment)
                     )
                 }
             }
         }
+            .environmentObject(UsernamePasswordLoginService(account: Account()))
     }
 }

@@ -9,9 +9,26 @@
 import SwiftUI
 
 
+enum ConfigurableLocalization<T> {
+    case environment
+    case value(T)
+}
+
+
 struct DateOfBirthPicker: View {
-    @Binding var date: Date
+    @Binding private var date: Date
+    @EnvironmentObject private var localizationEnvironmentObject: UsernamePasswordLoginService
+    private let localization: ConfigurableLocalization<String>
     
+    
+    private var dateOfBirthTitle: String {
+        switch localization {
+        case .environment:
+            return localizationEnvironmentObject.localization.signUp.dateOfBirthTitle
+        case let .value(dateOfBirthTitle):
+            return dateOfBirthTitle
+        }
+    }
     
     private var dateRange: ClosedRange<Date> {
         let calendar = Calendar.current
@@ -28,9 +45,21 @@ struct DateOfBirthPicker: View {
                 .date
             ]
         ) {
-            Text(String(localized: "DATE_OF_BIRTH", bundle: .module))
+            Text(dateOfBirthTitle)
                 .fontWeight(.semibold)
         }
+    }
+    
+    
+    init(date: Binding<Date>, title: String) {
+        self._date = date
+        self.localization = .value(title)
+    }
+    
+    
+    init(date: Binding<Date>) {
+        self._date = date
+        self.localization = .environment
     }
 }
 
@@ -48,6 +77,7 @@ struct DateOfBirthPicker_Previews: PreviewProvider {
             DateOfBirthPicker(date: $date)
                 .padding(32)
         }
-        .background(Color(.systemGroupedBackground))
+            .environmentObject(UsernamePasswordLoginService(account: Account()))
+            .background(Color(.systemGroupedBackground))
     }
 }

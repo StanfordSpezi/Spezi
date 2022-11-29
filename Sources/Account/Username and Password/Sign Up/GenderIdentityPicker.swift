@@ -11,38 +11,41 @@ import SwiftUI
 
 struct GenderIdentityPicker: View {
     @Binding private var genderIdentity: GenderIdentity
-    @FocusState private var focusedField: LoginAndSignUpFields?
+    @EnvironmentObject private var localizationEnvironmentObject: UsernamePasswordLoginService
+    private let localization: ConfigurableLocalization<String>
+    
+    
+    private var genderIdentityTitle: String {
+        switch localization {
+        case .environment:
+            return localizationEnvironmentObject.localization.signUp.genderIdentityTitle
+        case let .value(genderIdentityTitle):
+            return genderIdentityTitle
+        }
+    }
     
     var body: some View {
-//        Menu {
-//            ForEach(GenderIdentity.allCases) { genderIdentity in
-//                Button(genderIdentity.localizedDescription) {
-//                    self.genderIdentity = genderIdentity
-//                }
-//            }
-//        } label: {
-//            HStack {
-//                Text(genderIdentity.localizedDescription)
-//                Image(systemName: "chevron.up.chevron.down")
-//                    .font(.footnote)
-//            }
-//                .foregroundColor(.secondary)
-//        }
-//        .contentShape(Rectangle())
         Picker(selection: $genderIdentity) {
             ForEach(GenderIdentity.allCases) { genderIdentity in
                 Text(genderIdentity.localizedDescription)
                     .id(genderIdentity.id)
             }
         } label: {
-            Text(String(localized: "GENDER_IDENTITY", bundle: .module))
+            Text(genderIdentityTitle)
                 .fontWeight(.semibold)
         }
     }
     
     
+    init(genderIdentity: Binding<GenderIdentity>, title: String) {
+        self._genderIdentity = genderIdentity
+        self.localization = .value(title)
+    }
+    
+    
     init(genderIdentity: Binding<GenderIdentity>) {
         self._genderIdentity = genderIdentity
+        self.localization = .environment
     }
 }
 
@@ -64,6 +67,7 @@ struct GenderIdentityPicker_Previews: PreviewProvider {
             }
                 .padding(32)
         }
-        .background(Color(.systemGroupedBackground))
+            .environmentObject(UsernamePasswordLoginService(account: Account()))
+            .background(Color(.systemGroupedBackground))
     }
 }
