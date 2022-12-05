@@ -19,7 +19,7 @@ struct UsernamePasswordLoginView: View {
     
     @State private var username: String = ""
     @State private var password: String = ""
-    @State private var valid: Bool = false
+    @State private var valid = false
     @FocusState private var focusedField: LoginAndSignUpFields?
     @State private var state: AccountViewState = .idle
     
@@ -115,7 +115,7 @@ struct UsernamePasswordLoginView: View {
             } else {
                 return false
             }
-        } set: { newValue in
+        } set: { _ in
             state = .idle
         }
     }

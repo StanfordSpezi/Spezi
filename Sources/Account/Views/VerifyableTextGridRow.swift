@@ -125,7 +125,7 @@ struct VerifyableTextFieldGridRow_Previews: PreviewProvider {
     
     
     @State private static var text: String = ""
-    @State private static var valid: Bool = false
+    @State private static var valid = false
     @FocusState private static var focusedField: Field?
     
     

@@ -34,7 +34,7 @@ struct DateOfBirthPicker: View {
         let calendar = Calendar.current
         let startDateComponents = DateComponents(year: 1900, month: 1, day: 1)
         let endDate = Date.now
-        return calendar.date(from:startDateComponents)!...endDate
+        return calendar.date(from: startDateComponents)!...endDate
     }
     
     var body: some View {
@@ -65,7 +65,7 @@ struct DateOfBirthPicker: View {
 
 
 struct DateOfBirthPicker_Previews: PreviewProvider {
-    @State private static var date: Date = Date.now
+    @State private static var date = Date.now
     
     
     static var previews: some View {

@@ -19,7 +19,7 @@ public protocol Component<ComponentStandard>: AnyObject, TypedCollectionKey {
 }
 
 
-extension Component {    
+extension Component {
     // A documentation for this methodd exists in the `Component` type which SwiftLint doesn't recognize.
     // swiftlint:disable:next missing_docs
     public func configure() {}

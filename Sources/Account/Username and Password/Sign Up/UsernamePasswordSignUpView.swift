@@ -30,7 +30,7 @@ struct UsernamePasswordSignUpView: View {
     @State private var genderIdentity: GenderIdentity = .preferNotToState
     @State private var state: AccountViewState = .idle
     
-    @State private var usernamePasswordValid: Bool = false
+    @State private var usernamePasswordValid = false
     @FocusState private var focusedField: LoginAndSignUpFields?
     
     private let localization: ConfigurableLocalization<Localization.SignUp>

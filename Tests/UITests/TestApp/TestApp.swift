@@ -6,8 +6,8 @@
 // SPDX-License-Identifier: MIT
 //
 
-import SwiftUI
 @testable import Account
+import SwiftUI
 
 
 @main
@@ -45,7 +45,7 @@ struct UITestsApp: App {
     
     @State private var username: String = ""
     @State private var password: String = ""
-    @State private var valid: Bool = false
+    @State private var valid = false
     
     
     private var validationRules: [ValidationRule] {
@@ -60,7 +60,6 @@ struct UITestsApp: App {
             )
         ]
     }
-    
     
     
     var body: some Scene {

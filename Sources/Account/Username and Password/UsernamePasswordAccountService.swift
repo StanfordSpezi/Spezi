@@ -14,19 +14,19 @@ class UsernamePasswordAccountService: AccountService, ObservableObject {
     weak var account: Account?
     
     
-    open var localization: Localization {
+    var localization: Localization {
         Localization.default
     }
     
-    open var loginButton: AnyView {
+    var loginButton: AnyView {
         button(localization.signUp.buttonTitle, destination: UsernamePasswordLoginView())
     }
     
-    open var signUpButton: AnyView {
+    var signUpButton: AnyView {
         button(localization.signUp.buttonTitle, destination: UsernamePasswordSignUpView())
     }
     
-    open var resetPasswordButton: AnyView {
+    var resetPasswordButton: AnyView {
         button(localization.resetPassword.buttonTitle, destination: Text("Reset Password ..."))
     }
     
@@ -45,7 +45,7 @@ class UsernamePasswordAccountService: AccountService, ObservableObject {
     }
     
     
-    open func button<V: View>(_ title: String, destination: V) -> AnyView {
+    func button<V: View>(_ title: String, destination: V) -> AnyView {
         AnyView(
             NavigationLink {
                 destination

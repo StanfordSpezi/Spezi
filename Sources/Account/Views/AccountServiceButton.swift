@@ -36,7 +36,7 @@ struct AccountServiceButton<Content: View>: View {
 
 struct UsernamePasswordLoginServiceButton_Previews: PreviewProvider {
     static var previews: some View {
-        AccountServiceButton() {
+        AccountServiceButton {
             Image(systemName: "ellipsis.rectangle")
                 .font(.title2)
             Text("LOGIN_UAP_BUTTON_TITLE", bundle: .module)

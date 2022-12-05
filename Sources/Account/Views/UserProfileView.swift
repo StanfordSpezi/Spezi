@@ -11,7 +11,7 @@ import SwiftUI
 
 public struct UserProfileView: View {
     private var user: User
-    @State private var image: Image? = nil
+    @State private var image: Image?
     
     
     public var body: some View {

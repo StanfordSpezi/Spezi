@@ -24,7 +24,7 @@ struct UsernamePasswordFields: View {
         
         
         var login: Bool {
-            if case .login(_) = self {
+            if case .login = self {
                 return true
             } else {
                 return false
@@ -32,7 +32,7 @@ struct UsernamePasswordFields: View {
         }
         
         var signUp: Bool {
-            if case .signUp(_) = self {
+            if case .signUp = self {
                 return true
             } else {
                 return false
@@ -92,9 +92,9 @@ struct UsernamePasswordFields: View {
     
     @State private var passwordRepeat: String = ""
     
-    @State private var usernameValid: Bool = false
-    @State private var passwordValid: Bool = false
-    @State private var passwordRepeatValid: Bool = false
+    @State private var usernameValid = false
+    @State private var passwordValid = false
+    @State private var passwordRepeatValid = false
     
     
     private var usernameField: Localization.Field {
@@ -264,11 +264,10 @@ struct UsernamePasswordFields: View {
 }
 
 
-
 struct UsernamePasswordFields_Previews: PreviewProvider {
     @State private static var username: String = ""
     @State private static var password: String = ""
-    @State private static var valid: Bool = false
+    @State private static var valid = false
     
     
     private static var validationRules: [ValidationRule] {
