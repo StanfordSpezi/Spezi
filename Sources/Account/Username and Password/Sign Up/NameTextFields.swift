@@ -12,7 +12,7 @@ import SwiftUI
 struct NameTextFields: View {
     @Binding private var name: PersonNameComponents
     @FocusState private var focusedField: LoginAndSignUpFields?
-    @EnvironmentObject var localizationEnvironmentObject: UsernamePasswordLoginService
+    @EnvironmentObject var localizationEnvironmentObject: UsernamePasswordAccountService
     private let localization: ConfigurableLocalization<(
         givenName: Localization.Field,
         familyName: Localization.Field
@@ -58,9 +58,9 @@ struct NameTextFields: View {
     var body: some View {
         Grid {
             DescriptionGridRow {
-                Text("NAME_TEXT_FIELD_GIVEN_NAME", bundle: .module)
+                Text(familyName.title)
             } content: {
-                TextField(String(localized: "NAME_TEXT_FIELD_GIVEN_NAME_PLACEHOLDER", bundle: .module), text: givenNameBinding)
+                TextField(familyName.placeholder, text: familyNameBinding)
                     .autocorrectionDisabled(true)
                     .textInputAutocapitalization(.never)
                     .textContentType(.givenName)
@@ -69,9 +69,9 @@ struct NameTextFields: View {
             Divider()
                 .gridCellUnsizedAxes(.horizontal)
             DescriptionGridRow {
-                Text("NAME_TEXT_FIELD_FAMILY_NAME", bundle: .module)
+                Text(givenName.title)
             } content: {
-                TextField(String(localized: "NAME_TEXT_FIELD_FAMILY_NAME_PLACEHOLDER", bundle: .module), text: givenNameBinding)
+                TextField(familyName.placeholder, text: givenNameBinding)
                     .autocorrectionDisabled(true)
                     .textInputAutocapitalization(.never)
                     .textContentType(.familyName)
@@ -117,7 +117,7 @@ struct NameTextFields_Previews: PreviewProvider {
             NameTextFields(name: $name)
                 .padding(32)
         }
-            .environmentObject(UsernamePasswordLoginService(account: Account()))
+            .environmentObject(UsernamePasswordAccountService(account: Account()))
             .background(Color(.systemGroupedBackground))
     }
 }

@@ -10,7 +10,7 @@ import CardinalKit
 import SwiftUI
 
 
-class EmailPasswordLoginService: UsernamePasswordLoginService {
+class EmailPasswordLoginService: UsernamePasswordAccountService {
     private var validationRules: [ValidationRule] {
         guard let regex = try? Regex("[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}") else {
             return []
@@ -24,28 +24,47 @@ class EmailPasswordLoginService: UsernamePasswordLoginService {
         ]
     }
     
-    
     override var localization: Localization {
-        let usernameField = Localization.Field(title: "EAP_LOGIN_USERNAME_TITLE", placeholder: "EAP_LOGIN_USERNAME_PLACEHOLDER")
+        let usernameField = Localization.Field(
+            title: String(moduleLocalized: "EAP_LOGIN_USERNAME_TITLE"),
+            placeholder: String(moduleLocalized: "EAP_LOGIN_USERNAME_PLACEHOLDER")
+        )
         return Localization(
-            login: .init(username: usernameField),
-            signUp: .init(username: usernameField),
+            login: .init(buttonTitle: String(moduleLocalized: "EAP_LOGIN_BUTTON_TITLE"), username: usernameField),
+            signUp: .init(buttonTitle: String(moduleLocalized: "EAP_SIGNUP_BUTTON_TITLE"), username: usernameField),
             resetPassword: .init(username: usernameField)
         )
     }
     
     override var loginButton: AnyView {
+        button(
+            localization.login.buttonTitle,
+            destination: UsernamePasswordLoginView(
+                usernameValidationRules: validationRules
+            )
+        )
+    }
+    
+    override var signUpButton: AnyView {
+        button(
+            localization.login.buttonTitle,
+            destination: UsernamePasswordSignUpView(
+                usernameValidationRules: validationRules
+            )
+        )
+    }
+    
+    
+    override func button<V: View>(_ title: String, destination: V) -> AnyView {
         AnyView(
             NavigationLink {
-                UsernamePasswordLoginView(
-                    usernameValidationRules: validationRules
-                )
-                    .environmentObject(self as UsernamePasswordLoginService)
+                destination
+                    .environmentObject(self as UsernamePasswordAccountService)
             } label: {
                 AccountServiceButton {
                     Image(systemName: "envelope.fill")
                         .font(.title2)
-                    Text("EAP_BUTTON_TITLE", bundle: .module)
+                    Text(title)
                 }
             }
         )

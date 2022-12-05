@@ -66,7 +66,7 @@ struct UITestsApp: App {
     var body: some Scene {
         WindowGroup {
             NavigationStack {
-                Login()
+                SignUp()
                     .environmentObject(Account())
 //                List(Tests.allCases) { test in
 //                    NavigationLink(test.rawValue, value: test)

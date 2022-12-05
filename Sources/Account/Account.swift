@@ -15,7 +15,7 @@ open class Account: ObservableObject, ObservableObjectComponent, TypedCollection
     
     
     open lazy var accountServices: [any AccountService] = [
-        UsernamePasswordLoginService(account: self),
+        UsernamePasswordAccountService(account: self),
         EmailPasswordLoginService(account: self)
     ]
     open var user: User?

@@ -10,15 +10,15 @@ import CardinalKit
 import SwiftUI
 
 
-public struct Login<Header: View>: View {
+public struct SignUp<Header: View>: View {
     private var header: Header
     
     
     public var body: some View {
         AccountServicesView(header: header) { accountService in
-            accountService.loginButton
+            accountService.signUpButton
         }
-            .navigationTitle(String(localized: "LOGIN", bundle: .module))
+            .navigationTitle(String(localized: "SIGN_UP", bundle: .module))
     }
     
     
@@ -32,7 +32,7 @@ public struct Login<Header: View>: View {
 }
 
 
-struct Login_Previews: PreviewProvider {
+struct SignUp_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
             Login()

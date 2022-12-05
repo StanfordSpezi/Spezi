@@ -15,7 +15,7 @@ struct UsernamePasswordLoginView: View {
     private let header: AnyView
     private let footer: AnyView
     
-    @EnvironmentObject private var usernamePasswordLoginService: UsernamePasswordLoginService
+    @EnvironmentObject private var usernamePasswordLoginService: UsernamePasswordAccountService
     
     @State private var username: String = ""
     @State private var password: String = ""
@@ -168,7 +168,7 @@ struct UsernamePasswordLoginView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
             UsernamePasswordLoginView()
-                .environmentObject(UsernamePasswordLoginService(account: Account()))
+                .environmentObject(UsernamePasswordAccountService(account: Account()))
         }
     }
 }

@@ -84,7 +84,7 @@ struct UsernamePasswordFields: View {
     
     @FocusState var focusedField: LoginAndSignUpFields?
     
-    @EnvironmentObject private var usernamePasswordLoginService: UsernamePasswordLoginService
+    @EnvironmentObject private var usernamePasswordLoginService: UsernamePasswordAccountService
     
     @Binding private var valid: Bool
     @Binding private var username: String
@@ -222,6 +222,12 @@ struct UsernamePasswordFields: View {
             .onChange(of: passwordValid) { _ in
                 updateValid()
             }
+            .onChange(of: password) { _ in
+                updateValid()
+            }
+            .onChange(of: passwordRepeat) { _ in
+                updateValid()
+            }
     }
     
     
@@ -304,6 +310,6 @@ struct UsernamePasswordFields_Previews: PreviewProvider {
                 }
             }
         }
-            .environmentObject(UsernamePasswordLoginService(account: Account()))
+            .environmentObject(UsernamePasswordAccountService(account: Account()))
     }
 }

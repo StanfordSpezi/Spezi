@@ -17,7 +17,7 @@ enum ConfigurableLocalization<T> {
 
 struct DateOfBirthPicker: View {
     @Binding private var date: Date
-    @EnvironmentObject private var localizationEnvironmentObject: UsernamePasswordLoginService
+    @EnvironmentObject private var localizationEnvironmentObject: UsernamePasswordAccountService
     private let localization: ConfigurableLocalization<String>
     
     
@@ -77,7 +77,7 @@ struct DateOfBirthPicker_Previews: PreviewProvider {
             DateOfBirthPicker(date: $date)
                 .padding(32)
         }
-            .environmentObject(UsernamePasswordLoginService(account: Account()))
+            .environmentObject(UsernamePasswordAccountService(account: Account()))
             .background(Color(.systemGroupedBackground))
     }
 }

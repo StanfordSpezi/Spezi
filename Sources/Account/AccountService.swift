@@ -11,13 +11,18 @@ import SwiftUI
 
 public protocol AccountService: Identifiable {
     var loginButton: AnyView { get }
+    var signUpButton: AnyView { get }
     
     
     init(account: Account)
 }
 
 
-extension AccountService {    
+extension AccountService {
+    public var signUpButton: AnyView {
+        loginButton
+    }
+    
     public var id: String {
         String(describing: type(of: self))
     }

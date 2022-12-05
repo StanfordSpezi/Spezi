@@ -21,7 +21,7 @@ struct UsernamePasswordSignUpView: View {
     private let footer: AnyView
     private let signUpOptions: SignUpOptions
     
-    @EnvironmentObject private var usernamePasswordLoginService: UsernamePasswordLoginService
+    @EnvironmentObject private var usernamePasswordLoginService: UsernamePasswordAccountService
     
     @State private var username = ""
     @State private var password = ""
@@ -74,33 +74,25 @@ struct UsernamePasswordSignUpView: View {
                             )
                         }
                     }
-                } header: {
-                    Text("SU_USERNAME_AND_PASSWORD_SECTION", bundle: .module)
                 }
             }
             if signUpOptions.contains(.name) {
                 Section {
                     NameTextFields(name: $name, focusState: _focusedField)
-                } header: {
-                    Text("SU_NAME_SECTION", bundle: .module)
                 }
             }
             if signUpOptions.contains(.dateOfBirth) {
                 Section {
                     DateOfBirthPicker(date: $dateOfBirth)
-                } header: {
-                    Text("SU_DATE_OF_BIRTH_SECTION", bundle: .module)
                 }
             }
             if signUpOptions.contains(.genderIdentity) {
                 Section {
                     GenderIdentityPicker(genderIdentity: $genderIdentity)
-                } header: {
-                    Text("SU_GENDER_IDENTIFY_SECTION", bundle: .module)
                 }
             }
             Button(action: signUpButtonPressed) {
-                Text("SU_BUTTON_TITLE")
+                Text("Sign Up")
                     .padding(6)
                     .frame(maxWidth: .infinity)
                     .opacity(state == .processing ? 0.0 : 1.0)
@@ -118,12 +110,32 @@ struct UsernamePasswordSignUpView: View {
                 .listRowBackground(Color.clear)
             footer
         }
-            .navigationTitle("SU_NAVIGATION_TITLE")
+            .navigationTitle(navigationTitle)
     }
     
+    private var navigationTitle: String {
+        switch localization {
+        case .environment:
+            return usernamePasswordLoginService.localization.signUp.navigationTitle
+        case .value(let signUp):
+            return signUp.navigationTitle
+        }
+    }
     
     private var signUpButtonDisabled: Bool {
-        state == .processing || !usernamePasswordValid
+        let namesInvalid: Bool
+        if signUpOptions.contains(.name) {
+            if let familyName = name.familyName,
+               let givenName = name.givenName {
+                namesInvalid = familyName.isEmpty || givenName.isEmpty
+            } else {
+                namesInvalid = true
+            }
+        } else {
+            namesInvalid = false
+        }
+        
+        return state == .processing || !usernamePasswordValid || namesInvalid
     }
     
     
@@ -172,7 +184,7 @@ struct UsernamePasswordSignUpView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
             UsernamePasswordSignUpView()
-                .environmentObject(UsernamePasswordLoginService(account: Account()))
+                .environmentObject(UsernamePasswordAccountService(account: Account()))
         }
     }
 }

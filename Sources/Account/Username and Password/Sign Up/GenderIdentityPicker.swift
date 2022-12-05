@@ -11,7 +11,7 @@ import SwiftUI
 
 struct GenderIdentityPicker: View {
     @Binding private var genderIdentity: GenderIdentity
-    @EnvironmentObject private var localizationEnvironmentObject: UsernamePasswordLoginService
+    @EnvironmentObject private var localizationEnvironmentObject: UsernamePasswordAccountService
     private let localization: ConfigurableLocalization<String>
     
     
@@ -67,7 +67,7 @@ struct GenderIdentityPicker_Previews: PreviewProvider {
             }
                 .padding(32)
         }
-            .environmentObject(UsernamePasswordLoginService(account: Account()))
+            .environmentObject(UsernamePasswordAccountService(account: Account()))
             .background(Color(.systemGroupedBackground))
     }
 }

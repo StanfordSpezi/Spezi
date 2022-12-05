@@ -6,33 +6,60 @@
 // SPDX-License-Identifier: MIT
 //
 
+// MARK: - General Views
 "LOGIN" = "Login";
+"SIGN_UP" = "Sign Up";
 
-// Username Password Login View
-"LOGIN_UAP_BUTTON_TITLE" = "Username and Password";
-"LOGIN_UAP_NAVIGATION_TITLE" = "Login";
-"LOGIN_UAP_USERNAME_TITLE" = "Username";
-"LOGIN_UAP_PASSWORD_TITLE" = "Password";
-"LOGIN_UAP_PASSWORD_REPEAT_TITLE" = "Repeat
+// MARK: - Username Password
+
+// Login
+"UAP_LOGIN_BUTTON_TITLE" = "Username and Password";
+"UAP_LOGIN_NAVIGATION_TITLE" = "Login";
+"UAP_LOGIN_USERNAME_TITLE" = "Username";
+"UAP_LOGIN_USERNAME_PLACEHOLDER" = "Enter your username ...";
+"UAP_LOGIN_PASSWORD_TITLE" = "Password";
+"UAP_LOGIN_PASSWORD_PLACEHOLDER" = "Enter your password ...";
+
+
+// SignUp
+"UAP_SIGNUP_BUTTION_TITLE" = "Username and Password";
+"UAP_SIGNUP_NAVIGATION_TITLE" = "Sign Up";
+"UAP_SIGNUP_USERNAME_TITLE" = "Username";
+"UAP_SIGNUP_USERNAME_PLACEHOLDER" = "Enter your username ...";
+"UAP_SIGNUP_PASSWORD_TITLE" = "Password";
+"UAP_SIGNUP_PASSWORD_PLACEHOLDER" = "Enter your password ...";
+"UAP_SIGNUP_PASSWORD_REPEAT_TITLE" = "Repeat
 Password";
-"LOGIN_UAP_USERNAME_PLACEHOLDER" = "Enter your username ...";
-"LOGIN_UAP_PASSWORD_PLACEHOLDER" = "Enter your password ...";
-"LOGIN_UAP_PASSWORD_REPEAT_PLACEHOLDER" = "Reenter your password ...";
-"LOGIN_UAP_LOGIN_BUTTON_TITLE" = "Login";
-"LOGIN_UAP_DEFAULT_ERROR" = "Login Failed";
-"LOGIN_UAP_PASSWORD_REPEAT_NOT_EQUAL" = "The entered passwords are not equal.";
+"UAP_SIGNUP_PASSWORD_REPEAT_PLACEHOLDER" = "Repeat your password ...";
+"UAP_SIGNUP_PASSWORD_NOT_EQUAL_ERROR" = "The entered passwords are not equal";
+"UAP_SIGNUP_GIVEN_NAME_TITLE" = "Given Name";
+"UAP_SIGNUP_GIVEN_NAME_PLACEHOLDER" = "Given Name";
+"UAP_SIGNUP_FAMILY_NAME_TITLE" = "Family Name";
+"UAP_SIGNUP_FAMILY_NAME_PLACEHOLDER" = "Family Name";
+"UAP_SIGNUP_GENDER_IDENTITY_TITLE" = "Gender Identiy";
+"UAP_SIGNUP_DATE_OF_BIRTH_TITLE" = "Date of Birth";
+"UAP_SIGNUP_ACTION_BUTTON_TITLE" = "Sign Up";
 
 
-// Email Password Login View
-"LOGIN_EAP_BUTTON_TITLE" = "Email and Password";
-"LOGIN_EAP_USERNAME_TITLE" = "Email";
-"LOGIN_EAP_USERNAME_PLACEHOLDER" = "Enter your email ...";
-"LOGIN_EAP_EMAIL_VERIFICATION_ERROR" = "The entered email is not valid.";
+// Reset
+"UAP_RESET_PASSWORD_BUTTON_TITLE" = "Reset Password";
+"UAP_RESET_PASSWORD_NAVIGATION_TITLE" = "Reset Password";
+"UAP_RESET_PASSWORD_USERNAME_TITLE" = "Username";
+"UAP_RESET_PASSWORD_USERNAME_PLACEHOLDER" = "Enter your username ...";
+"UAP_RESET_PASSWORD_ACTION_BUTTON_TITLE" = "Reset password";
 
 
-// Gender Identity
+// MARK: - Email and Password
+"EAP_LOGIN_BUTTON_TITLE" = "Email and Password";
+"EAP_SIGNUP_BUTTION_TITLE" = "Email and Password";
+"EAP_LOGIN_USERNAME_TITLE" = "Email";
+"EAP_LOGIN_USERNAME_PLACEHOLDER" = "Enter your email ...";
+"EAP_EMAIL_VERIFICATION_ERROR" = "The entered email is not correct.";
+
+
+// MARK: - Gender Identity
 "GENDER_IDENTITY_FEMALE" = "Female";
 "GENDER_IDENTITY_MALE" = "Male";
 "GENDER_IDENTITY_TRANSGENDER" = "Transgender";
 "GENDER_IDENTITY_NON_BINARY" = "Non-binary";
-"GENDER_IDENTITY_PREFER_NOT_TO_STATE" = "Prefer not to state";
+"GENDER_IDENTITY_PREFER_NOT_TO_STATE" = "Choose not to answer";
