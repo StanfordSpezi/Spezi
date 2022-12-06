@@ -10,7 +10,7 @@ import XCTest
 
 
 final class AccountTests: TestAppUITests {
-    func testAccountComponents() throws { // swiftlint:disable:this function_body_length
+    func testAccountComponents() throws {
         let app = XCUIApplication()
         app.launch()
         
