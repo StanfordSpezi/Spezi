@@ -31,9 +31,23 @@
       <CodeCoverageTargets>
          <BuildableReference
             BuildableIdentifier = "primary"
+            BlueprintIdentifier = "Account"
+            BuildableName = "Account"
+            BlueprintName = "Account"
+            ReferencedContainer = "container:../..">
+         </BuildableReference>
+         <BuildableReference
+            BuildableIdentifier = "primary"
             BlueprintIdentifier = "CardinalKit"
             BuildableName = "CardinalKit"
             BlueprintName = "CardinalKit"
+            ReferencedContainer = "container:../..">
+         </BuildableReference>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "HealthKitDataSource"
+            BuildableName = "HealthKitDataSource"
+            BlueprintName = "HealthKitDataSource"
             ReferencedContainer = "container:../..">
          </BuildableReference>
          <BuildableReference
@@ -55,13 +69,6 @@
             BlueprintIdentifier = "XCTRuntimeAssertions"
             BuildableName = "XCTRuntimeAssertions"
             BlueprintName = "XCTRuntimeAssertions"
-            ReferencedContainer = "container:../..">
-         </BuildableReference>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "HealthKitDataSource"
-            BuildableName = "HealthKitDataSource"
-            BlueprintName = "HealthKitDataSource"
             ReferencedContainer = "container:../..">
          </BuildableReference>
       </CodeCoverageTargets>
