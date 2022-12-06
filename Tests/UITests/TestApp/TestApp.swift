@@ -6,7 +6,6 @@
 // SPDX-License-Identifier: MIT
 //
 
-@testable import Account
 import SwiftUI
 
 
@@ -43,37 +42,16 @@ struct UITestsApp: App {
     @UIApplicationDelegateAdaptor(TestAppDelegate.self) var appDelegate
     
     
-    @State private var username: String = ""
-    @State private var password: String = ""
-    @State private var valid = false
-    
-    
-    private var validationRules: [ValidationRule] {
-        guard let regex = try? Regex("^[a-zA-Z]+$") else {
-            return []
-        }
-        
-        return [
-            ValidationRule(
-                regex: regex,
-                message: "Validation failed: Required only letters."
-            )
-        ]
-    }
-    
-    
     var body: some Scene {
         WindowGroup {
             NavigationStack {
-                SignUp()
-                    .environmentObject(Account())
-//                List(Tests.allCases) { test in
-//                    NavigationLink(test.rawValue, value: test)
-//                }
-//                    .navigationDestination(for: Tests.self) { test in
-//                        test.view
-//                    }
-//                    .navigationTitle("UITest")
+                List(Tests.allCases) { test in
+                    NavigationLink(test.rawValue, value: test)
+                }
+                    .navigationDestination(for: Tests.self) { test in
+                        test.view
+                    }
+                    .navigationTitle("UITest")
             }
                 .cardinalKit(appDelegate)
         }
