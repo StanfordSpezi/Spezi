@@ -69,6 +69,8 @@ struct VerifyableTextFieldGridRow<Description: View, TextField: View>: View {
         self.textField = textField(text)
     }
     
+    // We want to have the same argument order as found in the main initializer. We do not move the description property up as it constructs a trainling closure in the main initializer.
+    // swiftlint:disable:next function_default_parameter_at_end
     init(
         text: Binding<String>,
         valid: Binding<Bool>,
@@ -132,58 +134,43 @@ struct VerifyableTextFieldGridRow_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
             Form {
-                Grid(horizontalSpacing: 8, verticalSpacing: 8) {
-                    VerifyableTextFieldGridRow(
-                        text: $text,
-                        valid: $valid
-                    ) {
-                        Text("Text")
-                    } textField: { binding in
-                        TextField(text: binding) {
-                            Text("Placeholder ...")
-                        }
-                    }
-                        .onTapFocus()
-                    Divider()
-                    VerifyableTextFieldGridRow(
-                        text: $text,
-                        valid: $valid,
-                        description: "Secure Text"
-                    ) { binding in
-                        SecureField(text: binding) {
-                            Text("Secure Placeholder ...")
-                        }
-                    }
-                        .onTapFocus()
-                }
+                views
             }
-            Grid(horizontalSpacing: 8, verticalSpacing: 8) {
-                VerifyableTextFieldGridRow(
-                    text: $text,
-                    valid: $valid
-                ) {
+            views
+        }
+            .background(Color(.systemGroupedBackground))
+    }
+    
+    private static var views: some View {
+        Grid(horizontalSpacing: 8, verticalSpacing: 8) {
+            VerifyableTextFieldGridRow(
+                text: $text,
+                valid: $valid,
+                description: {
                     Text("Text")
-                } textField: { binding in
+                },
+                textField: { binding in
                     TextField(text: binding) {
                         Text("Placeholder ...")
                     }
                 }
-                    .onTapFocus(focusedField: _focusedField, fieldIdentifier: .first)
-                Divider()
-                VerifyableTextFieldGridRow(
-                    text: $text,
-                    valid: $valid
-                ) {
+            )
+                .onTapFocus(focusedField: _focusedField, fieldIdentifier: .first)
+            Divider()
+            VerifyableTextFieldGridRow(
+                text: $text,
+                valid: $valid,
+                description: {
                     Text("Text")
-                } textField: { binding in
+                },
+                textField: { binding in
                     SecureField(text: binding) {
                         Text("Secure Placeholder ...")
                     }
                 }
-                    .onTapFocus(focusedField: _focusedField, fieldIdentifier: .first)
-            }
-                .padding(32)
+            )
+                .onTapFocus(focusedField: _focusedField, fieldIdentifier: .first)
         }
-            .background(Color(.systemGroupedBackground))
+            .padding(32)
     }
 }

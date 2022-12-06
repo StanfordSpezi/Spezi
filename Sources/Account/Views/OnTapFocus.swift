@@ -15,15 +15,6 @@ struct OnTapFocus<FocusedField: Hashable>: ViewModifier {
     @FocusState private var focusedState: FocusedField?
     
     
-    func body(content: Content) -> some View {
-        content
-            .focused($focusedState, equals: fieldIdentifier)
-            .onTapGesture {
-                focusedState = fieldIdentifier
-            }
-    }
-    
-    
     init(
         focusedState: FocusState<FocusedField?>,
         fieldIdentifier: FocusedField
@@ -37,6 +28,15 @@ struct OnTapFocus<FocusedField: Hashable>: ViewModifier {
             focusedState: FocusState<FocusedField?>(),
             fieldIdentifier: UUID()
         )
+    }
+    
+    
+    func body(content: Content) -> some View {
+        content
+            .focused($focusedState, equals: fieldIdentifier)
+            .onTapGesture {
+                focusedState = fieldIdentifier
+            }
     }
 }
 

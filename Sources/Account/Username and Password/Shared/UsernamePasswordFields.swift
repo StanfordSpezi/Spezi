@@ -15,6 +15,8 @@ struct UsernamePasswordFields: View {
             username: Localization.Field,
             password: Localization.Field
         )>)
+        // We do not introduce an explicity type for the temporary usage of the localization fields.
+        // swiftlint:disable:next large_tuple
         case signUp(ConfigurableLocalization<(
             username: Localization.Field,
             password: Localization.Field,
@@ -97,123 +99,14 @@ struct UsernamePasswordFields: View {
     @State private var passwordRepeatValid = false
     
     
-    private var usernameField: Localization.Field {
-        if let usernameField = presentationType.username {
-            return usernameField
-        } else {
-            switch presentationType {
-            case .login:
-                return usernamePasswordLoginService.localization.login.username
-            case .signUp:
-                return usernamePasswordLoginService.localization.signUp.username
-            }
-        }
-    }
-    
-    private var passwordField: Localization.Field {
-        if let passwordField = presentationType.password {
-            return passwordField
-        } else {
-            switch presentationType {
-            case .login:
-                return usernamePasswordLoginService.localization.login.password
-            case .signUp:
-                return usernamePasswordLoginService.localization.signUp.password
-            }
-        }
-    }
-    
-    
-    private var passwordRepeatField: Localization.Field {
-        if let passwordRepeatField = presentationType.passwordRepeat {
-            return passwordRepeatField
-        } else {
-            switch presentationType {
-            case .login:
-                preconditionFailure("The password repeat field should never be shown in the login presentation type.")
-            case .signUp:
-                return usernamePasswordLoginService.localization.signUp.passwordRepeat
-            }
-        }
-    }
-    
-    private var passwordNotEqualError: String {
-        if let passwordNotEqualError = presentationType.passwordNotEqualError {
-            return passwordNotEqualError
-        } else {
-            switch presentationType {
-            case .login:
-                preconditionFailure("The password not equal error should never be shown in the login presentation type.")
-            case .signUp:
-                return usernamePasswordLoginService.localization.signUp.passwordNotEqualError
-            }
-        }
-    }
-    
-    
     var body: some View {
         Group {
-            VerifyableTextFieldGridRow(
-                text: $username,
-                valid: $usernameValid,
-                validationRules: usernameValidationRules
-            ) {
-                Text(usernameField.title)
-            } textField: { binding in
-                TextField(text: binding) {
-                    Text(usernameField.placeholder)
-                }
-                    .autocorrectionDisabled(true)
-                    .textInputAutocapitalization(.never)
-                    .keyboardType(.emailAddress)
-                    .textContentType(.username)
-            }
-                .onTapFocus(focusedField: _focusedField, fieldIdentifier: .username)
+            usernameTextField
             Divider()
-            VerifyableTextFieldGridRow(
-                text: $password,
-                valid: $passwordValid,
-                validationRules: passwordValidationRules
-            ) {
-                Text(passwordField.title)
-            } textField: { binding in
-                SecureField(text: binding) {
-                    Text(passwordField.placeholder)
-                }
-                    .autocorrectionDisabled(true)
-                    .textInputAutocapitalization(.never)
-                    .textContentType(presentationType.login ? .password : .newPassword)
-            }
-                .onTapFocus(focusedField: _focusedField, fieldIdentifier: .password)
+            passwordSecureField
             if presentationType.signUp {
                 Divider()
-                VerifyableTextFieldGridRow(
-                    text: $passwordRepeat,
-                    valid: $passwordRepeatValid,
-                    validationRules: passwordValidationRules
-                ) {
-                    Text(passwordRepeatField.title)
-                } textField: { binding in
-                    VStack {
-                        SecureField(text: binding) {
-                            Text(passwordRepeatField.placeholder)
-                        }
-                            .autocorrectionDisabled(true)
-                            .textInputAutocapitalization(.never)
-                            .textContentType(.newPassword)
-                        if password != passwordRepeat && !passwordRepeat.isEmpty {
-                            HStack {
-                                Text(passwordNotEqualError)
-                                    .fixedSize(horizontal: false, vertical: true)
-                                    .gridColumnAlignment(.leading)
-                                    .font(.footnote)
-                                    .foregroundColor(.red)
-                                Spacer(minLength: 0)
-                            }
-                        }
-                    }
-                }
-                    .onTapFocus(focusedField: _focusedField, fieldIdentifier: .passwordRepeat)
+                passwordRepeatSecureField
             }
         }
             .onChange(of: usernameValid) { _ in
@@ -228,6 +121,127 @@ struct UsernamePasswordFields: View {
             .onChange(of: passwordRepeat) { _ in
                 updateValid()
             }
+    }
+    
+    private var usernameTextField: some View {
+        let usernameLocalization: Localization.Field
+        if let username = presentationType.username {
+            usernameLocalization = username
+        } else {
+            switch presentationType {
+            case .login:
+                usernameLocalization = usernamePasswordLoginService.localization.login.username
+            case .signUp:
+                usernameLocalization = usernamePasswordLoginService.localization.signUp.username
+            }
+        }
+        
+        return VerifyableTextFieldGridRow(
+            text: $username,
+            valid: $usernameValid,
+            validationRules: usernameValidationRules,
+            description: {
+                Text(usernameLocalization.title)
+            },
+            textField: { binding in
+                TextField(text: binding) {
+                    Text(usernameLocalization.placeholder)
+                }
+                    .autocorrectionDisabled(true)
+                    .textInputAutocapitalization(.never)
+                    .keyboardType(.emailAddress)
+                    .textContentType(.username)
+            }
+        )
+            .onTapFocus(focusedField: _focusedField, fieldIdentifier: .username)
+    }
+    
+    private var passwordSecureField: some View {
+        let passwordLocalization: Localization.Field
+        if let password = presentationType.password {
+            passwordLocalization = password
+        } else {
+            switch presentationType {
+            case .login:
+                passwordLocalization = usernamePasswordLoginService.localization.login.password
+            case .signUp:
+                passwordLocalization = usernamePasswordLoginService.localization.signUp.password
+            }
+        }
+        
+        return VerifyableTextFieldGridRow(
+            text: $password,
+            valid: $passwordValid,
+            validationRules: passwordValidationRules,
+            description: {
+                Text(passwordLocalization.title)
+            },
+            textField: { binding in
+                SecureField(text: binding) {
+                    Text(passwordLocalization.placeholder)
+                }
+                    .autocorrectionDisabled(true)
+                    .textInputAutocapitalization(.never)
+                    .textContentType(presentationType.login ? .password : .newPassword)
+            }
+        )
+            .onTapFocus(focusedField: _focusedField, fieldIdentifier: .password)
+    }
+    
+    private var passwordRepeatSecureField: some View {
+        let passwordRepeatLocalization: Localization.Field
+        if let passwordRepeat = presentationType.passwordRepeat {
+            passwordRepeatLocalization = passwordRepeat
+        } else {
+            switch presentationType {
+            case .login:
+                preconditionFailure("The password repeat field should never be shown in the login presentation type.")
+            case .signUp:
+                passwordRepeatLocalization = usernamePasswordLoginService.localization.signUp.passwordRepeat
+            }
+        }
+        
+        let passwordNotEqualErrorLocalization: String
+        if let passwordNotEqualError = presentationType.passwordNotEqualError {
+            passwordNotEqualErrorLocalization = passwordNotEqualError
+        } else {
+            switch presentationType {
+            case .login:
+                preconditionFailure("The password not equal error should never be shown in the login presentation type.")
+            case .signUp:
+                passwordNotEqualErrorLocalization = usernamePasswordLoginService.localization.signUp.passwordNotEqualError
+            }
+        }
+        
+        return VerifyableTextFieldGridRow(
+            text: $passwordRepeat,
+            valid: $passwordRepeatValid,
+            validationRules: passwordValidationRules,
+            description: {
+                Text(passwordRepeatLocalization.title)
+            },
+            textField: { binding in
+                VStack {
+                    SecureField(text: binding) {
+                        Text(passwordRepeatLocalization.placeholder)
+                    }
+                        .autocorrectionDisabled(true)
+                        .textInputAutocapitalization(.never)
+                        .textContentType(.newPassword)
+                    if password != passwordRepeat && !passwordRepeat.isEmpty {
+                        HStack {
+                            Text(passwordNotEqualErrorLocalization)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .gridColumnAlignment(.leading)
+                                .font(.footnote)
+                                .foregroundColor(.red)
+                            Spacer(minLength: 0)
+                        }
+                    }
+                }
+            }
+        )
+            .onTapFocus(focusedField: _focusedField, fieldIdentifier: .passwordRepeat)
     }
     
     

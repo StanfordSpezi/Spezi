@@ -25,15 +25,18 @@ struct GenderIdentityPicker: View {
     }
     
     var body: some View {
-        Picker(selection: $genderIdentity) {
-            ForEach(GenderIdentity.allCases) { genderIdentity in
-                Text(genderIdentity.localizedDescription)
-                    .id(genderIdentity.id)
+        Picker(
+            selection: $genderIdentity,
+            content: {
+                ForEach(GenderIdentity.allCases) { genderIdentity in
+                    Text(genderIdentity.localizedDescription)
+                        .id(genderIdentity.id)
+                }
+            }, label: {
+                Text(genderIdentityTitle)
+                    .fontWeight(.semibold)
             }
-        } label: {
-            Text(genderIdentityTitle)
-                .fontWeight(.semibold)
-        }
+        )
     }
     
     

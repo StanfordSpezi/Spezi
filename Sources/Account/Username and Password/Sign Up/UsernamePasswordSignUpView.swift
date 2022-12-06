@@ -57,23 +57,7 @@ struct UsernamePasswordSignUpView: View {
                     GenderIdentityPicker(genderIdentity: $genderIdentity)
                 }
             }
-            Button(action: signUpButtonPressed) {
-                Text("Sign Up")
-                    .padding(6)
-                    .frame(maxWidth: .infinity)
-                    .opacity(state == .processing ? 0.0 : 1.0)
-                    .overlay {
-                        if state == .processing {
-                            ProgressView()
-                                .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                        }
-                    }
-            }
-                .buttonStyle(.borderedProminent)
-                .disabled(signUpButtonDisabled)
-                .padding()
-                .padding(-34)
-                .listRowBackground(Color.clear)
+            signUpButton
             footer
         }
             .navigationTitle(navigationTitle)
@@ -115,6 +99,34 @@ struct UsernamePasswordSignUpView: View {
                 }
             }
         }
+    }
+    
+    private var signUpButton: some View {
+        let signUpButtonLocalization: String
+        switch localization {
+        case .environment:
+            signUpButtonLocalization = usernamePasswordLoginService.localization.signUp.signUpActionButtonTitle
+        case .value(let signUp):
+            signUpButtonLocalization = signUp.signUpActionButtonTitle
+        }
+        
+        return Button(action: signUpButtonPressed) {
+            Text(signUpButtonLocalization)
+                .padding(6)
+                .frame(maxWidth: .infinity)
+                .opacity(state == .processing ? 0.0 : 1.0)
+                .overlay {
+                    if state == .processing {
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                    }
+                }
+        }
+            .buttonStyle(.borderedProminent)
+            .disabled(signUpButtonDisabled)
+            .padding()
+            .padding(-34)
+            .listRowBackground(Color.clear)
     }
     
     private var navigationTitle: String {

@@ -26,76 +26,13 @@ struct UsernamePasswordLoginView: View {
     private let localization: ConfigurableLocalization<Localization.Login>
     
     
-    private var loginButtonTitle: String {
-        switch localization {
-        case .environment:
-            return usernamePasswordLoginService.localization.login.buttonTitle
-        case let .value(login):
-            return login.buttonTitle
-        }
-    }
-    
-    private var navigationTitle: String {
-        switch localization {
-        case .environment:
-            return usernamePasswordLoginService.localization.login.navigationTitle
-        case let .value(login):
-            return login.navigationTitle
-        }
-    }
-    
     var body: some View {
         ScrollView {
             header
             Divider()
-            Grid(horizontalSpacing: 16, verticalSpacing: 16) {
-                switch localization {
-                case .environment:
-                    UsernamePasswordFields(
-                        username: $username,
-                        password: $password,
-                        valid: $valid,
-                        focusState: _focusedField,
-                        usernameValidationRules: usernameValidationRules,
-                        passwordValidationRules: passwordValidationRules,
-                        presentationType: .login(.environment)
-                    )
-                case let .value(login):
-                    UsernamePasswordFields(
-                        username: $username,
-                        password: $password,
-                        valid: $valid,
-                        focusState: _focusedField,
-                        usernameValidationRules: usernameValidationRules,
-                        passwordValidationRules: passwordValidationRules,
-                        presentationType: .login(
-                            .value(
-                                (
-                                    login.username,
-                                    login.password
-                                )
-                            )
-                        )
-                    )
-                }
-            }
-                .padding(.leading, 16)
-                .padding(.vertical, 12)
+            usernamePasswordSection
             Divider()
-            Button(action: loginButtonPressed) {
-                Text(loginButtonTitle)
-                    .padding(6)
-                    .frame(maxWidth: .infinity)
-                    .opacity(state == .processing ? 0.0 : 1.0)
-                    .overlay {
-                        if state == .processing {
-                            ProgressView()
-                        }
-                    }
-            }
-                .buttonStyle(.borderedProminent)
-                .disabled(loginButtonDisabled)
-                .padding()
+            loginButton
             footer
         }
             .navigationTitle(navigationTitle)
@@ -108,6 +45,77 @@ struct UsernamePasswordLoginView: View {
             }
     }
     
+    private var usernamePasswordSection: some View {
+        Grid(horizontalSpacing: 16, verticalSpacing: 16) {
+            switch localization {
+            case .environment:
+                UsernamePasswordFields(
+                    username: $username,
+                    password: $password,
+                    valid: $valid,
+                    focusState: _focusedField,
+                    usernameValidationRules: usernameValidationRules,
+                    passwordValidationRules: passwordValidationRules,
+                    presentationType: .login(.environment)
+                )
+            case let .value(login):
+                UsernamePasswordFields(
+                    username: $username,
+                    password: $password,
+                    valid: $valid,
+                    focusState: _focusedField,
+                    usernameValidationRules: usernameValidationRules,
+                    passwordValidationRules: passwordValidationRules,
+                    presentationType: .login(
+                        .value(
+                            (
+                                login.username,
+                                login.password
+                            )
+                        )
+                    )
+                )
+            }
+        }
+            .padding(.leading, 16)
+            .padding(.vertical, 12)
+    }
+    
+    private var loginButton: some View {
+        let loginButtonDisabled = state == .processing || !valid
+        let loginButtonTitleLocalization: String
+        switch localization {
+        case .environment:
+            loginButtonTitleLocalization = usernamePasswordLoginService.localization.login.buttonTitle
+        case let .value(login):
+            loginButtonTitleLocalization = login.buttonTitle
+        }
+        
+        return Button(action: loginButtonPressed) {
+            Text(loginButtonTitleLocalization)
+                .padding(6)
+                .frame(maxWidth: .infinity)
+                .opacity(state == .processing ? 0.0 : 1.0)
+                .overlay {
+                    if state == .processing {
+                        ProgressView()
+                    }
+                }
+        }
+            .buttonStyle(.borderedProminent)
+            .disabled(loginButtonDisabled)
+            .padding()
+    }
+    
+    private var navigationTitle: String {
+        switch localization {
+        case .environment:
+            return usernamePasswordLoginService.localization.login.navigationTitle
+        case let .value(login):
+            return login.navigationTitle
+        }
+    }
+    
     private var errorAlertBinding: Binding<Bool> {
         Binding {
             if case .error = state {
@@ -118,10 +126,6 @@ struct UsernamePasswordLoginView: View {
         } set: { _ in
             state = .idle
         }
-    }
-    
-    private var loginButtonDisabled: Bool {
-        state == .processing || !valid
     }
     
     
