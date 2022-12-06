@@ -34,7 +34,12 @@ struct DateOfBirthPicker: View {
         let calendar = Calendar.current
         let startDateComponents = DateComponents(year: 1900, month: 1, day: 1)
         let endDate = Date.now
-        return calendar.date(from: startDateComponents)!...endDate
+        
+        guard let startDate = calendar.date(from: startDateComponents) else {
+            fatalError("Could not translate \(startDateComponents) to a valid date.")
+        }
+        
+        return startDate...endDate
     }
     
     var body: some View {

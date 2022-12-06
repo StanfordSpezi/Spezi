@@ -83,13 +83,13 @@ struct NameTextFields: View {
     
     init(
         name: Binding<PersonNameComponents>,
-        focusState: FocusState<LoginAndSignUpFields?> = FocusState<LoginAndSignUpFields?>(),
         givenName: Localization.Field,
-        familyName: Localization.Field
+        familyName: Localization.Field,
+        focusState: FocusState<LoginAndSignUpFields?> = FocusState<LoginAndSignUpFields?>()
     ) {
         self._name = name
-        self._focusedField = focusState
         self.localization = .value((givenName, familyName))
+        self._focusedField = focusState
     }
     
     

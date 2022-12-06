@@ -40,41 +40,7 @@ struct UsernamePasswordSignUpView: View {
         Form {
             header
             if signUpOptions.contains(.usernameAndPassword) {
-                Section {
-                    Grid(alignment: .leading) {
-                        switch localization {
-                        case .environment:
-                            UsernamePasswordFields(
-                                username: $username,
-                                password: $password,
-                                valid: $usernamePasswordValid,
-                                focusState: _focusedField,
-                                usernameValidationRules: usernameValidationRules,
-                                passwordValidationRules: passwordValidationRules,
-                                presentationType: .signUp(.environment)
-                            )
-                        case let .value(signUp):
-                            UsernamePasswordFields(
-                                username: $username,
-                                password: $password,
-                                valid: $usernamePasswordValid,
-                                focusState: _focusedField,
-                                usernameValidationRules: usernameValidationRules,
-                                passwordValidationRules: passwordValidationRules,
-                                presentationType: .signUp(
-                                    .value(
-                                        (
-                                            signUp.username,
-                                            signUp.password,
-                                            signUp.passwordRepeat,
-                                            signUp.passwordNotEqualError
-                                        )
-                                    )
-                                )
-                            )
-                        }
-                    }
-                }
+                usernamePasswordSection
             }
             if signUpOptions.contains(.name) {
                 Section {
@@ -111,6 +77,44 @@ struct UsernamePasswordSignUpView: View {
             footer
         }
             .navigationTitle(navigationTitle)
+    }
+    
+    private var usernamePasswordSection: some View {
+        Section {
+            Grid(alignment: .leading) {
+                switch localization {
+                case .environment:
+                    UsernamePasswordFields(
+                        username: $username,
+                        password: $password,
+                        valid: $usernamePasswordValid,
+                        focusState: _focusedField,
+                        usernameValidationRules: usernameValidationRules,
+                        passwordValidationRules: passwordValidationRules,
+                        presentationType: .signUp(.environment)
+                    )
+                case let .value(signUp):
+                    UsernamePasswordFields(
+                        username: $username,
+                        password: $password,
+                        valid: $usernamePasswordValid,
+                        focusState: _focusedField,
+                        usernameValidationRules: usernameValidationRules,
+                        passwordValidationRules: passwordValidationRules,
+                        presentationType: .signUp(
+                            .value(
+                                (
+                                    signUp.username,
+                                    signUp.password,
+                                    signUp.passwordRepeat,
+                                    signUp.passwordNotEqualError
+                                )
+                            )
+                        )
+                    )
+                }
+            }
+        }
     }
     
     private var navigationTitle: String {
