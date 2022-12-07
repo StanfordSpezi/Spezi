@@ -11,7 +11,7 @@ import SwiftUI
 
 struct NameTextFields: View {
     @Binding private var name: PersonNameComponents
-    @FocusState private var focusedField: LoginAndSignUpFields?
+    @FocusState private var focusedField: AccountInputFields?
     @EnvironmentObject var localizationEnvironmentObject: UsernamePasswordAccountService
     private let localization: ConfigurableLocalization<(
         givenName: Localization.Field,
@@ -85,7 +85,7 @@ struct NameTextFields: View {
         name: Binding<PersonNameComponents>,
         givenName: Localization.Field,
         familyName: Localization.Field,
-        focusState: FocusState<LoginAndSignUpFields?> = FocusState<LoginAndSignUpFields?>()
+        focusState: FocusState<AccountInputFields?> = FocusState<AccountInputFields?>()
     ) {
         self._name = name
         self.localization = .value((givenName, familyName))
@@ -95,7 +95,7 @@ struct NameTextFields: View {
     
     init(
         name: Binding<PersonNameComponents>,
-        focusState: FocusState<LoginAndSignUpFields?> = FocusState<LoginAndSignUpFields?>()
+        focusState: FocusState<AccountInputFields?> = FocusState<AccountInputFields?>()
     ) {
         self._name = name
         self._focusedField = focusState

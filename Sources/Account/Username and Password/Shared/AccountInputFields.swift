@@ -7,7 +7,7 @@
 //
 
 
-enum LoginAndSignUpFields: Hashable {
+enum AccountInputFields: Hashable {
     case username
     case password
     case passwordRepeat

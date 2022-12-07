@@ -84,7 +84,7 @@ struct UsernamePasswordFields: View {
     private let passwordValidationRules: [ValidationRule]
     private let presentationType: PresentationType
     
-    @FocusState var focusedField: LoginAndSignUpFields?
+    @FocusState var focusedField: AccountInputFields?
     
     @EnvironmentObject private var usernamePasswordLoginService: UsernamePasswordAccountService
     
@@ -249,7 +249,7 @@ struct UsernamePasswordFields: View {
         username: Binding<String>,
         password: Binding<String>,
         valid: Binding<Bool>,
-        focusState: FocusState<LoginAndSignUpFields?> = FocusState<LoginAndSignUpFields?>(),
+        focusState: FocusState<AccountInputFields?> = FocusState<AccountInputFields?>(),
         usernameValidationRules: [ValidationRule] = [],
         passwordValidationRules: [ValidationRule] = [],
         presentationType: PresentationType = .login(.environment)

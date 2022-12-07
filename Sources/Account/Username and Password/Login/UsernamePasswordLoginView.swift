@@ -20,7 +20,7 @@ struct UsernamePasswordLoginView: View {
     @State private var username: String = ""
     @State private var password: String = ""
     @State private var valid = false
-    @FocusState private var focusedField: LoginAndSignUpFields?
+    @FocusState private var focusedField: AccountInputFields?
     @State private var state: AccountViewState = .idle
     
     private let localization: ConfigurableLocalization<Localization.Login>
@@ -37,12 +37,10 @@ struct UsernamePasswordLoginView: View {
         }
             .navigationTitle(navigationTitle)
             .navigationBarBackButtonHidden(state == .processing)
-            .alert(state.errorTitle, isPresented: errorAlertBinding) {
-                Text(state.errorDescription)
-            }
             .onTapGesture {
                 focusedField = nil
             }
+            .viewStateAlert(state: $state)
     }
     
     private var usernamePasswordSection: some View {
@@ -86,9 +84,9 @@ struct UsernamePasswordLoginView: View {
         let loginButtonTitleLocalization: String
         switch localization {
         case .environment:
-            loginButtonTitleLocalization = usernamePasswordLoginService.localization.login.buttonTitle
+            loginButtonTitleLocalization = usernamePasswordLoginService.localization.login.loginActionButtonTitle
         case let .value(login):
-            loginButtonTitleLocalization = login.buttonTitle
+            loginButtonTitleLocalization = login.loginActionButtonTitle
         }
         
         return Button(action: loginButtonPressed) {
@@ -113,18 +111,6 @@ struct UsernamePasswordLoginView: View {
             return usernamePasswordLoginService.localization.login.navigationTitle
         case let .value(login):
             return login.navigationTitle
-        }
-    }
-    
-    private var errorAlertBinding: Binding<Bool> {
-        Binding {
-            if case .error = state {
-                return true
-            } else {
-                return false
-            }
-        } set: { _ in
-            state = .idle
         }
     }
     

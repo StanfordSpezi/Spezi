@@ -19,7 +19,7 @@
 "UAP_LOGIN_USERNAME_PLACEHOLDER" = "Enter your username ...";
 "UAP_LOGIN_PASSWORD_TITLE" = "Password";
 "UAP_LOGIN_PASSWORD_PLACEHOLDER" = "Enter your password ...";
-
+"UAP_LOGIN_ACTION_BUTTON_TITLE" = "Login";
 
 // SignUp
 "UAP_SIGNUP_BUTTION_TITLE" = "Username and Password";

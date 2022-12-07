@@ -6,31 +6,39 @@
 // SPDX-License-Identifier: MIT
 //
 
+import Foundation
 
-enum GenderIdentity: Int, CaseIterable, Identifiable, Hashable {
+
+/// Describes the self-identified gender identity
+public enum GenderIdentity: Int, CaseIterable, Identifiable, Hashable, CustomLocalizedStringResourceConvertible {
+    /// Self-identify as female
     case female
+    /// Self-identify as male
     case male
+    /// Self-identify as transgender
     case transgender
+    /// Self-identify as non-binary
     case nonBinary
+    /// Prefer not to state the self-identified gender
     case preferNotToState
     
     
-    var id: RawValue {
+    public var id: RawValue {
         rawValue
     }
     
-    var localizedDescription: String {
+    public var localizedStringResource: LocalizedStringResource {
         switch self {
         case .female:
-            return String(localized: "GENDER_IDENTITY_FEMALE", bundle: .module)
+            return LocalizedStringResource("GENDER_IDENTITY_FEMALE", bundle: .atURL(Bundle.module.bundleURL))
         case .male:
-            return String(localized: "GENDER_IDENTITY_MALE", bundle: .module)
+            return LocalizedStringResource("GENDER_IDENTITY_MALE", bundle: .atURL(Bundle.module.bundleURL))
         case .transgender:
-            return String(localized: "GENDER_IDENTITY_TRANSGENDER", bundle: .module)
+            return LocalizedStringResource("GENDER_IDENTITY_TRANSGENDER", bundle: .atURL(Bundle.module.bundleURL))
         case .nonBinary:
-            return String(localized: "GENDER_IDENTITY_NON_BINARY", bundle: .module)
+            return LocalizedStringResource("GENDER_IDENTITY_NON_BINARY", bundle: .atURL(Bundle.module.bundleURL))
         case .preferNotToState:
-            return String(localized: "GENDER_IDENTITY_PREFER_NOT_TO_STATE", bundle: .module)
+            return LocalizedStringResource("GENDER_IDENTITY_PREFER_NOT_TO_STATE", bundle: .atURL(Bundle.module.bundleURL))
         }
     }
 }

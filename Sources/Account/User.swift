@@ -11,7 +11,7 @@ import SwiftUI
 
 
 /// A ``User`` 
-public struct User {
+public struct User: Equatable {
     /// The name of a ``User`` using `PersonNameComponents`. It is recommended to provide the family name and given name if applicable.
     public let name: PersonNameComponents
     private let imageLoader: () async -> Image?
@@ -32,5 +32,10 @@ public struct User {
     public init(name: PersonNameComponents, imageLoader: @escaping () async -> Image? = { nil }) {
         self.name = name
         self.imageLoader = imageLoader
+    }
+    
+    
+    public static func == (lhs: User, rhs: User) -> Bool {
+        lhs.name == rhs.name
     }
 }

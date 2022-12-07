@@ -29,7 +29,7 @@ struct GenderIdentityPicker: View {
             selection: $genderIdentity,
             content: {
                 ForEach(GenderIdentity.allCases) { genderIdentity in
-                    Text(genderIdentity.localizedDescription)
+                    Text(String(localized: genderIdentity.localizedStringResource))
                         .tag(genderIdentity)
                 }
             }, label: {

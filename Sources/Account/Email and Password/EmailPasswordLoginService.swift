@@ -10,7 +10,11 @@ import CardinalKit
 import SwiftUI
 
 
-class EmailPasswordLoginService: UsernamePasswordAccountService {
+/// The ``EmailPasswordLoginService`` enables a email and password based login based on the ``UsernamePasswordAccountService``.
+///
+/// Other ``AccountService``s can be created by subclassing the ``EmailPasswordLoginService`` and overriding the ``EmailPasswordLoginService/localization``,
+/// buttons like the ``EmailPasswordLoginService/loginButton``, or overriding the ``UsernamePasswordAccountService/login(username:password:)`` and ``EmailPasswordLoginService/button(_:destination:)`` functions.
+open class EmailPasswordLoginService: UsernamePasswordAccountService {
     private var validationRules: [ValidationRule] {
         guard let regex = try? Regex("[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}") else {
             return []
@@ -24,7 +28,7 @@ class EmailPasswordLoginService: UsernamePasswordAccountService {
         ]
     }
     
-    override var localization: Localization {
+    override open var localization: Localization {
         let usernameField = Localization.Field(
             title: String(moduleLocalized: "EAP_LOGIN_USERNAME_TITLE"),
             placeholder: String(moduleLocalized: "EAP_LOGIN_USERNAME_PLACEHOLDER")
@@ -36,7 +40,7 @@ class EmailPasswordLoginService: UsernamePasswordAccountService {
         )
     }
     
-    override var loginButton: AnyView {
+    override open var loginButton: AnyView {
         button(
             localization.login.buttonTitle,
             destination: UsernamePasswordLoginView(
@@ -45,7 +49,7 @@ class EmailPasswordLoginService: UsernamePasswordAccountService {
         )
     }
     
-    override var signUpButton: AnyView {
+    override open var signUpButton: AnyView {
         button(
             localization.login.buttonTitle,
             destination: UsernamePasswordSignUpView(
@@ -55,7 +59,7 @@ class EmailPasswordLoginService: UsernamePasswordAccountService {
     }
     
     
-    override func button<V: View>(_ title: String, destination: V) -> AnyView {
+    override open func button<V: View>(_ title: String, destination: V) -> AnyView {
         AnyView(
             NavigationLink {
                 destination

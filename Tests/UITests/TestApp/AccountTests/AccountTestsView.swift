@@ -16,31 +16,118 @@ class TestAccountConfiguration<ComponentStandard: Standard>: Component, Observab
     }
 }
 
+struct TestUser {
+    var username: String?
+    var password: String?
+    var name: PersonNameComponents
+    var gender: GenderIdentity?
+    var dateOfBirth: Date?
+    var imageLoader: () async -> Image?
+    
+    
+    var user: User {
+        User(name: name, imageLoader: imageLoader)
+    }
+}
+
 class TestAccount: Account {
+    var testUser: TestUser?
+    
+    
+    override var user: User? {
+        get {
+            testUser?.user
+        }
+        set {
+            guard let newValue else {
+                testUser = nil
+                return
+            }
+            
+            guard var testUser else {
+                self.testUser = TestUser(name: newValue.name, imageLoader: { await newValue.image })
+                return
+            }
+            
+            testUser.name = newValue.name
+            testUser.imageLoader = { await newValue.image }
+            self.testUser = testUser
+        }
+    }
+    
     override var accountServices: [any AccountService] {
         [
-            UsernamePasswordAccountService(account: self),
-            EmailPasswordLoginService(account: self)
+            MockUsernamePasswordAccountService(account: self),
+            MockEmailPasswordLoginService(account: self)
         ]
     }
 }
 
+class MockUsernamePasswordAccountService: UsernamePasswordAccountService {
+    override func login(username: String, password: String) async throws {
+        try await Task.sleep(for: .seconds(5))
+        await MainActor.run {
+            account?.user = User(name: PersonNameComponents(givenName: "Leland", familyName: "Stanford")) {
+                try? await Task.sleep(for: .seconds(2))
+                return Image(systemName: "person.circle.fill")
+            }
+        }
+    }
+}
+
+class MockEmailPasswordLoginService: EmailPasswordLoginService {
+    override func login(username: String, password: String) async throws {
+        try await Task.sleep(for: .seconds(5))
+        await MainActor.run {
+            account?.user = User(name: PersonNameComponents(givenName: "Leland", familyName: "Stanford (@Stanford)")) {
+                try? await Task.sleep(for: .seconds(2))
+                return Image(systemName: "person.circle.fill")
+            }
+        }
+    }
+}
 
 struct AccountTestsView: View {
+    @EnvironmentObject var account: Account
+    @State var showLogin = false
+    @State var showSignUp = false
+    
+    
     var body: some View {
-        Group {
-            List {
-                NavigationLink("User Profile View") {
-                    profileViews
+        List {
+            if let user = account.user {
+                HStack {
+                    UserProfileView(user: user)
+                        .frame(height: 30)
+                    Text(user.name.formatted())
                 }
-                NavigationLink("Login") {
+            }
+            NavigationLink("User Profile View") {
+                profileViews
+            }
+            Button("Login") {
+                showLogin.toggle()
+            }
+            Button("SignUp") {
+                showSignUp.toggle()
+            }
+        }
+            .sheet(isPresented: $showLogin) {
+                NavigationStack {
                     Login()
                 }
-                NavigationLink("Sign Up") {
+            }
+            .sheet(isPresented: $showSignUp) {
+                NavigationStack {
                     SignUp()
                 }
             }
-        }
+            .onChange(of: account) { newAccount in
+                if newAccount.user != nil {
+                    showLogin = false
+                    showSignUp = false
+                }
+            }
     }
     
     

@@ -31,7 +31,7 @@ struct UsernamePasswordSignUpView: View {
     @State private var state: AccountViewState = .idle
     
     @State private var usernamePasswordValid = false
-    @FocusState private var focusedField: LoginAndSignUpFields?
+    @FocusState private var focusedField: AccountInputFields?
     
     private let localization: ConfigurableLocalization<Localization.SignUp>
     
@@ -61,6 +61,7 @@ struct UsernamePasswordSignUpView: View {
             footer
         }
             .navigationTitle(navigationTitle)
+            .viewStateAlert(state: $state)
     }
     
     private var usernamePasswordSection: some View {

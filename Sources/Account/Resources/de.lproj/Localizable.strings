@@ -15,6 +15,7 @@
 "UAP_LOGIN_USERNAME_PLACEHOLDER" = "Benutzername eingeben ...";
 "UAP_LOGIN_PASSWORD_TITLE" = "Passwort";
 "UAP_LOGIN_PASSWORD_PLACEHOLDER" = "Passwort eingeben ...";
+"UAP_LOGIN_ACTION_BUTTON_TITLE" = "Anmelden";
 
 
 // SignUp
