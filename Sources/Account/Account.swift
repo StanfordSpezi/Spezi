@@ -10,21 +10,13 @@ import CardinalKit
 import SwiftUI
 
 
-open class Account: ObservableObject, ObservableObjectComponent, TypedCollectionKey, DefaultInitializable {
-    public typealias Value = Account
-    
-    
-    open lazy var accountServices: [any AccountService] = [
-        UsernamePasswordAccountService(account: self),
-        EmailPasswordLoginService(account: self)
-    ]
+/// The ``Account`` type is used to store and inject account-related information into the SwiftUI View hieray and enables interaction with the ``AccountService``s.
+open class Account: ObservableObject {
+    /// The ``User`` is intialized by AccountServices during the lifecycle of the application, allowing views to populate content with user information.
     open var user: User?
     
-    
-    public var observableObject: Account {
-        self
+    ///  An account provides a collection of ``AccountService``s that are used to populate login, sign up, or reset password screens.
+    open var accountServices: [any AccountService] {
+        []
     }
-    
-    
-    public required init() {}
 }

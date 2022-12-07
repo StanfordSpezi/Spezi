@@ -30,7 +30,7 @@ struct GenderIdentityPicker: View {
             content: {
                 ForEach(GenderIdentity.allCases) { genderIdentity in
                     Text(genderIdentity.localizedDescription)
-                        .id(genderIdentity.id)
+                        .tag(genderIdentity)
                 }
             }, label: {
                 Text(genderIdentityTitle)
