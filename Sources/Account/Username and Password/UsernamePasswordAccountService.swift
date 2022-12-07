@@ -41,7 +41,7 @@ open class UsernamePasswordAccountService: @unchecked Sendable, AccountService, 
     
     
     /// Creates a new instance of a ``UsernamePasswordAccountService``
-    public required init() { }
+    public init() { }
     
     
     public func inject(account: Account) {

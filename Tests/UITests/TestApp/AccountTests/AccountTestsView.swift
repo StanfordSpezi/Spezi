@@ -10,68 +10,107 @@
 import CardinalKit
 import SwiftUI
 
+actor User: ObservableObject {
+    @MainActor @Published var username: String?
+    @MainActor @Published var name: PersonNameComponents = PersonNameComponents()
+    @MainActor @Published var gender: GenderIdentity?
+    @MainActor @Published var dateOfBirth: Date?
+    
+    
+    init(
+        username: String? = nil,
+        name: PersonNameComponents = PersonNameComponents(),
+        gender: GenderIdentity? = nil,
+        dateOfBirth: Date? = nil
+    ) {
+        Task { @MainActor in
+            self.username = username
+            self.name = name
+            self.gender = gender
+            self.dateOfBirth = dateOfBirth
+        }
+    }
+}
+
+
 actor TestAccountConfiguration<ComponentStandard: Standard>: Component, ObservableObjectProvider {
     private let account: Account
+    private let user: User
     
     
     nonisolated var observableObjects: [any ObservableObject] {
         [
-            account
+            account,
+            user
         ]
     }
     
     
     init() {
+        self.user = User()
         let accountServices: [any AccountService] = [
-            MockUsernamePasswordAccountService(),
-            MockEmailPasswordAccountService()
+            MockUsernamePasswordAccountService(user: user),
+            MockEmailPasswordAccountService(user: user)
         ]
         self.account = Account(accountServices: accountServices)
     }
 }
 
-struct TestUser: Sendable {
-    var username: String?
-    var password: String?
-    var name: PersonNameComponents
-    var gender: GenderIdentity?
-    var dateOfBirth: Date?
-}
-
 
 class MockUsernamePasswordAccountService: UsernamePasswordAccountService {
+    let user: User
+    
+    
     override func login(username: String, password: String) async throws {
         try await Task.sleep(for: .seconds(5))
         await MainActor.run {
             account?.signedIn = true
+            user.username = username
         }
+    }
+    
+    
+    init(user: User) {
+        self.user = user
+        super.init()
     }
 }
 
 class MockEmailPasswordAccountService: EmailPasswordAccountService {
+    let user: User
+    
+    
     override func login(username: String, password: String) async throws {
         try await Task.sleep(for: .seconds(5))
         await MainActor.run {
             account?.signedIn = true
+            user.username = username
         }
+    }
+    
+    
+    init(user: User) {
+        self.user = user
+        super.init()
     }
 }
 
 struct AccountTestsView: View {
     @EnvironmentObject var account: Account
+    @EnvironmentObject var user: User
     @State var showLogin = false
     @State var showSignUp = false
     
     
     var body: some View {
         List {
-//            if let user = account.user {
-//                HStack {
-//                    UserProfileView(user: user)
-//                        .frame(height: 30)
-//                    Text(user.name.formatted())
-//                }
-//            }
+            if account.signedIn {
+                HStack {
+                    UserProfileView(name: user.name)
+                        .frame(height: 30)
+                    Text(user.username ?? user.name.formatted())
+                }
+            }
             NavigationLink("User Profile View") {
                 profileViews
             }
