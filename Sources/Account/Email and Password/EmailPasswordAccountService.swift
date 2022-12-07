@@ -14,7 +14,7 @@ import SwiftUI
 ///
 /// Other ``AccountService``s can be created by subclassing the ``EmailPasswordLoginService`` and overriding the ``EmailPasswordLoginService/localization``,
 /// buttons like the ``EmailPasswordLoginService/loginButton``, or overriding the ``UsernamePasswordAccountService/login(username:password:)`` and ``EmailPasswordLoginService/button(_:destination:)`` functions.
-open class EmailPasswordLoginService: UsernamePasswordAccountService {
+open class EmailPasswordAccountService: UsernamePasswordAccountService {
     private var validationRules: [ValidationRule] {
         guard let regex = try? Regex("[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}") else {
             return []
