@@ -10,11 +10,14 @@
 import CardinalKit
 import SwiftUI
 
-actor TestAccountConfiguration<ComponentStandard: Standard>: Component, ObservableObjectComponent {
+actor TestAccountConfiguration<ComponentStandard: Standard>: Component, ObservableObjectProvider {
     private let account: Account
     
-    nonisolated var observableObject: Account {
-        account
+    
+    nonisolated var observableObjects: [any ObservableObject] {
+        [
+            account
+        ]
     }
     
     
