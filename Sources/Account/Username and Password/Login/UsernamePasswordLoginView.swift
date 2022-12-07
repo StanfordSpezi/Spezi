@@ -158,7 +158,7 @@ struct UsernamePasswordLoginView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
             UsernamePasswordLoginView()
-                .environmentObject(UsernamePasswordAccountService(account: Account()))
+                .environmentObject(UsernamePasswordAccountService())
         }
     }
 }

@@ -323,6 +323,6 @@ struct UsernamePasswordFields_Previews: PreviewProvider {
                 }
             }
         }
-            .environmentObject(UsernamePasswordAccountService(account: Account()))
+            .environmentObject(UsernamePasswordAccountService())
     }
 }

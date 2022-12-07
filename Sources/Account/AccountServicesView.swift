@@ -50,10 +50,18 @@ public struct AccountServicesView<Header: View>: View {
 
 
 struct AccountServicesView_Previews: PreviewProvider {
+    @StateObject private static var account: Account = {
+        let accountServices: [any AccountService] = [
+            UsernamePasswordAccountService(),
+            EmailPasswordAccountService()
+        ]
+        return Account(accountServices: accountServices)
+    }()
+    
     static var previews: some View {
         NavigationStack {
             Login()
         }
-            .environmentObject(Account())
+            .environmentObject(account)
     }
 }

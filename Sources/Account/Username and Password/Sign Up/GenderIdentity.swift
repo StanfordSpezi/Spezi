@@ -10,7 +10,7 @@ import Foundation
 
 
 /// Describes the self-identified gender identity
-public enum GenderIdentity: Int, CaseIterable, Identifiable, Hashable, CustomLocalizedStringResourceConvertible {
+public enum GenderIdentity: Int, Sendable, CaseIterable, Identifiable, Hashable, CustomLocalizedStringResourceConvertible {
     /// Self-identify as female
     case female
     /// Self-identify as male

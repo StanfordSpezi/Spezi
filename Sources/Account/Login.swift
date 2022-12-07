@@ -33,10 +33,19 @@ public struct Login<Header: View>: View {
 
 
 struct Login_Previews: PreviewProvider {
+    @StateObject private static var account: Account = {
+        let accountServices: [any AccountService] = [
+            UsernamePasswordAccountService(),
+            EmailPasswordAccountService()
+        ]
+        return Account(accountServices: accountServices)
+    }()
+    
+    
     static var previews: some View {
         NavigationStack {
             Login()
         }
-            .environmentObject(Account())
+            .environmentObject(account)
     }
 }

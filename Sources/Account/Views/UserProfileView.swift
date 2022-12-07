@@ -10,7 +10,9 @@ import SwiftUI
 
 
 public struct UserProfileView: View {
-    private var user: User
+    private let name: PersonNameComponents
+    private let imageLoader: () async -> Image?
+    
     @State private var image: Image?
     
     
@@ -25,7 +27,7 @@ public struct UserProfileView: View {
                 } else {
                     Circle()
                         .foregroundColor(Color(.systemGray3))
-                    Text(user.name.formatted(.name(style: .abbreviated)))
+                    Text(name.formatted(.name(style: .abbreviated)))
                         .foregroundColor(.init(UIColor.systemBackground))
                         .font(
                             .system(
@@ -43,13 +45,14 @@ public struct UserProfileView: View {
             .aspectRatio(1, contentMode: .fit)
             .contentShape(Circle())
             .task {
-                self.image = await user.image
+                self.image = await imageLoader()
             }
     }
     
     
-    public init(user: User) {
-        self.user = user
+    public init(name: PersonNameComponents, imageLoader: @escaping () async -> Image? = { nil }) {
+        self.name = name
+        self.imageLoader = imageLoader
     }
 }
 
@@ -58,20 +61,16 @@ struct ProfilePictureView_Previews: PreviewProvider {
     static var previews: some View {
         VStack(spacing: 16) {
             UserProfileView(
-                user: User(
-                    name: PersonNameComponents(givenName: "Paul", familyName: "Schmiedmayer")
-                )
+                name: PersonNameComponents(givenName: "Paul", familyName: "Schmiedmayer")
             )
                 .frame(width: 100, height: 50)
                 .padding()
             UserProfileView(
-                user: User(
-                    name: PersonNameComponents(
-                        namePrefix: "Prof.",
-                        givenName: "Oliver",
-                        middleName: "Oppers",
-                        familyName: "Aalami"
-                    )
+                name: PersonNameComponents(
+                    namePrefix: "Prof.",
+                    givenName: "Oliver",
+                    middleName: "Oppers",
+                    familyName: "Aalami"
                 )
             )
                 .frame(width: 100, height: 100)
@@ -79,13 +78,11 @@ struct ProfilePictureView_Previews: PreviewProvider {
                 .background(Color(.systemBackground))
                 .colorScheme(.dark)
             UserProfileView(
-                user: User(
-                    name: PersonNameComponents(givenName: "Vishnu", familyName: "Ravi"),
-                    imageLoader: {
-                        try? await Task.sleep(for: .seconds(2))
-                        return Image(systemName: "person.crop.artframe")
-                    }
-                )
+                name: PersonNameComponents(givenName: "Vishnu", familyName: "Ravi"),
+                imageLoader: {
+                    try? await Task.sleep(for: .seconds(2))
+                    return Image(systemName: "person.crop.artframe")
+                }
             )
                 .frame(width: 50, height: 100)
                 .shadow(radius: 4)
