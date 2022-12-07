@@ -20,8 +20,10 @@ struct AccountViewStateAlert: ViewModifier {
             } else {
                 return false
             }
-        } set: { _ in
-            state = .idle
+        } set: { newValue in
+            if newValue == false {
+                state = .idle
+            }
         }
     }
     

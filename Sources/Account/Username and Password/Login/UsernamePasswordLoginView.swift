@@ -143,11 +143,11 @@ struct UsernamePasswordLoginView: View {
         Task {
             do {
                 try await usernamePasswordLoginService.login(username: username, password: password)
+                withAnimation(.easeIn(duration: 0.2)) {
+                    state = .idle
+                }
             } catch {
                 state = .error(error)
-            }
-            withAnimation(.easeIn(duration: 0.2)) {
-                state = .idle
             }
         }
     }

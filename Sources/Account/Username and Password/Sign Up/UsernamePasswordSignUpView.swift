@@ -185,12 +185,20 @@ struct UsernamePasswordSignUpView: View {
         
         Task {
             do {
-                try await usernamePasswordLoginService.login(username: username, password: password)
+                try await usernamePasswordLoginService.signUp(
+                    signInValues: SignInValues(
+                        username: username,
+                        password: password,
+                        name: name,
+                        genderIdentity: genderIdentity,
+                        dateOfBirth: dateOfBirth
+                    )
+                )
+                withAnimation(.easeIn(duration: 0.2)) {
+                    state = .idle
+                }
             } catch {
                 state = .error(error)
-            }
-            withAnimation(.easeIn(duration: 0.2)) {
-                state = .idle
             }
         }
     }
