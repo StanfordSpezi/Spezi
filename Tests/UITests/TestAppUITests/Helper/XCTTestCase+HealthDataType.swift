@@ -147,14 +147,14 @@ extension XCTestCase {
         healthApp.terminate()
         healthApp.activate()
         
-        if healthApp.staticTexts["Welcome to Health"].waitForExistence(timeout: 2.0) {
-            XCTAssertTrue(healthApp.staticTexts["Continue"].waitForExistence(timeout: 2.0))
+        if healthApp.staticTexts["Welcome to Health"].waitForExistence(timeout: 2) {
+            XCTAssertTrue(healthApp.staticTexts["Continue"].waitForExistence(timeout: 2))
             healthApp.staticTexts["Continue"].tap()
-            XCTAssertTrue(healthApp.staticTexts["Continue"].waitForExistence(timeout: 2.0))
+            XCTAssertTrue(healthApp.staticTexts["Continue"].waitForExistence(timeout: 2))
             healthApp.staticTexts["Continue"].tap()
-            XCTAssertTrue(healthApp.tables.buttons["Next"].waitForExistence(timeout: 2.0))
+            XCTAssertTrue(healthApp.tables.buttons["Next"].waitForExistence(timeout: 2))
             healthApp.tables.buttons["Next"].tap()
-            XCTAssertTrue(healthApp.staticTexts["Continue"].waitForExistence(timeout: 20.0))
+            XCTAssertTrue(healthApp.staticTexts["Continue"].waitForExistence(timeout: 20))
             healthApp.staticTexts["Continue"].tap()
         }
         
