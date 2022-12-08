@@ -147,7 +147,7 @@ final class HealthKitTests: TestAppUITests {
             
             app.buttons["HealthKit"].tap()
             
-            _ = app.buttons["Ask for authorization"].waitForExistence(timeout: 1)
+            XCTAssert(app.buttons["Ask for authorization"].waitForExistence(timeout: 2))
             app.buttons["Ask for authorization"].tap()
             
             _ = app.navigationBars["Health Access"].waitForExistence(timeout: 10)
