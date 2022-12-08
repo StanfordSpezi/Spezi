@@ -13,7 +13,15 @@ class TestAppUITests: XCTestCase {
     override func setUpWithError() throws {
         try super.setUpWithError()
         
-        continueAfterFailure = true
+        continueAfterFailure = false
+    }
+    
+    override func tearDown() {
+        super.tearDown()
+        
+        if let failureCount = testRun?.failureCount, failureCount > 0 {
+          takeScreenshot()
+        }
     }
     
     
