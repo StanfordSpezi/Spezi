@@ -154,7 +154,7 @@ extension XCTestCase {
             healthApp.staticTexts["Continue"].tap()
             XCTAssertTrue(healthApp.tables.buttons["Next"].waitForExistence(timeout: 2))
             healthApp.tables.buttons["Next"].tap()
-            XCTAssertTrue(healthApp.staticTexts["Continue"].waitForExistence(timeout: 20))
+            XCTAssertTrue(healthApp.staticTexts["Continue"].waitForExistence(timeout: 30))
             healthApp.staticTexts["Continue"].tap()
         }
         
