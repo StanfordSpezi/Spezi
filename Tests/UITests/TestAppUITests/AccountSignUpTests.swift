@@ -132,11 +132,17 @@ final class AccountSignUpTests: TestAppUITests {
         }
         
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
-        let passcodeInput = springboard.secureTextFields["Passcode field"]
-        passcodeInput.tap()
-        passcodeInput.typeText("1234\r")
+        if springboard.secureTextFields["Passcode field"].waitForExistence(timeout: 20) {
+            let passcodeInput = springboard.secureTextFields["Passcode field"]
+            passcodeInput.tap()
+            passcodeInput.typeText("1234\r")
+        } else {
+            XCTFail("Could not enter the passcode in the device to enter the password section in the settings app.")
+            takeScreenshot()
+            return
+        }
         
-        XCTAssertTrue(settingsApp.tables.cells["PasswordOptionsCell"].waitForExistence(timeout: 1.0))
+        XCTAssertTrue(settingsApp.tables.cells["PasswordOptionsCell"].waitForExistence(timeout: 5.0))
         settingsApp.tables.cells["PasswordOptionsCell"].buttons["chevron"].tap()
         if settingsApp.switches["AutoFill Passwords"].value as? String == "1" {
             settingsApp.switches["AutoFill Passwords"].tap()
@@ -144,6 +150,16 @@ final class AccountSignUpTests: TestAppUITests {
     }
 }
 
+extension XCTestCase {
+    func takeScreenshot() {
+        let screenshot = XCUIScreen.main.screenshot()
+        let fullScreenshotAttachment = XCTAttachment(screenshot: screenshot)
+        fullScreenshotAttachment.lifetime = .keepAlways
+        
+        add(fullScreenshotAttachment)
+    }
+}
+    
 extension XCUIApplication {
     func textField(_ field: String, secure: Bool) -> XCUIElement {
         if secure {

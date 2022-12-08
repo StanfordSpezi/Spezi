@@ -81,7 +81,7 @@ final class HealthKitTests: TestAppUITests {
             let categoryStaticTextPredicate = NSPredicate(format: "label CONTAINS[cd] %@", category)
             let categoryStaticText = healthApp.staticTexts.element(matching: categoryStaticTextPredicate).firstMatch
             
-            if categoryStaticText.waitForExistence(timeout: 1) {
+            if categoryStaticText.waitForExistence(timeout: 20) {
                 categoryStaticText.tap()
             } else {
                 XCTFail("Failed to find category: \(healthApp.staticTexts.allElementsBoundByIndex)")
@@ -130,11 +130,6 @@ final class HealthKitTests: TestAppUITests {
     
     
     func testHealthKit() throws { // swiftlint:disable:this function_body_length
-        // Due to the problem that GitHub Action Runners do have an empty HealthKit instance we skip the tests on GitHub Action runners:
-        if ProcessInfo.processInfo.environment["SIMULATOR_HOST_HOME"] == "/Users/runner" {
-            throw XCTSkip("The GitHub Action environment does not support interactions with the HealthApp, therefore we don't run the tests for now.")
-        }
-        
         do {
             let app = XCUIApplication()
             app.launch()
@@ -150,8 +145,7 @@ final class HealthKitTests: TestAppUITests {
             XCTAssert(app.buttons["Ask for authorization"].waitForExistence(timeout: 2))
             app.buttons["Ask for authorization"].tap()
             
-            _ = app.navigationBars["Health Access"].waitForExistence(timeout: 10)
-            if app.navigationBars["Health Access"].waitForExistence(timeout: 10) {
+            if app.navigationBars["Health Access"].waitForExistence(timeout: 20) {
                 app.tables.staticTexts["Turn On All"].tap()
                 app.navigationBars["Health Access"].buttons["Allow"].tap()
             }
