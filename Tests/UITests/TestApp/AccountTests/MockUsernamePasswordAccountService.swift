@@ -22,7 +22,7 @@ class MockUsernamePasswordAccountService: UsernamePasswordAccountService {
     override func login(username: String, password: String) async throws {
         try await Task.sleep(for: .seconds(5))
         
-        guard username == "lelandstanford@stanford.edu", password == "StanfordRocks123!" else {
+        guard username == "lelandstanford", password == "StanfordRocks123!" else {
             throw MockAccountServiceError.wrongCredentials
         }
         
@@ -36,7 +36,7 @@ class MockUsernamePasswordAccountService: UsernamePasswordAccountService {
     override func signUp(signInValues: SignInValues) async throws {
         try await Task.sleep(for: .seconds(5))
         
-        guard signInValues.username != "lelandstanford@stanford.edu" else {
+        guard signInValues.username != "lelandstanford" else {
             throw MockAccountServiceError.usernameTaken
         }
         
