@@ -58,9 +58,9 @@ struct NameTextFields: View {
     var body: some View {
         Grid {
             DescriptionGridRow {
-                Text(familyName.title)
+                Text(givenName.title)
             } content: {
-                TextField(familyName.placeholder, text: familyNameBinding)
+                TextField(givenName.placeholder, text: givenNameBinding)
                     .autocorrectionDisabled(true)
                     .textInputAutocapitalization(.never)
                     .textContentType(.givenName)
@@ -69,9 +69,9 @@ struct NameTextFields: View {
             Divider()
                 .gridCellUnsizedAxes(.horizontal)
             DescriptionGridRow {
-                Text(givenName.title)
+                Text(familyName.title)
             } content: {
-                TextField(familyName.placeholder, text: givenNameBinding)
+                TextField(familyName.placeholder, text: familyNameBinding)
                     .autocorrectionDisabled(true)
                     .textInputAutocapitalization(.never)
                     .textContentType(.familyName)

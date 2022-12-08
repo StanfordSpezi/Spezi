@@ -9,7 +9,7 @@
 import XCTest
 
 
-final class AccountTests: TestAppUITests {
+final class AccountLoginTests: TestAppUITests {
     func testLoginUsernameComponents() throws {
         let app = XCUIApplication()
         app.launch()
@@ -91,7 +91,7 @@ final class AccountTests: TestAppUITests {
             password: (passwordField, password)
         )
         
-                XCTAssertTrue(app.collectionViews.staticTexts[username].waitForExistence(timeout: 6.0))
+        XCTAssertTrue(app.collectionViews.staticTexts[username].waitForExistence(timeout: 6.0))
     }
     
     private func delete(username: (field: String, count: Int), password: (field: String, count: Int)) throws {

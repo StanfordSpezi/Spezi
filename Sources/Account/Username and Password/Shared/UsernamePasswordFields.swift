@@ -115,6 +115,9 @@ struct UsernamePasswordFields: View {
             .onChange(of: passwordValid) { _ in
                 updateValid()
             }
+            .onChange(of: passwordRepeatValid) { _ in
+                updateValid()
+            }
             .onChange(of: password) { _ in
                 updateValid()
             }
