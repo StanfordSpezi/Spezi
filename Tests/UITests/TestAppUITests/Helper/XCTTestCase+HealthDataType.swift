@@ -92,10 +92,10 @@ enum HealthDataType: String {
         let elementStaticTextPredicate = NSPredicate(format: "label CONTAINS[cd] %@", rawValue)
         var elementStaticText = healthApp.staticTexts.element(matching: elementStaticTextPredicate).firstMatch
         
-        guard elementStaticText.waitForExistence(timeout: 3) else {
+        guard elementStaticText.waitForExistence(timeout: 10) else {
             healthApp.firstMatch.swipeUp(velocity: .slow)
             elementStaticText = healthApp.buttons.element(matching: elementStaticTextPredicate).firstMatch
-            if elementStaticText.waitForExistence(timeout: 3) {
+            if elementStaticText.waitForExistence(timeout: 10) {
                 elementStaticText.tap()
                 return
             }
