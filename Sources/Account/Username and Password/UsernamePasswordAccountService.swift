@@ -50,7 +50,7 @@ open class UsernamePasswordAccountService: @unchecked Sendable, AccountService, 
     
     /// The function is called when a user is logged in.
     ///
-    /// You can use views like the ``UsernamePasswordSignUpView`` to display user interfaces for logging in users or create your own views and call ``UsernamePasswordAccountService/login(username:password:)``
+    /// You can use views like the ``UsernamePasswordLoginView`` to display user interfaces for logging in users or create your own views and call ``UsernamePasswordAccountService/login(username:password:)``
     /// - Parameters:
     ///   - username: The username that should be used in the login process
     ///   - password: The password that should be used in the login process

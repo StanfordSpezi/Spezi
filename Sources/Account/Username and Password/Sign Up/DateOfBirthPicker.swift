@@ -9,12 +9,6 @@
 import SwiftUI
 
 
-enum ConfigurableLocalization<T> {
-    case environment
-    case value(T)
-}
-
-
 struct DateOfBirthPicker: View {
     @Binding private var date: Date
     @EnvironmentObject private var localizationEnvironmentObject: UsernamePasswordAccountService

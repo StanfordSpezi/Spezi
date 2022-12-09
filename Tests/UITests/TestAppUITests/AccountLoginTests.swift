@@ -124,18 +124,4 @@ final class AccountLoginTests: TestAppUITests {
         XCTAssertFalse(app.navigationBars.buttons["Login"].exists)
         XCTAssertTrue(app.scrollViews.otherElements.buttons["Login, In progress"].waitForExistence(timeout: 0.5))
     }
-    
-    
-    func testProfileViews() throws {
-        let app = XCUIApplication()
-        app.launch()
-        
-        app.buttons["Account"].tap()
-        app.buttons["User Profile View"].tap()
-        
-        XCTAssertTrue(app.staticTexts["PS"].exists)
-        XCTAssertTrue(app.staticTexts["LS"].exists)
-        
-        XCTAssertTrue(app.images["person.crop.artframe"].waitForExistence(timeout: 1.0))
-    }
 }

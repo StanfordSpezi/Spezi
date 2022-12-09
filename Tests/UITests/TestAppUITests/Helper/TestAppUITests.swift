@@ -16,14 +16,6 @@ class TestAppUITests: XCTestCase {
         continueAfterFailure = false
     }
     
-    override func tearDown() {
-        super.tearDown()
-        
-        if let failureCount = testRun?.failureCount, failureCount > 0 {
-          takeScreenshot()
-        }
-    }
-    
     
     func runTestAppUITests(feature: String, timeout: TimeInterval = 0.5) throws {
         let app = XCUIApplication()
