@@ -57,7 +57,14 @@ open class UsernamePasswordAccountService: @unchecked Sendable, AccountService, 
     open func login(username: String, password: String) async throws { }
     
     
+    /// <#Description#>
+    /// - Parameter signInValues: <#signInValues description#>
     open func signUp(signInValues: SignInValues) async throws { }
+    
+    
+    /// <#Description#>
+    /// - Parameter username: <#username description#>
+    open func resetPassword(username: String) async throws { }
     
     
     /// Creates a resuable button styled in accordance to the ``UsernamePasswordAccountService`` or its subclasses.
