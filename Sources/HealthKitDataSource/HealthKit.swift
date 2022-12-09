@@ -12,7 +12,7 @@ import SwiftUI
 
 
 /// <#Description#>
-public final class HealthKit<ComponentStandard: Standard>: Component, ObservableObject, ObservableObjectComponent {
+public final class HealthKit<ComponentStandard: Standard>: Component, ObservableObject, ObservableObjectProvider {
     /// <#Description#>
     public typealias Adapter = any DataSourceRegistryAdapter<HKSample, ComponentStandard.BaseType>
     

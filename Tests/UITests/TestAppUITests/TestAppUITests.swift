@@ -13,7 +13,7 @@ class TestAppUITests: XCTestCase {
     override func setUpWithError() throws {
         try super.setUpWithError()
         
-        continueAfterFailure = true
+        continueAfterFailure = false
     }
     
     

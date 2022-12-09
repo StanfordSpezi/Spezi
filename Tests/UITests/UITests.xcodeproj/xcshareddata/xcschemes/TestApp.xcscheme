@@ -38,6 +38,13 @@
          </BuildableReference>
          <BuildableReference
             BuildableIdentifier = "primary"
+            BlueprintIdentifier = "HealthKitDataSource"
+            BuildableName = "HealthKitDataSource"
+            BlueprintName = "HealthKitDataSource"
+            ReferencedContainer = "container:../..">
+         </BuildableReference>
+         <BuildableReference
+            BuildableIdentifier = "primary"
             BlueprintIdentifier = "LocalStorage"
             BuildableName = "LocalStorage"
             BlueprintName = "LocalStorage"
@@ -55,13 +62,6 @@
             BlueprintIdentifier = "XCTRuntimeAssertions"
             BuildableName = "XCTRuntimeAssertions"
             BlueprintName = "XCTRuntimeAssertions"
-            ReferencedContainer = "container:../..">
-         </BuildableReference>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "HealthKitDataSource"
-            BuildableName = "HealthKitDataSource"
-            BlueprintName = "HealthKitDataSource"
             ReferencedContainer = "container:../..">
          </BuildableReference>
       </CodeCoverageTargets>
