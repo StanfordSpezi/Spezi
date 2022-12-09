@@ -30,13 +30,36 @@ extension XCUIApplication {
         textField.typeText(value)
     }
     
-    func testPrimaryButton(enabled: Bool) {
-        self.collectionViews.buttons["Sign Up"].tap()
-        if enabled {
-            XCTAssert(self.collectionViews.buttons["Sign Up, In progress"].waitForExistence(timeout: 0.5))
+    func testPrimaryButton(enabled: Bool, title: String, navigationBarButtonTitle: String? = nil) {
+        let navigationBarButtonTitle = navigationBarButtonTitle ?? title
+        
+        if self.scrollViews.buttons[title].waitForExistence(timeout: 0.5) {
+            self.scrollViews.buttons[title].tap()
+        } else if self.collectionViews.buttons[title].waitForExistence(timeout: 0.5) {
+            self.collectionViews.buttons[title].tap()
         } else {
-            XCTAssert(self.navigationBars.buttons["Sign Up"].exists)
-            self.collectionViews.buttons["Sign Up"].swipeDown()
+            XCTAssert(self.buttons[title].waitForExistence(timeout: 0.5))
+            self.buttons[title].tap()
+        }
+        
+        if enabled {
+            guard !self.scrollViews.buttons["\(title), In progress"].waitForExistence(timeout: 1.0) else {
+                return
+            }
+            guard !self.collectionViews.buttons["\(title), In progress"].waitForExistence(timeout: 1.0) else {
+                return
+            }
+            XCTAssert(self.buttons["\(title), In progress"].waitForExistence(timeout: 1.0))
+        } else {
+            XCTAssert(self.navigationBars.buttons[navigationBarButtonTitle].exists)
+            
+            if self.scrollViews.buttons[title].exists {
+                self.scrollViews.buttons[title].swipeDown()
+            } else if self.collectionViews.buttons[title].exists {
+                self.collectionViews.buttons[title].swipeDown()
+            } else {
+                self.buttons[title].swipeDown()
+            }
         }
     }
 }

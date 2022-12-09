@@ -41,6 +41,15 @@ Password";
 "UAP_SIGNUP_ACTION_BUTTON_TITLE" = "Sign Up";
 
 
+// Reset
+"UAP_RESET_PASSWORD_BUTTON_TITLE" = "Forgot Password?";
+"UAP_RESET_PASSWORD_NAVIGATION_TITLE" = "Forgot Password";
+"UAP_RESET_PASSWORD_USERNAME_TITLE" = "Username";
+"UAP_RESET_PASSWORD_USERNAME_PLACEHOLDER" = "Enter your username ...";
+"UAP_RESET_PASSWORD_ACTION_BUTTON_TITLE" = "Reset Password";
+"UAP_RESET_PASSWORD_PROCESS_SUCCESSFUL_LABEL" = "Sent out a link to reset the password.";
+
+
 // MARK: - Email and Password
 "EAP_LOGIN_BUTTON_TITLE" = "Email and Password";
 "EAP_SIGNUP_BUTTION_TITLE" = "Email and Password";

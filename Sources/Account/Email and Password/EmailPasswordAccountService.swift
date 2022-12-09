@@ -35,7 +35,8 @@ open class EmailPasswordAccountService: UsernamePasswordAccountService {
         )
         return Localization(
             login: .init(buttonTitle: String(moduleLocalized: "EAP_LOGIN_BUTTON_TITLE"), username: usernameField),
-            signUp: .init(buttonTitle: String(moduleLocalized: "EAP_SIGNUP_BUTTON_TITLE"), username: usernameField)
+            signUp: .init(buttonTitle: String(moduleLocalized: "EAP_SIGNUP_BUTTON_TITLE"), username: usernameField),
+            resetPassword: .init(username: usernameField)
         )
     }
     
@@ -54,6 +55,21 @@ open class EmailPasswordAccountService: UsernamePasswordAccountService {
             destination: UsernamePasswordSignUpView(
                 usernameValidationRules: validationRules
             )
+        )
+    }
+    
+    override open var resetPasswordButton: AnyView {
+        AnyView(
+            NavigationLink {
+                UsernamePasswordResetPasswordView(
+                    usernameValidationRules: validationRules
+                ) {
+                    processSuccessfulResetPasswordView
+                }
+                    .environmentObject(self as UsernamePasswordAccountService)
+            } label: {
+                Text(localization.resetPassword.buttonTitle)
+            }
         )
     }
     

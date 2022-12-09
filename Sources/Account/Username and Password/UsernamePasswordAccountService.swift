@@ -34,6 +34,35 @@ open class UsernamePasswordAccountService: @unchecked Sendable, AccountService, 
         button(localization.signUp.buttonTitle, destination: UsernamePasswordSignUpView())
     }
     
+    /// The button that should be displayed in password-reset-related views to represent the ``UsernamePasswordAccountService`` or its subclasses.
+    open var resetPasswordButton: AnyView {
+        AnyView(
+            NavigationLink {
+                UsernamePasswordResetPasswordView {
+                    processSuccessfulResetPasswordView
+                }
+                    .environmentObject(self as UsernamePasswordAccountService)
+            } label: {
+                Text(localization.resetPassword.buttonTitle)
+            }
+        )
+    }
+    
+    open var processSuccessfulResetPasswordView: AnyView {
+        AnyView(
+            VStack(spacing: 32) {
+                Image(systemName: "checkmark.circle.fill")
+                    .resizable()
+                    .foregroundColor(.green)
+                    .frame(width: 100, height: 100)
+                Text(localization.resetPassword.processSuccessfulLabel)
+                    .multilineTextAlignment(.center)
+                    .lineLimit(nil)
+            }
+                .padding(32)
+        )
+    }
+    
     
     /// Creates a new instance of a ``UsernamePasswordAccountService``
     public init() { }
@@ -52,7 +81,14 @@ open class UsernamePasswordAccountService: @unchecked Sendable, AccountService, 
     open func login(username: String, password: String) async throws { }
     
     
+    /// <#Description#>
+    /// - Parameter signInValues: <#signInValues description#>
     open func signUp(signInValues: SignInValues) async throws { }
+    
+    
+    /// <#Description#>
+    /// - Parameter username: <#username description#>
+    open func resetPassword(username: String) async throws { }
     
     
     /// Creates a resuable button styled in accordance to the ``UsernamePasswordAccountService`` or its subclasses.

@@ -61,6 +61,7 @@ struct UsernamePasswordSignUpView: View {
             footer
         }
             .navigationTitle(navigationTitle)
+            .navigationBarBackButtonHidden(state == .processing)
             .viewStateAlert(state: $state)
     }
     
