@@ -10,7 +10,7 @@ import CardinalKit
 import Foundation
 
 
-actor TestAppStandard: Standard, ObservableObjectComponent, ObservableObject {
+actor TestAppStandard: Standard, ObservableObjectProvider, ObservableObject {
     typealias BaseType = TestAppStandardDataSourceElement
     
     

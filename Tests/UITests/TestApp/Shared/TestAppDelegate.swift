@@ -18,6 +18,7 @@ class TestAppDelegate: CardinalKitAppDelegate {
     override var configuration: Configuration {
         Configuration(standard: TestAppStandard()) {
             ObservableComponentTestsComponent(message: "Passed")
+            MultipleObservableObjectsTestsComponent()
             if HKHealthStore.isHealthDataAvailable() {
                 HealthKit {
                     CollectSample(
