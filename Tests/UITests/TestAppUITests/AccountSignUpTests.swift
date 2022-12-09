@@ -138,7 +138,6 @@ final class AccountSignUpTests: TestAppUITests {
             passcodeInput.typeText("1234\r")
         } else {
             XCTFail("Could not enter the passcode in the device to enter the password section in the settings app.")
-            takeScreenshot()
             return
         }
         
