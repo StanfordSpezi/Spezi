@@ -58,6 +58,21 @@ open class EmailPasswordAccountService: UsernamePasswordAccountService {
         )
     }
     
+    override open var resetPasswordButton: AnyView {
+        AnyView(
+            NavigationLink {
+                UsernamePasswordResetPasswordView(
+                    usernameValidationRules: validationRules
+                ) {
+                    processSuccessfulResetPasswordView
+                }
+                    .environmentObject(self as UsernamePasswordAccountService)
+            } label: {
+                Text(localization.resetPassword.buttonTitle)
+            }
+        )
+    }
+    
     
     override open func button<V: View>(_ title: String, destination: V) -> AnyView {
         AnyView(

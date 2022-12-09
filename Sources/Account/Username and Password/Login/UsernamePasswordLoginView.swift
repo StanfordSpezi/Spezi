@@ -15,32 +15,37 @@ struct UsernamePasswordLoginView: View {
     private let header: AnyView
     private let footer: AnyView
     
-    @EnvironmentObject private var usernamePasswordLoginService: UsernamePasswordAccountService
+    @EnvironmentObject private var usernamePasswordAccountService: UsernamePasswordAccountService
     
     @State private var username: String = ""
     @State private var password: String = ""
     @State private var valid = false
     @FocusState private var focusedField: AccountInputFields?
-    @State private var state: AccountViewState = .idle
     
     private let localization: ConfigurableLocalization<Localization.Login>
     
     
     var body: some View {
         ScrollView {
-            header
-            Divider()
-            usernamePasswordSection
-            Divider()
-            loginButton
+            DataEntryAccountView(
+                buttonTitle: loginButtonTitleLocalization,
+                focusState: _focusedField,
+                valid: $valid,
+                buttonPressed: {
+                    try await usernamePasswordAccountService.login(username: username, password: password)
+                }, content: {
+                    header
+                    Divider()
+                    usernamePasswordSection
+                    Divider()
+                    usernamePasswordAccountService.resetPasswordButton
+                }, footer: {
+                    footer
+                }
+            )
             footer
         }
             .navigationTitle(navigationTitle)
-            .navigationBarBackButtonHidden(state == .processing)
-            .onTapGesture {
-                focusedField = nil
-            }
-            .viewStateAlert(state: $state)
     }
     
     private var usernamePasswordSection: some View {
@@ -79,36 +84,19 @@ struct UsernamePasswordLoginView: View {
             .padding(.vertical, 12)
     }
     
-    private var loginButton: some View {
-        let loginButtonDisabled = state == .processing || !valid
-        let loginButtonTitleLocalization: String
+    private var loginButtonTitleLocalization: String {
         switch localization {
         case .environment:
-            loginButtonTitleLocalization = usernamePasswordLoginService.localization.login.loginActionButtonTitle
+            return usernamePasswordAccountService.localization.login.loginActionButtonTitle
         case let .value(login):
-            loginButtonTitleLocalization = login.loginActionButtonTitle
+            return login.loginActionButtonTitle
         }
-        
-        return Button(action: loginButtonPressed) {
-            Text(loginButtonTitleLocalization)
-                .padding(6)
-                .frame(maxWidth: .infinity)
-                .opacity(state == .processing ? 0.0 : 1.0)
-                .overlay {
-                    if state == .processing {
-                        ProgressView()
-                    }
-                }
-        }
-            .buttonStyle(.borderedProminent)
-            .disabled(loginButtonDisabled)
-            .padding()
     }
     
     private var navigationTitle: String {
         switch localization {
         case .environment:
-            return usernamePasswordLoginService.localization.login.navigationTitle
+            return usernamePasswordAccountService.localization.login.navigationTitle
         case let .value(login):
             return login.navigationTitle
         }
@@ -127,29 +115,6 @@ struct UsernamePasswordLoginView: View {
         self.header = AnyView(header())
         self.footer = AnyView(footer())
         self.localization = localization
-    }
-    
-    
-    private func loginButtonPressed() {
-        guard !(state == .processing) else {
-            return
-        }
-        
-        withAnimation(.easeOut(duration: 0.2)) {
-            focusedField = .none
-            state = .processing
-        }
-        
-        Task {
-            do {
-                try await usernamePasswordLoginService.login(username: username, password: password)
-                withAnimation(.easeIn(duration: 0.2)) {
-                    state = .idle
-                }
-            } catch {
-                state = .error(error)
-            }
-        }
     }
 }
 

@@ -16,7 +16,8 @@ extension Localization {
                 title: String(moduleLocalized: "UAP_RESET_PASSWORD_USERNAME_TITLE"),
                 placeholder: String(moduleLocalized: "UAP_RESET_PASSWORD_USERNAME_PLACEHOLDER")
             ),
-            resetPasswordActionbuttonTitle: String(moduleLocalized: "UAP_RESET_PASSWORD_ACTION_BUTTON_TITLE")
+            resetPasswordActionbuttonTitle: String(moduleLocalized: "UAP_RESET_PASSWORD_ACTION_BUTTON_TITLE"),
+            processSuccessfulLabel: String(moduleLocalized: "UAP_RESET_PASSWORD_PROCESS_SUCCESSFUL_LABEL")
         )
         
         
@@ -24,18 +25,21 @@ extension Localization {
         public let navigationTitle: String
         public let username: Field
         public let resetPasswordActionbuttonTitle: String
+        public let processSuccessfulLabel: String
         
         
         init(
             buttonTitle: String = ResetPassword.default.buttonTitle,
             navigationTitle: String = ResetPassword.default.navigationTitle,
             username: Field = ResetPassword.default.username,
-            resetPasswordActionbuttonTitle: String = ResetPassword.default.resetPasswordActionbuttonTitle
+            resetPasswordActionbuttonTitle: String = ResetPassword.default.resetPasswordActionbuttonTitle,
+            processSuccessfulLabel: String = ResetPassword.default.processSuccessfulLabel
         ) {
             self.buttonTitle = buttonTitle
             self.navigationTitle = navigationTitle
             self.username = username
             self.resetPasswordActionbuttonTitle = resetPasswordActionbuttonTitle
+            self.processSuccessfulLabel = processSuccessfulLabel
         }
     }
 }

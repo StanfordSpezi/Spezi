@@ -62,9 +62,6 @@ struct UsernamePasswordSignUpView: View {
         }
             .navigationTitle(navigationTitle)
             .navigationBarBackButtonHidden(state == .processing)
-            .onTapGesture {
-                focusedField = nil
-            }
             .viewStateAlert(state: $state)
     }
     

@@ -6,8 +6,8 @@
 // SPDX-License-Identifier: MIT
 //
 
+@testable import Account
 import SwiftUI
-
 
 @main
 struct UITestsApp: App {

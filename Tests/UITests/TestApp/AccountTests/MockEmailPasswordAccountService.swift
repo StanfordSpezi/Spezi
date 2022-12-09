@@ -47,4 +47,8 @@ class MockEmailPasswordAccountService: EmailPasswordAccountService {
             user.gender = signInValues.genderIdentity
         }
     }
+    
+    override func resetPassword(username: String) async throws {
+        try await Task.sleep(for: .seconds(5))
+    }
 }
