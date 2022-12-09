@@ -1,0 +1,25 @@
+//
+// This source file is part of the CardinalKit open-source project
+//
+// SPDX-FileCopyrightText: 2022 CardinalKit and the project authors (see CONTRIBUTORS.md)
+//
+// SPDX-License-Identifier: MIT
+//
+
+// MARK: - Username Password
+
+// Login
+"UAP_LOGIN_BUTTON_TITLE" = "Benutzername und Passwort";
+"UAP_LOGIN_NAVIGATION_TITLE" = "Anmelden";
+"UAP_LOGIN_USERNAME_TITLE" = "Benutzername";
+"UAP_LOGIN_USERNAME_PLACEHOLDER" = "Benutzername eingeben ...";
+"UAP_LOGIN_PASSWORD_TITLE" = "Passwort";
+"UAP_LOGIN_PASSWORD_PLACEHOLDER" = "Passwort eingeben ...";
+"UAP_LOGIN_ACTION_BUTTON_TITLE" = "Anmelden";
+
+
+// MARK: - Email and Password
+"EAP_BUTTON_TITLE" = "E-Mail and Passwort";
+"EAP_LOGIN_USERNAME_TITLE" = "E-Mail";
+"EAP_LOGIN_USERNAME_PLACEHOLDER" = "E-Mail eingeben ...";
+"EAP_EMAIL_VERIFICATION_ERROR" = "Die eingegebene E-Mail ist nicht korrekt.";

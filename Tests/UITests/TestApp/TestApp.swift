@@ -12,6 +12,7 @@ import SwiftUI
 @main
 struct UITestsApp: App {
     enum Tests: String, CaseIterable, Identifiable {
+        case account = "Account"
         case healthKit = "HealthKit"
         case localStorage = "LocalStorage"
         case observableObject = "ObservableObject"
@@ -26,6 +27,8 @@ struct UITestsApp: App {
         @ViewBuilder
         var view: some View {
             switch self {
+            case .account:
+                AccountTestsView()
             case .healthKit:
                 HealthKitTestsView()
             case .localStorage:
