@@ -35,19 +35,27 @@ extension XCUIApplication {
         
         if self.scrollViews.buttons[title].waitForExistence(timeout: 0.5) {
             self.scrollViews.buttons[title].tap()
+        } else if self.collectionViews.buttons[title].waitForExistence(timeout: 0.5) {
+            self.collectionViews.buttons[title].tap()
         } else {
             XCTAssert(self.buttons[title].waitForExistence(timeout: 0.5))
             self.buttons[title].tap()
         }
         
         if enabled {
-            if !self.scrollViews.buttons["\(title), In progress"].waitForExistence(timeout: 1.0) {
-                XCTAssert(self.buttons["\(title), In progress"].waitForExistence(timeout: 1.0))
+            guard !self.scrollViews.buttons["\(title), In progress"].waitForExistence(timeout: 1.0) else {
+                return
             }
+            guard !self.collectionViews.buttons["\(title), In progress"].waitForExistence(timeout: 1.0) else {
+                return
+            }
+            XCTAssert(self.buttons["\(title), In progress"].waitForExistence(timeout: 1.0))
         } else {
             XCTAssert(self.navigationBars.buttons[navigationBarButtonTitle].exists)
             
-            if self.collectionViews.buttons[title].exists {
+            if self.scrollViews.buttons[title].exists {
+                self.scrollViews.buttons[title].swipeDown()
+            } else if self.collectionViews.buttons[title].exists {
                 self.collectionViews.buttons[title].swipeDown()
             } else {
                 self.buttons[title].swipeDown()
