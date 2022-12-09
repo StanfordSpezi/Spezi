@@ -10,6 +10,7 @@
 		2F01E8CC29148D120089C46B /* HealthKitDataSource in Frameworks */ = {isa = PBXBuildFile; productRef = 2F01E8CB29148D120089C46B /* HealthKitDataSource */; };
 		2F1B81FB2942C4F00037BC09 /* UserProfileViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1B81FA2942C4F00037BC09 /* UserProfileViewTests.swift */; };
 		2F1B82092942DE390037BC09 /* TestAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1B82082942DE390037BC09 /* TestAppUITests.swift */; };
+		2F1B820F2942E54F0037BC09 /* XCTTestCase+HealthDataType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1B820E2942E54F0037BC09 /* XCTTestCase+HealthDataType.swift */; };
 		2F2A354F291CCF74000E8373 /* TestAppHealthKitAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2A354E291CCF74000E8373 /* TestAppHealthKitAdapter.swift */; };
 		2F4530C4293FD704000A858F /* AccountTestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4530C3293FD704000A858F /* AccountTestsView.swift */; };
 		2F6051CC290C5BDC0003D458 /* XCTRuntimeAssertions in Frameworks */ = {isa = PBXBuildFile; productRef = 2F6051CB290C5BDC0003D458 /* XCTRuntimeAssertions */; };
@@ -62,6 +63,7 @@
 		2F01E8CE291493560089C46B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		2F1B81FA2942C4F00037BC09 /* UserProfileViewTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileViewTests.swift; sourceTree = "<group>"; };
 		2F1B82082942DE390037BC09 /* TestAppUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestAppUITests.swift; sourceTree = "<group>"; };
+		2F1B820E2942E54F0037BC09 /* XCTTestCase+HealthDataType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "XCTTestCase+HealthDataType.swift"; sourceTree = "<group>"; };
 		2F2A354E291CCF74000E8373 /* TestAppHealthKitAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAppHealthKitAdapter.swift; sourceTree = "<group>"; };
 		2F4530C3293FD704000A858F /* AccountTestsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountTestsView.swift; sourceTree = "<group>"; };
 		2F6D139228F5F384007C25D6 /* TestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -247,6 +249,7 @@
 			isa = PBXGroup;
 			children = (
 				2F1B82082942DE390037BC09 /* TestAppUITests.swift */,
+				2F1B820E2942E54F0037BC09 /* XCTTestCase+HealthDataType.swift */,
 				2FE122B1294247480016B162 /* XCUIApplication+TextEntry.swift */,
 			);
 			path = Helper;
@@ -390,6 +393,7 @@
 			files = (
 				2F9F07F529090BA900CDC598 /* ObservableObjectComponentTests.swift in Sources */,
 				2F1B82092942DE390037BC09 /* TestAppUITests.swift in Sources */,
+				2F1B820F2942E54F0037BC09 /* XCTTestCase+HealthDataType.swift in Sources */,
 				2F9F07E2290906A200CDC598 /* SecureStorageTests.swift in Sources */,
 				2FC246D62941720600F75383 /* AccountSignUpTests.swift in Sources */,
 				2FC246D4294171EE00F75383 /* AccountLoginTests.swift in Sources */,
