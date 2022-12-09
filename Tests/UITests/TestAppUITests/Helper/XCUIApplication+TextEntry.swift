@@ -30,13 +30,28 @@ extension XCUIApplication {
         textField.typeText(value)
     }
     
-    func testPrimaryButton(enabled: Bool) {
-        self.collectionViews.buttons["Sign Up"].tap()
-        if enabled {
-            XCTAssert(self.collectionViews.buttons["Sign Up, In progress"].waitForExistence(timeout: 0.5))
+    func testPrimaryButton(enabled: Bool, title: String, navigationBarButtonTitle: String? = nil) {
+        let navigationBarButtonTitle = navigationBarButtonTitle ?? title
+        
+        if self.scrollViews.buttons[title].waitForExistence(timeout: 0.5) {
+            self.scrollViews.buttons[title].tap()
         } else {
-            XCTAssert(self.navigationBars.buttons["Sign Up"].exists)
-            self.collectionViews.buttons["Sign Up"].swipeDown()
+            XCTAssert(self.buttons[title].waitForExistence(timeout: 0.5))
+            self.buttons[title].tap()
+        }
+        
+        if enabled {
+            if !self.scrollViews.buttons["\(title), In progress"].waitForExistence(timeout: 1.0) {
+                XCTAssert(self.buttons["\(title), In progress"].waitForExistence(timeout: 1.0))
+            }
+        } else {
+            XCTAssert(self.navigationBars.buttons[navigationBarButtonTitle].exists)
+            
+            if self.collectionViews.buttons[title].exists {
+                self.collectionViews.buttons[title].swipeDown()
+            } else {
+                self.buttons[title].swipeDown()
+            }
         }
     }
 }

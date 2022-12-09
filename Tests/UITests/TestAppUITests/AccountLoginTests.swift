@@ -59,11 +59,8 @@ final class AccountLoginTests: TestAppUITests {
         let username = "lelandstanford@stanford.edu"
         let password = "StanfordRocks123!"
         
-        app.textFields[usernameField].tap()
-        app.textFields[usernameField].typeText(String(username.dropLast(4)))
-        
-        app.secureTextFields[passwordField].tap()
-        app.secureTextFields[passwordField].typeText(password)
+        app.enter(value: String(username.dropLast(4)), in: usernameField)
+        app.enter(value: password, in: passwordField, secureTextField: true)
         
         XCTAssertTrue(app.staticTexts["The entered email is not correct."].exists)
         XCTAssertFalse(app.scrollViews.otherElements.buttons["Login, In progress"].waitForExistence(timeout: 0.5))
@@ -96,32 +93,17 @@ final class AccountLoginTests: TestAppUITests {
     
     private func delete(username: (field: String, count: Int), password: (field: String, count: Int)) throws {
         let app = XCUIApplication()
-        
-        app.textFields[username.field].coordinate(withNormalizedOffset: CGVector(dx: 0.95, dy: 0.5)).tap()
-        app.textFields[username.field].typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: username.count))
-        app.secureTextFields[password.field].coordinate(withNormalizedOffset: CGVector(dx: 0.95, dy: 0.5)).tap()
-        app.secureTextFields[password.field].typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: password.count))
+        app.delete(count: username.count, in: username.field)
+        app.delete(count: password.count, in: password.field, secureTextField: true)
     }
     
     private func enterCredentials(username: (field: String, value: String), password: (field: String, value: String)) throws {
         let app = XCUIApplication()
-        
-        app.scrollViews.otherElements.buttons["Login"].tap()
-        XCTAssertFalse(app.scrollViews.otherElements.buttons["Login, In progress"].waitForExistence(timeout: 0.5))
-        XCTAssertTrue(app.navigationBars.buttons["Login"].exists)
-        
-        app.textFields[username.field].tap()
-        app.textFields[username.field].typeText(username.value)
-        
-        app.scrollViews.otherElements.buttons["Login"].tap()
-        XCTAssertFalse(app.scrollViews.otherElements.buttons["Login, In progress"].waitForExistence(timeout: 0.5))
-        XCTAssertTrue(app.navigationBars.buttons["Login"].exists)
-        
-        app.secureTextFields[password.field].tap()
-        app.secureTextFields[password.field].typeText(password.value)
-        
-        app.scrollViews.otherElements.buttons["Login"].tap()
-        XCTAssertFalse(app.navigationBars.buttons["Login"].exists)
-        XCTAssertTrue(app.scrollViews.otherElements.buttons["Login, In progress"].waitForExistence(timeout: 0.5))
+        let buttonTitle = "Login"
+        app.testPrimaryButton(enabled: false, title: buttonTitle)
+        app.enter(value: username.value, in: username.field)
+        app.testPrimaryButton(enabled: false, title: buttonTitle)
+        app.enter(value: password.value, in: password.field, secureTextField: true)
+        app.testPrimaryButton(enabled: true, title: buttonTitle)
     }
 }

@@ -29,6 +29,7 @@
 		2F9F07E7290907C600CDC598 /* XCTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9F07E6290907C600CDC598 /* XCTest.swift */; };
 		2F9F07F129090B0500CDC598 /* TestAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9F07F029090B0500CDC598 /* TestAppDelegate.swift */; };
 		2F9F07F529090BA900CDC598 /* ObservableObjectComponentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9F07F429090BA900CDC598 /* ObservableObjectComponentTests.swift */; };
+		2FA04AD72943165200648A48 /* AccountResetPasswordTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA04AD62943165200648A48 /* AccountResetPasswordTests.swift */; };
 		2FA7382C290ADFAA007ACEB9 /* TestApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA7382B290ADFAA007ACEB9 /* TestApp.swift */; };
 		2FB77B9E2910EF13009FDDE2 /* LocalStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 2FB77B9D2910EF13009FDDE2 /* LocalStorage */; };
 		2FB77BA12910EF4A009FDDE2 /* LocalStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB77BA02910EF4A009FDDE2 /* LocalStorageTests.swift */; };
@@ -82,6 +83,7 @@
 		2F9F07E6290907C600CDC598 /* XCTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTest.swift; sourceTree = "<group>"; };
 		2F9F07F029090B0500CDC598 /* TestAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAppDelegate.swift; sourceTree = "<group>"; };
 		2F9F07F429090BA900CDC598 /* ObservableObjectComponentTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservableObjectComponentTests.swift; sourceTree = "<group>"; };
+		2FA04AD62943165200648A48 /* AccountResetPasswordTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountResetPasswordTests.swift; sourceTree = "<group>"; };
 		2FA7382B290ADFAA007ACEB9 /* TestApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestApp.swift; sourceTree = "<group>"; };
 		2FB77BA02910EF4A009FDDE2 /* LocalStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalStorageTests.swift; sourceTree = "<group>"; };
 		2FB77BA42910F84D009FDDE2 /* LocalStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalStorageTests.swift; sourceTree = "<group>"; };
@@ -181,6 +183,7 @@
 				2F9F07E1290906A200CDC598 /* SecureStorageTests.swift */,
 				2FB77BA42910F84D009FDDE2 /* LocalStorageTests.swift */,
 				2FC246D3294171EE00F75383 /* AccountLoginTests.swift */,
+				2FA04AD62943165200648A48 /* AccountResetPasswordTests.swift */,
 				2FC246D52941720600F75383 /* AccountSignUpTests.swift */,
 				2F1B81FA2942C4F00037BC09 /* UserProfileViewTests.swift */,
 				2FC2C407291DCC8200712676 /* HealthKitTests.swift */,
@@ -394,6 +397,7 @@
 				2F9F07F529090BA900CDC598 /* ObservableObjectComponentTests.swift in Sources */,
 				2F1B82092942DE390037BC09 /* TestAppUITests.swift in Sources */,
 				2F1B820F2942E54F0037BC09 /* XCTTestCase+HealthDataType.swift in Sources */,
+				2FA04AD72943165200648A48 /* AccountResetPasswordTests.swift in Sources */,
 				2F9F07E2290906A200CDC598 /* SecureStorageTests.swift in Sources */,
 				2FC246D62941720600F75383 /* AccountSignUpTests.swift in Sources */,
 				2FC246D4294171EE00F75383 /* AccountLoginTests.swift in Sources */,
