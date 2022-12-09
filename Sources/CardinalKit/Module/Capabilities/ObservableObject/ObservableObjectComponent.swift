@@ -16,7 +16,7 @@ public protocol ObservableObjectProvider {
 }
 
 
-private struct ObservableObjectInjectionViewModifie: ViewModifier {
+private struct ObservableObjectInjectionViewModifier: ViewModifier {
     let apply: (AnyView) -> AnyView
     
     
@@ -44,7 +44,7 @@ extension ObservableObjectProvider {
     func inject(in view: AnyView) -> AnyView {
         var view = view
         for observableObject in observableObjects {
-            let modifier = ObservableObjectInjectionViewModifie(observableObject: observableObject)
+            let modifier = ObservableObjectInjectionViewModifier(observableObject: observableObject)
             view = AnyView(view.modifier(modifier))
         }
         return view
