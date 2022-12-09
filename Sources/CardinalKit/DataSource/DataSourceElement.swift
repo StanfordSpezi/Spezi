@@ -16,7 +16,7 @@ public enum DataSourceElement<Element: Identifiable & Sendable>: Sendable where 
     case removal(Element.ID)
     
     
-    /// <#Description#>
+    /// The identifier of the `Element` passed to the ``DataSourceRegistry``
     public var id: Element.ID {
         switch self {
         case let .addition(element):
@@ -27,11 +27,11 @@ public enum DataSourceElement<Element: Identifiable & Sendable>: Sendable where 
     }
     
     
-    /// <#Description#>
+    /// Maps a ``DataSourceElement`` to an other `Element` type.
     /// - Parameters:
-    ///   - elementMap: <#elementMap description#>
-    ///   - idMap: <#idMap description#>
-    /// - Returns: <#description#>
+    ///   - elementMap: The element map function maps the complete `Element` instance used for the ``DataSourceElement/addition(_:)`` case.
+    ///   - idMap: The id map function only maps the identifier or an `Element` used for the ``DataSourceElement/removal(_:)`` case.
+    /// - Returns: Returns the mapped element
     public func map<I: Identifiable & Sendable>(
         element elementMap: (Element) -> I,
         id idMap: (Element.ID) -> I.ID

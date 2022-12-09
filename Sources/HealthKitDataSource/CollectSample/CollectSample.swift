@@ -10,7 +10,7 @@ import CardinalKit
 import HealthKit
 
 
-/// <#Description#>
+/// Collects a specificied `HKSampleType`  in the ``HealthKit`` component.
 public struct CollectSample<SampleType: HKSampleType>: HealthKitDataSourceDescription {
     let sampleType: SampleType
     let deliverySetting: HealthKitDeliverySetting
@@ -21,10 +21,9 @@ public struct CollectSample<SampleType: HKSampleType>: HealthKitDataSourceDescri
     }
     
     
-    /// <#Description#>
     /// - Parameters:
-    ///   - sampleType: <#sampleType description#>
-    ///   - deliverySetting: <#deliverySetting description#>
+    ///   - sampleType: The `HKSampleType` that should be collected
+    ///   - deliverySetting: The ``HealthKitDeliverySetting`` that should be used to collect the sample type. `.manual` is the default argument used.
     public init(_ sampleType: SampleType, deliverySetting: HealthKitDeliverySetting = .manual()) {
         self.sampleType = sampleType
         self.deliverySetting = deliverySetting
