@@ -38,6 +38,7 @@
 		2FC246D02941500800F75383 /* TestAccountConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC246CF2941500800F75383 /* TestAccountConfiguration.swift */; };
 		2FC246D22941500F00F75383 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC246D12941500F00F75383 /* User.swift */; };
 		2FC246D4294171EE00F75383 /* AccountLoginTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC246D3294171EE00F75383 /* AccountLoginTests.swift */; };
+		2FC246D62941720600F75383 /* AccountSignUpTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC246D52941720600F75383 /* AccountSignUpTests.swift */; };
 		2FC2C406291D84A600712676 /* HealthKitTestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC2C405291D84A600712676 /* HealthKitTestsView.swift */; };
 		2FC2C408291DCC8200712676 /* HealthKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC2C407291DCC8200712676 /* HealthKitTests.swift */; };
 		2FC42FD9290ADD8800B08F18 /* CardinalKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2FC42FD8290ADD8800B08F18 /* CardinalKit */; };
@@ -87,6 +88,7 @@
 		2FC246CF2941500800F75383 /* TestAccountConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAccountConfiguration.swift; sourceTree = "<group>"; };
 		2FC246D12941500F00F75383 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		2FC246D3294171EE00F75383 /* AccountLoginTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountLoginTests.swift; sourceTree = "<group>"; };
+		2FC246D52941720600F75383 /* AccountSignUpTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSignUpTests.swift; sourceTree = "<group>"; };
 		2FC2C405291D84A600712676 /* HealthKitTestsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitTestsView.swift; sourceTree = "<group>"; };
 		2FC2C407291DCC8200712676 /* HealthKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitTests.swift; sourceTree = "<group>"; };
 		2FC42FD7290ADD5E00B08F18 /* CardinalKitSPM */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = CardinalKitSPM; path = ../..; sourceTree = "<group>"; };
@@ -175,6 +177,7 @@
 				2F9F07E1290906A200CDC598 /* SecureStorageTests.swift */,
 				2FB77BA42910F84D009FDDE2 /* LocalStorageTests.swift */,
 				2FC246D3294171EE00F75383 /* AccountLoginTests.swift */,
+				2FC246D52941720600F75383 /* AccountSignUpTests.swift */,
 				2FC2C407291DCC8200712676 /* HealthKitTests.swift */,
 			);
 			path = TestAppUITests;
@@ -385,6 +388,7 @@
 				2F9F07F529090BA900CDC598 /* ObservableObjectComponentTests.swift in Sources */,
 				2F8A431329130A8C005D2B8F /* TestAppUITests.swift in Sources */,
 				2F9F07E2290906A200CDC598 /* SecureStorageTests.swift in Sources */,
+				2FC246D62941720600F75383 /* AccountSignUpTests.swift in Sources */,
 				2FC246D4294171EE00F75383 /* AccountLoginTests.swift in Sources */,
 				2FB77BA52910F84D009FDDE2 /* LocalStorageTests.swift in Sources */,
 				2FE122B2294247480016B162 /* XCUIApplication+TextEntry.swift in Sources */,

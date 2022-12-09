@@ -26,9 +26,14 @@ open class UsernamePasswordAccountService: @unchecked Sendable, AccountService, 
     
     /// The button that should be displayed in login-related views to represent the ``UsernamePasswordAccountService`` or its subclasses.
     open var loginButton: AnyView {
-        button(localization.login.buttonTitle, destination: UsernamePasswordLoginView())
+        button(localization.signUp.buttonTitle, destination: UsernamePasswordLoginView())
     }
-
+    
+    /// The button that should be displayed in sign up-related views to represent the ``UsernamePasswordAccountService`` or its subclasses.
+    open var signUpButton: AnyView {
+        button(localization.signUp.buttonTitle, destination: UsernamePasswordSignUpView())
+    }
+    
     
     /// Creates a new instance of a ``UsernamePasswordAccountService``
     public init() { }
@@ -45,6 +50,9 @@ open class UsernamePasswordAccountService: @unchecked Sendable, AccountService, 
     ///   - username: The username that should be used in the login process
     ///   - password: The password that should be used in the login process
     open func login(username: String, password: String) async throws { }
+    
+    
+    open func signUp(signInValues: SignInValues) async throws { }
     
     
     /// Creates a resuable button styled in accordance to the ``UsernamePasswordAccountService`` or its subclasses.

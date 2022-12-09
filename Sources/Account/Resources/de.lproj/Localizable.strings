@@ -18,8 +18,35 @@
 "UAP_LOGIN_ACTION_BUTTON_TITLE" = "Anmelden";
 
 
+// SignUp
+"UAP_SIGNUP_BUTTION_TITLE" = "Benutzername und Passwort";
+"UAP_SIGNUP_NAVIGATION_TITLE" = "Benutzerkonto Erstellen";
+"UAP_SIGNUP_USERNAME_TITLE" = "Benutzername";
+"UAP_SIGNUP_USERNAME_PLACEHOLDER" = "Benutzername eingeben ...";
+"UAP_SIGNUP_PASSWORD_TITLE" = "Passwort";
+"UAP_SIGNUP_PASSWORD_PLACEHOLDER" = "Passwort eingeben ...";
+"UAP_SIGNUP_PASSWORD_REPEAT_TITLE" = "Passwort
+Wiederholen";
+"UAP_SIGNUP_PASSWORD_REPEAT_PLACEHOLDER" = "Passwort wiederholen ...";
+"UAP_SIGNUP_PASSWORD_NOT_EQUAL_ERROR" = "Die eingegebenen Passwörter sind nicht gleich.";
+"UAP_SIGNUP_GIVEN_NAME_TITLE" = "";
+"UAP_SIGNUP_GIVEN_NAME_PLACEHOLDER" = "";
+"UAP_SIGNUP_FAMILY_NAME_TITLE" = "";
+"UAP_SIGNUP_FAMILY_NAME_PLACEHOLDER" = "";
+"UAP_SIGNUP_GENDER_IDENTITY_TITLE" = "";
+"UAP_SIGNUP_DATE_OF_BIRTH_TITLE" = "";
+"UAP_SIGNUP_ACTION_BUTTON_TITLE" = "";
+
 // MARK: - Email and Password
 "EAP_BUTTON_TITLE" = "E-Mail and Passwort";
 "EAP_LOGIN_USERNAME_TITLE" = "E-Mail";
 "EAP_LOGIN_USERNAME_PLACEHOLDER" = "E-Mail eingeben ...";
 "EAP_EMAIL_VERIFICATION_ERROR" = "Die eingegebene E-Mail ist nicht korrekt.";
+
+
+// MARK: - Gender Identity
+"GENDER_IDENTITY_FEMALE" = "Weiblich";
+"GENDER_IDENTITY_MALE" = "Männlich";
+"GENDER_IDENTITY_TRANSGENDER" = "Transgender";
+"GENDER_IDENTITY_NON_BINARY" = "Nicht-binär";
+"GENDER_IDENTITY_PREFER_NOT_TO_STATE" = "Keine Angabe";

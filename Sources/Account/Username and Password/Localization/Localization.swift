@@ -15,16 +15,20 @@ public struct Localization: Codable {
     
     
     public static let `default` = Localization(
-        login: Login.default
+        login: Login.default,
+        signUp: SignUp.default
     )
     
     
     public let login: Login
+    public let signUp: SignUp
     
     
     init(
-        login: Login = Localization.default.login
+        login: Login = Localization.default.login,
+        signUp: SignUp = Localization.default.signUp
     ) {
         self.login = login
+        self.signUp = signUp
     }
 }

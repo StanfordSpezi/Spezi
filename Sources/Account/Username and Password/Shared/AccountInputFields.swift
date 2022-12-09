@@ -10,4 +10,10 @@
 enum AccountInputFields: Hashable {
     case username
     case password
+    case passwordRepeat
+    case givenName
+    case familyName
+    case genderIdentity
+    case dateOfBirth
+    case phoneNumber
 }

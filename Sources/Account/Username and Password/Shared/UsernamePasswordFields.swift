@@ -15,11 +15,36 @@ struct UsernamePasswordFields: View {
             username: Localization.Field,
             password: Localization.Field
         )>)
+        // We do not introduce an explicity type for the temporary usage of the localization fields.
+        // swiftlint:disable:next large_tuple
+        case signUp(ConfigurableLocalization<(
+            username: Localization.Field,
+            password: Localization.Field,
+            passwordRepeat: Localization.Field,
+            passwordNotEqualError: String
+        )>)
+        
+        
+        var login: Bool {
+            if case .login = self {
+                return true
+            } else {
+                return false
+            }
+        }
+        
+        var signUp: Bool {
+            if case .signUp = self {
+                return true
+            } else {
+                return false
+            }
+        }
         
         
         var username: Localization.Field? {
             switch self {
-            case let .login(.value((username, _))):
+            case let .login(.value((username, _))), let .signUp(.value((username, _, _, _))):
                 return username
             default:
                 return nil
@@ -28,8 +53,26 @@ struct UsernamePasswordFields: View {
         
         var password: Localization.Field? {
             switch self {
-            case let .login(.value((_, password))):
+            case let .login(.value((_, password))), let .signUp(.value((_, password, _, _))):
                 return password
+            default:
+                return nil
+            }
+        }
+        
+        var passwordRepeat: Localization.Field? {
+            switch self {
+            case let .signUp(.value((_, _, passwordRepeat, _))):
+                return passwordRepeat
+            default:
+                return nil
+            }
+        }
+        
+        var passwordNotEqualError: String? {
+            switch self {
+            case let .signUp(.value((_, _, _, passwordNotEqualError))):
+                return passwordNotEqualError
             default:
                 return nil
             }
@@ -61,6 +104,10 @@ struct UsernamePasswordFields: View {
             usernameTextField
             Divider()
             passwordSecureField
+            if presentationType.signUp {
+                Divider()
+                passwordRepeatSecureField
+            }
         }
             .onChange(of: usernameValid) { _ in
                 updateValid()
@@ -87,6 +134,8 @@ struct UsernamePasswordFields: View {
             switch presentationType {
             case .login:
                 usernameLocalization = usernamePasswordLoginService.localization.login.username
+            case .signUp:
+                usernameLocalization = usernamePasswordLoginService.localization.signUp.username
             }
         }
         
@@ -118,6 +167,8 @@ struct UsernamePasswordFields: View {
             switch presentationType {
             case .login:
                 passwordLocalization = usernamePasswordLoginService.localization.login.password
+            case .signUp:
+                passwordLocalization = usernamePasswordLoginService.localization.signUp.password
             }
         }
         
@@ -134,10 +185,66 @@ struct UsernamePasswordFields: View {
                 }
                     .autocorrectionDisabled(true)
                     .textInputAutocapitalization(.never)
-                    .textContentType(.password)
+                    .textContentType(presentationType.login ? .password : .newPassword)
             }
         )
             .onTapFocus(focusedField: _focusedField, fieldIdentifier: .password)
+    }
+    
+    private var passwordRepeatSecureField: some View {
+        let passwordRepeatLocalization: Localization.Field
+        if let passwordRepeat = presentationType.passwordRepeat {
+            passwordRepeatLocalization = passwordRepeat
+        } else {
+            switch presentationType {
+            case .login:
+                preconditionFailure("The password repeat field should never be shown in the login presentation type.")
+            case .signUp:
+                passwordRepeatLocalization = usernamePasswordLoginService.localization.signUp.passwordRepeat
+            }
+        }
+        
+        let passwordNotEqualErrorLocalization: String
+        if let passwordNotEqualError = presentationType.passwordNotEqualError {
+            passwordNotEqualErrorLocalization = passwordNotEqualError
+        } else {
+            switch presentationType {
+            case .login:
+                preconditionFailure("The password not equal error should never be shown in the login presentation type.")
+            case .signUp:
+                passwordNotEqualErrorLocalization = usernamePasswordLoginService.localization.signUp.passwordNotEqualError
+            }
+        }
+        
+        return VerifyableTextFieldGridRow(
+            text: $passwordRepeat,
+            valid: $passwordRepeatValid,
+            validationRules: passwordValidationRules,
+            description: {
+                Text(passwordRepeatLocalization.title)
+            },
+            textField: { binding in
+                VStack {
+                    SecureField(text: binding) {
+                        Text(passwordRepeatLocalization.placeholder)
+                    }
+                        .autocorrectionDisabled(true)
+                        .textInputAutocapitalization(.never)
+                        .textContentType(.newPassword)
+                    if password != passwordRepeat && !passwordRepeat.isEmpty {
+                        HStack {
+                            Text(passwordNotEqualErrorLocalization)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .gridColumnAlignment(.leading)
+                                .font(.footnote)
+                                .foregroundColor(.red)
+                            Spacer(minLength: 0)
+                        }
+                    }
+                }
+            }
+        )
+            .onTapFocus(focusedField: _focusedField, fieldIdentifier: .passwordRepeat)
     }
     
     
@@ -161,7 +268,15 @@ struct UsernamePasswordFields: View {
     
     
     private func updateValid() {
-        valid = usernameValid && passwordValid
+        switch presentationType {
+        case .login:
+            valid = usernameValid && passwordValid
+        case .signUp:
+            valid = usernameValid
+                && passwordValid
+                && passwordRepeatValid
+                && password == passwordRepeat
+        }
     }
 }
 
@@ -195,6 +310,18 @@ struct UsernamePasswordFields_Previews: PreviewProvider {
                         valid: $valid,
                         usernameValidationRules: validationRules,
                         passwordValidationRules: validationRules
+                    )
+                }
+            }
+            Section {
+                Grid(horizontalSpacing: 8, verticalSpacing: 8) {
+                    UsernamePasswordFields(
+                        username: $username,
+                        password: $password,
+                        valid: $valid,
+                        usernameValidationRules: validationRules,
+                        passwordValidationRules: validationRules,
+                        presentationType: .signUp(.environment)
                     )
                 }
             }
