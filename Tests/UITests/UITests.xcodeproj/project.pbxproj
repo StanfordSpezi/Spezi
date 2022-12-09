@@ -45,9 +45,7 @@
 		2FC2C408291DCC8200712676 /* HealthKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC2C407291DCC8200712676 /* HealthKitTests.swift */; };
 		2FC42FD9290ADD8800B08F18 /* CardinalKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2FC42FD8290ADD8800B08F18 /* CardinalKit */; };
 		2FD68DE3292971730043AB73 /* Account in Frameworks */ = {isa = PBXBuildFile; productRef = 2FD68DE2292971730043AB73 /* Account */; };
-		2FE122B0294246DB0016B162 /* XCTTestCase+HealthDataType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE122AF294246DB0016B162 /* XCTTestCase+HealthDataType.swift */; };
 		2FE122B2294247480016B162 /* XCUIApplication+TextEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE122B1294247480016B162 /* XCUIApplication+TextEntry.swift */; };
-		2FE122B4294247910016B162 /* XCTestCase+Screenshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE122B3294247910016B162 /* XCTestCase+Screenshot.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -98,9 +96,7 @@
 		2FC2C405291D84A600712676 /* HealthKitTestsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitTestsView.swift; sourceTree = "<group>"; };
 		2FC2C407291DCC8200712676 /* HealthKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitTests.swift; sourceTree = "<group>"; };
 		2FC42FD7290ADD5E00B08F18 /* CardinalKitSPM */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = CardinalKitSPM; path = ../..; sourceTree = "<group>"; };
-		2FE122AF294246DB0016B162 /* XCTTestCase+HealthDataType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTTestCase+HealthDataType.swift"; sourceTree = "<group>"; };
 		2FE122B1294247480016B162 /* XCUIApplication+TextEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCUIApplication+TextEntry.swift"; sourceTree = "<group>"; };
-		2FE122B3294247910016B162 /* XCTestCase+Screenshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+Screenshot.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -255,7 +251,6 @@
 				2F1B82082942DE390037BC09 /* TestAppUITests.swift */,
 				2F1B820E2942E54F0037BC09 /* XCTTestCase+HealthDataType.swift */,
 				2FE122B1294247480016B162 /* XCUIApplication+TextEntry.swift */,
-				2FE122B3294247910016B162 /* XCTestCase+Screenshot.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -396,14 +391,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2F1B82052942DB0F0037BC09 /* TestAppUITests.swift in Sources */,
 				2F9F07F529090BA900CDC598 /* ObservableObjectComponentTests.swift in Sources */,
 				2F1B82092942DE390037BC09 /* TestAppUITests.swift in Sources */,
 				2F1B820F2942E54F0037BC09 /* XCTTestCase+HealthDataType.swift in Sources */,
 				2F9F07E2290906A200CDC598 /* SecureStorageTests.swift in Sources */,
 				2FC246D62941720600F75383 /* AccountSignUpTests.swift in Sources */,
 				2FC246D4294171EE00F75383 /* AccountLoginTests.swift in Sources */,
-				2FE122B4294247910016B162 /* XCTestCase+Screenshot.swift in Sources */,
 				2FB77BA52910F84D009FDDE2 /* LocalStorageTests.swift in Sources */,
 				2FE122B2294247480016B162 /* XCUIApplication+TextEntry.swift in Sources */,
 				2FC2C408291DCC8200712676 /* HealthKitTests.swift in Sources */,
