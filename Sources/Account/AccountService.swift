@@ -21,7 +21,7 @@ public protocol AccountService: Sendable, AnyObject, Identifiable {
 }
 
 
-extension AccountService {    
+extension AccountService {
     // A documentation for this methodd exists in the `Identifiable` type which SwiftLint doesn't recognize.
     // swiftlint:disable:next missing_docs
     public var id: String {
