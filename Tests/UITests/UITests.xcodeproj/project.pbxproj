@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2F01E8CC29148D120089C46B /* HealthKitDataSource in Frameworks */ = {isa = PBXBuildFile; productRef = 2F01E8CB29148D120089C46B /* HealthKitDataSource */; };
-		2F1B82002942CAE90037BC09 /* TestAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1B81FF2942CAE90037BC09 /* TestAppUITests.swift */; };
+		2F1B82032942D2070037BC09 /* TestAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1B82022942D2070037BC09 /* TestAppUITests.swift */; };
 		2F2A354F291CCF74000E8373 /* TestAppHealthKitAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2A354E291CCF74000E8373 /* TestAppHealthKitAdapter.swift */; };
 		2F4530C4293FD704000A858F /* AccountTestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4530C3293FD704000A858F /* AccountTestsView.swift */; };
 		2F6051CC290C5BDC0003D458 /* XCTRuntimeAssertions in Frameworks */ = {isa = PBXBuildFile; productRef = 2F6051CB290C5BDC0003D458 /* XCTRuntimeAssertions */; };
@@ -38,6 +38,7 @@
 		2FC246D02941500800F75383 /* TestAccountConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC246CF2941500800F75383 /* TestAccountConfiguration.swift */; };
 		2FC246D22941500F00F75383 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC246D12941500F00F75383 /* User.swift */; };
 		2FC246D4294171EE00F75383 /* AccountLoginTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC246D3294171EE00F75383 /* AccountLoginTests.swift */; };
+		2FC246D62941720600F75383 /* AccountSignUpTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC246D52941720600F75383 /* AccountSignUpTests.swift */; };
 		2FC2C406291D84A600712676 /* HealthKitTestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC2C405291D84A600712676 /* HealthKitTestsView.swift */; };
 		2FC2C408291DCC8200712676 /* HealthKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC2C407291DCC8200712676 /* HealthKitTests.swift */; };
 		2FC42FD9290ADD8800B08F18 /* CardinalKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2FC42FD8290ADD8800B08F18 /* CardinalKit */; };
@@ -58,8 +59,8 @@
 /* Begin PBXFileReference section */
 		2F01E8CD291490B80089C46B /* TestApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TestApp.entitlements; sourceTree = "<group>"; };
 		2F01E8CE291493560089C46B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		2F1B81FC2942C6220037BC09 /* TestAppUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestAppUITests.swift; sourceTree = "<group>"; };
 		2F1B81FF2942CAE90037BC09 /* TestAppUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestAppUITests.swift; sourceTree = "<group>"; };
+		2F1B82022942D2070037BC09 /* TestAppUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestAppUITests.swift; sourceTree = "<group>"; };
 		2F2A354E291CCF74000E8373 /* TestAppHealthKitAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAppHealthKitAdapter.swift; sourceTree = "<group>"; };
 		2F4530C3293FD704000A858F /* AccountTestsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountTestsView.swift; sourceTree = "<group>"; };
 		2F6D139228F5F384007C25D6 /* TestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -88,6 +89,7 @@
 		2FC246CF2941500800F75383 /* TestAccountConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAccountConfiguration.swift; sourceTree = "<group>"; };
 		2FC246D12941500F00F75383 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		2FC246D3294171EE00F75383 /* AccountLoginTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountLoginTests.swift; sourceTree = "<group>"; };
+		2FC246D52941720600F75383 /* AccountSignUpTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSignUpTests.swift; sourceTree = "<group>"; };
 		2FC2C405291D84A600712676 /* HealthKitTestsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitTestsView.swift; sourceTree = "<group>"; };
 		2FC2C407291DCC8200712676 /* HealthKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitTests.swift; sourceTree = "<group>"; };
 		2FC42FD7290ADD5E00B08F18 /* CardinalKitSPM */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = CardinalKitSPM; path = ../..; sourceTree = "<group>"; };
@@ -118,10 +120,10 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		2F1B81FE2942CAC80037BC09 /* Recovered References */ = {
+		2F1B82012942D1C40037BC09 /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
-				2F1B81FC2942C6220037BC09 /* TestAppUITests.swift */,
+				2F1B81FF2942CAE90037BC09 /* TestAppUITests.swift */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -147,7 +149,7 @@
 				2F6D13AF28F5F386007C25D6 /* TestAppUITests */,
 				2F6D139328F5F384007C25D6 /* Products */,
 				2F6D13C228F5F3BE007C25D6 /* Frameworks */,
-				2F1B81FE2942CAC80037BC09 /* Recovered References */,
+				2F1B82012942D1C40037BC09 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -185,6 +187,7 @@
 				2F9F07E1290906A200CDC598 /* SecureStorageTests.swift */,
 				2FB77BA42910F84D009FDDE2 /* LocalStorageTests.swift */,
 				2FC246D3294171EE00F75383 /* AccountLoginTests.swift */,
+				2FC246D52941720600F75383 /* AccountSignUpTests.swift */,
 				2FC2C407291DCC8200712676 /* HealthKitTests.swift */,
 			);
 			path = TestAppUITests;
@@ -250,7 +253,7 @@
 		2FE122AE294246D40016B162 /* Helper */ = {
 			isa = PBXGroup;
 			children = (
-				2F1B81FF2942CAE90037BC09 /* TestAppUITests.swift */,
+				2F1B82022942D2070037BC09 /* TestAppUITests.swift */,
 				2FE122B1294247480016B162 /* XCUIApplication+TextEntry.swift */,
 			);
 			path = Helper;
@@ -393,8 +396,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F9F07F529090BA900CDC598 /* ObservableObjectComponentTests.swift in Sources */,
-				2F1B82002942CAE90037BC09 /* TestAppUITests.swift in Sources */,
+				2F1B82032942D2070037BC09 /* TestAppUITests.swift in Sources */,
 				2F9F07E2290906A200CDC598 /* SecureStorageTests.swift in Sources */,
+				2FC246D62941720600F75383 /* AccountSignUpTests.swift in Sources */,
 				2FC246D4294171EE00F75383 /* AccountLoginTests.swift in Sources */,
 				2FB77BA52910F84D009FDDE2 /* LocalStorageTests.swift in Sources */,
 				2FE122B2294247480016B162 /* XCUIApplication+TextEntry.swift in Sources */,

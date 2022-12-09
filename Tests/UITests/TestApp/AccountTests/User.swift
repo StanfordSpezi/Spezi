@@ -12,13 +12,22 @@ import Foundation
 
 actor User: ObservableObject {
     @MainActor @Published var username: String?
+    @MainActor @Published var name = PersonNameComponents()
+    @MainActor @Published var gender: GenderIdentity?
+    @MainActor @Published var dateOfBirth: Date?
     
     
     init(
-        username: String? = nil
+        username: String? = nil,
+        name: PersonNameComponents = PersonNameComponents(),
+        gender: GenderIdentity? = nil,
+        dateOfBirth: Date? = nil
     ) {
         Task { @MainActor in
             self.username = username
+            self.name = name
+            self.gender = gender
+            self.dateOfBirth = dateOfBirth
         }
     }
 }

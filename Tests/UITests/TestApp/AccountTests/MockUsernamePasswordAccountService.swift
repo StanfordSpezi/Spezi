@@ -31,4 +31,21 @@ class MockUsernamePasswordAccountService: UsernamePasswordAccountService {
             user.username = username
         }
     }
+    
+    
+    override func signUp(signInValues: SignInValues) async throws {
+        try await Task.sleep(for: .seconds(5))
+        
+        guard signInValues.username != "lelandstanford" else {
+            throw MockAccountServiceError.usernameTaken
+        }
+        
+        await MainActor.run {
+            account?.signedIn = true
+            user.username = signInValues.username
+            user.name = signInValues.name
+            user.dateOfBirth = signInValues.dateOfBirth
+            user.gender = signInValues.genderIdentity
+        }
+    }
 }

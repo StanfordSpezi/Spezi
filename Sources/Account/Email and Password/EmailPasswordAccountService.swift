@@ -34,7 +34,8 @@ open class EmailPasswordAccountService: UsernamePasswordAccountService {
             placeholder: String(moduleLocalized: "EAP_LOGIN_USERNAME_PLACEHOLDER")
         )
         return Localization(
-            login: .init(buttonTitle: String(moduleLocalized: "EAP_LOGIN_BUTTON_TITLE"), username: usernameField)
+            login: .init(buttonTitle: String(moduleLocalized: "EAP_LOGIN_BUTTON_TITLE"), username: usernameField),
+            signUp: .init(buttonTitle: String(moduleLocalized: "EAP_SIGNUP_BUTTON_TITLE"), username: usernameField)
         )
     }
     
@@ -42,6 +43,15 @@ open class EmailPasswordAccountService: UsernamePasswordAccountService {
         button(
             localization.login.buttonTitle,
             destination: UsernamePasswordLoginView(
+                usernameValidationRules: validationRules
+            )
+        )
+    }
+    
+    override open var signUpButton: AnyView {
+        button(
+            localization.login.buttonTitle,
+            destination: UsernamePasswordSignUpView(
                 usernameValidationRules: validationRules
             )
         )

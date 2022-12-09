@@ -15,17 +15,21 @@ struct AccountTestsView: View {
     @EnvironmentObject var account: Account
     @EnvironmentObject var user: User
     @State var showLogin = false
+    @State var showSignUp = false
     
     
     var body: some View {
         List {
             if account.signedIn {
                 HStack {
-                    Text(user.username ?? "")
+                    Text(user.username ?? user.name.formatted())
                 }
             }
             Button("Login") {
                 showLogin.toggle()
+            }
+            Button("SignUp") {
+                showSignUp.toggle()
             }
         }
             .sheet(isPresented: $showLogin) {
@@ -33,9 +37,15 @@ struct AccountTestsView: View {
                     Login()
                 }
             }
+            .sheet(isPresented: $showSignUp) {
+                NavigationStack {
+                    SignUp()
+                }
+            }
             .onChange(of: account.signedIn) { signedIn in
                 if signedIn {
                     showLogin = false
+                    showSignUp = false
                 }
             }
     }
