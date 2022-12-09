@@ -17,6 +17,7 @@ import SwiftUI
 class TestAppDelegate: CardinalKitAppDelegate {
     override var configuration: Configuration {
         Configuration(standard: TestAppStandard()) {
+            TestAccountConfiguration()
             ObservableComponentTestsComponent(message: "Passed")
             MultipleObservableObjectsTestsComponent()
             if HKHealthStore.isHealthDataAvailable() {
