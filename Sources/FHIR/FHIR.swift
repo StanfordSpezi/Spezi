@@ -6,15 +6,15 @@
 // SPDX-License-Identifier: MIT
 //
 
-@_exported import ModelsR4
 import CardinalKit
+@_exported import ModelsR4
 
 
 actor FHIR: Standard {
-    typealias BaseType = ResourceProxy
+    typealias BaseType = Resource
     
     
-    var resources: [FHIRString: ResourceProxy] = [:]
+    var resources: [String: ResourceProxy] = [:]
     
     
     func registerDataSource(_ asyncSequence: some TypedAsyncSequence<DataSourceElement<BaseType>>) {
@@ -22,12 +22,12 @@ actor FHIR: Standard {
             for try await dateSourceElement in asyncSequence {
                 switch dateSourceElement {
                 case let .addition(resource):
-                    guard let id = resource.id else {
+                    guard let id = resource.id?.value?.string else {
                         return
                     }
-                    resources[id] = resource
+                    resources[id] = ResourceProxy(with: resource)
                 case let .removal(resourceId):
-                    guard let id = resourceId else {
+                    guard let id = resourceId?.value?.string else {
                         return
                     }
                     resources[id] = nil
