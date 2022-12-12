@@ -15,6 +15,7 @@
 		2F6D139A28F5F386007C25D6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F6D139928F5F386007C25D6 /* Assets.xcassets */; };
 		2F7E32AB29466BCC0025C422 /* Account in Frameworks */ = {isa = PBXBuildFile; productRef = 2F7E32AA29466BCC0025C422 /* Account */; };
 		2F7E32AD29466BCC0025C422 /* CardinalKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2F7E32AC29466BCC0025C422 /* CardinalKit */; };
+		2F7E32AF29466BCC0025C422 /* FHIR in Frameworks */ = {isa = PBXBuildFile; productRef = 2F7E32AE29466BCC0025C422 /* FHIR */; };
 		2F7E32B129466BCC0025C422 /* HealthKitDataSource in Frameworks */ = {isa = PBXBuildFile; productRef = 2F7E32B029466BCC0025C422 /* HealthKitDataSource */; };
 		2F7E32B329466BCC0025C422 /* LocalStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 2F7E32B229466BCC0025C422 /* LocalStorage */; };
 		2F7E32B529466BCC0025C422 /* SecureStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 2F7E32B429466BCC0025C422 /* SecureStorage */; };
@@ -111,6 +112,7 @@
 				2F7E32B129466BCC0025C422 /* HealthKitDataSource in Frameworks */,
 				2F7E32AB29466BCC0025C422 /* Account in Frameworks */,
 				2F7E32B529466BCC0025C422 /* SecureStorage in Frameworks */,
+				2F7E32AF29466BCC0025C422 /* FHIR in Frameworks */,
 				2F7E32AD29466BCC0025C422 /* CardinalKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -277,6 +279,7 @@
 			packageProductDependencies = (
 				2F7E32AA29466BCC0025C422 /* Account */,
 				2F7E32AC29466BCC0025C422 /* CardinalKit */,
+				2F7E32AE29466BCC0025C422 /* FHIR */,
 				2F7E32B029466BCC0025C422 /* HealthKitDataSource */,
 				2F7E32B229466BCC0025C422 /* LocalStorage */,
 				2F7E32B429466BCC0025C422 /* SecureStorage */,
@@ -679,6 +682,10 @@
 		2F7E32AC29466BCC0025C422 /* CardinalKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = CardinalKit;
+		};
+		2F7E32AE29466BCC0025C422 /* FHIR */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FHIR;
 		};
 		2F7E32B029466BCC0025C422 /* HealthKitDataSource */ = {
 			isa = XCSwiftPackageProductDependency;

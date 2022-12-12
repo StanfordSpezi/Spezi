@@ -46,6 +46,13 @@
          </BuildableReference>
          <BuildableReference
             BuildableIdentifier = "primary"
+            BlueprintIdentifier = "FHIR"
+            BuildableName = "FHIR"
+            BlueprintName = "FHIR"
+            ReferencedContainer = "container:../..">
+         </BuildableReference>
+         <BuildableReference
+            BuildableIdentifier = "primary"
             BlueprintIdentifier = "HealthKitDataSource"
             BuildableName = "HealthKitDataSource"
             BlueprintName = "HealthKitDataSource"

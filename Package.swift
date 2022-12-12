@@ -20,10 +20,14 @@ let package = Package(
     products: [
         .library(name: "Account", targets: ["Account"]),
         .library(name: "CardinalKit", targets: ["CardinalKit"]),
+        .library(name: "FHIR", targets: ["FHIR"]),
         .library(name: "HealthKitDataSource", targets: ["HealthKitDataSource"]),
         .library(name: "LocalStorage", targets: ["LocalStorage"]),
         .library(name: "SecureStorage", targets: ["SecureStorage"]),
         .library(name: "XCTRuntimeAssertions", targets: ["XCTRuntimeAssertions"])
+    ],
+    dependencies: [
+        .package(url: "https://github.com/apple/FHIRModels", .upToNextMinor(from: "0.4.0"))
     ],
     targets: [
         .target(
@@ -46,6 +50,19 @@ let package = Package(
             dependencies: [
                 .target(name: "CardinalKit"),
                 .target(name: "XCTRuntimeAssertions")
+            ]
+        ),
+        .target(
+            name: "FHIR",
+            dependencies: [
+                .target(name: "CardinalKit"),
+                .product(name: "ModelsR4", package: "FHIRModels")
+            ]
+        ),
+        .testTarget(
+            name: "FHIRTests",
+            dependencies: [
+                .target(name: "FHIR")
             ]
         ),
         .target(
