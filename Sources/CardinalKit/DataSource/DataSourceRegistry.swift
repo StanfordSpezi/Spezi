@@ -16,21 +16,21 @@ public protocol DataSourceRegistry<BaseType>: Actor {
     
     
     /// Registers a new data source for the ``DataSourceRegistry``.
-    /// - Parameter asyncSequence: The `TypedAsyncSequence<DataSourceElement<BaseType>>` providing the data to the ``DataSourceRegistry``.
-    func registerDataSource(_ asyncSequence: some TypedAsyncSequence<DataSourceElement<BaseType>>)
+    /// - Parameter asyncSequence: The `TypedAsyncSequence<DataChange<BaseType>>` providing the data to the ``DataSourceRegistry``.
+    func registerDataSource(_ asyncSequence: some TypedAsyncSequence<DataChange<BaseType>>)
 }
 
 
 extension DataSourceRegistry {
     /// Overload of the ``DataSourceRegistry/registerDataSource(_:)`` method to recieve `AsyncStream`s.
-    /// - Parameter asyncStream: The `AsyncStream<DataSourceElement<BaseType>>` providing the data to the ``DataSourceRegistry``.
-    public func registerDataSource(asyncStream: AsyncStream<DataSourceElement<BaseType>>) {
+    /// - Parameter asyncStream: The `AsyncStream<DataChange<BaseType>>` providing the data to the ``DataSourceRegistry``.
+    public func registerDataSource(asyncStream: AsyncStream<DataChange<BaseType>>) {
         registerDataSource(asyncStream)
     }
     
     /// Overload of the ``DataSourceRegistry/registerDataSource(_:)`` method to recieve `AsyncThrowingStream`s.
-    /// - Parameter asyncThrowingStream: The `AsyncThrowingStream<DataSourceElement<BaseType>>` providing the data to the ``DataSourceRegistry``.
-    public func registerDataSource(asyncThrowingStream: AsyncThrowingStream<DataSourceElement<BaseType>, Error>) {
+    /// - Parameter asyncThrowingStream: The `AsyncThrowingStream<DataChange<BaseType>>` providing the data to the ``DataSourceRegistry``.
+    public func registerDataSource(asyncThrowingStream: AsyncThrowingStream<DataChange<BaseType>, Error>) {
         registerDataSource(asyncThrowingStream)
     }
 }

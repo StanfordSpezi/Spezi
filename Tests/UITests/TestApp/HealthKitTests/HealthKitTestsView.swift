@@ -14,7 +14,7 @@ import SwiftUI
 struct HealthKitTestsView: View {
     @EnvironmentObject var healthKitComponent: HealthKit<TestAppStandard>
     @EnvironmentObject var standard: TestAppStandard
-    @State var dataSourceElements: [String] = []
+    @State var dataChanges: [String] = []
     @State var cancellable: AnyCancellable?
     
     
@@ -26,14 +26,14 @@ struct HealthKitTestsView: View {
             triggerDataSourceCollection()
         }
         HStack {
-            List(dataSourceElements, id: \.self) { element in
+            List(dataChanges, id: \.self) { element in
                 Text(element)
             }
         }
             .onAppear {
                 cancellable = standard.objectWillChange.sink {
                     Task { @MainActor in
-                        self.dataSourceElements = await standard.dataSourceElements.map { $0.id }
+                        self.dataChanges = await standard.dataChanges.map { $0.id }
                     }
                 }
             }

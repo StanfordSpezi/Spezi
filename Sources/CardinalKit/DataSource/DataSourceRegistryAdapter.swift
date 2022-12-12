@@ -17,13 +17,13 @@ public protocol DataSourceRegistryAdapter<InputType, OutputType>: Actor {
     associatedtype OutputType: Identifiable, Sendable where OutputType.ID: Sendable
     
     
-    /// Transforms any `TypedAsyncSequence<DataSourceElement<InputType>>` to an `TypedAsyncSequence` with
-    /// the `TypedAsyncSequence<DataSourceElement<OutputType>>` generic constraint fulfilling the transformation,
+    /// Transforms any `TypedAsyncSequence<DataChange<InputType>>` to an `TypedAsyncSequence` with
+    /// the `TypedAsyncSequence<DataChange<OutputType>>` generic constraint fulfilling the transformation,
     ///
     /// Implement this method in an instance of a `DataSourceRegistryAdapter`.
     /// - Parameter asyncSequence: The input `TypedAsyncSequence`.
     /// - Returns: The transformed `TypedAsyncSequence`.
     func transform(
-        _ asyncSequence: some TypedAsyncSequence<DataSourceElement<InputType>>
-    ) async -> any TypedAsyncSequence<DataSourceElement<OutputType>>
+        _ asyncSequence: some TypedAsyncSequence<DataChange<InputType>>
+    ) async -> any TypedAsyncSequence<DataChange<OutputType>>
 }

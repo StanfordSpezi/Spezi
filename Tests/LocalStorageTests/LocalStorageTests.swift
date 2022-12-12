@@ -21,7 +21,7 @@ final class LocalStorageTests: XCTestCase {
         }
         
         
-        func registerDataSource(_ asyncSequence: some TypedAsyncSequence<DataSourceElement<BaseType>>) { }
+        func registerDataSource(_ asyncSequence: some TypedAsyncSequence<DataChange<BaseType>>) { }
     }
     
     struct Letter: Codable, Equatable {

@@ -18,14 +18,14 @@ actor TypedMockStandard<T: Hashable>: Standard {
     }
     
     
-    let dataSourceExpecations: (DataSourceElement<BaseType>) async throws -> Void
-    let finishedDataSourceSequence: (any TypedAsyncSequence<DataSourceElement<BaseType>>.Type) async throws -> Void
+    let dataSourceExpecations: (DataChange<BaseType>) async throws -> Void
+    let finishedDataSourceSequence: (any TypedAsyncSequence<DataChange<BaseType>>.Type) async throws -> Void
     
     
     init(
-        dataSourceExpecations: @escaping (DataSourceElement<BaseType>) async throws -> Void
+        dataSourceExpecations: @escaping (DataChange<BaseType>) async throws -> Void
             = defaultDataSourceExpecations,
-        finishedDataSourceSequence: @escaping (any TypedAsyncSequence<DataSourceElement<BaseType>>.Type) async throws -> Void
+        finishedDataSourceSequence: @escaping (any TypedAsyncSequence<DataChange<BaseType>>.Type) async throws -> Void
             = defaultFinishedDataSourceSequence
     ) {
         self.dataSourceExpecations = dataSourceExpecations
@@ -34,7 +34,7 @@ actor TypedMockStandard<T: Hashable>: Standard {
     
     
     static func defaultDataSourceExpecations(
-        _ element: DataSourceElement<BaseType>
+        _ element: DataChange<BaseType>
     ) {
         switch element {
         case let .addition(newElement):
@@ -45,13 +45,13 @@ actor TypedMockStandard<T: Hashable>: Standard {
     }
     
     static func defaultFinishedDataSourceSequence(
-        _ sequenceType: any TypedAsyncSequence<DataSourceElement<BaseType>>.Type
+        _ sequenceType: any TypedAsyncSequence<DataChange<BaseType>>.Type
     ) {
         print("Finished: \(String(describing: sequenceType))")
     }
     
     
-    func registerDataSource(_ asyncSequence: some TypedAsyncSequence<DataSourceElement<BaseType>>) {
+    func registerDataSource(_ asyncSequence: some TypedAsyncSequence<DataChange<BaseType>>) {
         Task {
             do {
                 for try await element in asyncSequence {
