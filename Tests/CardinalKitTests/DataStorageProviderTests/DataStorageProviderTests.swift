@@ -13,19 +13,30 @@ import XCTRuntimeAssertions
 
 
 final class DataStorageProviderTests: XCTestCase {
+    enum MockUpload {
+        case post(String)
+        case delete(String)
+    }
+    
+    
     private actor DataStorageExample<ComponentStandard: Standard>: DataStorageProvider {
         typealias Adapter = any EncodableAdapter<ComponentStandard.BaseType, String>
         
         
         let adapter: Adapter
+        let mockUpload: (MockUpload) -> Void
         
         
-        init(adapter: Adapter) {
+        init(adapter: Adapter, mockUpload: @escaping (MockUpload) -> Void) {
             self.adapter = adapter
+            self.mockUpload = mockUpload
         }
         
-        init() where ComponentStandard.BaseType: Encodable & Sendable, ComponentStandard.BaseType.ID: LosslessStringConvertible {
+        init(
+            mockUpload: @escaping (MockUpload) -> Void
+        ) where ComponentStandard.BaseType: Encodable & Sendable, ComponentStandard.BaseType.ID: LosslessStringConvertible {
             self.adapter = IdentityEncodableAdapter()
+            self.mockUpload = mockUpload
         }
         
         
@@ -34,17 +45,25 @@ final class DataStorageProviderTests: XCTestCase {
             case let .addition(element):
                 async let transformedElement = adapter.transform(element: element)
                 let data = try await JSONEncoder().encode(transformedElement)
-                print("Upload \(data) ...")
-                try await _Concurrency.Task.sleep(for: .seconds(2))
-                print("Upload successsful.")
+                let string = String(decoding: data, as: UTF8.self)
+                mockUpload(.post(string))
             case let .removal(id):
-                print("Remove \(id)")
+                async let stringId = transform(id, using: adapter)
+                await mockUpload(.delete(stringId))
             }
+        }
+        
+        
+        private func transform(
+            _ id: ComponentStandard.BaseType.ID,
+            using adapter: some EncodableAdapter<ComponentStandard.BaseType, String>
+        ) async -> String {
+            await adapter.transform(id: id)
         }
     }
     
     
     func testDataStorageProviderTests() {
-        print("...")
+        #warning("Add test cases")
     }
 }
