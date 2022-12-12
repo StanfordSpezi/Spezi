@@ -12,7 +12,7 @@ import XCTest
 
 
 final class DataStorageProviderTests: XCTestCase {
-    enum MockUpload {
+    private enum MockUpload {
         case post(String)
         case delete(String)
         
@@ -70,11 +70,11 @@ final class DataStorageProviderTests: XCTestCase {
         }
     }
     
-    public class DataStorageProviderApplicationDelegate: CardinalKitAppDelegate {
+    private class DataStorageProviderApplicationDelegate: CardinalKitAppDelegate {
         let mockUpload: (MockUpload) -> Void
         
         
-        override public var configuration: Configuration {
+        override var configuration: Configuration {
             Configuration {
                 FHIRDataStorageExample(mockUpload: mockUpload)
             }

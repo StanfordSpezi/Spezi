@@ -13,7 +13,7 @@ import XCTRuntimeAssertions
 
 
 final class DataStorageProviderTests: XCTestCase {
-    enum MockUpload {
+    private enum MockUpload {
         case post(String)
         case delete(String)
         
@@ -80,7 +80,7 @@ final class DataStorageProviderTests: XCTestCase {
     }
     
     
-    actor DataStorageProviderStandard: Standard {
+    private actor DataStorageProviderStandard: Standard {
         typealias BaseType = CustomDataSourceType<String>
         
         
@@ -115,11 +115,11 @@ final class DataStorageProviderTests: XCTestCase {
         }
     }
     
-    public class DataStorageProviderApplicationDelegate: CardinalKitAppDelegate {
+    private class DataStorageProviderApplicationDelegate: CardinalKitAppDelegate {
         let mockUpload: (MockUpload) -> Void
         
         
-        override public var configuration: Configuration {
+        override var configuration: Configuration {
             Configuration(standard: DataStorageProviderStandard()) {
                 DataStorageExample(mockUpload: mockUpload)
             }
