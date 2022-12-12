@@ -59,6 +59,12 @@ let package = Package(
                 .product(name: "ModelsR4", package: "FHIRModels")
             ]
         ),
+        .testTarget(
+            name: "FHIRTests",
+            dependencies: [
+                .target(name: "FHIR")
+            ]
+        ),
         .target(
             name: "HealthKitDataSource",
             dependencies: [

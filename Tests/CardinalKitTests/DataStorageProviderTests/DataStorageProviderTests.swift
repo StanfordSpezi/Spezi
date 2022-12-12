@@ -165,5 +165,13 @@ final class DataStorageProviderTests: XCTestCase {
         )
         
         wait(for: [expectation], timeout: 1)
+        XCTAssertEqual(count, 4)
+    }
+    
+    
+    func testInjectionPreconditionDependencyPropertyWrapper() throws {
+        try XCTRuntimePrecondition {
+            _ = _DataStorageProvidersPropertyWrapper<MockStandard>().wrappedValue
+        }
     }
 }
