@@ -40,7 +40,7 @@ final class DataStorageProviderTests: XCTestCase {
         }
         
         
-        func process(_ element: DataSourceElement<ComponentStandard.BaseType>) async throws {
+        func process(_ element: DataChange<ComponentStandard.BaseType>) async throws {
             switch element {
             case let .addition(element):
                 async let transformedElement = adapter.transform(element: element)

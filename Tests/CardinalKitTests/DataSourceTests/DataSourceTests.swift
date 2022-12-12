@@ -30,12 +30,12 @@ final class DataSourceTests: XCTestCase {
         
         
         @StandardActor var standard: TypedMockStandard<MockStandardType>
-        var injectedData: [DataSourceElement<T>]
+        var injectedData: [DataChange<T>]
         let adapter: any DataSourceRegistryAdapter<T, TypedMockStandard<MockStandardType>.BaseType>
         
         
         init(
-            injectedData: [DataSourceElement<T>],
+            injectedData: [DataChange<T>],
             @DataSourceRegistryAdapterBuilder<TypedMockStandard<MockStandardType>> adapter:
                 () -> (any DataSourceRegistryAdapter<T, ComponentStandard.BaseType>)
         ) {
@@ -45,7 +45,7 @@ final class DataSourceTests: XCTestCase {
         
         
         func willFinishLaunchingWithOptions(_ application: UIApplication, launchOptions: [UIApplication.LaunchOptionsKey: Any]) {
-            let asyncStream = AsyncStream<DataSourceElement<T>> {
+            let asyncStream = AsyncStream<DataChange<T>> {
                 guard !self.injectedData.isEmpty else {
                     return nil
                 }
@@ -64,8 +64,8 @@ final class DataSourceTests: XCTestCase {
     
     class DataSourceTestApplicationDelegate<T: Hashable>: CardinalKitAppDelegate {
         let dynamicDependencies: _DynamicDependenciesPropertyWrapper<TypedMockStandard<T>>
-        let dataSourceExpecations: (DataSourceElement<TypedMockStandard<T>.BaseType>) async throws -> Void
-        let finishedDataSourceSequence: (any TypedAsyncSequence<DataSourceElement<TypedMockStandard<T>.BaseType>>.Type) async throws -> Void
+        let dataSourceExpecations: (DataChange<TypedMockStandard<T>.BaseType>) async throws -> Void
+        let finishedDataSourceSequence: (any TypedAsyncSequence<DataChange<TypedMockStandard<T>.BaseType>>.Type) async throws -> Void
         
         
         override var configuration: Configuration {
@@ -80,8 +80,8 @@ final class DataSourceTests: XCTestCase {
         
         init(
             dynamicDependencies: _DynamicDependenciesPropertyWrapper<TypedMockStandard<T>>,
-            dataSourceExpecations: @escaping (DataSourceElement<TypedMockStandard<T>.BaseType>) async throws -> Void,
-            finishedDataSourceSequence: @escaping (any TypedAsyncSequence<DataSourceElement<TypedMockStandard<T>.BaseType>>.Type) async throws -> Void
+            dataSourceExpecations: @escaping (DataChange<TypedMockStandard<T>.BaseType>) async throws -> Void,
+            finishedDataSourceSequence: @escaping (any TypedAsyncSequence<DataChange<TypedMockStandard<T>.BaseType>>.Type) async throws -> Void
         ) {
             self.dynamicDependencies = dynamicDependencies
             self.dataSourceExpecations = dataSourceExpecations
@@ -95,8 +95,8 @@ final class DataSourceTests: XCTestCase {
         
         
         func transform(
-            _ asyncSequence: some TypedAsyncSequence<DataSourceElement<InputType>>
-        ) async -> any TypedAsyncSequence<DataSourceElement<OutputType>> {
+            _ asyncSequence: some TypedAsyncSequence<DataChange<InputType>>
+        ) async -> any TypedAsyncSequence<DataChange<OutputType>> {
             asyncSequence.map { element in
                 element.map(
                     element: { MockStandard.CustomDataSourceType(id: String(describing: $0.id)) },
@@ -139,7 +139,7 @@ final class DataSourceTests: XCTestCase {
         let expecation = XCTestExpectation(description: "Recieved all required data source elements")
         expecation.assertForOverFulfill = true
         expecation.expectedFulfillmentCount = 3
-        var dataSourceElements: [DataSourceElement<TypedMockStandard<String>.BaseType>] = []
+        var dataChanges: [DataChange<TypedMockStandard<String>.BaseType>] = []
         
         let delegate = DataSourceTestApplicationDelegate(
             dynamicDependencies: _DynamicDependenciesPropertyWrapper<TypedMockStandard<String>>(
@@ -188,8 +188,8 @@ final class DataSourceTests: XCTestCase {
                     )
                 ]
             ),
-            dataSourceExpecations: { dataSourceElement in
-                dataSourceElements.append(dataSourceElement)
+            dataSourceExpecations: { dataChange in
+                dataChanges.append(dataChange)
             },
             finishedDataSourceSequence: { _ in
                 expecation.fulfill()
@@ -201,14 +201,14 @@ final class DataSourceTests: XCTestCase {
         
         wait(for: [expecation], timeout: 1)
         
-        XCTAssertEqual(dataSourceElements.count, 15)
-        XCTAssertEqual(dataSourceElements.filter { $0.id == "1" } .count, 3)
-        XCTAssertEqual(dataSourceElements.filter { $0.id == "2" } .count, 3)
-        XCTAssertEqual(dataSourceElements.filter { $0.id == "3" } .count, 6)
-        XCTAssertEqual(dataSourceElements.filter { $0.id == "42" } .count, 3)
+        XCTAssertEqual(dataChanges.count, 15)
+        XCTAssertEqual(dataChanges.filter { $0.id == "1" } .count, 3)
+        XCTAssertEqual(dataChanges.filter { $0.id == "2" } .count, 3)
+        XCTAssertEqual(dataChanges.filter { $0.id == "3" } .count, 6)
+        XCTAssertEqual(dataChanges.filter { $0.id == "42" } .count, 3)
         
         XCTAssertEqual(
-            dataSourceElements.filter {
+            dataChanges.filter {
                 if case .addition(MockStandard.CustomDataSourceType(id: "3")) = $0 {
                     return true
                 } else {
@@ -219,7 +219,7 @@ final class DataSourceTests: XCTestCase {
             3
         )
         XCTAssertEqual(
-            dataSourceElements.filter {
+            dataChanges.filter {
                 if case .removal("3") = $0 {
                     return true
                 } else {

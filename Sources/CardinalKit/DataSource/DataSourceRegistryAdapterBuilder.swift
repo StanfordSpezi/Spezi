@@ -28,8 +28,8 @@ private actor TwoDataSourceRegistryAdapterChain<
     
     
     func transform(
-        _ asyncSequence: some TypedAsyncSequence<DataSourceElement<InputType>>
-    ) async -> any TypedAsyncSequence<DataSourceElement<OutputType>> {
+        _ asyncSequence: some TypedAsyncSequence<DataChange<InputType>>
+    ) async -> any TypedAsyncSequence<DataChange<OutputType>> {
         let firstDataSourceRegistryTransformation = await firstDataSourceRegistryAdapter.transform(asyncSequence)
         return await secondDataSourceRegistryAdapter.transform(firstDataSourceRegistryTransformation)
     }
@@ -58,8 +58,8 @@ private actor ThreeDataSourceRegistryAdapterChain<
     
     
     func transform(
-        _ asyncSequence: some TypedAsyncSequence<DataSourceElement<InputType>>
-    ) async -> any TypedAsyncSequence<DataSourceElement<OutputType>> {
+        _ asyncSequence: some TypedAsyncSequence<DataChange<InputType>>
+    ) async -> any TypedAsyncSequence<DataChange<OutputType>> {
         let firstDataSourceRegistryTransformation = await firstDataSourceRegistryAdapter.transform(asyncSequence)
         let secondDataSourceRegistryTransformation = await secondDataSourceRegistryAdapter.transform(firstDataSourceRegistryTransformation)
         return await thirdDataSourceRegistryAdapter.transform(secondDataSourceRegistryTransformation)

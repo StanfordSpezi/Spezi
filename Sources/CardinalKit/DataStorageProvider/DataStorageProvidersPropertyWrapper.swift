@@ -7,7 +7,8 @@
 //
 
 
-/// <#Description#>
+/// Refer to ``Standard/DataStorageProviders`` for information on how to use the `@DataStorageProviders` property wrapper.
+/// Do not use the `_DataStorageProvidersPropertyWrapper` directly.
 @propertyWrapper
 public class _DataStorageProvidersPropertyWrapper<S: Standard> {
     // swiftlint:disable:previous type_name
@@ -18,7 +19,7 @@ public class _DataStorageProvidersPropertyWrapper<S: Standard> {
     private var dataStorageProviders: [any DataStorageProvider<S>]?
     
     
-    /// <#Description#>
+    /// The injected ``[any DataStorageProvider<S>]`` that are resolved by ``CardinalKit``
     public var wrappedValue: [any DataStorageProvider<S>] {
         guard let dataStorageProviders else {
             preconditionFailure(
@@ -32,7 +33,8 @@ public class _DataStorageProvidersPropertyWrapper<S: Standard> {
     }
     
     
-    /// <#Description#>
+    /// Refer to ``Standard/DataStorageProviders`` for information on how to use the `@DataStorageProviders` property wrapper.
+    /// Do not use the `_DataStorageProvidersPropertyWrapper` directly.
     public init() { }
     
     

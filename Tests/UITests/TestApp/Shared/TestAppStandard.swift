@@ -11,15 +11,15 @@ import Foundation
 
 
 actor TestAppStandard: Standard, ObservableObjectProvider, ObservableObject {
-    typealias BaseType = TestAppStandardDataSourceElement
+    typealias BaseType = TestAppStandardDataChange
     
     
-    struct TestAppStandardDataSourceElement: Identifiable {
+    struct TestAppStandardDataChange: Identifiable {
         let id: String
     }
     
     
-    var dataSourceElements: [DataSourceElement<BaseType>] = [] {
+    var dataChanges: [DataChange<BaseType>] = [] {
         willSet {
             Task { @MainActor in
                 self.objectWillChange.send()
@@ -28,7 +28,7 @@ actor TestAppStandard: Standard, ObservableObjectProvider, ObservableObject {
     }
     
     
-    func registerDataSource(_ asyncSequence: some TypedAsyncSequence<DataSourceElement<BaseType>>) {
+    func registerDataSource(_ asyncSequence: some TypedAsyncSequence<DataChange<BaseType>>) {
         Task {
             do {
                 for try await element in asyncSequence {
@@ -38,10 +38,10 @@ actor TestAppStandard: Standard, ObservableObjectProvider, ObservableObject {
                     case let .removal(deletedElementId):
                         print("Removed element with \(deletedElementId)")
                     }
-                    dataSourceElements.append(element)
+                    dataChanges.append(element)
                 }
             } catch {
-                dataSourceElements = [.removal(error.localizedDescription)]
+                dataChanges = [.removal(error.localizedDescription)]
             }
         }
     }

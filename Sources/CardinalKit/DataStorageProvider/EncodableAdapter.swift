@@ -7,21 +7,23 @@
 //
 
 
-/// <#Description#>
+/// An ``EncodableAdapter`` can be used to transform a type to an `Encodable` type and is typically used in instantiations of a ``DataStorageProvider``.
+///
+/// You can refer to the ``IdentityEncodableAdapter`` if you require a default adapter for a type that already conforms to all required protocols.
 public protocol EncodableAdapter<InputType, ID>: Actor {
-    /// <#Description#>
+    /// The input type conforming to `Sendable` and `Identifiable` where the `InputType.ID` is `Sendable` as well.
     associatedtype InputType: Sendable, Identifiable where InputType.ID: Sendable
-    /// <#Description#>
+    /// The ouput of the ``transform(id:)`` function that has to confrom to `Sendable` and `Hashable`.
     associatedtype ID: Sendable, Hashable
     
     
-    /// <#Description#>
-    /// - Parameter element: <#element description#>
-    /// - Returns: <#description#>
+    /// Transforms an element to an `Encodable` and `Sendable` value.
+    /// - Parameter element: The element that is tranformed.
+    /// - Returns: Returns an element conforming to an `Encodable` and `Sendable`
     func transform(element: InputType) async -> any Encodable & Sendable
     
-    /// <#Description#>
-    /// - Parameter id: <#id description#>
-    /// - Returns: <#description#>
+    /// Transforms an id to an ``ID`` instance.
+    /// - Parameter id: The ``InputType``'s `ID` type that is transformed.
+    /// - Returns: The transformed ``ID`` instance.
     func transform(id: InputType.ID) async -> ID
 }

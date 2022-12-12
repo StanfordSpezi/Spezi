@@ -28,8 +28,8 @@ extension SingleValueDataSourceRegistryAdapter {
     // A documentation for this methodd exists in the `DataSourceRegistryAdapter` type which SwiftLint doesn't recognize.
     // swiftlint:disable:next missing_docs
     public func transform(
-        _ asyncSequence: some TypedAsyncSequence<DataSourceElement<InputType>>
-    ) async -> any TypedAsyncSequence<DataSourceElement<OutputType>> {
+        _ asyncSequence: some TypedAsyncSequence<DataChange<InputType>>
+    ) async -> any TypedAsyncSequence<DataChange<OutputType>> {
         asyncSequence.map { [self] element in
             switch element {
             case let .addition(element):

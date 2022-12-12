@@ -22,7 +22,7 @@ actor FHIR: Standard {
     var dataSources: [any DataStorageProvider<FHIR>]
     
     
-    func registerDataSource(_ asyncSequence: some TypedAsyncSequence<DataSourceElement<BaseType>>) {
+    func registerDataSource(_ asyncSequence: some TypedAsyncSequence<DataChange<BaseType>>) {
         _Concurrency.Task {
             for try await dateSourceElement in asyncSequence {
                 switch dateSourceElement {
