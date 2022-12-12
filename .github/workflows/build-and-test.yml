@@ -18,7 +18,7 @@ on:
 jobs:
   build_and_test-spm:
     name: Build and Test Swift Package
-    uses: CardinalKit/.github/.github/workflows/build-and-test-xcodebuild-spm.yml@v1
+    uses: CardinalKit/.github/.github/workflows/build-and-test-xcodebuild-spm.yml@resolveDependencies
     with:
       scheme: CardinalKit-Package
   build_and_test-uitests:
