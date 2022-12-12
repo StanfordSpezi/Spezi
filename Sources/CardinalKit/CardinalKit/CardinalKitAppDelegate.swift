@@ -41,7 +41,7 @@ open class CardinalKitAppDelegate: NSObject, UIApplicationDelegate {
         }
         
         
-        func registerDataSource(_ asyncSequence: some TypedAsyncSequence<DataSourceElement<BaseType>>) { }
+        func registerDataSource(_ asyncSequence: some TypedAsyncSequence<DataChange<BaseType>>) { }
     }
     
     

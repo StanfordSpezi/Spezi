@@ -75,19 +75,26 @@ open class UsernamePasswordAccountService: @unchecked Sendable, AccountService, 
     /// The function is called when a user is logged in.
     ///
     /// You can use views like the ``UsernamePasswordLoginView`` to display user interfaces for logging in users or create your own views and call ``UsernamePasswordAccountService/login(username:password:)``
+    /// Throw an `Error` type conforming to `LocalizedError` if the sign up has not been successful to present a localized description to the user on a failed sign up.
     /// - Parameters:
     ///   - username: The username that should be used in the login process
     ///   - password: The password that should be used in the login process
     open func login(username: String, password: String) async throws { }
     
     
-    /// <#Description#>
-    /// - Parameter signInValues: <#signInValues description#>
+    /// The ``signUp(signInValues:)`` method is called by UI elements when a user wants to sign up.
+    ///
+    /// You can use views like the ``UsernamePasswordSignUpView`` to display user interfaces for signing up users or create your own views and call ``UsernamePasswordAccountService/signUp(signInValues:)``
+    /// Throw an `Error` type conforming to `LocalizedError` if the sign up has not been successful to present a localized description to the user on a failed sign up.
+    /// - Parameter signInValues: The context collected in the sign in process. Refer to ``SignInValues`` for more information about the possible context.
     open func signUp(signInValues: SignInValues) async throws { }
     
     
-    /// <#Description#>
-    /// - Parameter username: <#username description#>
+    /// The ``login(username:password:)`` method is called by UI elements when a user wants to reset their password.
+    ///
+    /// You can use views like the ``UsernamePasswordResetPasswordView`` to display user interfaces for resetting their password or create your own views and call ``UsernamePasswordAccountService/resetPassword(username:)``
+    /// Throw an `Error` type conforming to `LocalizedError` if the reset password action has not been successful to present a localized description to the user on a failed reset password attempt.
+    /// - Parameter username: The username that the password should be reset for.
     open func resetPassword(username: String) async throws { }
     
     

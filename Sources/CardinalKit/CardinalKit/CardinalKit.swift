@@ -60,5 +60,7 @@ public actor CardinalKit<S: Standard>: AnyCardinalKit, ObservableObject {
             component.configure()
             component.saveInTypedCollection(cardinalKit: self)
         }
+        
+        standard.inject(dataStorageProviders: dataStorageProviders)
     }
 }

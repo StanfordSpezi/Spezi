@@ -14,14 +14,15 @@ public class _DynamicDependenciesPropertyWrapper<S: Standard>: DependencyDescrip
     // swiftlint:disable:previous type_name
     // We want the _DependencyPropertyWrapper type to be hidden from autocompletion and document generation.
     
+    private var componentProperties: [any ComponentDependency<S>]
+    
+    
     public var wrappedValue: [any Component<S>] {
         componentProperties.compactMap {
             let component = $0.wrappedValue as any Component
             return component as? any Component<S>
         }
     }
-    
-    private var componentProperties: [any ComponentDependency<S>]
     
     
     /// Refer to ``Component/DynamicDependencies`` for information on how to use the `@DynamicDependencies` property wrapper.

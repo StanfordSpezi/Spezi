@@ -7,7 +7,7 @@
 //
 
 
-///// A ``Configuration`` defines the ``Standard`` and ``Component``s that are used in a CardinalKit project.
+/// A ``Configuration`` defines the ``Standard`` and ``Component``s that are used in a CardinalKit project.
 public struct Configuration {
     let cardinalKit: AnyCardinalKit
     
