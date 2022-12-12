@@ -33,5 +33,3 @@ jobs:
     uses: StanfordBDHG/.github/.github/workflows/create-and-upload-coverage-report.yml@v1
     with:
       coveragereports: CardinalKit-Package.xcresult TestApp.xcresult
-    secrets:
-      token: ${{ secrets.CODECOV_TOKEN }}

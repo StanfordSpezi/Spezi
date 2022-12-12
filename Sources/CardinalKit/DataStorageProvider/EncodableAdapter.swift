@@ -7,7 +7,7 @@
 //
 
 
-/// An ``EncodableAdapter`` can be used to transform a type to an `Encodable` type and is typically used in instantiations of a ``DataStorageProvider``.
+/// An ``EncodableAdapter`` can be used to transform a type to an `Encodable` instance. It is typically used in instantiations of a ``DataStorageProvider``.
 ///
 /// You can refer to the ``IdentityEncodableAdapter`` if you require a default adapter for a type that already conforms to all required protocols.
 public protocol EncodableAdapter<InputType, ID>: Actor {
