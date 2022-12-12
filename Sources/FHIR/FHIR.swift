@@ -7,7 +7,9 @@
 //
 
 import CardinalKit
+import Foundation
 @_exported import ModelsR4
+import XCTRuntimeAssertions
 
 
 actor FHIR: Standard {
@@ -15,6 +17,9 @@ actor FHIR: Standard {
     
     
     var resources: [String: ResourceProxy] = [:]
+    
+    @DataStorageProviders
+    var dataSources: [any DataStorageProvider<FHIR>]
     
     
     func registerDataSource(_ asyncSequence: some TypedAsyncSequence<DataSourceElement<BaseType>>) {
@@ -26,11 +31,17 @@ actor FHIR: Standard {
                         return
                     }
                     resources[id] = ResourceProxy(with: resource)
+                    for dataSource in dataSources {
+                        try await dataSource.process(.addition(resource))
+                    }
                 case let .removal(resourceId):
                     guard let id = resourceId?.value?.string else {
                         return
                     }
                     resources[id] = nil
+                    for dataSource in dataSources {
+                        try await dataSource.process(.removal(resourceId))
+                    }
                 }
             }
         }

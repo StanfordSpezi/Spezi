@@ -18,6 +18,7 @@ public class _DependencyPropertyWrapper<C: Component, S: Standard>: ComponentDep
     public let defaultValue: () -> C
     private var dependency: C?
     
+    
     /// The dependency that is resolved by ``CardinalKit``
     public var wrappedValue: C {
         guard let dependency else {

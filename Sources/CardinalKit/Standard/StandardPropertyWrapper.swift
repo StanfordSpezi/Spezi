@@ -15,8 +15,7 @@ public class _StandardPropertyWrapper<S: Standard> {
     // swiftlint:disable:previous type_name
     // We want the _StandardPropertyWrapper type to be hidden from autocompletion and document generation.
     
-    
-    var standard: S?
+    private var standard: S?
     
     
     /// The injected ``Standard`` that is resolved by ``CardinalKit``
