@@ -20,6 +20,7 @@ let package = Package(
     products: [
         .library(name: "Account", targets: ["Account"]),
         .library(name: "CardinalKit", targets: ["CardinalKit"]),
+        .library(name: "Contact", targets: ["Contact"]),
         .library(name: "FHIR", targets: ["FHIR"]),
         .library(name: "HealthKitDataSource", targets: ["HealthKitDataSource"]),
         .library(name: "LocalStorage", targets: ["LocalStorage"]),
@@ -50,6 +51,15 @@ let package = Package(
             dependencies: [
                 .target(name: "CardinalKit"),
                 .target(name: "XCTRuntimeAssertions")
+            ]
+        ),
+        .target(
+            name: "Contact",
+            dependencies: [
+                .target(name: "CardinalKit")
+            ],
+            resources: [
+                .process("Resources")
             ]
         ),
         .target(

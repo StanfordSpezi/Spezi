@@ -8,6 +8,7 @@
 
 @testable import Account
 import CardinalKit
+import Contact
 import SwiftUI
 
 

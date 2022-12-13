@@ -12,14 +12,17 @@
 		2F1B820F2942E54F0037BC09 /* XCTTestCase+HealthDataType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1B820E2942E54F0037BC09 /* XCTTestCase+HealthDataType.swift */; };
 		2F2A354F291CCF74000E8373 /* TestAppHealthKitAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2A354E291CCF74000E8373 /* TestAppHealthKitAdapter.swift */; };
 		2F4530C4293FD704000A858F /* AccountTestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4530C3293FD704000A858F /* AccountTestsView.swift */; };
+		2F4D91642948E98D000E2D94 /* Account in Frameworks */ = {isa = PBXBuildFile; productRef = 2F4D91632948E98D000E2D94 /* Account */; };
+		2F4D91662948E98D000E2D94 /* CardinalKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2F4D91652948E98D000E2D94 /* CardinalKit */; };
+		2F4D91682948E98D000E2D94 /* Contact in Frameworks */ = {isa = PBXBuildFile; productRef = 2F4D91672948E98D000E2D94 /* Contact */; };
+		2F4D916A2948E98D000E2D94 /* FHIR in Frameworks */ = {isa = PBXBuildFile; productRef = 2F4D91692948E98D000E2D94 /* FHIR */; };
+		2F4D916C2948E98D000E2D94 /* HealthKitDataSource in Frameworks */ = {isa = PBXBuildFile; productRef = 2F4D916B2948E98D000E2D94 /* HealthKitDataSource */; };
+		2F4D916E2948E98D000E2D94 /* LocalStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 2F4D916D2948E98D000E2D94 /* LocalStorage */; };
+		2F4D91702948E98D000E2D94 /* SecureStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 2F4D916F2948E98D000E2D94 /* SecureStorage */; };
+		2F4D91722948E98D000E2D94 /* XCTRuntimeAssertions in Frameworks */ = {isa = PBXBuildFile; productRef = 2F4D91712948E98D000E2D94 /* XCTRuntimeAssertions */; };
+		2F4D91752948EA1A000E2D94 /* ContactsTestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4D91742948EA1A000E2D94 /* ContactsTestsView.swift */; };
+		2F4D91772948EB33000E2D94 /* ContactsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4D91762948EB33000E2D94 /* ContactsTests.swift */; };
 		2F6D139A28F5F386007C25D6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F6D139928F5F386007C25D6 /* Assets.xcassets */; };
-		2F7E32AB29466BCC0025C422 /* Account in Frameworks */ = {isa = PBXBuildFile; productRef = 2F7E32AA29466BCC0025C422 /* Account */; };
-		2F7E32AD29466BCC0025C422 /* CardinalKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2F7E32AC29466BCC0025C422 /* CardinalKit */; };
-		2F7E32AF29466BCC0025C422 /* FHIR in Frameworks */ = {isa = PBXBuildFile; productRef = 2F7E32AE29466BCC0025C422 /* FHIR */; };
-		2F7E32B129466BCC0025C422 /* HealthKitDataSource in Frameworks */ = {isa = PBXBuildFile; productRef = 2F7E32B029466BCC0025C422 /* HealthKitDataSource */; };
-		2F7E32B329466BCC0025C422 /* LocalStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 2F7E32B229466BCC0025C422 /* LocalStorage */; };
-		2F7E32B529466BCC0025C422 /* SecureStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 2F7E32B429466BCC0025C422 /* SecureStorage */; };
-		2F7E32B729466BCC0025C422 /* XCTRuntimeAssertions in Frameworks */ = {isa = PBXBuildFile; productRef = 2F7E32B629466BCC0025C422 /* XCTRuntimeAssertions */; };
 		2F8A431529130B9B005D2B8F /* TestAppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8A431429130B9B005D2B8F /* TestAppView.swift */; };
 		2F8A431729130BBC005D2B8F /* TestAppStandard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8A431629130BBC005D2B8F /* TestAppStandard.swift */; };
 		2F8A431929130CA7005D2B8F /* TestAppTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8A431829130CA7005D2B8F /* TestAppTestCase.swift */; };
@@ -68,6 +71,8 @@
 		2F1B820E2942E54F0037BC09 /* XCTTestCase+HealthDataType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "XCTTestCase+HealthDataType.swift"; sourceTree = "<group>"; };
 		2F2A354E291CCF74000E8373 /* TestAppHealthKitAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAppHealthKitAdapter.swift; sourceTree = "<group>"; };
 		2F4530C3293FD704000A858F /* AccountTestsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountTestsView.swift; sourceTree = "<group>"; };
+		2F4D91742948EA1A000E2D94 /* ContactsTestsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsTestsView.swift; sourceTree = "<group>"; };
+		2F4D91762948EB33000E2D94 /* ContactsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsTests.swift; sourceTree = "<group>"; };
 		2F6D139228F5F384007C25D6 /* TestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F6D139928F5F386007C25D6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2F6D13AC28F5F386007C25D6 /* TestAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TestAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -107,13 +112,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2F7E32B329466BCC0025C422 /* LocalStorage in Frameworks */,
-				2F7E32B729466BCC0025C422 /* XCTRuntimeAssertions in Frameworks */,
-				2F7E32B129466BCC0025C422 /* HealthKitDataSource in Frameworks */,
-				2F7E32AB29466BCC0025C422 /* Account in Frameworks */,
-				2F7E32B529466BCC0025C422 /* SecureStorage in Frameworks */,
-				2F7E32AF29466BCC0025C422 /* FHIR in Frameworks */,
-				2F7E32AD29466BCC0025C422 /* CardinalKit in Frameworks */,
+				2F4D916E2948E98D000E2D94 /* LocalStorage in Frameworks */,
+				2F4D91682948E98D000E2D94 /* Contact in Frameworks */,
+				2F4D91722948E98D000E2D94 /* XCTRuntimeAssertions in Frameworks */,
+				2F4D916A2948E98D000E2D94 /* FHIR in Frameworks */,
+				2F4D916C2948E98D000E2D94 /* HealthKitDataSource in Frameworks */,
+				2F4D91642948E98D000E2D94 /* Account in Frameworks */,
+				2F4D91662948E98D000E2D94 /* CardinalKit in Frameworks */,
+				2F4D91702948E98D000E2D94 /* SecureStorage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -138,6 +144,14 @@
 				2FC246D12941500F00F75383 /* User.swift */,
 			);
 			path = AccountTests;
+			sourceTree = "<group>";
+		};
+		2F4D91732948E9F1000E2D94 /* ContactsTests */ = {
+			isa = PBXGroup;
+			children = (
+				2F4D91742948EA1A000E2D94 /* ContactsTestsView.swift */,
+			);
+			path = ContactsTests;
 			sourceTree = "<group>";
 		};
 		2F6D138928F5F384007C25D6 = {
@@ -165,6 +179,7 @@
 			children = (
 				2FA7382B290ADFAA007ACEB9 /* TestApp.swift */,
 				2F4530C0293FD617000A858F /* AccountTests */,
+				2F4D91732948E9F1000E2D94 /* ContactsTests */,
 				2FC2C404291D848600712676 /* HealthKitTests */,
 				2F8A431C291316C8005D2B8F /* LocalStorageTests */,
 				2F8A431D291316CD005D2B8F /* ObservableObjectTests */,
@@ -181,14 +196,15 @@
 			isa = PBXGroup;
 			children = (
 				2FE122AE294246D40016B162 /* Helper */,
-				2F9F07F429090BA900CDC598 /* ObservableObjectComponentTests.swift */,
-				2F9F07E1290906A200CDC598 /* SecureStorageTests.swift */,
-				2FB77BA42910F84D009FDDE2 /* LocalStorageTests.swift */,
 				2FC246D3294171EE00F75383 /* AccountLoginTests.swift */,
 				2FA04AD62943165200648A48 /* AccountResetPasswordTests.swift */,
 				2FC246D52941720600F75383 /* AccountSignUpTests.swift */,
-				2F1B81FA2942C4F00037BC09 /* UserProfileViewTests.swift */,
+				2F4D91762948EB33000E2D94 /* ContactsTests.swift */,
 				2FC2C407291DCC8200712676 /* HealthKitTests.swift */,
+				2FB77BA42910F84D009FDDE2 /* LocalStorageTests.swift */,
+				2F9F07F429090BA900CDC598 /* ObservableObjectComponentTests.swift */,
+				2F9F07E1290906A200CDC598 /* SecureStorageTests.swift */,
+				2F1B81FA2942C4F00037BC09 /* UserProfileViewTests.swift */,
 			);
 			path = TestAppUITests;
 			sourceTree = "<group>";
@@ -277,13 +293,14 @@
 			);
 			name = TestApp;
 			packageProductDependencies = (
-				2F7E32AA29466BCC0025C422 /* Account */,
-				2F7E32AC29466BCC0025C422 /* CardinalKit */,
-				2F7E32AE29466BCC0025C422 /* FHIR */,
-				2F7E32B029466BCC0025C422 /* HealthKitDataSource */,
-				2F7E32B229466BCC0025C422 /* LocalStorage */,
-				2F7E32B429466BCC0025C422 /* SecureStorage */,
-				2F7E32B629466BCC0025C422 /* XCTRuntimeAssertions */,
+				2F4D91632948E98D000E2D94 /* Account */,
+				2F4D91652948E98D000E2D94 /* CardinalKit */,
+				2F4D91672948E98D000E2D94 /* Contact */,
+				2F4D91692948E98D000E2D94 /* FHIR */,
+				2F4D916B2948E98D000E2D94 /* HealthKitDataSource */,
+				2F4D916D2948E98D000E2D94 /* LocalStorage */,
+				2F4D916F2948E98D000E2D94 /* SecureStorage */,
+				2F4D91712948E98D000E2D94 /* XCTRuntimeAssertions */,
 			);
 			productName = Example;
 			productReference = 2F6D139228F5F384007C25D6 /* TestApp.app */;
@@ -376,6 +393,7 @@
 				2FC246D02941500800F75383 /* TestAccountConfiguration.swift in Sources */,
 				2F8A4326291317AA005D2B8F /* LocalStorageTestsView.swift in Sources */,
 				2F8A43242913174B005D2B8F /* ObservableObjectTestsView.swift in Sources */,
+				2F4D91752948EA1A000E2D94 /* ContactsTestsView.swift in Sources */,
 				2F8A431B29130EF0005D2B8F /* ObservableObjectTests.swift in Sources */,
 				2F8A431729130BBC005D2B8F /* TestAppStandard.swift in Sources */,
 				2FC246D22941500F00F75383 /* User.swift in Sources */,
@@ -401,6 +419,7 @@
 				2F1B82092942DE390037BC09 /* TestAppUITests.swift in Sources */,
 				2F1B820F2942E54F0037BC09 /* XCTTestCase+HealthDataType.swift in Sources */,
 				2FA04AD72943165200648A48 /* AccountResetPasswordTests.swift in Sources */,
+				2F4D91772948EB33000E2D94 /* ContactsTests.swift in Sources */,
 				2F9F07E2290906A200CDC598 /* SecureStorageTests.swift in Sources */,
 				2FC246D62941720600F75383 /* AccountSignUpTests.swift in Sources */,
 				2FC246D4294171EE00F75383 /* AccountLoginTests.swift in Sources */,
@@ -675,31 +694,35 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		2F7E32AA29466BCC0025C422 /* Account */ = {
+		2F4D91632948E98D000E2D94 /* Account */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Account;
 		};
-		2F7E32AC29466BCC0025C422 /* CardinalKit */ = {
+		2F4D91652948E98D000E2D94 /* CardinalKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = CardinalKit;
 		};
-		2F7E32AE29466BCC0025C422 /* FHIR */ = {
+		2F4D91672948E98D000E2D94 /* Contact */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Contact;
+		};
+		2F4D91692948E98D000E2D94 /* FHIR */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = FHIR;
 		};
-		2F7E32B029466BCC0025C422 /* HealthKitDataSource */ = {
+		2F4D916B2948E98D000E2D94 /* HealthKitDataSource */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = HealthKitDataSource;
 		};
-		2F7E32B229466BCC0025C422 /* LocalStorage */ = {
+		2F4D916D2948E98D000E2D94 /* LocalStorage */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = LocalStorage;
 		};
-		2F7E32B429466BCC0025C422 /* SecureStorage */ = {
+		2F4D916F2948E98D000E2D94 /* SecureStorage */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SecureStorage;
 		};
-		2F7E32B629466BCC0025C422 /* XCTRuntimeAssertions */ = {
+		2F4D91712948E98D000E2D94 /* XCTRuntimeAssertions */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = XCTRuntimeAssertions;
 		};
