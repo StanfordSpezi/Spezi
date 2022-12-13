@@ -16,15 +16,15 @@ public struct Contact {
     public let image: Image?
     /// The name of the individual. Ideally provide at least a first and given name.
     public let name: PersonNameComponents
-    /// The title of the individual
+    /// The title of the individual.
     public let title: String?
-    /// The desciption of the individual
+    /// The desciption of the individual.
     public let description: String?
-    /// The organization of the individual
+    /// The organization of the individual.
     public let organization: String?
-    /// The address of the individual
+    /// The address of the individual.
     public let address: CNPostalAddress?
-    /// The contact options of the individual
+    /// The contact options of the individual.
     public let contactOptions: [ContactOption]
 }
 
