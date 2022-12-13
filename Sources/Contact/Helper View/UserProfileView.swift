@@ -9,6 +9,7 @@
 import SwiftUI
 
 
+/// A ``UserProfileView`` allows you to display a user image and name in a circular profile view.
 public struct UserProfileView: View {
     private let name: PersonNameComponents
     private let imageLoader: () async -> Image?
@@ -50,6 +51,10 @@ public struct UserProfileView: View {
     }
     
     
+    /// Creates a new instance with a name and a possible image provided by an async closure.
+    /// - Parameters:
+    ///   - name: The name that should be displayed and transformed to its initials.
+    ///   - imageLoader: An optional closure delivering an image that can be displayed instead of the name initials.
     public init(name: PersonNameComponents, imageLoader: @escaping () async -> Image? = { nil }) {
         self.name = name
         self.imageLoader = imageLoader

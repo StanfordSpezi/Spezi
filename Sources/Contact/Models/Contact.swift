@@ -9,22 +9,22 @@
 import Contacts
 import SwiftUI
 
-/// <#Description#>
+/// A ``Contact`` encodes the contact information.
 public struct Contact {
     let id = UUID()
-    /// <#Description#>
+    /// The image of the Contact.
     public let image: Image?
-    /// <#Description#>
+    /// The name of the individual. Ideally provide at least a first and given name.
     public let name: PersonNameComponents
-    /// <#Description#>
+    /// The title of the individual
     public let title: String?
-    /// <#Description#>
+    /// The desciption of the individual
     public let description: String?
-    /// <#Description#>
+    /// The organization of the individual
     public let organization: String?
-    /// <#Description#>
+    /// The address of the individual
     public let address: CNPostalAddress?
-    /// <#Description#>
+    /// The contact options of the individual
     public let contactOptions: [ContactOption]
 }
 

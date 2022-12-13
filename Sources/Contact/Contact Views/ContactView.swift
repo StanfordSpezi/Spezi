@@ -11,7 +11,8 @@ import MessageUI
 import SwiftUI
 
 
-struct ContactView: View {
+/// A ``ContactView`` enables the display of contact information as defined by a ``Contact``.
+public struct ContactView: View {
     private let contact: Contact
     
     @State private var contactGridWidth: CGFloat = 300
@@ -24,7 +25,7 @@ struct ContactView: View {
         return (contact.contactOptions.dropLast(leftOverElements), contact.contactOptions.dropFirst(columnCount * numberOfRows))
     }
     
-    var body: some View {
+    public var body: some View {
         VStack {
             header
             Divider()
@@ -51,7 +52,7 @@ struct ContactView: View {
             Spacer()
                 .frame(width: 16)
             VStack(alignment: .leading, spacing: 2) {
-                Text(contact.name.formatted())
+                Text(contact.name.formatted(.name(style: .long)))
                     .font(.title3.bold())
                 HStack(spacing: 0) {
                     if let title = contact.title {
@@ -128,7 +129,9 @@ struct ContactView: View {
     }
     
     
-    init(contact: Contact) {
+    /// A ``ContactView`` enables the display of contact information as defined by a ``Contact``.
+    /// - Parameter contact: The ``Contact`` that should be displayed.
+    public init(contact: Contact) {
         self.contact = contact
     }
     

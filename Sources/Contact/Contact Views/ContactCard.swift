@@ -10,12 +10,11 @@
 import SwiftUI
 
 
-/// <#Description#>
-public struct ContactCard: View {
+struct ContactCard: View {
     private let contact: Contact
     
     
-    public var body: some View {
+    var body: some View {
         ContactView(contact: contact)
             .padding()
             .background {
@@ -26,9 +25,7 @@ public struct ContactCard: View {
     }
     
     
-    /// <#Description#>
-    /// - Parameter contact: <#contact description#>
-    public init(contact: Contact) {
+    init(contact: Contact) {
         self.contact = contact
     }
 }
