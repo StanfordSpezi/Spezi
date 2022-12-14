@@ -32,6 +32,7 @@ struct UsernamePasswordResetPasswordView: View {
             } else {
                 DataEntryAccountView(
                     buttonTitle: resetPasswordButtonTitleLocalization,
+                    defaultError: defaultResetPasswordFailedError,
                     focusState: _focusedField,
                     valid: $valid,
                     buttonPressed: {
@@ -41,7 +42,6 @@ struct UsernamePasswordResetPasswordView: View {
                         }
                         try await Task.sleep(for: .seconds(0.6))
                     },
-                    defaultError: defaultResetPasswordFailedError,
                     content: {
                         header
                         Divider()

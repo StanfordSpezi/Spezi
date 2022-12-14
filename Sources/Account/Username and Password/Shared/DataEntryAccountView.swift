@@ -58,10 +58,10 @@ struct DataEntryAccountView: View {
     
     init<Content: View, Footer: View>(
         buttonTitle: String,
+        defaultError: String,
         focusState: FocusState<AccountInputFields?> = FocusState<AccountInputFields?>(),
         valid: Binding<Bool> = .constant(true),
         buttonPressed: @escaping () async throws -> Void,
-        defaultError: String,
         @ViewBuilder content: () -> Content,
         @ViewBuilder footer: () -> Footer = { EmptyView() }
     ) {
@@ -109,11 +109,11 @@ struct DataEntryView_Previews: PreviewProvider {
         NavigationStack {
             DataEntryAccountView(
                 buttonTitle: "Test",
+                defaultError: "Error",
                 buttonPressed: {
                     try await Task.sleep(for: .seconds(2))
                     print("Pressed!")
-                },
-                defaultError: "Error"
+                }
             ) {
                 Text("Content ...")
             }

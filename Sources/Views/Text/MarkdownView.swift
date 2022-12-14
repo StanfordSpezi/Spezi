@@ -54,10 +54,10 @@ struct MarkdownView<Header: View, Footer: View>: View {
     
     
     init(
-        header: Header = EmptyView(),
-        footer: Footer = EmptyView(),
         asyncMarkdown: @escaping () async -> Data,
-        state: Binding<ViewState> = .constant(.idle)
+        state: Binding<ViewState> = .constant(.idle),
+        header: Header = EmptyView(),
+        footer: Footer = EmptyView()
     ) {
         self.header = header
         self.footer = footer
@@ -66,16 +66,16 @@ struct MarkdownView<Header: View, Footer: View>: View {
     }
     
     init(
-        header: Header = EmptyView(),
-        footer: Footer = EmptyView(),
         markdown: Data,
-        state: Binding<ViewState> = .constant(.idle)
+        state: Binding<ViewState> = .constant(.idle),
+        header: Header = EmptyView(),
+        footer: Footer = EmptyView()
     ) {
         self.init(
-            header: header,
-            footer: footer,
             asyncMarkdown: { markdown },
-            state: state
+            state: state,
+            header: header,
+            footer: footer
         )
     }
 }

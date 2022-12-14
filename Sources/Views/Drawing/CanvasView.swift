@@ -42,7 +42,7 @@ public struct CanvasView: UIViewRepresentable {
     @State private var drawing = PKDrawing()
     @State private var pkcanvasViewSize = CGSize()
     let canvasView = PKCanvasView()
-    let picker = PKToolPicker.init()
+    let picker = PKToolPicker()
     
     @Binding private var showToolPicker: Bool
     
@@ -54,7 +54,7 @@ public struct CanvasView: UIViewRepresentable {
     ///   - coordinator: <#coordinator description#>
     ///   - showToolPicker: <#showToolPicker description#>
     public init(
-        tool: PKInkingTool = PKInkingTool(.monoline, color: .label, width: 1),
+        tool: PKInkingTool = PKInkingTool(.pencil, color: .label, width: 1),
         drawingPolicy: PKCanvasViewDrawingPolicy = .anyInput,
         coordinator: Coordinator = Coordinator(),
         showToolPicker: Binding<Bool> = .constant(true)

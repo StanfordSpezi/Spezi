@@ -29,12 +29,12 @@ struct UsernamePasswordLoginView: View {
         ScrollView {
             DataEntryAccountView(
                 buttonTitle: loginButtonTitleLocalization,
+                defaultError: defaultLoginFailedError,
                 focusState: _focusedField,
                 valid: $valid,
                 buttonPressed: {
                     try await usernamePasswordAccountService.login(username: username, password: password)
                 },
-                defaultError: defaultLoginFailedError,
                 content: {
                     header
                     Divider()
