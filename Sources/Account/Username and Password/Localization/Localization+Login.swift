@@ -20,7 +20,8 @@ extension Localization {
                 title: String(moduleLocalized: "UAP_LOGIN_PASSWORD_TITLE"),
                 placeholder: String(moduleLocalized: "UAP_LOGIN_PASSWORD_PLACEHOLDER")
             ),
-            loginActionButtonTitle: String(moduleLocalized: "UAP_LOGIN_ACTION_BUTTON_TITLE")
+            loginActionButtonTitle: String(moduleLocalized: "UAP_LOGIN_ACTION_BUTTON_TITLE"),
+            defaultLoginFailedError: String(moduleLocalized: "UAP_LOGIN_FAILED_DEFAULT_ERROR")
         )
         
         
@@ -29,6 +30,7 @@ extension Localization {
         public let username: Field
         public let password: Field
         public let loginActionButtonTitle: String
+        public let defaultLoginFailedError: String
         
         
         init(
@@ -36,13 +38,15 @@ extension Localization {
             navigationTitle: String = Login.default.navigationTitle,
             username: Field = Login.default.username,
             password: Field = Login.default.password,
-            loginActionButtonTitle: String = Login.default.loginActionButtonTitle
+            loginActionButtonTitle: String = Login.default.loginActionButtonTitle,
+            defaultLoginFailedError: String = Login.default.defaultLoginFailedError
         ) {
             self.buttonTitle = buttonTitle
             self.navigationTitle = navigationTitle
             self.username = username
             self.password = password
             self.loginActionButtonTitle = loginActionButtonTitle
+            self.defaultLoginFailedError = defaultLoginFailedError
         }
     }
 }

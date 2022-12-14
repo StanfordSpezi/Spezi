@@ -44,15 +44,16 @@ private struct _Label: UIViewRepresentable {
 }
 
 
-struct Label: View {
-    let text: String
-    let textStyle: UIFont.TextStyle
-    let textAllignment: NSTextAlignment
-    let textColor: UIColor
-    let numberOfLines: Int
+/// <#Description#>
+public struct Label: View {
+    private let text: String
+    private let textStyle: UIFont.TextStyle
+    private let textAllignment: NSTextAlignment
+    private let textColor: UIColor
+    private let numberOfLines: Int
     
     
-    var body: some View {
+    public var body: some View {
         HorizontalGeometryReader { width in
             _Label(
                 text: text,
@@ -66,7 +67,14 @@ struct Label: View {
     }
     
     
-    init(
+    /// <#Description#>
+    /// - Parameters:
+    ///   - text: <#text description#>
+    ///   - textStyle: <#textStyle description#>
+    ///   - textAllignment: <#textAllignment description#>
+    ///   - textColor: <#textColor description#>
+    ///   - numberOfLines: <#numberOfLines description#>
+    public init(
         _ text: String,
         textStyle: UIFont.TextStyle = .body,
         textAllignment: NSTextAlignment = .justified,

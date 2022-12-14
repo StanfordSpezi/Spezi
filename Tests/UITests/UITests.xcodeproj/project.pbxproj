@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2F0B3D6B294953CF0043FAC4 /* Consent in Frameworks */ = {isa = PBXBuildFile; productRef = 2F0B3D6A294953CF0043FAC4 /* Consent */; };
+		2F0B3D6D294953CF0043FAC4 /* Onboarding in Frameworks */ = {isa = PBXBuildFile; productRef = 2F0B3D6C294953CF0043FAC4 /* Onboarding */; };
 		2F1B81FB2942C4F00037BC09 /* UserProfileViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1B81FA2942C4F00037BC09 /* UserProfileViewTests.swift */; };
 		2F1B82092942DE390037BC09 /* TestAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1B82082942DE390037BC09 /* TestAppUITests.swift */; };
 		2F1B820F2942E54F0037BC09 /* XCTTestCase+HealthDataType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1B820E2942E54F0037BC09 /* XCTTestCase+HealthDataType.swift */; };
@@ -115,9 +117,11 @@
 				2F4D916E2948E98D000E2D94 /* LocalStorage in Frameworks */,
 				2F4D91682948E98D000E2D94 /* Contact in Frameworks */,
 				2F4D91722948E98D000E2D94 /* XCTRuntimeAssertions in Frameworks */,
+				2F0B3D6B294953CF0043FAC4 /* Consent in Frameworks */,
 				2F4D916A2948E98D000E2D94 /* FHIR in Frameworks */,
 				2F4D916C2948E98D000E2D94 /* HealthKitDataSource in Frameworks */,
 				2F4D91642948E98D000E2D94 /* Account in Frameworks */,
+				2F0B3D6D294953CF0043FAC4 /* Onboarding in Frameworks */,
 				2F4D91662948E98D000E2D94 /* CardinalKit in Frameworks */,
 				2F4D91702948E98D000E2D94 /* SecureStorage in Frameworks */,
 			);
@@ -301,6 +305,8 @@
 				2F4D916D2948E98D000E2D94 /* LocalStorage */,
 				2F4D916F2948E98D000E2D94 /* SecureStorage */,
 				2F4D91712948E98D000E2D94 /* XCTRuntimeAssertions */,
+				2F0B3D6A294953CF0043FAC4 /* Consent */,
+				2F0B3D6C294953CF0043FAC4 /* Onboarding */,
 			);
 			productName = Example;
 			productReference = 2F6D139228F5F384007C25D6 /* TestApp.app */;
@@ -694,6 +700,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		2F0B3D6A294953CF0043FAC4 /* Consent */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Consent;
+		};
+		2F0B3D6C294953CF0043FAC4 /* Onboarding */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Onboarding;
+		};
 		2F4D91632948E98D000E2D94 /* Account */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Account;

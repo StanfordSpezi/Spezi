@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import Views
 
 
 struct DataEntryAccountView: View {
@@ -14,10 +15,11 @@ struct DataEntryAccountView: View {
     private let buttonTitle: String
     private let buttonPressed: () async throws -> Void
     private let footer: AnyView
-        
+    private let defaultError: String
+    
     @Binding private var valid: Bool
     @FocusState private var focusedField: AccountInputFields?
-    @State private var state: AccountViewState = .idle
+    @State private var state: ViewState = .idle
     
     
     var body: some View {
@@ -59,6 +61,7 @@ struct DataEntryAccountView: View {
         focusState: FocusState<AccountInputFields?> = FocusState<AccountInputFields?>(),
         valid: Binding<Bool> = .constant(true),
         buttonPressed: @escaping () async throws -> Void,
+        defaultError: String,
         @ViewBuilder content: () -> Content,
         @ViewBuilder footer: () -> Footer = { EmptyView() }
     ) {
@@ -66,6 +69,7 @@ struct DataEntryAccountView: View {
         self._focusedField = focusState
         self._valid = valid
         self.buttonPressed = buttonPressed
+        self.defaultError = defaultError
         self.content = AnyView(content())
         self.footer = AnyView(footer())
     }
@@ -88,7 +92,12 @@ struct DataEntryAccountView: View {
                     state = .idle
                 }
             } catch {
-                state = .error(error)
+                state = .error(
+                    AnyLocalizedError(
+                        error: error,
+                        defaultErrorDescription: defaultError
+                    )
+                )
             }
         }
     }
@@ -103,7 +112,8 @@ struct DataEntryView_Previews: PreviewProvider {
                 buttonPressed: {
                     try await Task.sleep(for: .seconds(2))
                     print("Pressed!")
-                }
+                },
+                defaultError: "Error"
             ) {
                 Text("Content ...")
             }

@@ -35,7 +35,8 @@ extension Localization {
             ),
             genderIdentityTitle: String(moduleLocalized: "UAP_SIGNUP_GENDER_IDENTITY_TITLE"),
             dateOfBirthTitle: String(moduleLocalized: "UAP_SIGNUP_DATE_OF_BIRTH_TITLE"),
-            signUpActionButtonTitle: String(moduleLocalized: "UAP_SIGNUP_ACTION_BUTTON_TITLE")
+            signUpActionButtonTitle: String(moduleLocalized: "UAP_SIGNUP_ACTION_BUTTON_TITLE"),
+            defaultSignUpFailedError: String(moduleLocalized: "UAP_SIGNUP_FAILED_DEFAULT_ERROR")
         )
         
         
@@ -50,6 +51,7 @@ extension Localization {
         public let genderIdentityTitle: String
         public let dateOfBirthTitle: String
         public let signUpActionButtonTitle: String
+        public let defaultSignUpFailedError: String
         
         
         public init(
@@ -63,7 +65,8 @@ extension Localization {
             familyName: Field = SignUp.default.familyName,
             genderIdentityTitle: String = SignUp.default.genderIdentityTitle,
             dateOfBirthTitle: String = SignUp.default.dateOfBirthTitle,
-            signUpActionButtonTitle: String = SignUp.default.signUpActionButtonTitle
+            signUpActionButtonTitle: String = SignUp.default.signUpActionButtonTitle,
+            defaultSignUpFailedError: String = SignUp.default.defaultSignUpFailedError
         ) {
             self.buttonTitle = buttonTitle
             self.navigationTitle = navigationTitle
@@ -76,6 +79,7 @@ extension Localization {
             self.genderIdentityTitle = genderIdentityTitle
             self.dateOfBirthTitle = dateOfBirthTitle
             self.signUpActionButtonTitle = signUpActionButtonTitle
+            self.defaultSignUpFailedError = defaultSignUpFailedError
         }
     }
 }

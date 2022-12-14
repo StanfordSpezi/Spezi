@@ -40,12 +40,15 @@ struct UsernamePasswordResetPasswordView: View {
                             processSuccess = true
                         }
                         try await Task.sleep(for: .seconds(0.6))
-                    }, content: {
+                    },
+                    defaultError: defaultResetPasswordFailedError,
+                    content: {
                         header
                         Divider()
                         usernameTextField
                         Divider()
-                    }, footer: {
+                    },
+                    footer: {
                         footer
                     }
                 )
@@ -102,6 +105,15 @@ struct UsernamePasswordResetPasswordView: View {
             return usernamePasswordAccountService.localization.resetPassword.navigationTitle
         case let .value(resetPassword):
             return resetPassword.navigationTitle
+        }
+    }
+    
+    private var defaultResetPasswordFailedError: String {
+        switch localization {
+        case .environment:
+            return usernamePasswordAccountService.localization.resetPassword.defaultResetPasswordFailedError
+        case let .value(resetPassword):
+            return resetPassword.defaultResetPasswordFailedError
         }
     }
     

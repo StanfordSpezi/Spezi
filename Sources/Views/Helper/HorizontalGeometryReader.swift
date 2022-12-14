@@ -9,20 +9,22 @@
 import SwiftUI
 
 
-struct WidthPreferenceKey: PreferenceKey, Equatable {
-    static var defaultValue: CGFloat = 0
+/// <#Description#>
+public struct WidthPreferenceKey: PreferenceKey, Equatable {
+    public static var defaultValue: CGFloat = 0
     
     
-    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) { }
+    public static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) { }
 }
 
 
-struct HorizontalGeometryReader<Content: View>: View {
+/// <#Description#>
+public struct HorizontalGeometryReader<Content: View>: View {
     private var content: (CGFloat) -> Content
     @State private var width: CGFloat = 0
     
     
-    var body: some View {
+    public var body: some View {
         content(width)
             .frame(minWidth: 0, maxWidth: .infinity)
             .background(
@@ -37,7 +39,9 @@ struct HorizontalGeometryReader<Content: View>: View {
     }
     
     
-    init(@ViewBuilder content: @escaping (CGFloat) -> Content) {
+    /// <#Description#>
+    /// - Parameter content: <#content description#>
+    public init(@ViewBuilder content: @escaping (CGFloat) -> Content) {
         self.content = content
     }
 }

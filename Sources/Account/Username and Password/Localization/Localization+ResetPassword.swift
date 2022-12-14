@@ -17,7 +17,8 @@ extension Localization {
                 placeholder: String(moduleLocalized: "UAP_RESET_PASSWORD_USERNAME_PLACEHOLDER")
             ),
             resetPasswordActionbuttonTitle: String(moduleLocalized: "UAP_RESET_PASSWORD_ACTION_BUTTON_TITLE"),
-            processSuccessfulLabel: String(moduleLocalized: "UAP_RESET_PASSWORD_PROCESS_SUCCESSFUL_LABEL")
+            processSuccessfulLabel: String(moduleLocalized: "UAP_RESET_PASSWORD_PROCESS_SUCCESSFUL_LABEL"),
+            defaultResetPasswordFailedError: String(moduleLocalized: "UAP_RESET_PASSWORD_FAILED_DEFAULT_ERROR")
         )
         
         
@@ -26,6 +27,7 @@ extension Localization {
         public let username: Field
         public let resetPasswordActionbuttonTitle: String
         public let processSuccessfulLabel: String
+        public let defaultResetPasswordFailedError: String
         
         
         init(
@@ -33,13 +35,15 @@ extension Localization {
             navigationTitle: String = ResetPassword.default.navigationTitle,
             username: Field = ResetPassword.default.username,
             resetPasswordActionbuttonTitle: String = ResetPassword.default.resetPasswordActionbuttonTitle,
-            processSuccessfulLabel: String = ResetPassword.default.processSuccessfulLabel
+            processSuccessfulLabel: String = ResetPassword.default.processSuccessfulLabel,
+            defaultResetPasswordFailedError: String = ResetPassword.default.defaultResetPasswordFailedError
         ) {
             self.buttonTitle = buttonTitle
             self.navigationTitle = navigationTitle
             self.username = username
             self.resetPasswordActionbuttonTitle = resetPasswordActionbuttonTitle
             self.processSuccessfulLabel = processSuccessfulLabel
+            self.defaultResetPasswordFailedError = defaultResetPasswordFailedError
         }
     }
 }

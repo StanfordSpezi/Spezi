@@ -33,13 +33,16 @@ struct UsernamePasswordLoginView: View {
                 valid: $valid,
                 buttonPressed: {
                     try await usernamePasswordAccountService.login(username: username, password: password)
-                }, content: {
+                },
+                defaultError: defaultLoginFailedError,
+                content: {
                     header
                     Divider()
                     usernamePasswordSection
                     Divider()
                     usernamePasswordAccountService.resetPasswordButton
-                }, footer: {
+                },
+                footer: {
                     footer
                 }
             )
@@ -99,6 +102,15 @@ struct UsernamePasswordLoginView: View {
             return usernamePasswordAccountService.localization.login.navigationTitle
         case let .value(login):
             return login.navigationTitle
+        }
+    }
+    
+    private var defaultLoginFailedError: String {
+        switch localization {
+        case .environment:
+            return usernamePasswordAccountService.localization.login.defaultLoginFailedError
+        case let .value(resetPassword):
+            return resetPassword.defaultLoginFailedError
         }
     }
     

@@ -20,10 +20,12 @@ let package = Package(
     products: [
         .library(name: "Account", targets: ["Account"]),
         .library(name: "CardinalKit", targets: ["CardinalKit"]),
+        .library(name: "Consent", targets: ["Consent"]),
         .library(name: "Contact", targets: ["Contact"]),
         .library(name: "FHIR", targets: ["FHIR"]),
         .library(name: "HealthKitDataSource", targets: ["HealthKitDataSource"]),
         .library(name: "LocalStorage", targets: ["LocalStorage"]),
+        .library(name: "Onboarding", targets: ["Onboarding"]),
         .library(name: "SecureStorage", targets: ["SecureStorage"]),
         .library(name: "XCTRuntimeAssertions", targets: ["XCTRuntimeAssertions"])
     ],
@@ -34,7 +36,8 @@ let package = Package(
         .target(
             name: "Account",
             dependencies: [
-                .target(name: "CardinalKit")
+                .target(name: "CardinalKit"),
+                .target(name: "Views")
             ],
             resources: [
                 .process("Resources")
@@ -54,9 +57,17 @@ let package = Package(
             ]
         ),
         .target(
+            name: "Consent",
+            dependencies: [
+                .target(name: "CardinalKit"),
+                .target(name: "Views")
+            ]
+        ),
+        .target(
             name: "Contact",
             dependencies: [
-                .target(name: "CardinalKit")
+                .target(name: "CardinalKit"),
+                .target(name: "Views")
             ],
             resources: [
                 .process("Resources")
@@ -95,11 +106,21 @@ let package = Package(
             ]
         ),
         .target(
+            name: "Onboarding",
+            dependencies: [
+                .target(name: "CardinalKit"),
+                .target(name: "Views")
+            ]
+        ),
+        .target(
             name: "SecureStorage",
             dependencies: [
                 .target(name: "CardinalKit"),
                 .target(name: "XCTRuntimeAssertions")
             ]
+        ),
+        .target(
+            name: "Views"
         ),
         .target(
             name: "XCTRuntimeAssertions"

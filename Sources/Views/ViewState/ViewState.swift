@@ -9,25 +9,33 @@
 import Foundation
 
 
-enum AccountViewState: Equatable {
+/// <#Description#>
+public enum ViewState: Equatable {
+    /// <#Description#>
     case idle
+    /// <#Description#>
     case processing
-    case error(Error)
+    /// <#Description#>
+    case error(LocalizedError)
     
     
-    var errorTitle: String {
+    /// <#Description#>
+    public var errorTitle: String {
         switch self {
-        case let .error(error as LocalizedError):
-            return error.errorDescription
-            ?? String(localized: "LOGIN_UAP_DEFAULT_ERROR", bundle: .module)
+        case let .error(error):
+            guard let errorTitle = error.errorDescription else {
+                fallthrough
+            }
+            return errorTitle
         default:
-            return String(localized: "LOGIN_UAP_DEFAULT_ERROR", bundle: .module)
+            return String(localized: "VIEW_STATE_DEFAULT_ERROR_TITLE", bundle: .module)
         }
     }
     
-    var errorDescription: String {
+    /// <#Description#>
+    public var errorDescription: String {
         switch self {
-        case let .error(error as LocalizedError):
+        case let .error(error):
             var errorDescription = ""
             if let failureReason = error.failureReason {
                 errorDescription.append("\(failureReason)\n\n")
@@ -42,14 +50,13 @@ enum AccountViewState: Equatable {
                 errorDescription = error.localizedDescription
             }
             return errorDescription
-        case let .error(error):
-            return error.localizedDescription
         default:
             return ""
         }
     }
     
-    static func == (lhs: AccountViewState, rhs: AccountViewState) -> Bool {
+    
+    public static func == (lhs: ViewState, rhs: ViewState) -> Bool {
         switch (lhs, rhs) {
         case (.idle, .idle), (.processing, .processing), (.error, .error):
             return true

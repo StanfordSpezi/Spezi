@@ -9,8 +9,8 @@
 import SwiftUI
 
 
-struct AccountViewStateAlert: ViewModifier {
-    @Binding private var state: AccountViewState
+private struct ViewStateAlert: ViewModifier {
+    @Binding private var state: ViewState
     
     
     private var errorAlertBinding: Binding<Bool> {
@@ -28,7 +28,7 @@ struct AccountViewStateAlert: ViewModifier {
     }
     
     
-    fileprivate init(state: Binding<AccountViewState>) {
+    init(state: Binding<ViewState>) {
         self._state = state
     }
     
@@ -43,8 +43,11 @@ struct AccountViewStateAlert: ViewModifier {
 
 
 extension View {
-    func viewStateAlert(state: Binding<AccountViewState>) -> some View {
+    /// <#Description#>
+    /// - Parameter state: <#state description#>
+    /// - Returns: <#description#>
+    public func viewStateAlert(state: Binding<ViewState>) -> some View {
         self
-            .modifier(AccountViewStateAlert(state: state))
+            .modifier(ViewStateAlert(state: state))
     }
 }
