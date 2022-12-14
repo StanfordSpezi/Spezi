@@ -27,8 +27,7 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES"
-      codeCoverageEnabled = "YES"
-      onlyGenerateCoverageForSpecifiedTargets = "YES">
+      codeCoverageEnabled = "YES">
       <CodeCoverageTargets>
          <BuildableReference
             BuildableIdentifier = "primary"
@@ -42,6 +41,13 @@
             BlueprintIdentifier = "CardinalKit"
             BuildableName = "CardinalKit"
             BlueprintName = "CardinalKit"
+            ReferencedContainer = "container:../..">
+         </BuildableReference>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "Contact"
+            BuildableName = "Contact"
+            BlueprintName = "Contact"
             ReferencedContainer = "container:../..">
          </BuildableReference>
          <BuildableReference

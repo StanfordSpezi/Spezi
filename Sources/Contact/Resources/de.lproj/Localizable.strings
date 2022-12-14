@@ -1,0 +1,18 @@
+//
+// This source file is part of the CardinalKit open-source project
+//
+// SPDX-FileCopyrightText: 2022 Stanford University and the project authors (see CONTRIBUTORS.md)
+//
+// SPDX-License-Identifier: MIT
+//
+
+// MARK: - Contact Options
+"CONTACT_OPTION_CALL" = "Anrufen";
+"CONTACT_OPTION_CALL_MANUAL %@" = "Das Gerät kann keinen Anruf tätigen. Sie können %@ anderswertig erreichen.";
+"CONTACT_OPTION_TEXT" = "Nachricht";
+"CONTACT_OPTION_TEST_MANUAL %@" = "Das Gerät kann keine SMS senden. Sie können %@ anderswertig erreichen.";
+"CONTACT_OPTION_EMAIL" = "E-Mail";
+"CONTACT_OPTION_EMAIL_MANUAL %@" = "Das Gerät kann keine E-Mail senden. Sie können %@ anderswertig erreichen.";
+"CONTACT_MANUAL_DISMISS" = "Ok";
+
+"CONTACT_ADDRESS" = "Adresse";

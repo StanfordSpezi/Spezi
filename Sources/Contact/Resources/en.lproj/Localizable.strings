@@ -1,0 +1,18 @@
+//
+// This source file is part of the CardinalKit open-source project
+//
+// SPDX-FileCopyrightText: 2022 Stanford University and the project authors (see CONTRIBUTORS.md)
+//
+// SPDX-License-Identifier: MIT
+//
+
+// MARK: - Contact Options
+"CONTACT_OPTION_CALL" = "Call";
+"CONTACT_OPTION_CALL_MANUAL %@" = "The device is not setup to make a call. You can manually reach out to %@.";
+"CONTACT_OPTION_TEXT" = "Text";
+"CONTACT_OPTION_TEXT_MANUAL %@" = "The device is not setup to send a text. You can manually reach out to %@.";
+"CONTACT_OPTION_EMAIL" = "Email";
+"CONTACT_OPTION_EMAIL_MANUAL %@" = "The device is not setup to send email. You can manually reach out to %@.";
+"CONTACT_MANUAL_DISMISS" = "Ok";
+
+"CONTACT_ADDRESS" = "Address";

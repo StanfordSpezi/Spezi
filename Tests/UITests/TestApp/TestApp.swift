@@ -13,6 +13,7 @@ import SwiftUI
 struct UITestsApp: App {
     enum Tests: String, CaseIterable, Identifiable {
         case account = "Account"
+        case contacts = "Contacts"
         case healthKit = "HealthKit"
         case localStorage = "LocalStorage"
         case observableObject = "ObservableObject"
@@ -29,6 +30,8 @@ struct UITestsApp: App {
             switch self {
             case .account:
                 AccountTestsView()
+            case .contacts:
+                ContactsTestsView()
             case .healthKit:
                 HealthKitTestsView()
             case .localStorage:
