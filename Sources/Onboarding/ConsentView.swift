@@ -17,6 +17,7 @@ struct ConsentView<Header: View, ContentView: View, Footer: View, Action: View>:
     private let footer: Footer
     private let action: Action
     @State private var name = PersonNameComponents()
+    @State private var showSignatureView = false
     @State private var isSigning = false
     @State private var signature = PKDrawing()
     
@@ -57,12 +58,15 @@ struct ConsentView<Header: View, ContentView: View, Footer: View, Action: View>:
         }
     }
     
-    var showSignatureView: Bool {
-        !(name.givenName?.isEmpty ?? true) && !(name.familyName?.isEmpty ?? true)
-    }
-    
     var buttonDisabled: Bool {
-        signature.strokes.isEmpty || (name.givenName?.isEmpty ?? true) || (name.familyName?.isEmpty ?? true)
+        let showSignatureView = !(name.givenName?.isEmpty ?? true) && !(name.familyName?.isEmpty ?? true)
+        if !self.showSignatureView && showSignatureView {
+            Task { @MainActor in
+                self.showSignatureView = showSignatureView
+            }
+        }
+        
+        return signature.strokes.isEmpty || (name.givenName?.isEmpty ?? true) || (name.familyName?.isEmpty ?? true)
     }
     
     

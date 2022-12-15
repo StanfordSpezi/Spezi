@@ -24,6 +24,8 @@ final class OnboardingTests: TestAppUITests {
         XCTAssertFalse(app.staticTexts["Leland Stanford"].exists)
         XCTAssertFalse(app.staticTexts["X"].exists)
         
+        app.staticTexts["This is a markdown example"].swipeUp()
+        
         app.buttons["I Consent"].tap()
         
         app.enter(value: "Leland", in: "Enter your given name ...")
