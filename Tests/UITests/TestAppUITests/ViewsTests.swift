@@ -79,7 +79,6 @@ final class ViewsTests: TestAppUITests {
         
         XCTAssert(app.staticTexts["300.000000"].exists)
         XCTAssert(app.staticTexts["200.000000"].exists)
-        
     }
     
     func testLabel() throws {
@@ -88,7 +87,9 @@ final class ViewsTests: TestAppUITests {
         
         app.collectionViews.buttons["Views"].tap()
         app.collectionViews.buttons["Label"].tap()
-
+        
+        // The string value needs to be searched for in the UI.
+        // swiftlint:disable:next line_length
         let text = "This is a label ... An other text. This is longer and we can check if the justified text works as epxected. This is a very long text."
         XCTAssertEqual(app.staticTexts.allElementsBoundByIndex.filter { $0.label.contains(text) }.count, 2)
     }
