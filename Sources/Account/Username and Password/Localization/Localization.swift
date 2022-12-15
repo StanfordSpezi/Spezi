@@ -7,13 +7,10 @@
 //
 
 
+import Views
+
+
 public struct Localization: Codable {
-    public struct Field: Codable {
-        public let title: String
-        public let placeholder: String
-    }
-    
-    
     public static let `default` = Localization(
         login: Login.default,
         signUp: SignUp.default,

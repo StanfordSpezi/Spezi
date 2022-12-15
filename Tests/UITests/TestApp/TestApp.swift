@@ -16,6 +16,7 @@ struct UITestsApp: App {
         case contacts = "Contacts"
         case healthKit = "HealthKit"
         case localStorage = "LocalStorage"
+        case onboardingTests = "OnboardingTests"
         case observableObject = "ObservableObject"
         case secureStorage = "SecureStorage"
         
@@ -36,6 +37,8 @@ struct UITestsApp: App {
                 HealthKitTestsView()
             case .localStorage:
                 LocalStorageTestsView()
+            case .onboardingTests:
+                OnboardingTestsView()
             case .observableObject:
                 ObservableObjectTestsView()
             case .secureStorage:

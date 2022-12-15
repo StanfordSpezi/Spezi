@@ -20,7 +20,6 @@ let package = Package(
     products: [
         .library(name: "Account", targets: ["Account"]),
         .library(name: "CardinalKit", targets: ["CardinalKit"]),
-        .library(name: "Consent", targets: ["Consent"]),
         .library(name: "Contact", targets: ["Contact"]),
         .library(name: "FHIR", targets: ["FHIR"]),
         .library(name: "HealthKitDataSource", targets: ["HealthKitDataSource"]),
@@ -54,13 +53,6 @@ let package = Package(
             dependencies: [
                 .target(name: "CardinalKit"),
                 .target(name: "XCTRuntimeAssertions")
-            ]
-        ),
-        .target(
-            name: "Consent",
-            dependencies: [
-                .target(name: "CardinalKit"),
-                .target(name: "Views")
             ]
         ),
         .target(

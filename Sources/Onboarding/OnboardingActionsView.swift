@@ -7,51 +7,53 @@
 //
 
 import SwiftUI
+import Views
 
 
 struct OnboardingActionsView: View {
-    let primaryText: String.LocalizationValue
-    let primaryAction: () -> Void
-    let seconaryText: String.LocalizationValue?
-    let seconaryAction: (() -> Void)?
+    private let primaryText: String
+    private let primaryAction: () -> Void
+    private let seconaryText: String?
+    private let seconaryAction: (() -> Void)?
     
     
     var body: some View {
         Button(action: primaryAction) {
-            Text(String(localized: primaryText))
+            Text(primaryText)
                 .frame(maxWidth: .infinity, minHeight: 38)
         }
             .buttonStyle(.borderedProminent)
-            .padding(.bottom, 10)
         if let seconaryText, let seconaryAction {
-            Button(String(localized: seconaryText)) {
+            Button(seconaryText) {
                 seconaryAction()
             }
+                .padding(.top, 10)
         }
     }
     
-    init(
-        _ text: String.LocalizationValue,
+    init<Text: StringProtocol>(
+        _ text: Text,
         action: @escaping () -> Void
     ) {
-        self.primaryText = text
+        self.primaryText = text.localized
         self.primaryAction = action
         self.seconaryText = nil
         self.seconaryAction = nil
     }
     
-    init(
-        primaryText: String.LocalizationValue,
+    init<PrimaryText: StringProtocol, SeconaryText: StringProtocol>(
+        primaryText: PrimaryText,
         primaryAction: @escaping () -> Void,
-        seconaryText: String.LocalizationValue,
+        seconaryText: SeconaryText,
         seconaryAction: (@escaping () -> Void)
     ) {
-        self.primaryText = primaryText
+        self.primaryText = primaryText.localized
         self.primaryAction = primaryAction
-        self.seconaryText = seconaryText
+        self.seconaryText = seconaryText.localized
         self.seconaryAction = seconaryAction
     }
 }
+
 
 struct OnboardingActionsView_Previews: PreviewProvider {
     static var previews: some View {

@@ -9,7 +9,8 @@
 import SwiftUI
 
 
-struct MarkdownView<Header: View, Footer: View>: View {
+/// <#Description#>
+public struct MarkdownView<Header: View, Footer: View>: View {
     let header: Header
     let footer: Footer
     let asyncMarkdown: () async -> Data
@@ -35,8 +36,8 @@ struct MarkdownView<Header: View, Footer: View>: View {
     }
     
     
-    var body: some View {
-        ScrollView {
+    public var body: some View {
+        VStack {
             header
             if markdown == nil {
                 ProgressView()
@@ -53,23 +54,35 @@ struct MarkdownView<Header: View, Footer: View>: View {
     }
     
     
-    init(
+    /// <#Description#>
+    /// - Parameters:
+    ///   - asyncMarkdown: <#asyncMarkdown description#>
+    ///   - state: <#state description#>
+    ///   - header: <#header description#>
+    ///   - footer: <#footer description#>
+    public init(
         asyncMarkdown: @escaping () async -> Data,
         state: Binding<ViewState> = .constant(.idle),
-        header: Header = EmptyView(),
-        footer: Footer = EmptyView()
+        @ViewBuilder header: () -> (Header) = { EmptyView() },
+        @ViewBuilder footer: () -> (Footer) = { EmptyView() }
     ) {
-        self.header = header
-        self.footer = footer
+        self.header = header()
+        self.footer = footer()
         self.asyncMarkdown = asyncMarkdown
         self._state = state
     }
     
-    init(
+    /// <#Description#>
+    /// - Parameters:
+    ///   - markdown: <#markdown description#>
+    ///   - state: <#state description#>
+    ///   - header: <#header description#>
+    ///   - footer: <#footer description#>
+    public init(
         markdown: Data,
         state: Binding<ViewState> = .constant(.idle),
-        header: Header = EmptyView(),
-        footer: Footer = EmptyView()
+        @ViewBuilder header: () -> (Header) = { EmptyView() },
+        @ViewBuilder footer: () -> (Footer) = { EmptyView() }
     ) {
         self.init(
             asyncMarkdown: { markdown },

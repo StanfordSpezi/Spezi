@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import Views
 
 
 struct UsernamePasswordResetPasswordView: View {
@@ -58,7 +59,7 @@ struct UsernamePasswordResetPasswordView: View {
     }
     
     private var usernameTextField: some View {
-        let usernameLocalization: Localization.Field
+        let usernameLocalization: FieldLocalization
         switch localization {
         case .environment:
             usernameLocalization = usernamePasswordAccountService.localization.resetPassword.username

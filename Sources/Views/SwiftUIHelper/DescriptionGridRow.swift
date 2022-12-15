@@ -9,12 +9,12 @@
 import SwiftUI
 
 
-struct DescriptionGridRow<Description: View, Content: View>: View {
+public struct DescriptionGridRow<Description: View, Content: View>: View {
     private let description: Description
     private let content: Content
     
     
-    var body: some View {
+    public var body: some View {
         GridRow {
             description
                 .fontWeight(.semibold)
@@ -27,7 +27,7 @@ struct DescriptionGridRow<Description: View, Content: View>: View {
     }
     
     
-    init(
+    public init(
         @ViewBuilder description: () -> Description,
         @ViewBuilder content: () -> Content
     ) {

@@ -10,25 +10,35 @@ import SwiftUI
 
 
 struct OnboardingTitleView: View {
-    let title: String.LocalizationValue
-    let subtitle: String.LocalizationValue?
+    private let title: String
+    private let subtitle: String?
     
     
     var body: some View {
         VStack {
-            Text(String(localized: title))
+            Text(title)
                 .bold()
                 .font(.largeTitle)
                 .multilineTextAlignment(.center)
                 .padding(.bottom)
                 .padding(.top, 30)
-            
             if let subtitle = subtitle {
-                Text(String(localized: subtitle))
+                Text(subtitle)
                     .multilineTextAlignment(.center)
                     .padding(.bottom)
             }
         }
+    }
+    
+    
+    init<S: StringProtocol>(title: S) {
+        self.title = title.localized
+        self.subtitle = nil
+    }
+    
+    init<S1: StringProtocol, S2: StringProtocol>(title: S1, subtitle: S2?) {
+        self.title = title.localized
+        self.subtitle = subtitle?.localized
     }
 }
 

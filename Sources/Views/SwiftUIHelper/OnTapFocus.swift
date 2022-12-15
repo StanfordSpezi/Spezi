@@ -42,11 +42,11 @@ struct OnTapFocus<FocusedField: Hashable>: ViewModifier {
 
 
 extension View {
-    func onTapFocus() -> some View {
+    public func onTapFocus() -> some View {
         modifier(OnTapFocus())
     }
     
-    func onTapFocus<FocusedField: Hashable>(
+    public func onTapFocus<FocusedField: Hashable>(
         focusedField: FocusState<FocusedField?>,
         fieldIdentifier: FocusedField
     ) -> some View {

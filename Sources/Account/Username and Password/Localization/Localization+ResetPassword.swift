@@ -6,13 +6,15 @@
 // SPDX-License-Identifier: MIT
 //
 
+import Views
+
 
 extension Localization {
     public struct ResetPassword: Codable {
         public static let `default` = ResetPassword(
             buttonTitle: String(moduleLocalized: "UAP_RESET_PASSWORD_BUTTON_TITLE"),
             navigationTitle: String(moduleLocalized: "UAP_RESET_PASSWORD_NAVIGATION_TITLE"),
-            username: Localization.Field(
+            username: FieldLocalization(
                 title: String(moduleLocalized: "UAP_RESET_PASSWORD_USERNAME_TITLE"),
                 placeholder: String(moduleLocalized: "UAP_RESET_PASSWORD_USERNAME_PLACEHOLDER")
             ),
@@ -24,7 +26,7 @@ extension Localization {
         
         public let buttonTitle: String
         public let navigationTitle: String
-        public let username: Field
+        public let username: FieldLocalization
         public let resetPasswordActionbuttonTitle: String
         public let processSuccessfulLabel: String
         public let defaultResetPasswordFailedError: String
@@ -33,7 +35,7 @@ extension Localization {
         init(
             buttonTitle: String = ResetPassword.default.buttonTitle,
             navigationTitle: String = ResetPassword.default.navigationTitle,
-            username: Field = ResetPassword.default.username,
+            username: FieldLocalization = ResetPassword.default.username,
             resetPasswordActionbuttonTitle: String = ResetPassword.default.resetPasswordActionbuttonTitle,
             processSuccessfulLabel: String = ResetPassword.default.processSuccessfulLabel,
             defaultResetPasswordFailedError: String = ResetPassword.default.defaultResetPasswordFailedError

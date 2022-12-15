@@ -49,17 +49,24 @@ struct OnboardingView<TitleView: View, ContentView: View, ActionView: View>: Vie
     }
     
     init(
-        title: String.LocalizationValue,
-        subtitle: String.LocalizationValue?,
+        title: String,
+        subtitle: String?,
         areas: [OnboardingInformationView.Content],
-        actionText: String.LocalizationValue,
+        actionText: String,
         action: @escaping () -> Void
     ) where TitleView == OnboardingTitleView, ContentView == OnboardingInformationView, ActionView == OnboardingActionsView {
-        self.titleView = OnboardingTitleView(title: title, subtitle: subtitle)
-        self.contentView = OnboardingInformationView(areas: areas)
-        self.actionView = OnboardingActionsView(actionText) {
-            action()
-        }
+        self.init(
+            titleView: {
+                OnboardingTitleView(title: title, subtitle: subtitle)
+            },
+            contentView: {
+                OnboardingInformationView(areas: areas)
+            }, actionView: {
+                OnboardingActionsView(actionText) {
+                    action()
+                }
+            }
+        )
     }
 }
 
@@ -68,7 +75,7 @@ struct OnboardingView_Previews: PreviewProvider {
         OnboardingView(
             title: "TITLE",
             subtitle: "SUBTITLE",
-            areas: OnboardingInformationView.Content.mock,
+            areas: AreasView_Previews.mock,
             actionText: "PRIMARY"
         ) {
             print("Primary!")

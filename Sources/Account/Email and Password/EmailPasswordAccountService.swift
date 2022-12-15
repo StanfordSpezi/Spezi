@@ -8,6 +8,7 @@
 
 import CardinalKit
 import SwiftUI
+import Views
 
 
 /// The ``EmailPasswordLoginService`` enables a email and password based login based on the ``UsernamePasswordAccountService``.
@@ -29,7 +30,7 @@ open class EmailPasswordAccountService: UsernamePasswordAccountService {
     }
     
     override open var localization: Localization {
-        let usernameField = Localization.Field(
+        let usernameField = FieldLocalization(
             title: String(moduleLocalized: "EAP_LOGIN_USERNAME_TITLE"),
             placeholder: String(moduleLocalized: "EAP_LOGIN_USERNAME_PLACEHOLDER")
         )

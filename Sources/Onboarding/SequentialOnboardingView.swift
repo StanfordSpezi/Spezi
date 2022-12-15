@@ -11,32 +11,32 @@ import SwiftUI
 
 struct SequentialOnboardingView: View {
     struct Content {
-        let title: String.LocalizationValue
-        let description: String.LocalizationValue
+        let title: String
+        let description: String
         
         
-        static var mock: [Content] {
-            [
-                Content(title: "A thing to know", description: "This is a first thing that you should know, read carfully!"),
-                Content(title: "Second thing to know", description: "This is a second thing that you should know, read carfully!"),
-                Content(title: "Third thing to know", description: "This is a third thing that you should know, read carfully!")
-            ]
+        init<Title: StringProtocol, Description: StringProtocol>(
+            title: Title,
+            description: Description
+        ) {
+            self.title = title.localized
+            self.description = description.localized
         }
     }
     
-    let title: String.LocalizationValue
-    let subtitle: String.LocalizationValue?
-    let content: [Content]
-    @State var currentContentIndex: Int = 0
-    let actionText: String.LocalizationValue
-    let action: () -> Void
+    
+    private let titleView: AnyView
+    private let content: [Content]
+    @State private var currentContentIndex: Int = 0
+    private let actionText: String
+    private let action: () -> Void
     
     
     var body: some View {
         ScrollViewReader { proxy in
             OnboardingView(
                 titleView: {
-                    OnboardingTitleView(title: title, subtitle: subtitle)
+                    titleView
                 },
                 contentView: {
                     ForEach(0..<content.count, id: \.self) { index in
@@ -76,9 +76,9 @@ struct SequentialOnboardingView: View {
                             .fill(Color.accentColor)
                     }
                 VStack(alignment: .leading, spacing: 8) {
-                    Text(String(localized: content.title))
+                    Text(content.title)
                         .bold()
-                    Text(String(localized: content.description))
+                    Text(content.description)
                 }
                 Spacer()
             }
@@ -91,12 +91,49 @@ struct SequentialOnboardingView: View {
                 }
         }
     }
+    
+    
+    init<Title: StringProtocol, Subtitle: StringProtocol, ActionText: StringProtocol>(
+        title: Title,
+        subtitle: Subtitle?,
+        content: [Content],
+        actionText: ActionText,
+        action: @escaping () -> Void
+    ) {
+        self.init(
+            titleView: OnboardingTitleView(title: title, subtitle: subtitle),
+            content: content,
+            actionText: actionText,
+            action: action
+        )
+    }
+    
+    
+    init<TitleView: View, ActionText: StringProtocol>(
+        titleView: TitleView,
+        content: [Content],
+        actionText: ActionText,
+        action: @escaping () -> Void
+    ) {
+        self.titleView = AnyView(titleView)
+        self.content = content
+        self.actionText = actionText.localized
+        self.action = action
+    }
 }
 
 
 struct SequentialOnboardingView_Previews: PreviewProvider {
+    static var mock: [SequentialOnboardingView.Content] {
+        [
+            .init(title: "A thing to know", description: "This is a first thing that you should know, read carfully!"),
+            .init(title: "Second thing to know", description: "This is a second thing that you should know, read carfully!"),
+            .init(title: "Third thing to know", description: "This is a third thing that you should know, read carfully!")
+        ]
+    }
+    
     static var previews: some View {
-        SequentialOnboardingView(title: "TITLE", subtitle: "SUBTITLE", content: SequentialOnboardingView.Content.mock, actionText: "ACTION") {
+        SequentialOnboardingView(title: "TITLE", subtitle: "SUBTITLE", content: mock, actionText: "ACTION") {
             print("Done!")
         }
     }

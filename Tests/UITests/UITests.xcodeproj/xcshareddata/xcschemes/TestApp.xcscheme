@@ -27,7 +27,8 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES"
-      codeCoverageEnabled = "YES">
+      codeCoverageEnabled = "YES"
+      onlyGenerateCoverageForSpecifiedTargets = "YES">
       <CodeCoverageTargets>
          <BuildableReference
             BuildableIdentifier = "primary"
@@ -69,6 +70,13 @@
             BlueprintIdentifier = "LocalStorage"
             BuildableName = "LocalStorage"
             BlueprintName = "LocalStorage"
+            ReferencedContainer = "container:../..">
+         </BuildableReference>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "Onboarding"
+            BuildableName = "Onboarding"
+            BlueprintName = "Onboarding"
             ReferencedContainer = "container:../..">
          </BuildableReference>
          <BuildableReference
