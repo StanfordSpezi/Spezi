@@ -10,14 +10,15 @@ import SwiftUI
 import Views
 
 
-struct OnboardingActionsView: View {
+/// <#Description#>
+public struct OnboardingActionsView: View {
     private let primaryText: String
     private let primaryAction: () -> Void
     private let seconaryText: String?
     private let seconaryAction: (() -> Void)?
     
     
-    var body: some View {
+    public var body: some View {
         Button(action: primaryAction) {
             Text(primaryText)
                 .frame(maxWidth: .infinity, minHeight: 38)
@@ -31,7 +32,11 @@ struct OnboardingActionsView: View {
         }
     }
     
-    init<Text: StringProtocol>(
+    /// <#Description#>
+    /// - Parameters:
+    ///   - text: <#text description#>
+    ///   - action: <#action description#>
+    public init<Text: StringProtocol>(
         _ text: Text,
         action: @escaping () -> Void
     ) {
@@ -41,7 +46,13 @@ struct OnboardingActionsView: View {
         self.seconaryAction = nil
     }
     
-    init<PrimaryText: StringProtocol, SeconaryText: StringProtocol>(
+    /// <#Description#>
+    /// - Parameters:
+    ///   - primaryText: <#primaryText description#>
+    ///   - primaryAction: <#primaryAction description#>
+    ///   - seconaryText: <#seconaryText description#>
+    ///   - seconaryAction: <#seconaryAction description#>
+    public init<PrimaryText: StringProtocol, SeconaryText: StringProtocol>(
         primaryText: PrimaryText,
         primaryAction: @escaping () -> Void,
         seconaryText: SeconaryText,

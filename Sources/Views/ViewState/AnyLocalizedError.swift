@@ -11,9 +11,13 @@ import Foundation
 
 /// A type erased version of `LocalizedError` with convenience initializers to do a best-effort transform an exsting `Error` to an `LocalizedError`.
 public struct AnyLocalizedError: LocalizedError {
+    /// <#Description#>
     public var errorDescription: String?
+    /// <#Description#>
     public var failureReason: String?
+    /// <#Description#>
     public var helpAnchor: String?
+    /// <#Description#>
     public var recoverySuggestion: String?
     
     

@@ -9,6 +9,7 @@
 import SwiftUI
 
 
+/// <#Description#>
 public struct DescriptionGridRow<Description: View, Content: View>: View {
     private let description: Description
     private let content: Content
@@ -27,6 +28,10 @@ public struct DescriptionGridRow<Description: View, Content: View>: View {
     }
     
     
+    /// <#Description#>
+    /// - Parameters:
+    ///   - description: <#description description#>
+    ///   - content: <#content description#>
     public init(
         @ViewBuilder description: () -> Description,
         @ViewBuilder content: () -> Content

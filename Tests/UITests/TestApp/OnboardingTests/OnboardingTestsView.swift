@@ -12,7 +12,7 @@ import SwiftUI
 
 
 struct OnboardingTestsView: View {
-    @State private var isDrawing: Bool = false
+    @State private var isDrawing = false
     
     
     var body: some View {

@@ -10,55 +10,6 @@ import PencilKit
 import SwiftUI
 
 
-/// <#Description#>
-public struct CanvasView: View {
-    struct CanvasSizePreferenceKey: PreferenceKey, Equatable {
-        public static var defaultValue: CGSize = .zero
-        
-        
-        public static func reduce(value: inout CGSize, nextValue: () -> CGSize) {
-            value = nextValue()
-        }
-    }
-    
-    
-    let tool: PKInkingTool
-    let drawingPolicy: PKCanvasViewDrawingPolicy
-    @Binding private var drawing: PKDrawing
-    @Binding private var isDrawing: Bool
-    @Binding private var showToolPicker: Bool
-    
-    
-    public var body: some View {
-        GeometryReader { proxy in
-            _CanvasView(
-                drawing: $drawing,
-                isDrawing: $isDrawing,
-                tool: tool,
-                drawingPolicy: drawingPolicy,
-                showToolPicker: $showToolPicker
-            )
-                .preference(key: CanvasSizePreferenceKey.self, value: proxy.size)
-        }
-    }
-    
-    
-    public init(
-        drawing: Binding<PKDrawing> = .constant(PKDrawing()),
-        isDrawing: Binding<Bool> = .constant(false),
-        tool: PKInkingTool = PKInkingTool(.pencil, color: .label, width: 1),
-        drawingPolicy: PKCanvasViewDrawingPolicy = .anyInput,
-        showToolPicker: Binding<Bool> = .constant(true)
-    ) {
-        self._drawing = drawing
-        self._isDrawing = isDrawing
-        self.tool = tool
-        self.drawingPolicy = drawingPolicy
-        self._showToolPicker = showToolPicker
-    }
-}
-
-/// <#Description#>
 private struct _CanvasView: UIViewRepresentable {
     class Coordinator: NSObject, ObservableObject, PKCanvasViewDelegate {
         let canvasView: _CanvasView
@@ -142,8 +93,65 @@ private struct _CanvasView: UIViewRepresentable {
 }
 
 
+/// <#Description#>
+public struct CanvasView: View {
+    /// <#Description#>
+    public struct CanvasSizePreferenceKey: PreferenceKey, Equatable {
+        public static var defaultValue: CGSize = .zero
+        
+        
+        public static func reduce(value: inout CGSize, nextValue: () -> CGSize) {
+            value = nextValue()
+        }
+    }
+    
+    
+    let tool: PKInkingTool
+    let drawingPolicy: PKCanvasViewDrawingPolicy
+    @Binding private var drawing: PKDrawing
+    @Binding private var isDrawing: Bool
+    @Binding private var showToolPicker: Bool
+    
+    
+    public var body: some View {
+        GeometryReader { proxy in
+            _CanvasView(
+                drawing: $drawing,
+                isDrawing: $isDrawing,
+                tool: tool,
+                drawingPolicy: drawingPolicy,
+                showToolPicker: $showToolPicker
+            )
+                .preference(key: CanvasSizePreferenceKey.self, value: proxy.size)
+        }
+    }
+    
+    
+    /// <#Description#>
+    /// - Parameters:
+    ///   - drawing: <#drawing description#>
+    ///   - isDrawing: <#isDrawing description#>
+    ///   - tool: <#tool description#>
+    ///   - drawingPolicy: <#drawingPolicy description#>
+    ///   - showToolPicker: <#showToolPicker description#>
+    public init(
+        drawing: Binding<PKDrawing> = .constant(PKDrawing()),
+        isDrawing: Binding<Bool> = .constant(false),
+        tool: PKInkingTool = PKInkingTool(.pencil, color: .label, width: 1),
+        drawingPolicy: PKCanvasViewDrawingPolicy = .anyInput,
+        showToolPicker: Binding<Bool> = .constant(true)
+    ) {
+        self._drawing = drawing
+        self._isDrawing = isDrawing
+        self.tool = tool
+        self.drawingPolicy = drawingPolicy
+        self._showToolPicker = showToolPicker
+    }
+}
+
+
 struct SignatureView_Previews: PreviewProvider {
-    @State private static var isDrawing: Bool = false
+    @State private static var isDrawing = false
     
     
     static var previews: some View {

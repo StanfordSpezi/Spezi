@@ -11,46 +11,50 @@ import SwiftUI
 import Views
 
 
-struct ConsentView<Header: View, ContentView: View, Footer: View>: View {
+struct ConsentView<Header: View, ContentView: View, Footer: View, Action: View>: View {
     private let header: Header
     private let contentView: ContentView
     private let footer: Footer
-    private let action: () -> Void
+    private let action: Action
     @State private var name = PersonNameComponents()
     @State private var isSigning = false
     @State private var signature = PKDrawing()
     
     
     var body: some View {
-        OnboardingView(
-            titleView: {
-                header
-            },
-            contentView: {
-                contentView
-            },
-            actionView: {
-                VStack {
-                    footer
-                    Divider()
-                    NameFields(name: $name)
-                    if showSignatureView {
+        ScrollViewReader { proxy in
+            OnboardingView(
+                titleView: {
+                    header
+                },
+                contentView: {
+                    contentView
+                },
+                actionView: {
+                    VStack {
+                        footer
                         Divider()
-                        SignatureView(signature: $signature, isSigning: $isSigning, name: name)
-                            .padding(.vertical, 4)
+                        NameFields(name: $name)
+                        if showSignatureView {
+                            Divider()
+                            SignatureView(signature: $signature, isSigning: $isSigning, name: name)
+                                .padding(.vertical, 4)
+                        }
+                        Divider()
+                        action
+                            .disabled(buttonDisabled)
+                            .animation(.easeInOut, value: buttonDisabled)
+                            .id("ActionButton")
+                            .onChange(of: showSignatureView) { _ in
+                                proxy.scrollTo("ActionButton")
+                            }
                     }
-                    Divider()
-                    OnboardingActionsView("CONSENT_ACTION") {
-                        
-                    }
-                        .disabled(buttonDisabled)
-                        .animation(.easeInOut, value: buttonDisabled)
-                }
                     .transition(.opacity)
                     .animation(.easeInOut, value: showSignatureView)
-            }
-        )
-            .scrollDisabled(isSigning)
+                }
+            )
+                .scrollDisabled(isSigning)
+        }
     }
     
     var showSignatureView: Bool {
@@ -62,32 +66,36 @@ struct ConsentView<Header: View, ContentView: View, Footer: View>: View {
     }
     
     
-    public init(
+    init(
         @ViewBuilder titleView: () -> (Header) = { EmptyView() },
         asyncMarkdown: @escaping () async -> Data,
         @ViewBuilder footer: () -> (Footer) = { EmptyView() },
         action: @escaping () -> Void
-    ) where ContentView == MarkdownView<EmptyView, EmptyView> {
+    ) where ContentView == MarkdownView<EmptyView, EmptyView>, Action == OnboardingActionsView {
         self.init(
             header: titleView,
             contentView: {
                 MarkdownView(asyncMarkdown: asyncMarkdown)
             },
             footer: footer,
-            action: action
+            actionView: {
+                OnboardingActionsView(String(localized: "CONSENT_ACTION", bundle: .module)) {
+                    action()
+                }
+            }
         )
     }
     
-    public init(
+    init(
         @ViewBuilder header: () -> (Header) = { EmptyView() },
         @ViewBuilder contentView: () -> (ContentView),
         @ViewBuilder footer: () -> (Footer) = { EmptyView() },
-        action: @escaping () -> Void
+        @ViewBuilder actionView: () -> (Action)
     ) {
         self.header = header()
         self.contentView = contentView()
         self.footer = footer()
-        self.action = action
+        self.action = actionView()
     }
 }
 

@@ -9,13 +9,21 @@
 import SwiftUI
 
 
-struct SequentialOnboardingView: View {
-    struct Content {
-        let title: String
-        let description: String
+/// <#Description#>
+public struct SequentialOnboardingView: View {
+    /// <#Description#>
+    public struct Content {
+        /// <#Description#>
+        public let title: String
+        /// <#Description#>
+        public let description: String
         
         
-        init<Title: StringProtocol, Description: StringProtocol>(
+        /// <#Description#>
+        /// - Parameters:
+        ///   - title: <#title description#>
+        ///   - description: <#description description#>
+        public init<Title: StringProtocol, Description: StringProtocol>(
             title: Title,
             description: Description
         ) {
@@ -32,7 +40,7 @@ struct SequentialOnboardingView: View {
     private let action: () -> Void
     
     
-    var body: some View {
+    public var body: some View {
         ScrollViewReader { proxy in
             OnboardingView(
                 titleView: {
@@ -47,7 +55,9 @@ struct SequentialOnboardingView: View {
                     }
                 },
                 actionView: {
-                    OnboardingActionsView(currentContentIndex < content.count - 1 ? "SEQUENTIAL_ONBOARDING_NEXT" : actionText) {
+                    OnboardingActionsView(
+                        actionButtonTitle
+                    ) {
                         if currentContentIndex < content.count - 1 {
                             currentContentIndex += 1
                             withAnimation {
@@ -60,6 +70,56 @@ struct SequentialOnboardingView: View {
                 }
             )
         }
+    }
+    
+    private var actionButtonTitle: String {
+        if currentContentIndex < content.count - 1 {
+            return String(localized: "SEQUENTIAL_ONBOARDING_NEXT", bundle: .module)
+        } else {
+            return actionText
+        }
+    }
+    
+    
+    /// <#Description#>
+    /// - Parameters:
+    ///   - title: <#title description#>
+    ///   - subtitle: <#subtitle description#>
+    ///   - content: <#content description#>
+    ///   - actionText: <#actionText description#>
+    ///   - action: <#action description#>
+    public init<Title: StringProtocol, Subtitle: StringProtocol, ActionText: StringProtocol>(
+        title: Title,
+        subtitle: Subtitle?,
+        content: [Content],
+        actionText: ActionText,
+        action: @escaping () -> Void
+    ) {
+        self.init(
+            titleView: OnboardingTitleView(title: title, subtitle: subtitle),
+            content: content,
+            actionText: actionText,
+            action: action
+        )
+    }
+    
+    
+    /// <#Description#>
+    /// - Parameters:
+    ///   - titleView: <#titleView description#>
+    ///   - content: <#content description#>
+    ///   - actionText: <#actionText description#>
+    ///   - action: <#action description#>
+    public init<TitleView: View, ActionText: StringProtocol>(
+        titleView: TitleView,
+        content: [Content],
+        actionText: ActionText,
+        action: @escaping () -> Void
+    ) {
+        self.titleView = AnyView(titleView)
+        self.content = content
+        self.actionText = actionText.localized
+        self.action = action
     }
     
     
@@ -91,35 +151,6 @@ struct SequentialOnboardingView: View {
                 }
         }
     }
-    
-    
-    init<Title: StringProtocol, Subtitle: StringProtocol, ActionText: StringProtocol>(
-        title: Title,
-        subtitle: Subtitle?,
-        content: [Content],
-        actionText: ActionText,
-        action: @escaping () -> Void
-    ) {
-        self.init(
-            titleView: OnboardingTitleView(title: title, subtitle: subtitle),
-            content: content,
-            actionText: actionText,
-            action: action
-        )
-    }
-    
-    
-    init<TitleView: View, ActionText: StringProtocol>(
-        titleView: TitleView,
-        content: [Content],
-        actionText: ActionText,
-        action: @escaping () -> Void
-    ) {
-        self.titleView = AnyView(titleView)
-        self.content = content
-        self.actionText = actionText.localized
-        self.action = action
-    }
 }
 
 
@@ -133,7 +164,12 @@ struct SequentialOnboardingView_Previews: PreviewProvider {
     }
     
     static var previews: some View {
-        SequentialOnboardingView(title: "TITLE", subtitle: "SUBTITLE", content: mock, actionText: "ACTION") {
+        SequentialOnboardingView(
+            title: "Title",
+            subtitle: "Subtitle",
+            content: mock,
+            actionText: "Continue"
+        ) {
             print("Done!")
         }
     }

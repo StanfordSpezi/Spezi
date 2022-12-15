@@ -8,13 +8,15 @@
 
 import SwiftUI
 
-struct OnboardingView<TitleView: View, ContentView: View, ActionView: View>: View {
-    let titleView: TitleView
-    let contentView: ContentView
-    let actionView: ActionView?
+
+/// <#Description#>
+public struct OnboardingView<TitleView: View, ContentView: View, ActionView: View>: View {
+    private let titleView: TitleView
+    private let contentView: ContentView
+    private let actionView: ActionView?
     
     
-    var body: some View {
+    public var body: some View {
         Group {
             GeometryReader { geometry in
                 ScrollView(.vertical, showsIndicators: false) {
@@ -38,7 +40,12 @@ struct OnboardingView<TitleView: View, ContentView: View, ActionView: View>: Vie
     }
     
     
-    init(
+    /// <#Description#>
+    /// - Parameters:
+    ///   - titleView: <#titleView description#>
+    ///   - contentView: <#contentView description#>
+    ///   - actionView: <#actionView description#>
+    public init(
         @ViewBuilder titleView: () -> TitleView,
         @ViewBuilder contentView: () -> ContentView,
         @ViewBuilder actionView: () -> ActionView? = { nil }
@@ -48,7 +55,14 @@ struct OnboardingView<TitleView: View, ContentView: View, ActionView: View>: Vie
         self.actionView = actionView()
     }
     
-    init(
+    /// <#Description#>
+    /// - Parameters:
+    ///   - title: <#title description#>
+    ///   - subtitle: <#subtitle description#>
+    ///   - areas: <#areas description#>
+    ///   - actionText: <#actionText description#>
+    ///   - action: <#action description#>
+    public init(
         title: String,
         subtitle: String?,
         areas: [OnboardingInformationView.Content],
@@ -70,13 +84,14 @@ struct OnboardingView<TitleView: View, ContentView: View, ActionView: View>: Vie
     }
 }
 
+
 struct OnboardingView_Previews: PreviewProvider {
     static var previews: some View {
         OnboardingView(
-            title: "TITLE",
-            subtitle: "SUBTITLE",
+            title: "Title",
+            subtitle: "Subtitle",
             areas: AreasView_Previews.mock,
-            actionText: "PRIMARY"
+            actionText: "Primary Button"
         ) {
             print("Primary!")
         }

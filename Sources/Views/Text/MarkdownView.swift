@@ -11,9 +11,9 @@ import SwiftUI
 
 /// <#Description#>
 public struct MarkdownView<Header: View, Footer: View>: View {
-    let header: Header
-    let footer: Footer
-    let asyncMarkdown: () async -> Data
+    private let header: Header
+    private let footer: Footer
+    private let asyncMarkdown: () async -> Data
     
     @State private var markdown: Data?
     @Binding private var state: ViewState
@@ -26,10 +26,7 @@ public struct MarkdownView<Header: View, Footer: View>: View {
                 options: .init(interpretedSyntax: .inlineOnlyPreservingWhitespace)
               ) else {
             return AttributedString(
-                NSLocalizedString(
-                    "MARKDOWN_LOADING_ERROR",
-                    comment: "Error for not beeing able to parse the privacy policy."
-                )
+                String(localized: "MARKDOWN_LOADING_ERROR", bundle: .module)
             )
         }
         return markdownString

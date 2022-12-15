@@ -10,14 +10,24 @@ import SwiftUI
 import Views
 
 
-struct OnboardingInformationView: View {
-    struct Content {
-        let icon: Image
-        let title: String
-        let description: String
+/// <#Description#>
+public struct OnboardingInformationView: View {
+    /// <#Description#>
+    public struct Content {
+        /// <#Description#>
+        public let icon: Image
+        /// <#Description#>
+        public let title: String
+        /// <#Description#>
+        public let description: String
         
         
-        init<Title: StringProtocol, Description: StringProtocol>(
+        /// <#Description#>
+        /// - Parameters:
+        ///   - icon: <#icon description#>
+        ///   - title: <#title description#>
+        ///   - description: <#description description#>
+        public init<Title: StringProtocol, Description: StringProtocol>(
             icon: Image,
             title: Title,
             description: Description
@@ -32,7 +42,7 @@ struct OnboardingInformationView: View {
     private let areas: [Content]
     
     
-    var body: some View {
+    public var body: some View {
         VStack(alignment: .leading, spacing: 30) {
             ForEach(0..<areas.count, id: \.self) { index in
                 areaView(area: areas[index])
@@ -41,7 +51,9 @@ struct OnboardingInformationView: View {
     }
     
     
-    init(areas: [Content]) {
+    /// <#Description#>
+    /// - Parameter areas: <#areas description#>
+    public init(areas: [Content]) {
         self.areas = areas
     }
     

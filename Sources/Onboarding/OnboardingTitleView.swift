@@ -9,12 +9,13 @@
 import SwiftUI
 
 
-struct OnboardingTitleView: View {
+/// <#Description#>
+public struct OnboardingTitleView: View {
     private let title: String
     private let subtitle: String?
     
     
-    var body: some View {
+    public var body: some View {
         VStack {
             Text(title)
                 .bold()
@@ -31,19 +32,26 @@ struct OnboardingTitleView: View {
     }
     
     
-    init<S: StringProtocol>(title: S) {
+    /// <#Description#>
+    /// - Parameter title: <#title description#>
+    public init<S: StringProtocol>(title: S) {
         self.title = title.localized
         self.subtitle = nil
     }
     
-    init<S1: StringProtocol, S2: StringProtocol>(title: S1, subtitle: S2?) {
+    /// <#Description#>
+    /// - Parameters:
+    ///   - title: <#title description#>
+    ///   - subtitle: <#subtitle description#>
+    public init<S1: StringProtocol, S2: StringProtocol>(title: S1, subtitle: S2?) {
         self.title = title.localized
         self.subtitle = subtitle?.localized
     }
 }
 
+
 struct OnboardingTitleView_Previews: PreviewProvider {
     static var previews: some View {
-        OnboardingTitleView(title: "TITLE", subtitle: "SUBTITLE")
+        OnboardingTitleView(title: "Title", subtitle: "Subtitle")
     }
 }

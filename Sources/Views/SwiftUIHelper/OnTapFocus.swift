@@ -9,7 +9,7 @@
 import SwiftUI
 
 
-struct OnTapFocus<FocusedField: Hashable>: ViewModifier {
+private struct OnTapFocus<FocusedField: Hashable>: ViewModifier {
     private let fieldIdentifier: FocusedField
     
     @FocusState private var focusedState: FocusedField?
@@ -42,10 +42,17 @@ struct OnTapFocus<FocusedField: Hashable>: ViewModifier {
 
 
 extension View {
+    /// <#Description#>
+    /// - Returns: <#description#>
     public func onTapFocus() -> some View {
         modifier(OnTapFocus())
     }
     
+    /// <#Description#>
+    /// - Parameters:
+    ///   - focusedField: <#focusedField description#>
+    ///   - fieldIdentifier: <#fieldIdentifier description#>
+    /// - Returns: <#description#>
     public func onTapFocus<FocusedField: Hashable>(
         focusedField: FocusState<FocusedField?>,
         fieldIdentifier: FocusedField

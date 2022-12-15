@@ -11,7 +11,7 @@ import SwiftUI
 import Views
 
 
-struct SignatureView: View {
+public struct SignatureView: View {
     @Environment(\.undoManager) private var undoManager
     @Binding private var signature: PKDrawing
     @Binding private var isSigning: Bool
@@ -20,7 +20,7 @@ struct SignatureView: View {
     private let lineOffset: CGFloat
     
     
-    var body: some View {
+    public var body: some View {
         VStack {
             ZStack(alignment: .bottomLeading) {
                 Color(.secondarySystemBackground)
@@ -42,7 +42,7 @@ struct SignatureView: View {
                 CanvasView(drawing: $signature, isDrawing: $isSigning, showToolPicker: .constant(false))
             }
                 .frame(height: 120)
-            Button("SIGNATURE_VIEW_UNDO") {
+            Button(String(localized: "SIGNATURE_VIEW_UNDO", bundle: .module)) {
                 undoManager?.undo()
                 canUndo = undoManager?.canUndo ?? false
             }
@@ -58,6 +58,12 @@ struct SignatureView: View {
     }
     
     
+    /// <#Description#>
+    /// - Parameters:
+    ///   - signature: <#signature description#>
+    ///   - isSigning: <#isSigning description#>
+    ///   - name: <#name description#>
+    ///   - lineOffset: <#lineOffset description#>
     init(
         signature: Binding<PKDrawing> = .constant(PKDrawing()),
         isSigning: Binding<Bool> = .constant(false),

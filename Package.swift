@@ -102,6 +102,9 @@ let package = Package(
             dependencies: [
                 .target(name: "CardinalKit"),
                 .target(name: "Views")
+            ],
+            resources: [
+                .process("Resources")
             ]
         ),
         .target(

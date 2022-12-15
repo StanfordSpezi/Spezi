@@ -9,7 +9,23 @@
 import SwiftUI
 
 
+/// <#Description#>
 public struct NameFields<FocusedField: Hashable>: View {
+    public enum LocalizationDefaults {
+        public static var givenName: FieldLocalization {
+            FieldLocalization(
+                title: String(localized: "NAME_FIELD_GIVEN_NAME_TITLE", bundle: .module),
+                placeholder: String(localized: "NAME_FIELD_GIVEN_NAME_PLACEHOLDER", bundle: .module)
+            )
+        }
+        public static var familyName: FieldLocalization {
+            FieldLocalization(
+                title: String(localized: "NAME_FIELD_FAMILY_NAME_TITLE", bundle: .module),
+                placeholder: String(localized: "NAME_FIELD_FAMILY_NAME_PLACEHOLDER", bundle: .module)
+            )
+        }
+    }
+    
     private let givenNameField: FieldLocalization
     private let givenNameFieldIdentifier: FocusedField
     private let familyNameField: FieldLocalization
@@ -62,10 +78,15 @@ public struct NameFields<FocusedField: Hashable>: View {
     }
     
     
+    /// <#Description#>
+    /// - Parameters:
+    ///   - name: <#name description#>
+    ///   - givenNameField: <#givenNameField description#>
+    ///   - familyNameField: <#familyNameField description#>
     public init(
         name: Binding<PersonNameComponents>,
-        givenNameField: FieldLocalization = FieldLocalization(title: "NAME_FIELD_GIVEN_NAME_TITLE", placeholder: "NAME_FIELD_GIVEN_NAME_PLACEHOLDER"),
-        familyNameField: FieldLocalization = FieldLocalization(title: "NAME_FIELD_FAMILY_NAME_TITLE", placeholder: "NAME_FIELD_FAMILY_NAME_PLACEHOLDER")
+        givenNameField: FieldLocalization = LocalizationDefaults.givenName,
+        familyNameField: FieldLocalization = LocalizationDefaults.familyName
     ) where FocusedField == UUID {
         self._name = name
         self.givenNameField = givenNameField
@@ -76,11 +97,21 @@ public struct NameFields<FocusedField: Hashable>: View {
     }
     
     
+    /// <#Description#>
+    /// - Parameters:
+    ///   - name: <#name description#>
+    ///   - givenNameField: <#givenNameField description#>
+    ///   - givenNameFieldIdentifier: <#givenNameFieldIdentifier description#>
+    ///   - familyNameField: <#familyNameField description#>
+    ///   - familyNameFieldIdentifier: <#familyNameFieldIdentifier description#>
+    ///   - focusedState: <#focusedState description#>
     public init(
+        // swiftlint:disable:previous function_default_parameter_at_end
+        // We want to keep the arguments grouped by field to ensure that we have the same order as in the non-focusfield initializer.
         name: Binding<PersonNameComponents>,
-        givenNameField: FieldLocalization,
+        givenNameField: FieldLocalization = LocalizationDefaults.givenName,
         givenNameFieldIdentifier: FocusedField,
-        familyNameField: FieldLocalization,
+        familyNameField: FieldLocalization = LocalizationDefaults.familyName,
         familyNameFieldIdentifier: FocusedField,
         focusedState: FocusState<FocusedField?>
     ) {
