@@ -19,6 +19,7 @@ struct UITestsApp: App {
         case onboardingTests = "OnboardingTests"
         case observableObject = "ObservableObject"
         case secureStorage = "SecureStorage"
+        case views = "Views"
         
         
         var id: RawValue {
@@ -27,7 +28,7 @@ struct UITestsApp: App {
         
         @MainActor
         @ViewBuilder
-        var view: some View {
+        func view(withNavigationPath path: Binding<NavigationPath>) -> some View {
             switch self {
             case .account:
                 AccountTestsView()
@@ -38,27 +39,30 @@ struct UITestsApp: App {
             case .localStorage:
                 LocalStorageTestsView()
             case .onboardingTests:
-                OnboardingTestsView()
+                OnboardingTestsView(navigationPath: path)
             case .observableObject:
                 ObservableObjectTestsView()
             case .secureStorage:
                 SecureStorageTestsView()
+            case .views:
+                ViewsTestsView(navigationPath: path)
             }
         }
     }
     
     
     @UIApplicationDelegateAdaptor(TestAppDelegate.self) var appDelegate
+    @State private var path = NavigationPath()
     
     
     var body: some Scene {
         WindowGroup {
-            NavigationStack {
+            NavigationStack(path: $path) {
                 List(Tests.allCases) { test in
                     NavigationLink(test.rawValue, value: test)
                 }
                     .navigationDestination(for: Tests.self) { test in
-                        test.view
+                        test.view(withNavigationPath: $path)
                     }
                     .navigationTitle("UITest")
             }

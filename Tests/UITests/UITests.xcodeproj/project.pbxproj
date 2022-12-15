@@ -25,6 +25,8 @@
 		2F4F0396294A66FB0062D4C7 /* XCTRuntimeAssertions in Frameworks */ = {isa = PBXBuildFile; productRef = 2F4F0395294A66FB0062D4C7 /* XCTRuntimeAssertions */; };
 		2F4F0399294A8D410062D4C7 /* OnboardingTestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4F0398294A8D410062D4C7 /* OnboardingTestsView.swift */; };
 		2F6D139A28F5F386007C25D6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F6D139928F5F386007C25D6 /* Assets.xcassets */; };
+		2F817A4A294B152B00A39983 /* ViewsTestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F817A49294B152B00A39983 /* ViewsTestsView.swift */; };
+		2F817A4C294B16A000A39983 /* ViewsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F817A4B294B16A000A39983 /* ViewsTests.swift */; };
 		2F8A431529130B9B005D2B8F /* TestAppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8A431429130B9B005D2B8F /* TestAppView.swift */; };
 		2F8A431729130BBC005D2B8F /* TestAppStandard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8A431629130BBC005D2B8F /* TestAppStandard.swift */; };
 		2F8A431929130CA7005D2B8F /* TestAppTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8A431829130CA7005D2B8F /* TestAppTestCase.swift */; };
@@ -52,6 +54,7 @@
 		2FC246D62941720600F75383 /* AccountSignUpTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC246D52941720600F75383 /* AccountSignUpTests.swift */; };
 		2FC2C406291D84A600712676 /* HealthKitTestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC2C405291D84A600712676 /* HealthKitTestsView.swift */; };
 		2FC2C408291DCC8200712676 /* HealthKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC2C407291DCC8200712676 /* HealthKitTests.swift */; };
+		2FD6390C294B0A4B008BADFC /* OnboardingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD6390B294B0A4B008BADFC /* OnboardingTests.swift */; };
 		2FE122B2294247480016B162 /* XCUIApplication+TextEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE122B1294247480016B162 /* XCUIApplication+TextEntry.swift */; };
 /* End PBXBuildFile section */
 
@@ -79,6 +82,8 @@
 		2F6D139228F5F384007C25D6 /* TestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F6D139928F5F386007C25D6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2F6D13AC28F5F386007C25D6 /* TestAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TestAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2F817A49294B152B00A39983 /* ViewsTestsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewsTestsView.swift; sourceTree = "<group>"; };
+		2F817A4B294B16A000A39983 /* ViewsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewsTests.swift; sourceTree = "<group>"; };
 		2F8A431429130B9B005D2B8F /* TestAppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAppView.swift; sourceTree = "<group>"; };
 		2F8A431629130BBC005D2B8F /* TestAppStandard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestAppStandard.swift; sourceTree = "<group>"; };
 		2F8A431829130CA7005D2B8F /* TestAppTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAppTestCase.swift; sourceTree = "<group>"; };
@@ -107,6 +112,7 @@
 		2FC2C405291D84A600712676 /* HealthKitTestsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitTestsView.swift; sourceTree = "<group>"; };
 		2FC2C407291DCC8200712676 /* HealthKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitTests.swift; sourceTree = "<group>"; };
 		2FC42FD7290ADD5E00B08F18 /* CardinalKitSPM */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = CardinalKitSPM; path = ../..; sourceTree = "<group>"; };
+		2FD6390B294B0A4B008BADFC /* OnboardingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingTests.swift; sourceTree = "<group>"; };
 		2FE122B1294247480016B162 /* XCUIApplication+TextEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCUIApplication+TextEntry.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -197,6 +203,7 @@
 				2F4F0397294A8D280062D4C7 /* OnboardingTests */,
 				2F8A431D291316CD005D2B8F /* ObservableObjectTests */,
 				2F8A431E291316D2005D2B8F /* SecureStorageTests */,
+				2F817A48294B150E00A39983 /* ViewsTests */,
 				2F9F07ED29090AF500CDC598 /* Shared */,
 				2F6D139928F5F386007C25D6 /* Assets.xcassets */,
 				2F01E8CE291493560089C46B /* Info.plist */,
@@ -216,7 +223,9 @@
 				2FC2C407291DCC8200712676 /* HealthKitTests.swift */,
 				2FB77BA42910F84D009FDDE2 /* LocalStorageTests.swift */,
 				2F9F07F429090BA900CDC598 /* ObservableObjectComponentTests.swift */,
+				2FD6390B294B0A4B008BADFC /* OnboardingTests.swift */,
 				2F9F07E1290906A200CDC598 /* SecureStorageTests.swift */,
+				2F817A4B294B16A000A39983 /* ViewsTests.swift */,
 				2F1B81FA2942C4F00037BC09 /* UserProfileViewTests.swift */,
 			);
 			path = TestAppUITests;
@@ -227,6 +236,14 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		2F817A48294B150E00A39983 /* ViewsTests */ = {
+			isa = PBXGroup;
+			children = (
+				2F817A49294B152B00A39983 /* ViewsTestsView.swift */,
+			);
+			path = ViewsTests;
 			sourceTree = "<group>";
 		};
 		2F8A431C291316C8005D2B8F /* LocalStorageTests */ = {
@@ -407,6 +424,7 @@
 				2F4F0399294A8D410062D4C7 /* OnboardingTestsView.swift in Sources */,
 				2FC246D02941500800F75383 /* TestAccountConfiguration.swift in Sources */,
 				2F8A4326291317AA005D2B8F /* LocalStorageTestsView.swift in Sources */,
+				2F817A4A294B152B00A39983 /* ViewsTestsView.swift in Sources */,
 				2F8A43242913174B005D2B8F /* ObservableObjectTestsView.swift in Sources */,
 				2F4D91752948EA1A000E2D94 /* ContactsTestsView.swift in Sources */,
 				2F8A431B29130EF0005D2B8F /* ObservableObjectTests.swift in Sources */,
@@ -432,6 +450,7 @@
 			files = (
 				2F9F07F529090BA900CDC598 /* ObservableObjectComponentTests.swift in Sources */,
 				2F1B82092942DE390037BC09 /* TestAppUITests.swift in Sources */,
+				2F817A4C294B16A000A39983 /* ViewsTests.swift in Sources */,
 				2F1B820F2942E54F0037BC09 /* XCTTestCase+HealthDataType.swift in Sources */,
 				2FA04AD72943165200648A48 /* AccountResetPasswordTests.swift in Sources */,
 				2F4D91772948EB33000E2D94 /* ContactsTests.swift in Sources */,
@@ -441,6 +460,7 @@
 				2FB77BA52910F84D009FDDE2 /* LocalStorageTests.swift in Sources */,
 				2FE122B2294247480016B162 /* XCUIApplication+TextEntry.swift in Sources */,
 				2FC2C408291DCC8200712676 /* HealthKitTests.swift in Sources */,
+				2FD6390C294B0A4B008BADFC /* OnboardingTests.swift in Sources */,
 				2F1B81FB2942C4F00037BC09 /* UserProfileViewTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

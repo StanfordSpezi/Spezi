@@ -19,29 +19,24 @@ struct OnboardingTestsView: View {
     }
     
     
-    @State private var isDrawing = false
-    @State private var steps: [OnboardingStep] = []
+    @Binding private var path: NavigationPath
     
     
     var body: some View {
-        NavigationStack(path: $steps) {
-            List(OnboardingStep.allCases, id: \.rawValue) { onboardingStep in
-                NavigationLink(onboardingStep.rawValue, value: onboardingStep)
-            }
-                .navigationDestination(for: OnboardingStep.self) { onboardingStep in
-                    switch onboardingStep {
-                    case .consentView:
-                        consentView
-                            .navigationTitle(onboardingStep.rawValue)
-                    case .onboardingView:
-                        onboardingView
-                            .navigationTitle(onboardingStep.rawValue)
-                    case .sequentialOnboarding:
-                        sequentialOnboardingView
-                            .navigationTitle(onboardingStep.rawValue)
-                    }
-                }
+        List(OnboardingStep.allCases, id: \.rawValue) { onboardingStep in
+            NavigationLink(onboardingStep.rawValue, value: onboardingStep)
         }
+            .navigationTitle("Onboarding")
+            .navigationDestination(for: OnboardingStep.self) { onboardingStep in
+                switch onboardingStep {
+                case .consentView:
+                    consentView
+                case .onboardingView:
+                    onboardingView
+                case .sequentialOnboarding:
+                    sequentialOnboardingView
+                }
+            }
     }
     
     
@@ -54,9 +49,10 @@ struct OnboardingTestsView: View {
                 Data("This is a *markdown* **example**".utf8)
             },
             action: {
-                steps.append(.onboardingView)
+                path.append(OnboardingStep.onboardingView)
             }
         )
+            .navigationBarTitleDisplayMode(.inline)
     }
     
     private var onboardingView: some View {
@@ -70,15 +66,16 @@ struct OnboardingTestsView: View {
             ],
             actionText: "Learn More",
             action: {
-                steps.append(.sequentialOnboarding)
+                path.append(OnboardingStep.sequentialOnboarding)
             }
         )
+            .navigationBarTitleDisplayMode(.inline)
     }
     
     private var sequentialOnboardingView: some View {
         SequentialOnboardingView(
-            title: "Title",
-            subtitle: "Subtitle",
+            title: "Things to know",
+            subtitle: "And you should pay close attention ...",
             content: [
                 .init(title: "A thing to know", description: "This is a first thing that you should know, read carfully!"),
                 .init(title: "Second thing to know", description: "This is a second thing that you should know, read carfully!"),
@@ -86,16 +83,25 @@ struct OnboardingTestsView: View {
             ],
             actionText: "Continue"
         ) {
-            steps.append(.consentView)
+            path.append(OnboardingStep.consentView)
         }
+            .navigationBarTitleDisplayMode(.inline)
+    }
+    
+    
+    init(navigationPath: Binding<NavigationPath>) {
+        self._path = navigationPath
     }
 }
 
 
 struct OnboardingTestsView_Previews: PreviewProvider {
+    @State private static var path = NavigationPath()
+    
+    
     static var previews: some View {
         NavigationStack {
-            OnboardingTestsView()
+            OnboardingTestsView(navigationPath: $path)
         }
     }
 }
