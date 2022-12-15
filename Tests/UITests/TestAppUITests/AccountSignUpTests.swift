@@ -100,12 +100,12 @@ final class AccountSignUpTests: TestAppUITests {
         app.buttons["Male"].tap()
         app.testPrimaryButton(enabled: false, title: buttonTitle)
         
-        let givenNameField = "Given Name"
+        let givenNameField = "Enter your given name ..."
         let givenName = "Leland"
         app.enter(value: givenName, in: givenNameField)
         app.testPrimaryButton(enabled: false, title: buttonTitle)
 
-        let familyNameField = "Family Name"
+        let familyNameField = "Enter your family name ..."
         let familyName = "Stanford"
         app.enter(value: familyName, in: familyNameField)
         XCTAssertTrue(app.buttons["Sign Up"].waitForExistence(timeout: 0.5))
