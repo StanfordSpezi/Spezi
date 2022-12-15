@@ -35,9 +35,16 @@ private struct ViewStateAlert: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .alert(state.errorTitle, isPresented: errorAlertBinding) {
-                Text(state.errorDescription)
-            }
+            .alert(
+                state.errorTitle,
+                isPresented: errorAlertBinding,
+                actions: {
+                    EmptyView()
+                },
+                message: {
+                    Text(state.errorDescription)
+                }
+            )
     }
 }
 

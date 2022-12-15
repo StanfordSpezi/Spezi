@@ -38,13 +38,13 @@ public enum ViewState: Equatable {
         case let .error(error):
             var errorDescription = ""
             if let failureReason = error.failureReason {
-                errorDescription.append("\(failureReason)\n\n")
+                errorDescription.append("\(failureReason)")
             }
             if let helpAnchor = error.helpAnchor {
-                errorDescription.append("\(helpAnchor)\n\n")
+                errorDescription.append("\(errorDescription.isEmpty ? "" : "\n\n")\(helpAnchor)")
             }
             if let recoverySuggestion = error.recoverySuggestion {
-                errorDescription.append("\(recoverySuggestion)\n\n")
+                errorDescription.append("\(errorDescription.isEmpty ? "" : "\n\n")\(recoverySuggestion)")
             }
             if errorDescription.isEmpty {
                 errorDescription = error.localizedDescription

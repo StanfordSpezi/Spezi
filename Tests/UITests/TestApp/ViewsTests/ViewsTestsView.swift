@@ -6,9 +6,8 @@
 // SPDX-License-Identifier: MIT
 //
 
-import CardinalKit
-@testable import Onboarding
 import SwiftUI
+import Views
 
 
 struct ViewsTestsView: View {
@@ -52,32 +51,67 @@ struct ViewsTestsView: View {
     }
     
     
+    @ViewBuilder
     private var canvas: some View {
-        Text("Canvas")
+        CanvasTestView()
     }
     
+    @ViewBuilder
     private var nameFields: some View {
-        Text("Name Fields")
+        NameFieldsTestView()
     }
     
+    @ViewBuilder
     private var userProfile: some View {
-        Text("User Profile")
+        UserProfileView(
+            name: PersonNameComponents(givenName: "Paul", familyName: "Schmiedmayer")
+        )
+            .frame(width: 100)
+        UserProfileView(
+            name: PersonNameComponents(givenName: "Leland", familyName: "Stanford"),
+            imageLoader: {
+                try? await Task.sleep(for: .seconds(1))
+                return Image(systemName: "person.crop.artframe")
+            }
+        )
+            .frame(width: 200)
     }
     
+    @ViewBuilder
     private var geometryReader: some View {
-        Text("Geometry Reader")
+        GeometryReaderTestView()
     }
     
+    @ViewBuilder
     private var label: some View {
-        Text("Label")
+        Label(
+            """
+            This is a label ...
+            An other text. This is longer and we can check if the justified text works as epxected. This is a very long text.
+            """,
+            textAllignment: .justified,
+            textColor: .blue
+        )
+            .border(.gray)
+        Label(
+            """
+            This is a label ...
+            An other text. This is longer and we can check if the justified text works as epxected. This is a very long text.
+            """,
+            textAllignment: .right,
+            textColor: .red
+        )
+            .border(.red)
     }
     
+    @ViewBuilder
     private var markdownView: some View {
-        Text("Markdown View")
+        MarkdownViewTestView()
     }
     
+    @ViewBuilder
     private var viewState: some View {
-        Text("View State")
+        ViewStateTestView()
     }
     
     
@@ -93,7 +127,7 @@ struct ViewsTestsView_Previews: PreviewProvider {
     
     static var previews: some View {
         NavigationStack {
-            OnboardingTestsView(navigationPath: $path)
+            ViewsTestsView(navigationPath: $path)
         }
     }
 }

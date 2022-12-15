@@ -32,6 +32,11 @@ final class ViewsTests: TestAppUITests {
         
         app.collectionViews.buttons["Views"].tap()
         app.collectionViews.buttons["User Profile"].tap()
+        
+        XCTAssertTrue(app.staticTexts["PS"].exists)
+        XCTAssertTrue(app.staticTexts["LS"].exists)
+        
+        XCTAssertTrue(app.images["person.crop.artframe"].waitForExistence(timeout: 1.0))
     }
     
     func testGeometryReader() throws {

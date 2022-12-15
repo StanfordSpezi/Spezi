@@ -28,9 +28,6 @@ struct AccountTestsView: View {
                     Text(user.username ?? user.name.formatted())
                 }
             }
-            NavigationLink("User Profile View") {
-                profileViews
-            }
             Button("Login") {
                 showLogin.toggle()
             }
@@ -54,23 +51,6 @@ struct AccountTestsView: View {
                     showSignUp = false
                 }
             }
-    }
-    
-    
-    @ViewBuilder
-    var profileViews: some View {
-        UserProfileView(
-            name: PersonNameComponents(givenName: "Paul", familyName: "Schmiedmayer")
-        )
-            .frame(width: 100)
-        UserProfileView(
-            name: PersonNameComponents(givenName: "Leland", familyName: "Stanford"),
-            imageLoader: {
-                try? await Task.sleep(for: .seconds(1))
-                return Image(systemName: "person.crop.artframe")
-            }
-        )
-            .frame(width: 200)
     }
 }
 
