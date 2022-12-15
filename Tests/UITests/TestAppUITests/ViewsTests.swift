@@ -16,6 +16,23 @@ final class ViewsTests: TestAppUITests {
         
         app.collectionViews.buttons["Views"].tap()
         app.collectionViews.buttons["Canvas"].tap()
+        
+        XCTAssert(app.staticTexts["Did Draw Anything: false"].exists)
+        XCTAssertFalse(app.scrollViews.otherElements.images["palette_tool_pencil_base"].isHittable)
+        
+        let canvasView = app.scrollViews.firstMatch
+        canvasView.swipeRight()
+        canvasView.swipeDown()
+        
+        XCTAssert(app.staticTexts["Did Draw Anything: true"].exists)
+        
+        app.buttons["Show Tool Picker"].tap()
+        XCTAssert(app.images["palette_tool_pencil_base"].isHittable)
+        canvasView.swipeLeft()
+        
+        app.buttons["Show Tool Picker"].tap()
+        XCTAssertFalse(app.images["palette_tool_pencil_base"].isHittable)
+        canvasView.swipeUp()
     }
     
     func testNameFields() throws {
@@ -24,6 +41,20 @@ final class ViewsTests: TestAppUITests {
         
         app.collectionViews.buttons["Views"].tap()
         app.collectionViews.buttons["Name Fields"].tap()
+        
+        XCTAssert(app.staticTexts["First Title"].exists)
+        XCTAssert(app.staticTexts["Second Title"].exists)
+        XCTAssert(app.staticTexts["Given Name"].exists)
+        XCTAssert(app.staticTexts["Family Name"].exists)
+        
+        app.enter(value: "Le", in: "First Placeholder")
+        app.enter(value: "Stan", in: "Second Placeholder")
+        
+        app.enter(value: "land", in: "Enter your given name ...")
+        app.enter(value: "ford", in: "Enter your family name ...")
+        
+        XCTAssert(app.textFields["Leland"].exists)
+        XCTAssert(app.textFields["Stanford"].exists)
     }
     
     func testUserProfile() throws {
@@ -45,6 +76,10 @@ final class ViewsTests: TestAppUITests {
         
         app.collectionViews.buttons["Views"].tap()
         app.collectionViews.buttons["Geometry Reader"].tap()
+        
+        XCTAssert(app.staticTexts["300.000000"].exists)
+        XCTAssert(app.staticTexts["200.000000"].exists)
+        
     }
     
     func testLabel() throws {
@@ -53,6 +88,9 @@ final class ViewsTests: TestAppUITests {
         
         app.collectionViews.buttons["Views"].tap()
         app.collectionViews.buttons["Label"].tap()
+
+        let text = "This is a label ... An other text. This is longer and we can check if the justified text works as epxected. This is a very long text."
+        XCTAssertEqual(app.staticTexts.allElementsBoundByIndex.filter { $0.label.contains(text) }.count, 2)
     }
     
     func testMardownView() throws {
@@ -61,6 +99,14 @@ final class ViewsTests: TestAppUITests {
         
         app.collectionViews.buttons["Views"].tap()
         app.collectionViews.buttons["Markdown View"].tap()
+        
+        XCTAssert(app.staticTexts["This is a markdown example."].exists)
+        XCTAssert(app.staticTexts["idle"].exists)
+        XCTAssert(app.staticTexts["Header"].exists)
+        
+        sleep(6)
+        
+        XCTAssert(app.staticTexts["This is a markdown example taking 5 seconds to load."].exists)
     }
     
     func testViewState() throws {
@@ -69,5 +115,16 @@ final class ViewsTests: TestAppUITests {
         
         app.collectionViews.buttons["Views"].tap()
         app.collectionViews.buttons["View State"].tap()
+        
+        XCTAssert(app.staticTexts["View State: processing"].exists)
+        
+        sleep(6)
+        
+        let alert = app.alerts.firstMatch.scrollViews.otherElements
+        XCTAssert(alert.staticTexts["Error Description"].exists)
+        XCTAssert(alert.staticTexts["Failure Reason\n\nHelp Anchor\n\nRecovery Suggestion"].exists)
+        alert.buttons["OK"].tap()
+        
+        app.staticTexts["View State: idle"].tap()
     }
 }
