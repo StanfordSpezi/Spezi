@@ -9,12 +9,13 @@
 import SwiftUI
 
 
-struct DescriptionGridRow<Description: View, Content: View>: View {
+/// A ``DescriptionGridRow`` provides a layout to allign a desription next to content element in a `Grid`-based layout.
+public struct DescriptionGridRow<Description: View, Content: View>: View {
     private let description: Description
     private let content: Content
     
     
-    var body: some View {
+    public var body: some View {
         GridRow {
             description
                 .fontWeight(.semibold)
@@ -27,7 +28,11 @@ struct DescriptionGridRow<Description: View, Content: View>: View {
     }
     
     
-    init(
+    /// Creates a new ``DescriptionGridRow`` instance providing a layout to allign a desription next to content element in a `Grid`-based layout.
+    /// - Parameters:
+    ///   - description: The description `View` of the `DescriptionGridRow``
+    ///   - content: The content `View` of the `DescriptionGridRow``
+    public init(
         @ViewBuilder description: () -> Description,
         @ViewBuilder content: () -> Content
     ) {

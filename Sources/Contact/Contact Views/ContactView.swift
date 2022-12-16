@@ -9,6 +9,7 @@
 import Contacts
 import MessageUI
 import SwiftUI
+import Views
 
 
 /// A ``ContactView`` enables the display of contact information as defined by a ``Contact``.
