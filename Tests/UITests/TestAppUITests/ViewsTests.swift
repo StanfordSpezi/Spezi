@@ -11,9 +11,9 @@ import XCTest
 
 final class ViewsTests: TestAppUITests {
     func testCanvas() throws {
-        guard #available(iOS 16.2, *) else {
-            throw XCTSkip("PKCanvas view-related tests are currently skipeed in Xcode 14.1 and iOS 16.2 due to a metal bug on the simulator.")
-        }
+        #if targetEnvironment(simulator) && (arch(i386) || arch(x86_64))
+            throw XCTSkip("PKCanvas view-related tests are currently skipped on Intel-based iOS simulators due to a metal bug on the simulator.")
+        #endif
         
         let app = XCUIApplication()
         app.launch()

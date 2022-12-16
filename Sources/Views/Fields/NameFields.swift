@@ -9,7 +9,7 @@
 import SwiftUI
 
 
-/// <#Description#>
+/// ``NameFields`` provides two text fields in a grid layout that allow users to enter their given and family name and parses the results in a `PersonNameComponents` instance.
 public struct NameFields<FocusedField: Hashable>: View {
     public enum LocalizationDefaults {
         public static var givenName: FieldLocalization {
@@ -78,11 +78,11 @@ public struct NameFields<FocusedField: Hashable>: View {
     }
     
     
-    /// <#Description#>
+    /// ``NameFields`` provides two text fields in a grid layout that allow users to enter their given and family name and parses the results in a `PersonNameComponents` instance.
     /// - Parameters:
-    ///   - name: <#name description#>
-    ///   - givenNameField: <#givenNameField description#>
-    ///   - familyNameField: <#familyNameField description#>
+    ///   - name: Binding containing the `PersonNameComponents` parsed from the fields.
+    ///   - givenNameField: The localization of the given name field.
+    ///   - familyNameField: The localization of the family name field.
     public init(
         name: Binding<PersonNameComponents>,
         givenNameField: FieldLocalization = LocalizationDefaults.givenName,
@@ -97,14 +97,15 @@ public struct NameFields<FocusedField: Hashable>: View {
     }
     
     
-    /// <#Description#>
+    /// ``NameFields`` provides two text fields in a grid layout that allow users to enter their given and family name and parses the results in a `PersonNameComponents` instance.
+    /// The initializer allows developers to pass in additional `FocusState` information to control and observe the focus state from outside the view.
     /// - Parameters:
-    ///   - name: <#name description#>
-    ///   - givenNameField: <#givenNameField description#>
-    ///   - givenNameFieldIdentifier: <#givenNameFieldIdentifier description#>
-    ///   - familyNameField: <#familyNameField description#>
-    ///   - familyNameFieldIdentifier: <#familyNameFieldIdentifier description#>
-    ///   - focusedState: <#focusedState description#>
+    ///   - name: Binding containing the `PersonNameComponents` parsed from the fields.
+    ///   - givenNameField: The localization of the given name field.
+    ///   - givenNameFieldIdentifier: The `FocusState` identifier of the given name field.
+    ///   - familyNameField: The localization of the family name field.
+    ///   - familyNameFieldIdentifier: The `FocusState` identifier of the family name field.
+    ///   - focusedState: `FocusState` binding to control and observe the focus state from outside the view.
     public init(
         // swiftlint:disable:previous function_default_parameter_at_end
         // We want to keep the arguments grouped by field to ensure that we have the same order as in the non-focusfield initializer.

@@ -26,9 +26,9 @@ final class OnboardingTests: TestAppUITests {
         
         hitConsentButton(app)
         
-        guard #available(iOS 16.2, *) else {
-            throw XCTSkip("PKCanvas view-related tests are currently skipeed in Xcode 14.1 and iOS 16.2 due to a metal bug on the simulator.")
-        }
+        #if targetEnvironment(simulator) && (arch(i386) || arch(x86_64))
+            throw XCTSkip("PKCanvas view-related tests are currently skipped on Intel-based iOS simulators due to a metal bug on the simulator.")
+        #endif
         
         app.enter(value: "Leland", in: "Enter your given name ...")
         app.enter(value: "Stanford", in: "Enter your family name ...")

@@ -93,9 +93,31 @@ private struct _CanvasView: UIViewRepresentable {
 }
 
 
-/// <#Description#>
+/// The ``CanvasView`` provides a SwiftUI wrapper around the PencilKit `PKCanvasView`.
+///
+/// You can use the ``CanvasSizePreferenceKey`` `PreferenceKey` to get the current canvas size to e.g. determine the
+/// current canvas size using the SwiftUI preference mechanisms.
+///
+/// The view offers several bindings to observe the resulting drawing, check if a user is currently drawing, and showing or hiding the tool picker.
+/// ```
+/// @State var drawing = PKDrawing()
+/// @State var isDrawing = false
+/// @State var showToolPicker = false
+///
+///
+/// var body: some View {
+///     CanvasView(
+///         drawing: $drawing,
+///         isDrawing: $isDrawing,
+///         tool: .init(.pencil, color: .black, width: 2),
+///         drawingPolicy: .anyInput,
+///         showToolPicker: $showToolPicker
+///     )
+/// }
+/// ```
 public struct CanvasView: View {
-    /// <#Description#>
+    /// The ``CanvasSizePreferenceKey`` enables outer views to get access to the current canvas size of the ``CanvasView``
+    /// using the SwiftUI preference mechanisms.
     public struct CanvasSizePreferenceKey: PreferenceKey, Equatable {
         public static var defaultValue: CGSize = .zero
         
@@ -127,13 +149,13 @@ public struct CanvasView: View {
     }
     
     
-    /// <#Description#>
+    /// Creates a new ``CanvasView`` providing a SwiftUI wrapper around the PencilKit `PKCanvasView`
     /// - Parameters:
-    ///   - drawing: <#drawing description#>
-    ///   - isDrawing: <#isDrawing description#>
-    ///   - tool: <#tool description#>
-    ///   - drawingPolicy: <#drawingPolicy description#>
-    ///   - showToolPicker: <#showToolPicker description#>
+    ///   - drawing: A `Binding` containing the current `PKDrawing`
+    ///   - isDrawing: A `Binding` indicating if the user is currently drawing.
+    ///   - tool: The default tool (`PKInkingTool`) that is selected when the view is loaded.
+    ///   - drawingPolicy: The drawing policy as defined by the PencilKit `PKCanvasViewDrawingPolicy`
+    ///   - showToolPicker: A `Binding` determining if the toolbox is currently show or hidden.
     public init(
         drawing: Binding<PKDrawing> = .constant(PKDrawing()),
         isDrawing: Binding<Bool> = .constant(false),
