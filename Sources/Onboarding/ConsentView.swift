@@ -11,10 +11,23 @@ import SwiftUI
 import Views
 
 
-struct ConsentView<Header: View, ContentView: View, Footer: View, Action: View>: View {
-    private let header: Header
+/// The ``ConsentView`` allows the display of markdown-based documents that can be signed using a family and given name and a hand drawn signature.
+///
+/// The ``ConsentView`` provides a convenience initalizer with a provided action view using an ``OnboardingActionsView`` (``ConsentView/init(header:asyncMarkdown:footer:action:)``)
+/// or a more customized ``ConsentView/init(contentView:actionView:)`` initializer with a custom-provided content and action view.
+///
+/// ```
+/// ConsentView(
+///     asyncMarkdown: {
+///         Data("This is a *markdown* **example**".utf8)
+///     },
+///     action: {
+///         // The action that should be performed once the user has providided their consent.
+///     }
+/// )
+/// ```
+public struct ConsentView<ContentView: View, Action: View>: View {
     private let contentView: ContentView
-    private let footer: Footer
     private let action: Action
     @State private var name = PersonNameComponents()
     @State private var showSignatureView = false
@@ -22,18 +35,14 @@ struct ConsentView<Header: View, ContentView: View, Footer: View, Action: View>:
     @State private var signature = PKDrawing()
     
     
-    var body: some View {
+    public var body: some View {
         ScrollViewReader { proxy in
             OnboardingView(
-                titleView: {
-                    header
-                },
                 contentView: {
                     contentView
                 },
                 actionView: {
                     VStack {
-                        footer
                         Divider()
                         NameFields(name: $name)
                         if showSignatureView {
@@ -70,18 +79,26 @@ struct ConsentView<Header: View, ContentView: View, Footer: View, Action: View>:
     }
     
     
-    init(
-        @ViewBuilder titleView: () -> (Header) = { EmptyView() },
+    /// Creates a ``ConsentView`` with a provided action view using  an``OnboardingActionsView`` and renders a markdown view.
+    /// - Parameters:
+    ///   - header: The header view will be displayed above the markdown content.
+    ///   - asyncMarkdown: The markdown content provided as an UTF8 encoded `Data` instance that can be provided asynchronously.
+    ///   - footer: The footer view will be displayed above the markdown content.
+    ///   - action: The action that should be performed once the consent has been given.
+    public init(
+        @ViewBuilder header: () -> (some View) = { EmptyView() },
         asyncMarkdown: @escaping () async -> Data,
-        @ViewBuilder footer: () -> (Footer) = { EmptyView() },
+        @ViewBuilder footer: () -> (some View) = { EmptyView() },
         action: @escaping () -> Void
-    ) where ContentView == MarkdownView<EmptyView, EmptyView>, Action == OnboardingActionsView {
+    ) where ContentView == MarkdownView<AnyView, AnyView>, Action == OnboardingActionsView {
         self.init(
-            header: titleView,
             contentView: {
-                MarkdownView(asyncMarkdown: asyncMarkdown)
+                MarkdownView(
+                    asyncMarkdown: asyncMarkdown,
+                    header: { AnyView(header()) },
+                    footer: { AnyView(footer()) }
+                )
             },
-            footer: footer,
             actionView: {
                 OnboardingActionsView(String(localized: "CONSENT_ACTION", bundle: .module)) {
                     action()
@@ -90,15 +107,15 @@ struct ConsentView<Header: View, ContentView: View, Footer: View, Action: View>:
         )
     }
     
-    init(
-        @ViewBuilder header: () -> (Header) = { EmptyView() },
+    /// Creates a ``ConsentView`` with a custom-provided action view.
+    /// - Parameters:
+    ///   - contentView: The content view providing context about the consent view.
+    ///   - actionView: The action view that should be displayed under the name and signature boxes.
+    public init(
         @ViewBuilder contentView: () -> (ContentView),
-        @ViewBuilder footer: () -> (Footer) = { EmptyView() },
         @ViewBuilder actionView: () -> (Action)
     ) {
-        self.header = header()
         self.contentView = contentView()
-        self.footer = footer()
         self.action = actionView()
     }
 }

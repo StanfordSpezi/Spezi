@@ -42,7 +42,7 @@ struct OnboardingTestsView: View {
     
     private var consentView: some View {
         ConsentView(
-            titleView: {
+            header: {
                 OnboardingTitleView(title: "Consent", subtitle: "Version 1.0")
             },
             asyncMarkdown: {
