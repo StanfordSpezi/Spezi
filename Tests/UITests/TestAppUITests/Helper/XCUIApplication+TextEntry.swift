@@ -33,29 +33,29 @@ extension XCUIApplication {
     func testPrimaryButton(enabled: Bool, title: String, navigationBarButtonTitle: String? = nil) {
         let navigationBarButtonTitle = navigationBarButtonTitle ?? title
         
-        if self.scrollViews.buttons[title].waitForExistence(timeout: 0.5) {
+        if self.scrollViews.buttons[title].waitForExistence(timeout: 1) {
             self.scrollViews.buttons[title].tap()
-        } else if self.collectionViews.buttons[title].waitForExistence(timeout: 0.5) {
+        } else if self.collectionViews.buttons[title].waitForExistence(timeout: 1) {
             self.collectionViews.buttons[title].tap()
         } else {
-            XCTAssert(self.buttons[title].waitForExistence(timeout: 0.5))
+            XCTAssert(self.buttons[title].waitForExistence(timeout: 1))
             self.buttons[title].tap()
         }
         
         if enabled {
-            guard !self.scrollViews.buttons["\(title), In progress"].waitForExistence(timeout: 1.0) else {
+            guard !self.scrollViews.buttons["\(title), In progress"].waitForExistence(timeout: 1) else {
                 return
             }
-            guard !self.collectionViews.buttons["\(title), In progress"].waitForExistence(timeout: 1.0) else {
+            guard !self.collectionViews.buttons["\(title), In progress"].waitForExistence(timeout: 1) else {
                 return
             }
-            XCTAssert(self.buttons["\(title), In progress"].waitForExistence(timeout: 1.0))
+            XCTAssert(self.buttons["\(title), In progress"].waitForExistence(timeout: 1))
         } else {
-            XCTAssert(self.navigationBars.buttons[navigationBarButtonTitle].exists)
+            XCTAssert(self.navigationBars.buttons[navigationBarButtonTitle].waitForExistence(timeout: 1))
             
-            if self.scrollViews.buttons[title].exists {
+            if self.scrollViews.buttons[title].waitForExistence(timeout: 1) {
                 self.scrollViews.buttons[title].swipeDown()
-            } else if self.collectionViews.buttons[title].exists {
+            } else if self.collectionViews.buttons[title].waitForExistence(timeout: 1) {
                 self.collectionViews.buttons[title].swipeDown()
             } else {
                 self.buttons[title].swipeDown()

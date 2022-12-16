@@ -24,26 +24,33 @@ final class OnboardingTests: TestAppUITests {
         XCTAssertFalse(app.staticTexts["Leland Stanford"].exists)
         XCTAssertFalse(app.staticTexts["X"].exists)
         
-        app.staticTexts["This is a markdown example"].swipeUp()
-        
-        app.buttons["I Consent"].tap()
+        hitConsentButton(app)
         
         app.enter(value: "Leland", in: "Enter your given name ...")
         app.enter(value: "Stanford", in: "Enter your family name ...")
         
-        app.buttons["I Consent"].tap()
+        hitConsentButton(app)
         
         app.staticTexts["Leland Stanford"].swipeRight()
         app.buttons["Undo"].tap()
         
-        app.buttons["I Consent"].tap()
+        hitConsentButton(app)
         
         app.staticTexts["X"].swipeRight()
         
-        app.buttons["I Consent"].tap()
+        hitConsentButton(app)
         
         XCTAssert(app.staticTexts["Welcome"].exists)
         XCTAssert(app.staticTexts["CardinalKit UI Tests"].exists)
+    }
+    
+    private func hitConsentButton(_ app: XCUIApplication) {
+        if app.staticTexts["This is a markdown example"].isHittable {
+            app.staticTexts["This is a markdown example"].swipeUp()
+        } else {
+            print("Can not scroll down.")
+        }
+        app.buttons["I Consent"].tap()
     }
     
     func testOnboardingView() throws {

@@ -108,7 +108,6 @@ final class AccountSignUpTests: TestAppUITests {
         let familyNameField = "Enter your family name ..."
         let familyName = "Stanford"
         app.enter(value: familyName, in: familyNameField)
-        XCTAssertTrue(app.buttons["Sign Up"].waitForExistence(timeout: 0.5))
         app.testPrimaryButton(enabled: true, title: buttonTitle)
         
         XCTAssertTrue(XCUIApplication().alerts["Username is already taken"].waitForExistence(timeout: 6.0))
@@ -116,7 +115,6 @@ final class AccountSignUpTests: TestAppUITests {
         
         app.delete(count: username.count, in: usernameField)
         app.enter(value: usernameReplacement, in: usernameField)
-        XCTAssertTrue(app.buttons["Sign Up"].waitForExistence(timeout: 0.5))
         app.testPrimaryButton(enabled: true, title: buttonTitle)
         
         XCTAssertTrue(app.collectionViews.staticTexts[usernameReplacement].waitForExistence(timeout: 6.0))

@@ -17,8 +17,8 @@ final class ViewsTests: TestAppUITests {
         app.collectionViews.buttons["Views"].tap()
         app.collectionViews.buttons["Canvas"].tap()
         
-        XCTAssert(app.staticTexts["Did Draw Anything: false"].exists)
-        XCTAssertFalse(app.scrollViews.otherElements.images["palette_tool_pencil_base"].exists)
+        XCTAssert(app.staticTexts["Did Draw Anything: false"].waitForExistence(timeout: 1))
+        XCTAssertFalse(app.scrollViews.otherElements.images["palette_tool_pencil_base"].waitForExistence(timeout: 1))
         
         let canvasView = app.scrollViews.firstMatch
         canvasView.swipeRight()
@@ -27,11 +27,13 @@ final class ViewsTests: TestAppUITests {
         XCTAssert(app.staticTexts["Did Draw Anything: true"].exists)
         
         app.buttons["Show Tool Picker"].tap()
-        XCTAssert(app.scrollViews.otherElements.images["palette_tool_pencil_base"].exists)
+        
+        XCTAssert(app.scrollViews.otherElements.images["palette_tool_pencil_base"].waitForExistence(timeout: 1))
         canvasView.swipeLeft()
         
         app.buttons["Show Tool Picker"].tap()
-        XCTAssertFalse(app.images["palette_tool_pencil_base"].isHittable)
+        
+        XCTAssertFalse(app.scrollViews.otherElements.images["palette_tool_pencil_base"].waitForExistence(timeout: 1))
         canvasView.swipeUp()
     }
     
