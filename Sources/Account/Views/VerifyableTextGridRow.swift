@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import Views
 
 
 struct VerifyableTextFieldGridRow<Description: View, TextField: View>: View {
@@ -135,8 +136,10 @@ struct VerifyableTextFieldGridRow_Previews: PreviewProvider {
         VStack {
             Form {
                 views
+                    .padding(4)
             }
             views
+                .padding(32)
         }
             .background(Color(.systemGroupedBackground))
     }
@@ -171,6 +174,5 @@ struct VerifyableTextFieldGridRow_Previews: PreviewProvider {
             )
                 .onTapFocus(focusedField: _focusedField, fieldIdentifier: .first)
         }
-            .padding(32)
     }
 }

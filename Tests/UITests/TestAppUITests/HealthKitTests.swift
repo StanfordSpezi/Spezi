@@ -25,6 +25,9 @@ final class HealthKitTests: TestAppUITests {
         XCTAssert(app.buttons["Ask for authorization"].waitForExistence(timeout: 2))
         app.buttons["Ask for authorization"].tap()
         
+        if !app.navigationBars["Health Access"].waitForExistence(timeout: 10) {
+            print("The HealthKit View did not load after 10 seconds ... give it a second try with a timeout of 20 seconds.")
+        }
         if app.navigationBars["Health Access"].waitForExistence(timeout: 20) {
             app.tables.staticTexts["Turn On All"].tap()
             app.navigationBars["Health Access"].buttons["Allow"].tap()

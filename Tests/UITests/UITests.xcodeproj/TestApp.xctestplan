@@ -1,0 +1,77 @@
+{
+  "configurations" : [
+    {
+      "id" : "A3A0543A-08F3-4356-97BF-88EC80ED0D0E",
+      "name" : "Default",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : {
+      "targets" : [
+        {
+          "containerPath" : "container:..\/..",
+          "identifier" : "Account",
+          "name" : "Account"
+        },
+        {
+          "containerPath" : "container:..\/..",
+          "identifier" : "CardinalKit",
+          "name" : "CardinalKit"
+        },
+        {
+          "containerPath" : "container:..\/..",
+          "identifier" : "Contact",
+          "name" : "Contact"
+        },
+        {
+          "containerPath" : "container:..\/..",
+          "identifier" : "FHIR",
+          "name" : "FHIR"
+        },
+        {
+          "containerPath" : "container:..\/..",
+          "identifier" : "HealthKitDataSource",
+          "name" : "HealthKitDataSource"
+        },
+        {
+          "containerPath" : "container:..\/..",
+          "identifier" : "LocalStorage",
+          "name" : "LocalStorage"
+        },
+        {
+          "containerPath" : "container:..\/..",
+          "identifier" : "SecureStorage",
+          "name" : "SecureStorage"
+        },
+        {
+          "containerPath" : "container:..\/..",
+          "identifier" : "Views",
+          "name" : "Views"
+        },
+        {
+          "containerPath" : "container:..\/..",
+          "identifier" : "XCTRuntimeAssertions",
+          "name" : "XCTRuntimeAssertions"
+        }
+      ]
+    },
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:UITests.xcodeproj",
+      "identifier" : "2F6D139128F5F384007C25D6",
+      "name" : "TestApp"
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:UITests.xcodeproj",
+        "identifier" : "2F6D13AB28F5F386007C25D6",
+        "name" : "TestAppUITests"
+      }
+    }
+  ],
+  "version" : 1
+}

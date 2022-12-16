@@ -7,20 +7,21 @@
 //
 
 import SwiftUI
+import Views
 
 
 struct UsernamePasswordFields: View {
     enum PresentationType {
         case login(ConfigurableLocalization<(
-            username: Localization.Field,
-            password: Localization.Field
+            username: FieldLocalization,
+            password: FieldLocalization
         )>)
         // We do not introduce an explicity type for the temporary usage of the localization fields.
         // swiftlint:disable:next large_tuple
         case signUp(ConfigurableLocalization<(
-            username: Localization.Field,
-            password: Localization.Field,
-            passwordRepeat: Localization.Field,
+            username: FieldLocalization,
+            password: FieldLocalization,
+            passwordRepeat: FieldLocalization,
             passwordNotEqualError: String
         )>)
         
@@ -42,7 +43,7 @@ struct UsernamePasswordFields: View {
         }
         
         
-        var username: Localization.Field? {
+        var username: FieldLocalization? {
             switch self {
             case let .login(.value((username, _))), let .signUp(.value((username, _, _, _))):
                 return username
@@ -51,7 +52,7 @@ struct UsernamePasswordFields: View {
             }
         }
         
-        var password: Localization.Field? {
+        var password: FieldLocalization? {
             switch self {
             case let .login(.value((_, password))), let .signUp(.value((_, password, _, _))):
                 return password
@@ -60,7 +61,7 @@ struct UsernamePasswordFields: View {
             }
         }
         
-        var passwordRepeat: Localization.Field? {
+        var passwordRepeat: FieldLocalization? {
             switch self {
             case let .signUp(.value((_, _, passwordRepeat, _))):
                 return passwordRepeat
@@ -127,7 +128,7 @@ struct UsernamePasswordFields: View {
     }
     
     private var usernameTextField: some View {
-        let usernameLocalization: Localization.Field
+        let usernameLocalization: FieldLocalization
         if let username = presentationType.username {
             usernameLocalization = username
         } else {
@@ -160,7 +161,7 @@ struct UsernamePasswordFields: View {
     }
     
     private var passwordSecureField: some View {
-        let passwordLocalization: Localization.Field
+        let passwordLocalization: FieldLocalization
         if let password = presentationType.password {
             passwordLocalization = password
         } else {
@@ -192,7 +193,7 @@ struct UsernamePasswordFields: View {
     }
     
     private var passwordRepeatSecureField: some View {
-        let passwordRepeatLocalization: Localization.Field
+        let passwordRepeatLocalization: FieldLocalization
         if let passwordRepeat = presentationType.passwordRepeat {
             passwordRepeatLocalization = passwordRepeat
         } else {
