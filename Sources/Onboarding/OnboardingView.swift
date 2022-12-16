@@ -9,7 +9,35 @@
 import SwiftUI
 
 
-/// <#Description#>
+/// The ``OnboardingView`` allows developers to present a unified style for the in an onboarding flow.
+/// The default style of the ``OnboardingView`` uses a combination of an ``OnboardingTitleView``, ``OnboardingInformationView``,
+/// and ``OnboardingActionsView``.
+///
+/// The ``SequentialOnboardingView`` provides an alternative to provide
+/// sequential information that is displayed step by step.
+///
+/// The following example demonstrates the usage of the ``OnboardingView`` using its default configuration.
+/// ```
+/// OnboardingView(
+///     title: "Title",
+///     subtitle: "Subtitle",
+///     areas: [
+///         OnboardingInformationView.Content(
+///             icon: Image(systemName: "pc"),
+///             title: "PC",
+///             description: "This is a PC."
+///         ),
+///         OnboardingInformationView.Content(
+///             icon: Image(systemName: "desktopcomputer"),
+///             title: "Mac",
+///             description: "This is an iMac."
+///         )
+///     ],
+///     actionText: "Continue"
+/// ) {
+///     // Action that should be performed on pressing the "Continue" button ...
+/// }
+/// ```
 public struct OnboardingView<TitleView: View, ContentView: View, ActionView: View>: View {
     private let titleView: TitleView
     private let contentView: ContentView
@@ -40,11 +68,11 @@ public struct OnboardingView<TitleView: View, ContentView: View, ActionView: Vie
     }
     
     
-    /// <#Description#>
+    /// Creates a customized ``OnboardingView`` allowing a complete customization of the  ``OnboardingView``.
     /// - Parameters:
-    ///   - titleView: <#titleView description#>
-    ///   - contentView: <#contentView description#>
-    ///   - actionView: <#actionView description#>
+    ///   - titleView: The title view displayed at the top.
+    ///   - contentView: The content view.
+    ///   - actionView: The action view displayed at the bottom.
     public init(
         @ViewBuilder titleView: () -> TitleView,
         @ViewBuilder contentView: () -> ContentView,
@@ -55,13 +83,14 @@ public struct OnboardingView<TitleView: View, ContentView: View, ActionView: Vie
         self.actionView = actionView()
     }
     
-    /// <#Description#>
+    /// Creates the default style of the ``OnboardingView`` uses a combination of an ``OnboardingTitleView``, ``OnboardingInformationView``,
+    /// and ``OnboardingActionsView``.
     /// - Parameters:
-    ///   - title: <#title description#>
-    ///   - subtitle: <#subtitle description#>
-    ///   - areas: <#areas description#>
-    ///   - actionText: <#actionText description#>
-    ///   - action: <#action description#>
+    ///   - title: The title of the ``OnboardingView``.
+    ///   - subtitle: The subtitle of the ``OnboardingView``.
+    ///   - areas: The areas of the ``OnboardingView`` defined using ``OnboardingInformationView/Content`` instances..
+    ///   - actionText: The text that should appear on the ``OnboardingView``'s primary button.
+    ///   - action: The close that is called then the primary button is pressed.
     public init(
         title: String,
         subtitle: String?,

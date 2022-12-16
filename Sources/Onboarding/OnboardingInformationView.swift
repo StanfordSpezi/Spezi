@@ -10,23 +10,42 @@ import SwiftUI
 import Views
 
 
-/// <#Description#>
+/// The ``OnboardingInformationView`` allows developers to present a unified style the display informational content as defined
+/// by the ``OnboardingInformationView/Content`` type.
+///
+/// The following example displays an ``OnboardingInformationView`` with two information areas:
+/// ```
+/// OnboardingInformationView(
+///     areas: [
+///         OnboardingInformationView.Content(
+///             icon: Image(systemName: "pc"),
+///             title: "PC",
+///             description: "This is a PC."
+///         ),
+///         OnboardingInformationView.Content(
+///             icon: Image(systemName: "desktopcomputer"),
+///             title: "Mac",
+///             description: "This is an iMac."
+///         )
+///     ]
+/// )
+/// ```
 public struct OnboardingInformationView: View {
-    /// <#Description#>
+    /// A ``Content`` defines the way that information is displayed in an ``OnboardingInformationView``.
     public struct Content {
-        /// <#Description#>
+        /// The icon of the area in the ``OnboardingInformationView``.
         public let icon: Image
-        /// <#Description#>
+        /// The title of the area in the ``OnboardingInformationView``.
         public let title: String
-        /// <#Description#>
+        /// The description of the area in the ``OnboardingInformationView``.
         public let description: String
         
         
-        /// <#Description#>
+        /// Creates a new content for an area in the ``OnboardingInformationView``.
         /// - Parameters:
-        ///   - icon: <#icon description#>
-        ///   - title: <#title description#>
-        ///   - description: <#description description#>
+        ///   - icon: The icon of the area in the ``OnboardingInformationView``.
+        ///   - title: The title of the area in the ``OnboardingInformationView``.
+        ///   - description: The description of the area in the ``OnboardingInformationView``.
         public init<Title: StringProtocol, Description: StringProtocol>(
             icon: Image,
             title: Title,
@@ -51,8 +70,8 @@ public struct OnboardingInformationView: View {
     }
     
     
-    /// <#Description#>
-    /// - Parameter areas: <#areas description#>
+    /// Creates an ``OnboardingInformationView`` instance with a collection of areas defined by the ``Content`` type.
+    /// - Parameter areas: The areas that should be displayed.
     public init(areas: [Content]) {
         self.areas = areas
     }
@@ -102,6 +121,19 @@ struct AreasView_Previews: PreviewProvider {
     
     
     static var previews: some View {
-        OnboardingInformationView(areas: mock)
+        OnboardingInformationView(
+            areas: [
+                OnboardingInformationView.Content(
+                    icon: Image(systemName: "pc"),
+                    title: "PC",
+                    description: "This is a PC."
+                ),
+                OnboardingInformationView.Content(
+                    icon: Image(systemName: "desktopcomputer"),
+                    title: "Mac",
+                    description: "This is an iMac."
+                )
+            ]
+        )
     }
 }

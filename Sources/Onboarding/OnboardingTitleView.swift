@@ -9,7 +9,12 @@
 import SwiftUI
 
 
-/// <#Description#>
+/// The ``OnboardingTitleView`` allows developers to present a unified style for the in an onboarding flow.
+/// The ``OnboardingTitleView`` can contain one title and a optional subtitle below the title.
+///
+/// ```
+/// OnboardingTitleView(title: "Title", subtitle: "Subtitle")
+/// ```
 public struct OnboardingTitleView: View {
     private let title: String
     private let subtitle: String?
@@ -32,17 +37,17 @@ public struct OnboardingTitleView: View {
     }
     
     
-    /// <#Description#>
-    /// - Parameter title: <#title description#>
+    /// Creates an ``OnboardingActionsView`` instance that only contains a title.
+    /// - Parameter title: The title of the ``OnboardingActionsView``.
     public init<S: StringProtocol>(title: S) {
         self.title = title.localized
         self.subtitle = nil
     }
     
-    /// <#Description#>
+    /// Creates an ``OnboardingActionsView`` instance that contains a title and a subtitle.
     /// - Parameters:
-    ///   - title: <#title description#>
-    ///   - subtitle: <#subtitle description#>
+    ///   - title: The title of the ``OnboardingActionsView``.
+    ///   - subtitle: The subtitle of the ``OnboardingActionsView``.
     public init<S1: StringProtocol, S2: StringProtocol>(title: S1, subtitle: S2?) {
         self.title = title.localized
         self.subtitle = subtitle?.localized
