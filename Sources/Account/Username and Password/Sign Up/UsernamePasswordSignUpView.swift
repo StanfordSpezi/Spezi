@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import Views
 
 
 struct UsernamePasswordSignUpView: View {
@@ -21,14 +22,14 @@ struct UsernamePasswordSignUpView: View {
     private let footer: AnyView
     private let signUpOptions: SignUpOptions
     
-    @EnvironmentObject private var usernamePasswordLoginService: UsernamePasswordAccountService
+    @EnvironmentObject private var usernamePasswordAccountService: UsernamePasswordAccountService
     
     @State private var username = ""
     @State private var password = ""
     @State private var name = PersonNameComponents()
     @State private var dateOfBirth = Date()
     @State private var genderIdentity: GenderIdentity = .preferNotToState
-    @State private var state: AccountViewState = .idle
+    @State private var state: ViewState = .idle
     
     @State private var usernamePasswordValid = false
     @FocusState private var focusedField: AccountInputFields?
@@ -107,7 +108,7 @@ struct UsernamePasswordSignUpView: View {
         let signUpButtonLocalization: String
         switch localization {
         case .environment:
-            signUpButtonLocalization = usernamePasswordLoginService.localization.signUp.signUpActionButtonTitle
+            signUpButtonLocalization = usernamePasswordAccountService.localization.signUp.signUpActionButtonTitle
         case .value(let signUp):
             signUpButtonLocalization = signUp.signUpActionButtonTitle
         }
@@ -134,9 +135,18 @@ struct UsernamePasswordSignUpView: View {
     private var navigationTitle: String {
         switch localization {
         case .environment:
-            return usernamePasswordLoginService.localization.signUp.navigationTitle
+            return usernamePasswordAccountService.localization.signUp.navigationTitle
         case .value(let signUp):
             return signUp.navigationTitle
+        }
+    }
+    
+    private var defaultSignUpFailedError: String {
+        switch localization {
+        case .environment:
+            return usernamePasswordAccountService.localization.signUp.defaultSignUpFailedError
+        case let .value(resetPassword):
+            return resetPassword.defaultSignUpFailedError
         }
     }
     
@@ -186,7 +196,7 @@ struct UsernamePasswordSignUpView: View {
         
         Task {
             do {
-                try await usernamePasswordLoginService.signUp(
+                try await usernamePasswordAccountService.signUp(
                     signInValues: SignInValues(
                         username: username,
                         password: password,
@@ -199,7 +209,12 @@ struct UsernamePasswordSignUpView: View {
                     state = .idle
                 }
             } catch {
-                state = .error(error)
+                state = .error(
+                    AnyLocalizedError(
+                        error: error,
+                        defaultErrorDescription: defaultSignUpFailedError
+                    )
+                )
             }
         }
     }

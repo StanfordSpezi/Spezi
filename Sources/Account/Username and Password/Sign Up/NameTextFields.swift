@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import Views
 
 
 struct NameTextFields: View {
@@ -14,12 +15,12 @@ struct NameTextFields: View {
     @FocusState private var focusedField: AccountInputFields?
     @EnvironmentObject var localizationEnvironmentObject: UsernamePasswordAccountService
     private let localization: ConfigurableLocalization<(
-        givenName: Localization.Field,
-        familyName: Localization.Field
+        givenName: FieldLocalization,
+        familyName: FieldLocalization
     )>
     
     
-    private var givenName: Localization.Field {
+    private var givenName: FieldLocalization {
         switch localization {
         case .environment:
             return localizationEnvironmentObject.localization.signUp.givenName
@@ -28,7 +29,7 @@ struct NameTextFields: View {
         }
     }
     
-    private var familyName: Localization.Field {
+    private var familyName: FieldLocalization {
         switch localization {
         case .environment:
             return localizationEnvironmentObject.localization.signUp.familyName
@@ -38,53 +39,22 @@ struct NameTextFields: View {
     }
     
     
-    private var givenNameBinding: Binding<String> {
-        Binding {
-            name.givenName ?? ""
-        } set: { newValue in
-            name.givenName = newValue
-        }
-    }
-    
-    private var familyNameBinding: Binding<String> {
-        Binding {
-            name.familyName ?? ""
-        } set: { newValue in
-            name.familyName = newValue
-        }
-    }
-    
-    
     var body: some View {
-        Grid {
-            DescriptionGridRow {
-                Text(givenName.title)
-            } content: {
-                TextField(givenName.placeholder, text: givenNameBinding)
-                    .autocorrectionDisabled(true)
-                    .textInputAutocapitalization(.never)
-                    .textContentType(.givenName)
-            }
-                .onTapFocus(focusedField: _focusedField, fieldIdentifier: .givenName)
-            Divider()
-                .gridCellUnsizedAxes(.horizontal)
-            DescriptionGridRow {
-                Text(familyName.title)
-            } content: {
-                TextField(familyName.placeholder, text: familyNameBinding)
-                    .autocorrectionDisabled(true)
-                    .textInputAutocapitalization(.never)
-                    .textContentType(.familyName)
-            }
-                .onTapFocus(focusedField: _focusedField, fieldIdentifier: .familyName)
-        }
+        Views.NameFields(
+            name: $name,
+            givenNameField: givenName,
+            givenNameFieldIdentifier: AccountInputFields.givenName,
+            familyNameField: familyName,
+            familyNameFieldIdentifier: AccountInputFields.familyName,
+            focusedState: _focusedField
+        )
     }
     
     
     init(
         name: Binding<PersonNameComponents>,
-        givenName: Localization.Field,
-        familyName: Localization.Field,
+        givenName: FieldLocalization,
+        familyName: FieldLocalization,
         focusState: FocusState<AccountInputFields?> = FocusState<AccountInputFields?>()
     ) {
         self._name = name

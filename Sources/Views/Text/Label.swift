@@ -44,15 +44,16 @@ private struct _Label: UIViewRepresentable {
 }
 
 
-struct Label: View {
-    let text: String
-    let textStyle: UIFont.TextStyle
-    let textAllignment: NSTextAlignment
-    let textColor: UIColor
-    let numberOfLines: Int
+/// A ``Label`` is a SwiftUI-based wrapper around a `UILabel` that allows the usage of an ``NSTextAlignment`` to e.g. justify the text.
+public struct Label: View {
+    private let text: String
+    private let textStyle: UIFont.TextStyle
+    private let textAllignment: NSTextAlignment
+    private let textColor: UIColor
+    private let numberOfLines: Int
     
     
-    var body: some View {
+    public var body: some View {
         HorizontalGeometryReader { width in
             _Label(
                 text: text,
@@ -66,7 +67,14 @@ struct Label: View {
     }
     
     
-    init(
+    /// Creates a new instance of the SwiftUI-based wrapper around a `UILabel`.
+    /// - Parameters:
+    ///   - text: The text that should be displayed.
+    ///   - textStyle: The `UIFont.TextStyle` of the `UILabel`. Defaults to `.body`.
+    ///   - textAllignment: The `NSTextAlignment` of the `UILabel`. Defaults to `.justified`.
+    ///   - textColor: The `UIColor` of the `UILabel`. Defaults to `.label`.
+    ///   - numberOfLines: The number of lines allowd of the `UILabel`. Defaults to 0 indicating no limit.
+    public init(
         _ text: String,
         textStyle: UIFont.TextStyle = .body,
         textAllignment: NSTextAlignment = .justified,

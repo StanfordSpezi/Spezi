@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import Views
 
 
 struct UsernamePasswordResetPasswordView: View {
@@ -32,6 +33,7 @@ struct UsernamePasswordResetPasswordView: View {
             } else {
                 DataEntryAccountView(
                     buttonTitle: resetPasswordButtonTitleLocalization,
+                    defaultError: defaultResetPasswordFailedError,
                     focusState: _focusedField,
                     valid: $valid,
                     buttonPressed: {
@@ -40,12 +42,14 @@ struct UsernamePasswordResetPasswordView: View {
                             processSuccess = true
                         }
                         try await Task.sleep(for: .seconds(0.6))
-                    }, content: {
+                    },
+                    content: {
                         header
                         Divider()
                         usernameTextField
                         Divider()
-                    }, footer: {
+                    },
+                    footer: {
                         footer
                     }
                 )
@@ -55,7 +59,7 @@ struct UsernamePasswordResetPasswordView: View {
     }
     
     private var usernameTextField: some View {
-        let usernameLocalization: Localization.Field
+        let usernameLocalization: FieldLocalization
         switch localization {
         case .environment:
             usernameLocalization = usernamePasswordAccountService.localization.resetPassword.username
@@ -102,6 +106,15 @@ struct UsernamePasswordResetPasswordView: View {
             return usernamePasswordAccountService.localization.resetPassword.navigationTitle
         case let .value(resetPassword):
             return resetPassword.navigationTitle
+        }
+    }
+    
+    private var defaultResetPasswordFailedError: String {
+        switch localization {
+        case .environment:
+            return usernamePasswordAccountService.localization.resetPassword.defaultResetPasswordFailedError
+        case let .value(resetPassword):
+            return resetPassword.defaultResetPasswordFailedError
         }
     }
     
