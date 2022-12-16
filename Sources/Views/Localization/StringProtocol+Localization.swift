@@ -10,13 +10,19 @@ import Foundation
 
 
 extension StringProtocol {
-    /// <#Description#>
+    /// Creates a localized verion of the instance conforming to `StringProtocol`.
+    ///
+    /// String literals (`StringLiteralType`) and `String.LocalizationValue` instances are tried to be localized using the main bundle.
+    /// `String` instances are not localized. You have to manually localize a `String` instance using `String(localized:)`.
     public var localized: String {
         localized(nil)
     }
     
     
-    /// <#Description#>
+    /// Creates a localized verion of the instance conforming to `StringProtocol`.
+    ///
+    /// String literals (`StringLiteralType`) and `String.LocalizationValue` instances are tried to be localized using the provided bundle.
+    /// `String` instances are not localized. You have to manually localize a `String` instance using `String(localized:)`.
     public func localized(_ bundle: Bundle?) -> String {
         switch self {
         case let text as String.LocalizationValue:

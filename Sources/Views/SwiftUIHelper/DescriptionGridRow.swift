@@ -9,7 +9,7 @@
 import SwiftUI
 
 
-/// <#Description#>
+/// A ``DescriptionGridRow`` provides a layout to allign a desription next to content element in a `Grid`-based layout.
 public struct DescriptionGridRow<Description: View, Content: View>: View {
     private let description: Description
     private let content: Content
@@ -28,10 +28,10 @@ public struct DescriptionGridRow<Description: View, Content: View>: View {
     }
     
     
-    /// <#Description#>
+    /// Creates a new ``DescriptionGridRow`` instance providing a layout to allign a desription next to content element in a `Grid`-based layout.
     /// - Parameters:
-    ///   - description: <#description description#>
-    ///   - content: <#content description#>
+    ///   - description: The description `View` of the `DescriptionGridRow``
+    ///   - content: The content `View` of the `DescriptionGridRow``
     public init(
         @ViewBuilder description: () -> Description,
         @ViewBuilder content: () -> Content

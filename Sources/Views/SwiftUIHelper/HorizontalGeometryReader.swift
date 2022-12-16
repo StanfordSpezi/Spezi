@@ -9,7 +9,8 @@
 import SwiftUI
 
 
-/// <#Description#>
+/// The ``WidthPreferenceKey`` enables outer views to get access to the current width calculated by the ``HorizontalGeometryReader``
+/// using the SwiftUI preference mechanisms.
 public struct WidthPreferenceKey: PreferenceKey, Equatable {
     public static var defaultValue: CGFloat = 0
     
@@ -18,7 +19,9 @@ public struct WidthPreferenceKey: PreferenceKey, Equatable {
 }
 
 
-/// <#Description#>
+/// An ``HorizontalGeometryReader`` enables a closure parameter-based and preference-based mechanism to read out the width of a specific view.
+/// Refer to ``WidthPreferenceKey`` for using the SwiftUI preference mechanism-based system or the ``HorizontalGeometryReader/init(content:)`` initializer
+/// for the closure-based approach.
 public struct HorizontalGeometryReader<Content: View>: View {
     private var content: (CGFloat) -> Content
     @State private var width: CGFloat = 0
@@ -39,8 +42,8 @@ public struct HorizontalGeometryReader<Content: View>: View {
     }
     
     
-    /// <#Description#>
-    /// - Parameter content: <#content description#>
+    /// Creates a new instance of the ``HorizontalGeometryReader``.
+    /// - Parameter content: The content closure that gets the calculated width as a parameter.
     public init(@ViewBuilder content: @escaping (CGFloat) -> Content) {
         self.content = content
     }

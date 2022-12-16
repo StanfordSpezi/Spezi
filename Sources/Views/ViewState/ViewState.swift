@@ -9,17 +9,17 @@
 import Foundation
 
 
-/// <#Description#>
+/// The ``ViewState`` allows SwiftUI views to keep track of their state and possible communicate it to outside views, e.g., using `Binding`s.
 public enum ViewState: Equatable {
-    /// <#Description#>
+    /// The view is idle and displaying content.
     case idle
-    /// <#Description#>
+    /// The view is in a processing state, e.g. loading content.
     case processing
-    /// <#Description#>
+    /// The view is in an error state, e.g., loading the content failed.
     case error(LocalizedError)
     
     
-    /// <#Description#>
+    /// The localized error title of the view if it is in an error state. An empty string if it is in an non-error state.
     public var errorTitle: String {
         switch self {
         case let .error(error):
@@ -32,7 +32,7 @@ public enum ViewState: Equatable {
         }
     }
     
-    /// <#Description#>
+    /// The localized error description of the view if it is in an error state. An empty string if it is in an non-error state.
     public var errorDescription: String {
         switch self {
         case let .error(error):

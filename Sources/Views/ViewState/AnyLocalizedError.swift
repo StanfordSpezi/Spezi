@@ -11,20 +11,20 @@ import Foundation
 
 /// A type erased version of `LocalizedError` with convenience initializers to do a best-effort transform an exsting `Error` to an `LocalizedError`.
 public struct AnyLocalizedError: LocalizedError {
-    /// <#Description#>
+    /// A localized message describing what error occurred.
     public var errorDescription: String?
-    /// <#Description#>
+    /// A localized message describing the reason for the failure.
     public var failureReason: String?
-    /// <#Description#>
+    /// A localized message describing how one might recover from the failure.
     public var helpAnchor: String?
-    /// <#Description#>
+    /// A localized message providing "help" text if the user requests help.
     public var recoverySuggestion: String?
     
     
-    /// <#Description#>
+    /// Provides a best-effort approach to create a type erased version of `LocalizedError`.
     /// - Parameters:
-    ///   - error: <#error description#>
-    ///   - defaultErrorDescription: <#defaultErrorDescription description#>
+    ///   - error: The error instance that should be wrapped.
+    ///   - defaultErrorDescription: The localized default error description that should be used if the `error` does not provide any context to create an error description.
     public init(error: Error, defaultErrorDescription: String) {
         switch error {
         case let localizedError as LocalizedError:

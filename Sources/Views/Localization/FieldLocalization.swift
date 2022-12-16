@@ -9,18 +9,18 @@
 import Foundation
 
 
-/// <#Description#>
+/// A ``FieldLocalization`` describes a localization of a `TextField` instance using a ``FieldLocalization/title`` and ``FieldLocalization/placeholder``.
 public struct FieldLocalization: Codable {
-    /// <#Description#>
+    /// The localized title of a `TextField`.
     public let title: String
-    /// <#Description#>
+    /// The localized placeholder of a `TextField`.
     public let placeholder: String
     
     
-    /// <#Description#>
+    /// Creates a new ``FieldLocalization`` instance.
     /// - Parameters:
-    ///   - title: <#title description#>
-    ///   - placeholder: <#placeholder description#>
+    ///   - title: The title of a `TextField` following the localization mechanisms lined out in ``StringProtocol/loalized``.
+    ///   - placeholder: The placeholder of a `TextField` following the localization mechanisms lined out in ``StringProtocol/loalized``.
     public init<Title: StringProtocol, Placeholder: StringProtocol>(title: Title, placeholder: Placeholder) {
         self.title = title.localized
         self.placeholder = placeholder.localized
