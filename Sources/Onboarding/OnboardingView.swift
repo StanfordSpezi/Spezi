@@ -85,6 +85,7 @@ public struct OnboardingView<TitleView: View, ContentView: View, ActionView: Vie
     
     /// Creates the default style of the ``OnboardingView`` uses a combination of an ``OnboardingTitleView``, ``OnboardingInformationView``,
     /// and ``OnboardingActionsView``.
+    /// 
     /// - Parameters:
     ///   - title: The title of the ``OnboardingView``.
     ///   - subtitle: The subtitle of the ``OnboardingView``.

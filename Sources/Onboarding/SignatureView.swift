@@ -11,6 +11,16 @@ import SwiftUI
 import Views
 
 
+/// A ``SignatureView`` enables the collection of signatures using a view that allows freeform signatures using a finger and the Apple Pencil.
+///
+/// Use SwiftUI `Bindings` to obtain information like the content of the signature and if the user is currently signing:
+/// ```
+/// SignatureView(
+///     signature: $signature,
+///     isSigning: $isSigning,
+///     name: name
+/// )
+/// ```
 public struct SignatureView: View {
     @Environment(\.undoManager) private var undoManager
     @Binding private var signature: PKDrawing
@@ -58,12 +68,12 @@ public struct SignatureView: View {
     }
     
     
-    /// <#Description#>
+    /// Creates a new instance of an ``SignatureView``.
     /// - Parameters:
-    ///   - signature: <#signature description#>
-    ///   - isSigning: <#isSigning description#>
-    ///   - name: <#name description#>
-    ///   - lineOffset: <#lineOffset description#>
+    ///   - signature: A `Binding` containing the current signature as an `PKDrawing`.
+    ///   - isSigning: A `Binding` indicating if the user is currently signing.
+    ///   - name: The name that is deplayed under the signature line.
+    ///   - lineOffset: Defines the distance of the signature line from the bottom of the view. The default value is 30.
     init(
         signature: Binding<PKDrawing> = .constant(PKDrawing()),
         isSigning: Binding<Bool> = .constant(false),

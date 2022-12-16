@@ -9,20 +9,47 @@
 import SwiftUI
 
 
-/// <#Description#>
+/// The ``SequentialOnboardingView`` provides a view to display information that is displayed step by step.
+///
+/// The ``OnboardingView`` provides an alternative to provide  information that is displayed all at once.
+///
+/// The following example demonstrates the usage of the ``SequentialOnboardingView``:
+/// ```
+/// SequentialOnboardingView(
+///     title: "Title",
+///     subtitle: "Subtitle",
+///     content: [
+///         .init(
+///             title: "A thing to know",
+///             description: "This is a first thing that you should know, read carfully!")
+///         ,
+///         .init(
+///             title: "Second thing to know",
+///             description: "This is a second thing that you should know, read carfully!"
+///         ),
+///         .init(
+///             title: "Third thing to know",
+///             description: "This is a third thing that you should know, read carfully!"
+///         )
+///     ],
+///     actionText: "Continue"
+/// ) {
+///     // Action that should be performed on pressing the "Continue" button ...
+/// }
+/// ```
 public struct SequentialOnboardingView: View {
-    /// <#Description#>
+    /// A ``Content`` defines the way that information is displayed in an ``SequentialOnboardingView``.
     public struct Content {
-        /// <#Description#>
+        /// The title of the area in the ``SequentialOnboardingView``.
         public let title: String
-        /// <#Description#>
+        /// The description of the area in the ``SequentialOnboardingView``.
         public let description: String
         
         
-        /// <#Description#>
+        /// Creates a new content for an area in the ``SequentialOnboardingView``.
         /// - Parameters:
-        ///   - title: <#title description#>
-        ///   - description: <#description description#>
+        ///   - title: The title of the area in the ``SequentialOnboardingView``.
+        ///   - description: The description of the area in the ``SequentialOnboardingView``.
         public init<Title: StringProtocol, Description: StringProtocol>(
             title: Title,
             description: Description
@@ -81,13 +108,15 @@ public struct SequentialOnboardingView: View {
     }
     
     
-    /// <#Description#>
+    /// Creates the default style of the ``SequentialOnboardingView`` that uses a combination of an ``OnboardingTitleView``
+    /// and ``OnboardingActionsView``.
+    ///
     /// - Parameters:
-    ///   - title: <#title description#>
-    ///   - subtitle: <#subtitle description#>
-    ///   - content: <#content description#>
-    ///   - actionText: <#actionText description#>
-    ///   - action: <#action description#>
+    ///   - title: The title of the ``SequentialOnboardingView``.
+    ///   - subtitle: The subtitle of the ``SequentialOnboardingView``.
+    ///   - content: The areas of the ``SequentialOnboardingView`` defined using ``SequentialOnboardingView/Content`` instances..
+    ///   - actionText: The text that should appear on the ``SequentialOnboardingView``'s primary button.
+    ///   - action: The close that is called then the primary button is pressed.
     public init<Title: StringProtocol, Subtitle: StringProtocol, ActionText: StringProtocol>(
         title: Title,
         subtitle: Subtitle?,
@@ -104,12 +133,13 @@ public struct SequentialOnboardingView: View {
     }
     
     
-    /// <#Description#>
+    /// Creates a customized ``SequentialOnboardingView`` allowing a complete customization of the  ``SequentialOnboardingView``'s title view.
+    ///
     /// - Parameters:
-    ///   - titleView: <#titleView description#>
-    ///   - content: <#content description#>
-    ///   - actionText: <#actionText description#>
-    ///   - action: <#action description#>
+    ///   - titleView: The title view displayed at the top.
+    ///   - content: The areas of the ``SequentialOnboardingView`` defined using ``SequentialOnboardingView/Content`` instances..
+    ///   - actionText: The text that should appear on the ``SequentialOnboardingView``'s primary button.
+    ///   - action: The close that is called then the primary button is pressed.
     public init<TitleView: View, ActionText: StringProtocol>(
         titleView: TitleView,
         content: [Content],
