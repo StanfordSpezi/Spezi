@@ -26,6 +26,7 @@ let package = Package(
         .library(name: "LocalStorage", targets: ["LocalStorage"]),
         .library(name: "Onboarding", targets: ["Onboarding"]),
         .library(name: "SecureStorage", targets: ["SecureStorage"]),
+        .library(name: "Views", targets: ["Views"]),
         .library(name: "XCTRuntimeAssertions", targets: ["XCTRuntimeAssertions"])
     ],
     dependencies: [

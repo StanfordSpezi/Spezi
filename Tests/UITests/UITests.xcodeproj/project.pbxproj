@@ -23,6 +23,7 @@
 		2F4F0394294A66FB0062D4C7 /* SecureStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 2F4F0393294A66FB0062D4C7 /* SecureStorage */; };
 		2F4F0396294A66FB0062D4C7 /* XCTRuntimeAssertions in Frameworks */ = {isa = PBXBuildFile; productRef = 2F4F0395294A66FB0062D4C7 /* XCTRuntimeAssertions */; };
 		2F4F0399294A8D410062D4C7 /* OnboardingTestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4F0398294A8D410062D4C7 /* OnboardingTestsView.swift */; };
+		2F532EAA294CD87900A4061E /* Views in Frameworks */ = {isa = PBXBuildFile; productRef = 2F532EA9294CD87900A4061E /* Views */; };
 		2F6D139A28F5F386007C25D6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F6D139928F5F386007C25D6 /* Assets.xcassets */; };
 		2F7B6CAB294BCA6600FDC494 /* CanvasTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7B6CAA294BCA6600FDC494 /* CanvasTestView.swift */; };
 		2F7B6CAD294BCA6F00FDC494 /* GeometryReaderTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7B6CAC294BCA6F00FDC494 /* GeometryReaderTestView.swift */; };
@@ -139,6 +140,7 @@
 				2F4F0386294A66FB0062D4C7 /* Account in Frameworks */,
 				2F4F0396294A66FB0062D4C7 /* XCTRuntimeAssertions in Frameworks */,
 				2F4F0388294A66FB0062D4C7 /* CardinalKit in Frameworks */,
+				2F532EAA294CD87900A4061E /* Views in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -346,6 +348,7 @@
 				2F4F0391294A66FB0062D4C7 /* Onboarding */,
 				2F4F0393294A66FB0062D4C7 /* SecureStorage */,
 				2F4F0395294A66FB0062D4C7 /* XCTRuntimeAssertions */,
+				2F532EA9294CD87900A4061E /* Views */,
 			);
 			productName = Example;
 			productReference = 2F6D139228F5F384007C25D6 /* TestApp.app */;
@@ -784,6 +787,10 @@
 		2F4F0395294A66FB0062D4C7 /* XCTRuntimeAssertions */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = XCTRuntimeAssertions;
+		};
+		2F532EA9294CD87900A4061E /* Views */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Views;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

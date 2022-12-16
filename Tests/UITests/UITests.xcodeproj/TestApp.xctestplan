@@ -53,6 +53,11 @@
         },
         {
           "containerPath" : "container:..\/..",
+          "identifier" : "Views",
+          "name" : "Views"
+        },
+        {
+          "containerPath" : "container:..\/..",
           "identifier" : "XCTRuntimeAssertions",
           "name" : "XCTRuntimeAssertions"
         }
