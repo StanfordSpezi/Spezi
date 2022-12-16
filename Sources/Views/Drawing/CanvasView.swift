@@ -137,7 +137,7 @@ public struct CanvasView: View {
     public init(
         drawing: Binding<PKDrawing> = .constant(PKDrawing()),
         isDrawing: Binding<Bool> = .constant(false),
-        tool: PKInkingTool = PKInkingTool(.pencil, color: .label, width: 1),
+        tool: PKInkingTool = PKInkingTool(.pen, color: .label, width: 1),
         drawingPolicy: PKCanvasViewDrawingPolicy = .anyInput,
         showToolPicker: Binding<Bool> = .constant(true)
     ) {
