@@ -27,6 +27,7 @@ final class HealthKitTests: TestAppUITests {
         
         if !app.navigationBars["Health Access"].waitForExistence(timeout: 10) {
             print("The HealthKit View did not load after 10 seconds ... give it a second try with a timeout of 20 seconds.")
+            app.buttons["Ask for authorization"].tap()
         }
         if app.navigationBars["Health Access"].waitForExistence(timeout: 20) {
             app.tables.staticTexts["Turn On All"].tap()
