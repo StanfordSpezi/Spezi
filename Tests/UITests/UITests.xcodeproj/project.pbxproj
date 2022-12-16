@@ -90,6 +90,7 @@
 		2F7B6CAE294BCA7600FDC494 /* NameFieldsTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameFieldsTestView.swift; sourceTree = "<group>"; };
 		2F7B6CB0294BCA7C00FDC494 /* MarkdownViewTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownViewTestView.swift; sourceTree = "<group>"; };
 		2F7B6CB2294BCA8200FDC494 /* ViewStateTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewStateTestView.swift; sourceTree = "<group>"; };
+		2F7B6CB4294C03C800FDC494 /* TestApp.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = TestApp.xctestplan; path = UITests.xcodeproj/TestApp.xctestplan; sourceTree = "<group>"; };
 		2F817A49294B152B00A39983 /* ViewsTestsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewsTestsView.swift; sourceTree = "<group>"; };
 		2F817A4B294B16A000A39983 /* ViewsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewsTests.swift; sourceTree = "<group>"; };
 		2F8A431429130B9B005D2B8F /* TestAppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAppView.swift; sourceTree = "<group>"; };
@@ -183,6 +184,7 @@
 		2F6D138928F5F384007C25D6 = {
 			isa = PBXGroup;
 			children = (
+				2F7B6CB4294C03C800FDC494 /* TestApp.xctestplan */,
 				2FC42FD7290ADD5E00B08F18 /* CardinalKitSPM */,
 				2F6D139428F5F384007C25D6 /* TestApp */,
 				2F6D13AF28F5F386007C25D6 /* TestAppUITests */,
