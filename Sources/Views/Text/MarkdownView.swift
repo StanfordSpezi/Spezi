@@ -9,7 +9,26 @@
 import SwiftUI
 
 
-/// <#Description#>
+/// A ``MarkdownView`` allows the display of a markdown file including the addition of a header and footer view.
+///
+/// ```
+/// @State var viewState: ViewState = .idle
+///
+/// MarkdownView(
+///     asyncMarkdown: {
+///         // Load your markdown file from a remote source or disk storage ...
+///         try? await Task.sleep(for: .seconds(5))
+///         return Data("This is a *markdown* **example** taking 5 seconds to load.".utf8)
+///     },
+///     state: $viewState,
+///     header: {
+///         Text("Header")
+///     },
+///     footer: {
+///         Text("Footer")
+///     }
+/// )
+/// ```
 public struct MarkdownView<Header: View, Footer: View>: View {
     private let header: Header
     private let footer: Footer
@@ -51,12 +70,12 @@ public struct MarkdownView<Header: View, Footer: View>: View {
     }
     
     
-    /// <#Description#>
+    /// Creates a ``MarkdownView`` that displayes the content of a markdown file as an utf8 representation that is loaded asynchronously.
     /// - Parameters:
-    ///   - asyncMarkdown: <#asyncMarkdown description#>
-    ///   - state: <#state description#>
-    ///   - header: <#header description#>
-    ///   - footer: <#footer description#>
+    ///   - asyncMarkdown: The async closure to load the markdown as an utf8 representation.
+    ///   - state: A `Binding` to observe the ``ViewState`` of the ``MarkdownView``.
+    ///   - header: An optional header of the ``MarkdownView``
+    ///   - footer: An optional footer of the ``MarkdownView``
     public init(
         asyncMarkdown: @escaping () async -> Data,
         state: Binding<ViewState> = .constant(.idle),
@@ -69,12 +88,12 @@ public struct MarkdownView<Header: View, Footer: View>: View {
         self._state = state
     }
     
-    /// <#Description#>
+    /// Creates a ``MarkdownView`` that displayes the content of a markdown file
     /// - Parameters:
-    ///   - markdown: <#markdown description#>
-    ///   - state: <#state description#>
-    ///   - header: <#header description#>
-    ///   - footer: <#footer description#>
+    ///   - asyncMarkdown: A `Data` instance containing the markdown file as an utf8 representation.
+    ///   - state: A `Binding` to observe the ``ViewState`` of the ``MarkdownView``.
+    ///   - header: An optional header of the ``MarkdownView``
+    ///   - footer: An optional footer of the ``MarkdownView``
     public init(
         markdown: Data,
         state: Binding<ViewState> = .constant(.idle),

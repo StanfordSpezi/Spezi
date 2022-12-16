@@ -44,7 +44,7 @@ private struct _Label: UIViewRepresentable {
 }
 
 
-/// <#Description#>
+/// A ``Label`` is a SwiftUI-based wrapper around a `UILabel` that allows the usage of an ``NSTextAlignment`` to e.g. justify the text.
 public struct Label: View {
     private let text: String
     private let textStyle: UIFont.TextStyle
@@ -67,13 +67,13 @@ public struct Label: View {
     }
     
     
-    /// <#Description#>
+    /// Creates a new instance of the SwiftUI-based wrapper around a `UILabel`.
     /// - Parameters:
-    ///   - text: <#text description#>
-    ///   - textStyle: <#textStyle description#>
-    ///   - textAllignment: <#textAllignment description#>
-    ///   - textColor: <#textColor description#>
-    ///   - numberOfLines: <#numberOfLines description#>
+    ///   - text: The text that should be displayed.
+    ///   - textStyle: The `UIFont.TextStyle` of the `UILabel`. Defaults to `.body`.
+    ///   - textAllignment: The `NSTextAlignment` of the `UILabel`. Defaults to `.justified`.
+    ///   - textColor: The `UIColor` of the `UILabel`. Defaults to `.label`.
+    ///   - numberOfLines: The number of lines allowd of the `UILabel`. Defaults to 0 indicating no limit.
     public init(
         _ text: String,
         textStyle: UIFont.TextStyle = .body,

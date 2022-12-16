@@ -42,17 +42,15 @@ private struct OnTapFocus<FocusedField: Hashable>: ViewModifier {
 
 
 extension View {
-    /// <#Description#>
-    /// - Returns: <#description#>
+    /// Modifies the view to be in a focused state (e.g., `TextFields`) if it is tapped.
     public func onTapFocus() -> some View {
         modifier(OnTapFocus())
     }
     
-    /// <#Description#>
+    /// Modifies the view to be in a focused state (e.g., `TextFields`) if it is tapped.
     /// - Parameters:
-    ///   - focusedField: <#focusedField description#>
-    ///   - fieldIdentifier: <#fieldIdentifier description#>
-    /// - Returns: <#description#>
+    ///   - focusedField: The `FocusState` binding that shoud be set.
+    ///   - fieldIdentifier: The identifier that the `focusedField` should be set to.
     public func onTapFocus<FocusedField: Hashable>(
         focusedField: FocusState<FocusedField?>,
         fieldIdentifier: FocusedField
