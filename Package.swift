@@ -24,6 +24,7 @@ let package = Package(
         .library(name: "FHIR", targets: ["FHIR"]),
         .library(name: "HealthKitDataSource", targets: ["HealthKitDataSource"]),
         .library(name: "LocalStorage", targets: ["LocalStorage"]),
+        .library(name: "Onboarding", targets: ["Onboarding"]),
         .library(name: "SecureStorage", targets: ["SecureStorage"]),
         .library(name: "Views", targets: ["Views"]),
         .library(name: "XCTRuntimeAssertions", targets: ["XCTRuntimeAssertions"])
@@ -95,6 +96,16 @@ let package = Package(
             name: "LocalStorageTests",
             dependencies: [
                 .target(name: "LocalStorage")
+            ]
+        ),
+        .target(
+            name: "Onboarding",
+            dependencies: [
+                .target(name: "CardinalKit"),
+                .target(name: "Views")
+            ],
+            resources: [
+                .process("Resources")
             ]
         ),
         .target(
