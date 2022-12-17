@@ -99,6 +99,14 @@ enum HealthDataType: String {
                 elementStaticText.tap()
                 return
             }
+            
+            healthApp.firstMatch.swipeDown(velocity: .slow)
+            elementStaticText = healthApp.buttons.element(matching: elementStaticTextPredicate).firstMatch
+            if elementStaticText.waitForExistence(timeout: 10) {
+                elementStaticText.tap()
+                return
+            }
+            
             XCTFail("Failed to find element in category: \(healthApp.staticTexts.allElementsBoundByIndex)")
             throw XCTestError(.failureWhileWaiting)
         }
