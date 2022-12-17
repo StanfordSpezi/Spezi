@@ -99,6 +99,14 @@ enum HealthDataType: String {
                 elementStaticText.tap()
                 return
             }
+            
+            healthApp.firstMatch.swipeDown(velocity: .slow)
+            elementStaticText = healthApp.buttons.element(matching: elementStaticTextPredicate).firstMatch
+            if elementStaticText.waitForExistence(timeout: 10) {
+                elementStaticText.tap()
+                return
+            }
+            
             XCTFail("Failed to find element in category: \(healthApp.staticTexts.allElementsBoundByIndex)")
             throw XCTestError(.failureWhileWaiting)
         }
@@ -148,14 +156,7 @@ extension XCTestCase {
         healthApp.activate()
         
         if healthApp.staticTexts["Welcome to Health"].waitForExistence(timeout: 2) {
-            XCTAssertTrue(healthApp.staticTexts["Continue"].waitForExistence(timeout: 2))
-            healthApp.staticTexts["Continue"].tap()
-            XCTAssertTrue(healthApp.staticTexts["Continue"].waitForExistence(timeout: 2))
-            healthApp.staticTexts["Continue"].tap()
-            XCTAssertTrue(healthApp.tables.buttons["Next"].waitForExistence(timeout: 2))
-            healthApp.tables.buttons["Next"].tap()
-            XCTAssertTrue(healthApp.staticTexts["Continue"].waitForExistence(timeout: 30))
-            healthApp.staticTexts["Continue"].tap()
+            handleWelcomeToHealth()
         }
         
         guard healthApp.tabBars["Tab Bar"].buttons["Browse"].waitForExistence(timeout: 3) else {
@@ -189,5 +190,50 @@ extension XCTestCase {
         
         let testApp = XCUIApplication()
         testApp.activate()
+    }
+    
+    
+    private func handleWelcomeToHealth(alreadyRecursive: Bool = false) {
+        let healthApp = XCUIApplication(bundleIdentifier: "com.apple.Health")
+        
+        if healthApp.staticTexts["Welcome to Health"].waitForExistence(timeout: 2) {
+            XCTAssertTrue(healthApp.staticTexts["Continue"].waitForExistence(timeout: 2))
+            healthApp.staticTexts["Continue"].tap()
+            
+            XCTAssertTrue(healthApp.staticTexts["Continue"].waitForExistence(timeout: 2))
+            healthApp.staticTexts["Continue"].tap()
+            
+            XCTAssertTrue(healthApp.tables.buttons["Next"].waitForExistence(timeout: 2))
+            healthApp.tables.buttons["Next"].tap()
+            
+            // Sometimes the HealthApp fails to advance to the next step here.
+            // Go back and try again.
+            if !healthApp.staticTexts["Continue"].waitForExistence(timeout: 30) {
+                // Go one step back.
+                healthApp.navigationBars["WDBuddyFlowUserInfoView"].buttons["Back"].tap()
+                
+                XCTAssertTrue(healthApp.staticTexts["Continue"].waitForExistence(timeout: 2))
+                healthApp.staticTexts["Continue"].tap()
+                
+                // Check if the Next button exists or of the view is still in a loading process.
+                if healthApp.tables.buttons["Next"].waitForExistence(timeout: 2) {
+                    healthApp.tables.buttons["Next"].tap()
+                }
+                
+                // Continue button still doesn't exist, go for terminating the app.
+                if !healthApp.staticTexts["Continue"].waitForExistence(timeout: 30) {
+                    if alreadyRecursive {
+                        XCTFail("Even the recursive process did fail. Terminate the process.")
+                    }
+                    
+                    healthApp.terminate()
+                    healthApp.activate()
+                    handleWelcomeToHealth(alreadyRecursive: true)
+                    return
+                }
+            }
+            
+            healthApp.staticTexts["Continue"].tap()
+        }
     }
 }

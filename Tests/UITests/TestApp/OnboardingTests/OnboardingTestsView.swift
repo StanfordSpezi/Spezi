@@ -13,6 +13,7 @@ import SwiftUI
 
 struct OnboardingTestsView: View {
     enum OnboardingStep: String, CaseIterable, Codable {
+        case consentView = "Consent View"
         case onboardingView = "Onboarding View"
         case sequentialOnboarding = "Sequential Onboarding"
     }
@@ -28,12 +29,30 @@ struct OnboardingTestsView: View {
             .navigationTitle("Onboarding")
             .navigationDestination(for: OnboardingStep.self) { onboardingStep in
                 switch onboardingStep {
+                case .consentView:
+                    consentView
                 case .onboardingView:
                     onboardingView
                 case .sequentialOnboarding:
                     sequentialOnboardingView
                 }
             }
+    }
+    
+    
+    private var consentView: some View {
+        ConsentView(
+            header: {
+                OnboardingTitleView(title: "Consent", subtitle: "Version 1.0")
+            },
+            asyncMarkdown: {
+                Data("This is a *markdown* **example**".utf8)
+            },
+            action: {
+                path.append(OnboardingStep.onboardingView)
+            }
+        )
+            .navigationBarTitleDisplayMode(.inline)
     }
     
     private var onboardingView: some View {
@@ -64,7 +83,7 @@ struct OnboardingTestsView: View {
             ],
             actionText: "Continue"
         ) {
-            path.append(OnboardingStep.onboardingView)
+            path.append(OnboardingStep.consentView)
         }
             .navigationBarTitleDisplayMode(.inline)
     }

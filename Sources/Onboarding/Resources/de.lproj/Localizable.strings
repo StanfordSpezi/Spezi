@@ -6,6 +6,13 @@
 // SPDX-License-Identifier: MIT
 //
 
+// MARK: Consent View
+"CONSENT_ACTION" = "Ich Stimme Zu";
+
 
 // MARK: Sequential Onboarding
 "SEQUENTIAL_ONBOARDING_NEXT" = "Nächster Schritt";
+
+
+// MARK: Signature View
+"SIGNATURE_VIEW_UNDO" = "Rückgängig Machen";
