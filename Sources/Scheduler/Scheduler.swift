@@ -10,12 +10,6 @@ import CardinalKit
 import Foundation
 
 
-class CompletedEvent: Codable {
-    let scheduledAt: Date
-    let completedAt: Date
-}
-
-
 class Event: Codable, Identifiable, Hashable {
     enum CodingKeys: CodingKey {
         case scheduledAt
@@ -64,8 +58,91 @@ class Event: Codable, Identifiable, Hashable {
 
 
 class Schedule: Codable {
+    enum ScheduleEnd: Codable {
+        case numberOfEvents(Int)
+        case endDate(Date)
+        case numberOfEventsOrEndDate(Int, Date)
+        
+        
+        var endDate: Date? {
+            switch self {
+            case let .endDate(endDate), let .numberOfEventsOrEndDate(_, endDate):
+                return endDate
+            case .numberOfEvents:
+                return nil
+            }
+        }
+        
+        var numberOfEvents: Int? {
+            switch self {
+            case let .numberOfEvents(numberOfEvents), let .numberOfEventsOrEndDate(numberOfEvents, _):
+                return numberOfEvents
+            case .endDate:
+                return nil
+            }
+        }
+        
+        
+        static func minimum(_ lhs: Self, _ rhs: Self) -> ScheduleEnd {
+            switch (lhs.numberOfEvents, lhs.endDate, lhs.numberOfEvents, rhs.endDate) {
+            case let (.some(numberOfEvents), .none, .none, .some(date)),
+                 let (.none, .some(date), .some(numberOfEvents), .none):
+                return .numberOfEventsOrEndDate(numberOfEvents, date)
+            case let (nil, .some(lhsDate), nil, .some(rhsDate)):
+                return .endDate(min(lhsDate, rhsDate))
+            case let (.some(lhsNumberOfEvents), nil, .some(rhsNumberOfEvents), nil):
+                return .numberOfEvents(min(lhsNumberOfEvents, rhsNumberOfEvents))
+            case let (.some(lhsNumberOfEvents), nil, .some(rhsNumberOfEvents), .some(date)),
+                 let (.some(lhsNumberOfEvents), .some(date), .some(rhsNumberOfEvents), nil):
+                return .numberOfEventsOrEndDate(min(lhsNumberOfEvents, rhsNumberOfEvents), date)
+            case let (.some(numberOfEvents), .some(lhsDate), nil, .some(rhsDate)),
+                 let (nil, .some(lhsDate), .some(numberOfEvents), .some(rhsDate)):
+                return .numberOfEventsOrEndDate(numberOfEvents, min(lhsDate, rhsDate))
+            case let (.some(lhsNumberOfEvents), .some(lhsDate), .some(rhsNumberOfEvents), .some(rhsDate)):
+                return .numberOfEventsOrEndDate(min(lhsNumberOfEvents, rhsNumberOfEvents), min(lhsDate, rhsDate))
+            case (.none, .none, _, _), (_, _, .none, .none):
+                fatalError("An ScheduleEnd must always either have an endDate or an numberOfEvents")
+            }
+        }
+    }
+    
+    
     let start: Date
-    let end: Date?
+    let dateComponents: DateComponents
+    let end: ScheduleEnd
+    
+    
+    init(start: Date, dateComponents: DateComponents, end: ScheduleEnd) {
+        self.start = start
+        self.dateComponents = dateComponents
+        self.end = end
+    }
+    
+    
+    func dates(from start: Date? = nil, to end: ScheduleEnd? = nil) -> [Date] {
+        let start = max(start ?? self.start, self.start)
+        let end = ScheduleEnd.minimum(end ?? self.end, self.end)
+        
+        var dates: [Date] = []
+        Calendar.current.enumerateDates(startingAfter: start, matching: dateComponents, matchingPolicy: .nextTime) { result, _, stop in
+            guard let result else {
+                return
+            }
+            
+            if let maxNumberOfEvents = end.numberOfEvents, dates.count > maxNumberOfEvents {
+                stop = true
+                return
+            }
+            
+            if let maxEndDate = end.endDate, result > maxEndDate {
+                stop = true
+                return
+            }
+            
+            dates.append(result)
+        }
+        return dates
+    }
 }
 
 
