@@ -52,7 +52,7 @@ final class HealthKitTests: TestAppUITests {
         
         try exitAppAndOpenHealth(.electrocardiograms)
         
-        sleep(1)
+        sleep(2)
         
         XCTAssertEqual(
             HealthDataType.numberOfHKTypeNames(in: app),
@@ -61,7 +61,7 @@ final class HealthKitTests: TestAppUITests {
         
         try exitAppAndOpenHealth(.steps)
         
-        sleep(1)
+        sleep(2)
         
         XCTAssertEqual(
             HealthDataType.numberOfHKTypeNames(in: app),
@@ -70,7 +70,7 @@ final class HealthKitTests: TestAppUITests {
         
         try exitAppAndOpenHealth(.pushes)
         
-        sleep(1)
+        sleep(2)
         
         XCTAssertEqual(
             HealthDataType.numberOfHKTypeNames(in: app),
@@ -79,7 +79,7 @@ final class HealthKitTests: TestAppUITests {
         
         try exitAppAndOpenHealth(.restingHeartRate)
         
-        sleep(1)
+        sleep(2)
         
         XCTAssertEqual(
             HealthDataType.numberOfHKTypeNames(in: app),
@@ -88,7 +88,7 @@ final class HealthKitTests: TestAppUITests {
         
         try exitAppAndOpenHealth(.activeEnergy)
         
-        sleep(1)
+        sleep(2)
         
         XCTAssertEqual(
             HealthDataType.numberOfHKTypeNames(in: app),
@@ -97,7 +97,7 @@ final class HealthKitTests: TestAppUITests {
         
         app.buttons["Trigger data source collection"].tap()
         
-        sleep(1)
+        sleep(2)
         
         XCTAssertEqual(
             HealthDataType.numberOfHKTypeNames(in: app),

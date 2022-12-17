@@ -10,6 +10,53 @@ import XCTest
 
 
 final class OnboardingTests: TestAppUITests {
+    func testOnboardingConsent() throws {
+        let app = XCUIApplication()
+        app.launch()
+        
+        app.collectionViews.buttons["OnboardingTests"].tap()
+        app.collectionViews.buttons["Consent View"].tap()
+        
+        XCTAssert(app.staticTexts["Consent"].exists)
+        XCTAssert(app.staticTexts["Version 1.0"].exists)
+        XCTAssert(app.staticTexts["This is a markdown example"].exists)
+        
+        XCTAssertFalse(app.staticTexts["Leland Stanford"].exists)
+        XCTAssertFalse(app.staticTexts["X"].exists)
+        
+        hitConsentButton(app)
+        
+        #if targetEnvironment(simulator) && (arch(i386) || arch(x86_64))
+            throw XCTSkip("PKCanvas view-related tests are currently skipped on Intel-based iOS simulators due to a metal bug on the simulator.")
+        #endif
+        
+        app.enter(value: "Leland", in: "Enter your given name ...")
+        app.enter(value: "Stanford", in: "Enter your family name ...")
+        
+        hitConsentButton(app)
+        
+        app.staticTexts["Leland Stanford"].swipeRight()
+        app.buttons["Undo"].tap()
+        
+        hitConsentButton(app)
+        
+        app.staticTexts["X"].swipeRight()
+        
+        hitConsentButton(app)
+        
+        XCTAssert(app.staticTexts["Welcome"].exists)
+        XCTAssert(app.staticTexts["CardinalKit UI Tests"].exists)
+    }
+    
+    private func hitConsentButton(_ app: XCUIApplication) {
+        if app.staticTexts["This is a markdown example"].isHittable {
+            app.staticTexts["This is a markdown example"].swipeUp()
+        } else {
+            print("Can not scroll down.")
+        }
+        app.buttons["I Consent"].tap()
+    }
+    
     func testOnboardingView() throws {
         let app = XCUIApplication()
         app.launch()
@@ -71,7 +118,7 @@ final class OnboardingTests: TestAppUITests {
         XCTAssert(app.staticTexts["Third thing to know"].exists)
         app.buttons["Continue"].tap()
         
-        XCTAssert(app.staticTexts["Welcome"].exists)
-        XCTAssert(app.staticTexts["CardinalKit UI Tests"].exists)
+        XCTAssert(app.staticTexts["Consent"].exists)
+        XCTAssert(app.staticTexts["Version 1.0"].exists)
     }
 }

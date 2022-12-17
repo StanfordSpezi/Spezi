@@ -74,9 +74,9 @@ public struct OnboardingView<TitleView: View, ContentView: View, ActionView: Vie
     ///   - contentView: The content view.
     ///   - actionView: The action view displayed at the bottom.
     public init(
-        @ViewBuilder titleView: () -> TitleView,
+        @ViewBuilder titleView: () -> TitleView = { EmptyView() },
         @ViewBuilder contentView: () -> ContentView,
-        @ViewBuilder actionView: () -> ActionView? = { nil }
+        @ViewBuilder actionView: () -> ActionView
     ) {
         self.titleView = titleView()
         self.contentView = contentView()
