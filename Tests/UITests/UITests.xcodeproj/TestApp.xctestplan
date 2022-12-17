@@ -43,6 +43,11 @@
         },
         {
           "containerPath" : "container:..\/..",
+          "identifier" : "Onboarding",
+          "name" : "Onboarding"
+        },
+        {
+          "containerPath" : "container:..\/..",
           "identifier" : "SecureStorage",
           "name" : "SecureStorage"
         },
