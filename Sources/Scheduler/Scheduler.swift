@@ -10,28 +10,34 @@ import CardinalKit
 import Foundation
 
 
-class Event: Codable, Identifiable, Hashable {
+actor Lock {
+    var lock: Bool = false
+    
+    
+    func enter(_ closure: () -> Void) {
+        precondition(lock == false)
+        lock = true
+        closure()
+        lock = false
+    }
+}
+
+final class Event: Codable, Identifiable, Hashable, @unchecked Sendable {
     enum CodingKeys: CodingKey {
         case scheduledAt
         case completedAt
     }
     
     
+    private let lock = Lock()
     let scheduledAt: Date
-    var completedAt: Date?
-    weak var task: EventsContainer?
+    private(set) var completedAt: Date?
+    fileprivate weak var eventsContainer: EventsContainer?
     
     
     var complete: Bool {
         get {
             completedAt != nil
-        }
-        set {
-            if newValue {
-                completedAt = Date()
-            } else {
-                completedAt = nil
-            }
         }
     }
     
@@ -40,9 +46,9 @@ class Event: Codable, Identifiable, Hashable {
     }
     
     
-    init(scheduledAt: Date, task: EventsContainer) {
+    fileprivate init(scheduledAt: Date, eventsContainer: EventsContainer) {
         self.scheduledAt = scheduledAt
-        self.task = task
+        self.eventsContainer = eventsContainer
     }
     
     
@@ -54,10 +60,22 @@ class Event: Codable, Identifiable, Hashable {
     func hash(into hasher: inout Hasher) {
         hasher.combine(scheduledAt)
     }
+    
+    func complete(_ newValue: Bool) async {
+        await lock.enter {
+            if newValue {
+                completedAt = Date()
+                eventsContainer?.completedEvents[scheduledAt] = self
+            } else {
+                eventsContainer?.completedEvents[scheduledAt] = nil
+                completedAt = nil
+            }
+        }
+    }
 }
 
 
-class Schedule: Codable {
+final class Schedule: Codable, Sendable {
     enum ScheduleEnd: Codable {
         case numberOfEvents(Int)
         case endDate(Date)
@@ -146,18 +164,18 @@ class Schedule: Codable {
 }
 
 
-protocol EventsContainer: AnyObject {
-    var completedEvents: Set<Event> { get set }
+fileprivate protocol EventsContainer: AnyObject {
+    var completedEvents: [Date: Event] { get set }
 }
 
 
-class Task<Context: Codable>: Codable, Identifiable, Hashable, EventsContainer {
+final class Task<Context: Codable & Sendable>: Codable, Identifiable, Hashable, @unchecked Sendable, EventsContainer {
     let id: UUID
     let title: String
     let description: String
     let schedule: Schedule
     let context: Context
-    var completedEvents: Set<Event>
+    fileprivate(set) var completedEvents: [Date: Event]
     
     
     init(title: String, description: String, schedule: Schedule, context: Context) {
@@ -166,7 +184,7 @@ class Task<Context: Codable>: Codable, Identifiable, Hashable, EventsContainer {
         self.description = description
         self.schedule = schedule
         self.context = context
-        self.completedEvents = []
+        self.completedEvents = [:]
     }
     
     
@@ -177,10 +195,10 @@ class Task<Context: Codable>: Codable, Identifiable, Hashable, EventsContainer {
         self.description = try container.decode(String.self, forKey: Task<Context>.CodingKeys.description)
         self.schedule = try container.decode(Schedule.self, forKey: Task<Context>.CodingKeys.schedule)
         self.context = try container.decode(Context.self, forKey: Task<Context>.CodingKeys.context)
-        self.completedEvents = try container.decode(Set<Event>.self, forKey: Task<Context>.CodingKeys.completedEvents)
+        self.completedEvents = try container.decode([Date : Event].self, forKey: Task<Context>.CodingKeys.completedEvents)
         
-        for completedEvent in completedEvents {
-            completedEvent.task = self
+        for completedEvent in completedEvents.values {
+            completedEvent.eventsContainer = self
         }
     }
     
@@ -189,6 +207,13 @@ class Task<Context: Codable>: Codable, Identifiable, Hashable, EventsContainer {
         lhs.id == rhs.id
     }
     
+    
+    func events(from start: Date? = nil, to end: Schedule.ScheduleEnd? = nil) -> [Event] {
+        let dates = schedule.dates(from: start, to: end)
+        return dates.map { date in
+            completedEvents[date] ?? Event(scheduledAt: date, eventsContainer: self)
+        }
+    }
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
