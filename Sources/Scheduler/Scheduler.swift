@@ -11,7 +11,7 @@ import Foundation
 
 
 actor Lock {
-    var lock: Bool = false
+    var lock = false
     
     
     func enter(_ closure: () -> Void) {
@@ -36,9 +36,7 @@ final class Event: Codable, Identifiable, Hashable, @unchecked Sendable {
     
     
     var complete: Bool {
-        get {
-            completedAt != nil
-        }
+        completedAt != nil
     }
     
     var id: Date {
@@ -164,7 +162,7 @@ final class Schedule: Codable, Sendable {
 }
 
 
-fileprivate protocol EventsContainer: AnyObject {
+private protocol EventsContainer: AnyObject {
     var completedEvents: [Date: Event] { get set }
 }
 
@@ -195,7 +193,7 @@ final class Task<Context: Codable & Sendable>: Codable, Identifiable, Hashable, 
         self.description = try container.decode(String.self, forKey: Task<Context>.CodingKeys.description)
         self.schedule = try container.decode(Schedule.self, forKey: Task<Context>.CodingKeys.schedule)
         self.context = try container.decode(Context.self, forKey: Task<Context>.CodingKeys.context)
-        self.completedEvents = try container.decode([Date : Event].self, forKey: Task<Context>.CodingKeys.completedEvents)
+        self.completedEvents = try container.decode([Date: Event].self, forKey: Task<Context>.CodingKeys.completedEvents)
         
         for completedEvent in completedEvents.values {
             completedEvent.eventsContainer = self
