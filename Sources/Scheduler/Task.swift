@@ -10,7 +10,17 @@ import Foundation
 
 
 /// <#Description#>
-public final class Task<Context: Codable & Sendable>: Codable, Identifiable, Hashable, @unchecked Sendable, EventContext {
+public final class Task<Context: Codable & Sendable>: Codable, Identifiable, Hashable, ObservableObject, @unchecked Sendable, EventContext {
+    enum CodingKeys: CodingKey {
+        case id
+        case title
+        case description
+        case schedule
+        case context
+        case completedEvents
+    }
+    
+    
     /// <#Description#>
     public let id: UUID
     /// <#Description#>
@@ -21,7 +31,7 @@ public final class Task<Context: Codable & Sendable>: Codable, Identifiable, Has
     public let schedule: Schedule
     /// <#Description#>
     public let context: Context
-    var completedEvents: [Date: Event]
+    @Published var completedEvents: [Date: Event]
     
     
     /// <#Description#>
@@ -30,7 +40,7 @@ public final class Task<Context: Codable & Sendable>: Codable, Identifiable, Has
     ///   - description: <#description description#>
     ///   - schedule: <#schedule description#>
     ///   - context: <#context description#>
-    init(title: String, description: String, schedule: Schedule, context: Context) {
+    public init(title: String, description: String, schedule: Schedule, context: Context) {
         self.id = UUID()
         self.title = title
         self.description = description
@@ -41,13 +51,13 @@ public final class Task<Context: Codable & Sendable>: Codable, Identifiable, Has
     
     
     public required init(from decoder: Decoder) throws {
-        let container: KeyedDecodingContainer<Task<Context>.CodingKeys> = try decoder.container(keyedBy: Task<Context>.CodingKeys.self)
-        self.id = try container.decode(UUID.self, forKey: Task<Context>.CodingKeys.id)
-        self.title = try container.decode(String.self, forKey: Task<Context>.CodingKeys.title)
-        self.description = try container.decode(String.self, forKey: Task<Context>.CodingKeys.description)
-        self.schedule = try container.decode(Schedule.self, forKey: Task<Context>.CodingKeys.schedule)
-        self.context = try container.decode(Context.self, forKey: Task<Context>.CodingKeys.context)
-        self.completedEvents = try container.decode([Date: Event].self, forKey: Task<Context>.CodingKeys.completedEvents)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = try container.decode(UUID.self, forKey: .id)
+        self.title = try container.decode(String.self, forKey: .title)
+        self.description = try container.decode(String.self, forKey: .description)
+        self.schedule = try container.decode(Schedule.self, forKey: .schedule)
+        self.context = try container.decode(Context.self, forKey: .context)
+        self.completedEvents = try container.decode([Date: Event].self, forKey: .completedEvents)
         
         for completedEvent in completedEvents.values {
             completedEvent.eventContext = self
@@ -74,6 +84,15 @@ public final class Task<Context: Codable & Sendable>: Codable, Identifiable, Has
             }
     }
     
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
+        try container.encode(title, forKey: .title)
+        try container.encode(description, forKey: .description)
+        try container.encode(schedule, forKey: .schedule)
+        try container.encode(context, forKey: .context)
+        try container.encode(completedEvents, forKey: .completedEvents)
+    }
     
     public func hash(into hasher: inout Hasher) {
         hasher.combine(id)

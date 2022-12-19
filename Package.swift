@@ -115,6 +115,12 @@ let package = Package(
                 .target(name: "CardinalKit")
             ]
         ),
+        .testTarget(
+            name: "SchedulerTests",
+            dependencies: [
+                .target(name: "Scheduler")
+            ]
+        ),
         .target(
             name: "SecureStorage",
             dependencies: [

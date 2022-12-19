@@ -41,7 +41,7 @@ public struct Schedule: Codable, Sendable {
         
         
         static func minimum(_ lhs: Self, _ rhs: Self) -> ScheduleEnd {
-            switch (lhs.numberOfEvents, lhs.endDate, lhs.numberOfEvents, rhs.endDate) {
+            switch (lhs.numberOfEvents, lhs.endDate, rhs.numberOfEvents, rhs.endDate) {
             case let (.some(numberOfEvents), .none, .none, .some(date)),
                  let (.none, .some(date), .some(numberOfEvents), .none):
                 return .numberOfEventsOrEndDate(numberOfEvents, date)
@@ -109,17 +109,24 @@ public struct Schedule: Codable, Sendable {
     ///   - start: <#start description#>
     ///   - end: <#end description#>
     /// - Returns: <#description#>
-    public func dates(from start: Date? = nil, to end: ScheduleEnd? = nil) -> [Date] {
-        let start = max(start ?? self.start, self.start)
+    public func dates(from searchStart: Date? = nil, to end: ScheduleEnd? = nil) -> [Date] {
         let end = ScheduleEnd.minimum(end ?? self.end, self.end)
         
         var dates: [Date] = []
-        calendar.enumerateDates(startingAfter: start, matching: dateComponents, matchingPolicy: .nextTime) { result, _, stop in
+        var numberOfEvents = 0
+        
+        calendar.enumerateDates(startingAfter: self.start, matching: dateComponents, matchingPolicy: .nextTime) { result, _, stop in
             guard let result else {
+                stop = true
                 return
             }
             
-            if let maxNumberOfEvents = end.numberOfEvents, dates.count > maxNumberOfEvents {
+            numberOfEvents += 1
+            if result < (searchStart ?? self.start) {
+                return
+            }
+            
+            if let maxNumberOfEvents = end.numberOfEvents, numberOfEvents > maxNumberOfEvents {
                 stop = true
                 return
             }

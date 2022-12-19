@@ -75,4 +75,9 @@ public final class Event: Codable, Identifiable, Hashable, @unchecked Sendable {
             }
         }
     }
+    
+    
+    public func toggle() async {
+        await complete(!complete)
+    }
 }
