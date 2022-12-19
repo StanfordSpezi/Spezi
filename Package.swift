@@ -25,6 +25,7 @@ let package = Package(
         .library(name: "HealthKitDataSource", targets: ["HealthKitDataSource"]),
         .library(name: "LocalStorage", targets: ["LocalStorage"]),
         .library(name: "Onboarding", targets: ["Onboarding"]),
+        .library(name: "Scheduler", targets: ["Scheduler"]),
         .library(name: "SecureStorage", targets: ["SecureStorage"]),
         .library(name: "Views", targets: ["Views"]),
         .library(name: "XCTRuntimeAssertions", targets: ["XCTRuntimeAssertions"])
@@ -106,6 +107,18 @@ let package = Package(
             ],
             resources: [
                 .process("Resources")
+            ]
+        ),
+        .target(
+            name: "Scheduler",
+            dependencies: [
+                .target(name: "CardinalKit")
+            ]
+        ),
+        .testTarget(
+            name: "SchedulerTests",
+            dependencies: [
+                .target(name: "Scheduler")
             ]
         ),
         .target(

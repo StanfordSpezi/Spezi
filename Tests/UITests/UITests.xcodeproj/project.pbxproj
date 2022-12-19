@@ -40,6 +40,7 @@
 		2F8A43222913172E005D2B8F /* ObservableComponentTestsComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8A43212913172E005D2B8F /* ObservableComponentTestsComponent.swift */; };
 		2F8A43242913174B005D2B8F /* ObservableObjectTestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8A43232913174B005D2B8F /* ObservableObjectTestsView.swift */; };
 		2F8A4326291317AA005D2B8F /* LocalStorageTestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8A4325291317AA005D2B8F /* LocalStorageTestsView.swift */; };
+		2F8CC7D8294D2B6A00358B7E /* Scheduler in Frameworks */ = {isa = PBXBuildFile; productRef = 2F8CC7D7294D2B6A00358B7E /* Scheduler */; };
 		2F9F07E2290906A200CDC598 /* SecureStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9F07E1290906A200CDC598 /* SecureStorageTests.swift */; };
 		2F9F07E5290906E200CDC598 /* SecureStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9F07E4290906E200CDC598 /* SecureStorageTests.swift */; };
 		2F9F07E7290907C600CDC598 /* XCTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9F07E6290907C600CDC598 /* XCTest.swift */; };
@@ -133,6 +134,7 @@
 			files = (
 				2F4F0390294A66FB0062D4C7 /* LocalStorage in Frameworks */,
 				2F4F0394294A66FB0062D4C7 /* SecureStorage in Frameworks */,
+				2F8CC7D8294D2B6A00358B7E /* Scheduler in Frameworks */,
 				2F4F038A294A66FB0062D4C7 /* Contact in Frameworks */,
 				2F4F038C294A66FB0062D4C7 /* FHIR in Frameworks */,
 				2F4F038E294A66FB0062D4C7 /* HealthKitDataSource in Frameworks */,
@@ -349,6 +351,7 @@
 				2F4F0393294A66FB0062D4C7 /* SecureStorage */,
 				2F4F0395294A66FB0062D4C7 /* XCTRuntimeAssertions */,
 				2F532EA9294CD87900A4061E /* Views */,
+				2F8CC7D7294D2B6A00358B7E /* Scheduler */,
 			);
 			productName = Example;
 			productReference = 2F6D139228F5F384007C25D6 /* TestApp.app */;
@@ -791,6 +794,10 @@
 		2F532EA9294CD87900A4061E /* Views */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Views;
+		};
+		2F8CC7D7294D2B6A00358B7E /* Scheduler */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Scheduler;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

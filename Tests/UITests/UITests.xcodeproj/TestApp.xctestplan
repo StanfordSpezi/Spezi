@@ -60,6 +60,11 @@
           "containerPath" : "container:..\/..",
           "identifier" : "XCTRuntimeAssertions",
           "name" : "XCTRuntimeAssertions"
+        },
+        {
+          "containerPath" : "container:..\/..",
+          "identifier" : "Scheduler",
+          "name" : "Scheduler"
         }
       ]
     },
