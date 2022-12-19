@@ -9,7 +9,9 @@
 import Foundation
 
 
-/// <#Description#>
+/// A ``Task`` defines an instruction that is scheduled one to multiple times as defined by the ``Task/schedule`` property.
+///
+/// A ``Task`` can have an additional ``Task/context`` associated with it that can be used to carry application-specific context.
 public final class Task<Context: Codable & Sendable>: Codable, Identifiable, Hashable, ObservableObject, @unchecked Sendable, EventContext {
     enum CodingKeys: CodingKey {
         case id
@@ -21,25 +23,25 @@ public final class Task<Context: Codable & Sendable>: Codable, Identifiable, Has
     }
     
     
-    /// <#Description#>
+    /// The unique identifier of the ``Task``.
     public let id: UUID
-    /// <#Description#>
+    /// The title of the ``Task``.
     public let title: String
-    /// <#Description#>
+    /// The description of the ``Task``.
     public let description: String
-    /// <#Description#>
+    /// The description of the ``Task`` as defined by a ``Schedule`` instance.
     public let schedule: Schedule
-    /// <#Description#>
+    /// The customized context of the ``Task``.
     public let context: Context
     @Published var completedEvents: [Date: Event]
     
     
-    /// <#Description#>
+    /// Creates a new ``Task`` instance.
     /// - Parameters:
-    ///   - title: <#title description#>
-    ///   - description: <#description description#>
-    ///   - schedule: <#schedule description#>
-    ///   - context: <#context description#>
+    ///   - title: The title of the ``Task``.
+    ///   - description: The description of the ``Task``.
+    ///   - schedule: The description of the ``Task`` as defined by a ``Schedule`` instance.
+    ///   - context: The customized context of the ``Task``.
     public init(title: String, description: String, schedule: Schedule, context: Context) {
         self.id = UUID()
         self.title = title
@@ -70,11 +72,10 @@ public final class Task<Context: Codable & Sendable>: Codable, Identifiable, Has
     }
     
     
-    /// <#Description#>
+    /// Returns all ``Event``s corresponding to a ``Task`` withi the `start` and `end` parameters.
     /// - Parameters:
-    ///   - start: <#start description#>
-    ///   - end: <#end description#>
-    /// - Returns: <#description#>
+    ///   - start: The start of the requested series of `Event`s. The start date of the ``Task/schedule`` is used if the start date is before the ``Task/schedule``'s start date.
+    ///   - end: The end of the requested series of `Event`s. The end (number of events or date) of the ``Task/schedule`` is used if the start date is after the ``Task/schedule``'s end.
     public func events(from start: Date? = nil, to end: Schedule.ScheduleEnd? = nil) -> [Event] {
         let dates = schedule.dates(from: start, to: end)
         

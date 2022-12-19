@@ -9,7 +9,10 @@
 import Foundation
 
 
-/// <#Description#>
+/// An  ``Event`` describes a unique point in time when a ``Task`` is scheduled. Use events to display the recurring nature of a ``Task`` to a user.
+///
+/// Use the  ``Event/complete(_:)`` and ``Event/toggle()`` functions to mark an Event as complete. You can access the scheduled date of an
+/// event using ``Event/scheduledAt`` and the completed date using the ``Event/completedAt`` properties.
 public final class Event: Codable, Identifiable, Hashable, @unchecked Sendable {
     enum CodingKeys: String, CodingKey {
         // We use the underscore as the corresponding property `_scheduledAt` uses an underscore as it is a private property.
@@ -21,11 +24,12 @@ public final class Event: Codable, Identifiable, Hashable, @unchecked Sendable {
     
     private let lock = Lock()
     private let _scheduledAt: Date
-    private(set) var completedAt: Date?
+    /// The date when the ``Event`` was completed.
+    public private(set) var completedAt: Date?
     weak var eventContext: EventContext?
     
     
-    /// <#Description#>
+    /// The date when the ``Event`` is scheduled at.
     public var scheduledAt: Date {
         guard let eventsContainer = eventContext else {
             return _scheduledAt
@@ -37,7 +41,7 @@ public final class Event: Codable, Identifiable, Hashable, @unchecked Sendable {
         return _scheduledAt.addingTimeInterval(timeZoneDifference)
     }
     
-    /// <#Description#>
+    /// Indictes if the ``Event`` is complete.
     public var complete: Bool {
         completedAt != nil
     }
@@ -63,8 +67,8 @@ public final class Event: Codable, Identifiable, Hashable, @unchecked Sendable {
         hasher.combine(_scheduledAt)
     }
     
-    /// <#Description#>
-    /// - Parameter newValue: <#newValue description#>
+    /// Use this function to mark an ``Event`` as complete or incomplete.
+    /// - Parameter newValue: The new state of the ``Event``.
     public func complete(_ newValue: Bool) async {
         await lock.enter {
             if newValue {
@@ -78,6 +82,7 @@ public final class Event: Codable, Identifiable, Hashable, @unchecked Sendable {
     }
     
     
+    /// Toggle the ``Event``'s ``Event/complete`` state.
     public func toggle() async {
         await complete(!complete)
     }

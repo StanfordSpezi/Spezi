@@ -11,14 +11,19 @@ import Combine
 import Foundation
 
 
+/// The ``Scheduler/Scheduler`` module allows the scheduling and observation of ``Task``s adhering to a sepcific ``Schedule``.
+///
+/// Use the ``Scheduler/Scheduler/init(tasks:)`` initializer or the ``Scheduler/Scheduler/schedule(task:)`` function
+/// to schedule tasks that you can obtain using the ``Scheduler/Scheduler/tasks`` property.
+/// You can use the ``Scheduler/Scheduler`` as an `ObservableObject` to automatically update your SwiftUI views when new events are emitted or events change.
 public class Scheduler<ComponentStandard: Standard, Context: Codable>: Module {
     public private(set) var tasks: [Task<Context>]
     private var timers: [Timer] = []
     private var cancellables: Set<AnyCancellable> = []
     
     
-    /// <#Description#>
-    /// - Parameter tasks: <#tasks description#>
+    /// Creates a new ``Scheduler`` module.
+    /// - Parameter tasks: The initial set of ``Task``s.
     public init(tasks: [Task<Context>] = []) {
         self.tasks = []
         self.tasks.reserveCapacity(tasks.count)
@@ -36,8 +41,8 @@ public class Scheduler<ComponentStandard: Standard, Context: Codable>: Module {
     }
     
     
-    /// <#Description#>
-    /// - Parameter task: <#task description#>
+    /// Schedule a new ``Task`` in the ``Scheduler`` module.
+    /// - Parameter task: The new ``Task`` instance that should be scheduled.
     public func schedule(task: Task<Context>) {
         let futureEvents = task.events(from: .now, to: .endDate(.distantFuture))
         timers.reserveCapacity(timers.count + futureEvents.count)

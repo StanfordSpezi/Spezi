@@ -9,15 +9,18 @@
 import Foundation
 
 
-/// <#Description#>
+/// A ``Schedule`` describe how a ``Task`` should schedule ``Event``.
+/// Use the ``Schedule``.s ``Schedule/init(start:dateComponents:end:calendar:)`` initializer to define
+/// the start date, the repetition schedule, and the end time of the ``Schedule``
 public struct Schedule: Codable, Sendable {
-    /// <#Description#>
+    /// The ``ScheduleEnd`` defines the end of a ``Schedule`` by either using a finite number of events (``ScheduleEnd/numberOfEvents(_:)``),
+    /// an end date (``ScheduleEnd/endDate(_:)``) or a combination of both (``ScheduleEnd/numberOfEventsOrEndDate(_:_:)``).
     public enum ScheduleEnd: Codable, Sendable {
-        /// <#Description#>
+        /// The end of the ``Schedule`` is defined by a finite number of events.
         case numberOfEvents(Int)
-        /// <#Description#>
+        /// The end of the ``Schedule`` is defined by an end date.
         case endDate(Date)
-        /// <#Description#>
+        /// The end of the ``Schedule`` is defined by a finite number of events or an end date, whatever comes earlier.
         case numberOfEventsOrEndDate(Int, Date)
         
         
@@ -64,22 +67,22 @@ public struct Schedule: Codable, Sendable {
     }
     
     
-    /// <#Description#>
+    /// The start of the ``Schedule``
     public let start: Date
-    /// <#Description#>
+    /// The `DateComponents` describing the repetition of the ``Schedule``
     public let dateComponents: DateComponents
-    /// <#Description#>
+    /// The end of the ``Schedule`` using a ``ScheduleEnd``.
     public let end: ScheduleEnd
-    /// <#Description#>
+    /// The `Calendar` used to schedule the ``Schedule`` including the time zone and locale.
     public let calendar: Calendar
     
     
-    /// <#Description#>
+    /// Creates a new ``Schedule``
     /// - Parameters:
-    ///   - start: <#start description#>
-    ///   - dateComponents: <#dateComponents description#>
-    ///   - calendar: <#calendar description#>
-    ///   - end: <#end description#>
+    ///   - start: The start of the ``Schedule``
+    ///   - dateComponents: The `DateComponents` describing the repetition of the ``Schedule``
+    ///   - calendar: The end of the ``Schedule`` using a ``ScheduleEnd``.
+    ///   - end: The `Calendar` used to schedule the ``Schedule`` including the time zone and locale.
     public init(start: Date, dateComponents: DateComponents, end: ScheduleEnd, calendar: Calendar = .current) {
         self.start = start
         self.dateComponents = dateComponents
@@ -104,11 +107,10 @@ public struct Schedule: Codable, Sendable {
     }
     
     
-    /// <#Description#>
+    /// Returns all `Date`s between the provided `start` and `end` of the ``Schedule`` instance.
     /// - Parameters:
-    ///   - start: <#start description#>
-    ///   - end: <#end description#>
-    /// - Returns: <#description#>
+    ///   - start: The start of the requested series of `Date`s. The start date of the ``Schedule`` is used if the start date is before the ``Schedule``'s start date.
+    ///   - end: The end of the requested series of `Date`s. The end (number of events or date) of the ``Schedule`` is used if the start date is after the ``Schedule``'s end.
     public func dates(from searchStart: Date? = nil, to end: ScheduleEnd? = nil) -> [Date] {
         let end = ScheduleEnd.minimum(end ?? self.end, self.end)
         
