@@ -94,7 +94,7 @@ public struct Schedule: Codable, Sendable {
         
         // We allow a remote instance of default configuration to use "current" as a valid string value for a calendar and
         // set it to the `.current` calendar value.
-        if try container.decode(String.self, forKey: .calendar) == "current" {
+        if let calendarString = try? container.decodeIfPresent(String.self, forKey: .calendar), calendarString == "current" {
             self.calendar = .current
         } else {
             self.calendar = try container.decode(Calendar.self, forKey: .calendar)

@@ -10,6 +10,7 @@ import Foundation
 
 
 protocol EventContext: AnyObject {
+    var id: UUID { get }
     var schedule: Schedule { get }
     var completedEvents: [Date: Event] { get set }
 }

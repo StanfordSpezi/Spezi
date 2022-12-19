@@ -42,8 +42,8 @@ public final class Event: Codable, Identifiable, Hashable, @unchecked Sendable {
         completedAt != nil
     }
     
-    public var id: Date {
-        _scheduledAt
+    public var id: String {
+        "\(eventContext?.id.uuidString ?? "").\(_scheduledAt.description)"
     }
     
     
@@ -54,11 +54,12 @@ public final class Event: Codable, Identifiable, Hashable, @unchecked Sendable {
     
     
     public static func == (lhs: Event, rhs: Event) -> Bool {
-        lhs._scheduledAt == rhs._scheduledAt
+        lhs.eventContext?.id == rhs.eventContext?.id && lhs.scheduledAt == rhs.scheduledAt
     }
     
     
     public func hash(into hasher: inout Hasher) {
+        hasher.combine(eventContext?.id)
         hasher.combine(_scheduledAt)
     }
     
