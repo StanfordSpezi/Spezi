@@ -15,3 +15,30 @@ SPDX-License-Identifier: MIT
 ## Overview
 
 This is an example for a DocC documentation for the CardinalKit package.
+
+
+## Topics
+
+### CardinalKit Setup
+
+- <doc:Setup>
+- ``CardinalKit/CardinalKit``
+- ``CardinalKitAppDelegate``
+- ``Standard``
+
+### Modules
+
+You can learn more about module capabilites at ...
+
+- ``Module``
+- <doc:ModuleCapabilities>
+
+### Data Sources
+
+- ``DataSourceRegistry``
+- ``DataSourceRegistryAdapter``
+
+### Data Storage Providers
+
+- ``DataStorageProvider``
+- ``EncodableAdapter``
