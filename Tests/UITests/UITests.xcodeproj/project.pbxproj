@@ -32,6 +32,7 @@
 		2F7B6CB3294BCA8200FDC494 /* ViewStateTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7B6CB2294BCA8200FDC494 /* ViewStateTestView.swift */; };
 		2F817A4A294B152B00A39983 /* ViewsTestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F817A49294B152B00A39983 /* ViewsTestsView.swift */; };
 		2F817A4C294B16A000A39983 /* ViewsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F817A4B294B16A000A39983 /* ViewsTests.swift */; };
+		2F87F9F12953EEB400810247 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F87F9F02953EEB400810247 /* GoogleService-Info.plist */; };
 		2F8A431529130B9B005D2B8F /* TestAppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8A431429130B9B005D2B8F /* TestAppView.swift */; };
 		2F8A431729130BBC005D2B8F /* TestAppStandard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8A431629130BBC005D2B8F /* TestAppStandard.swift */; };
 		2F8A431929130CA7005D2B8F /* TestAppTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8A431829130CA7005D2B8F /* TestAppTestCase.swift */; };
@@ -62,6 +63,7 @@
 		2FC2C408291DCC8200712676 /* HealthKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC2C407291DCC8200712676 /* HealthKitTests.swift */; };
 		2FD6390C294B0A4B008BADFC /* OnboardingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD6390B294B0A4B008BADFC /* OnboardingTests.swift */; };
 		2FE122B2294247480016B162 /* XCUIApplication+TextEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE122B1294247480016B162 /* XCUIApplication+TextEntry.swift */; };
+		2FF5BB8B295430770093F0AB /* FirebaseDataStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 2FF5BB8A295430770093F0AB /* FirebaseDataStorage */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -95,6 +97,7 @@
 		2F7B6CB4294C03C800FDC494 /* TestApp.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = TestApp.xctestplan; path = UITests.xcodeproj/TestApp.xctestplan; sourceTree = "<group>"; };
 		2F817A49294B152B00A39983 /* ViewsTestsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewsTestsView.swift; sourceTree = "<group>"; };
 		2F817A4B294B16A000A39983 /* ViewsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewsTests.swift; sourceTree = "<group>"; };
+		2F87F9F02953EEB400810247 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		2F8A431429130B9B005D2B8F /* TestAppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAppView.swift; sourceTree = "<group>"; };
 		2F8A431629130BBC005D2B8F /* TestAppStandard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestAppStandard.swift; sourceTree = "<group>"; };
 		2F8A431829130CA7005D2B8F /* TestAppTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAppTestCase.swift; sourceTree = "<group>"; };
@@ -143,6 +146,7 @@
 				2F4F0396294A66FB0062D4C7 /* XCTRuntimeAssertions in Frameworks */,
 				2F4F0388294A66FB0062D4C7 /* CardinalKit in Frameworks */,
 				2F532EAA294CD87900A4061E /* Views in Frameworks */,
+				2FF5BB8B295430770093F0AB /* FirebaseDataStorage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -221,6 +225,7 @@
 				2F9F07ED29090AF500CDC598 /* Shared */,
 				2F6D139928F5F386007C25D6 /* Assets.xcassets */,
 				2F01E8CE291493560089C46B /* Info.plist */,
+				2F87F9F02953EEB400810247 /* GoogleService-Info.plist */,
 				2F01E8CD291490B80089C46B /* TestApp.entitlements */,
 			);
 			path = TestApp;
@@ -352,6 +357,7 @@
 				2F4F0395294A66FB0062D4C7 /* XCTRuntimeAssertions */,
 				2F532EA9294CD87900A4061E /* Views */,
 				2F8CC7D7294D2B6A00358B7E /* Scheduler */,
+				2FF5BB8A295430770093F0AB /* FirebaseDataStorage */,
 			);
 			productName = Example;
 			productReference = 2F6D139228F5F384007C25D6 /* TestApp.app */;
@@ -419,6 +425,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F6D139A28F5F386007C25D6 /* Assets.xcassets in Resources */,
+				2F87F9F12953EEB400810247 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -798,6 +805,10 @@
 		2F8CC7D7294D2B6A00358B7E /* Scheduler */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Scheduler;
+		};
+		2FF5BB8A295430770093F0AB /* FirebaseDataStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseDataStorage;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
