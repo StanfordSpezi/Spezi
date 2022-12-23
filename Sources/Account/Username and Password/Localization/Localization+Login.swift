@@ -10,7 +10,9 @@ import Views
 
 
 extension Localization {
+    /// <#Description#>
     public struct Login: Codable {
+        /// <#Description#>
         public static let `default` = Login(
             buttonTitle: String(moduleLocalized: "UAP_LOGIN_BUTTON_TITLE"),
             navigationTitle: String(moduleLocalized: "UAP_LOGIN_NAVIGATION_TITLE"),
@@ -27,15 +29,29 @@ extension Localization {
         )
         
         
+        /// <#Description#>
         public let buttonTitle: String
+        /// <#Description#>
         public let navigationTitle: String
+        /// <#Description#>
         public let username: FieldLocalization
+        /// <#Description#>
         public let password: FieldLocalization
+        /// <#Description#>
         public let loginActionButtonTitle: String
+        /// <#Description#>
         public let defaultLoginFailedError: String
         
         
-        init(
+        /// <#Description#>
+        /// - Parameters:
+        ///   - buttonTitle: <#buttonTitle description#>
+        ///   - navigationTitle: <#navigationTitle description#>
+        ///   - username: <#username description#>
+        ///   - password: <#password description#>
+        ///   - loginActionButtonTitle: <#loginActionButtonTitle description#>
+        ///   - defaultLoginFailedError: <#defaultLoginFailedError description#>
+        public init(
             buttonTitle: String = Login.default.buttonTitle,
             navigationTitle: String = Login.default.navigationTitle,
             username: FieldLocalization = Login.default.username,
@@ -43,12 +59,12 @@ extension Localization {
             loginActionButtonTitle: String = Login.default.loginActionButtonTitle,
             defaultLoginFailedError: String = Login.default.defaultLoginFailedError
         ) {
-            self.buttonTitle = buttonTitle
-            self.navigationTitle = navigationTitle
+            self.buttonTitle = buttonTitle.localized
+            self.navigationTitle = navigationTitle.localized
             self.username = username
             self.password = password
-            self.loginActionButtonTitle = loginActionButtonTitle
-            self.defaultLoginFailedError = defaultLoginFailedError
+            self.loginActionButtonTitle = loginActionButtonTitle.localized
+            self.defaultLoginFailedError = defaultLoginFailedError.localized
         }
     }
 }

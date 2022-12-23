@@ -9,7 +9,8 @@
 import SwiftUI
 
 
-struct UsernamePasswordLoginView: View {
+/// <#Description#>
+public struct UsernamePasswordLoginView: View {
     private let usernameValidationRules: [ValidationRule]
     private let passwordValidationRules: [ValidationRule]
     private let header: AnyView
@@ -25,7 +26,7 @@ struct UsernamePasswordLoginView: View {
     private let localization: ConfigurableLocalization<Localization.Login>
     
     
-    var body: some View {
+    public var body: some View {
         ScrollView {
             DataEntryAccountView(
                 buttonTitle: loginButtonTitleLocalization,
@@ -115,7 +116,14 @@ struct UsernamePasswordLoginView: View {
     }
     
     
-    init<Header: View, Footer: View>(
+    /// <#Description#>
+    /// - Parameters:
+    ///   - usernameValidationRules: <#usernameValidationRules description#>
+    ///   - passwordValidationRules: <#passwordValidationRules description#>
+    ///   - header: <#header description#>
+    ///   - footer: <#footer description#>
+    ///   - localization: <#localization description#>
+    public init<Header: View, Footer: View>(
         usernameValidationRules: [ValidationRule] = [],
         passwordValidationRules: [ValidationRule] = [],
         @ViewBuilder header: () -> Header = { EmptyView() },

@@ -10,7 +10,9 @@ import Views
 
 
 extension Localization {
+    /// <#Description#>
     public struct ResetPassword: Codable {
+        /// <#Description#>
         public static let `default` = ResetPassword(
             buttonTitle: String(moduleLocalized: "UAP_RESET_PASSWORD_BUTTON_TITLE"),
             navigationTitle: String(moduleLocalized: "UAP_RESET_PASSWORD_NAVIGATION_TITLE"),
@@ -24,15 +26,29 @@ extension Localization {
         )
         
         
+        /// <#Description#>
         public let buttonTitle: String
+        /// <#Description#>
         public let navigationTitle: String
+        /// <#Description#>
         public let username: FieldLocalization
+        /// <#Description#>
         public let resetPasswordActionbuttonTitle: String
+        /// <#Description#>
         public let processSuccessfulLabel: String
+        /// <#Description#>
         public let defaultResetPasswordFailedError: String
         
         
-        init(
+        /// <#Description#>
+        /// - Parameters:
+        ///   - buttonTitle: <#buttonTitle description#>
+        ///   - navigationTitle: <#navigationTitle description#>
+        ///   - username: <#username description#>
+        ///   - resetPasswordActionbuttonTitle: <#resetPasswordActionbuttonTitle description#>
+        ///   - processSuccessfulLabel: <#processSuccessfulLabel description#>
+        ///   - defaultResetPasswordFailedError: <#defaultResetPasswordFailedError description#>
+        public init(
             buttonTitle: String = ResetPassword.default.buttonTitle,
             navigationTitle: String = ResetPassword.default.navigationTitle,
             username: FieldLocalization = ResetPassword.default.username,
@@ -40,12 +56,12 @@ extension Localization {
             processSuccessfulLabel: String = ResetPassword.default.processSuccessfulLabel,
             defaultResetPasswordFailedError: String = ResetPassword.default.defaultResetPasswordFailedError
         ) {
-            self.buttonTitle = buttonTitle
-            self.navigationTitle = navigationTitle
+            self.buttonTitle = buttonTitle.localized
+            self.navigationTitle = navigationTitle.localized
             self.username = username
-            self.resetPasswordActionbuttonTitle = resetPasswordActionbuttonTitle
-            self.processSuccessfulLabel = processSuccessfulLabel
-            self.defaultResetPasswordFailedError = defaultResetPasswordFailedError
+            self.resetPasswordActionbuttonTitle = resetPasswordActionbuttonTitle.localized
+            self.processSuccessfulLabel = processSuccessfulLabel.localized
+            self.defaultResetPasswordFailedError = defaultResetPasswordFailedError.localized
         }
     }
 }

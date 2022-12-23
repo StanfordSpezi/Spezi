@@ -10,7 +10,9 @@
 import Views
 
 
+/// <#Description#>
 public struct Localization: Codable {
+    /// <#Description#>
     public static let `default` = Localization(
         login: Login.default,
         signUp: SignUp.default,
@@ -18,12 +20,20 @@ public struct Localization: Codable {
     )
     
     
+    /// <#Description#>
     public let login: Login
+    /// <#Description#>
     public let signUp: SignUp
+    /// <#Description#>
     public let resetPassword: ResetPassword
     
     
-    init(
+    /// <#Description#>
+    /// - Parameters:
+    ///   - login: <#login description#>
+    ///   - signUp: <#signUp description#>
+    ///   - resetPassword: <#resetPassword description#>
+    public init(
         login: Login = Localization.default.login,
         signUp: SignUp = Localization.default.signUp,
         resetPassword: ResetPassword = Localization.default.resetPassword

@@ -10,7 +10,9 @@ import Views
 
 
 extension Localization {
+    /// <#Description#>
     public struct SignUp: Codable {
+        /// <#Description#>
         public static let `default` = SignUp(
             buttonTitle: String(moduleLocalized: "UAP_SIGNUP_BUTTION_TITLE"),
             navigationTitle: String(moduleLocalized: "UAP_SIGNUP_NAVIGATION_TITLE"),
@@ -42,20 +44,46 @@ extension Localization {
         )
         
         
+        /// <#Description#>
         public let buttonTitle: String
+        /// <#Description#>
         public let navigationTitle: String
+        /// <#Description#>
         public let username: FieldLocalization
+        /// <#Description#>
         public let password: FieldLocalization
+        /// <#Description#>
         public let passwordRepeat: FieldLocalization
+        /// <#Description#>
         public let passwordNotEqualError: String
+        /// <#Description#>
         public let givenName: FieldLocalization
+        /// <#Description#>
         public let familyName: FieldLocalization
+        /// <#Description#>
         public let genderIdentityTitle: String
+        /// <#Description#>
         public let dateOfBirthTitle: String
+        /// <#Description#>
         public let signUpActionButtonTitle: String
+        /// <#Description#>
         public let defaultSignUpFailedError: String
         
         
+        /// <#Description#>
+        /// - Parameters:
+        ///   - buttonTitle: <#buttonTitle description#>
+        ///   - navigationTitle: <#navigationTitle description#>
+        ///   - username: <#username description#>
+        ///   - password: <#password description#>
+        ///   - passwordRepeat: <#passwordRepeat description#>
+        ///   - passwordNotEqualError: <#passwordNotEqualError description#>
+        ///   - givenName: <#givenName description#>
+        ///   - familyName: <#familyName description#>
+        ///   - genderIdentityTitle: <#genderIdentityTitle description#>
+        ///   - dateOfBirthTitle: <#dateOfBirthTitle description#>
+        ///   - signUpActionButtonTitle: <#signUpActionButtonTitle description#>
+        ///   - defaultSignUpFailedError: <#defaultSignUpFailedError description#>
         public init(
             buttonTitle: String = SignUp.default.buttonTitle,
             navigationTitle: String = SignUp.default.navigationTitle,
@@ -70,18 +98,18 @@ extension Localization {
             signUpActionButtonTitle: String = SignUp.default.signUpActionButtonTitle,
             defaultSignUpFailedError: String = SignUp.default.defaultSignUpFailedError
         ) {
-            self.buttonTitle = buttonTitle
-            self.navigationTitle = navigationTitle
+            self.buttonTitle = buttonTitle.localized
+            self.navigationTitle = navigationTitle.localized
             self.username = username
             self.password = password
             self.passwordRepeat = passwordRepeat
-            self.passwordNotEqualError = passwordNotEqualError
+            self.passwordNotEqualError = passwordNotEqualError.localized
             self.givenName = givenName
             self.familyName = familyName
-            self.genderIdentityTitle = genderIdentityTitle
-            self.dateOfBirthTitle = dateOfBirthTitle
-            self.signUpActionButtonTitle = signUpActionButtonTitle
-            self.defaultSignUpFailedError = defaultSignUpFailedError
+            self.genderIdentityTitle = genderIdentityTitle.localized
+            self.dateOfBirthTitle = dateOfBirthTitle.localized
+            self.signUpActionButtonTitle = signUpActionButtonTitle.localized
+            self.defaultSignUpFailedError = defaultSignUpFailedError.localized
         }
     }
 }

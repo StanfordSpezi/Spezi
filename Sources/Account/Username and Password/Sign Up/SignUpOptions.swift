@@ -9,14 +9,25 @@
 import Foundation
 
 
-struct SignUpOptions: OptionSet {
-    static let usernameAndPassword = SignUpOptions(rawValue: 1 << 0)
-    static let name = SignUpOptions(rawValue: 1 << 1)
-    static let genderIdentity = SignUpOptions(rawValue: 1 << 2)
-    static let dateOfBirth = SignUpOptions(rawValue: 1 << 3)
+/// <#Description#>
+public struct SignUpOptions: OptionSet {
+    /// <#Description#>
+    public static let usernameAndPassword = SignUpOptions(rawValue: 1 << 0)
+    /// <#Description#>
+    public static let name = SignUpOptions(rawValue: 1 << 1)
+    /// <#Description#>
+    public static let genderIdentity = SignUpOptions(rawValue: 1 << 2)
+    /// <#Description#>
+    public static let dateOfBirth = SignUpOptions(rawValue: 1 << 3)
     
-    static let `default`: SignUpOptions = [.usernameAndPassword, .name, .genderIdentity, .dateOfBirth]
+    /// <#Description#>
+    public static let `default`: SignUpOptions = [.usernameAndPassword, .name, .genderIdentity, .dateOfBirth]
     
     
-    let rawValue: Int
+    public let rawValue: Int
+    
+    
+    public init(rawValue: Int) {
+        self.rawValue = rawValue
+    }
 }

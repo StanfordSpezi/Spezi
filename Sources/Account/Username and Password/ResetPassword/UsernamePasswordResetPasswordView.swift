@@ -10,7 +10,8 @@ import SwiftUI
 import Views
 
 
-struct UsernamePasswordResetPasswordView: View {
+/// <#Description#>
+public struct UsernamePasswordResetPasswordView: View {
     private let usernameValidationRules: [ValidationRule]
     private let header: AnyView
     private let footer: AnyView
@@ -26,7 +27,7 @@ struct UsernamePasswordResetPasswordView: View {
     private let localization: ConfigurableLocalization<Localization.ResetPassword>
     
     
-    var body: some View {
+    public var body: some View {
         ScrollView {
             if processSuccess {
                 processSuccessfulView
@@ -119,7 +120,14 @@ struct UsernamePasswordResetPasswordView: View {
     }
     
     
-    init<Header: View, Footer: View, ProcessSuccessful: View>(
+    /// <#Description#>
+    /// - Parameters:
+    ///   - usernameValidationRules: <#usernameValidationRules description#>
+    ///   - header: <#header description#>
+    ///   - footer: <#footer description#>
+    ///   - processSuccessfulView: <#processSuccessfulView description#>
+    ///   - localization: <#localization description#>
+    public init<Header: View, Footer: View, ProcessSuccessful: View>(
         usernameValidationRules: [ValidationRule] = [],
         @ViewBuilder header: () -> Header = { EmptyView() },
         @ViewBuilder footer: () -> Footer = { EmptyView() },

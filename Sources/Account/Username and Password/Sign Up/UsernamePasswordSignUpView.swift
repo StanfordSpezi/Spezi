@@ -10,7 +10,8 @@ import SwiftUI
 import Views
 
 
-struct UsernamePasswordSignUpView: View {
+/// <#Description#>
+public struct UsernamePasswordSignUpView: View {
     enum Constants {
         static let formVerticalPadding: CGFloat = 8
     }
@@ -37,7 +38,7 @@ struct UsernamePasswordSignUpView: View {
     private let localization: ConfigurableLocalization<Localization.SignUp>
     
     
-    var body: some View {
+    public var body: some View {
         Form {
             header
             if signUpOptions.contains(.usernameAndPassword) {
@@ -167,7 +168,15 @@ struct UsernamePasswordSignUpView: View {
     }
     
     
-    init<Header: View, Footer: View>(
+    /// <#Description#>
+    /// - Parameters:
+    ///   - signUpOptions: <#signUpOptions description#>
+    ///   - usernameValidationRules: <#usernameValidationRules description#>
+    ///   - passwordValidationRules: <#passwordValidationRules description#>
+    ///   - header: <#header description#>
+    ///   - footer: <#footer description#>
+    ///   - localization: <#localization description#>
+    public init<Header: View, Footer: View>(
         signUpOptions: SignUpOptions = .default,
         usernameValidationRules: [ValidationRule] = [],
         passwordValidationRules: [ValidationRule] = [],

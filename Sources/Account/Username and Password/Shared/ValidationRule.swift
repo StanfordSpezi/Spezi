@@ -7,7 +7,8 @@
 //
 
 
-struct ValidationRule: Decodable {
+/// <#Description#>
+public struct ValidationRule: Decodable {
     enum CodingKeys: String, CodingKey {
         case rule
         case message
@@ -18,19 +19,27 @@ struct ValidationRule: Decodable {
     private let message: String
     
     
-    init(rule: @escaping (String) -> Bool, message: String) {
+    /// <#Description#>
+    /// - Parameters:
+    ///   - rule: <#rule description#>
+    ///   - message: <#message description#>
+    public init(rule: @escaping (String) -> Bool, message: String) {
         self.rule = rule
         self.message = message
     }
     
-    init(regex: Regex<AnyRegexOutput>, message: String) {
+    /// <#Description#>
+    /// - Parameters:
+    ///   - regex: <#regex description#>
+    ///   - message: <#message description#>
+    public init(regex: Regex<AnyRegexOutput>, message: String) {
         self.rule = { input in
             (try? regex.wholeMatch(in: input) != nil) ?? false
         }
         self.message = message
     }
     
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         
         let regexString = try values.decode(String.self, forKey: .rule)

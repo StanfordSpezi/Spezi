@@ -7,7 +7,10 @@
 //
 
 
-enum ConfigurableLocalization<T> {
+/// <#Description#>
+public enum ConfigurableLocalization<T> {
+    /// <#Description#>
     case environment
+    /// <#Description#>
     case value(T)
 }
