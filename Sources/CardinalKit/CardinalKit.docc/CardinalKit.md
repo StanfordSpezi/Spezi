@@ -1,7 +1,3 @@
-# ``CardinalKit``
-
-Open-source framework for rapid development of modern, interoperable digital health applications.
-
 <!--
                   
 This source file is part of the CardinalKit open-source project
@@ -11,6 +7,10 @@ SPDX-FileCopyrightText: 2022 Stanford University and the project authors (see CO
 SPDX-License-Identifier: MIT
              
 -->
+
+# ``CardinalKit``
+
+Open-source framework for rapid development of modern, interoperable digital health applications.
 
 ## Overview
 
