@@ -16,7 +16,7 @@ struct UsernamePasswordFields: View {
             username: FieldLocalization,
             password: FieldLocalization
         )>)
-        // We do not introduce an explicity type for the temporary usage of the localization fields.
+        // We do not introduce an explicit type for the temporary usage of the localization fields.
         // swiftlint:disable:next large_tuple
         case signUp(ConfigurableLocalization<(
             username: FieldLocalization,

@@ -13,7 +13,7 @@ extension Localization {
     /// A configuration for providing localized text for reset password views
     ///
     /// ```
-    /// Login(
+    /// ResetPassword(
     ///     buttonTitle: "Forgot Password?"
     ///     navigationTitle: "Forgot Password",
     ///     username: FieldLocalization(
