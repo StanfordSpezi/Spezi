@@ -10,7 +10,23 @@ import SwiftUI
 import Views
 
 
-/// <#Description#>
+/// A `UsernamePasswordResetPasswordView` is a view that enables users who have created an account
+/// with a username and password to reset their password using a `UsernamePasswordAccountService`
+/// passed as an EnvironmentObject.
+///
+/// If the password is successfully reset, the view passed into `processSuccessfulView` is shown.
+/// A header view, footer view, and validation rules for the username can be optionally passed in as arguments.
+///
+/// ```
+/// UsernamePasswordResetPasswordView(
+///     usernameValidationRules: [/*..*/],
+///     header: HeaderView(),
+///     footer: FooterView(),
+///     processSuccessfulView: ResetSuccessView(),
+///     localization: .environment
+/// )
+///     .environmentObject(UsernamePasswordAccountService())
+/// ``
 public struct UsernamePasswordResetPasswordView: View {
     private let usernameValidationRules: [ValidationRule]
     private let header: AnyView
@@ -120,13 +136,15 @@ public struct UsernamePasswordResetPasswordView: View {
     }
     
     
-    /// <#Description#>
+    /// Creates a `UsernamePasswordResetPasswordView` for users who have created an account with
+    /// a username and password to reset their password.
+    ///
     /// - Parameters:
-    ///   - usernameValidationRules: <#usernameValidationRules description#>
-    ///   - header: <#header description#>
-    ///   - footer: <#footer description#>
-    ///   - processSuccessfulView: <#processSuccessfulView description#>
-    ///   - localization: <#localization description#>
+    ///   - usernameValidationRules: An array of `ValidationRule`s to apply to the entered username
+    ///   - header: A SwiftUI `View` to display as a header
+    ///   - footer: A SwiftUI `View` to display as a footer
+    ///   - processSuccessfulView: A SwiftUI `View` to display if the password has been successfully reset
+    ///   - localization: A `ConfigurableLocalization` to apply to this view
     public init<Header: View, Footer: View, ProcessSuccessful: View>(
         usernameValidationRules: [ValidationRule] = [],
         @ViewBuilder header: () -> Header = { EmptyView() },

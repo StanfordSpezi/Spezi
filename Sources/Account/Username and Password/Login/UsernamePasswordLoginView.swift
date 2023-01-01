@@ -11,14 +11,14 @@ import SwiftUI
 
 /// A `UsernamePasswordLoginView` is a view that enables users to sign in with a username and password
 /// using a `UsernamePasswordAccountService` passed as an EnvironmentObject. A header view, footer view,
-/// localization configuration, and validation rules for username and password can be optionally passed as arguments.
+/// localization, and validation rules for username and password can be optionally passed as arguments.
 ///
 /// ```
 /// UsernamePasswordLoginView(
 ///     usernameValidationRules: [/*..*/],
 ///     passwordValidationRules: [/*..*/],
-///     header: View(),
-///     footer: View(),
+///     header: HeaderView(),
+///     footer: FooterView(),
 ///     localization: .environment
 /// )
 ///     .environmentObject(UsernamePasswordAccountService())
@@ -129,15 +129,14 @@ public struct UsernamePasswordLoginView: View {
     }
     
     
-    /// Create a `UsernamePasswordLoginView` for users to log in with a username and password
-    /// with parameters for passing a header view, footer view, validation rules, and localization configuration.
+    /// Creates a `UsernamePasswordLoginView` for users to log in with a username and password.
     ///
     /// - Parameters:
-    ///   - usernameValidationRules: an array of `ValidationRule`s to apply to the entered username
-    ///   - passwordValidationRules: an array of `ValidationRule`s to apply to the entered password
-    ///   - header: a view to display as a header
-    ///   - footer: a view to display as a footer
-    ///   - localization: a localization configuration to apply to this view
+    ///   - usernameValidationRules: An array of `ValidationRule`s to apply to the entered username
+    ///   - passwordValidationRules: An array of `ValidationRule`s to apply to the entered password
+    ///   - header: A SwiftUI `View` to display as a header
+    ///   - footer: A SwiftUI `View` to display as a footer
+    ///   - localization: A `ConfigurableLocalization` to apply to this view
     public init<Header: View, Footer: View>(
         usernameValidationRules: [ValidationRule] = [],
         passwordValidationRules: [ValidationRule] = [],
