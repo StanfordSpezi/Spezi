@@ -10,9 +10,26 @@ import Views
 
 
 extension Localization {
-    /// <#Description#>
+    /// A configuration for providing localized text for login views
+    ///
+    /// ```
+    /// Login(
+    ///     buttonTitle: "Username and Password"
+    ///     navigationTitle: "Login",
+    ///     username: FieldLocalization(
+    ///        title: "Username",
+    ///        placeholder: "Enter your username ..."
+    ///     ),
+    ///     password: FieldLocalization(
+    ///       title: "Password",
+    ///       placeholder: "Enter your password ..."
+    ///     ),
+    ///     loginActionButtonTitle: "Login",
+    ///     defaultLoginFailedError: "Could not login"
+    /// )
+    /// ```
     public struct Login: Codable {
-        /// <#Description#>
+        /// A default configuration for providing localized text to login views
         public static let `default` = Login(
             buttonTitle: String(moduleLocalized: "UAP_LOGIN_BUTTON_TITLE"),
             navigationTitle: String(moduleLocalized: "UAP_LOGIN_NAVIGATION_TITLE"),
@@ -29,28 +46,29 @@ extension Localization {
         )
         
         
-        /// <#Description#>
+        /// A localized `String` to display on the login button
         public let buttonTitle: String
-        /// <#Description#>
+        /// A localized `String` for login view's localized navigation title
         public let navigationTitle: String
-        /// <#Description#>
+        /// A `FieldLocalization` instance containing the localized title and placeholder text for the username field
         public let username: FieldLocalization
-        /// <#Description#>
+        /// A  `FieldLocalization` instance containing the localized title and placeholder text for the password field
         public let password: FieldLocalization
-        /// <#Description#>
+        /// A localized `String` to display on the login action button
         public let loginActionButtonTitle: String
-        /// <#Description#>
+        /// A localized`String` error message to be displayed when login fails
         public let defaultLoginFailedError: String
         
         
-        /// <#Description#>
+        /// Creates a localization configuration for login views
+        ///
         /// - Parameters:
-        ///   - buttonTitle: <#buttonTitle description#>
-        ///   - navigationTitle: <#navigationTitle description#>
-        ///   - username: <#username description#>
-        ///   - password: <#password description#>
-        ///   - loginActionButtonTitle: <#loginActionButtonTitle description#>
-        ///   - defaultLoginFailedError: <#defaultLoginFailedError description#>
+        ///   - buttonTitle: A localized`String` to display on the login button
+        ///   - navigationTitle: A localized`String` for the login view's navigation title
+        ///   - username: A `FieldLocalization`instance containing the localized title and placeholder text for the username field
+        ///   - password: A `FieldLocalization` instance containing the localized title and placeholder text for the password field
+        ///   - loginActionButtonTitle: A localized`String`to display on the login action button
+        ///   - defaultLoginFailedError: A localized `String` error message to be displayed when login fails
         public init(
             buttonTitle: String = Login.default.buttonTitle,
             navigationTitle: String = Login.default.navigationTitle,

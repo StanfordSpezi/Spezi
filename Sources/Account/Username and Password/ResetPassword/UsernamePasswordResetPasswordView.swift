@@ -111,9 +111,9 @@ public struct UsernamePasswordResetPasswordView: View {
     private var resetPasswordButtonTitleLocalization: String {
         switch localization {
         case .environment:
-            return usernamePasswordAccountService.localization.resetPassword.resetPasswordActionbuttonTitle
+            return usernamePasswordAccountService.localization.resetPassword.resetPasswordActionButtonTitle
         case let .value(resetPassword):
-            return resetPassword.resetPasswordActionbuttonTitle
+            return resetPassword.resetPasswordActionButtonTitle
         }
     }
     

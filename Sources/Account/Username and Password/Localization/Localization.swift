@@ -10,9 +10,9 @@
 import Views
 
 
-/// <#Description#>
+/// A `Localization` defines text that can be customized depending on the user's preferred language
 public struct Localization: Codable {
-    /// <#Description#>
+    /// Defines the default localization
     public static let `default` = Localization(
         login: Login.default,
         signUp: SignUp.default,
@@ -20,19 +20,21 @@ public struct Localization: Codable {
     )
     
     
-    /// <#Description#>
+    /// Localization for login views
     public let login: Login
-    /// <#Description#>
+    /// Localization for signup views
     public let signUp: SignUp
-    /// <#Description#>
+    /// Localization for reset password views
     public let resetPassword: ResetPassword
     
     
-    /// <#Description#>
+    /// Creates a new localization with configurations for login, signup, and
+    /// reset password views.
+    ///
     /// - Parameters:
-    ///   - login: <#login description#>
-    ///   - signUp: <#signUp description#>
-    ///   - resetPassword: <#resetPassword description#>
+    ///   - login: An instance of `Login`, a configuration for localizing login screens
+    ///   - signUp: An instance of `SignUp`, a configuration for localizing sign up screens
+    ///   - resetPassword: An instance of  `resetPassword`, a configuration for localizing reset password screens
     public init(
         login: Login = Localization.default.login,
         signUp: SignUp = Localization.default.signUp,
