@@ -10,9 +10,41 @@ import Views
 
 
 extension Localization {
-    /// <#Description#>
+    /// A configuration for providing localized text for signup views
+    ///
+    /// ```
+    /// SignUp(
+    ///     buttonTitle: "Username and Password"
+    ///     navigationTitle: "Sign Up",
+    ///     username: FieldLocalization(
+    ///        title: "Username",
+    ///        placeholder: "Enter your username ..."
+    ///     ),
+    ///     password: FieldLocalization(
+    ///       title: "Password",
+    ///       placeholder: "Enter your password ..."
+    ///     ),
+    ///     passwordRepeat: FieldLocalization(
+    ///       title: "Repeat",
+    ///       placeholder: "Repeat your password ..."
+    ///     ),
+    ///     passwordNotEqualError: "The entered passwords are not equal.",
+    ///     givenName: FieldLocalization(
+    ///       title: "Given Name",
+    ///       placeholder "Enter your given name ...",
+    ///     ),
+    ///     familyName: FieldLocalization(
+    ///       title: "Family Name",
+    ///       placeholder "Enter your family name ...",
+    ///     ),
+    ///     genderIdentityTitle: "Gender Identity",
+    ///     dateOfBirthTitle: "Date of Birth",
+    ///     signUpActionButtonTitle: "Sign Up",
+    ///     defaultSignUpFailedError: "Could not sign up"
+    /// )
+    /// ```
     public struct SignUp: Codable {
-        /// <#Description#>
+        /// A default configuration for providing localized text to sign up views
         public static let `default` = SignUp(
             buttonTitle: String(moduleLocalized: "UAP_SIGNUP_BUTTION_TITLE"),
             navigationTitle: String(moduleLocalized: "UAP_SIGNUP_NAVIGATION_TITLE"),
@@ -44,46 +76,47 @@ extension Localization {
         )
         
         
-        /// <#Description#>
+        /// A localized `String` to display on the sign up button
         public let buttonTitle: String
-        /// <#Description#>
+        /// A localized `String` for sign up view's localized navigation title
         public let navigationTitle: String
-        /// <#Description#>
+        /// A `FieldLocalization` instance containing the localized title and placeholder text for the username field
         public let username: FieldLocalization
-        /// <#Description#>
+        /// A  `FieldLocalization` instance containing the localized title and placeholder text for the password field
         public let password: FieldLocalization
-        /// <#Description#>
+        /// A  `FieldLocalization` instance containing the localized title and placeholder text for the password repeat field
         public let passwordRepeat: FieldLocalization
-        /// <#Description#>
+        /// A localized`String` error message to be displayed when the text in the password and password repeat fields are not equal
         public let passwordNotEqualError: String
-        /// <#Description#>
+        /// A `FieldLocalization` instance containing the localized title and placeholder text for the given name (first name) field
         public let givenName: FieldLocalization
-        /// <#Description#>
+        /// A `FieldLocalization` instance containing the localized title and placeholder text for the family name (last name) field
         public let familyName: FieldLocalization
-        /// <#Description#>
+        /// A localized `String` label for the gender identity field
         public let genderIdentityTitle: String
-        /// <#Description#>
+        /// A localized `String` label for the date of birth field
         public let dateOfBirthTitle: String
-        /// <#Description#>
+        /// A localized `String` title for the sign up action button
         public let signUpActionButtonTitle: String
-        /// <#Description#>
+        /// A localized `String` message to display when sign up fails
         public let defaultSignUpFailedError: String
         
         
-        /// <#Description#>
+        /// Creates a localization configuration for signup views
+        ///
         /// - Parameters:
-        ///   - buttonTitle: <#buttonTitle description#>
-        ///   - navigationTitle: <#navigationTitle description#>
-        ///   - username: <#username description#>
-        ///   - password: <#password description#>
-        ///   - passwordRepeat: <#passwordRepeat description#>
-        ///   - passwordNotEqualError: <#passwordNotEqualError description#>
-        ///   - givenName: <#givenName description#>
-        ///   - familyName: <#familyName description#>
-        ///   - genderIdentityTitle: <#genderIdentityTitle description#>
-        ///   - dateOfBirthTitle: <#dateOfBirthTitle description#>
-        ///   - signUpActionButtonTitle: <#signUpActionButtonTitle description#>
-        ///   - defaultSignUpFailedError: <#defaultSignUpFailedError description#>
+        ///   - buttonTitle: A localized `String` to display on the sign up button
+        ///   - navigationTitle: A localized `String` for sign up view's localized navigation title
+        ///   - username: A `FieldLocalization` instance containing the localized title and placeholder text for the username field
+        ///   - password: A  `FieldLocalization` instance containing the localized title and placeholder text for the password field
+        ///   - passwordRepeat: A  `FieldLocalization` instance containing the localized title and placeholder text for the password repeat field
+        ///   - passwordNotEqualError: A localized`String` error message to be displayed when the text in the password and password repeat fields are not equal
+        ///   - givenName: A `FieldLocalization` instance containing the localized title and placeholder text for the given name (first name) field
+        ///   - familyName: A `FieldLocalization` instance containing the localized title and placeholder text for the family name (last name) field
+        ///   - genderIdentityTitle: A localized `String` label for the gender identity field
+        ///   - dateOfBirthTitle: A localized `String` label for the date of birth field
+        ///   - signUpActionButtonTitle: A localized `String` title for the sign up action button
+        ///   - defaultSignUpFailedError: A localized `String` message to display when sign up fails
         public init(
             buttonTitle: String = SignUp.default.buttonTitle,
             navigationTitle: String = SignUp.default.navigationTitle,
