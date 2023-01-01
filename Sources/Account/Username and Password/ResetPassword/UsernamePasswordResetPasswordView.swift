@@ -85,7 +85,7 @@ public struct UsernamePasswordResetPasswordView: View {
         }
         
         return Grid(horizontalSpacing: 16, verticalSpacing: 16) {
-            VerifyableTextFieldGridRow(
+            VerifiableTextFieldGridRow(
                 text: $username,
                 valid: $valid,
                 validationRules: usernameValidationRules,

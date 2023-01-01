@@ -140,7 +140,7 @@ struct UsernamePasswordFields: View {
             }
         }
         
-        return VerifyableTextFieldGridRow(
+        return VerifiableTextFieldGridRow(
             text: $username,
             valid: $usernameValid,
             validationRules: usernameValidationRules,
@@ -173,7 +173,7 @@ struct UsernamePasswordFields: View {
             }
         }
         
-        return VerifyableTextFieldGridRow(
+        return VerifiableTextFieldGridRow(
             text: $password,
             valid: $passwordValid,
             validationRules: passwordValidationRules,
@@ -217,7 +217,7 @@ struct UsernamePasswordFields: View {
             }
         }
         
-        return VerifyableTextFieldGridRow(
+        return VerifiableTextFieldGridRow(
             text: $passwordRepeat,
             valid: $passwordRepeatValid,
             validationRules: passwordValidationRules,
