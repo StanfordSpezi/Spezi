@@ -9,7 +9,20 @@
 import SwiftUI
 
 
-/// <#Description#>
+/// A `UsernamePasswordLoginView` is a view that enables users to sign in with a username and password
+/// using a `UsernamePasswordAccountService` passed as an EnvironmentObject. A header view, footer view,
+/// localization configuration, and validation rules for username and password can be optionally passed as arguments.
+///
+/// ```
+/// UsernamePasswordLoginView(
+///     usernameValidationRules: [/*..*/],
+///     passwordValidationRules: [/*..*/],
+///     header: View(),
+///     footer: View(),
+///     localization: .environment
+/// )
+///     .environmentObject(UsernamePasswordAccountService())
+/// ```
 public struct UsernamePasswordLoginView: View {
     private let usernameValidationRules: [ValidationRule]
     private let passwordValidationRules: [ValidationRule]
@@ -116,13 +129,15 @@ public struct UsernamePasswordLoginView: View {
     }
     
     
-    /// <#Description#>
+    /// Create a `UsernamePasswordLoginView` for users to log in with a username and password
+    /// with parameters for passing a header view, footer view, validation rules, and localization configuration.
+    ///
     /// - Parameters:
-    ///   - usernameValidationRules: <#usernameValidationRules description#>
-    ///   - passwordValidationRules: <#passwordValidationRules description#>
-    ///   - header: <#header description#>
-    ///   - footer: <#footer description#>
-    ///   - localization: <#localization description#>
+    ///   - usernameValidationRules: an array of `ValidationRule`s to apply to the entered username
+    ///   - passwordValidationRules: an array of `ValidationRule`s to apply to the entered password
+    ///   - header: a view to display as a header
+    ///   - footer: a view to display as a footer
+    ///   - localization: a localization configuration to apply to this view
     public init<Header: View, Footer: View>(
         usernameValidationRules: [ValidationRule] = [],
         passwordValidationRules: [ValidationRule] = [],
