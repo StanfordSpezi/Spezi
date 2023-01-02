@@ -140,11 +140,11 @@ public struct UsernamePasswordResetPasswordView: View {
     /// a username and password to reset their password.
     ///
     /// - Parameters:
-    ///   - usernameValidationRules: An array of `ValidationRule`s to apply to the entered username
+    ///   - usernameValidationRules: An array of ``ValidationRule``s to apply to the entered username
     ///   - header: A SwiftUI `View` to display as a header
     ///   - footer: A SwiftUI `View` to display as a footer
     ///   - processSuccessfulView: A SwiftUI `View` to display if the password has been successfully reset
-    ///   - localization: A `ConfigurableLocalization` to apply to this view
+    ///   - localization: A localization configuration  to apply to this view
     public init<Header: View, Footer: View, ProcessSuccessful: View>(
         usernameValidationRules: [ValidationRule] = [],
         @ViewBuilder header: () -> Header = { EmptyView() },

@@ -10,7 +10,21 @@ import SwiftUI
 import Views
 
 
-/// <#Description#>
+/// A ``UsernamePasswordSignUpView`` is a view that enables users to sign up with a username and password
+/// using a ``UsernamePasswordAccountService`` passed as an EnvironmentObject. A header view, footer view,
+/// username and password validation rules, localization, and ``SignUpOptions`` can be passed as arguments
+///
+/// ```
+/// UsernamePasswordSignUpView(
+///     usernameValidationRules: [/*..*/],
+///     passwordValidationRules: [/*..*/],
+///     header: HeaderView(),
+///     footer: FooterView(),
+///     signUpOptions: [.usernameAndPassword, .name, .genderIdentity, .dateOfBirth],
+///     localization: .environment
+/// )
+///     .environmentObject(UsernamePasswordAccountService())
+/// ```
 public struct UsernamePasswordSignUpView: View {
     enum Constants {
         static let formVerticalPadding: CGFloat = 8
@@ -168,14 +182,16 @@ public struct UsernamePasswordSignUpView: View {
     }
     
     
-    /// <#Description#>
+    /// Creates a `UsernamePasswordSignUpView` for users to sign up with a username, password,
+    /// and other personal information.
+    ///
     /// - Parameters:
-    ///   - signUpOptions: <#signUpOptions description#>
-    ///   - usernameValidationRules: <#usernameValidationRules description#>
-    ///   - passwordValidationRules: <#passwordValidationRules description#>
-    ///   - header: <#header description#>
-    ///   - footer: <#footer description#>
-    ///   - localization: <#localization description#>
+    ///   - signUpOptions: A set of options for data to collect from the user
+    ///   - usernameValidationRules: An array of ``ValidationRule``s to apply to the entered username
+    ///   - passwordValidationRules: An array of ``ValidationRule``s to apply to the entered password
+    ///   - header: A SwiftUI `View` to display as a header
+    ///   - footer: A SwiftUI `View` to display as a footer
+    ///   - localization: A localization configuration to apply to this view
     public init<Header: View, Footer: View>(
         signUpOptions: SignUpOptions = .default,
         usernameValidationRules: [ValidationRule] = [],

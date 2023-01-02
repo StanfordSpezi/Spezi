@@ -9,8 +9,8 @@
 import SwiftUI
 
 
-/// A `UsernamePasswordLoginView` is a view that enables users to sign in with a username and password
-/// using a `UsernamePasswordAccountService` passed as an EnvironmentObject. A header view, footer view,
+/// A ``UsernamePasswordLoginView`` is a view that enables users to sign in with a username and password
+/// using a ``UsernamePasswordAccountService`` passed as an EnvironmentObject. A header view, footer view,
 /// localization, and validation rules for username and password can be optionally passed as arguments.
 ///
 /// ```
@@ -132,11 +132,11 @@ public struct UsernamePasswordLoginView: View {
     /// Creates a `UsernamePasswordLoginView` for users to log in with a username and password.
     ///
     /// - Parameters:
-    ///   - usernameValidationRules: An array of `ValidationRule`s to apply to the entered username
-    ///   - passwordValidationRules: An array of `ValidationRule`s to apply to the entered password
+    ///   - usernameValidationRules: An array of ``ValidationRule``s to apply to the entered username
+    ///   - passwordValidationRules: An array of ``ValidationRule``s to apply to the entered password
     ///   - header: A SwiftUI `View` to display as a header
     ///   - footer: A SwiftUI `View` to display as a footer
-    ///   - localization: A `ConfigurableLocalization` to apply to this view
+    ///   - localization: A localization configuration to apply to this view
     public init<Header: View, Footer: View>(
         usernameValidationRules: [ValidationRule] = [],
         passwordValidationRules: [ValidationRule] = [],
