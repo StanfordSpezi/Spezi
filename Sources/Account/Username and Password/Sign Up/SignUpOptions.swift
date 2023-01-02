@@ -9,18 +9,18 @@
 import Foundation
 
 
-/// <#Description#>
+/// Represents a set of options for fields to display on a signup view
 public struct SignUpOptions: OptionSet {
-    /// <#Description#>
+    /// Option to display username and password fields
     public static let usernameAndPassword = SignUpOptions(rawValue: 1 << 0)
-    /// <#Description#>
+    /// Option to display name entry fields
     public static let name = SignUpOptions(rawValue: 1 << 1)
-    /// <#Description#>
+    /// Option to display a gender identity entry field
     public static let genderIdentity = SignUpOptions(rawValue: 1 << 2)
-    /// <#Description#>
+    /// Option to display a date of birth entry field
     public static let dateOfBirth = SignUpOptions(rawValue: 1 << 3)
     
-    /// <#Description#>
+    /// A default set of signup options, including username and password, name, gender identity, and date of birth
     public static let `default`: SignUpOptions = [.usernameAndPassword, .name, .genderIdentity, .dateOfBirth]
     
     

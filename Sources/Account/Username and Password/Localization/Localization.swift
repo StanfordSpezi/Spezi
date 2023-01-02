@@ -32,9 +32,9 @@ public struct Localization: Codable {
     /// reset password views.
     ///
     /// - Parameters:
-    ///   - login: An instance of `Login`, a configuration for localizing login screens
-    ///   - signUp: An instance of `SignUp`, a configuration for localizing sign up screens
-    ///   - resetPassword: An instance of  `resetPassword`, a configuration for localizing reset password screens
+    ///   - login: An instance of ``Localization/Login-swift.struct``, a configuration for localizing login views
+    ///   - signUp: An instance of ``Localization/SignUp-swift.struct``, a configuration for localizing signup views
+    ///   - resetPassword: An instance of  ``Localization/ResetPassword-swift.struct``, a configuration for localizing reset password views
     public init(
         login: Login = Localization.default.login,
         signUp: SignUp = Localization.default.signUp,

@@ -44,7 +44,7 @@ extension Localization {
         public let buttonTitle: String
         /// A localized `String` for the reset password view's navigation title
         public let navigationTitle: String
-        /// A `FieldLocalization` instance containing the localized title and placeholder text for the username field
+        /// A ``FieldLocalization`` instance containing the localized title and placeholder text for the username field
         public let username: FieldLocalization
         /// A localized `String` to display on the reset password action button
         public let resetPasswordActionButtonTitle: String
@@ -59,7 +59,7 @@ extension Localization {
         /// - Parameters:
         ///   - buttonTitle: A localized `String` title for the reset password button
         ///   - navigationTitle: A localized `String` for the reset password view's navigation title
-        ///   - username: A `FieldLocalization`instance containing the localized title and placeholder text for the username field
+        ///   - username: A ``FieldLocalization`` instance containing the localized title and placeholder text for the username field
         ///   - resetPasswordActionbuttonTitle: A localized `String` to display on the reset password action button
         ///   - processSuccessfulLabel: A localized `String` to display when the reset password process has been successful
         ///   - defaultResetPasswordFailedError: A localized `String` to display when the reset password process has failed

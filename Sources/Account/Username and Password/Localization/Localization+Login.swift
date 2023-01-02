@@ -50,9 +50,9 @@ extension Localization {
         public let buttonTitle: String
         /// A localized `String` for login view's navigation title
         public let navigationTitle: String
-        /// A `FieldLocalization` instance containing the localized title and placeholder text for the username field
+        /// A ``FieldLocalization`` instance containing the localized title and placeholder text for the username field
         public let username: FieldLocalization
-        /// A  `FieldLocalization` instance containing the localized title and placeholder text for the password field
+        /// A  ``FieldLocalization`` instance containing the localized title and placeholder text for the password field
         public let password: FieldLocalization
         /// A localized `String` to display on the login action button
         public let loginActionButtonTitle: String
@@ -65,8 +65,8 @@ extension Localization {
         /// - Parameters:
         ///   - buttonTitle: A localized `String` to display on the login button
         ///   - navigationTitle: A localized `String` for the login view's navigation title
-        ///   - username: A `FieldLocalization` instance containing the localized title and placeholder text for the username field
-        ///   - password: A `FieldLocalization` instance containing the localized title and placeholder text for the password field
+        ///   - username: A ``FieldLocalization`` instance containing the localized title and placeholder text for the username field
+        ///   - password: A ``FieldLocalization`` instance containing the localized title and placeholder text for the password field
         ///   - loginActionButtonTitle: A localized `String` to display on the login action button
         ///   - defaultLoginFailedError: A localized `String` error message to be displayed when login fails
         public init(

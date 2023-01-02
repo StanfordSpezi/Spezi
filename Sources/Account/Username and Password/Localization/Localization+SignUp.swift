@@ -80,17 +80,17 @@ extension Localization {
         public let buttonTitle: String
         /// A localized `String` for sign up view's localized navigation title
         public let navigationTitle: String
-        /// A `FieldLocalization` instance containing the localized title and placeholder text for the username field
+        /// A ``FieldLocalization`` instance containing the localized title and placeholder text for the username field
         public let username: FieldLocalization
-        /// A  `FieldLocalization` instance containing the localized title and placeholder text for the password field
+        /// A  ``FieldLocalization`` instance containing the localized title and placeholder text for the password field
         public let password: FieldLocalization
-        /// A  `FieldLocalization` instance containing the localized title and placeholder text for the password repeat field
+        /// A  ``FieldLocalization`` instance containing the localized title and placeholder text for the password repeat field
         public let passwordRepeat: FieldLocalization
         /// A localized`String` error message to be displayed when the text in the password and password repeat fields are not equal
         public let passwordNotEqualError: String
-        /// A `FieldLocalization` instance containing the localized title and placeholder text for the given name (first name) field
+        /// A ``FieldLocalization`` instance containing the localized title and placeholder text for the given name (first name) field
         public let givenName: FieldLocalization
-        /// A `FieldLocalization` instance containing the localized title and placeholder text for the family name (last name) field
+        /// A ``FieldLocalization`` instance containing the localized title and placeholder text for the family name (last name) field
         public let familyName: FieldLocalization
         /// A localized `String` label for the gender identity field
         public let genderIdentityTitle: String
@@ -107,12 +107,12 @@ extension Localization {
         /// - Parameters:
         ///   - buttonTitle: A localized `String` to display on the sign up button
         ///   - navigationTitle: A localized `String` for sign up view's localized navigation title
-        ///   - username: A `FieldLocalization` instance containing the localized title and placeholder text for the username field
-        ///   - password: A  `FieldLocalization` instance containing the localized title and placeholder text for the password field
-        ///   - passwordRepeat: A  `FieldLocalization` instance containing the localized title and placeholder text for the password repeat field
+        ///   - username: A ``FieldLocalization`` instance containing the localized title and placeholder text for the username field
+        ///   - password: A  ``FieldLocalization`` instance containing the localized title and placeholder text for the password field
+        ///   - passwordRepeat: A  ``FieldLocalization`` instance containing the localized title and placeholder text for the password repeat field
         ///   - passwordNotEqualError: A localized`String` error message to be displayed when the text in the password and password repeat fields are not equal
-        ///   - givenName: A `FieldLocalization` instance containing the localized title and placeholder text for the given name (first name) field
-        ///   - familyName: A `FieldLocalization` instance containing the localized title and placeholder text for the family name (last name) field
+        ///   - givenName: A ``FieldLocalization`` instance containing the localized title and placeholder text for the given name (first name) field
+        ///   - familyName: A ``FieldLocalization`` instance containing the localized title and placeholder text for the family name (last name) field
         ///   - genderIdentityTitle: A localized `String` label for the gender identity field
         ///   - dateOfBirthTitle: A localized `String` label for the date of birth field
         ///   - signUpActionButtonTitle: A localized `String` title for the sign up action button

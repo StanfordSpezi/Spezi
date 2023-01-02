@@ -55,7 +55,7 @@ final class AccountSignUpTests: TestAppUITests {
 
             XCTAssertTrue(app.staticTexts["The entered email is not correct."].exists)
             
-            app.delete(count: username.dropLast(4).count, in: usernameField)
+            app.delete(count: username.count, in: usernameField)
         }
     }
     
@@ -85,7 +85,7 @@ final class AccountSignUpTests: TestAppUITests {
         app.enter(value: passwordRepeat, in: passwordRepeatField, secureTextField: true)
         app.testPrimaryButton(enabled: false, title: buttonTitle)
 
-        XCTAssertTrue(app.staticTexts["The entered passwords are not equal"].exists)
+        XCTAssertTrue(app.staticTexts["The entered passwords are not equal."].exists)
 
         app.delete(count: passwordRepeat.count, in: passwordRepeatField, secureTextField: true)
         passwordRepeat = password
