@@ -36,7 +36,9 @@ final class DataStorageProviderTests: XCTestCase {
     }
     
     
-    private actor DataStorageExample<ComponentStandard: Standard>: DataStorageProvider where ComponentStandard.BaseType: Encodable, ComponentStandard.BaseType.ID == String {
+    private actor DataStorageExample<
+        ComponentStandard: Standard
+    >: DataStorageProvider where ComponentStandard.BaseType: Encodable, ComponentStandard.BaseType.ID == String {
         let mockUpload: (MockUpload) -> Void
         
         

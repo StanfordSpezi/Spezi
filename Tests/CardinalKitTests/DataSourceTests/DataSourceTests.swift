@@ -25,7 +25,10 @@ final class DataSourceTests: XCTestCase {
         }
     }
     
-    final class DataSourceTestComponent<T: Identifiable, MockStandardType: Identifiable>: Component, LifecycleHandler where T.ID: Identifiable, T.ID == T.ID.ID, MockStandardType == MockStandardType.ID {
+    final class DataSourceTestComponent<
+        T: Identifiable,
+        MockStandardType: Identifiable
+    >: Component, LifecycleHandler where T.ID: Identifiable, T.ID == T.ID.ID, MockStandardType == MockStandardType.ID {
         typealias ComponentStandard = TypedMockStandard<MockStandardType>
         
         
@@ -65,7 +68,10 @@ final class DataSourceTests: XCTestCase {
     class DataSourceTestApplicationDelegate<T: Hashable & Identifiable>: CardinalKitAppDelegate where T == T.ID {
         let dynamicDependencies: _DynamicDependenciesPropertyWrapper<TypedMockStandard<T>>
         let dataSourceExpecations: (DataChange<TypedMockStandard<T>.BaseType, TypedMockStandard<T>.RemovalContext>) async throws -> Void
-        let finishedDataSourceSequence: (any TypedAsyncSequence<DataChange<TypedMockStandard<T>.BaseType, TypedMockStandard<T>.RemovalContext>>.Type) async throws -> Void
+        let finishedDataSourceSequence: (
+            any TypedAsyncSequence<DataChange<TypedMockStandard<T>.BaseType,
+            TypedMockStandard<T>.RemovalContext>>.Type
+        ) async throws -> Void
         
         
         override var configuration: Configuration {
@@ -81,7 +87,10 @@ final class DataSourceTests: XCTestCase {
         init(
             dynamicDependencies: _DynamicDependenciesPropertyWrapper<TypedMockStandard<T>>,
             dataSourceExpecations: @escaping (DataChange<TypedMockStandard<T>.BaseType, TypedMockStandard<T>.RemovalContext>) async throws -> Void,
-            finishedDataSourceSequence: @escaping (any TypedAsyncSequence<DataChange<TypedMockStandard<T>.BaseType, TypedMockStandard<T>.RemovalContext>>.Type) async throws -> Void
+            finishedDataSourceSequence: @escaping (
+                any TypedAsyncSequence<DataChange<TypedMockStandard<T>.BaseType,
+                TypedMockStandard<T>.RemovalContext>>.Type
+            ) async throws -> Void
         ) {
             self.dynamicDependencies = dynamicDependencies
             self.dataSourceExpecations = dataSourceExpecations

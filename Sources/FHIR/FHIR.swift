@@ -43,20 +43,29 @@ import XCTRuntimeAssertions
 /// }
 /// ```
 public actor FHIR: Standard {
+    /// The FHIR `Resource` type builds the ``Standard/BaseType`` of the ``FHIR`` standard.
+    public typealias BaseType = Resource
+    /// <#Description#>
+    public typealias RemovalContext = FHIRRemovalContext
+    
+    
+    /// <#Description#>
     public struct FHIRRemovalContext: Sendable, Identifiable {
+        /// <#Description#>
         public let id: BaseType.ID
+        /// <#Description#>
         public let resourceType: String
         
         
+        /// <#Description#>
+        /// - Parameters:
+        ///   - id: <#id description#>
+        ///   - resourceType: <#resourceType description#>
         public init(id: BaseType.ID, resourceType: String) {
             self.id = id
             self.resourceType = resourceType
         }
     }
-    
-    /// The FHIR `Resource` type builds the ``Standard/BaseType`` of the ``FHIR`` standard.
-    public typealias BaseType = Resource
-    public typealias RemovalContext = FHIRRemovalContext
     
     
     var resources: [String: ResourceProxy] = [:]

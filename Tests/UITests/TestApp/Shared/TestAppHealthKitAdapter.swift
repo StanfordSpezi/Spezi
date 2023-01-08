@@ -21,7 +21,7 @@ actor TestAppHealthKitAdapter: SingleValueAdapter {
         TestAppStandard.BaseType(id: element.sampleType.identifier)
     }
     
-    func transform(id: UUID) -> String {
+    func transform(removalContext id: UUID) -> String {
         "Removed Element!"
     }
 }

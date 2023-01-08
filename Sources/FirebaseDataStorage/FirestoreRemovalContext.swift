@@ -7,6 +7,6 @@
 //
 
 
-public protocol FirestoreElement: Encodable, Identifiable, Sendable where ID == String {
+public protocol FirestoreRemovalContext: Identifiable, Sendable where ID == String {
     var collectionPath: String { get }
 }

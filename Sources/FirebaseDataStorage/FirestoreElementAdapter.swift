@@ -9,4 +9,7 @@
 import CardinalKit
 
 
-public protocol FirestoreElementAdapter<InputElement, InputRemovalContext>: SingleValueAdapter where OutputElement: FirestoreElement, OutputRemovalContext: FirestoreRemovalContext { }
+public protocol FirestoreElementAdapter<
+    InputElement,
+    InputRemovalContext
+>: SingleValueAdapter where OutputElement: FirestoreElement, OutputRemovalContext: FirestoreRemovalContext { }

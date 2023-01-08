@@ -8,7 +8,10 @@
 
 
 /// A ``DataChange`` tracks the addition or removel of elements across components.
-public enum DataChange<Element: Identifiable & Sendable, RemovalContext: Identifiable & Sendable>: Sendable where Element.ID: Sendable, Element.ID == RemovalContext.ID {
+public enum DataChange<
+    Element: Identifiable & Sendable,
+    RemovalContext: Identifiable & Sendable
+>: Sendable where Element.ID: Sendable, Element.ID == RemovalContext.ID {
     /// A new element was added
     case addition(Element)
     /// An element was removed

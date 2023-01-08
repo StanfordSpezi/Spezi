@@ -9,6 +9,8 @@
 import Foundation
 
 
+// swiftlint:disable generic_type_name line_length
+
 private actor TwoAdapterChain<
         InputElement: Identifiable & Sendable,
         InputRemovalContext: Identifiable & Sendable,
@@ -94,6 +96,7 @@ public enum AdapterBuilder<OutputElement: Identifiable & Sendable, OutputRemoval
         dataSourceRegistryAdapter
     }
     
+    /// Required by every result builder to build combined results from statement blocks.
     public static func buildBlock<
             InputElement: Identifiable & Sendable, InputRemovalContext: Identifiable & Sendable,
             IntermediateElement: Identifiable & Sendable, IntermediateRemovalContext: Identifiable & Sendable
@@ -109,6 +112,7 @@ public enum AdapterBuilder<OutputElement: Identifiable & Sendable, OutputRemoval
         )
     }
     
+    /// Required by every result builder to build combined results from statement blocks.
     public static func buildBlock<
             InputElement: Identifiable & Sendable, InputRemovalContext: Identifiable & Sendable,
             IntermediateElement1: Identifiable & Sendable, IntermediateRemovalContext1: Identifiable & Sendable,
