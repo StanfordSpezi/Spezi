@@ -6,7 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
-import ModelsR4
+import CardinalKit
 
 
-extension Resource: Identifiable { }
+public protocol FirestoreElementAdapter<InputElement, InputRemovalContext>: SingleValueAdapter where OutputElement: FirestoreElement, OutputRemovalContext: FirestoreRemovalContext { }

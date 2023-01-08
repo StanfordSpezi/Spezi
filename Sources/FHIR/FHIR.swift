@@ -8,7 +8,7 @@
 
 import CardinalKit
 import Foundation
-@_exported import ModelsR4
+@_exported @preconcurrency import ModelsR4
 import XCTRuntimeAssertions
 
 
@@ -43,8 +43,20 @@ import XCTRuntimeAssertions
 /// }
 /// ```
 public actor FHIR: Standard {
+    public struct FHIRRemovalContext: Sendable, Identifiable {
+        public let id: BaseType.ID
+        public let resourceType: String
+        
+        
+        public init(id: BaseType.ID, resourceType: String) {
+            self.id = id
+            self.resourceType = resourceType
+        }
+    }
+    
     /// The FHIR `Resource` type builds the ``Standard/BaseType`` of the ``FHIR`` standard.
     public typealias BaseType = Resource
+    public typealias RemovalContext = FHIRRemovalContext
     
     
     var resources: [String: ResourceProxy] = [:]
@@ -53,7 +65,7 @@ public actor FHIR: Standard {
     var dataSources: [any DataStorageProvider<FHIR>]
     
     
-    public func registerDataSource(_ asyncSequence: some TypedAsyncSequence<DataChange<BaseType>>) {
+    public func registerDataSource(_ asyncSequence: some TypedAsyncSequence<DataChange<BaseType, RemovalContext>>) {
         _Concurrency.Task {
             for try await dateSourceElement in asyncSequence {
                 switch dateSourceElement {
@@ -65,13 +77,13 @@ public actor FHIR: Standard {
                     for dataSource in dataSources {
                         try await dataSource.process(.addition(resource))
                     }
-                case let .removal(resourceId):
-                    guard let id = resourceId?.value?.string else {
+                case let .removal(removalContext):
+                    guard let id = removalContext.id?.value?.string else {
                         continue
                     }
                     resources[id] = nil
                     for dataSource in dataSources {
-                        try await dataSource.process(.removal(resourceId))
+                        try await dataSource.process(.removal(removalContext))
                     }
                 }
             }

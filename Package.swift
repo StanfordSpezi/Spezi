@@ -85,6 +85,7 @@ let package = Package(
         .target(
             name: "FirebaseDataStorage",
             dependencies: [
+                .target(name: "CardinalKit"),
                 .product(name: "FirebaseFirestore", package: "firebase-ios-sdk"),
                 .product(name: "FirebaseFirestoreSwift", package: "firebase-ios-sdk")
             ]

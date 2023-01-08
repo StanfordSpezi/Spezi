@@ -7,19 +7,25 @@
 //
 
 import CardinalKit
+import FirebaseDataStorage
 import Foundation
 
 
 actor TestAppStandard: Standard, ObservableObjectProvider, ObservableObject {
     typealias BaseType = TestAppStandardDataChange
+    typealias RemovalContext = BaseType.ID
     
     
-    struct TestAppStandardDataChange: Identifiable {
+    struct TestAppStandardDataChange: Identifiable, FirestoreElement {
+        var collectionPath: String {
+            "testDataChange"
+        }
+        
         let id: String
     }
     
     
-    var dataChanges: [DataChange<BaseType>] = [] {
+    var dataChanges: [DataChange<BaseType, BaseType.ID>] = [] {
         willSet {
             Task { @MainActor in
                 self.objectWillChange.send()
@@ -28,7 +34,7 @@ actor TestAppStandard: Standard, ObservableObjectProvider, ObservableObject {
     }
     
     
-    func registerDataSource(_ asyncSequence: some TypedAsyncSequence<DataChange<BaseType>>) {
+    func registerDataSource(_ asyncSequence: some TypedAsyncSequence<DataChange<BaseType, BaseType.ID>>) {
         Task {
             do {
                 for try await element in asyncSequence {

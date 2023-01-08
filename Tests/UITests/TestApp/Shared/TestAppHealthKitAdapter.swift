@@ -10,9 +10,11 @@ import CardinalKit
 @preconcurrency import HealthKit
 
 
-actor TestAppHealthKitAdapter: SingleValueDataSourceRegistryAdapter {
-    typealias InputType = HKSample
-    typealias OutputType = TestAppStandard.BaseType
+actor TestAppHealthKitAdapter: SingleValueAdapter {
+    typealias InputElement = HKSample
+    typealias InputRemovalContext = UUID
+    typealias OutputElement = TestAppStandard.BaseType
+    typealias OutputRemovalContext = String
     
     
     func transform(element: HKSample) -> TestAppStandard.BaseType {

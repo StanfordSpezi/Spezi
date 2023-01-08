@@ -63,6 +63,7 @@
 		2FC2C408291DCC8200712676 /* HealthKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC2C407291DCC8200712676 /* HealthKitTests.swift */; };
 		2FD6390C294B0A4B008BADFC /* OnboardingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD6390B294B0A4B008BADFC /* OnboardingTests.swift */; };
 		2FE122B2294247480016B162 /* XCUIApplication+TextEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE122B1294247480016B162 /* XCUIApplication+TextEntry.swift */; };
+		2FE62C3D2966074F00FCBE7F /* FirebaseDataStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE62C3C2966074F00FCBE7F /* FirebaseDataStorageTests.swift */; };
 		2FF5BB8B295430770093F0AB /* FirebaseDataStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 2FF5BB8A295430770093F0AB /* FirebaseDataStorage */; };
 /* End PBXBuildFile section */
 
@@ -128,6 +129,7 @@
 		2FC42FD7290ADD5E00B08F18 /* CardinalKitSPM */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = CardinalKitSPM; path = ../..; sourceTree = "<group>"; };
 		2FD6390B294B0A4B008BADFC /* OnboardingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingTests.swift; sourceTree = "<group>"; };
 		2FE122B1294247480016B162 /* XCUIApplication+TextEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCUIApplication+TextEntry.swift"; sourceTree = "<group>"; };
+		2FE62C3C2966074F00FCBE7F /* FirebaseDataStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseDataStorageTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -216,6 +218,7 @@
 				2FA7382B290ADFAA007ACEB9 /* TestApp.swift */,
 				2F4530C0293FD617000A858F /* AccountTests */,
 				2F4D91732948E9F1000E2D94 /* ContactsTests */,
+				2FE62C3B2966071400FCBE7F /* FirebaseDataStorageTests */,
 				2FC2C404291D848600712676 /* HealthKitTests */,
 				2F8A431C291316C8005D2B8F /* LocalStorageTests */,
 				2F4F0397294A8D280062D4C7 /* OnboardingTests */,
@@ -327,6 +330,14 @@
 				2FE122B1294247480016B162 /* XCUIApplication+TextEntry.swift */,
 			);
 			path = Helper;
+			sourceTree = "<group>";
+		};
+		2FE62C3B2966071400FCBE7F /* FirebaseDataStorageTests */ = {
+			isa = PBXGroup;
+			children = (
+				2FE62C3C2966074F00FCBE7F /* FirebaseDataStorageTests.swift */,
+			);
+			path = FirebaseDataStorageTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -450,6 +461,7 @@
 				2F7B6CAD294BCA6F00FDC494 /* GeometryReaderTestView.swift in Sources */,
 				2F7B6CB3294BCA8200FDC494 /* ViewStateTestView.swift in Sources */,
 				2FA7382C290ADFAA007ACEB9 /* TestApp.swift in Sources */,
+				2FE62C3D2966074F00FCBE7F /* FirebaseDataStorageTests.swift in Sources */,
 				2F7B6CAF294BCA7600FDC494 /* NameFieldsTestView.swift in Sources */,
 				2F4F0399294A8D410062D4C7 /* OnboardingTestsView.swift in Sources */,
 				2FC246D02941500800F75383 /* TestAccountConfiguration.swift in Sources */,
