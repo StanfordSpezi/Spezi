@@ -7,6 +7,8 @@
 //
 
 
+/// <#Description#>
 public protocol FirestoreElement: Encodable, Identifiable, Sendable where ID == String {
+    /// <#Description#>
     var collectionPath: String { get }
 }

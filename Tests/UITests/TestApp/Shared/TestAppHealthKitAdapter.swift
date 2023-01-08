@@ -14,14 +14,14 @@ actor TestAppHealthKitAdapter: SingleValueAdapter {
     typealias InputElement = HKSample
     typealias InputRemovalContext = UUID
     typealias OutputElement = TestAppStandard.BaseType
-    typealias OutputRemovalContext = String
+    typealias OutputRemovalContext = TestAppStandard.RemovalContext
     
     
-    func transform(element: HKSample) -> TestAppStandard.BaseType {
+    func transform(element: InputElement) -> OutputElement {
         TestAppStandard.BaseType(id: element.sampleType.identifier)
     }
     
-    func transform(removalContext id: UUID) -> String {
-        "Removed Element!"
+    func transform(removalContext: InputRemovalContext) -> OutputRemovalContext {
+        OutputRemovalContext(id: removalContext.uuidString)
     }
 }

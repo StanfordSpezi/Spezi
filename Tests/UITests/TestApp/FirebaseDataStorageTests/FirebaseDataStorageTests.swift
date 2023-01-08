@@ -31,7 +31,7 @@ struct FirebaseDataStorageTestsView: View {
             Button("Delete Element") {
                 Task {
                     do {
-                        try await firebaseModule.process(.removal("testDataChange/testelement"))
+                        try await firebaseModule.process(.removal(TestAppStandard.RemovalContext(id: "testelement")))
                     } catch {
                         self.error = error
                         self.displayAlert = true

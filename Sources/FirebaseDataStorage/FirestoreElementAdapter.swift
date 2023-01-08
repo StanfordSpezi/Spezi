@@ -9,6 +9,7 @@
 import CardinalKit
 
 
+/// <#Description#>
 public protocol FirestoreElementAdapter<
     InputElement,
     InputRemovalContext

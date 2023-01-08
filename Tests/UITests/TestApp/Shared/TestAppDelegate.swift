@@ -18,6 +18,7 @@ import SwiftUI
 class TestAppDelegate: CardinalKitAppDelegate {
     override var configuration: Configuration {
         Configuration(standard: TestAppStandard()) {
+             Firebase()
             if HKHealthStore.isHealthDataAvailable() {
                 HealthKit {
                     CollectSample(

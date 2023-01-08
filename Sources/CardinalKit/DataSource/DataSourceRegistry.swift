@@ -11,9 +11,9 @@
 /// Each ``DataSourceRegistry`` has a ``DataSourceRegistry/BaseType`` that all data sources should provide.
 /// Use ``Adapter``s to transform data of different data sources.
 public protocol DataSourceRegistry<BaseType, RemovalContext>: Actor {
-    /// The ``DataSourceRegistry/BaseType`` that all data sources should provide.
-    associatedtype BaseType: Identifiable, Sendable where BaseType.ID: Sendable & Identifiable, BaseType.ID == RemovalContext.ID
-    /// <#Description#>
+    /// The ``DataSourceRegistry/BaseType`` that all data sources should provide when adding or updating an element.
+    associatedtype BaseType: Identifiable, Sendable where BaseType.ID: Sendable, BaseType.ID == RemovalContext.ID
+    /// The ``DataSourceRegistry/RemovalContext`` that all data sources should provide when removing an element.
     associatedtype RemovalContext: Identifiable, Sendable
     
     
@@ -21,50 +21,6 @@ public protocol DataSourceRegistry<BaseType, RemovalContext>: Actor {
     /// - Parameter asyncSequence: The `TypedAsyncSequence<DataChange<BaseType>>` providing the data to the ``DataSourceRegistry``.
     func registerDataSource(_ asyncSequence: some TypedAsyncSequence<DataChange<BaseType, RemovalContext>>)
 }
-
-// protocol DataSourceRegistryRemovalContext<BaseType>: Identifiable where ID == BaseType.ID {
-//    associatedtype BaseType: Identifiable where BaseType.ID: Sendable & Identifiable
-//
-//
-//    var metaType: Any.Type { get }
-// }
-//
-// class TestClass: Identifiable {
-//    var id: String {
-//        "..."
-//    }
-// }
-// class TestSubClass {}
-//
-// struct Test: DataSourceRegistryRemovalContext {
-//    typealias BaseType = TestClass
-//
-//
-//    var id: String {
-//        "..."
-//    }
-//
-//    var metaType: Any.Type {
-//        return TestSubClass.self
-//    }
-//
-//    func test() {
-//        let test = Test()
-//        switch test.metaType {
-//        case is TestClass.Type:
-//            break
-//        default:
-//            break
-//        }
-//
-//        let aType = type(of: test)
-//    }
-// }
-// extension DataSourceRegistry {
-//    func test(_ element: DataChange<BaseType, some DataSourceRegistryRemovalContext<BaseType>>) {
-//
-//    }
-// }
 
 
 extension DataSourceRegistry {

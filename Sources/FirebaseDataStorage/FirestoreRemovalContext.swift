@@ -7,6 +7,8 @@
 //
 
 
+/// <#Description#>
 public protocol FirestoreRemovalContext: Identifiable, Sendable where ID == String {
+    /// <#Description#>
     var collectionPath: String { get }
 }

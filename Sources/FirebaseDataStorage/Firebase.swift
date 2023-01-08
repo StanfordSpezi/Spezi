@@ -21,10 +21,11 @@ public actor Firebase<ComponentStandard: Standard>: Module, DataStorageProvider 
     let adapter: FirestoreAdapter
 
 
-//    public init(settings: FirestoreSettings = FirestoreSettings()) where ComponentStandard.BaseType: FirestoreElement {
-//        self.adapter = IdentityFirestoreElementAdapter()
-//        self.settings = settings
-//    }
+    public init(settings: FirestoreSettings = FirestoreSettings())
+        where ComponentStandard.BaseType: FirestoreElement, ComponentStandard.RemovalContext: FirestoreRemovalContext {
+        self.adapter = DefaultFirestoreElementAdapter()
+        self.settings = settings
+    }
     
     public init(adapter: FirestoreAdapter, settings: FirestoreSettings = FirestoreSettings()) {
         self.adapter = adapter
