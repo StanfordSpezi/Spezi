@@ -10,6 +10,9 @@ import CardinalKit
 import SwiftUI
 
 
+/// A ``Login`` view provides a convenient way to display sign up buttons for all configured ``AccountService``s using the ``Account`` module.
+///
+/// The view displays a list of sign up buttons as well as a cusomizable header view that can be defined using the ``Login/init(header:)`` initializer.
 public struct SignUp<Header: View>: View {
     private var header: Header
     
@@ -26,6 +29,7 @@ public struct SignUp<Header: View>: View {
         self.header = EmptyView()
     }
     
+    /// - Parameter header: A SwiftUI `View` displayed as a header above all login buttons.
     public init(header: Header) {
         self.header = header
     }

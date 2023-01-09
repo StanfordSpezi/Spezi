@@ -9,26 +9,26 @@
 import Foundation
 
 
-/// A way to structure the values inputted in the sign-up user interface
+/// A way to structure the values inputted in the sign-up user interface.
 public struct SignInValues: Sendable {
-    /// The username as inputted in the sign-up user interface
+    /// The username as inputted in the sign-up user interface.
     public let username: String
-    /// The password as inputted in the sign-up user interface
+    /// The password as inputted in the sign-up user interface.
     public let password: String
-    /// The name as inputted in the sign-up user interface
+    /// The name as inputted in the sign-up user interface.
     public let name: PersonNameComponents
-    /// The self-identified gender as inputted in the sign-up user interface
+    /// The self-identified gender as inputted in the sign-up user interface.
     public let genderIdentity: GenderIdentity?
-    /// The date of birth as inputted in the sign-up user interface
+    /// The date of birth as inputted in the sign-up user interface.
     public let dateOfBirth: Date
     
     
     /// - Parameters:
-    ///   - username: The username as inputted in the sign-up user interface
-    ///   - password: The password as inputted in the sign-up user interface
-    ///   - name: The name as inputted in the sign-up user interface
-    ///   - genderIdentity: The self-identified gender as inputted in the sign-up user interface
-    ///   - dateOfBirth: The date of birth as inputted in the sign-up user interface
+    ///   - username: The username as inputted in the sign-up user interface.
+    ///   - password: The password as inputted in the sign-up user interface.
+    ///   - name: The name as inputted in the sign-up user interface.
+    ///   - genderIdentity: The self-identified gender as inputted in the sign-up user interface.
+    ///   - dateOfBirth: The date of birth as inputted in the sign-up user interface.
     init(username: String, password: String, name: PersonNameComponents, genderIdentity: GenderIdentity?, dateOfBirth: Date) {
         self.username = username
         self.password = password
