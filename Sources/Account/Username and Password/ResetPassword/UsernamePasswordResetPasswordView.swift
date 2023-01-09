@@ -10,7 +10,7 @@ import SwiftUI
 import Views
 
 
-/// A ``UsernamePasswordResetPasswordView`` enables ``AccountService``s such as the ``UsernamePasswordAccountService`` to
+/// Enables ``AccountService``s such as the ``UsernamePasswordAccountService`` to
 /// display a user interface allowing users to start the reset password workflow.
 ///
 /// If the password is successfully reset, the view passed as the `processSuccessfulView` into the ``UsernamePasswordResetPasswordView/init(usernameValidationRules:header:footer:processSuccessfulView:localization:)`` initializer is displayed.

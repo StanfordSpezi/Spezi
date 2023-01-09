@@ -9,7 +9,7 @@
 import SwiftUI
 
 
-/// A ``UsernamePasswordLoginView`` enables ``AccountService``s such as the ``UsernamePasswordAccountService`` to
+/// Enables ``AccountService``s such as the ``UsernamePasswordAccountService`` to
 /// display a user interface allowing users to login with a username and password.
 ///
 /// The ``Login``  view automatically displays login buttons of all configured ``AccountService``s and is the recommended way to automatically constuct a login flow for different ``AccountService``s.

@@ -10,7 +10,7 @@ import CardinalKit
 import SwiftUI
 
 
-/// The ``UsernamePasswordAccountService`` enables a username and password based login.
+/// Enables a username and password based login.
 ///
 /// Other ``AccountService``s can be created by subclassing the ``UsernamePasswordAccountService`` and overriding the ``UsernamePasswordAccountService/localization``,
 /// buttons like the ``UsernamePasswordAccountService/loginButton``, or overriding the ``UsernamePasswordAccountService/login(username:password:)`` and ``UsernamePasswordAccountService/button(_:destination:)`` functions.

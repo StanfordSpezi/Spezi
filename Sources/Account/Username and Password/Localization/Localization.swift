@@ -10,7 +10,7 @@
 import Views
 
 
-/// A ``Localization`` instance defines the localization for the ``Account`` module that can be used to customize the ``Account`` module-related views.
+/// Defines the localization for the ``Account`` module that can be used to customize the ``Account`` module-related views.
 ///
 /// The values passed into the ``Localization`` substructs are automatically interpreted according to the localization key mechanisms defined in the CardinalKit Views module.
 ///

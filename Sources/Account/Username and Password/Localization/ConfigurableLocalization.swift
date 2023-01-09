@@ -7,8 +7,8 @@
 //
 
 
-/// The ``Account/ConfigurableLocalization`` type is used to configure a view in the ``Account`` module to either use the localization
-/// injected in the SwiftUI environment using an ``Account/AccountService`` (``Account/ConfigurableLocalization/environment``)
+/// Configure a view in the ``Account`` module to either use the localization  injected in the SwiftUI environment
+/// using an ``Account/AccountService`` (``Account/ConfigurableLocalization/environment``)
 /// or using a provided value (``Account/ConfigurableLocalization/value(_:)``).
 public enum ConfigurableLocalization<T> {
     /// Use the localization injected in the SwiftUI environment using an ``Account/AccountService``.
