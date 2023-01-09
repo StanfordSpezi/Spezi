@@ -10,7 +10,7 @@ import Views
 
 
 extension Localization {
-    /// Provides default values for all localization properties that are loaded from the ``Account`` module in all supported localizations.
+    /// Provides localization information for the login-related views in the Accont module.
     ///
     /// The values passed into the ``Localization`` substructs are automatically interpreted according to the localization key mechanisms defined in the CardinalKit Views module.
     ///

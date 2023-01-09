@@ -9,7 +9,8 @@
 import SwiftUI
 import Views
 
-
+/// Displays a reset password view allowing a user to enter a username.
+///
 /// Enables ``AccountService``s such as the ``UsernamePasswordAccountService`` to
 /// display a user interface allowing users to start the reset password workflow.
 ///

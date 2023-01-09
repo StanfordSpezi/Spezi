@@ -9,6 +9,8 @@
 import SwiftUI
 
 
+/// Displays a login view allowing a user to enter a username and password.
+///
 /// Enables ``AccountService``s such as the ``UsernamePasswordAccountService`` to
 /// display a user interface allowing users to login with a username and password.
 ///

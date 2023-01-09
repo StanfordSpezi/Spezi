@@ -10,6 +10,8 @@ import SwiftUI
 import Views
 
 
+/// Displays a sign up view allowing a user to sign up using a username, password, and additional context.
+///
 /// Enables ``AccountService``s such as the ``UsernamePasswordAccountService`` to
 /// display a user interface allowing users to sign up with a username and password.
 ///
@@ -231,7 +233,7 @@ public struct UsernamePasswordSignUpView: View {
         Task {
             do {
                 try await usernamePasswordAccountService.signUp(
-                    signInValues: SignInValues(
+                    signUpValues: SignUpValues(
                         username: username,
                         password: password,
                         name: name,

@@ -10,11 +10,11 @@
 import Views
 
 
-/// Defines the localization for the ``Account`` module that can be used to customize the ``Account`` module-related views.
+/// Defines the localization for the ``Account/Account`` module that can be used to customize the ``Account/Account`` module-related views.
 ///
 /// The values passed into the ``Localization`` substructs are automatically interpreted according to the localization key mechanisms defined in the CardinalKit Views module.
 ///
-/// The ``Localization`` initializer provides default values in localizations provided out-of-the-box by the ``Account`` module.
+/// The ``Localization`` initializer provides default values in localizations provided out-of-the-box by the ``Account/Account`` module.
 /// Each substruct (``Localization/Login-swift.struct``, ``Localization/SignUp-swift.struct``, ``Localization/ResetPassword-swift.struct``) uses
 /// these default values and can be customized by, e.g., only modifying a specific property:
 /// ```swift

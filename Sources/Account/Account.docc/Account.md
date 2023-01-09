@@ -10,12 +10,12 @@ SPDX-License-Identifier: MIT
              
 -->
 
-The Account module provides convenient ways to display account-related functionalty including login, sign up, and reset password flows.
+The ``Account/Account`` module provides convenient ways to display account-related functionalty including login, sign up, and reset password flows.
 
 
 ## Overview
 
-TODO: How to setup the Account Module in the Delegate.
+TODO: How to setup the ``Account/Account`` module in the Delegate.
 TODO: How to use the views in some parts of the application (SignUp and Login)
 
 
@@ -28,7 +28,7 @@ TODO: How to use the views in some parts of the application (SignUp and Login)
 
 ### Views
 
-The Account module provides several views that can be used to provide login, sign up, and reset password flows using the defined ``Account/AccountService``s.
+The ``Account/Account`` module provides several views that can be used to provide login, sign up, and reset password flows using the defined ``Account/AccountService``s.
 
 - ``Account/SignUp``
 - ``Account/Login``

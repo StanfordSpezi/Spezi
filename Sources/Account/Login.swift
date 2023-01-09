@@ -10,7 +10,7 @@ import CardinalKit
 import SwiftUI
 
 
-/// Provides a convenient way to display login buttons for all configured ``AccountService``s using the ``Account`` module.
+/// Display login buttons for all configured ``AccountService``s using the ``Account/Account`` module.
 ///
 /// The view displays a list of login buttons as well as a cusomizable header view that can be defined using the ``Login/init(header:)`` initializer.
 public struct Login<Header: View>: View {

@@ -9,18 +9,18 @@
 import Foundation
 
 
-/// A way to structure the values inputted in the sign-up user interface.
-public struct SignInValues: Sendable {
-    /// The username as inputted in the sign-up user interface.
+/// The collected date instantiated by the sign up views.
+public struct SignUpValues: Sendable {
+    /// The username as inputted in the sign up user interface.
     public let username: String
-    /// The password as inputted in the sign-up user interface.
+    /// The password as inputted in the sign up user interface.
     public let password: String
-    /// The name as inputted in the sign-up user interface.
+    /// The name as inputted in the sign up user interface.
     public let name: PersonNameComponents
-    /// The self-identified gender as inputted in the sign-up user interface.
+    /// The self-identified gender as inputted in the sign up user interface.
     public let genderIdentity: GenderIdentity?
-    /// The date of birth as inputted in the sign-up user interface.
-    public let dateOfBirth: Date
+    /// The date of birth as inputted in the sign up user interface.
+    public let dateOfBirth: Date?
     
     
     /// - Parameters:
@@ -29,7 +29,7 @@ public struct SignInValues: Sendable {
     ///   - name: The name as inputted in the sign-up user interface.
     ///   - genderIdentity: The self-identified gender as inputted in the sign-up user interface.
     ///   - dateOfBirth: The date of birth as inputted in the sign-up user interface.
-    init(username: String, password: String, name: PersonNameComponents, genderIdentity: GenderIdentity?, dateOfBirth: Date) {
+    init(username: String, password: String, name: PersonNameComponents, genderIdentity: GenderIdentity?, dateOfBirth: Date?) {
         self.username = username
         self.password = password
         self.name = name
