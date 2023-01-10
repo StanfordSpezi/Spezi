@@ -15,7 +15,7 @@ Account services describe the mechanism for account management components to dis
 ## Create Your Account Service
 
 You can create new account services by conforming to the ``AccountService`` protocol.
-An ``AccountService`` has to provide an ``AccountService/loginButton`` and ``AccountService/signUpButton`` that is used in the
+An ``AccountService`` has to provide an ``AccountService/loginButton`` and ``AccountService/signUpButton-8r2hk`` that is used in the
 ``Login`` and ``SignUp`` views.
 
 The ``AccountService/inject(account:)`` function provides an ``AccountService`` to get access to the ``Account/Account`` actor.
