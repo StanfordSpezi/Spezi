@@ -32,7 +32,7 @@
 "UAP_SIGNUP_PASSWORD_REPEAT_TITLE" = "Repeat
 Password";
 "UAP_SIGNUP_PASSWORD_REPEAT_PLACEHOLDER" = "Repeat your password ...";
-"UAP_SIGNUP_PASSWORD_NOT_EQUAL_ERROR" = "The entered passwords are not equal";
+"UAP_SIGNUP_PASSWORD_NOT_EQUAL_ERROR" = "The entered passwords are not equal.";
 "UAP_SIGNUP_GIVEN_NAME_TITLE" = "Given Name";
 "UAP_SIGNUP_GIVEN_NAME_PLACEHOLDER" = "Enter your given name ...";
 "UAP_SIGNUP_FAMILY_NAME_TITLE" = "Family Name";
