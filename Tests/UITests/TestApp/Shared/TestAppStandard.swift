@@ -11,15 +11,36 @@ import Foundation
 
 
 actor TestAppStandard: Standard, ObservableObjectProvider, ObservableObject {
-    typealias BaseType = TestAppStandardDataChange
+    typealias BaseType = TestAppStandardBaseType
+    typealias RemovalContext = TestAppStandardRemovalContext
     
     
-    struct TestAppStandardDataChange: Identifiable {
+    struct TestAppStandardBaseType: Identifiable, Sendable {
         let id: String
+        let content: Int
+        let collectionPath: String
+        
+        
+        init(id: String, content: Int = 42, collectionPath: String = "TestAppStandardDataChange") {
+            self.collectionPath = collectionPath
+            self.id = id
+            self.content = content
+        }
+    }
+    
+    struct TestAppStandardRemovalContext: Identifiable, Sendable {
+        let id: TestAppStandardBaseType.ID
+        let collectionPath: String
+        
+        
+        init(id: TestAppStandardBaseType.ID, collectionPath: String = "TestAppStandardDataChange") {
+            self.collectionPath = collectionPath
+            self.id = id
+        }
     }
     
     
-    var dataChanges: [DataChange<BaseType>] = [] {
+    var dataChanges: [DataChange<BaseType, RemovalContext>] = [] {
         willSet {
             Task { @MainActor in
                 self.objectWillChange.send()
@@ -28,7 +49,7 @@ actor TestAppStandard: Standard, ObservableObjectProvider, ObservableObject {
     }
     
     
-    func registerDataSource(_ asyncSequence: some TypedAsyncSequence<DataChange<BaseType>>) {
+    func registerDataSource(_ asyncSequence: some TypedAsyncSequence<DataChange<BaseType, RemovalContext>>) {
         Task {
             do {
                 for try await element in asyncSequence {
@@ -41,7 +62,12 @@ actor TestAppStandard: Standard, ObservableObjectProvider, ObservableObject {
                     dataChanges.append(element)
                 }
             } catch {
-                dataChanges = [.removal(error.localizedDescription)]
+                fatalError(
+                    """
+                    Unexpected error in \(error).
+                    Do not use `fatalError` in production code. We only use this to validate the tests.
+                    """
+                )
             }
         }
     }
