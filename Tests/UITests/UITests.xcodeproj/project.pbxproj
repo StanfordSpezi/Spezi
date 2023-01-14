@@ -32,7 +32,6 @@
 		2F7B6CB3294BCA8200FDC494 /* ViewStateTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7B6CB2294BCA8200FDC494 /* ViewStateTestView.swift */; };
 		2F817A4A294B152B00A39983 /* ViewsTestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F817A49294B152B00A39983 /* ViewsTestsView.swift */; };
 		2F817A4C294B16A000A39983 /* ViewsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F817A4B294B16A000A39983 /* ViewsTests.swift */; };
-		2F87F9F12953EEB400810247 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F87F9F02953EEB400810247 /* GoogleService-Info.plist */; };
 		2F8A431529130B9B005D2B8F /* TestAppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8A431429130B9B005D2B8F /* TestAppView.swift */; };
 		2F8A431729130BBC005D2B8F /* TestAppStandard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8A431629130BBC005D2B8F /* TestAppStandard.swift */; };
 		2F8A431929130CA7005D2B8F /* TestAppTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8A431829130CA7005D2B8F /* TestAppTestCase.swift */; };
@@ -422,7 +421,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F6D139A28F5F386007C25D6 /* Assets.xcassets in Resources */,
-				2F87F9F12953EEB400810247 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
