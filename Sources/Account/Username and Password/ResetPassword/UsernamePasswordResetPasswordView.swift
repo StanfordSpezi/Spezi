@@ -9,8 +9,34 @@
 import SwiftUI
 import Views
 
-
-struct UsernamePasswordResetPasswordView: View {
+/// Displays a reset password view allowing a user to enter a username.
+///
+/// Enables ``AccountService``s such as the ``UsernamePasswordAccountService`` to
+/// display a user interface allowing users to start the reset password workflow.
+///
+/// If the password is successfully reset, the view passed as the `processSuccessfulView` into the ``UsernamePasswordResetPasswordView/init(usernameValidationRules:header:footer:processSuccessfulView:localization:)`` initializer is displayed.
+///
+/// Applications must ensure that an ``UsernamePasswordAccountService`` instance is injected in the SwiftUI environment by, e.g., using the `.environmentObject(_:)` view modifier.
+///
+/// The view can automatically validate input using passed in ``ValidationRule``s and can be customized using header or footer views:
+/// ```
+/// UsernamePasswordResetPasswordView(
+///     usernameValidationRules: [
+///         /* ... */
+///     ],
+///     header: {
+///         Text("A Header View ...")
+///     },
+///     footer: {
+///         Text("A Header View ...")
+///     },
+///     processSuccessfulView: {
+///         Text("The an email to reset the password has been sent out.")
+///     }
+/// )
+///     .environmentObject(UsernamePasswordAccountService())
+/// ``
+public struct UsernamePasswordResetPasswordView: View {
     private let usernameValidationRules: [ValidationRule]
     private let header: AnyView
     private let footer: AnyView
@@ -26,7 +52,7 @@ struct UsernamePasswordResetPasswordView: View {
     private let localization: ConfigurableLocalization<Localization.ResetPassword>
     
     
-    var body: some View {
+    public var body: some View {
         ScrollView {
             if processSuccess {
                 processSuccessfulView
@@ -68,7 +94,7 @@ struct UsernamePasswordResetPasswordView: View {
         }
         
         return Grid(horizontalSpacing: 16, verticalSpacing: 16) {
-            VerifyableTextFieldGridRow(
+            VerifiableTextFieldGridRow(
                 text: $username,
                 valid: $valid,
                 validationRules: usernameValidationRules,
@@ -94,9 +120,9 @@ struct UsernamePasswordResetPasswordView: View {
     private var resetPasswordButtonTitleLocalization: String {
         switch localization {
         case .environment:
-            return usernamePasswordAccountService.localization.resetPassword.resetPasswordActionbuttonTitle
+            return usernamePasswordAccountService.localization.resetPassword.resetPasswordActionButtonTitle
         case let .value(resetPassword):
-            return resetPassword.resetPasswordActionbuttonTitle
+            return resetPassword.resetPasswordActionButtonTitle
         }
     }
     
@@ -119,7 +145,13 @@ struct UsernamePasswordResetPasswordView: View {
     }
     
     
-    init<Header: View, Footer: View, ProcessSuccessful: View>(
+    /// - Parameters:
+    ///   - usernameValidationRules: An collection of ``ValidationRule``s to validete the entered username.
+    ///   - header: A SwiftUI `View` to display as a header.
+    ///   - footer: A SwiftUI `View` to display as a footer.
+    ///   - processSuccessfulView: A SwiftUI `View` to display if the password has been successfully reset.
+    ///   - localization: A  ``ConfigurableLocalization`` to define the localization of the ``UsernamePasswordResetPasswordView``. The default value uses the localization provided by the ``UsernamePasswordAccountService`` provided in the SwiftUI environment.
+    public init<Header: View, Footer: View, ProcessSuccessful: View>(
         usernameValidationRules: [ValidationRule] = [],
         @ViewBuilder header: () -> Header = { EmptyView() },
         @ViewBuilder footer: () -> Footer = { EmptyView() },

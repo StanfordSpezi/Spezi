@@ -10,7 +10,33 @@ import SwiftUI
 import Views
 
 
-struct UsernamePasswordSignUpView: View {
+/// Displays a sign up view allowing a user to sign up using a username, password, and additional context.
+///
+/// Enables ``AccountService``s such as the ``UsernamePasswordAccountService`` to
+/// display a user interface allowing users to sign up with a username and password.
+///
+/// The ``SignUp``  view automatically displays sign up buttons of all configured ``AccountService``s and is the recommended way to automatically constuct a sign up flow for different ``AccountService``s.
+///
+/// Nevertheless, the ``UsernamePasswordSignUpView`` can also be used to display the sign up view in a custom sign up flow.
+/// Applications must ensure that an ``UsernamePasswordAccountService`` instance is injected in the SwiftUI environment by, e.g., using the `.environmentObject(_:)` view modifier.
+///
+/// The view can automatically validate input using passed in ``ValidationRule``s and can be customized using header or footer views:
+/// ```
+/// UsernamePasswordSignUpView(
+///     passwordValidationRules: [
+///         /* ... */
+///     ],
+///     header: {
+///         Text("A Header View ...")
+///     },
+///     footer: {
+///         Text("A Footer View ...")
+///     },
+///     signUpOptions: [.usernameAndPassword, .name, .genderIdentity, .dateOfBirth],
+/// )
+///     .environmentObject(UsernamePasswordAccountService())
+/// ```
+public struct UsernamePasswordSignUpView: View {
     enum Constants {
         static let formVerticalPadding: CGFloat = 8
     }
@@ -37,7 +63,7 @@ struct UsernamePasswordSignUpView: View {
     private let localization: ConfigurableLocalization<Localization.SignUp>
     
     
-    var body: some View {
+    public var body: some View {
         Form {
             header
             if signUpOptions.contains(.usernameAndPassword) {
@@ -167,7 +193,17 @@ struct UsernamePasswordSignUpView: View {
     }
     
     
-    init<Header: View, Footer: View>(
+    /// Creates a `UsernamePasswordSignUpView` for users to sign up with a username, password,
+    /// and other personal information.
+    ///
+    /// - Parameters:
+    ///   - signUpOptions: A set of options for data to collect from the user
+    ///   - usernameValidationRules: An array of ``ValidationRule``s to apply to the entered username
+    ///   - passwordValidationRules: An array of ``ValidationRule``s to apply to the entered password
+    ///   - header: A SwiftUI `View` to display as a header
+    ///   - footer: A SwiftUI `View` to display as a footer
+    ///   - localization: A localization configuration to apply to this view
+    public init<Header: View, Footer: View>(
         signUpOptions: SignUpOptions = .default,
         usernameValidationRules: [ValidationRule] = [],
         passwordValidationRules: [ValidationRule] = [],
@@ -197,7 +233,7 @@ struct UsernamePasswordSignUpView: View {
         Task {
             do {
                 try await usernamePasswordAccountService.signUp(
-                    signInValues: SignInValues(
+                    signUpValues: SignUpValues(
                         username: username,
                         password: password,
                         name: name,
