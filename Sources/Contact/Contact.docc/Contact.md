@@ -16,7 +16,7 @@ Provides views for displaying contact information.
 
 The Contact module allows for the encoding of contact information and the creation of card-like views to display contact information that can be presented together in a list.
 
-The following example shows how ``Contact``s can be created to encode an individual's contact information and displayed in a ``ContactList`` within a SwiftUI View.
+The following example shows how ``Contact``s can be created to encode an individual's contact information and displayed in a ``ContactsList`` within a SwiftUI View.
 
 ```swift
 struct ContactsView: View {
@@ -39,11 +39,8 @@ struct ContactsView: View {
         }(),
         contactOptions: [
             .call("+1 (650) 123-4567"),
-            .email(addresses: ["example@stanford.edu"], subject: "Hi!"),
-            ContactOption(image: Image(systemName: "icloud.fill"), 
-                          title: "Cloud", 
-                          action: { }
-            )
+            .text("+1 (650) 123-4567"),
+            .email(addresses: ["example@stanford.edu"], subject: "Hi!")
         ]
     )
     
