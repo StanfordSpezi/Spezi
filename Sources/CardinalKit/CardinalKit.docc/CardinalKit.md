@@ -21,7 +21,6 @@ This is an example for a DocC documentation for the CardinalKit package.
 
 ### CardinalKit Setup
 
-- <doc:Setup>
 - ``CardinalKit/CardinalKit``
 - ``CardinalKitAppDelegate``
 - ``Standard``
@@ -31,7 +30,6 @@ This is an example for a DocC documentation for the CardinalKit package.
 You can learn more about module capabilites at ...
 
 - ``Module``
-- <doc:ModuleCapabilities>
 
 ### Data Sources
 

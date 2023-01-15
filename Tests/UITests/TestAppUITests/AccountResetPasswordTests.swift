@@ -55,7 +55,7 @@ final class AccountResetPasswordTests: TestAppUITests {
         
         XCTAssertTrue(app.staticTexts["The entered email is not correct."].waitForExistence(timeout: 1.0))
         
-        app.delete(count: username.dropLast(4).count, in: usernameField)
+        app.delete(count: username.count, in: usernameField)
         app.enter(value: username, in: usernameField)
         
         app.testPrimaryButton(enabled: true, title: buttonTitle, navigationBarButtonTitle: navigationBarButtonTitle)
