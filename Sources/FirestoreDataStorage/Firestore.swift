@@ -13,12 +13,12 @@ import FirebaseFirestoreSwift
 import SwiftUI
 
 
-public actor Firebase<ComponentStandard: Standard>: Module, DataStorageProvider {
+public actor Firestore<ComponentStandard: Standard>: Module, DataStorageProvider {
     public typealias FirestoreAdapter = any FirestoreElementAdapter<ComponentStandard.BaseType, ComponentStandard.RemovalContext>
 
 
-    let settings: FirestoreSettings
-    let adapter: FirestoreAdapter
+    private let settings: FirestoreSettings
+    private let adapter: FirestoreAdapter
 
 
     public init(settings: FirestoreSettings = FirestoreSettings())
@@ -40,9 +40,9 @@ public actor Firebase<ComponentStandard: Standard>: Module, DataStorageProvider 
         FirebaseApp.configure()
         
         #warning("Replace with actual settings .... Using the Firebase Emulator for now.")
-        Firestore.firestore().settings = .emulator
+        FirebaseFirestore.Firestore.firestore().settings = .emulator
         
-        _ = Firestore.firestore()
+        _ = FirebaseFirestore.Firestore.firestore()
     }
     
     public func process(_ element: DataChange<ComponentStandard.BaseType, ComponentStandard.RemovalContext>) async throws {
@@ -51,7 +51,7 @@ public actor Firebase<ComponentStandard: Standard>: Module, DataStorageProvider 
             let firebaseElement = await adapter.transform(element: element)
             try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
                 do {
-                    let firestore = Firestore.firestore()
+                    let firestore = FirebaseFirestore.Firestore.firestore()
                     try firestore
                         .collection(firebaseElement.collectionPath)
                         .document(firebaseElement.id)
@@ -67,12 +67,12 @@ public actor Firebase<ComponentStandard: Standard>: Module, DataStorageProvider 
                 }
             }
         case let .removal(removalContext):
-            let (collectionPath, identifier) = await transform(removalContext, using: adapter)
+            let firebaseRemovalContext = await adapter.transform(removalContext: removalContext)
             try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
-                let firestore = Firestore.firestore()
+                let firestore = FirebaseFirestore.Firestore.firestore()
                 firestore
-                    .collection(collectionPath)
-                    .document(identifier)
+                    .collection(firebaseRemovalContext.collectionPath)
+                    .document(firebaseRemovalContext.id)
                     .delete { error in
                         if let error {
                             continuation.resume(throwing: error)
@@ -82,12 +82,5 @@ public actor Firebase<ComponentStandard: Standard>: Module, DataStorageProvider 
                     }
             }
         }
-    }
-
-    private func transform(
-        _ removalContext: ComponentStandard.RemovalContext,
-        using adapter: some FirestoreElementAdapter<ComponentStandard.BaseType, ComponentStandard.RemovalContext>
-    ) async -> (collectionPath: String, identifier: String) {
-        ("", "")
     }
 }

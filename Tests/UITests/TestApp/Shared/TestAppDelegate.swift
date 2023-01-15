@@ -7,7 +7,7 @@
 //
 
 import CardinalKit
-import FirebaseDataStorage
+import FirestoreDataStorage
 @preconcurrency import HealthKit
 import HealthKitDataSource
 import LocalStorage
@@ -18,7 +18,7 @@ import SwiftUI
 class TestAppDelegate: CardinalKitAppDelegate {
     override var configuration: Configuration {
         Configuration(standard: TestAppStandard()) {
-            Firebase()
+            Firestore()
             if HKHealthStore.isHealthDataAvailable() {
                 HealthKit {
                     CollectSample(

@@ -71,7 +71,7 @@ public actor FHIR: Standard {
     var resources: [String: ResourceProxy] = [:]
     
     @DataStorageProviders
-    var dataSources: [any DataStorageProvider<FHIR>]
+    var dataStorageProviders: [any DataStorageProvider<FHIR>]
     
     
     public func registerDataSource(_ asyncSequence: some TypedAsyncSequence<DataChange<BaseType, RemovalContext>>) {
@@ -83,16 +83,16 @@ public actor FHIR: Standard {
                         continue
                     }
                     resources[id] = ResourceProxy(with: resource)
-                    for dataSource in dataSources {
-                        try await dataSource.process(.addition(resource))
+                    for dataStorageProvider in dataStorageProviders {
+                        try await dataStorageProvider.process(.addition(resource))
                     }
                 case let .removal(removalContext):
                     guard let id = removalContext.id?.value?.string else {
                         continue
                     }
                     resources[id] = nil
-                    for dataSource in dataSources {
-                        try await dataSource.process(.removal(removalContext))
+                    for dataStorageProvider in dataStorageProviders {
+                        try await dataStorageProvider.process(.removal(removalContext))
                     }
                 }
             }

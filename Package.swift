@@ -22,7 +22,7 @@ let package = Package(
         .library(name: "CardinalKit", targets: ["CardinalKit"]),
         .library(name: "Contact", targets: ["Contact"]),
         .library(name: "FHIR", targets: ["FHIR"]),
-        .library(name: "FirebaseDataStorage", targets: ["FirebaseDataStorage"]),
+        .library(name: "FirestoreDataStorage", targets: ["FirestoreDataStorage"]),
         .library(name: "HealthKitDataSource", targets: ["HealthKitDataSource"]),
         .library(name: "LocalStorage", targets: ["LocalStorage"]),
         .library(name: "Onboarding", targets: ["Onboarding"]),
@@ -83,7 +83,7 @@ let package = Package(
             ]
         ),
         .target(
-            name: "FirebaseDataStorage",
+            name: "FirestoreDataStorage",
             dependencies: [
                 .target(name: "CardinalKit"),
                 .product(name: "FirebaseFirestore", package: "firebase-ios-sdk"),
