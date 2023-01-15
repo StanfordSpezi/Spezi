@@ -29,8 +29,8 @@ final class AccountLoginTests: TestAppUITests {
             password: (passwordField, String(password.dropLast(2)))
         )
         
-        XCTAssertTrue(XCUIApplication().alerts["Credentials do not match"].waitForExistence(timeout: 6.0))
-        XCUIApplication().alerts["Credentials do not match"].scrollViews.otherElements.buttons["OK"].tap()
+        XCTAssertTrue(app.alerts["Credentials do not match"].waitForExistence(timeout: 10.0))
+        app.alerts["Credentials do not match"].scrollViews.otherElements.buttons["OK"].tap()
         
         try delete(
             username: (usernameField, username.count),
@@ -42,7 +42,7 @@ final class AccountLoginTests: TestAppUITests {
             password: (passwordField, password)
         )
         
-        XCTAssertTrue(app.collectionViews.staticTexts[username].waitForExistence(timeout: 6.0))
+        XCTAssertTrue(app.collectionViews.staticTexts[username].waitForExistence(timeout: 10.0))
     }
     
     func testLoginEmailComponents() throws {
@@ -62,7 +62,7 @@ final class AccountLoginTests: TestAppUITests {
         app.enter(value: String(username.dropLast(4)), in: usernameField)
         app.enter(value: password, in: passwordField, secureTextField: true)
         
-        XCTAssertTrue(app.staticTexts["The entered email is not correct."].exists)
+        XCTAssertTrue(app.staticTexts["The entered email is not correct."].waitForExistence(timeout: 1.0))
         XCTAssertFalse(app.scrollViews.otherElements.buttons["Login, In progress"].waitForExistence(timeout: 0.5))
         
         try delete(
