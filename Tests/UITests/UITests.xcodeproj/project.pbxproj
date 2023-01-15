@@ -95,6 +95,7 @@
 		2F7B6CB4294C03C800FDC494 /* TestApp.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = TestApp.xctestplan; path = UITests.xcodeproj/TestApp.xctestplan; sourceTree = "<group>"; };
 		2F817A49294B152B00A39983 /* ViewsTestsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewsTestsView.swift; sourceTree = "<group>"; };
 		2F817A4B294B16A000A39983 /* ViewsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewsTests.swift; sourceTree = "<group>"; };
+		2F87F9F02953EEB400810247 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		2F8A431429130B9B005D2B8F /* TestAppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAppView.swift; sourceTree = "<group>"; };
 		2F8A431629130BBC005D2B8F /* TestAppStandard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestAppStandard.swift; sourceTree = "<group>"; };
 		2F8A431829130CA7005D2B8F /* TestAppTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAppTestCase.swift; sourceTree = "<group>"; };
@@ -221,6 +222,7 @@
 				2F9F07ED29090AF500CDC598 /* Shared */,
 				2F6D139928F5F386007C25D6 /* Assets.xcassets */,
 				2F01E8CE291493560089C46B /* Info.plist */,
+				2F87F9F02953EEB400810247 /* GoogleService-Info.plist */,
 				2F01E8CD291490B80089C46B /* TestApp.entitlements */,
 			);
 			path = TestApp;

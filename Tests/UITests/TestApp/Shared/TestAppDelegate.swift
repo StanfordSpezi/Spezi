@@ -7,7 +7,7 @@
 //
 
 import CardinalKit
-import HealthKit
+@preconcurrency import HealthKit
 import HealthKitDataSource
 import LocalStorage
 import SecureStorage
@@ -17,9 +17,6 @@ import SwiftUI
 class TestAppDelegate: CardinalKitAppDelegate {
     override var configuration: Configuration {
         Configuration(standard: TestAppStandard()) {
-            TestAccountConfiguration()
-            ObservableComponentTestsComponent(message: "Passed")
-            MultipleObservableObjectsTestsComponent()
             if HKHealthStore.isHealthDataAvailable() {
                 HealthKit {
                     CollectSample(
@@ -46,8 +43,11 @@ class TestAppDelegate: CardinalKitAppDelegate {
                     TestAppHealthKitAdapter()
                 }
             }
-            SecureStorage()
             LocalStorage()
+            MultipleObservableObjectsTestsComponent()
+            ObservableComponentTestsComponent(message: "Passed")
+            SecureStorage()
+            TestAccountConfiguration()
         }
     }
 }
