@@ -11,8 +11,8 @@ builder:
   configs:
     - platform: ios
       documentation_targets:
-      - Account
       - CardinalKit
+      - Account
       - Contact
       - FHIR
       - HealthKitDataSource
