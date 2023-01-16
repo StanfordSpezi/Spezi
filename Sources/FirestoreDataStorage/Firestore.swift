@@ -12,6 +12,7 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 import SwiftUI
 
+
 /// The ``Firestore`` module & data storage provider enables the synchronization of data stored in a standard with the Firebase Firestore.
 ///
 /// You can configure the ``Firestore`` module in the `CardinalKitAppDelegate` including a chain of adapter from your standard basetype and
@@ -27,7 +28,6 @@ import SwiftUI
 ///     }
 /// }
 /// ```
-
 public actor Firestore<ComponentStandard: Standard>: Module, DataStorageProvider {
     public typealias FirestoreAdapter = any FirestoreElementAdapter<ComponentStandard.BaseType, ComponentStandard.RemovalContext>
 
