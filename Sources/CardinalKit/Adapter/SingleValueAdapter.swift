@@ -8,7 +8,7 @@
 
 
 /// A ``SingleValueAdapter`` is a ``Adapter`` that can be used to more simply transform data using the
-/// ``SingleValueAdapter/transform(element:)`` and ``SingleValueAdapter/transform(id:)`` functions.
+/// ``SingleValueAdapter/transform(element:)`` and ``SingleValueAdapter/transform(removalContext:)`` functions.
 ///
 /// See ``Adapter`` for more detail about data source registry adapters.
 public protocol SingleValueAdapter<InputElement, InputRemovalContext, OutputElement, OutputRemovalContext>: Adapter {

@@ -34,7 +34,7 @@ You can learn more about module capabilites at ...
 ### Data Sources
 
 - ``DataSourceRegistry``
-- ``DataSourceRegistryAdapter``
+- ``Adapter``
 
 ### Data Storage Providers
 

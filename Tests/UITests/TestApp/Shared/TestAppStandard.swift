@@ -7,6 +7,7 @@
 //
 
 import CardinalKit
+import FirestoreDataStorage
 import Foundation
 
 
@@ -15,10 +16,15 @@ actor TestAppStandard: Standard, ObservableObjectProvider, ObservableObject {
     typealias RemovalContext = TestAppStandardRemovalContext
     
     
-    struct TestAppStandardBaseType: Identifiable, Sendable {
-        let id: String
-        let content: Int
-        let collectionPath: String
+    struct TestAppStandardBaseType: Identifiable, Sendable, FirestoreElement {
+        var id: String
+        var content: Int
+        var collectionPath: String
+        
+        
+        var removalContext: TestAppStandardRemovalContext {
+            TestAppStandardRemovalContext(id: id, collectionPath: collectionPath)
+        }
         
         
         init(id: String, content: Int = 42, collectionPath: String = "TestAppStandardDataChange") {
@@ -28,9 +34,9 @@ actor TestAppStandard: Standard, ObservableObjectProvider, ObservableObject {
         }
     }
     
-    struct TestAppStandardRemovalContext: Identifiable, Sendable {
-        let id: TestAppStandardBaseType.ID
-        let collectionPath: String
+    struct TestAppStandardRemovalContext: Identifiable, Sendable, FirestoreRemovalContext {
+        var id: TestAppStandardBaseType.ID
+        var collectionPath: String
         
         
         init(id: TestAppStandardBaseType.ID, collectionPath: String = "TestAppStandardDataChange") {
