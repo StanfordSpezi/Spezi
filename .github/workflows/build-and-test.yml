@@ -41,7 +41,7 @@ jobs:
           swift --version
           echo "env.xcodeprojname: ${{ env.xcodeprojname }}"
           echo "env.scheme: ${{ env.scheme }}"
-    - name: Cache firebase emulators
+    - name: Cache Firebase Emulators
       uses: actions/cache@v3
       with:
         path: ~/.cache/firebase/emulators
