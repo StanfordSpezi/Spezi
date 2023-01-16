@@ -16,7 +16,7 @@ import XCTRuntimeAssertions
 ///
 ///
 /// If you import the FHIR module using `import FHIR` you can specify all FHIR compatible components and modules in the configuration builder:
-/// ```
+/// ```swift
 /// import FHIR
 /// import CardinalKit
 ///
@@ -30,7 +30,7 @@ import XCTRuntimeAssertions
 /// ```
 ///
 /// You can also manually specify the FHIR Standard by passing it into the `configuration` initializer:
-/// ```
+/// ```swift
 /// import FHIR
 /// import CardinalKit
 ///
