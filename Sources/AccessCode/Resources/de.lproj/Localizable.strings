@@ -1,0 +1,13 @@
+//
+// This source file is part of the CardinalKit open-source project
+//
+// SPDX-FileCopyrightText: 2022 Stanford University and the project authors (see CONTRIBUTORS.md)
+//
+// SPDX-License-Identifier: MIT
+//
+
+// MARK: - Passcode
+"ACCESS_CODE_PASSCODE_PROMPT" = "Bitte Passwort eingeben";
+
+// MARK: - Biometrics
+"ACCESS_CODE_BIOMETRICS_PROMPT" = "Bitte Authentifizieren";

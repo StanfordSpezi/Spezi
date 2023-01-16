@@ -18,6 +18,7 @@ let package = Package(
         .iOS(.v16)
     ],
     products: [
+        .library(name: "AccessCode", targets: ["AccessCode"]),
         .library(name: "Account", targets: ["Account"]),
         .library(name: "CardinalKit", targets: ["CardinalKit"]),
         .library(name: "Contact", targets: ["Contact"]),
@@ -34,6 +35,13 @@ let package = Package(
         .package(url: "https://github.com/apple/FHIRModels", .upToNextMinor(from: "0.4.0"))
     ],
     targets: [
+        .target(
+            name: "AccessCode",
+            dependencies: [
+                .target(name: "CardinalKit"),
+                .target(name: "Views")
+            ]
+        ),
         .target(
             name: "Account",
             dependencies: [
