@@ -18,7 +18,7 @@ import SwiftUI
 class TestAppDelegate: CardinalKitAppDelegate {
     override var configuration: Configuration {
         Configuration(standard: TestAppStandard()) {
-            Firestore()
+            Firestore(settings: .emulator)
             if HKHealthStore.isHealthDataAvailable() {
                 HealthKit {
                     CollectSample(

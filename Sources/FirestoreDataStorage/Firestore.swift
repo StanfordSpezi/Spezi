@@ -59,7 +59,7 @@ public actor Firestore<ComponentStandard: Standard>: Module, DataStorageProvider
     ) {
         FirebaseApp.configure()
         
-        FirebaseFirestore.Firestore.firestore().settings = settings
+        FirebaseFirestore.Firestore.firestore().settings = self.settings
         
         _ = FirebaseFirestore.Firestore.firestore()
     }

@@ -17,7 +17,8 @@ final class FirestoreDataStorageTests: TestAppUITests {
     private struct FirestoreElement: Decodable, Equatable {
         let name: String
         let fields: [String: [String: String]]
-
+        
+        
         init(name: String, fields: [String: [String: String]]) {
             self.name = name
             self.fields = fields
@@ -39,6 +40,7 @@ final class FirestoreDataStorageTests: TestAppUITests {
                 ]
             )
         }
+        
         
         subscript(dynamicMember member: String) -> [String: String] {
             fields[member, default: [:]]
