@@ -47,7 +47,7 @@ jobs:
         path: ~/.cache/firebase/emulators
         key: ${{ runner.os }}-firebase-emulators-${{ hashFiles('~/.cache/firebase/emulators/**') }}
     - name: Setting up NodeJS
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v3
     - name: Install Firebase CLI Tools
       run: npm install -g firebase-tools
     - name: Build and Test Example App
