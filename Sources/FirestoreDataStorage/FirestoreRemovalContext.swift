@@ -7,8 +7,8 @@
 //
 
 
-/// <#Description#>
+/// Provides the nescessary removal context for the ``Firestore`` date storage component.
 public protocol FirestoreRemovalContext: Identifiable, Sendable where ID == String {
-    /// <#Description#>
+    /// The collection path where the ``FirestoreElement`` is located at.
     var collectionPath: String { get }
 }

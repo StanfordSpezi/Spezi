@@ -7,13 +7,13 @@
 //
 
 
-/// <#Description#>
+/// Provides an identity mapping of a type already conforming to ``FirestoreElement``/``FirestoreRemovalContext`` to the type-erased counterparts (``AnyFirestoreElement``/``AnyFirestoreRemovalContext``)
 public actor DefaultFirestoreElementAdapter<InputElement: FirestoreElement, InputRemovalContext: FirestoreRemovalContext>: FirestoreElementAdapter {
     public typealias OutputElement = AnyFirestoreElement
     public typealias OutputRemovalContext = AnyFirestoreRemovalContext
     
     
-    /// <#Description#>
+    /// Type-erased version of a ``FirestoreElement`` instance.
     public struct AnyFirestoreElement: FirestoreElement {
         fileprivate let element: any FirestoreElement
         
@@ -36,7 +36,7 @@ public actor DefaultFirestoreElementAdapter<InputElement: FirestoreElement, Inpu
         }
     }
     
-    /// <#Description#>
+    /// Type-erased version of a ``FirestoreRemovalContext`` instance.
     public struct AnyFirestoreRemovalContext: FirestoreRemovalContext {
         public let collectionPath: String
         public let id: String
@@ -49,15 +49,14 @@ public actor DefaultFirestoreElementAdapter<InputElement: FirestoreElement, Inpu
     }
     
     
-    /// <#Description#>
     public init() {}
-
-
+    
+    
     public func transform(element: InputElement) -> AnyFirestoreElement {
         AnyFirestoreElement(element: element)
     }
-
+    
     public func transform(removalContext: InputRemovalContext) -> AnyFirestoreRemovalContext {
         AnyFirestoreRemovalContext(collectionPath: removalContext.collectionPath, id: removalContext.id)
     }
- }
+}

@@ -11,7 +11,7 @@ import HealthKit
 import SwiftUI
 
 
-/// The ``HealthKit`` module enables the collection of HealthKit data and transforms it to the component's standard's base type using a `DataSourceRegistryAdapter` (``HealthKit/Adapter``)
+/// The ``HealthKit`` module enables the collection of HealthKit data and transforms it to the component's standard's base type using a `DataSourceRegistryAdapter` (``HealthKit/HKSampleAdapter``)
 ///
 /// Use the ``HealthKit/init(_:adapter:)`` initializer to define different ``HealthKitDataSourceDescription``s to define the data collection.
 /// You can, e.g., use ``CollectSample`` to collect a wide variaty of `HKSampleTypes`:
@@ -50,7 +50,7 @@ import SwiftUI
 /// }
 /// ```
 public final class HealthKit<ComponentStandard: Standard>: Module {
-    /// The ``HealthKit/Adapter`` type defines the mapping of `HKSample`s to the component's standard's base type.
+    /// The ``HealthKit/HKSampleAdapter`` type defines the mapping of `HKSample`s to the component's standard's base type.
     public typealias HKSampleAdapter = any Adapter<HKSample, HKSample.ID, ComponentStandard.BaseType, ComponentStandard.RemovalContext>
     
     
@@ -68,7 +68,7 @@ public final class HealthKit<ComponentStandard: Standard>: Module {
     /// Creates a new instance of the ``HealthKit`` module.
     /// - Parameters:
     ///   - healthKitDataSourceDescriptions: The ``HealthKitDataSourceDescription``s define what data is collected by the ``HealthKit`` module. You can, e.g., use ``CollectSample`` to collect a wide variaty of `HKSampleTypes`.
-    ///   - adapter: The ``HealthKit/Adapter`` type defines the mapping of `HKSample`s to the component's standard's base type.
+    ///   - adapter: The ``HealthKit/HKSampleAdapter`` type defines the mapping of `HKSample`s to the component's standard's base type.
     public init(
         @HealthKitDataSourceDescriptionBuilder _ healthKitDataSourceDescriptions: () -> ([HealthKitDataSourceDescription]),
         @AdapterBuilder<ComponentStandard.BaseType, ComponentStandard.RemovalContext> adapter: () -> (HKSampleAdapter)

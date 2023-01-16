@@ -10,7 +10,7 @@
 /// A ``DataStorageProvider``  determines a ``Component`` used to process data from a ``Standard``.
 /// A ``Standard`` instance can use the ``Standard/DataStorageProviders`` property wrapper to access all related ``DataStorageProvider``s.
 ///
-/// The following example uses an ``EncodableAdapter`` and ``IdentityEncodableAdapter`` to transform elements to an `Encodable` representation:
+/// The following example uses a ``SingleValueAdapter`` to transform elements to an `DataStorageUploadable` representation:
 /// ```
 /// struct DataStorageUploadable: Encodable, Identifiable {
 ///     let id: String

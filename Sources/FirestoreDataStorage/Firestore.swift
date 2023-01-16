@@ -12,6 +12,21 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 import SwiftUI
 
+/// The ``Firestore`` module & data storage provider enables the synchronization of data stored in a standard with the Firebase Firestore.
+///
+/// You can configure the ``Firestore`` module in the `CardinalKitAppDelegate` including a chain of adapter from your standard basetype and
+/// removal context to ``FirestoreElement`` and ``FirestoreRemovalContext`` instances.
+/// ```swift
+/// class FirestoreExampleDelegate: CardinalKitAppDelegate {
+///     override var configuration: Configuration {
+///         Configuration(standard: ExampleStandard()) {
+///             Firestore(settings: .emulator) {
+///                 // ... chain of `Adapter`s
+///             }
+///         }
+///     }
+/// }
+/// ```
 
 public actor Firestore<ComponentStandard: Standard>: Module, DataStorageProvider {
     public typealias FirestoreAdapter = any FirestoreElementAdapter<ComponentStandard.BaseType, ComponentStandard.RemovalContext>
@@ -20,13 +35,18 @@ public actor Firestore<ComponentStandard: Standard>: Module, DataStorageProvider
     private let settings: FirestoreSettings
     private let adapter: FirestoreAdapter
 
-
+    
+    /// - Parameter settings: The firestore settings according to the [Firebase Firestore Swift Package](https://firebase.google.com/docs/reference/swift/firebasefirestore/api/reference/Classes/FirestoreSettings)
     public init(settings: FirestoreSettings = FirestoreSettings())
         where ComponentStandard.BaseType: FirestoreElement, ComponentStandard.RemovalContext: FirestoreRemovalContext {
         self.adapter = DefaultFirestoreElementAdapter()
         self.settings = settings
     }
     
+    /// - Parameters:
+    ///   - adapter: A chain of adapter from your standard basetype and
+    /// removal context to ``FirestoreElement`` and ``FirestoreRemovalContext`` instances.
+    ///   - settings: The firestore settings according to the [Firebase Firestore Swift Package](https://firebase.google.com/docs/reference/swift/firebasefirestore/api/reference/Classes/FirestoreSettings)
     public init(adapter: FirestoreAdapter, settings: FirestoreSettings = FirestoreSettings()) {
         self.adapter = adapter
         self.settings = settings
@@ -39,8 +59,7 @@ public actor Firestore<ComponentStandard: Standard>: Module, DataStorageProvider
     ) {
         FirebaseApp.configure()
         
-        #warning("Replace with actual settings .... Using the Firebase Emulator for now.")
-        FirebaseFirestore.Firestore.firestore().settings = .emulator
+        FirebaseFirestore.Firestore.firestore().settings = settings
         
         _ = FirebaseFirestore.Firestore.firestore()
     }

@@ -7,8 +7,8 @@
 //
 
 
-/// <#Description#>
+/// Provides the nescessary information context for the ``Firestore`` date storage component to store a new element or update an existing element.
 public protocol FirestoreElement: Encodable, Identifiable, Sendable where ID == String {
-    /// <#Description#>
+    /// The collection path where the ``FirestoreElement`` should be stored at.
     var collectionPath: String { get }
 }

@@ -9,7 +9,9 @@
 import CardinalKit
 
 
-/// <#Description#>
+/// An adapter that a type conforms to when transforming elements and removal contexts for the ``Firestore`` data storage provider.
+///
+/// Transforms an input element to a ``FirestoreElement`` and a removal context to a ``FirestoreRemovalContext``.
 public protocol FirestoreElementAdapter<
     InputElement,
     InputRemovalContext
