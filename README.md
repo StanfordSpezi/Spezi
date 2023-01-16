@@ -29,3 +29,6 @@ Contributions to this project are welcome. Please make sure to read the [contrib
 ## License
 
 This project is licensed under the MIT License. See [Licenses](https://github.com/CardinalKit/Template-Repository/tree/develop/LICENSES) for more information.
+
+![Stanford Byers Center for Biodesign Logo](https://raw.githubusercontent.com/StanfordBDHG/.github/main/assets/biodesign-footer-light.png#gh-light-mode-only)
+![Stanford Byers Center for Biodesign Logo](https://raw.githubusercontent.com/StanfordBDHG/.github/main/assets/biodesign-footer-dark.png#gh-dark-mode-only)
