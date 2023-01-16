@@ -63,7 +63,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: ${{ env.scheme }}.xcresult
-        path: ${{ env.scheme }}.xcresult
+        path: Tests/UITests/${{ env.scheme }}.xcresult
   create-and-upload-coverage-report:
     name: Create and Upload Coverage Report
     needs: [build_and_test-spm, build_and_test-uitests]
