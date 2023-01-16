@@ -11,6 +11,10 @@ import CardinalKit
 import SwiftUI
 
 
+/// The Firestore tests require the Firebase Firestore Emulator to run at port 8080.
+///
+/// Refer to https://firebase.google.com/docs/emulator-suite/connect_firestore about more information about the
+/// Firebase Local Emulator Suite.
 struct FirestoreDataStorageTestsView: View {
     @EnvironmentObject var firebaseModule: Firestore<TestAppStandard>
     @State var error: Error?
@@ -21,6 +25,7 @@ struct FirestoreDataStorageTestsView: View {
     
     var body: some View {
         Form {
+            Text("The Firestore tests require the Firebase Firestore Emulator to run at port 8080.")
             Section("Element Information") {
                 TextField(
                     "Id",

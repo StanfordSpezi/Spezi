@@ -9,6 +9,10 @@
 import XCTest
 
 
+/// The `FirestoreDataStorageTests` require the Firebase Firestore Emulator to run at port 8080.
+///
+/// Refer to https://firebase.google.com/docs/emulator-suite/connect_firestore about more information about the
+/// Firebase Local Emulator Suite.
 final class FirestoreDataStorageTests: TestAppUITests {
     private struct FirestoreElement: Decodable, Equatable {
         let name: String
@@ -197,6 +201,14 @@ final class FirestoreDataStorageTests: TestAppUITests {
         
         guard let urlResponse = response as? HTTPURLResponse,
               200...299 ~= urlResponse.statusCode else {
+            print(
+                """
+                The `FirestoreDataStorageTests` require the Firebase Firestore Emulator to run at port 8080.
+                
+                Refer to https://firebase.google.com/docs/emulator-suite/connect_firestore about more information about the
+                Firebase Local Emulator Suite.
+                """
+            )
             throw URLError(.fileDoesNotExist)
         }
     }
@@ -209,6 +221,14 @@ final class FirestoreDataStorageTests: TestAppUITests {
         
         guard let urlResponse = response as? HTTPURLResponse,
               200...299 ~= urlResponse.statusCode else {
+            print(
+                """
+                The `FirestoreDataStorageTests` require the Firebase Firestore Emulator to run at port 8080.
+                
+                Refer to https://firebase.google.com/docs/emulator-suite/connect_firestore about more information about the
+                Firebase Local Emulator Suite.
+                """
+            )
             throw URLError(.fileDoesNotExist)
         }
         
