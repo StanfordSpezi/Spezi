@@ -77,7 +77,7 @@ public final class LocalStorage<ComponentStandard: Standard>: Module, DefaultIni
         let data = try JSONEncoder().encode(element)
         
         
-        // Determin if the data should be encryped or not:
+        // Determine if the data should be encrypted or not:
         guard let keys = try settings.keys(from: secureStorage) else {
             // No encryption:
             try data.write(to: fileURL)
