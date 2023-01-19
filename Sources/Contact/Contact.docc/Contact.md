@@ -10,16 +10,18 @@ SPDX-License-Identifier: MIT
              
 -->
 
-Provides views for displaying contact information.
+Views to display contact information.
 
 ## Contact
 
-The Contact module allows for the encoding of contact information and the creation of card-like views to display contact information that can be presented together in a list.
+The Contact module enables displaying contact information in an application. 
+Information can be encoded in ``Contact`` and ``ContactOption`` to configure the contact views.
+The ``ContactView`` and ``ContactsList`` can display the contact information in a card-like layout and list.
 
 The following example shows how ``Contact``s can be created to encode an individual's contact information and displayed in a ``ContactsList`` within a SwiftUI View.
 
 ```swift
-struct ContactsView: View {
+struct ContactsExample: View {
     let contact = Contact(
         image: Image(systemName: "figure.wave.circle"),
         name: PersonNameComponents(givenName: "Leland", familyName: "Stanford"),
@@ -55,7 +57,14 @@ struct ContactsView: View {
 
 ### Views
 
-Views that can be used to display contact information.
+The contact views that can be used to display contact information.
 
 - ``ContactView``
 - ``ContactsList``
+
+### Models
+
+Use the ``Contact`` and ``ContactOption`` to configure the contact views.
+
+- ``Contact/Contact``
+- ``ContactOption``

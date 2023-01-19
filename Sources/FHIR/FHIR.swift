@@ -16,7 +16,7 @@ import XCTRuntimeAssertions
 ///
 ///
 /// If you import the FHIR module using `import FHIR` you can specify all FHIR compatible components and modules in the configuration builder:
-/// ```
+/// ```swift
 /// import FHIR
 /// import CardinalKit
 ///
@@ -30,7 +30,7 @@ import XCTRuntimeAssertions
 /// ```
 ///
 /// You can also manually specify the FHIR Standard by passing it into the `configuration` initializer:
-/// ```
+/// ```swift
 /// import FHIR
 /// import CardinalKit
 ///
@@ -45,22 +45,37 @@ import XCTRuntimeAssertions
 public actor FHIR: Standard {
     /// The FHIR `Resource` type builds the `BaseType` of the ``FHIR/FHIR`` standard.
     public typealias BaseType = Resource
-    /// <#Description#>
+    /// The FHIR ``FHIRRemovalContext`` type builds the `RemovalContext` of the ``FHIR/FHIR`` standard.
     public typealias RemovalContext = FHIRRemovalContext
     
     
-    /// <#Description#>
+    /// Defines the nescessary context to process removals of a FHIR `Resource`.
     public struct FHIRRemovalContext: Sendable, Identifiable {
-        /// <#Description#>
+        /// The identifier of the FHIR `Resource`.
         public let id: BaseType.ID
-        /// <#Description#>
+        /// The string representation of the resource type of the FHIR `Resource`.
+        ///
+        /// You can obtain the resource type using a `ResourceProxy`:
+        /// ```swift
+        /// let resource: Resource = // ...
+        /// let resourceProxy = ResourceProxy(with: resource)
+        /// let resourceType = resourceProxy.resourceType
+        /// ```
+        /// or shortly:
+        /// ```swift
+        /// let resourceType = ResourceProxy(with: resource).resourceType
+        /// ```
         public let resourceType: String
         
         
-        /// <#Description#>
         /// - Parameters:
-        ///   - id: <#id description#>
-        ///   - resourceType: <#resourceType description#>
+        ///   - id: The identifier of the FHIR `Resource`.
+        ///   - resourceType: The string representation of the resource type of the FHIR `Resource`.
+        ///
+        /// You can obtain the resource type using a `ResourceProxy`:
+        /// ```swift
+        /// let resourceType = ResourceProxy(with: resource).resourceType
+        /// ```
         public init(id: BaseType.ID, resourceType: String) {
             self.id = id
             self.resourceType = resourceType
@@ -71,7 +86,7 @@ public actor FHIR: Standard {
     var resources: [String: ResourceProxy] = [:]
     
     @DataStorageProviders
-    var dataSources: [any DataStorageProvider<FHIR>]
+    var dataStorageProviders: [any DataStorageProvider<FHIR>]
     
     
     public func registerDataSource(_ asyncSequence: some TypedAsyncSequence<DataChange<BaseType, RemovalContext>>) {
@@ -83,16 +98,16 @@ public actor FHIR: Standard {
                         continue
                     }
                     resources[id] = ResourceProxy(with: resource)
-                    for dataSource in dataSources {
-                        try await dataSource.process(.addition(resource))
+                    for dataStorageProvider in dataStorageProviders {
+                        try await dataStorageProvider.process(.addition(resource))
                     }
                 case let .removal(removalContext):
                     guard let id = removalContext.id?.value?.string else {
                         continue
                     }
                     resources[id] = nil
-                    for dataSource in dataSources {
-                        try await dataSource.process(.removal(removalContext))
+                    for dataStorageProvider in dataStorageProviders {
+                        try await dataStorageProvider.process(.removal(removalContext))
                     }
                 }
             }
