@@ -13,7 +13,8 @@ import SwiftUI
 
 struct OnboardingTestsView: View {
     enum OnboardingStep: String, CaseIterable, Codable {
-        case consentView = "Consent View"
+        case consentMarkdownView = "Consent View (Markdown)"
+        case consentHTMLView = "Consent View (HTML)"
         case onboardingView = "Onboarding View"
         case sequentialOnboarding = "Sequential Onboarding"
     }
@@ -29,8 +30,10 @@ struct OnboardingTestsView: View {
             .navigationTitle("Onboarding")
             .navigationDestination(for: OnboardingStep.self) { onboardingStep in
                 switch onboardingStep {
-                case .consentView:
-                    consentView
+                case .consentMarkdownView:
+                    consentMarkdownView
+                case .consentHTMLView:
+                    consentHTMLView
                 case .onboardingView:
                     onboardingView
                 case .sequentialOnboarding:
@@ -40,7 +43,7 @@ struct OnboardingTestsView: View {
     }
     
     
-    private var consentView: some View {
+    private var consentMarkdownView: some View {
         ConsentView(
             header: {
                 OnboardingTitleView(title: "Consent", subtitle: "Version 1.0")
@@ -53,6 +56,33 @@ struct OnboardingTestsView: View {
             }
         )
             .navigationBarTitleDisplayMode(.inline)
+    }
+
+    private var consentHTMLView: some View {
+        ConsentView(
+            header: {
+                OnboardingTitleView(title: "Consent", subtitle: "Version 1.0")
+            },
+            asyncHTML: {
+                try? await Task.sleep(for: .seconds(2))
+                let html = """
+                        <meta name=\"viewport\" content=\"initial-scale=1.0\" />
+                        <h1>Study Consent</h1>
+                        <hr />
+                        <p>This is an example of a study consent written in HTML.</p>
+                        <h2>Study Tasks</h2>
+                        <ul>
+                            <li>First task</li>
+                            <li>Second task</li>
+                            <li>Third task</li>
+                        </ul>
+                """
+                return Data(html.utf8)
+            },
+            action: {
+                path.append(OnboardingStep.onboardingView)
+            }
+        )
     }
     
     private var onboardingView: some View {
@@ -83,7 +113,7 @@ struct OnboardingTestsView: View {
             ],
             actionText: "Continue"
         ) {
-            path.append(OnboardingStep.consentView)
+            path.append(OnboardingStep.consentMarkdownView)
         }
             .navigationBarTitleDisplayMode(.inline)
     }

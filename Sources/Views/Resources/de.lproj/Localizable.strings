@@ -17,3 +17,6 @@
 
 // MARK: MarkdownView
 "MARKDOWN_LOADING_ERROR" = "Das Dokument konnte nicht geladen werden.";
+
+// MARK: HTMLView
+"HTML_LOADING_ERROR" = "HTML konnte nicht geladen werden.";

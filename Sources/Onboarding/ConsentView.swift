@@ -106,6 +106,34 @@ public struct ConsentView<ContentView: View, Action: View>: View {
             }
         )
     }
+
+    /// Creates a ``ConsentView`` with a provided action view using  an``OnboardingActionsView`` and renders HTML in a web view.
+    /// - Parameters:
+    ///   - header: The header view will be displayed above the html content.
+    ///   - asyncHTML: The html content provided as an UTF8 encoded `Data` instance that can be provided asynchronously.
+    ///   - footer: The footer view will be displayed above the html content.
+    ///   - action: The action that should be performed once the consent has been given.
+    public init(
+        @ViewBuilder header: () -> (some View) = { EmptyView() },
+        asyncHTML: @escaping () async -> Data,
+        @ViewBuilder footer: () -> (some View) = { EmptyView() },
+        action: @escaping () -> Void
+    ) where ContentView == HTMLView<AnyView, AnyView>, Action == OnboardingActionsView {
+        self.init(
+            contentView: {
+                HTMLView(
+                    asyncHTML: asyncHTML,
+                    header: { AnyView(header()) },
+                    footer: { AnyView(footer()) }
+                )
+            },
+            actionView: {
+                OnboardingActionsView(String(localized: "CONSENT_ACTION", bundle: .module)) {
+                    action()
+                }
+            }
+        )
+    }
     
     /// Creates a ``ConsentView`` with a custom-provided action view.
     /// - Parameters:
