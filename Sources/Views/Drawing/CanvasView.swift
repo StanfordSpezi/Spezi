@@ -148,7 +148,6 @@ public struct CanvasView: View {
         }
     }
     
-    
     /// Creates a new ``CanvasView`` providing a SwiftUI wrapper around the PencilKit `PKCanvasView`
     /// - Parameters:
     ///   - drawing: A `Binding` containing the current `PKDrawing`
