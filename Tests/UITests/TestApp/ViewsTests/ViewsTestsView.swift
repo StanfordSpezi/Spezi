@@ -18,6 +18,7 @@ struct ViewsTestsView: View {
         case geometryReader = "Geometry Reader"
         case label = "Label"
         case markdownView = "Markdown View"
+        case htmlView = "HTML View"
         case viewState = "View State"
     }
     
@@ -44,6 +45,8 @@ struct ViewsTestsView: View {
                     label
                 case .markdownView:
                     markdownView
+                case .htmlView:
+                    htmlView
                 case .viewState:
                     viewState
                 }
@@ -107,6 +110,11 @@ struct ViewsTestsView: View {
     @ViewBuilder
     private var markdownView: some View {
         MarkdownViewTestView()
+    }
+
+    @ViewBuilder
+    private var htmlView: some View {
+        HTMLViewTestView()
     }
     
     @ViewBuilder
