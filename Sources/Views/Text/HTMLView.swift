@@ -61,9 +61,9 @@ public struct HTMLView: View {
                 }
             }
         }
-        .task {
-            html = await asyncHTML()
-        }
+            .task {
+                html = await asyncHTML()
+            }
     }
 
     /// Creates an ``HTMLView`` that displays HTML that is loaded asynchronously.
