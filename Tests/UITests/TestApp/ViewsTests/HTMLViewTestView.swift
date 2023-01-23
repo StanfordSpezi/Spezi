@@ -13,12 +13,12 @@ struct HTMLViewTestView: View {
     @State var viewState: ViewState = .idle
 
     var body: some View {
-        HTMLView(
-            asyncHTML: {
+        DocumentView(
+            asyncData: {
                 try? await Task.sleep(for: .seconds(5))
                 return Data("This is an <strong>HTML example</strong> taking 5 seconds to load.".utf8)
             },
-            state: $viewState,
+            type: .html,
             header: {
                 Text("Header")
             },

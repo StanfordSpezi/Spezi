@@ -63,7 +63,7 @@ public struct ConsentView<ContentView: View, Action: View>: View {
                     .animation(.easeInOut, value: showSignatureView)
                 }
             )
-                .scrollDisabled(isSigning)
+            .scrollDisabled(isSigning)
         }
     }
     
@@ -90,11 +90,12 @@ public struct ConsentView<ContentView: View, Action: View>: View {
         asyncMarkdown: @escaping () async -> Data,
         @ViewBuilder footer: () -> (some View) = { EmptyView() },
         action: @escaping () -> Void
-    ) where ContentView == MarkdownView<AnyView, AnyView>, Action == OnboardingActionsView {
+    ) where ContentView == DocumentView<AnyView, AnyView>, Action == OnboardingActionsView {
         self.init(
             contentView: {
-                MarkdownView(
-                    asyncMarkdown: asyncMarkdown,
+                DocumentView(
+                    asyncData: asyncMarkdown,
+                    type: .markdown,
                     header: { AnyView(header()) },
                     footer: { AnyView(footer()) }
                 )
@@ -118,11 +119,12 @@ public struct ConsentView<ContentView: View, Action: View>: View {
         asyncHTML: @escaping () async -> Data,
         @ViewBuilder footer: () -> (some View) = { EmptyView() },
         action: @escaping () -> Void
-    ) where ContentView == HTMLView<AnyView, AnyView>, Action == OnboardingActionsView {
+    ) where ContentView == DocumentView<AnyView, AnyView>, Action == OnboardingActionsView {
         self.init(
             contentView: {
-                HTMLView(
-                    asyncHTML: asyncHTML,
+                DocumentView(
+                    asyncData: asyncHTML,
+                    type: .html,
                     header: { AnyView(header()) },
                     footer: { AnyView(footer()) }
                 )
@@ -148,7 +150,6 @@ public struct ConsentView<ContentView: View, Action: View>: View {
     }
 }
 
-
 struct ConsentView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
@@ -160,7 +161,7 @@ struct ConsentView_Previews: PreviewProvider {
                     print("Next step ...")
                 }
             )
-                .navigationTitle("Consent")
+            .navigationTitle("Consent")
         }
     }
 }

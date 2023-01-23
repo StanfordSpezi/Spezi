@@ -14,12 +14,12 @@ struct MarkdownViewTestView: View {
     @State var viewState: ViewState = .idle
     
     var body: some View {
-        MarkdownView(
-            asyncMarkdown: {
+        DocumentView(
+            asyncData: {
                 try? await Task.sleep(for: .seconds(5))
                 return Data("This is a *markdown* **example** taking 5 seconds to load.".utf8)
             },
-            state: $viewState,
+            type: .markdown,
             header: {
                 Text("Header")
             },

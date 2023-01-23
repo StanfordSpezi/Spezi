@@ -20,13 +20,7 @@ import WebKit
 ///         try? await Task.sleep(for: .seconds(5))
 ///         return Data("This is an <strong>HTML example</strong> taking 5 seconds to load.".utf8)
 ///     },
-///     state: $viewState,
-///     header: {
-///         Text("Header")
-///     },
-///     footer: {
-///         Text("Footer")
-///     }
+///     state: $viewState
 /// )
 /// ```
 private struct WebView: UIViewRepresentable {
@@ -42,37 +36,30 @@ private struct WebView: UIViewRepresentable {
 }
 
 
-public struct HTMLView<Header: View, Footer: View>: View {
-    private let header: Header
-    private let footer: Footer
+public struct HTMLView: View {
     private let asyncHTML: () async -> Data
 
     @State private var html: Data?
     @Binding private var state: ViewState
 
 
-    private var htmlString: String {
+    private var htmlString: String? {
         guard let html else {
-            let errorString = String(localized: "HTML_LOADING_ERROR", bundle: .module)
-            return """
-                    <meta name=\"viewport\" content=\"initial-scale=1.0\" />
-                    <p style=\"text-align: center\">\(errorString)</p>
-                    """
+            return nil
         }
-
         return String(decoding: html, as: UTF8.self)
     }
 
     public var body: some View {
         VStack {
-            header
             if html == nil {
                 ProgressView()
                     .padding()
             } else {
-                WebView(htmlContent: htmlString)
+                if let htmlString {
+                    WebView(htmlContent: htmlString)
+                }
             }
-            footer
         }
         .task {
             html = await asyncHTML()
@@ -83,16 +70,10 @@ public struct HTMLView<Header: View, Footer: View>: View {
     /// - Parameters:
     ///   - asyncHTML: The async closure to load the html as a utf8 representation.
     ///   - state: A `Binding` to observe the ``ViewState`` of the ``HTMLView``.
-    ///   - header: An optional header of the ``HTMLView``
-    ///   - footer: An optional footer of the ``HTMLView``
     public init(
         asyncHTML: @escaping () async -> Data,
-        state: Binding<ViewState> = .constant(.idle),
-        @ViewBuilder header: () -> (Header) = { EmptyView() },
-        @ViewBuilder footer: () -> (Footer) = { EmptyView() }
+        state: Binding<ViewState> = .constant(.idle)
     ) {
-        self.header = header()
-        self.footer = footer()
         self.asyncHTML = asyncHTML
         self._state = state
     }
@@ -101,19 +82,13 @@ public struct HTMLView<Header: View, Footer: View>: View {
     /// - Parameters:
     ///   - html: A `Data` instance containing the html as an utf8 representation.
     ///   - state: A `Binding` to observe the ``ViewState`` of the ``HTMLView``.
-    ///   - header: An optional header of the ``HTMLView``
-    ///   - footer: An optional footer of the ``HTMLView``
     public init(
         html: Data,
-        state: Binding<ViewState> = .constant(.idle),
-        @ViewBuilder header: () -> (Header) = { EmptyView() },
-        @ViewBuilder footer: () -> (Footer) = { EmptyView() }
+        state: Binding<ViewState> = .constant(.idle)
     ) {
         self.init(
             asyncHTML: { html },
-            state: state,
-            header: header,
-            footer: footer
+            state: state
         )
     }
 }
