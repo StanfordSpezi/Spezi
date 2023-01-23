@@ -11,7 +11,7 @@ import Combine
 import Foundation
 
 
-/// The ``Scheduler/Scheduler`` module allows the scheduling and observation of ``Task``s adhering to a sepcific ``Schedule``.
+/// The ``Scheduler/Scheduler`` module allows the scheduling and observation of ``Task``s adhering to a specific ``Schedule``.
 ///
 /// Use the ``Scheduler/Scheduler/init(tasks:)`` initializer or the ``Scheduler/Scheduler/schedule(task:)`` function
 /// to schedule tasks that you can obtain using the ``Scheduler/Scheduler/tasks`` property.
