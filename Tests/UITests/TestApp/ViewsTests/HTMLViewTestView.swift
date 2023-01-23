@@ -18,13 +18,7 @@ struct HTMLViewTestView: View {
                 try? await Task.sleep(for: .seconds(5))
                 return Data("This is an <strong>HTML example</strong> taking 5 seconds to load.".utf8)
             },
-            type: .html,
-            header: {
-                Text("Header")
-            },
-            footer: {
-                Text("\(String(describing: viewState))")
-            }
+            type: .html
         )
         HTMLView(
             html: Data("This is an <strong>HTML example</strong>.".utf8)

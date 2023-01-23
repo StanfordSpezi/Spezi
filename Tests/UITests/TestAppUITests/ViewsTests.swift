@@ -123,11 +123,13 @@ final class ViewsTests: TestAppUITests {
         app.collectionViews.buttons["Views"].tap()
         app.collectionViews.buttons["HTML View"].tap()
 
+        sleep(3) // Wait for WKWebView to load
+
         XCTAssert(app.staticTexts["This is an HTML example."].exists)
         XCTAssert(app.staticTexts["idle"].exists)
         XCTAssert(app.staticTexts["Header"].exists)
 
-        sleep(6)
+        sleep(8)
 
         XCTAssert(app.staticTexts["This is an HTML example taking 5 seconds to load."].exists)
     }

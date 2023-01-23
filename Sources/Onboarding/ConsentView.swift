@@ -90,14 +90,18 @@ public struct ConsentView<ContentView: View, Action: View>: View {
         asyncMarkdown: @escaping () async -> Data,
         @ViewBuilder footer: () -> (some View) = { EmptyView() },
         action: @escaping () -> Void
-    ) where ContentView == DocumentView<AnyView, AnyView>, Action == OnboardingActionsView {
+    ) where ContentView == AnyView, Action == OnboardingActionsView {
         self.init(
             contentView: {
-                DocumentView(
-                    asyncData: asyncMarkdown,
-                    type: .markdown,
-                    header: { AnyView(header()) },
-                    footer: { AnyView(footer()) }
+                AnyView(
+                    VStack {
+                        header()
+                        DocumentView(
+                            asyncData: asyncMarkdown,
+                            type: .markdown
+                        )
+                        footer()
+                    }
                 )
             },
             actionView: {
@@ -119,14 +123,18 @@ public struct ConsentView<ContentView: View, Action: View>: View {
         asyncHTML: @escaping () async -> Data,
         @ViewBuilder footer: () -> (some View) = { EmptyView() },
         action: @escaping () -> Void
-    ) where ContentView == DocumentView<AnyView, AnyView>, Action == OnboardingActionsView {
+    ) where ContentView == AnyView, Action == OnboardingActionsView {
         self.init(
             contentView: {
-                DocumentView(
-                    asyncData: asyncHTML,
-                    type: .html,
-                    header: { AnyView(header()) },
-                    footer: { AnyView(footer()) }
+                AnyView(
+                    VStack {
+                        header()
+                        DocumentView(
+                            asyncData: asyncHTML,
+                            type: .html
+                        )
+                        footer()
+                    }
                 )
             },
             actionView: {

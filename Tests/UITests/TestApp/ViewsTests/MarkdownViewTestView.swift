@@ -19,13 +19,7 @@ struct MarkdownViewTestView: View {
                 try? await Task.sleep(for: .seconds(5))
                 return Data("This is a *markdown* **example** taking 5 seconds to load.".utf8)
             },
-            type: .markdown,
-            header: {
-                Text("Header")
-            },
-            footer: {
-                Text("\(String(describing: viewState))")
-            }
+            type: .markdown
         )
         MarkdownView(
             markdown: Data("This is a *markdown* **example**.".utf8)
