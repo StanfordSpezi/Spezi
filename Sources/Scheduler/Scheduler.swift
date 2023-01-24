@@ -22,11 +22,6 @@ public class Scheduler<ComponentStandard: Standard, Context: Codable>: Equatable
     private var cancellables: Set<AnyCancellable> = []
     
     
-    public static func == (lhs: Scheduler<ComponentStandard, Context>, rhs: Scheduler<ComponentStandard, Context>) -> Bool {
-        lhs.tasks == rhs.tasks
-    }
-    
-    
     /// Creates a new ``Scheduler`` module.
     /// - Parameter tasks: The initial set of ``Task``s.
     public init(tasks: [Task<Context>] = []) {
@@ -43,6 +38,11 @@ public class Scheduler<ComponentStandard: Standard, Context: Codable>: Equatable
         for task in tasks {
             schedule(task: task)
         }
+    }
+    
+    
+    public static func == (lhs: Scheduler<ComponentStandard, Context>, rhs: Scheduler<ComponentStandard, Context>) -> Bool {
+        lhs.tasks == rhs.tasks
     }
     
     
