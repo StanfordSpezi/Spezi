@@ -141,6 +141,7 @@ let package = Package(
                 .target(name: "FHIR"),
                 .product(name: "ModelsR4", package: "FHIRModels"),
                 .product(name: "ResearchKitOnFHIR", package: "ResearchKitOnFHIR"),
+                .product(name: "FHIRQuestionnaires", package: "ResearchKitOnFHIR"),
                 .product(name: "ResearchKit", package: "ResearchKit")
             ]
         ),

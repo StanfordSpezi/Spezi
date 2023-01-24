@@ -25,10 +25,17 @@ import SwiftUI
 ///     }
 /// }
 /// ```
-public class QuestionnaireDataSource<ComponentStandard: Standard>: AnyQuestionnaireDataSource, Component, LifecycleHandler, ObservableObjectProvider {
+public class QuestionnaireDataSource<ComponentStandard: Standard>: Component, LifecycleHandler, ObservableObjectProvider {
     @StandardActor private var standard: ComponentStandard
     private let adapter: any Adapter<QuestionnaireResponse, Resource.ID, ComponentStandard.BaseType, ComponentStandard.RemovalContext>
     private var continuation: AsyncStream<DataChange<QuestionnaireResponse, Resource.ID>>.Continuation?
+    
+    
+    public var observableObjects: [any ObservableObject] {
+        [
+            AnyQuestionnaireDataSource(self)
+        ]
+    }
     
     
     /// - Parameter adapter: An `Adapter` to define the mapping of a `QuestionnaireResponse`s to the component's standard's base type.
@@ -40,16 +47,20 @@ public class QuestionnaireDataSource<ComponentStandard: Standard>: AnyQuestionna
     }
     
     /// ``QuestionnaireDataSource`` initializer with no need for an adapter if the `ComponentStandard` is the `FHIR` standard.
-    override init() where ComponentStandard == FHIR {
+    public init() where ComponentStandard == FHIR {
         self.adapter = QuestionnaireResponseIdentityAdapter()
     }
     
     
-    override public func add(_ response: QuestionnaireResponse) {
+    /// Adds a new `QuestionnaireResponse` to the ``QuestionnaireDataSource``
+    /// - Parameter response: The `QuestionnaireResponse` that should be added.
+    public func add(_ response: QuestionnaireResponse) {
         continuation?.yield(.addition(response))
     }
     
-    override public func remove(removalContext: Resource.ID) {
+    /// Removes a `QuestionnaireResponse` by its response from the ``QuestionnaireDataSource``
+    /// - Parameter removalContext:Removes a `QuestionnaireResponse` identified by its identifier.
+    public func remove(removalContext: Resource.ID) {
         continuation?.yield(.removal(removalContext))
     }
     

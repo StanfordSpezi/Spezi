@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
+import FHIRQuestionnaires
 import ModelsR4
 import ResearchKit
 import SwiftUI
@@ -21,7 +22,11 @@ public struct QuestionnaireView: View {
     
     public var body: some View {
         if let task = createTask(questionnaire: questionnaire) {
-            ORKOrderedTaskView(tasks: task, delegate: ORKTaskFHIRDelegate(questionnaireResponse))
+            ORKOrderedTaskView(
+                tasks: task,
+                delegate: ORKTaskFHIRDelegate(questionnaireResponse),
+                tintColor: .accentColor
+            )
                 .ignoresSafeArea(.container, edges: .bottom)
                 .ignoresSafeArea(.keyboard, edges: .bottom)
         } else {
@@ -77,10 +82,7 @@ public struct QuestionnaireView: View {
 
 
 struct QuestionnaireView_Previews: PreviewProvider {
-    @State private static var questionnaire = Questionnaire(status: FHIRPrimitive<PublicationStatus>())
-    
-    
     static var previews: some View {
-        QuestionnaireView(questionnaire: questionnaire)
+        QuestionnaireView(questionnaire: Questionnaire.dateTimeExample)
     }
 }

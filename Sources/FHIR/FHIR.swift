@@ -84,7 +84,7 @@ public actor FHIR: Standard, ObservableObject, ObservableObjectProvider {
     
     
     @Published
-    var resources: [String: ResourceProxy] = [:]
+    private var resources: [Resource.ID: ResourceProxy] = [:]
     
     @DataStorageProviders
     var dataStorageProviders: [any DataStorageProvider<FHIR>]
@@ -98,7 +98,7 @@ public actor FHIR: Standard, ObservableObject, ObservableObjectProvider {
             for try await dateSourceElement in asyncSequence {
                 switch dateSourceElement {
                 case let .addition(resource):
-                    guard let id = resource.id?.value?.string else {
+                    guard let id = resource.id else {
                         continue
                     }
                     resources[id] = ResourceProxy(with: resource)
@@ -106,7 +106,7 @@ public actor FHIR: Standard, ObservableObject, ObservableObjectProvider {
                         try await dataStorageProvider.process(.addition(resource))
                     }
                 case let .removal(removalContext):
-                    guard let id = removalContext.id?.value?.string else {
+                    guard let id = removalContext.id else {
                         continue
                     }
                     resources[id] = nil
@@ -116,5 +116,14 @@ public actor FHIR: Standard, ObservableObject, ObservableObjectProvider {
                 }
             }
         }
+    }
+    
+    
+    public func resource(withId id: Resource.ID) -> ResourceProxy? {
+        resources[id]
+    }
+    
+    public func resources<R: Resource>(resourceType: R.Type = R.self) -> [R] {
+        resources.values.compactMap { $0.get(if: R.self) }
     }
 }
