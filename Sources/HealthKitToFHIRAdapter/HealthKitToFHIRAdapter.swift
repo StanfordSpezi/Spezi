@@ -24,9 +24,7 @@ public actor HealthKitToFHIRAdapter: SingleValueAdapter {
     
     
     public func transform(element: InputElement) throws -> OutputElement {
-        let resource = try element.resource.get()
-        resource.id = element.id.uuidString.asFHIRStringPrimitive()
-        return resource
+        try element.resource.get()
     }
     
     public func transform(removalContext: InputRemovalContext) throws -> OutputRemovalContext {

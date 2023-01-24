@@ -35,7 +35,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/apple/FHIRModels", .upToNextMinor(from: "0.4.0")),
         .package(url: "https://github.com/firebase/firebase-ios-sdk", from: "10.3.0"),
-        .package(url: "https://github.com/StanfordBDHG/HealthKitOnFHIR", .upToNextMinor(from: "0.2.1"))
+        .package(url: "https://github.com/StanfordBDHG/HealthKitOnFHIR", .upToNextMinor(from: "0.2.2"))
     ],
     targets: [
         .target(
