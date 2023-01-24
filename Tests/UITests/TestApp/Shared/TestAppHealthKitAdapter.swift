@@ -8,20 +8,21 @@
 
 import CardinalKit
 @preconcurrency import HealthKit
+import HealthKitDataSource
 
 
 actor TestAppHealthKitAdapter: SingleValueAdapter {
     typealias InputElement = HKSample
-    typealias InputRemovalContext = UUID
+    typealias InputRemovalContext = HKSampleRemovalContext
     typealias OutputElement = TestAppStandard.BaseType
     typealias OutputRemovalContext = TestAppStandard.RemovalContext
     
     
-    func transform(element: InputElement) -> OutputElement {
+    func transform(element: InputElement) throws -> OutputElement {
         TestAppStandard.BaseType(id: element.sampleType.identifier)
     }
     
-    func transform(removalContext: InputRemovalContext) -> OutputRemovalContext {
-        OutputRemovalContext(id: removalContext.uuidString)
+    func transform(removalContext: InputRemovalContext) throws -> OutputRemovalContext {
+        OutputRemovalContext(id: removalContext.id.uuidString)
     }
 }

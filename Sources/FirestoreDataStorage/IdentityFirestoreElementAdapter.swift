@@ -52,11 +52,11 @@ public actor DefaultFirestoreElementAdapter<InputElement: FirestoreElement, Inpu
     public init() {}
     
     
-    public func transform(element: InputElement) -> AnyFirestoreElement {
+    public func transform(element: InputElement) throws -> AnyFirestoreElement {
         AnyFirestoreElement(element: element)
     }
     
-    public func transform(removalContext: InputRemovalContext) -> AnyFirestoreRemovalContext {
+    public func transform(removalContext: InputRemovalContext) throws -> AnyFirestoreRemovalContext {
         AnyFirestoreRemovalContext(collectionPath: removalContext.collectionPath, id: removalContext.id)
     }
 }

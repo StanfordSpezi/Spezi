@@ -120,7 +120,7 @@ final class HealthKitSampleDataSource<ComponentStandard: Standard, SampleType: H
     }
     
     
-    private func anchoredSingleObjectQuery() -> AsyncThrowingStream<DataChange<HKSample, HKSample.ID>, Error> {
+    private func anchoredSingleObjectQuery() -> AsyncThrowingStream<DataChange<HKSample, HKSampleRemovalContext>, Error> {
         AsyncThrowingStream { continuation in
             Task {
                 let results = try await healthStore.anchoredSingleObjectQuery(
