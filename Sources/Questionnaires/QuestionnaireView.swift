@@ -11,7 +11,7 @@ import ResearchKit
 import SwiftUI
 
 
-/// Renders a ResearchKit task from the selected FHIR questionnaire
+/// Renders a FHIR `Questionnaire`.
 public struct QuestionnaireView: View {
     @EnvironmentObject private var questionnaireDataSource: AnyQuestionnaireDataSource
     private let questionnaire: Questionnaire
@@ -30,9 +30,8 @@ public struct QuestionnaireView: View {
     }
     
     
-    /// <#Description#>
     /// - Parameters:
-    ///   - questionnaire: <#questionnaire description#>
+    ///   - questionnaire: The FHIR `Questionnaire` that should be displayed.
     ///   - completionStepMessage: Optional completion message that can be appended at the end of the questionnaire.
     ///   - questionnaireResponse: Optional response closure that can be used to manually obtain the `QuestionnaireResponse`.
     ///                            If no closure is provided, the `QuestionnaireResponse` instance is send to the `QuestionnaireDataSource` found in the SwiftUI environment.

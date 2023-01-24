@@ -12,7 +12,7 @@ import FHIR
 
 actor QuestionnaireResponseIdentityAdapter: SingleValueAdapter {
     typealias InputElement = QuestionnaireResponse
-    typealias InputRemovalContext = Identifier
+    typealias InputRemovalContext = Resource.ID
     typealias OutputElement = FHIR.BaseType
     typealias OutputRemovalContext = FHIR.RemovalContext
     
@@ -23,7 +23,7 @@ actor QuestionnaireResponseIdentityAdapter: SingleValueAdapter {
     
     func transform(removalContext: InputRemovalContext) throws -> OutputRemovalContext {
         OutputRemovalContext(
-            id: removalContext.id,
+            id: removalContext,
             resourceType: QuestionnaireResponse.resourceType
         )
     }

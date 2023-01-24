@@ -12,23 +12,34 @@ import ModelsR4
 import SwiftUI
 
 
-/// <#Description#>
+/// Maps `Questionnaires` returned from the ``QuestionnaireView`` to the `Standard` of the CardinalKit application.
+///
+/// Use the ``QuestionnaireDataSource/init(adapter:)`` initializer to add the data source to your `Configuration`.
+/// You can use the ``QuestionnaireDataSource/init()`` initializer of you use the FHIR standard in your CardinalKit application:
+/// ```
+/// class ExampleAppDelegate: CardinalKitAppDelegate {
+///     override var configuration: Configuration {
+///         Configuration(standard: FHIR()) {
+///             QuestionnaireDataSource()
+///         }
+///     }
+/// }
+/// ```
 public class QuestionnaireDataSource<ComponentStandard: Standard>: AnyQuestionnaireDataSource, Component, LifecycleHandler, ObservableObjectProvider {
     @StandardActor private var standard: ComponentStandard
-    private let adapter: any Adapter<QuestionnaireResponse, Identifier, ComponentStandard.BaseType, ComponentStandard.RemovalContext>
-    private var continuation: AsyncStream<DataChange<QuestionnaireResponse, Identifier>>.Continuation?
+    private let adapter: any Adapter<QuestionnaireResponse, Resource.ID, ComponentStandard.BaseType, ComponentStandard.RemovalContext>
+    private var continuation: AsyncStream<DataChange<QuestionnaireResponse, Resource.ID>>.Continuation?
     
     
-    /// <#Description#>
-    /// - Parameter adapter: <#adapter description#>
+    /// - Parameter adapter: An `Adapter` to define the mapping of a `QuestionnaireResponse`s to the component's standard's base type.
     public init(
         @AdapterBuilder<ComponentStandard.BaseType, ComponentStandard.RemovalContext> adapter:
-        () -> (any Adapter<QuestionnaireResponse, Identifier, ComponentStandard.BaseType, ComponentStandard.RemovalContext>)
+        () -> (any Adapter<QuestionnaireResponse, Resource.ID, ComponentStandard.BaseType, ComponentStandard.RemovalContext>)
     ) {
         self.adapter = adapter()
     }
     
-    /// <#Description#>
+    /// ``QuestionnaireDataSource`` initializer with no need for an adapter if the `ComponentStandard` is the `FHIR` standard.
     override init() where ComponentStandard == FHIR {
         self.adapter = QuestionnaireResponseIdentityAdapter()
     }
@@ -38,7 +49,7 @@ public class QuestionnaireDataSource<ComponentStandard: Standard>: AnyQuestionna
         continuation?.yield(.addition(response))
     }
     
-    override public func remove(removalContext: Identifier) {
+    override public func remove(removalContext: Resource.ID) {
         continuation?.yield(.removal(removalContext))
     }
     

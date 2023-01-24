@@ -10,12 +10,12 @@ import ModelsR4
 import SwiftUI
 
 
-/// <#Description#>
+/// A type erased version of a ``QuestionnaireDataSource``.
 public class AnyQuestionnaireDataSource: ObservableObject {
-    /// <#Description#>
-    /// - Parameter response: <#response description#>
+    /// Adds a new `QuestionnaireResponse` to the ``QuestionnaireDataSource``
+    /// - Parameter response: The `QuestionnaireResponse` that should be added.
     public func add(_ response: QuestionnaireResponse) { }
-    /// <#Description#>
-    /// - Parameter removalContext: <#removalContext description#>
-    public func remove(removalContext: Identifier) { }
+    /// Removes a `QuestionnaireResponse` by its response from the ``QuestionnaireDataSource``
+    /// - Parameter removalContext:Removes a `QuestionnaireResponse` identified by its identifier.
+    public func remove(removalContext: Resource.ID) { }
 }
