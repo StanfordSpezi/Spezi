@@ -74,9 +74,8 @@ public struct QuestionnaireView: View {
     private func questionnaireResponse(_ questionnaireResponse: QuestionnaireResponse) {
         if let questionnaireResponseClosure {
             questionnaireResponseClosure(questionnaireResponse)
-        } else {
-            questionnaireDataSource.add(questionnaireResponse)
         }
+        questionnaireDataSource.add(questionnaireResponse)
     }
 }
 

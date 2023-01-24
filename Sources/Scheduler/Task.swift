@@ -12,7 +12,7 @@ import Foundation
 /// A ``Task`` defines an instruction that is scheduled one to multiple times as defined by the ``Task/schedule`` property.
 ///
 /// A ``Task`` can have an additional ``Task/context`` associated with it that can be used to carry application-specific context.
-public final class Task<Context: Codable & Sendable>: Codable, Identifiable, Hashable, ObservableObject, @unchecked Sendable, EventContext {
+public final class Task<Context: Codable & Sendable>: Codable, Identifiable, Equatable, Hashable, ObservableObject, @unchecked Sendable, EventContext {
     enum CodingKeys: CodingKey {
         case id
         case title
