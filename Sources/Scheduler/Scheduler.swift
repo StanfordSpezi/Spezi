@@ -16,7 +16,7 @@ import Foundation
 /// Use the ``Scheduler/Scheduler/init(tasks:)`` initializer or the ``Scheduler/Scheduler/schedule(task:)`` function
 /// to schedule tasks that you can obtain using the ``Scheduler/Scheduler/tasks`` property.
 /// You can use the ``Scheduler/Scheduler`` as an `ObservableObject` to automatically update your SwiftUI views when new events are emitted or events change.
-public class Scheduler<ComponentStandard: Standard, Context: Codable>: Module {
+public class Scheduler<ComponentStandard: Standard, Context: Codable>: Equatable, Module {
     public private(set) var tasks: [Task<Context>]
     private var timers: [Timer] = []
     private var cancellables: Set<AnyCancellable> = []
@@ -38,6 +38,11 @@ public class Scheduler<ComponentStandard: Standard, Context: Codable>: Module {
         for task in tasks {
             schedule(task: task)
         }
+    }
+    
+    
+    public static func == (lhs: Scheduler<ComponentStandard, Context>, rhs: Scheduler<ComponentStandard, Context>) -> Bool {
+        lhs.tasks == rhs.tasks
     }
     
     

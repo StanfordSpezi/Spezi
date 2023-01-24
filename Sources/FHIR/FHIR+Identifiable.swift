@@ -9,7 +9,9 @@
 import ModelsR4
 
 
-extension Resource: Identifiable { }
+extension Resource: Identifiable {
+    public typealias ID = FHIRPrimitive<FHIRString>?
+}
 
 extension FHIRPrimitive: Identifiable where PrimitiveType: Identifiable { }
 

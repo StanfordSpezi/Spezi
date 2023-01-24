@@ -30,6 +30,7 @@ public struct ContactsList: View {
             }
                 .padding(.vertical, 6)
         }
+            .background(Color(.systemGroupedBackground))
     }
     
     
