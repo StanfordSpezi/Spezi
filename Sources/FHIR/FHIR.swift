@@ -42,7 +42,7 @@ import XCTRuntimeAssertions
 ///     }
 /// }
 /// ```
-public actor FHIR: Standard {
+public actor FHIR: Standard, ObservableObject, ObservableObjectProvider {
     /// The FHIR `Resource` type builds the `BaseType` of the ``FHIR/FHIR`` standard.
     public typealias BaseType = Resource
     /// The FHIR ``FHIRRemovalContext`` type builds the `RemovalContext` of the ``FHIR/FHIR`` standard.
@@ -65,7 +65,7 @@ public actor FHIR: Standard {
         /// ```swift
         /// let resourceType = ResourceProxy(with: resource).resourceType
         /// ```
-        public let resourceType: String
+        public let resourceType: ResourceType
         
         
         /// - Parameters:
@@ -76,17 +76,21 @@ public actor FHIR: Standard {
         /// ```swift
         /// let resourceType = ResourceProxy(with: resource).resourceType
         /// ```
-        public init(id: BaseType.ID, resourceType: String) {
+        public init(id: BaseType.ID, resourceType: ResourceType) {
             self.id = id
             self.resourceType = resourceType
         }
     }
     
     
+    @Published
     var resources: [String: ResourceProxy] = [:]
     
     @DataStorageProviders
     var dataStorageProviders: [any DataStorageProvider<FHIR>]
+    
+    
+    public init() { }
     
     
     public func registerDataSource(_ asyncSequence: some TypedAsyncSequence<DataChange<BaseType, RemovalContext>>) {

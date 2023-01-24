@@ -14,13 +14,13 @@
 public protocol SingleValueAdapter<InputElement, InputRemovalContext, OutputElement, OutputRemovalContext>: Adapter {
     /// Map the element of the transformed async streams from additions.
     /// - Parameter element: The element that should be transformed.
-    /// - Returns: Returns the transformed element
-    func transform(element: InputElement) -> OutputElement
+    /// - Returns: Returns the transformed element.
+    func transform(element: InputElement) throws -> OutputElement
     
     /// Map the element's removal of the transformed async streams from removals.
     /// - Parameter removalContext: The element's removal context that should be transformed.
     /// - Returns: Returns the transformed removal context.
-    func transform(removalContext: InputRemovalContext) -> OutputRemovalContext
+    func transform(removalContext: InputRemovalContext) throws -> OutputRemovalContext
 }
 
 
@@ -33,9 +33,9 @@ extension SingleValueAdapter {
         asyncSequence.map { [self] element in
             switch element {
             case let .addition(element):
-                return await .addition(transform(element: element))
-            case let .removal(elementId):
-                return await .removal(transform(removalContext: elementId))
+                return await .addition(try transform(element: element))
+            case let .removal(removalContext):
+                return await .removal(try transform(removalContext: removalContext))
             }
         }
     }
