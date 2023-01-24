@@ -24,6 +24,7 @@ let package = Package(
         .library(name: "FHIR", targets: ["FHIR"]),
         .library(name: "FirestoreDataStorage", targets: ["FirestoreDataStorage"]),
         .library(name: "HealthKitDataSource", targets: ["HealthKitDataSource"]),
+        .library(name: "HealthKitToFHIRAdapter", targets: ["HealthKitToFHIRAdapter"]),
         .library(name: "LocalStorage", targets: ["LocalStorage"]),
         .library(name: "Onboarding", targets: ["Onboarding"]),
         .library(name: "Scheduler", targets: ["Scheduler"]),
@@ -33,7 +34,8 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/apple/FHIRModels", .upToNextMinor(from: "0.4.0")),
-        .package(url: "https://github.com/firebase/firebase-ios-sdk", from: "10.3.0")
+        .package(url: "https://github.com/firebase/firebase-ios-sdk", from: "10.3.0"),
+        .package(url: "https://github.com/StanfordBDHG/HealthKitOnFHIR", .upToNextMinor(from: "0.2.2"))
     ],
     targets: [
         .target(
@@ -94,6 +96,16 @@ let package = Package(
             name: "HealthKitDataSource",
             dependencies: [
                 .target(name: "CardinalKit")
+            ]
+        ),
+        .target(
+            name: "HealthKitToFHIRAdapter",
+            dependencies: [
+                .target(name: "CardinalKit"),
+                .target(name: "FHIR"),
+                .target(name: "HealthKitDataSource"),
+                .product(name: "ModelsR4", package: "FHIRModels"),
+                .product(name: "HealthKitOnFHIR", package: "HealthKitOnFHIR")
             ]
         ),
         .target(
