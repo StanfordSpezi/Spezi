@@ -45,7 +45,13 @@ public struct ContactsList: View {
 struct ContactsList_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
-            ContactsList(contacts: [.mock, .mock, .mock])
+            ContactsList(
+                contacts: [
+                    ContactView_Previews.mock,
+                    ContactView_Previews.mock,
+                    ContactView_Previews.mock
+                ]
+            )
                 .navigationTitle("Contacts")
                 .background(Color(.systemGroupedBackground))
         }
