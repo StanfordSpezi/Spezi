@@ -126,8 +126,8 @@ final class DataStorageProviderTests: XCTestCase {
                 continuation.yield(.addition(observation2))
                 continuation.yield(.addition(observation3))
                 continuation.yield(.addition(observationNilId))
-                continuation.yield(.removal(FHIR.RemovalContext(id: nil, resourceType: "Observation")))
-                continuation.yield(.removal(FHIR.RemovalContext(id: "1", resourceType: "Observation")))
+                continuation.yield(.removal(FHIR.RemovalContext(id: nil, resourceType: .observation)))
+                continuation.yield(.removal(FHIR.RemovalContext(id: "1", resourceType: .observation)))
             }
         )
         

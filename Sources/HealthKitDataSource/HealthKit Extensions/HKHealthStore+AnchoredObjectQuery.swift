@@ -27,7 +27,7 @@ extension HKHealthStore {
     func anchoredContinousObjectQuery(
         for sampleType: HKSampleType,
         withPredicate predicate: NSPredicate? = nil
-    ) async -> any TypedAsyncSequence<DataChange<HKSample, HKSample.ID>> {
+    ) async -> any TypedAsyncSequence<DataChange<HKSample, HKSampleRemovalContext>> {
         AsyncThrowingStream { continuation in
             Task {
                 try await self.requestAuthorization(toShare: [], read: [sampleType])
@@ -45,7 +45,7 @@ extension HKHealthStore {
                         }
                         
                         for deletedObject in results.deletedObjects {
-                            continuation.yield(.removal(deletedObject.uuid))
+                            continuation.yield(.removal(HKSampleRemovalContext(id: deletedObject.uuid, sampleType: sampleType)))
                         }
                         
                         for addedSample in results.addedSamples {
@@ -65,18 +65,18 @@ extension HKHealthStore {
         for sampleType: HKSampleType,
         using anchor: HKQueryAnchor? = nil,
         withPredicate predicate: NSPredicate? = nil
-    ) async throws -> (elements: [DataChange<HKSample, HKSample.ID>], anchor: HKQueryAnchor) {
+    ) async throws -> (elements: [DataChange<HKSample, HKSampleRemovalContext>], anchor: HKQueryAnchor) {
         try await self.requestAuthorization(toShare: [], read: [sampleType])
         
         let anchorDescriptor = anchorDescriptor(sampleType: sampleType, predicate: predicate, anchor: anchor)
         
         let result = try await anchorDescriptor.result(for: self)
         
-        var elements: [DataChange<HKSample, HKSample.ID>] = []
+        var elements: [DataChange<HKSample, HKSampleRemovalContext>] = []
         elements.reserveCapacity(result.deletedObjects.count + result.addedSamples.count)
         
         for deletedObject in result.deletedObjects {
-            elements.append(.removal(deletedObject.uuid))
+            elements.append(.removal(HKSampleRemovalContext(id: deletedObject.uuid, sampleType: sampleType)))
         }
         
         for addedSample in result.addedSamples {

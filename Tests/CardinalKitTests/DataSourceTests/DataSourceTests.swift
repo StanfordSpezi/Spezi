@@ -124,11 +124,11 @@ final class DataSourceTests: XCTestCase {
         typealias OutputRemovalContext = OutputElement.ID
         
         
-        func transform(element: InputElement) -> OutputElement {
+        func transform(element: InputElement) throws -> OutputElement {
             MockStandard.CustomDataSourceType(id: OutputElement.ID(element.id))
         }
         
-        func transform(removalContext: InputRemovalContext) -> OutputRemovalContext {
+        func transform(removalContext: InputRemovalContext) throws -> OutputRemovalContext {
             OutputRemovalContext(removalContext.id)
         }
     }
@@ -140,11 +140,11 @@ final class DataSourceTests: XCTestCase {
         typealias OutputRemovalContext = OutputElement.ID
         
         
-        func transform(element: InputElement) -> OutputElement {
+        func transform(element: InputElement) throws -> OutputElement {
             MockStandard.CustomDataSourceType(id: OutputElement.ID(element.id))
         }
         
-        func transform(removalContext: InputRemovalContext) -> OutputRemovalContext {
+        func transform(removalContext: InputRemovalContext) throws -> OutputRemovalContext {
             OutputRemovalContext(removalContext.id)
         }
     }
