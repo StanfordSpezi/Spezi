@@ -30,7 +30,8 @@ struct HealthKitTestsView: View {
                 Text(element)
             }
         }
-            .onAppear {
+            .task {
+                self.dataChanges = await standard.dataChanges.map { $0.id }
                 cancellable = standard.objectWillChange.sink {
                     Task { @MainActor in
                         self.dataChanges = await standard.dataChanges.map { $0.id }
