@@ -1,5 +1,15 @@
 # Obtaining User Consent
 
+<!--
+                  
+This source file is part of the CardinalKit open-source project
+
+SPDX-FileCopyrightText: 2022 Stanford University and the project authors (see CONTRIBUTORS.md)
+
+SPDX-License-Identifier: MIT
+             
+-->
+
 Present your user a consent document to read and sign.
 
 ### Obtaining User Consent
