@@ -27,23 +27,41 @@ import Views
 /// ```
 public struct OnboardingActionsView: View {
     private let primaryText: String
-    private let primaryAction: () -> Void
+    private let _primaryAction: () async -> Void
     private let secondaryText: String?
-    private let secondaryAction: (() -> Void)?
+    private let _secondaryAction: (() async -> Void)?
+    
+    @State private var primaryActionLoading = false
+    @State private var secondaryActionLoading = false
     
     
     public var body: some View {
-        Button(action: primaryAction) {
-            Text(primaryText)
-                .frame(maxWidth: .infinity, minHeight: 38)
-        }
-            .buttonStyle(.borderedProminent)
-        if let secondaryText, let secondaryAction {
-            Button(secondaryText) {
-                secondaryAction()
+        VStack {
+            Button(action: primaryAction) {
+                Group {
+                    if primaryActionLoading {
+                        ProgressView()
+                    } else {
+                        Text(primaryText)
+                    }
+                }
+                    .frame(maxWidth: .infinity, minHeight: 38)
             }
-                .padding(.top, 10)
+                .buttonStyle(.borderedProminent)
+            if let secondaryText, _secondaryAction != nil {
+                Button(action: secondaryAction) {
+                    Group {
+                        if secondaryActionLoading {
+                            ProgressView()
+                        } else {
+                            Text(secondaryText)
+                        }
+                    }
+                }
+                    .padding(.top, 10)
+            }
         }
+            .disabled(primaryActionLoading || secondaryActionLoading)
     }
     
     /// Creates an ``OnboardingActionsView`` instance that only contains a primary button.
@@ -52,12 +70,12 @@ public struct OnboardingActionsView: View {
     ///   - action: The action that should be performed when pressing the primary button
     public init<Text: StringProtocol>(
         _ text: Text,
-        action: @escaping () -> Void
+        action: @escaping () async -> Void
     ) {
         self.primaryText = text.localized
-        self.primaryAction = action
+        self._primaryAction = action
         self.secondaryText = nil
-        self.secondaryAction = nil
+        self._secondaryAction = nil
     }
     
     /// Creates an ``OnboardingActionsView`` instance that contains a primary button and a secondary button.
@@ -68,14 +86,39 @@ public struct OnboardingActionsView: View {
     ///   - secondaryAction: The action that should be performed when pressing the secondary button
     public init<PrimaryText: StringProtocol, SecondaryText: StringProtocol>(
         primaryText: PrimaryText,
-        primaryAction: @escaping () -> Void,
+        primaryAction: @escaping () async -> Void,
         secondaryText: SecondaryText,
-        secondaryAction: (@escaping () -> Void)
+        secondaryAction: (@escaping () async -> Void)
     ) {
         self.primaryText = primaryText.localized
-        self.primaryAction = primaryAction
+        self._primaryAction = primaryAction
         self.secondaryText = secondaryText.localized
-        self.secondaryAction = secondaryAction
+        self._secondaryAction = secondaryAction
+    }
+    
+    
+    private func primaryAction() {
+        Task {
+            withAnimation(.easeOut(duration: 0.2)) {
+                primaryActionLoading = true
+            }
+            await _primaryAction()
+            withAnimation(.easeIn(duration: 0.2)) {
+                primaryActionLoading = false
+            }
+        }
+    }
+    
+    private func secondaryAction() {
+        Task {
+            withAnimation(.easeOut(duration: 0.2)) {
+                secondaryActionLoading = true
+            }
+            await _secondaryAction?()
+            withAnimation(.easeIn(duration: 0.2)) {
+                secondaryActionLoading = false
+            }
+        }
     }
 }
 

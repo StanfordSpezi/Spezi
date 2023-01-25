@@ -42,7 +42,7 @@ import XCTRuntimeAssertions
 ///     }
 /// }
 /// ```
-public actor FHIR: Standard {
+public actor FHIR: Standard, ObservableObject, ObservableObjectProvider {
     /// The FHIR `Resource` type builds the `BaseType` of the ``FHIR/FHIR`` standard.
     public typealias BaseType = Resource
     /// The FHIR ``FHIRRemovalContext`` type builds the `RemovalContext` of the ``FHIR/FHIR`` standard.
@@ -65,7 +65,7 @@ public actor FHIR: Standard {
         /// ```swift
         /// let resourceType = ResourceProxy(with: resource).resourceType
         /// ```
-        public let resourceType: String
+        public let resourceType: ResourceType
         
         
         /// - Parameters:
@@ -76,17 +76,21 @@ public actor FHIR: Standard {
         /// ```swift
         /// let resourceType = ResourceProxy(with: resource).resourceType
         /// ```
-        public init(id: BaseType.ID, resourceType: String) {
+        public init(id: BaseType.ID, resourceType: ResourceType) {
             self.id = id
             self.resourceType = resourceType
         }
     }
     
     
-    var resources: [String: ResourceProxy] = [:]
+    @Published
+    private var resources: [Resource.ID: ResourceProxy] = [:]
     
     @DataStorageProviders
     var dataStorageProviders: [any DataStorageProvider<FHIR>]
+    
+    
+    public init() { }
     
     
     public func registerDataSource(_ asyncSequence: some TypedAsyncSequence<DataChange<BaseType, RemovalContext>>) {
@@ -94,7 +98,7 @@ public actor FHIR: Standard {
             for try await dateSourceElement in asyncSequence {
                 switch dateSourceElement {
                 case let .addition(resource):
-                    guard let id = resource.id?.value?.string else {
+                    guard let id = resource.id else {
                         continue
                     }
                     resources[id] = ResourceProxy(with: resource)
@@ -102,7 +106,7 @@ public actor FHIR: Standard {
                         try await dataStorageProvider.process(.addition(resource))
                     }
                 case let .removal(removalContext):
-                    guard let id = removalContext.id?.value?.string else {
+                    guard let id = removalContext.id else {
                         continue
                     }
                     resources[id] = nil
@@ -112,5 +116,14 @@ public actor FHIR: Standard {
                 }
             }
         }
+    }
+    
+    
+    public func resource(withId id: Resource.ID) -> ResourceProxy? {
+        resources[id]
+    }
+    
+    public func resources<R: Resource>(resourceType: R.Type = R.self) -> [R] {
+        resources.values.compactMap { $0.get(if: R.self) }
     }
 }

@@ -51,13 +51,13 @@ public final class LocalStorage<ComponentStandard: Standard>: Module, DefaultIni
     public func store<C: Encodable>(
         _ element: C,
         storageKey: String? = nil,
-        settings: LocalStorageSetting = .encrypedUsingKeyChain()
+        settings: LocalStorageSetting = .encryptedUsingKeyChain()
     ) async throws {
         var fileURL = fileURL(from: storageKey, type: C.self)
         let fileExistsAlready = FileManager.default.fileExists(atPath: fileURL.path)
         
         // Called at the end of each execution path
-        // We can not use defer as the function can potentlially throw an error.
+        // We can not use defer as the function can potentially throw an error.
         func setResourceValues() throws {
             do {
                 if settings.excludedFromBackup {
@@ -77,7 +77,7 @@ public final class LocalStorage<ComponentStandard: Standard>: Module, DefaultIni
         let data = try JSONEncoder().encode(element)
         
         
-        // Determin if the data should be encryped or not:
+        // Determine if the data should be encrypted or not:
         guard let keys = try settings.keys(from: secureStorage) else {
             // No encryption:
             try data.write(to: fileURL)
@@ -100,7 +100,7 @@ public final class LocalStorage<ComponentStandard: Standard>: Module, DefaultIni
     }
     
     
-    /// Use ``LocalStorage/LocalStorage/read(_:storageKey:settings:)`` to read elements on disk which are decoded as define by  passed in  ``LocalStorageSetting`` instance.
+    /// Use ``LocalStorage/LocalStorage/read(_:storageKey:settings:)`` to read elements on disk which are decoded as defined by  passed in  ``LocalStorageSetting`` instance.
     /// - Parameters:
     ///   - storageKey: An optional storage key to identify the file.
     ///   - settings: The ``LocalStorageSetting``s used to retrieve the file on disk.
@@ -108,12 +108,12 @@ public final class LocalStorage<ComponentStandard: Standard>: Module, DefaultIni
     public func read<C: Decodable>(
         _ type: C.Type = C.self,
         storageKey: String? = nil,
-        settings: LocalStorageSetting = .encrypedUsingKeyChain()
+        settings: LocalStorageSetting = .encryptedUsingKeyChain()
     ) async throws -> C {
         let fileURL = fileURL(from: storageKey, type: C.self)
         let data = try Data(contentsOf: fileURL)
         
-        // Determin if the data should be decrypted or not:
+        // Determine if the data should be decrypted or not:
         guard let keys = try settings.keys(from: secureStorage) else {
             return try JSONDecoder().decode(C.self, from: data)
         }
