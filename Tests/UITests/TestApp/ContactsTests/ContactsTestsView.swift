@@ -13,7 +13,7 @@ import SwiftUI
 
 struct ContactsTestsView: View {
     var body: some View {
-        ContactsList(contacts: [.mock, .mock])
+        ContactsList(contacts: [ContactView_Previews.mock, ContactView_Previews.mock])
             .navigationTitle("Contacts")
             .background(Color(.systemGroupedBackground))
     }
@@ -23,7 +23,7 @@ struct ContactsTestsView: View {
 struct ContactsTestsView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
-            ContactsList(contacts: [.mock, .mock, .mock])
+            ContactsList(contacts: [ContactView_Previews.mock, ContactView_Previews.mock, ContactView_Previews.mock])
         }
     }
 }

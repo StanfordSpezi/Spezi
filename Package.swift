@@ -24,16 +24,21 @@ let package = Package(
         .library(name: "FHIR", targets: ["FHIR"]),
         .library(name: "FirestoreDataStorage", targets: ["FirestoreDataStorage"]),
         .library(name: "HealthKitDataSource", targets: ["HealthKitDataSource"]),
+        .library(name: "HealthKitToFHIRAdapter", targets: ["HealthKitToFHIRAdapter"]),
         .library(name: "LocalStorage", targets: ["LocalStorage"]),
         .library(name: "Onboarding", targets: ["Onboarding"]),
         .library(name: "Scheduler", targets: ["Scheduler"]),
+        .library(name: "Questionnaires", targets: ["Questionnaires"]),
         .library(name: "SecureStorage", targets: ["SecureStorage"]),
         .library(name: "Views", targets: ["Views"]),
         .library(name: "XCTRuntimeAssertions", targets: ["XCTRuntimeAssertions"])
     ],
     dependencies: [
         .package(url: "https://github.com/apple/FHIRModels", .upToNextMinor(from: "0.4.0")),
-        .package(url: "https://github.com/firebase/firebase-ios-sdk", from: "10.3.0")
+        .package(url: "https://github.com/firebase/firebase-ios-sdk", from: "10.3.0"),
+        .package(url: "https://github.com/StanfordBDHG/HealthKitOnFHIR", .upToNextMinor(from: "0.2.2")),
+        .package(url: "https://github.com/StanfordBDHG/ResearchKit", from: "2.2.8"),
+        .package(url: "https://github.com/StanfordBDHG/ResearchKitOnFHIR", .upToNextMinor(from: "0.1.5"))
     ],
     targets: [
         .target(
@@ -97,6 +102,16 @@ let package = Package(
             ]
         ),
         .target(
+            name: "HealthKitToFHIRAdapter",
+            dependencies: [
+                .target(name: "CardinalKit"),
+                .target(name: "FHIR"),
+                .target(name: "HealthKitDataSource"),
+                .product(name: "ModelsR4", package: "FHIRModels"),
+                .product(name: "HealthKitOnFHIR", package: "HealthKitOnFHIR")
+            ]
+        ),
+        .target(
             name: "LocalStorage",
             dependencies: [
                 .target(name: "CardinalKit"),
@@ -117,6 +132,17 @@ let package = Package(
             ],
             resources: [
                 .process("Resources")
+            ]
+        ),
+        .target(
+            name: "Questionnaires",
+            dependencies: [
+                .target(name: "CardinalKit"),
+                .target(name: "FHIR"),
+                .product(name: "ModelsR4", package: "FHIRModels"),
+                .product(name: "ResearchKitOnFHIR", package: "ResearchKitOnFHIR"),
+                .product(name: "FHIRQuestionnaires", package: "ResearchKitOnFHIR"),
+                .product(name: "ResearchKit", package: "ResearchKit")
             ]
         ),
         .target(

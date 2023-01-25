@@ -51,7 +51,7 @@ import SwiftUI
 /// ```
 public final class HealthKit<ComponentStandard: Standard>: Module {
     /// The ``HealthKit/HKSampleAdapter`` type defines the mapping of `HKSample`s to the component's standard's base type.
-    public typealias HKSampleAdapter = any Adapter<HKSample, HKSample.ID, ComponentStandard.BaseType, ComponentStandard.RemovalContext>
+    public typealias HKSampleAdapter = any Adapter<HKSample, HKSampleRemovalContext, ComponentStandard.BaseType, ComponentStandard.RemovalContext>
     
     
     @StandardActor var standard: ComponentStandard
@@ -116,6 +116,13 @@ public final class HealthKit<ComponentStandard: Standard>: Module {
         
         for healthKitComponent in healthKitComponents {
             healthKitComponent.askedForAuthorization()
+        }
+    }
+    
+    
+    public func willFinishLaunchingWithOptions(_ application: UIApplication, launchOptions: [UIApplication.LaunchOptionsKey: Any]) {
+        for healthKitComponent in healthKitComponents {
+            healthKitComponent.willFinishLaunchingWithOptions(application, launchOptions: launchOptions)
         }
     }
     

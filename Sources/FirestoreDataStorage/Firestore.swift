@@ -67,7 +67,7 @@ public actor Firestore<ComponentStandard: Standard>: Module, DataStorageProvider
     public func process(_ element: DataChange<ComponentStandard.BaseType, ComponentStandard.RemovalContext>) async throws {
         switch element {
         case let .addition(element):
-            let firebaseElement = await adapter.transform(element: element)
+            let firebaseElement = try await adapter.transform(element: element)
             try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
                 do {
                     let firestore = FirebaseFirestore.Firestore.firestore()
@@ -86,7 +86,7 @@ public actor Firestore<ComponentStandard: Standard>: Module, DataStorageProvider
                 }
             }
         case let .removal(removalContext):
-            let firebaseRemovalContext = await adapter.transform(removalContext: removalContext)
+            let firebaseRemovalContext = try await adapter.transform(removalContext: removalContext)
             try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
                 let firestore = FirebaseFirestore.Firestore.firestore()
                 firestore

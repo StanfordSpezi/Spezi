@@ -33,7 +33,7 @@ struct ContactCard: View {
 
 struct ContactCard_Previews: PreviewProvider {
     static var previews: some View {
-        ContactCard(contact: .mock)
+        ContactCard(contact: ContactView_Previews.mock)
             .padding()
     }
 }
