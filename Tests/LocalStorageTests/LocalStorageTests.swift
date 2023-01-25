@@ -43,8 +43,8 @@ final class LocalStorageTests: XCTestCase {
         let localStorage = try XCTUnwrap(cardinalKit.typedCollection[LocalStorage<LocalStorageTestStandard>.self])
         
         let letter = Letter(greeting: "Hello Paul 👋\(String(repeating: "🚀", count: Int.random(in: 0...10)))")
-        try await localStorage.store(letter, settings: .unencryped())
-        let storedLetter: Letter = try await localStorage.read(settings: .unencryped())
+        try await localStorage.store(letter, settings: .unencrypted())
+        let storedLetter: Letter = try await localStorage.read(settings: .unencrypted())
         
         XCTAssertEqual(letter, storedLetter)
         

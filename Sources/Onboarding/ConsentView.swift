@@ -22,7 +22,7 @@ import Views
 ///         Data("This is a *markdown* **example**".utf8)
 ///     },
 ///     action: {
-///         // The action that should be performed once the user has providided their consent.
+///         // The action that should be performed once the user has provided their consent.
 ///     }
 /// )
 /// ```
@@ -106,7 +106,7 @@ public struct ConsentView<ContentView: View, Action: View>: View {
             }
         )
     }
-    
+
     /// Creates a ``ConsentView`` with a custom-provided action view.
     /// - Parameters:
     ///   - contentView: The content view providing context about the consent view.

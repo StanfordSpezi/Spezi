@@ -10,17 +10,55 @@ SPDX-License-Identifier: MIT
              
 -->
 
-A reusable `Module` that can be used to store store small chunks of data such as credentials and keys.
+Securely store small chunks of data, such as credentials and keys.
 
 ## Overview
 
-The SecureStorage module allows for the encrypted storage of small chunks of sensitive user data, such as usernames and passwords for internet services, using Apple's [Keychain documentation](https://developer.apple.com/documentation/security/keychain_services/keychain_items/using_the_keychain_to_manage_user_secrets). 
+The ``SecureStorage`` module allows for the encrypted storage of small chunks of sensitive user data, such as usernames and passwords for internet services, using Apple's [Keychain documentation](https://developer.apple.com/documentation/security/keychain_services/keychain_items/using_the_keychain_to_manage_user_secrets). 
 
-Credentials can be stored in the Secure Enclave (if available) or the Keychain. Credentials stored in the keychain can be made synchronizable between different instances of user devices.
+Credentials can be stored in the Secure Enclave (if available) or the Keychain. Credentials stored in the Keychain can be made synchronizable between different instances of user devices.
+
+
+## Add the Secure Storage Component
+
+You can configure the ``SecureStorage/SecureStorage`` component in the `CardinalKitAppDelegate`.
+```swift
+import CardinalKit
+import SecureStorage
+
+
+class ExampleDelegate: CardinalKitAppDelegate {
+    override var configuration: Configuration {
+        Configuration(standard: ExampleStandard()) {
+            SecureStorage()
+        }
+    }
+}
+```
+
+You can then use the ``SecureStorage/SecureStorage`` class in any SwiftUI view.
+
+```swift
+struct ExampleSecureStorageView: View {
+    @EnvironmentObject var secureStorage: SecureStorage<ExampleStandard>
+    
+    
+    var body: some View {
+        // ...
+    }
+}
+```
+
+Alternatively it is common to use the ``SecureStorage/SecureStorage`` component in other components as a dependency:
+
+## Use the ``SecureStorage/SecureStorage`` component.
+
+You can use the ``SecureStorage/SecureStorage`` component to store, update, retrieve, and delete credentials and keys. 
+
 
 ### Storing Credentials
 
-This example shows how to store a set of credentials in the Keychain, associated with a server, that is synchronizable between different devices.
+Use the ``SecureStorage/SecureStorage`` component to store a set of ``Credentials`` instances in the Keychain associated with a server that is synchronizable between different devices.
 
 ```swift
 do {
@@ -42,7 +80,7 @@ do {
 
 ### Retrieving Credentials
 
-This example shows how to retrieve the previously stored set of credentials.
+The ``SecureStorage/SecureStorage`` component enables the retrieval of a previously stored set of credentials.
 
 ```swift
 if let serverCredentials = secureStorage.retrieveCredentials(
@@ -56,7 +94,7 @@ if let serverCredentials = secureStorage.retrieveCredentials(
 
 ### Updating Credentials
 
-This example shows how to update the previously stored set of credentials.
+The ``SecureStorage/SecureStorage`` component enables the update of a previously stored set of credentials.
 
 ```swift
 do {
@@ -78,7 +116,7 @@ do {
 
 ### Deleting Credentials
 
-This example shows how to delete the previously stored set of credentials.
+The ``SecureStorage/SecureStorage`` component enables the deletion of a previously stored set of credentials.
 
 ```swift
 do {
@@ -91,3 +129,12 @@ do {
     // ...
 }
 ```
+
+### Handeling Keys
+
+Similiar to ``Credentials`` instances, you can also use the ``SecureStorage`` component to interact with keys.
+
+- ``SecureStorage/SecureStorage/createKey(_:size:storageScope:)``
+- ``SecureStorage/SecureStorage/retrievePrivateKey(forTag:)``
+- ``SecureStorage/SecureStorage/retrievePublicKey(forTag:)``
+- ``SecureStorage/SecureStorage/deleteKeys(forTag:)``
