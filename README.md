@@ -31,7 +31,7 @@ We differentiate between five different types of modules:
 - **Data Storage Providers**: 
 - **Research Application User Interface**: 
 
-![System Architecture of the CardinalKit Framework](Sources/CardinalKit/CardinalKit.docc/Resources/System Architecture.jpg)
+![System Architecture of the CardinalKit Framework](Sources/CardinalKit/CardinalKit.docc/Resources/SystemArchitecture.jpg)
 
 The [API documentation](https://swiftpackageindex.com/StanfordBDHG/CardinalKit/documentation) includes a selector to switch between the different Swift Package Manager Targets, allowing you to explore the different modules that are included in the CardinalKit repository.
 
