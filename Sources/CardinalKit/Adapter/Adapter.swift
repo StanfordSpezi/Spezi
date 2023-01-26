@@ -80,28 +80,3 @@ public protocol Adapter<InputElement, InputRemovalContext, OutputElement, Output
         _ asyncSequence: some TypedAsyncSequence<DataChange<InputElement, InputRemovalContext>>
     ) async -> any TypedAsyncSequence<DataChange<OutputElement, OutputRemovalContext>>
 }
-
-actor ExampleStandard: Standard {
-    func registerDataSource(_ asyncSequence: some TypedAsyncSequence<DataChange<BaseType, RemovalContext>>) {
-        fatalError()
-    }
-    
-    typealias BaseType = String
-    typealias RemovalContext = String
-}
-
-final class DataSourceExample<T: Identifiable>: Component {
-    typealias ComponentStandard = ExampleStandard
-    typealias DataSourceExampleAdapter = Adapter<T, T.ID, ExampleStandard.BaseType, ExampleStandard.RemovalContext>
-    
-    @StandardActor var standard: ExampleStandard
-    let adapter: any DataSourceExampleAdapter
-    
-    
-    init(@AdapterBuilder<ExampleStandard.BaseType, ExampleStandard.RemovalContext> adapter: () -> (any DataSourceExampleAdapter)) {
-        self.adapter = adapter()
-    }
-    
-    
-    // ...
-}
