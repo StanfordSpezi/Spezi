@@ -12,7 +12,7 @@ import SwiftUI
 /// The ``OnboardingTitleView`` allows developers to present a unified style for the in an onboarding flow.
 /// The ``OnboardingTitleView`` can contain one title and a optional subtitle below the title.
 ///
-/// ```
+/// ```swift
 /// OnboardingTitleView(title: "Title", subtitle: "Subtitle")
 /// ```
 public struct OnboardingTitleView: View {

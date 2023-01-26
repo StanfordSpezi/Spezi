@@ -31,6 +31,25 @@ import SwiftUI
 ///     }
 /// }
 /// ```
+///
+/// Register your different ``Component``s (or more sophisticated ``Module``s) using the ``CardinalKitAppDelegate/configuration`` property, e.g. using the
+/// `FHIR` standard integrated into the CardinalKit framework:
+/// ```swift
+/// import CardinalKit
+/// import FHIR
+///
+///
+/// class TemplateAppDelegate: CardinalKitAppDelegate {
+///     override var configuration: Configuration {
+///         Configuration(standard: FHIR()) {
+///             // Add your `Component`s here ...
+///        }
+///     }
+/// }
+/// ```
+///
+/// The ``Component`` documentation provides more information about the structure of components.
+/// Refer to the ``Configuration`` documentation to learn more about the CardinalKit configuration.
 open class CardinalKitAppDelegate: NSObject, UIApplicationDelegate {
     private actor DefaultStandard: Standard {
         typealias BaseType = StandardType
@@ -49,6 +68,24 @@ open class CardinalKitAppDelegate: NSObject, UIApplicationDelegate {
     private(set) lazy var cardinalKit: AnyCardinalKit = configuration.cardinalKit
     
     
+    /// Register your different ``Component``s (or more sophisticated ``Module``s) using the ``CardinalKitAppDelegate/configuration`` property, e.g. using the
+    /// `FHIR` standard integrated into the CardinalKit framework:
+    /// ```swift
+    /// import CardinalKit
+    /// import FHIR
+    ///
+    ///
+    /// class TemplateAppDelegate: CardinalKitAppDelegate {
+    ///     override var configuration: Configuration {
+    ///         Configuration(standard: FHIR()) {
+    ///             // Add your `Component`s here ...
+    ///        }
+    ///     }
+    /// }
+    /// ```
+    ///
+    /// The ``Component`` documentation provides more information about the structure of components.
+    /// Refer to the ``Configuration`` documentation to learn more about the CardinalKit configuration.
     open var configuration: Configuration {
         Configuration(standard: DefaultStandard()) { }
     }

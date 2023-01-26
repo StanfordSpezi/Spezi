@@ -10,6 +10,53 @@
 /// A ``SingleValueAdapter`` is a ``Adapter`` that can be used to more simply transform data using the
 /// ``SingleValueAdapter/transform(element:)`` and ``SingleValueAdapter/transform(removalContext:)`` functions.
 ///
+/// The following example demonstrates a simple ``Adapter`` that transforms an `Int` to a `String` (both have been extended to conform to `Identifiable`).
+/// The mapping function uses the ``DataChange/map(element:removalContext:)`` function.
+/// ```swift
+/// actor IntToStringAdapter: Adapter {
+///     typealias InputElement = Int
+///     typealias InputRemovalContext = InputElement.ID
+///     typealias OutputElement = String
+///     typealias OutputRemovalContext = OutputElement.ID
+///
+///
+///     func transform(
+///         _ asyncSequence: some TypedAsyncSequence<DataChange<InputElement, InputRemovalContext>>
+///     ) async -> any TypedAsyncSequence<DataChange<OutputElement, OutputRemovalContext>> {
+///         asyncSequence.map { element in
+///             element.map(
+///                 element: {
+///                     String($0.id)
+///                 },
+///                 removalContext: {
+///                     String($0.id)
+///                 }
+///             )
+///         }
+///     }
+/// }
+/// ```
+///
+/// The `IntToStringAdapter` can be transformed to a ``SingleValueAdapter`` by breaking up the
+/// functionality in the ``SingleValueAdapter/transform(element:)`` and ``SingleValueAdapter/transform(removalContext:)`` methods:
+/// ```swift
+/// actor IntToStringSingleValueAdapter: SingleValueAdapter {
+///     typealias InputElement = Int
+///     typealias InputRemovalContext = InputElement.ID
+///     typealias OutputElement = String
+///     typealias OutputRemovalContext = OutputElement.ID
+///
+///
+///     func transform(element: Int) throws -> String {
+///         String(element)
+///     }
+///
+///     func transform(removalContext: InputElement.ID) throws -> OutputElement.ID {
+///         String(removalContext)
+///     }
+/// }
+/// ```
+///
 /// See ``Adapter`` for more detail about data source registry adapters.
 public protocol SingleValueAdapter<InputElement, InputRemovalContext, OutputElement, OutputRemovalContext>: Adapter {
     /// Map the element of the transformed async streams from additions.

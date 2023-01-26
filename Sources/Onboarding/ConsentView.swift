@@ -16,7 +16,7 @@ import Views
 /// The ``ConsentView`` provides a convenience initalizer with a provided action view using an ``OnboardingActionsView`` (``ConsentView/init(header:asyncMarkdown:footer:action:)``)
 /// or a more customized ``ConsentView/init(contentView:actionView:)`` initializer with a custom-provided content and action view.
 ///
-/// ```
+/// ```swift
 /// ConsentView(
 ///     asyncMarkdown: {
 ///         Data("This is a *markdown* **example**".utf8)
