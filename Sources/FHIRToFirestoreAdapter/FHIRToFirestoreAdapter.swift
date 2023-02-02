@@ -8,45 +8,23 @@
 
 import CardinalKit
 import FHIR
-import FirestoreDataStorage
-import Foundation
 
 
-/// <#Description#>
-public struct FHIRFirestoreElement: FirestoreElement, @unchecked Sendable {
-    let resource: Resource
-    
-    public let id: String
-    public let collectionPath: String
-    
-    
-    init(_ baseType: FHIR.BaseType) {
-        self.resource = baseType
-        self.id = baseType.id?.value?.string ?? UUID().uuidString
-        self.collectionPath = ResourceProxy(with: baseType).resourceType
-    }
-    
-    
-    public func encode(to encoder: Encoder) throws {
-        try resource.encode(to: encoder)
-    }
-}
-
-
-/// <#Description#>
-public struct FHIRFirestoreRemovalContext: FirestoreRemovalContext, @unchecked Sendable {
-    public let id: String
-    public let collectionPath: String
-    
-    
-    init(_ removalContext: FHIR.RemovalContext) {
-        self.id = removalContext.id?.value?.string ?? UUID().uuidString
-        self.collectionPath = removalContext.resourceType.rawValue
-    }
-}
-
-
-/// <#Description#>
+/// Adapts the output of the `FHIR` standard to be used with the `Firestore` data storage provider.
+///
+/// Use the ``FHIRToFirestoreAdapter`` in the adapter result builder of the `Firestore` data storage provider in the CardinalKit `Configuration`.
+/// ```swift
+/// class ExampleAppDelegate: CardinalKitAppDelegate {
+///     override var configuration: Configuration {
+///         Configuration(standard: FHIR()) {
+///             Firestore {
+///                 FHIRToFirestoreAdapter()
+///             }
+///             // ...
+///         }
+///     }
+/// }
+/// ```
 public actor FHIRToFirestoreAdapter: SingleValueAdapter {
     public typealias InputElement = FHIR.BaseType
     public typealias InputRemovalContext = FHIR.RemovalContext
