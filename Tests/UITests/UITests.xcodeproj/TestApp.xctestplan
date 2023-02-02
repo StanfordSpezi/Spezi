@@ -9,70 +9,14 @@
     }
   ],
   "defaultOptions" : {
-    "codeCoverage" : {
-      "targets" : [
-        {
-          "containerPath" : "container:..\/..",
-          "identifier" : "Account",
-          "name" : "Account"
-        },
-        {
-          "containerPath" : "container:..\/..",
-          "identifier" : "CardinalKit",
-          "name" : "CardinalKit"
-        },
-        {
-          "containerPath" : "container:..\/..",
-          "identifier" : "Contact",
-          "name" : "Contact"
-        },
-        {
-          "containerPath" : "container:..\/..",
-          "identifier" : "FHIR",
-          "name" : "FHIR"
-        },
-        {
-          "containerPath" : "container:..\/..",
-          "identifier" : "HealthKitDataSource",
-          "name" : "HealthKitDataSource"
-        },
-        {
-          "containerPath" : "container:..\/..",
-          "identifier" : "LocalStorage",
-          "name" : "LocalStorage"
-        },
-        {
-          "containerPath" : "container:..\/..",
-          "identifier" : "Onboarding",
-          "name" : "Onboarding"
-        },
-        {
-          "containerPath" : "container:..\/..",
-          "identifier" : "SecureStorage",
-          "name" : "SecureStorage"
-        },
-        {
-          "containerPath" : "container:..\/..",
-          "identifier" : "Views",
-          "name" : "Views"
-        },
-        {
-          "containerPath" : "container:..\/..",
-          "identifier" : "XCTRuntimeAssertions",
-          "name" : "XCTRuntimeAssertions"
-        },
-        {
-          "containerPath" : "container:..\/..",
-          "identifier" : "Scheduler",
-          "name" : "Scheduler"
-        }
-      ]
-    },
+    "maximumTestRepetitions" : 2,
+    "repeatInNewRunnerProcess" : true,
     "targetForVariableExpansion" : {
       "containerPath" : "container:UITests.xcodeproj",
       "identifier" : "2F6D139128F5F384007C25D6",
       "name" : "TestApp"
-    }
+    },
+    "testRepetitionMode" : "retryOnFailure"
   },
   "testTargets" : [
     {
