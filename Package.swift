@@ -22,6 +22,7 @@ let package = Package(
         .library(name: "CardinalKit", targets: ["CardinalKit"]),
         .library(name: "Contact", targets: ["Contact"]),
         .library(name: "FHIR", targets: ["FHIR"]),
+        .library(name: "FHIRToFirestoreAdapter", targets: ["FHIRToFirestoreAdapter"]),
         .library(name: "FirestoreDataStorage", targets: ["FirestoreDataStorage"]),
         .library(name: "HealthKitDataSource", targets: ["HealthKitDataSource"]),
         .library(name: "HealthKitToFHIRAdapter", targets: ["HealthKitToFHIRAdapter"]),
@@ -85,6 +86,22 @@ let package = Package(
             name: "FHIRTests",
             dependencies: [
                 .target(name: "FHIR")
+            ]
+        ),
+        .target(
+            name: "FHIRToFirestoreAdapter",
+            dependencies: [
+                .target(name: "CardinalKit"),
+                .target(name: "FHIR"),
+                .target(name: "FirestoreDataStorage")
+            ]
+        ),
+        .testTarget(
+            name: "FHIRToFirestoreAdapterTests",
+            dependencies: [
+                .target(name: "FHIRToFirestoreAdapter"),
+                .target(name: "FHIR"),
+                .product(name: "ModelsR4", package: "FHIRModels")
             ]
         ),
         .target(
