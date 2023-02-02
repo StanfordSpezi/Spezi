@@ -96,6 +96,14 @@ let package = Package(
                 .target(name: "FirestoreDataStorage")
             ]
         ),
+        .testTarget(
+            name: "FHIRToFirestoreAdapterTests",
+            dependencies: [
+                .target(name: "FHIRToFirestoreAdapter"),
+                .target(name: "FHIR"),
+                .product(name: "ModelsR4", package: "FHIRModels")
+            ]
+        ),
         .target(
             name: "FirestoreDataStorage",
             dependencies: [
