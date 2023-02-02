@@ -23,6 +23,8 @@ let package = Package(
         .library(name: "Contact", targets: ["Contact"]),
         .library(name: "FHIR", targets: ["FHIR"]),
         .library(name: "FirestoreDataStorage", targets: ["FirestoreDataStorage"]),
+        .library(name: "FirebaseConfiguration", targets: ["FirebaseConfiguration"]),
+        .library(name: "FirebaseAccount", targets: ["FirebaseAccount"]),
         .library(name: "HealthKitDataSource", targets: ["HealthKitDataSource"]),
         .library(name: "HealthKitToFHIRAdapter", targets: ["HealthKitToFHIRAdapter"]),
         .library(name: "LocalStorage", targets: ["LocalStorage"]),
@@ -88,9 +90,26 @@ let package = Package(
             ]
         ),
         .target(
+            name: "FirebaseConfiguration",
+            dependencies: [
+                .target(name: "CardinalKit"),
+                .product(name: "FirebaseFirestore", package: "firebase-ios-sdk")
+            ]
+        ),
+        .target(
+            name: "FirebaseAccount",
+            dependencies: [
+                .target(name: "Account"),
+                .target(name: "CardinalKit"),
+                .target(name: "FirebaseConfiguration"),
+                .product(name: "FirebaseAuth", package: "firebase-ios-sdk")
+            ]
+        ),
+        .target(
             name: "FirestoreDataStorage",
             dependencies: [
                 .target(name: "CardinalKit"),
+                .target(name: "FirebaseConfiguration"),
                 .product(name: "FirebaseFirestore", package: "firebase-ios-sdk"),
                 .product(name: "FirebaseFirestoreSwift", package: "firebase-ios-sdk")
             ]
