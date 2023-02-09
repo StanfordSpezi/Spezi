@@ -119,31 +119,4 @@ final class AccountSignUpTests: TestAppUITests {
         
         XCTAssertTrue(app.collectionViews.staticTexts[usernameReplacement].waitForExistence(timeout: 10.0))
     }
-    
-    
-    func disablePasswordAutofill() {
-        let settingsApp = XCUIApplication(bundleIdentifier: "com.apple.Preferences")
-        settingsApp.terminate()
-        settingsApp.launch()
-        
-        if settingsApp.staticTexts["PASSWORDS"].waitForExistence(timeout: 0.5) {
-            settingsApp.staticTexts["PASSWORDS"].tap()
-        }
-        
-        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
-        if springboard.secureTextFields["Passcode field"].waitForExistence(timeout: 20) {
-            let passcodeInput = springboard.secureTextFields["Passcode field"]
-            passcodeInput.tap()
-            passcodeInput.typeText("1234\r")
-        } else {
-            XCTFail("Could not enter the passcode in the device to enter the password section in the settings app.")
-            return
-        }
-        
-        XCTAssertTrue(settingsApp.tables.cells["PasswordOptionsCell"].waitForExistence(timeout: 5.0))
-        settingsApp.tables.cells["PasswordOptionsCell"].buttons["chevron"].tap()
-        if settingsApp.switches["AutoFill Passwords"].value as? String == "1" {
-            settingsApp.switches["AutoFill Passwords"].tap()
-        }
-    }
 }

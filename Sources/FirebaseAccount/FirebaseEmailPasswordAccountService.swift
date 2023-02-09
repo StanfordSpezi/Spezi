@@ -18,7 +18,8 @@ class FirebaseEmailPasswordAccountService: EmailPasswordAccountService {
             destination: UsernamePasswordSignUpView(
                 signUpOptions: [.usernameAndPassword, .name],
                 usernameValidationRules: [emailValidationRule]
-            )
+            ),
+            injecting: self
         )
     }
     

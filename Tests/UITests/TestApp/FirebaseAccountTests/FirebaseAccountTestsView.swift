@@ -39,7 +39,7 @@ struct FirebaseAccountTestsView: View {
                 showLogin.toggle()
             }
                 .disabled(account.signedIn)
-            Button("SignUp") {
+            Button("Sign Up") {
                 showSignUp.toggle()
             }
                 .disabled(account.signedIn)

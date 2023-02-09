@@ -6,7 +6,6 @@
 // SPDX-License-Identifier: MIT
 //
 
-//  curl  -H "Authorization: Bearer owner" -H "Content-Type: application/json" -X POST -d '{}' http://localhost:9099/identitytoolkit.googleapis.com/v1/projects/cardinalkituitests/accounts:query
 import XCTest
 
 
@@ -27,6 +26,12 @@ final class FirebaseAccountTests: TestAppUITests {
         let displayName: String
         let providerIds: [String]
         
+        
+        init(email: String, displayName: String, providerIds: [String] = ["password"]) {
+            self.email = email
+            self.displayName = displayName
+            self.providerIds = providerIds
+        }
         
         init(from decoder: Decoder) throws {
             let container: KeyedDecodingContainer<FirebaseAccountTests.FirestoreAccount.CodingKeys> = try decoder.container(
@@ -53,6 +58,8 @@ final class FirebaseAccountTests: TestAppUITests {
     override func setUp() async throws {
         try await super.setUp()
         
+        disablePasswordAutofill()
+        
         try await deleteAllAccounts()
         try await Task.sleep(for: .seconds(0.5))
     }
@@ -61,38 +68,36 @@ final class FirebaseAccountTests: TestAppUITests {
     @MainActor
     func testAccountSignUp() async throws {
         let app = XCUIApplication()
+        app.launchArguments = ["--firebaseAccount"]
         app.launch()
+        
         app.buttons["FirebaseAccount"].tap()
 
         var accounts = try await getAllAccounts()
         XCTAssert(accounts.isEmpty)
 
-        add(id: "Identifier1", collectionPath: "CollectionPath1", context: 1)
-        add(id: "Identifier2", collectionPath: "CollectionPath2", context: 2)
-        add(id: "Identifier3", collectionPath: "CollectionPath1", context: 3)
+        if app.buttons["Logout"].waitForExistence(timeout: 10.0) && app.buttons["Logout"].isHittable {
+            app.buttons["Logout"].tap()
+        }
+        
+        app.signup(username: "test@username1.edu", password: "TestPassword1", givenName: "Test1", familyName: "Username1")
+        XCTAssert(app.buttons["Logout"].waitForExistence(timeout: 10.0))
+        app.buttons["Logout"].tap()
+        
+        app.signup(username: "test@username2.edu", password: "TestPassword2", givenName: "Test2", familyName: "Username2")
 
         try await Task.sleep(for: .seconds(0.5))
-        documents = try await getAllDocuments()
+        
+        accounts = try await getAllAccounts()
         XCTAssertEqual(
-            documents.sorted(by: { $0.name < $1.name }),
+            accounts.sorted(by: { $0.email < $1.email }),
             [
-                FirestoreElement(
-                    id: "Identifier1",
-                    collectionPath: "CollectionPath1",
-                    content: 1
-                ),
-                FirestoreElement(
-                    id: "Identifier3",
-                    collectionPath: "CollectionPath1",
-                    content: 3
-                ),
-                FirestoreElement(
-                    id: "Identifier2",
-                    collectionPath: "CollectionPath2",
-                    content: 2
-                )
+                FirestoreAccount(email: "test@username1.edu", displayName: "Test1 Username1"),
+                FirestoreAccount(email: "test@username2.edu", displayName: "Test2 Username2")
             ]
         )
+        
+        app.buttons["Logout"].tap()
     }
 //
 //    @MainActor
@@ -189,13 +194,15 @@ final class FirebaseAccountTests: TestAppUITests {
 //        app.enter(value: context.description, in: contextFieldIdentifier)
 //    }
 //
+    
+    // curl -H "Authorization: Bearer owner" -X DELETE http://localhost:9099/emulator/v1/projects/cardinalkituitests/accounts
     private func deleteAllAccounts() async throws {
         let emulatorDocumentsURL = try XCTUnwrap(
             URL(string: "http://localhost:9099/emulator/v1/projects/cardinalkituitests/accounts")
         )
         var request = URLRequest(url: emulatorDocumentsURL)
         request.httpMethod = "DELETE"
-        request.addValue("Authorization", forHTTPHeaderField: "Bearer owner")
+        request.addValue("Bearer owner", forHTTPHeaderField: "Authorization")
 
         let (_, response) = try await URLSession.shared.data(for: request)
 
@@ -213,14 +220,15 @@ final class FirebaseAccountTests: TestAppUITests {
         }
     }
 
+    // curl -H "Authorization: Bearer owner" -H "Content-Type: application/json" -X POST -d '{}' http://localhost:9099/identitytoolkit.googleapis.com/v1/projects/cardinalkituitests/accounts:query
     private func getAllAccounts() async throws -> [FirestoreAccount] {
         let emulatorAccountsURL = try XCTUnwrap(
             URL(string: "http://localhost:9099/identitytoolkit.googleapis.com/v1/projects/cardinalkituitests/accounts:query")
         )
         var request = URLRequest(url: emulatorAccountsURL)
-        request.httpMethod = "DELETE"
-        request.addValue("Authorization", forHTTPHeaderField: "Bearer owner")
-        request.addValue("Content-Type", forHTTPHeaderField: "application/json")
+        request.httpMethod = "POST"
+        request.addValue("Bearer owner", forHTTPHeaderField: "Authorization")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = Data("{}".utf8)
         
         let (data, response) = try await URLSession.shared.data(for: request)
@@ -251,30 +259,49 @@ final class FirebaseAccountTests: TestAppUITests {
 }
 
 extension XCUIApplication {
-    func login(username: String, password: String) {
+    fileprivate func login(username: String, password: String) {
         buttons["Login"].tap()
         buttons["Email and Password"].tap()
         XCTAssertTrue(self.navigationBars.buttons["Login"].waitForExistence(timeout: 2.0))
         
-        enter(value: String(username.dropLast(4)), in: "Enter your email ...")
-        enter(value: password, in: "Enter your password ...", secureTextField: true)
+        textFields["Enter your email ..."].enter(value: username)
+        secureTextFields["Enter your password ..."].enter(value: password)
         
-        buttons["Login"].tap()
+        swipeUp()
+        
+        let allButtons = collectionViews.buttons.allElementsBoundByIndex
+        for index in 0..<allButtons.count {
+            guard allButtons[index].label == "Login", allButtons[index].isHittable else {
+                continue
+            }
+            allButtons[index].tap()
+        }
     }
     
     
-    func signup(username: String, password: String, givenName: String, familyName: String) {
+    fileprivate func signup(username: String, password: String, givenName: String, familyName: String) {
         buttons["Sign Up"].tap()
         buttons["Email and Password"].tap()
         XCTAssertTrue(self.navigationBars.buttons["Sign Up"].waitForExistence(timeout: 2.0))
         
-        enter(value: username, in: "Enter your email ...")
-        enter(value: password, in: "Enter your password ...", secureTextField: true)
-        enter(value: password, in: "Repeat your password ...", secureTextField: true)
+        textFields["Enter your email ..."].enter(value: username)
+        secureTextFields["Enter your password ..."].enter(value: password)
+        secureTextFields["Repeat your password ..."].enter(value: password)
         
-        enter(value: givenName, in: "Enter your given name ...")
-        enter(value: familyName, in: "Enter your family name ...")
+        swipeUp()
         
-        buttons["Sign Up"].tap()
+        textFields["Enter your given name ..."].enter(value: givenName)
+        swipeUp()
+        textFields["Enter your family name ..."].enter(value: familyName)
+        textFields["Enter your family name ..."].enter(value: "\n")
+        
+        
+        let allButtons = collectionViews.buttons.allElementsBoundByIndex
+        for index in 0..<allButtons.count {
+            guard allButtons[index].label == "Sign Up", allButtons[index].isHittable else {
+                continue
+            }
+            allButtons[index].tap()
+        }
     }
 }

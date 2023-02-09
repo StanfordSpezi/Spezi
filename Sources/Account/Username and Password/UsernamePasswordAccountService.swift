@@ -29,12 +29,20 @@ open class UsernamePasswordAccountService: @unchecked Sendable, AccountService, 
     
     /// The button that should be displayed in login-related views to represent the ``UsernamePasswordAccountService`` or its subclasses.
     open var loginButton: AnyView {
-        button(localization.signUp.buttonTitle, destination: UsernamePasswordLoginView())
+        button(
+            localization.signUp.buttonTitle,
+            destination: UsernamePasswordLoginView(),
+            injecting: self
+        )
     }
     
     /// The button that should be displayed in sign up-related views to represent the ``UsernamePasswordAccountService`` or its subclasses.
     open var signUpButton: AnyView {
-        button(localization.signUp.buttonTitle, destination: UsernamePasswordSignUpView())
+        button(
+            localization.signUp.buttonTitle,
+            destination: UsernamePasswordSignUpView(),
+            injecting: self
+        )
     }
     
     /// The button that should be displayed in password-reset-related views to represent the ``UsernamePasswordAccountService`` or its subclasses.
@@ -105,12 +113,13 @@ open class UsernamePasswordAccountService: @unchecked Sendable, AccountService, 
     /// - Parameters:
     ///   - title: The title of the button.
     ///   - destination: The destination of the button.
+    ///   - usernamePasswordAccountService: <#usernamePasswordAccountService description#>
     /// - Returns: Returns the styled button in accordance to the ``UsernamePasswordAccountService`` or its subclasses.
-    open func button<V: View>(_ title: String, destination: V) -> AnyView {
+    open func button<V: View>(_ title: String, destination: V, injecting usernamePasswordAccountService: UsernamePasswordAccountService) -> AnyView {
         AnyView(
             NavigationLink {
                 destination
-                    .environmentObject(self as UsernamePasswordAccountService)
+                    .environmentObject(usernamePasswordAccountService)
             } label: {
                 AccountServiceButton {
                     Image(systemName: "ellipsis.rectangle")

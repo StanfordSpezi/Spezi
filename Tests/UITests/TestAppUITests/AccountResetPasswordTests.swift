@@ -27,7 +27,7 @@ final class AccountResetPasswordTests: TestAppUITests {
         
         app.testPrimaryButton(enabled: false, title: buttonTitle, navigationBarButtonTitle: navigationBarButtonTitle)
         
-        app.enter(value: username, in: usernameField)
+        app.textFields[usernameField].enter(value: username)
         
         app.testPrimaryButton(enabled: true, title: buttonTitle, navigationBarButtonTitle: navigationBarButtonTitle)
         

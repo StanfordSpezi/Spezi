@@ -53,11 +53,11 @@ final class ViewsTests: TestAppUITests {
         XCTAssert(app.staticTexts["Given Name"].exists)
         XCTAssert(app.staticTexts["Family Name"].exists)
         
-        app.enter(value: "Le", in: "First Placeholder")
-        app.enter(value: "Stan", in: "Second Placeholder")
+        app.textFields["First Placeholder"].enter(value: "Le")
+        app.textFields["Second Placeholder"].enter(value: "Stan")
         
-        app.enter(value: "land", in: "Enter your given name ...")
-        app.enter(value: "ford", in: "Enter your family name ...")
+        app.textFields["Enter your given name ..."].enter(value: "land")
+        app.textFields["Enter your family name ..."].enter(value: "ford")
         
         XCTAssert(app.textFields["Leland"].exists)
         XCTAssert(app.textFields["Stanford"].exists)

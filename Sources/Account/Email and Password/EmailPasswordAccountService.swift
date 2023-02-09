@@ -47,7 +47,8 @@ open class EmailPasswordAccountService: UsernamePasswordAccountService {
             localization.login.buttonTitle,
             destination: UsernamePasswordLoginView(
                 usernameValidationRules: [emailValidationRule]
-            )
+            ),
+            injecting: self
         )
     }
     
@@ -56,7 +57,8 @@ open class EmailPasswordAccountService: UsernamePasswordAccountService {
             localization.login.buttonTitle,
             destination: UsernamePasswordSignUpView(
                 usernameValidationRules: [emailValidationRule]
-            )
+            ),
+            injecting: self
         )
     }
     
@@ -76,11 +78,11 @@ open class EmailPasswordAccountService: UsernamePasswordAccountService {
     }
     
     
-    override open func button<V: View>(_ title: String, destination: V) -> AnyView {
+    override open func button<V: View>(_ title: String, destination: V, injecting usernamePasswordAccountService: UsernamePasswordAccountService) -> AnyView {
         AnyView(
             NavigationLink {
                 destination
-                    .environmentObject(self as UsernamePasswordAccountService)
+                    .environmentObject(usernamePasswordAccountService)
             } label: {
                 AccountServiceButton {
                     Image(systemName: "envelope.fill")
