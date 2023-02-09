@@ -31,8 +31,7 @@ open class UsernamePasswordAccountService: @unchecked Sendable, AccountService, 
     open var loginButton: AnyView {
         button(
             localization.signUp.buttonTitle,
-            destination: UsernamePasswordLoginView(),
-            injecting: self
+            destination: UsernamePasswordLoginView()
         )
     }
     
@@ -40,8 +39,7 @@ open class UsernamePasswordAccountService: @unchecked Sendable, AccountService, 
     open var signUpButton: AnyView {
         button(
             localization.signUp.buttonTitle,
-            destination: UsernamePasswordSignUpView(),
-            injecting: self
+            destination: UsernamePasswordSignUpView()
         )
     }
     
@@ -113,13 +111,12 @@ open class UsernamePasswordAccountService: @unchecked Sendable, AccountService, 
     /// - Parameters:
     ///   - title: The title of the button.
     ///   - destination: The destination of the button.
-    ///   - usernamePasswordAccountService: <#usernamePasswordAccountService description#>
     /// - Returns: Returns the styled button in accordance to the ``UsernamePasswordAccountService`` or its subclasses.
-    open func button<V: View>(_ title: String, destination: V, injecting usernamePasswordAccountService: UsernamePasswordAccountService) -> AnyView {
+    open func button<V: View>(_ title: String, destination: V) -> AnyView {
         AnyView(
             NavigationLink {
                 destination
-                    .environmentObject(usernamePasswordAccountService)
+                    .environmentObject(self as UsernamePasswordAccountService)
             } label: {
                 AccountServiceButton {
                     Image(systemName: "ellipsis.rectangle")
