@@ -11,7 +11,7 @@
 /// A ``Standard`` instance can use the ``Standard/DataStorageProviders`` property wrapper to access all related ``DataStorageProvider``s.
 ///
 /// The following example uses a ``SingleValueAdapter`` to transform elements to an `DataStorageUploadable` representation:
-/// ```
+/// ```swift
 /// struct DataStorageUploadable: Encodable, Identifiable {
 ///     let id: String
 ///     let element: Encodable

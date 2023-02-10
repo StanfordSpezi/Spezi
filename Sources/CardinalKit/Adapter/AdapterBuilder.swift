@@ -84,6 +84,26 @@ private actor ThreeAdapterChain<
 
 
 /// A function builder used to generate data source registry adapter chains.
+///
+/// Use the ``AdapterBuilder`` to offer developers to option to pass in a `Adapter` instance to your components:
+/// ```swift
+/// final class DataSourceExample<T: Identifiable>: Component {
+///     typealias ComponentStandard = ExampleStandard
+///     typealias DataSourceExampleAdapter = Adapter<T, T.ID, ExampleStandard.BaseType, ExampleStandard.RemovalContext>
+///
+///
+///     @StandardActor var standard: ExampleStandard
+///     let adapter: any DataSourceExampleAdapter
+///
+///
+///     init(@AdapterBuilder<ExampleStandard.BaseType, ExampleStandard.RemovalContext> adapter: () -> (any DataSourceExampleAdapter)) {
+///         self.adapter = adapter()
+///     }
+///
+///
+///     // ...
+/// }
+/// ```
 @resultBuilder
 public enum AdapterBuilder<OutputElement: Identifiable & Sendable, OutputRemovalContext: Identifiable & Sendable> where OutputElement.ID: Sendable, OutputElement.ID == OutputRemovalContext.ID {
     /// Required by every result builder to build combined results from statement blocks.

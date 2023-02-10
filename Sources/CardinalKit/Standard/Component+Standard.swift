@@ -22,8 +22,8 @@ extension Component {
 extension Component {
     /// Defines access to the shared ``Standard`` actor.
     ///
-    /// A ``Component`` can define the injection of a ``Standard`` using the `@```Component/StandardActor`` property wrapper:
-    /// ```
+    /// A ``Component`` can define the injection of a ``Standard`` using the @``Component/StandardActor`` property wrapper:
+    /// ```swift
     /// class ExampleComponent: Component {
     ///     typealias ComponentStandard = ExampleStandard
     ///

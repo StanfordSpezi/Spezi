@@ -7,7 +7,22 @@
 //
 
 
-/// A ``DataChange`` tracks the addition or removel of elements across components.
+/// A ``DataChange`` tracks the addition or removal of elements across components.
+///
+/// ``DataChange`` instances are used in ``DataSourceRegistry``s to identify incoming data. ``Adapter``s use them as the basis for the transform functions.
+///
+/// The ``DataChange/map(element:removalContext:)`` function provides a convenient way to transform one ``DataChange`` instance in an other ``DataChange`` instance:
+/// ```swift
+/// let element: DataChange<Int, Int> = .addition(42)
+/// element.map(
+///     element: {
+///         String($0.id)
+///     },
+///     removalContext: {
+///         String($0.id)
+///     }
+/// )
+/// ```
 public enum DataChange<
     Element: Identifiable & Sendable,
     RemovalContext: Identifiable & Sendable

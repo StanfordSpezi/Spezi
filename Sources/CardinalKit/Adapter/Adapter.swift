@@ -10,7 +10,55 @@
 /// A ``Adapter`` can be used to transfrom an input `DataChange` (`InputElement` and `InputRemovalContext`)
 /// to an output `DataChange` (`OutputElement` and `OutputRemovalContext`).
 ///
-/// Use the ``AdapterBuilder`` to offer developers to option to pass in a `Adapter` instance to your components.
+///
+/// The following example demonstrates a simple ``Adapter`` that transforms an `Int` to a `String` (both have been extended to conform to `Identifiable`).
+/// The mapping function uses the ``DataChange/map(element:removalContext:)`` function.
+/// ```swift
+/// actor IntToStringAdapter: Adapter {
+///     typealias InputElement = Int
+///     typealias InputRemovalContext = InputElement.ID
+///     typealias OutputElement = String
+///     typealias OutputRemovalContext = OutputElement.ID
+///
+///
+///     func transform(
+///         _ asyncSequence: some TypedAsyncSequence<DataChange<InputElement, InputRemovalContext>>
+///     ) async -> any TypedAsyncSequence<DataChange<OutputElement, OutputRemovalContext>> {
+///         asyncSequence.map { element in
+///             element.map(
+///                 element: {
+///                     String($0.id)
+///                 },
+///                 removalContext: {
+///                     String($0.id)
+///                 }
+///             )
+///         }
+///     }
+/// }
+/// ```
+///
+/// The ``SingleValueAdapter`` provides a even more convenient way to implement adapters if the transformation can be done on a item-by-item basis.
+///
+/// Use the ``AdapterBuilder`` to offer developers to option to pass in a `Adapter` instance to your components:
+/// ```swift
+/// final class DataSourceExample<T: Identifiable>: Component {
+///     typealias ComponentStandard = ExampleStandard
+///     typealias DataSourceExampleAdapter = Adapter<T, T.ID, ExampleStandard.BaseType, ExampleStandard.RemovalContext>
+///
+///
+///     @StandardActor var standard: ExampleStandard
+///     let adapter: any DataSourceExampleAdapter
+///
+///
+///     init(@AdapterBuilder<ExampleStandard.BaseType, ExampleStandard.RemovalContext> adapter: () -> (any DataSourceExampleAdapter)) {
+///         self.adapter = adapter()
+///     }
+///
+///
+///     // ...
+/// }
+/// ```
 public protocol Adapter<InputElement, InputRemovalContext, OutputElement, OutputRemovalContext>: Actor {
     /// The input element of the ``Adapter``
     associatedtype InputElement: Identifiable, Sendable where InputElement.ID: Sendable

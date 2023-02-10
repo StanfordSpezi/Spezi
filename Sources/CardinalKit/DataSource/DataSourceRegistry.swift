@@ -8,8 +8,11 @@
 
 
 /// A ``DataSourceRegistry`` can recieve data from data sources using the ``DataSourceRegistry/registerDataSource(_:)`` method.
+///
 /// Each ``DataSourceRegistry`` has a ``DataSourceRegistry/BaseType`` that all data sources should provide.
-/// Use ``Adapter``s to transform data of different data sources.
+/// Use ``Adapter``s to transform data from different data sources.
+///
+/// ``Standard``s conforms to ``DataSourceRegistry`` as they serve as a shared repository to exchange information between CardinalKit modules.
 public protocol DataSourceRegistry<BaseType, RemovalContext>: Actor {
     /// The ``DataSourceRegistry/BaseType`` that all data sources should provide when adding or updating an element.
     associatedtype BaseType: Identifiable, Sendable where BaseType.ID: Sendable, BaseType.ID == RemovalContext.ID
