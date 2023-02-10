@@ -7,6 +7,7 @@
 //
 
 import CardinalKit
+import FirebaseConfiguration
 import FirebaseCore
 import FirebaseFirestore
 import FirebaseFirestoreSwift
@@ -30,15 +31,17 @@ import SwiftUI
 /// ```
 public actor Firestore<ComponentStandard: Standard>: Module, DataStorageProvider {
     public typealias FirestoreAdapter = any FirestoreElementAdapter<ComponentStandard.BaseType, ComponentStandard.RemovalContext>
-
-
+    
+    
+    @Dependency private var configureFirebaseApp: ConfigureFirebaseApp
+    
     private let settings: FirestoreSettings
     private let adapter: FirestoreAdapter
-
+    
     
     /// - Parameter settings: The firestore settings according to the [Firebase Firestore Swift Package](https://firebase.google.com/docs/reference/swift/firebasefirestore/api/reference/Classes/FirestoreSettings)
     public init(settings: FirestoreSettings = FirestoreSettings())
-        where ComponentStandard.BaseType: FirestoreElement, ComponentStandard.RemovalContext: FirestoreRemovalContext {
+    where ComponentStandard.BaseType: FirestoreElement, ComponentStandard.RemovalContext: FirestoreRemovalContext {
         self.adapter = DefaultFirestoreElementAdapter()
         self.settings = settings
     }
@@ -53,12 +56,7 @@ public actor Firestore<ComponentStandard: Standard>: Module, DataStorageProvider
     }
     
     
-    nonisolated public func willFinishLaunchingWithOptions(
-        _ application: UIApplication,
-        launchOptions: [UIApplication.LaunchOptionsKey: Any]
-    ) {
-        FirebaseApp.configure()
-        
+    nonisolated public func configure() {
         FirebaseFirestore.Firestore.firestore().settings = self.settings
         
         _ = FirebaseFirestore.Firestore.firestore()

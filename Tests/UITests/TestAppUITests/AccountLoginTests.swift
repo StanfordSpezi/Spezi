@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import XCTestExtensions
 
 
 final class AccountLoginTests: TestAppUITests {
@@ -24,7 +25,7 @@ final class AccountLoginTests: TestAppUITests {
         let username = "lelandstanford"
         let password = "StanfordRocks123!"
         
-        try enterCredentials(
+        try app.enterCredentials(
             username: (usernameField, username),
             password: (passwordField, String(password.dropLast(2)))
         )
@@ -32,12 +33,12 @@ final class AccountLoginTests: TestAppUITests {
         XCTAssertTrue(app.alerts["Credentials do not match"].waitForExistence(timeout: 10.0))
         app.alerts["Credentials do not match"].scrollViews.otherElements.buttons["OK"].tap()
         
-        try delete(
+        try app.delete(
             username: (usernameField, username.count),
             password: (passwordField, password.count)
         )
         
-        try enterCredentials(
+        try app.enterCredentials(
             username: (usernameField, username),
             password: (passwordField, password)
         )
@@ -59,18 +60,18 @@ final class AccountLoginTests: TestAppUITests {
         let username = "lelandstanford@stanford.edu"
         let password = "StanfordRocks123!"
         
-        app.enter(value: String(username.dropLast(4)), in: usernameField)
-        app.enter(value: password, in: passwordField, secureTextField: true)
+        app.textFields[usernameField].enter(value: String(username.dropLast(4)))
+        app.secureTextFields[passwordField].enter(value: password)
         
         XCTAssertTrue(app.staticTexts["The entered email is not correct."].waitForExistence(timeout: 1.0))
         XCTAssertFalse(app.scrollViews.otherElements.buttons["Login, In progress"].waitForExistence(timeout: 0.5))
         
-        try delete(
+        try app.delete(
             username: (usernameField, username.dropLast(4).count),
             password: (passwordField, password.count)
         )
         
-        try enterCredentials(
+        try app.enterCredentials(
             username: (usernameField, username),
             password: (passwordField, String(password.dropLast(2)))
         )
@@ -78,32 +79,36 @@ final class AccountLoginTests: TestAppUITests {
         XCTAssertTrue(XCUIApplication().alerts["Credentials do not match"].waitForExistence(timeout: 6.0))
         XCUIApplication().alerts["Credentials do not match"].scrollViews.otherElements.buttons["OK"].tap()
         
-        try delete(
+        try app.delete(
             username: (usernameField, username.count),
             password: (passwordField, password.count)
         )
         
-        try enterCredentials(
+        try app.enterCredentials(
             username: (usernameField, username),
             password: (passwordField, password)
         )
         
         XCTAssertTrue(app.collectionViews.staticTexts[username].waitForExistence(timeout: 6.0))
     }
+}
+
     
-    private func delete(username: (field: String, count: Int), password: (field: String, count: Int)) throws {
-        let app = XCUIApplication()
-        app.delete(count: username.count, in: username.field)
-        app.delete(count: password.count, in: password.field, secureTextField: true)
+extension XCUIApplication {
+    fileprivate func delete(username: (field: String, count: Int), password: (field: String, count: Int)) throws {
+        textFields[username.field].delete(count: username.count)
+        secureTextFields[password.field].delete(count: password.count)
     }
     
-    private func enterCredentials(username: (field: String, value: String), password: (field: String, value: String)) throws {
-        let app = XCUIApplication()
+    fileprivate func enterCredentials(username: (field: String, value: String), password: (field: String, value: String)) throws {
         let buttonTitle = "Login"
-        app.testPrimaryButton(enabled: false, title: buttonTitle)
-        app.enter(value: username.value, in: username.field)
-        app.testPrimaryButton(enabled: false, title: buttonTitle)
-        app.enter(value: password.value, in: password.field, secureTextField: true)
-        app.testPrimaryButton(enabled: true, title: buttonTitle)
+        
+        testPrimaryButton(enabled: false, title: buttonTitle)
+        
+        textFields[username.field].enter(value: username.value)
+        testPrimaryButton(enabled: false, title: buttonTitle)
+        
+        secureTextFields[password.field].enter(value: password.value)
+        testPrimaryButton(enabled: true, title: buttonTitle)
     }
 }

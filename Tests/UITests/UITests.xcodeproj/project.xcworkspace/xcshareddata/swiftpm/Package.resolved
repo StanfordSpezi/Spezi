@@ -32,8 +32,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/firebase/firebase-ios-sdk",
       "state" : {
-        "revision" : "0df86ea17d5d281415be74f2290df8431644f156",
-        "version" : "10.4.0"
+        "revision" : "f567ed9a2b30e29159df258049a9c662c517688e",
+        "version" : "10.5.0"
       }
     },
     {
@@ -50,8 +50,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/GoogleDataTransport.git",
       "state" : {
-        "revision" : "5056b15c5acbb90cd214fe4d6138bdf5a740e5a8",
-        "version" : "9.2.0"
+        "revision" : "f6b558e3f801f2cac336b04f615ce111fa9ddaa0",
+        "version" : "9.2.1"
       }
     },
     {
