@@ -34,8 +34,8 @@ final class HealthKitTests: TestAppUITests {
         XCTAssertEqual(
             app.numberOfHKTypeIdentifiers(),
             [
-                HealthAppDataType.activeEnergy.hkTypeName: 1,
-                HealthAppDataType.steps.hkTypeName: 1,
+                .activeEnergy: 1,
+                .steps: 1,
             ]
         )
         
@@ -46,11 +46,11 @@ final class HealthKitTests: TestAppUITests {
         XCTAssertEqual(
             app.numberOfHKTypeIdentifiers(),
             [
-                HealthAppDataType.activeEnergy.hkTypeName: 1,
-                HealthAppDataType.restingHeartRate.hkTypeName: 1,
-                HealthAppDataType.electrocardiograms.hkTypeName: 1,
-                HealthAppDataType.steps.hkTypeName: 1,
-                HealthAppDataType.pushes.hkTypeName: 1
+                .activeEnergy: 1,
+                .restingHeartRate: 1,
+                .electrocardiograms: 1,
+                .steps: 1,
+                .pushes: 1
             ]
         )
         
@@ -61,11 +61,11 @@ final class HealthKitTests: TestAppUITests {
         XCTAssertEqual(
             app.numberOfHKTypeIdentifiers(),
             [
-                HealthAppDataType.activeEnergy.hkTypeName: 1,
-                HealthAppDataType.restingHeartRate.hkTypeName: 1,
-                HealthAppDataType.electrocardiograms.hkTypeName: 2,
-                HealthAppDataType.steps.hkTypeName: 1,
-                HealthAppDataType.pushes.hkTypeName: 1
+                .activeEnergy: 1,
+                .restingHeartRate: 1,
+                .electrocardiograms: 2,
+                .steps: 1,
+                .pushes: 1
             ]
         )
         
@@ -76,11 +76,11 @@ final class HealthKitTests: TestAppUITests {
         XCTAssertEqual(
             app.numberOfHKTypeIdentifiers(),
             [
-                HealthAppDataType.activeEnergy.hkTypeName: 1,
-                HealthAppDataType.restingHeartRate.hkTypeName: 1,
-                HealthAppDataType.electrocardiograms.hkTypeName: 2,
-                HealthAppDataType.steps.hkTypeName: 2,
-                HealthAppDataType.pushes.hkTypeName: 1
+                .activeEnergy: 1,
+                .restingHeartRate: 1,
+                .electrocardiograms: 2,
+                .steps: 2,
+                .pushes: 1
             ]
         )
         
@@ -91,11 +91,11 @@ final class HealthKitTests: TestAppUITests {
         XCTAssertEqual(
             app.numberOfHKTypeIdentifiers(),
             [
-                HealthAppDataType.activeEnergy.hkTypeName: 1,
-                HealthAppDataType.restingHeartRate.hkTypeName: 1,
-                HealthAppDataType.electrocardiograms.hkTypeName: 2,
-                HealthAppDataType.steps.hkTypeName: 2,
-                HealthAppDataType.pushes.hkTypeName: 2
+                .activeEnergy: 1,
+                .restingHeartRate: 1,
+                .electrocardiograms: 2,
+                .steps: 2,
+                .pushes: 2
             ]
         )
         
@@ -106,11 +106,11 @@ final class HealthKitTests: TestAppUITests {
         XCTAssertEqual(
             app.numberOfHKTypeIdentifiers(),
             [
-                HealthAppDataType.activeEnergy.hkTypeName: 1,
-                HealthAppDataType.restingHeartRate.hkTypeName: 1,
-                HealthAppDataType.electrocardiograms.hkTypeName: 2,
-                HealthAppDataType.steps.hkTypeName: 2,
-                HealthAppDataType.pushes.hkTypeName: 2
+                .activeEnergy: 1,
+                .restingHeartRate: 1,
+                .electrocardiograms: 2,
+                .steps: 2,
+                .pushes: 2
             ]
         )
 
@@ -121,11 +121,11 @@ final class HealthKitTests: TestAppUITests {
         XCTAssertEqual(
             app.numberOfHKTypeIdentifiers(),
             [
-                HealthAppDataType.activeEnergy.hkTypeName: 2,
-                HealthAppDataType.restingHeartRate.hkTypeName: 1,
-                HealthAppDataType.electrocardiograms.hkTypeName: 2,
-                HealthAppDataType.steps.hkTypeName: 2,
-                HealthAppDataType.pushes.hkTypeName: 2
+                .activeEnergy: 2,
+                .restingHeartRate: 1,
+                .electrocardiograms: 2,
+                .steps: 2,
+                .pushes: 2
             ]
         )
         
@@ -136,11 +136,11 @@ final class HealthKitTests: TestAppUITests {
         XCTAssertEqual(
             app.numberOfHKTypeIdentifiers(),
             [
-                HealthAppDataType.activeEnergy.hkTypeName: 2,
-                HealthAppDataType.restingHeartRate.hkTypeName: 2,
-                HealthAppDataType.electrocardiograms.hkTypeName: 2,
-                HealthAppDataType.steps.hkTypeName: 2,
-                HealthAppDataType.pushes.hkTypeName: 2
+                .activeEnergy: 2,
+                .restingHeartRate: 2,
+                .electrocardiograms: 2,
+                .steps: 2,
+                .pushes: 2
             ]
         )
     }
