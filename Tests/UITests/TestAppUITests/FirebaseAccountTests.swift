@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import XCTestExtensions
 
 
 /// The `FirebaseAccountTests` require the Firebase Authentication Emulator to run at port 9099.

@@ -28,7 +28,6 @@
 		2F4F0396294A66FB0062D4C7 /* XCTRuntimeAssertions in Frameworks */ = {isa = PBXBuildFile; productRef = 2F4F0395294A66FB0062D4C7 /* XCTRuntimeAssertions */; };
 		2F4F0399294A8D410062D4C7 /* OnboardingTestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4F0398294A8D410062D4C7 /* OnboardingTestsView.swift */; };
 		2F532EAA294CD87900A4061E /* Views in Frameworks */ = {isa = PBXBuildFile; productRef = 2F532EA9294CD87900A4061E /* Views */; };
-		2F59507E2994E454006570C5 /* XCTestCase+DiableAutofillPassword.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F59507D2994E454006570C5 /* XCTestCase+DiableAutofillPassword.swift */; };
 		2F6D139A28F5F386007C25D6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F6D139928F5F386007C25D6 /* Assets.xcassets */; };
 		2F7B6CAB294BCA6600FDC494 /* CanvasTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7B6CAA294BCA6600FDC494 /* CanvasTestView.swift */; };
 		2F7B6CAD294BCA6F00FDC494 /* GeometryReaderTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7B6CAC294BCA6F00FDC494 /* GeometryReaderTestView.swift */; };
@@ -95,7 +94,6 @@
 		2F4D91742948EA1A000E2D94 /* ContactsTestsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsTestsView.swift; sourceTree = "<group>"; };
 		2F4D91762948EB33000E2D94 /* ContactsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsTests.swift; sourceTree = "<group>"; };
 		2F4F0398294A8D410062D4C7 /* OnboardingTestsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingTestsView.swift; sourceTree = "<group>"; };
-		2F59507D2994E454006570C5 /* XCTestCase+DiableAutofillPassword.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+DiableAutofillPassword.swift"; sourceTree = "<group>"; };
 		2F6D139228F5F384007C25D6 /* TestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F6D139928F5F386007C25D6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2F6D13AC28F5F386007C25D6 /* TestAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TestAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -354,7 +352,6 @@
 			children = (
 				2F1B82082942DE390037BC09 /* TestAppUITests.swift */,
 				2FE122B1294247480016B162 /* XCUIApplication+TextEntry.swift */,
-				2F59507D2994E454006570C5 /* XCTestCase+DiableAutofillPassword.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -532,7 +529,6 @@
 			files = (
 				2F2E4B8429749C5900FF710F /* FirestoreDataStorageTests.swift in Sources */,
 				2F9F07F529090BA900CDC598 /* ObservableObjectComponentTests.swift in Sources */,
-				2F59507E2994E454006570C5 /* XCTestCase+DiableAutofillPassword.swift in Sources */,
 				2F8CE161298C2C6D003799A8 /* FirebaseAccountTests.swift in Sources */,
 				2F1B82092942DE390037BC09 /* TestAppUITests.swift in Sources */,
 				2F817A4C294B16A000A39983 /* ViewsTests.swift in Sources */,
@@ -834,8 +830,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/StanfordBDHG/XCTestExtensions";
 			requirement = {
-				kind = upToNextMinorVersion;
-				minimumVersion = 0.1.0;
+				branch = feature/improveOffset;
+				kind = branch;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

@@ -7,44 +7,35 @@
 //
 
 import XCTest
+import XCTestExtensions
 import XCTHealthKit
 
 
 final class HealthKitTests: TestAppUITests {
     func testHealthKit() throws { // swiftlint:disable:this function_body_length
-        let app = XCUIApplication()
-        app.launch()
-        
         try exitAppAndOpenHealth(.electrocardiograms)
         try exitAppAndOpenHealth(.steps)
         try exitAppAndOpenHealth(.pushes)
         try exitAppAndOpenHealth(.restingHeartRate)
         try exitAppAndOpenHealth(.activeEnergy)
+        
+        let app = XCUIApplication()
+        app.deleteAndLaunch(withSpringboardAppName: "TestApp")
         
         app.buttons["HealthKit"].tap()
         
         XCTAssert(app.buttons["Ask for authorization"].waitForExistence(timeout: 2))
         app.buttons["Ask for authorization"].tap()
         
-        if !app.navigationBars["Health Access"].waitForExistence(timeout: 10) {
-            print("The HealthKit View did not load after 10 seconds ... give it a second try with a timeout of 20 seconds.")
-            app.buttons["Ask for authorization"].tap()
-        }
-        if app.navigationBars["Health Access"].waitForExistence(timeout: 20) {
-            app.tables.staticTexts["Turn On All"].tap()
-            app.navigationBars["Health Access"].buttons["Allow"].tap()
-        }
+        try app.handleHealthKitAuthorization()
         
         sleep(2)
         
         XCTAssertEqual(
             app.numberOfHKTypeIdentifiers(),
             [
-                HealthAppDataType.activeEnergy.rawValue: 1,
-                HealthAppDataType.restingHeartRate.rawValue: 0,
-                HealthAppDataType.electrocardiograms.rawValue: 1,
-                HealthAppDataType.steps.rawValue: 1,
-                HealthAppDataType.pushes.rawValue: 1
+                HealthAppDataType.activeEnergy.hkTypeName: 1,
+                HealthAppDataType.steps.hkTypeName: 1,
             ]
         )
         
@@ -55,101 +46,101 @@ final class HealthKitTests: TestAppUITests {
         XCTAssertEqual(
             app.numberOfHKTypeIdentifiers(),
             [
-                HealthAppDataType.activeEnergy.rawValue: 1,
-                HealthAppDataType.restingHeartRate.rawValue: 1,
-                HealthAppDataType.electrocardiograms.rawValue: 1,
-                HealthAppDataType.steps.rawValue: 1,
-                HealthAppDataType.pushes.rawValue: 1
+                HealthAppDataType.activeEnergy.hkTypeName: 1,
+                HealthAppDataType.restingHeartRate.hkTypeName: 1,
+                HealthAppDataType.electrocardiograms.hkTypeName: 1,
+                HealthAppDataType.steps.hkTypeName: 1,
+                HealthAppDataType.pushes.hkTypeName: 1
             ]
         )
         
         try exitAppAndOpenHealth(.electrocardiograms)
-        
+        app.activate()
         sleep(2)
         
         XCTAssertEqual(
             app.numberOfHKTypeIdentifiers(),
             [
-                HealthAppDataType.activeEnergy.rawValue: 1,
-                HealthAppDataType.restingHeartRate.rawValue: 1,
-                HealthAppDataType.electrocardiograms.rawValue: 2,
-                HealthAppDataType.steps.rawValue: 1,
-                HealthAppDataType.pushes.rawValue: 1
+                HealthAppDataType.activeEnergy.hkTypeName: 1,
+                HealthAppDataType.restingHeartRate.hkTypeName: 1,
+                HealthAppDataType.electrocardiograms.hkTypeName: 2,
+                HealthAppDataType.steps.hkTypeName: 1,
+                HealthAppDataType.pushes.hkTypeName: 1
             ]
         )
         
         try exitAppAndOpenHealth(.steps)
-        
+        app.activate()
         sleep(2)
         
         XCTAssertEqual(
             app.numberOfHKTypeIdentifiers(),
             [
-                HealthAppDataType.activeEnergy.rawValue: 1,
-                HealthAppDataType.restingHeartRate.rawValue: 1,
-                HealthAppDataType.electrocardiograms.rawValue: 2,
-                HealthAppDataType.steps.rawValue: 2,
-                HealthAppDataType.pushes.rawValue: 1
+                HealthAppDataType.activeEnergy.hkTypeName: 1,
+                HealthAppDataType.restingHeartRate.hkTypeName: 1,
+                HealthAppDataType.electrocardiograms.hkTypeName: 2,
+                HealthAppDataType.steps.hkTypeName: 2,
+                HealthAppDataType.pushes.hkTypeName: 1
             ]
         )
         
         try exitAppAndOpenHealth(.pushes)
-        
+        app.activate()
         sleep(2)
         
         XCTAssertEqual(
             app.numberOfHKTypeIdentifiers(),
             [
-                HealthAppDataType.activeEnergy.rawValue: 1,
-                HealthAppDataType.restingHeartRate.rawValue: 1,
-                HealthAppDataType.electrocardiograms.rawValue: 2,
-                HealthAppDataType.steps.rawValue: 2,
-                HealthAppDataType.pushes.rawValue: 2
+                HealthAppDataType.activeEnergy.hkTypeName: 1,
+                HealthAppDataType.restingHeartRate.hkTypeName: 1,
+                HealthAppDataType.electrocardiograms.hkTypeName: 2,
+                HealthAppDataType.steps.hkTypeName: 2,
+                HealthAppDataType.pushes.hkTypeName: 2
             ]
         )
         
         try exitAppAndOpenHealth(.restingHeartRate)
-        
+        app.activate()
         sleep(2)
         
         XCTAssertEqual(
             app.numberOfHKTypeIdentifiers(),
             [
-                HealthAppDataType.activeEnergy.rawValue: 1,
-                HealthAppDataType.restingHeartRate.rawValue: 1,
-                HealthAppDataType.electrocardiograms.rawValue: 2,
-                HealthAppDataType.steps.rawValue: 2,
-                HealthAppDataType.pushes.rawValue: 2
+                HealthAppDataType.activeEnergy.hkTypeName: 1,
+                HealthAppDataType.restingHeartRate.hkTypeName: 1,
+                HealthAppDataType.electrocardiograms.hkTypeName: 2,
+                HealthAppDataType.steps.hkTypeName: 2,
+                HealthAppDataType.pushes.hkTypeName: 2
             ]
         )
 
         try exitAppAndOpenHealth(.activeEnergy)
-        
+        app.activate()
         sleep(2)
         
         XCTAssertEqual(
             app.numberOfHKTypeIdentifiers(),
             [
-                HealthAppDataType.activeEnergy.rawValue: 2,
-                HealthAppDataType.restingHeartRate.rawValue: 1,
-                HealthAppDataType.electrocardiograms.rawValue: 2,
-                HealthAppDataType.steps.rawValue: 2,
-                HealthAppDataType.pushes.rawValue: 2
+                HealthAppDataType.activeEnergy.hkTypeName: 2,
+                HealthAppDataType.restingHeartRate.hkTypeName: 1,
+                HealthAppDataType.electrocardiograms.hkTypeName: 2,
+                HealthAppDataType.steps.hkTypeName: 2,
+                HealthAppDataType.pushes.hkTypeName: 2
             ]
         )
         
         app.buttons["Trigger data source collection"].tap()
-        
+        app.activate()
         sleep(2)
         
         XCTAssertEqual(
             app.numberOfHKTypeIdentifiers(),
             [
-                HealthAppDataType.activeEnergy.rawValue: 2,
-                HealthAppDataType.restingHeartRate.rawValue: 2,
-                HealthAppDataType.electrocardiograms.rawValue: 2,
-                HealthAppDataType.steps.rawValue: 2,
-                HealthAppDataType.pushes.rawValue: 2
+                HealthAppDataType.activeEnergy.hkTypeName: 2,
+                HealthAppDataType.restingHeartRate.hkTypeName: 2,
+                HealthAppDataType.electrocardiograms.hkTypeName: 2,
+                HealthAppDataType.steps.hkTypeName: 2,
+                HealthAppDataType.pushes.hkTypeName: 2
             ]
         )
     }

@@ -149,8 +149,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/StanfordBDHG/XCTestExtensions",
       "state" : {
-        "revision" : "006109da7231b231a597db4566a87f79dbc8c66b",
-        "version" : "0.1.0"
+        "branch" : "feature/improveOffset",
+        "revision" : "c279c1998185d9806f99d14bb70be480941b8706"
       }
     },
     {

@@ -96,7 +96,7 @@ final class AccountLoginTests: TestAppUITests {
     
 extension XCUIApplication {
     fileprivate func delete(username: (field: String, count: Int), password: (field: String, count: Int)) throws {
-        textFields[username.field].delete(count: password.count)
+        textFields[username.field].delete(count: username.count)
         secureTextFields[password.field].delete(count: password.count)
     }
     
