@@ -42,8 +42,8 @@
 ///
 /// **Additional Capabilities**
 ///
-/// Componets can also conform to different additional protocols to provide additional access to CardinalKit features.
-/// - ``LifecycleHandler``: Delegate methods related to the  `UIApplication` and ``CardinalKit/CardinalKit`` lifecycle.
+/// Components can also conform to different additional protocols to provide additional access to CardinalKit features.
+/// - ``LifecycleHandler``: Delegate methods are related to the  `UIApplication` and ``CardinalKit/CardinalKit`` lifecycle.
 /// - ``ObservableObjectProvider``: A ``Component`` can conform to ``ObservableObjectProvider`` to inject `ObservableObject`s in the SwiftUI view hierarchy.
 ///
 /// All these protocols are combined in the ``Module`` protocol, making it an easy one-stop solution to support all these different functionalities and build a capable CardinalKit module.

@@ -9,13 +9,13 @@
 
 /// A ``Configuration`` defines the ``Standard`` and ``Component``s that are used in a CardinalKit project.
 ///
-/// Register your different ``Component``s (or more sophisticated ``Module``s) using the ``CardinalKitAppDelegate/configuration`` property, e.g. using the
+/// Register your different ``Component``s (or more sophisticated ``Module``s) using the ``CardinalKitAppDelegate/configuration`` property, e.g., using the
 /// `FHIR` standard integrated into the CardinalKit Swift Package.
 ///
-/// The ``Configuration`` initalizer requires a ``Standard`` that is used in the CardinalKit project.
+/// The ``Configuration`` initializer requires a ``Standard`` that is used in the CardinalKit project.
 /// The standard defines a shared repository to facilitate communication between different modules.
 ///
-/// The ``Configuration/init(standard:_:)``'s components result builder allows the definition of different components including conditional statements or loops.
+/// The ``Configuration/init(standard:_:)``'s components result builder allows the definition of different components, including conditional statements or loops.
 ///
 /// The following example demonstrates the usage of the `FHIR` standard and different built-in CardinalKit modules, including the `HealthKit` and `QuestionnaireDataSource` components:
 /// ```swift

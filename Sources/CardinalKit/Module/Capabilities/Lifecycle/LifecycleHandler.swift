@@ -10,7 +10,7 @@ import os
 import SwiftUI
 
 
-/// Delegate methods related to the  `UIApplication` and ``CardinalKit/CardinalKit`` lifecycle.
+/// Delegate methods are related to the  `UIApplication` and ``CardinalKit/CardinalKit`` lifecycle.
 ///
 /// Conform to the `LifecycleHandler` protocol to get updates about the application lifecycle similar to the `UIApplicationDelegate` on an app basis.
 public protocol LifecycleHandler {

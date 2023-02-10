@@ -9,6 +9,6 @@
 
 /// ``DefaultInitializable`` is used to identify ``Component``s that can be initialized without the need for additional context.
 public protocol DefaultInitializable {
-    /// A default initalizer with no arguments provided by conforming to ``DefaultInitializable``
+    /// A default initializer with no arguments provided by conforming to ``DefaultInitializable``
     init()
 }

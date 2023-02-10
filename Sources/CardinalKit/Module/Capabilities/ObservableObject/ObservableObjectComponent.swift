@@ -12,7 +12,7 @@ import SwiftUI
 /// A ``Component`` can conform to ``ObservableObjectProvider`` to inject `ObservableObject`s in the SwiftUI view hierarchy using ``ObservableObjectProvider/observableObjects-6w1nz``
 ///
 ///
-/// Reference types conforming to `ObservableObject` and be used in SwiftUI views to inform a view about changes in the object.
+/// Reference types conforming to `ObservableObject` can be used in SwiftUI views to inform a view about changes in the object.
 /// You can create and use them in a view using `@ObservedObject` or get it from the SwiftUI environment using `@EnvironmentObject`.
 ///
 /// A Component can conform to `ObservableObjectProvider` to inject `ObservableObject`s in the SwiftUI view hierarchy.
