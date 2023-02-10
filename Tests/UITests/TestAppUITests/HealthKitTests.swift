@@ -35,7 +35,7 @@ final class HealthKitTests: TestAppUITests {
             app.numberOfHKTypeIdentifiers(),
             [
                 .activeEnergy: 1,
-                .steps: 1,
+                .steps: 1
             ]
         )
         
