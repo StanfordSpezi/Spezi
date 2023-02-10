@@ -21,11 +21,12 @@ final class HealthKitSampleDataSource<ComponentStandard: Standard, SampleType: H
     let adapter: HealthKit<ComponentStandard>.HKSampleAdapter
     
     var active = false
-    var anchor: HKQueryAnchor?
     
-    
-    var anchorUserDefaultsKey: String {
-        UserDefaults.Keys.healthKitAnchorPrefix.appending(sampleType.identifier)
+    private lazy var anchorUserDefaultsKey = UserDefaults.Keys.healthKitAnchorPrefix.appending(sampleType.identifier)
+    private lazy var anchor: HKQueryAnchor? = loadAnchor() {
+        didSet {
+            saveAnchor()
+        }
     }
     
     
@@ -40,18 +41,27 @@ final class HealthKitSampleDataSource<ComponentStandard: Standard, SampleType: H
         self.healthStore = healthStore
         self.standard = standard
         self.sampleType = sampleType
-        self.predicate = predicate
         self.deliverySetting = deliverySetting
         self.adapter = adapter
         
-        if deliverySetting.saveAnchor {
-            guard let userDefaultsData = UserDefaults.standard.data(forKey: anchorUserDefaultsKey),
-                  let newAnchor = try? NSKeyedUnarchiver.unarchivedObject(ofClass: HKQueryAnchor.self, from: userDefaultsData) else {
-                return
-            }
-            
-            self.anchor = newAnchor
+        if predicate == nil {
+            self.predicate = HKQuery.predicateForSamples(
+                withStart: HealthKitSampleDataSource<ComponentStandard, SampleType>.loadDefaultQueryDate(for: sampleType),
+                end: nil
+            )
+        } else {
+            self.predicate = predicate
         }
+    }
+    
+    
+    private static func loadDefaultQueryDate(for sampleType: SampleType) -> Date {
+        let defaultPredicateDateUserDefaultsKey = UserDefaults.Keys.healthKitDefaultPredicateDatePrefix.appending(sampleType.identifier)
+        guard let date = UserDefaults.standard.object(forKey: defaultPredicateDateUserDefaultsKey) as? Date else {
+            UserDefaults.standard.set(Date.now, forKey: defaultPredicateDateUserDefaultsKey)
+            return .now
+        }
+        return date
     }
     
     
@@ -78,17 +88,6 @@ final class HealthKitSampleDataSource<ComponentStandard: Standard, SampleType: H
             }
         default:
             break
-        }
-    }
-    
-    func applicationWillTerminate(_ application: UIApplication) {
-        if deliverySetting.saveAnchor {
-            guard let anchor,
-                  let data = try? NSKeyedArchiver.archivedData(withRootObject: anchor, requiringSecureCoding: true) else {
-                return
-            }
-            
-            UserDefaults.standard.set(data, forKey: UserDefaults.Keys.healthKitAnchorPrefix.appending(sampleType.identifier))
         }
     }
     
@@ -130,5 +129,26 @@ final class HealthKitSampleDataSource<ComponentStandard: Standard, SampleType: H
                 continuation.finish()
             }
         }
+    }
+    
+    private func saveAnchor() {
+        if deliverySetting.saveAnchor {
+            guard let anchor,
+                  let data = try? NSKeyedArchiver.archivedData(withRootObject: anchor, requiringSecureCoding: true) else {
+                return
+            }
+            
+            UserDefaults.standard.set(data, forKey: anchorUserDefaultsKey)
+        }
+    }
+    
+    private func loadAnchor() -> HKQueryAnchor? {
+        guard deliverySetting.saveAnchor,
+              let userDefaultsData = UserDefaults.standard.data(forKey: anchorUserDefaultsKey),
+              let loadedAnchor = try? NSKeyedUnarchiver.unarchivedObject(ofClass: HKQueryAnchor.self, from: userDefaultsData) else {
+            return nil
+        }
+        
+        return loadedAnchor
     }
 }

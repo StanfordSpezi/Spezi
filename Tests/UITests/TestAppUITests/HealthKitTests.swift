@@ -13,14 +13,16 @@ import XCTHealthKit
 
 final class HealthKitTests: TestAppUITests {
     func testHealthKit() throws { // swiftlint:disable:this function_body_length
+        let app = XCUIApplication()
+        app.deleteAndLaunch(withSpringboardAppName: "TestApp")
+        
         try exitAppAndOpenHealth(.electrocardiograms)
         try exitAppAndOpenHealth(.steps)
         try exitAppAndOpenHealth(.pushes)
         try exitAppAndOpenHealth(.restingHeartRate)
         try exitAppAndOpenHealth(.activeEnergy)
         
-        let app = XCUIApplication()
-        app.deleteAndLaunch(withSpringboardAppName: "TestApp")
+        app.activate()
         
         app.buttons["HealthKit"].tap()
         
