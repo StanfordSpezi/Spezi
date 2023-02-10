@@ -101,8 +101,7 @@ final class HealthKitSampleDataSource<ComponentStandard: Standard, SampleType: H
             await standard.registerDataSource(adapter.transform(anchoredSingleObjectQuery()))
         case .anchorQuery:
             active = true
-            let healthKitSamples = await healthStore.anchoredContinousObjectQuery(for: sampleType, withPredicate: predicate)
-            await standard.registerDataSource(adapter.transform(healthKitSamples))
+            await standard.registerDataSource(adapter.transform(anchoredContinousObjectQuery()))
         case .background:
             active = true
             let healthKitSamples = healthStore.startObservation(for: [sampleType], withPredicate: predicate)
@@ -127,6 +126,38 @@ final class HealthKitSampleDataSource<ComponentStandard: Standard, SampleType: H
                     continuation.yield(result)
                 }
                 continuation.finish()
+            }
+        }
+    }
+    
+    private func anchoredContinousObjectQuery() async -> any TypedAsyncSequence<DataChange<HKSample, HKSampleRemovalContext>> {
+        AsyncThrowingStream { continuation in
+            Task {
+                try await healthStore.requestAuthorization(toShare: [], read: [sampleType])
+                
+                let anchorDescriptor = healthStore.anchorDescriptor(sampleType: sampleType, predicate: predicate, anchor: anchor)
+                
+                let updateQueue = anchorDescriptor.results(for: healthStore)
+                
+                do {
+                    for try await results in updateQueue {
+                        if Task.isCancelled {
+                            continuation.finish()
+                            return
+                        }
+                        
+                        for deletedObject in results.deletedObjects {
+                            continuation.yield(.removal(HKSampleRemovalContext(id: deletedObject.uuid, sampleType: sampleType)))
+                        }
+                        
+                        for addedSample in results.addedSamples {
+                            continuation.yield(.addition(addedSample))
+                        }
+                        self.anchor = results.newAnchor
+                    }
+                } catch {
+                    continuation.finish(throwing: error)
+                }
             }
         }
     }

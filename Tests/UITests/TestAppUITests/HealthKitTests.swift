@@ -145,5 +145,50 @@ final class HealthKitTests: TestAppUITests {
                 .pushes: 2
             ]
         )
+        
+        app.terminate()
+        app.activate()
+        
+        app.buttons["HealthKit"].tap()
+        app.buttons["Trigger data source collection"].tap()
+        
+        XCTAssertEqual(
+            app.numberOfHKTypeIdentifiers(),
+            [:]
+        )
+        
+        try exitAppAndOpenHealth(.electrocardiograms)
+        try exitAppAndOpenHealth(.steps)
+        try exitAppAndOpenHealth(.pushes)
+        try exitAppAndOpenHealth(.restingHeartRate)
+        try exitAppAndOpenHealth(.activeEnergy)
+        
+        app.activate()
+        sleep(2)
+        
+        XCTAssertEqual(
+            app.numberOfHKTypeIdentifiers(),
+            [
+                .activeEnergy: 1,
+                .electrocardiograms: 1,
+                .steps: 1,
+                .pushes: 1
+            ]
+        )
+        
+        app.buttons["Trigger data source collection"].tap()
+        app.activate()
+        sleep(2)
+        
+        XCTAssertEqual(
+            app.numberOfHKTypeIdentifiers(),
+            [
+                .activeEnergy: 1,
+                .restingHeartRate: 1,
+                .electrocardiograms: 1,
+                .steps: 1,
+                .pushes: 1
+            ]
+        )
     }
 }
