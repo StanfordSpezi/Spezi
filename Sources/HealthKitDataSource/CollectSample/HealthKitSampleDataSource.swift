@@ -20,7 +20,6 @@ final class HealthKitSampleDataSource<ComponentStandard: Standard, SampleType: H
     let deliverySetting: HealthKitDeliverySetting
     let adapter: HealthKit<ComponentStandard>.HKSampleAdapter
     
-    var didFinishLaunchingWithOptions = false
     var active = false
     var anchor: HKQueryAnchor?
     
@@ -57,7 +56,7 @@ final class HealthKitSampleDataSource<ComponentStandard: Standard, SampleType: H
     
     
     func askedForAuthorization() {
-        guard askedForAuthorization(for: sampleType) && !deliverySetting.isManual && !active && !didFinishLaunchingWithOptions else {
+        guard askedForAuthorization(for: sampleType) && !deliverySetting.isManual && !active else {
             return
         }
         
@@ -67,17 +66,13 @@ final class HealthKitSampleDataSource<ComponentStandard: Standard, SampleType: H
     }
     
     func willFinishLaunchingWithOptions(_ application: UIApplication, launchOptions: [UIApplication.LaunchOptionsKey: Any]) {
-        defer {
-            didFinishLaunchingWithOptions = true
-        }
-        
         guard askedForAuthorization(for: sampleType) else {
             return
         }
         
         switch deliverySetting {
         case let .anchorQuery(startSetting, _) where startSetting == .afterAuthorizationAndApplicationWillLaunch,
-             let .background(startSetting, _) where startSetting == .afterAuthorizationAndApplicationWillLaunch:
+            let .background(startSetting, _) where startSetting == .afterAuthorizationAndApplicationWillLaunch:
             Task {
                 await triggerDataSourceCollection()
             }
@@ -98,7 +93,7 @@ final class HealthKitSampleDataSource<ComponentStandard: Standard, SampleType: H
     }
     
     func triggerDataSourceCollection() async {
-        guard deliverySetting.isManual || !active else {
+        guard !active else {
             return
         }
         
