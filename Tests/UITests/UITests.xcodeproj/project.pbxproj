@@ -7,10 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2F148BFD298BADD700031B7F /* FirebaseConfiguration in Frameworks */ = {isa = PBXBuildFile; productRef = 2F148BFC298BADD700031B7F /* FirebaseConfiguration */; };
+		2F148C00298BB15900031B7F /* FirebaseAccountTestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F148BFF298BB15900031B7F /* FirebaseAccountTestsView.swift */; };
 		2F1B82092942DE390037BC09 /* TestAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1B82082942DE390037BC09 /* TestAppUITests.swift */; };
-		2F1B820F2942E54F0037BC09 /* XCTTestCase+HealthDataType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1B820E2942E54F0037BC09 /* XCTTestCase+HealthDataType.swift */; };
 		2F2A354F291CCF74000E8373 /* TestAppHealthKitAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2A354E291CCF74000E8373 /* TestAppHealthKitAdapter.swift */; };
 		2F2E4B8429749C5900FF710F /* FirestoreDataStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2E4B8329749C5900FF710F /* FirestoreDataStorageTests.swift */; };
+		2F319E802994D44F00C29B45 /* XCTestExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 2F319E7F2994D44F00C29B45 /* XCTestExtensions */; };
 		2F4530C4293FD704000A858F /* AccountTestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4530C3293FD704000A858F /* AccountTestsView.swift */; };
 		2F4D91752948EA1A000E2D94 /* ContactsTestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4D91742948EA1A000E2D94 /* ContactsTestsView.swift */; };
 		2F4D91772948EB33000E2D94 /* ContactsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4D91762948EB33000E2D94 /* ContactsTests.swift */; };
@@ -43,6 +45,7 @@
 		2F8A43242913174B005D2B8F /* ObservableObjectTestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8A43232913174B005D2B8F /* ObservableObjectTestsView.swift */; };
 		2F8A4326291317AA005D2B8F /* LocalStorageTestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8A4325291317AA005D2B8F /* LocalStorageTestsView.swift */; };
 		2F8CC7D8294D2B6A00358B7E /* Scheduler in Frameworks */ = {isa = PBXBuildFile; productRef = 2F8CC7D7294D2B6A00358B7E /* Scheduler */; };
+		2F8CE161298C2C6D003799A8 /* FirebaseAccountTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8CE160298C2C6D003799A8 /* FirebaseAccountTests.swift */; };
 		2F9F07E2290906A200CDC598 /* SecureStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9F07E1290906A200CDC598 /* SecureStorageTests.swift */; };
 		2F9F07E5290906E200CDC598 /* SecureStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9F07E4290906E200CDC598 /* SecureStorageTests.swift */; };
 		2F9F07E7290907C600CDC598 /* XCTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9F07E6290907C600CDC598 /* XCTest.swift */; };
@@ -53,6 +56,7 @@
 		2FB77BA12910EF4A009FDDE2 /* LocalStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB77BA02910EF4A009FDDE2 /* LocalStorageTests.swift */; };
 		2FB77BA52910F84D009FDDE2 /* LocalStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB77BA42910F84D009FDDE2 /* LocalStorageTests.swift */; };
 		2FB926E32974AF15008E7B03 /* FirestoreDataStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 2FB926E22974AF15008E7B03 /* FirestoreDataStorage */; };
+		2FBBBBDE299628B100F1E92B /* XCTTestCase+HealthDataType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBBBBDD299628B100F1E92B /* XCTTestCase+HealthDataType.swift */; };
 		2FC246C82941376600F75383 /* MultipleObservableObjectsTestsComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC246C72941376600F75383 /* MultipleObservableObjectsTestsComponent.swift */; };
 		2FC246CA29414FF200F75383 /* MockEmailPasswordAccountService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC246C929414FF200F75383 /* MockEmailPasswordAccountService.swift */; };
 		2FC246CC29414FFA00F75383 /* MockUsernamePasswordAccountService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC246CB29414FFA00F75383 /* MockUsernamePasswordAccountService.swift */; };
@@ -63,6 +67,7 @@
 		2FC246D62941720600F75383 /* AccountSignUpTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC246D52941720600F75383 /* AccountSignUpTests.swift */; };
 		2FC2C406291D84A600712676 /* HealthKitTestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC2C405291D84A600712676 /* HealthKitTestsView.swift */; };
 		2FC2C408291DCC8200712676 /* HealthKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC2C407291DCC8200712676 /* HealthKitTests.swift */; };
+		2FC94CDC298B57E0009C8209 /* FirebaseAccount in Frameworks */ = {isa = PBXBuildFile; productRef = 2FC94CDB298B57E0009C8209 /* FirebaseAccount */; };
 		2FD6390C294B0A4B008BADFC /* OnboardingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD6390B294B0A4B008BADFC /* OnboardingTests.swift */; };
 		2FE122B2294247480016B162 /* XCUIApplication+TextEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE122B1294247480016B162 /* XCUIApplication+TextEntry.swift */; };
 		2FE62C3D2966074F00FCBE7F /* FirestoreDataStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE62C3C2966074F00FCBE7F /* FirestoreDataStorageTests.swift */; };
@@ -81,8 +86,8 @@
 /* Begin PBXFileReference section */
 		2F01E8CD291490B80089C46B /* TestApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TestApp.entitlements; sourceTree = "<group>"; };
 		2F01E8CE291493560089C46B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		2F148BFF298BB15900031B7F /* FirebaseAccountTestsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAccountTestsView.swift; sourceTree = "<group>"; };
 		2F1B82082942DE390037BC09 /* TestAppUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestAppUITests.swift; sourceTree = "<group>"; };
-		2F1B820E2942E54F0037BC09 /* XCTTestCase+HealthDataType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "XCTTestCase+HealthDataType.swift"; sourceTree = "<group>"; };
 		2F2A354E291CCF74000E8373 /* TestAppHealthKitAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAppHealthKitAdapter.swift; sourceTree = "<group>"; };
 		2F2E4B8329749C5900FF710F /* FirestoreDataStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreDataStorageTests.swift; sourceTree = "<group>"; };
 		2F4530C3293FD704000A858F /* AccountTestsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountTestsView.swift; sourceTree = "<group>"; };
@@ -109,6 +114,7 @@
 		2F8A43212913172E005D2B8F /* ObservableComponentTestsComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservableComponentTestsComponent.swift; sourceTree = "<group>"; };
 		2F8A43232913174B005D2B8F /* ObservableObjectTestsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservableObjectTestsView.swift; sourceTree = "<group>"; };
 		2F8A4325291317AA005D2B8F /* LocalStorageTestsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalStorageTestsView.swift; sourceTree = "<group>"; };
+		2F8CE160298C2C6D003799A8 /* FirebaseAccountTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAccountTests.swift; sourceTree = "<group>"; };
 		2F9F07E1290906A200CDC598 /* SecureStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureStorageTests.swift; sourceTree = "<group>"; };
 		2F9F07E4290906E200CDC598 /* SecureStorageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecureStorageTests.swift; sourceTree = "<group>"; };
 		2F9F07E6290907C600CDC598 /* XCTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTest.swift; sourceTree = "<group>"; };
@@ -119,6 +125,7 @@
 		2FB77BA02910EF4A009FDDE2 /* LocalStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalStorageTests.swift; sourceTree = "<group>"; };
 		2FB77BA42910F84D009FDDE2 /* LocalStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalStorageTests.swift; sourceTree = "<group>"; };
 		2FB926E42974B0FC008E7B03 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		2FBBBBDD299628B100F1E92B /* XCTTestCase+HealthDataType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "XCTTestCase+HealthDataType.swift"; sourceTree = "<group>"; };
 		2FC246C72941376600F75383 /* MultipleObservableObjectsTestsComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipleObservableObjectsTestsComponent.swift; sourceTree = "<group>"; };
 		2FC246C929414FF200F75383 /* MockEmailPasswordAccountService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockEmailPasswordAccountService.swift; sourceTree = "<group>"; };
 		2FC246CB29414FFA00F75383 /* MockUsernamePasswordAccountService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUsernamePasswordAccountService.swift; sourceTree = "<group>"; };
@@ -140,6 +147,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2FC94CDC298B57E0009C8209 /* FirebaseAccount in Frameworks */,
 				2F4F0390294A66FB0062D4C7 /* LocalStorage in Frameworks */,
 				2F4F0394294A66FB0062D4C7 /* SecureStorage in Frameworks */,
 				2F8CC7D8294D2B6A00358B7E /* Scheduler in Frameworks */,
@@ -147,6 +155,7 @@
 				2F4F038C294A66FB0062D4C7 /* FHIR in Frameworks */,
 				2F4F038E294A66FB0062D4C7 /* HealthKitDataSource in Frameworks */,
 				2F4F0392294A66FB0062D4C7 /* Onboarding in Frameworks */,
+				2F148BFD298BADD700031B7F /* FirebaseConfiguration in Frameworks */,
 				2F4F0386294A66FB0062D4C7 /* Account in Frameworks */,
 				2F4F0396294A66FB0062D4C7 /* XCTRuntimeAssertions in Frameworks */,
 				2F4F0388294A66FB0062D4C7 /* CardinalKit in Frameworks */,
@@ -159,12 +168,21 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F319E802994D44F00C29B45 /* XCTestExtensions in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2F148BFE298BB14100031B7F /* FirebaseAccountTests */ = {
+			isa = PBXGroup;
+			children = (
+				2F148BFF298BB15900031B7F /* FirebaseAccountTestsView.swift */,
+			);
+			path = FirebaseAccountTests;
+			sourceTree = "<group>";
+		};
 		2F4530C0293FD617000A858F /* AccountTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -221,6 +239,7 @@
 				2FA7382B290ADFAA007ACEB9 /* TestApp.swift */,
 				2F4530C0293FD617000A858F /* AccountTests */,
 				2F4D91732948E9F1000E2D94 /* ContactsTests */,
+				2F148BFE298BB14100031B7F /* FirebaseAccountTests */,
 				2FE62C3B2966071400FCBE7F /* FirestoreDataStorageTests */,
 				2FC2C404291D848600712676 /* HealthKitTests */,
 				2F8A431C291316C8005D2B8F /* LocalStorageTests */,
@@ -246,6 +265,7 @@
 				2FA04AD62943165200648A48 /* AccountResetPasswordTests.swift */,
 				2FC246D52941720600F75383 /* AccountSignUpTests.swift */,
 				2F4D91762948EB33000E2D94 /* ContactsTests.swift */,
+				2F8CE160298C2C6D003799A8 /* FirebaseAccountTests.swift */,
 				2F2E4B8329749C5900FF710F /* FirestoreDataStorageTests.swift */,
 				2FC2C407291DCC8200712676 /* HealthKitTests.swift */,
 				2FB77BA42910F84D009FDDE2 /* LocalStorageTests.swift */,
@@ -330,8 +350,8 @@
 		2FE122AE294246D40016B162 /* Helper */ = {
 			isa = PBXGroup;
 			children = (
+				2FBBBBDD299628B100F1E92B /* XCTTestCase+HealthDataType.swift */,
 				2F1B82082942DE390037BC09 /* TestAppUITests.swift */,
-				2F1B820E2942E54F0037BC09 /* XCTTestCase+HealthDataType.swift */,
 				2FE122B1294247480016B162 /* XCUIApplication+TextEntry.swift */,
 			);
 			path = Helper;
@@ -374,6 +394,8 @@
 				2F532EA9294CD87900A4061E /* Views */,
 				2F8CC7D7294D2B6A00358B7E /* Scheduler */,
 				2FB926E22974AF15008E7B03 /* FirestoreDataStorage */,
+				2FC94CDB298B57E0009C8209 /* FirebaseAccount */,
+				2F148BFC298BADD700031B7F /* FirebaseConfiguration */,
 			);
 			productName = Example;
 			productReference = 2F6D139228F5F384007C25D6 /* TestApp.app */;
@@ -393,6 +415,9 @@
 				2F6D13AE28F5F386007C25D6 /* PBXTargetDependency */,
 			);
 			name = TestAppUITests;
+			packageProductDependencies = (
+				2F319E7F2994D44F00C29B45 /* XCTestExtensions */,
+			);
 			productName = ExampleUITests;
 			productReference = 2F6D13AC28F5F386007C25D6 /* TestAppUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
@@ -425,6 +450,9 @@
 				Base,
 			);
 			mainGroup = 2F6D138928F5F384007C25D6;
+			packageReferences = (
+				2F319E7E2994D44F00C29B45 /* XCRemoteSwiftPackageReference "XCTestExtensions" */,
+			);
 			productRefGroup = 2F6D139328F5F384007C25D6 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -460,6 +488,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F8A431929130CA7005D2B8F /* TestAppTestCase.swift in Sources */,
+				2F148C00298BB15900031B7F /* FirebaseAccountTestsView.swift in Sources */,
 				2F8A431529130B9B005D2B8F /* TestAppView.swift in Sources */,
 				2F8A43222913172E005D2B8F /* ObservableComponentTestsComponent.swift in Sources */,
 				2FC246C82941376600F75383 /* MultipleObservableObjectsTestsComponent.swift in Sources */,
@@ -499,9 +528,10 @@
 			files = (
 				2F2E4B8429749C5900FF710F /* FirestoreDataStorageTests.swift in Sources */,
 				2F9F07F529090BA900CDC598 /* ObservableObjectComponentTests.swift in Sources */,
+				2FBBBBDE299628B100F1E92B /* XCTTestCase+HealthDataType.swift in Sources */,
+				2F8CE161298C2C6D003799A8 /* FirebaseAccountTests.swift in Sources */,
 				2F1B82092942DE390037BC09 /* TestAppUITests.swift in Sources */,
 				2F817A4C294B16A000A39983 /* ViewsTests.swift in Sources */,
-				2F1B820F2942E54F0037BC09 /* XCTTestCase+HealthDataType.swift in Sources */,
 				2FA04AD72943165200648A48 /* AccountResetPasswordTests.swift in Sources */,
 				2F4D91772948EB33000E2D94 /* ContactsTests.swift in Sources */,
 				2F9F07E2290906A200CDC598 /* SecureStorageTests.swift in Sources */,
@@ -787,7 +817,27 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		2F319E7E2994D44F00C29B45 /* XCRemoteSwiftPackageReference "XCTestExtensions" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/StanfordBDHG/XCTestExtensions";
+			requirement = {
+				kind = upToNextMinorVersion;
+				minimumVersion = 0.1.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
+		2F148BFC298BADD700031B7F /* FirebaseConfiguration */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseConfiguration;
+		};
+		2F319E7F2994D44F00C29B45 /* XCTestExtensions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2F319E7E2994D44F00C29B45 /* XCRemoteSwiftPackageReference "XCTestExtensions" */;
+			productName = XCTestExtensions;
+		};
 		2F4F0385294A66FB0062D4C7 /* Account */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Account;
@@ -835,6 +885,10 @@
 		2FB926E22974AF15008E7B03 /* FirestoreDataStorage */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = FirestoreDataStorage;
+		};
+		2FC94CDB298B57E0009C8209 /* FirebaseAccount */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseAccount;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -50,12 +50,12 @@ final class AccountSignUpTests: TestAppUITests {
             username: username,
             usernameReplacement: usernameReplacement
         ) {
-            app.enter(value: String(username.dropLast(4)), in: usernameField)
+            app.textFields[usernameField].enter(value: String(username.dropLast(4)))
             app.testPrimaryButton(enabled: false, title: "Sign Up")
-
+            
             XCTAssertTrue(app.staticTexts["The entered email is not correct."].waitForExistence(timeout: 5.0))
             
-            app.delete(count: username.count, in: usernameField)
+            app.textFields[usernameField].delete(count: username.count)
         }
     }
     
@@ -72,24 +72,24 @@ final class AccountSignUpTests: TestAppUITests {
         
         initialTests()
         
-        app.enter(value: username, in: usernameField)
+        app.textFields[usernameField].enter(value: username)
         app.testPrimaryButton(enabled: false, title: buttonTitle)
-
+        
         let passwordField = "Enter your password ..."
         let password = "StanfordRocks123!"
-        app.enter(value: password, in: passwordField, secureTextField: true)
+        app.secureTextFields[passwordField].enter(value: password)
         app.testPrimaryButton(enabled: false, title: buttonTitle)
-
+        
         let passwordRepeatField = "Repeat your password ..."
         var passwordRepeat = "StanfordRocks123"
-        app.enter(value: passwordRepeat, in: passwordRepeatField, secureTextField: true)
+        app.secureTextFields[passwordRepeatField].enter(value: passwordRepeat)
         app.testPrimaryButton(enabled: false, title: buttonTitle)
-
+        
         XCTAssertTrue(app.staticTexts["The entered passwords are not equal."].waitForExistence(timeout: 1.0))
-
-        app.delete(count: passwordRepeat.count, in: passwordRepeatField, secureTextField: true)
+        
+        app.secureTextFields[passwordRepeatField].delete(count: passwordRepeat.count)
         passwordRepeat = password
-        app.enter(value: passwordRepeat, in: passwordRepeatField, secureTextField: true)
+        app.secureTextFields[passwordRepeatField].enter(value: passwordRepeat)
         app.testPrimaryButton(enabled: false, title: buttonTitle)
         
         app.datePickers.firstMatch.tap()
@@ -102,48 +102,22 @@ final class AccountSignUpTests: TestAppUITests {
         
         let givenNameField = "Enter your given name ..."
         let givenName = "Leland"
-        app.enter(value: givenName, in: givenNameField)
+        app.textFields[givenNameField].enter(value: givenName)
         app.testPrimaryButton(enabled: false, title: buttonTitle)
-
+        
         let familyNameField = "Enter your family name ..."
         let familyName = "Stanford"
-        app.enter(value: familyName, in: familyNameField)
+        app.textFields[familyNameField].enter(value: familyName)
         app.testPrimaryButton(enabled: true, title: buttonTitle)
         
         XCTAssertTrue(app.alerts["Username is already taken"].waitForExistence(timeout: 10.0))
         app.alerts["Username is already taken"].scrollViews.otherElements.buttons["OK"].tap()
         
-        app.delete(count: username.count, in: usernameField)
-        app.enter(value: usernameReplacement, in: usernameField)
+        app.textFields[usernameField].delete(count: username.count)
+        app.textFields[usernameField].delete(count: username.count) // Delete twice as the text entry is a long one.
+        app.textFields[usernameField].enter(value: usernameReplacement)
         app.testPrimaryButton(enabled: true, title: buttonTitle)
         
         XCTAssertTrue(app.collectionViews.staticTexts[usernameReplacement].waitForExistence(timeout: 10.0))
-    }
-    
-    
-    func disablePasswordAutofill() {
-        let settingsApp = XCUIApplication(bundleIdentifier: "com.apple.Preferences")
-        settingsApp.terminate()
-        settingsApp.launch()
-        
-        if settingsApp.staticTexts["PASSWORDS"].waitForExistence(timeout: 0.5) {
-            settingsApp.staticTexts["PASSWORDS"].tap()
-        }
-        
-        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
-        if springboard.secureTextFields["Passcode field"].waitForExistence(timeout: 20) {
-            let passcodeInput = springboard.secureTextFields["Passcode field"]
-            passcodeInput.tap()
-            passcodeInput.typeText("1234\r")
-        } else {
-            XCTFail("Could not enter the passcode in the device to enter the password section in the settings app.")
-            return
-        }
-        
-        XCTAssertTrue(settingsApp.tables.cells["PasswordOptionsCell"].waitForExistence(timeout: 5.0))
-        settingsApp.tables.cells["PasswordOptionsCell"].buttons["chevron"].tap()
-        if settingsApp.switches["AutoFill Passwords"].value as? String == "1" {
-            settingsApp.switches["AutoFill Passwords"].tap()
-        }
     }
 }

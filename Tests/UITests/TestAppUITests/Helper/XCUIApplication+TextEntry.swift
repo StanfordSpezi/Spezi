@@ -10,26 +10,6 @@ import XCTest
 
 
 extension XCUIApplication {
-    func textField(_ field: String, secure: Bool) -> XCUIElement {
-        if secure {
-            return secureTextFields[field]
-        } else {
-            return textFields[field]
-        }
-    }
-    
-    func delete(count: Int, in field: String, secureTextField: Bool = false) {
-        let textField = textField(field, secure: secureTextField)
-        textField.coordinate(withNormalizedOffset: CGVector(dx: 0.95, dy: 0.5)).tap()
-        textField.typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: count))
-    }
-    
-    func enter(value: String, in field: String, secureTextField: Bool = false) {
-        let textField = textField(field, secure: secureTextField)
-        textField.tap()
-        textField.typeText(value)
-    }
-    
     func testPrimaryButton(enabled: Bool, title: String, navigationBarButtonTitle: String? = nil) {
         let navigationBarButtonTitle = navigationBarButtonTitle ?? title
         

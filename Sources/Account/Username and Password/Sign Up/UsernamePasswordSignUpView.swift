@@ -23,6 +23,7 @@ import Views
 /// The view can automatically validate input using passed in ``ValidationRule``s and can be customized using header or footer views:
 /// ```
 /// UsernamePasswordSignUpView(
+///     signUpOptions: [.usernameAndPassword, .name, .genderIdentity, .dateOfBirth],
 ///     passwordValidationRules: [
 ///         /* ... */
 ///     ],
@@ -31,8 +32,7 @@ import Views
 ///     },
 ///     footer: {
 ///         Text("A Footer View ...")
-///     },
-///     signUpOptions: [.usernameAndPassword, .name, .genderIdentity, .dateOfBirth],
+///     }
 /// )
 ///     .environmentObject(UsernamePasswordAccountService())
 /// ```

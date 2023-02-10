@@ -7,6 +7,7 @@
 //
 
 import CardinalKit
+import FirebaseAccount
 import FirestoreDataStorage
 @preconcurrency import HealthKit
 import HealthKitDataSource
@@ -19,37 +20,46 @@ class TestAppDelegate: CardinalKitAppDelegate {
     override var configuration: Configuration {
         Configuration(standard: TestAppStandard()) {
             Firestore(settings: .emulator)
+            if CommandLine.arguments.contains("--firebaseAccount") {
+                FirebaseAccountConfiguration(emulatorSettings: (host: "localhost", port: 9099))
+            } else {
+                TestAccountConfiguration()
+            }
             if HKHealthStore.isHealthDataAvailable() {
-                HealthKit {
-                    CollectSample(
-                        HKQuantityType.electrocardiogramType(),
-                        deliverySetting: .background(.manual)
-                    )
-                    CollectSample(
-                        HKQuantityType(.stepCount),
-                        deliverySetting: .background(.afterAuthorizationAndApplicationWillLaunch)
-                    )
-                    CollectSample(
-                        HKQuantityType(.pushCount),
-                        deliverySetting: .anchorQuery(.manual)
-                    )
-                    CollectSample(
-                        HKQuantityType(.activeEnergyBurned),
-                        deliverySetting: .anchorQuery(.afterAuthorizationAndApplicationWillLaunch)
-                    )
-                    CollectSample(
-                        HKQuantityType(.restingHeartRate),
-                        deliverySetting: .manual()
-                    )
-                } adapter: {
-                    TestAppHealthKitAdapter()
-                }
+                healthKit
             }
             LocalStorage()
             MultipleObservableObjectsTestsComponent()
             ObservableComponentTestsComponent(message: "Passed")
             SecureStorage()
-            TestAccountConfiguration()
+        }
+    }
+    
+    
+    private var healthKit: HealthKit<TestAppStandard> {
+        HealthKit<TestAppStandard> {
+            CollectSample(
+                HKQuantityType.electrocardiogramType(),
+                deliverySetting: .background(.manual)
+            )
+            CollectSample(
+                HKQuantityType(.stepCount),
+                deliverySetting: .background(.afterAuthorizationAndApplicationWillLaunch)
+            )
+            CollectSample(
+                HKQuantityType(.pushCount),
+                deliverySetting: .anchorQuery(.manual)
+            )
+            CollectSample(
+                HKQuantityType(.activeEnergyBurned),
+                deliverySetting: .anchorQuery(.afterAuthorizationAndApplicationWillLaunch)
+            )
+            CollectSample(
+                HKQuantityType(.restingHeartRate),
+                deliverySetting: .manual()
+            )
+        } adapter: {
+            TestAppHealthKitAdapter()
         }
     }
 }
