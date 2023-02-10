@@ -34,8 +34,8 @@ public enum HealthKitDeliverySetting: Equatable {
         switch self {
         case .manual:
             return true
-        case let .anchorQuery(healthKitDeliveryStartSetting, _), let .background(healthKitDeliveryStartSetting, _):
-            return healthKitDeliveryStartSetting == .manual
+        default:
+            return false
         }
     }
 }

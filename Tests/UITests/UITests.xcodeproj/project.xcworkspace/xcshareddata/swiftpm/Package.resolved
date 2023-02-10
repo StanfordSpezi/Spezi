@@ -149,16 +149,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/StanfordBDHG/XCTestExtensions",
       "state" : {
-        "branch" : "feature/improveOffset",
-        "revision" : "c279c1998185d9806f99d14bb70be480941b8706"
-      }
-    },
-    {
-      "identity" : "xcthealthkit",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/StanfordBDHG/XCTHealthKit",
-      "state" : {
-        "revision" : "5b6a766cdeb67f4a1ea86dd354cd248c1ba67c5d",
+        "revision" : "e97633e1e9729a59d02b0f0ef4de1382887a5985",
         "version" : "0.1.1"
       }
     }
