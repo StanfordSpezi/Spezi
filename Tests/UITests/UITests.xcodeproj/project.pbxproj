@@ -809,7 +809,7 @@
 			repositoryURL = "https://github.com/StanfordBDHG/XCTHealthKit";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 0.2.0;
+				minimumVersion = 0.2.1;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
