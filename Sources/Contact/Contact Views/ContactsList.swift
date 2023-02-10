@@ -12,7 +12,7 @@ import SwiftUI
 /// A ``ContactsList`` enables the display of different ``ContactView``s in a card-like style in a scroll view.
 ///
 /// You pass multiple ``Contact``s to the ``ContactsList`` to populate its content: ``ContactsList/init(contacts:)``:
-/// ```
+/// ```swift
 /// ContactsList(contacts: [/* ... */])
 ///     .navigationTitle("Contacts")
 ///     .background(Color(.systemGroupedBackground))

@@ -13,7 +13,7 @@ import Views
 /// The ``OnboardingActionsView`` allows developers to present a unified style for action buttons in an onboarding flow.
 /// The ``OnboardingActionsView`` can contain one primary button and a optional secondary button below the primary button.
 ///
-/// ```
+/// ```swift
 /// OnboardingActionsView(
 ///     primaryText: "Primary Text",
 ///     primaryAction: {

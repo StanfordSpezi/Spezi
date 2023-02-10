@@ -16,7 +16,7 @@ import SwiftUI
 ///
 /// Use the ``QuestionnaireDataSource/init(adapter:)`` initializer to add the data source to your `Configuration`.
 /// You can use the ``QuestionnaireDataSource/init()`` initializer of you use the FHIR standard in your CardinalKit application:
-/// ```
+/// ```swift
 /// class ExampleAppDelegate: CardinalKitAppDelegate {
 ///     override var configuration: Configuration {
 ///         Configuration(standard: FHIR()) {
