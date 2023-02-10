@@ -180,16 +180,16 @@ final class FirestoreDataStorageTests: TestAppUITests {
         let app = XCUIApplication()
         
         let identifierTextFieldIdentifier = "Enter the element's identifier."
-        app.delete(count: 42, in: identifierTextFieldIdentifier)
-        app.enter(value: id, in: identifierTextFieldIdentifier)
+        app.textFields[identifierTextFieldIdentifier].delete(count: 42)
+        app.textFields[identifierTextFieldIdentifier].enter(value: id)
         
         let collectionPathTextFieldIdentifier = "Enter the element's collection path."
-        app.delete(count: 42, in: collectionPathTextFieldIdentifier)
-        app.enter(value: collectionPath, in: collectionPathTextFieldIdentifier)
+        app.textFields[collectionPathTextFieldIdentifier].delete(count: 42)
+        app.textFields[collectionPathTextFieldIdentifier].enter(value: collectionPath)
         
         let contextFieldIdentifier = "Enter the element's optional context."
-        app.delete(count: 42, in: contextFieldIdentifier)
-        app.enter(value: context.description, in: contextFieldIdentifier)
+        app.textFields[contextFieldIdentifier].delete(count: 42)
+        app.textFields[contextFieldIdentifier].enter(value: context.description)
     }
     
     private func deleteAllDocuments() async throws {

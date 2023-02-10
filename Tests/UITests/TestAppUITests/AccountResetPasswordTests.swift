@@ -27,7 +27,7 @@ final class AccountResetPasswordTests: TestAppUITests {
         
         app.testPrimaryButton(enabled: false, title: buttonTitle, navigationBarButtonTitle: navigationBarButtonTitle)
         
-        app.enter(value: username, in: usernameField)
+        app.textFields[usernameField].enter(value: username)
         
         app.testPrimaryButton(enabled: true, title: buttonTitle, navigationBarButtonTitle: navigationBarButtonTitle)
         
@@ -51,12 +51,12 @@ final class AccountResetPasswordTests: TestAppUITests {
         
         app.testPrimaryButton(enabled: false, title: buttonTitle, navigationBarButtonTitle: navigationBarButtonTitle)
         
-        app.enter(value: String(username.dropLast(4)), in: usernameField)
+        app.textFields[usernameField].enter(value: String(username.dropLast(4)))
         
         XCTAssertTrue(app.staticTexts["The entered email is not correct."].waitForExistence(timeout: 1.0))
         
-        app.delete(count: username.count, in: usernameField)
-        app.enter(value: username, in: usernameField)
+        app.textFields[usernameField].delete(count: username.count)
+        app.textFields[usernameField].enter(value: username)
         
         app.testPrimaryButton(enabled: true, title: buttonTitle, navigationBarButtonTitle: navigationBarButtonTitle)
         

@@ -7,6 +7,7 @@
 //
 
 import CardinalKit
+import RegexBuilder
 import SwiftUI
 import Views
 
@@ -18,17 +19,15 @@ import Views
 /// Other ``AccountService``s can be created by subclassing the ``EmailPasswordAccountService`` and overriding the ``EmailPasswordAccountService/localization``,
 /// buttons like the ``EmailPasswordAccountService/loginButton``, or overriding  the ``EmailPasswordAccountService/button(_:destination:)`` function.
 open class EmailPasswordAccountService: UsernamePasswordAccountService {
-    private var validationRules: [ValidationRule] {
+    public var emailValidationRule: ValidationRule {
         guard let regex = try? Regex("[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}") else {
-            return []
+            fatalError("Invalid E-Mail Regex in the EmailPasswordAccountService")
         }
         
-        return [
-            ValidationRule(
-                regex: regex,
-                message: String(localized: "EAP_EMAIL_VERIFICATION_ERROR", bundle: .module)
-            )
-        ]
+        return ValidationRule(
+            regex: regex,
+            message: String(localized: "EAP_EMAIL_VERIFICATION_ERROR", bundle: .module)
+        )
     }
     
     override open var localization: Localization {
@@ -47,7 +46,7 @@ open class EmailPasswordAccountService: UsernamePasswordAccountService {
         button(
             localization.login.buttonTitle,
             destination: UsernamePasswordLoginView(
-                usernameValidationRules: validationRules
+                usernameValidationRules: [emailValidationRule]
             )
         )
     }
@@ -56,7 +55,7 @@ open class EmailPasswordAccountService: UsernamePasswordAccountService {
         button(
             localization.login.buttonTitle,
             destination: UsernamePasswordSignUpView(
-                usernameValidationRules: validationRules
+                usernameValidationRules: [emailValidationRule]
             )
         )
     }
@@ -65,7 +64,7 @@ open class EmailPasswordAccountService: UsernamePasswordAccountService {
         AnyView(
             NavigationLink {
                 UsernamePasswordResetPasswordView(
-                    usernameValidationRules: validationRules
+                    usernameValidationRules: [emailValidationRule]
                 ) {
                     processSuccessfulResetPasswordView
                 }
