@@ -149,8 +149,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/StanfordBDHG/XCTestExtensions",
       "state" : {
-        "revision" : "088d2ea2db491ce3fd3c7842b2057bac0ffd03f0",
-        "version" : "0.2.0"
+        "revision" : "773d7f9a841d4e68132776b096e5307dca389e43",
+        "version" : "0.2.1"
       }
     },
     {
@@ -158,8 +158,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/StanfordBDHG/XCTHealthKit",
       "state" : {
-        "branch" : "bugfix/improveBrowsTabInteractionStability",
-        "revision" : "a8f1bbffcc5e28d050785bc678cdd4416f04b55e"
+        "revision" : "37ef9a48fcbdd5a301e8482a4bdbf61ef987a4f0",
+        "version" : "0.3.0"
       }
     }
   ],
