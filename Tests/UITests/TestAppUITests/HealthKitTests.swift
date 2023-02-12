@@ -156,24 +156,41 @@ final class HealthKitTests: TestAppUITests {
 extension XCUIApplication {
     fileprivate func hkTypeIdentifierAssert(_ hkTypeIdentifiers: [HealthAppDataType: Int]) {
         XCTAssert(wait(for: .runningForeground, timeout: 10.0))
-        
-        guard numberOfHKTypeIdentifiers() != hkTypeIdentifiers else {
-            return
-        }
-        
-        print("Wait 5 seconds for HealthAppDataType to appear on screen ...")
         sleep(5)
         
         guard numberOfHKTypeIdentifiers() != hkTypeIdentifiers else {
             return
         }
         
-        print("Wait 10 seconds for HealthAppDataType to appear on screen ...")
+        print("Wait 5 more seconds for HealthAppDataType to appear on screen ...")
+        sleep(5)
+        
+        guard numberOfHKTypeIdentifiers() != hkTypeIdentifiers else {
+            return
+        }
+        
+        print("Wait 10 more seconds for HealthAppDataType to appear on screen ...")
         sleep(10)
         
         XCTAssertEqual(
             numberOfHKTypeIdentifiers(),
             hkTypeIdentifiers
         )
+    }
+    
+    private func numberOfHKTypeIdentifiers() -> [HealthAppDataType: Int] {
+        var observations: [HealthAppDataType: Int] = [:]
+        for healthDataType in HealthAppDataType.allCases {
+            let numberOfHKTypeNames = staticTexts
+                .allElementsBoundByIndex
+                .filter {
+                    $0.label.contains(healthDataType.hkTypeName)
+                }
+                .count
+            if numberOfHKTypeNames > 0 {
+                observations[healthDataType] = numberOfHKTypeNames
+            }
+        }
+        return observations
     }
 }

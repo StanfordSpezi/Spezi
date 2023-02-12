@@ -832,8 +832,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/StanfordBDHG/XCTHealthKit";
 			requirement = {
-				kind = upToNextMinorVersion;
-				minimumVersion = 0.2.1;
+				branch = bugfix/improveBrowsTabInteractionStability;
+				kind = branch;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

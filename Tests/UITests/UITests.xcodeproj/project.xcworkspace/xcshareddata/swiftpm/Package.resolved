@@ -158,8 +158,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/StanfordBDHG/XCTHealthKit",
       "state" : {
-        "revision" : "beccc94d523531d58edb163bd0e14e7fd2be2417",
-        "version" : "0.2.1"
+        "branch" : "bugfix/improveBrowsTabInteractionStability",
+        "revision" : "a8f1bbffcc5e28d050785bc678cdd4416f04b55e"
       }
     }
   ],
