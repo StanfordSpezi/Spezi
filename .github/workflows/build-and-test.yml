@@ -18,7 +18,7 @@ on:
 jobs:
   build_and_test-spm:
     name: Build and Test Swift Package
-    uses: StanfordBDHG/.github/.github/workflows/build-and-test-xcodebuild-spm.yml@feature/xcpretty
+    uses: StanfordBDHG/.github/.github/workflows/build-and-test-xcodebuild-spm.yml@v1
     with:
       scheme: CardinalKit-Package
   build_and_test-uitests:
@@ -58,10 +58,7 @@ jobs:
     - name: Install xcpretty
       run: gem install xcpretty
     - name: Resolve Dependencies
-      run: |
-          set -o pipefail \
-          $$ xcodebuild -resolvePackageDependencies \
-          | xcpretty
+      run: xcodebuild -resolvePackageDependencies
     - name: Build and Test Example App
       run: |
           firebase emulators:exec 'set -o pipefail && xcodebuild test -project ${{ env.xcodeprojname }} -scheme ${{ env.scheme }} -destination "name=iPhone 14 Pro Max" -resultBundlePath ${{ env.scheme }}.xcresult CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | xcpretty'
