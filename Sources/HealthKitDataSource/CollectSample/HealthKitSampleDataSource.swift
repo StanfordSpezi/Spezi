@@ -47,7 +47,8 @@ final class HealthKitSampleDataSource<ComponentStandard: Standard, SampleType: H
         if predicate == nil {
             self.predicate = HKQuery.predicateForSamples(
                 withStart: HealthKitSampleDataSource<ComponentStandard, SampleType>.loadDefaultQueryDate(for: sampleType),
-                end: nil
+                end: nil,
+                options: .strictEndDate
             )
         } else {
             self.predicate = predicate
@@ -58,8 +59,16 @@ final class HealthKitSampleDataSource<ComponentStandard: Standard, SampleType: H
     private static func loadDefaultQueryDate(for sampleType: SampleType) -> Date {
         let defaultPredicateDateUserDefaultsKey = UserDefaults.Keys.healthKitDefaultPredicateDatePrefix.appending(sampleType.identifier)
         guard let date = UserDefaults.standard.object(forKey: defaultPredicateDateUserDefaultsKey) as? Date else {
-            UserDefaults.standard.set(Date.now, forKey: defaultPredicateDateUserDefaultsKey)
-            return .now
+            // We start date collection at the previous full minute mark to make the
+            // data collection deterministic to manually entered data in HealthKit.
+            var components = Calendar.current.dateComponents(in: .current, from: .now)
+            components.setValue(0, for: .second)
+            components.setValue(0, for: .nanosecond)
+            let defaultQueryDate = components.date ?? .now
+            
+            UserDefaults.standard.set(defaultQueryDate, forKey: defaultPredicateDateUserDefaultsKey)
+            
+            return defaultQueryDate
         }
         return date
     }
