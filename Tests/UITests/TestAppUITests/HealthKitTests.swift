@@ -23,18 +23,11 @@ final class HealthKitTests: TestAppUITests {
         try exitAppAndOpenHealth(.activeEnergy)
         
         app.activate()
-        
         app.buttons["HealthKit"].tap()
-        
         XCTAssert(app.buttons["Ask for authorization"].waitForExistence(timeout: 2))
         app.buttons["Ask for authorization"].tap()
-        
         try app.handleHealthKitAuthorization()
-        
-        sleep(2)
-        
-        XCTAssertEqual(
-            app.numberOfHKTypeIdentifiers(),
+        app.hkTypeIdentifierAssert(
             [
                 .activeEnergy: 1,
                 .steps: 1
@@ -42,11 +35,7 @@ final class HealthKitTests: TestAppUITests {
         )
         
         app.buttons["Trigger data source collection"].tap()
-        
-        sleep(2)
-        
-        XCTAssertEqual(
-            app.numberOfHKTypeIdentifiers(),
+        app.hkTypeIdentifierAssert(
             [
                 .activeEnergy: 1,
                 .restingHeartRate: 1,
@@ -58,10 +47,7 @@ final class HealthKitTests: TestAppUITests {
         
         try exitAppAndOpenHealth(.electrocardiograms)
         app.activate()
-        sleep(2)
-        
-        XCTAssertEqual(
-            app.numberOfHKTypeIdentifiers(),
+        app.hkTypeIdentifierAssert(
             [
                 .activeEnergy: 1,
                 .restingHeartRate: 1,
@@ -73,10 +59,7 @@ final class HealthKitTests: TestAppUITests {
         
         try exitAppAndOpenHealth(.steps)
         app.activate()
-        sleep(2)
-        
-        XCTAssertEqual(
-            app.numberOfHKTypeIdentifiers(),
+        app.hkTypeIdentifierAssert(
             [
                 .activeEnergy: 1,
                 .restingHeartRate: 1,
@@ -88,10 +71,7 @@ final class HealthKitTests: TestAppUITests {
         
         try exitAppAndOpenHealth(.pushes)
         app.activate()
-        sleep(2)
-        
-        XCTAssertEqual(
-            app.numberOfHKTypeIdentifiers(),
+        app.hkTypeIdentifierAssert(
             [
                 .activeEnergy: 1,
                 .restingHeartRate: 1,
@@ -103,10 +83,7 @@ final class HealthKitTests: TestAppUITests {
         
         try exitAppAndOpenHealth(.restingHeartRate)
         app.activate()
-        sleep(2)
-        
-        XCTAssertEqual(
-            app.numberOfHKTypeIdentifiers(),
+        app.hkTypeIdentifierAssert(
             [
                 .activeEnergy: 1,
                 .restingHeartRate: 1,
@@ -115,13 +92,10 @@ final class HealthKitTests: TestAppUITests {
                 .pushes: 2
             ]
         )
-
+        
         try exitAppAndOpenHealth(.activeEnergy)
         app.activate()
-        sleep(2)
-        
-        XCTAssertEqual(
-            app.numberOfHKTypeIdentifiers(),
+        app.hkTypeIdentifierAssert(
             [
                 .activeEnergy: 2,
                 .restingHeartRate: 1,
@@ -132,11 +106,7 @@ final class HealthKitTests: TestAppUITests {
         )
         
         app.buttons["Trigger data source collection"].tap()
-        app.activate()
-        sleep(2)
-        
-        XCTAssertEqual(
-            app.numberOfHKTypeIdentifiers(),
+        app.hkTypeIdentifierAssert(
             [
                 .activeEnergy: 2,
                 .restingHeartRate: 2,
@@ -146,28 +116,21 @@ final class HealthKitTests: TestAppUITests {
             ]
         )
         
+        // Relaunch App to test delivery after the app has been terminted.
         app.terminate()
         app.activate()
-        
+        XCTAssert(app.wait(for: .runningForeground, timeout: 10.0))
         app.buttons["HealthKit"].tap()
         app.buttons["Trigger data source collection"].tap()
-        
-        XCTAssertEqual(
-            app.numberOfHKTypeIdentifiers(),
-            [:]
-        )
+        app.hkTypeIdentifierAssert([:])
         
         try exitAppAndOpenHealth(.electrocardiograms)
         try exitAppAndOpenHealth(.steps)
         try exitAppAndOpenHealth(.pushes)
         try exitAppAndOpenHealth(.restingHeartRate)
         try exitAppAndOpenHealth(.activeEnergy)
-        
         app.activate()
-        sleep(2)
-        
-        XCTAssertEqual(
-            app.numberOfHKTypeIdentifiers(),
+        app.hkTypeIdentifierAssert(
             [
                 .activeEnergy: 1,
                 .electrocardiograms: 1,
@@ -177,11 +140,7 @@ final class HealthKitTests: TestAppUITests {
         )
         
         app.buttons["Trigger data source collection"].tap()
-        app.activate()
-        sleep(2)
-        
-        XCTAssertEqual(
-            app.numberOfHKTypeIdentifiers(),
+        app.hkTypeIdentifierAssert(
             [
                 .activeEnergy: 1,
                 .restingHeartRate: 1,
@@ -189,6 +148,32 @@ final class HealthKitTests: TestAppUITests {
                 .steps: 1,
                 .pushes: 1
             ]
+        )
+    }
+}
+
+
+extension XCUIApplication {
+    fileprivate func hkTypeIdentifierAssert(_ hkTypeIdentifiers: [HealthAppDataType: Int]) {
+        XCTAssert(wait(for: .runningForeground, timeout: 10.0))
+        
+        guard numberOfHKTypeIdentifiers() != hkTypeIdentifiers else {
+            return
+        }
+        
+        print("Wait 5 seconds for HealthAppDataType to appear on screen ...")
+        sleep(5)
+        
+        guard numberOfHKTypeIdentifiers() != hkTypeIdentifiers else {
+            return
+        }
+        
+        print("Wait 10 seconds for HealthAppDataType to appear on screen ...")
+        sleep(10)
+        
+        XCTAssertEqual(
+            numberOfHKTypeIdentifiers(),
+            hkTypeIdentifiers
         )
     }
 }

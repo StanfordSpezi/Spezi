@@ -149,8 +149,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/StanfordBDHG/XCTestExtensions",
       "state" : {
-        "branch" : "feature/flakyTextEntry",
-        "revision" : "be8f27e53659c8487957eede3ebac53a6a343aaa"
+        "revision" : "088d2ea2db491ce3fd3c7842b2057bac0ffd03f0",
+        "version" : "0.2.0"
       }
     },
     {
