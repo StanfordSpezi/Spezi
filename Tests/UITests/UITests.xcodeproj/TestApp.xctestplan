@@ -20,10 +20,6 @@
   },
   "testTargets" : [
     {
-      "skippedTests" : [
-        "AccountSignUpTests\/testSignUpEmailComponents()",
-        "HealthKitTests"
-      ],
       "target" : {
         "containerPath" : "container:UITests.xcodeproj",
         "identifier" : "2F6D13AB28F5F386007C25D6",

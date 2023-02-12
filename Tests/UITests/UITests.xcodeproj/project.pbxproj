@@ -12,7 +12,6 @@
 		2F1B82092942DE390037BC09 /* TestAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1B82082942DE390037BC09 /* TestAppUITests.swift */; };
 		2F2A354F291CCF74000E8373 /* TestAppHealthKitAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2A354E291CCF74000E8373 /* TestAppHealthKitAdapter.swift */; };
 		2F2E4B8429749C5900FF710F /* FirestoreDataStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2E4B8329749C5900FF710F /* FirestoreDataStorageTests.swift */; };
-		2F319E802994D44F00C29B45 /* XCTestExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 2F319E7F2994D44F00C29B45 /* XCTestExtensions */; };
 		2F4530C4293FD704000A858F /* AccountTestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4530C3293FD704000A858F /* AccountTestsView.swift */; };
 		2F4D91752948EA1A000E2D94 /* ContactsTestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4D91742948EA1A000E2D94 /* ContactsTestsView.swift */; };
 		2F4D91772948EB33000E2D94 /* ContactsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4D91762948EB33000E2D94 /* ContactsTests.swift */; };
@@ -28,6 +27,8 @@
 		2F4F0399294A8D410062D4C7 /* OnboardingTestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4F0398294A8D410062D4C7 /* OnboardingTestsView.swift */; };
 		2F532EAA294CD87900A4061E /* Views in Frameworks */ = {isa = PBXBuildFile; productRef = 2F532EA9294CD87900A4061E /* Views */; };
 		2F6D139A28F5F386007C25D6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F6D139928F5F386007C25D6 /* Assets.xcassets */; };
+		2F746D9F29962B2A00BF54FE /* XCTestExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 2F746D9E29962B2A00BF54FE /* XCTestExtensions */; };
+		2F746DA229962B5100BF54FE /* XCTHealthKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2F746DA129962B5100BF54FE /* XCTHealthKit */; };
 		2F7B6CAB294BCA6600FDC494 /* CanvasTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7B6CAA294BCA6600FDC494 /* CanvasTestView.swift */; };
 		2F7B6CAD294BCA6F00FDC494 /* GeometryReaderTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7B6CAC294BCA6F00FDC494 /* GeometryReaderTestView.swift */; };
 		2F7B6CAF294BCA7600FDC494 /* NameFieldsTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7B6CAE294BCA7600FDC494 /* NameFieldsTestView.swift */; };
@@ -56,7 +57,6 @@
 		2FB77BA12910EF4A009FDDE2 /* LocalStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB77BA02910EF4A009FDDE2 /* LocalStorageTests.swift */; };
 		2FB77BA52910F84D009FDDE2 /* LocalStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FB77BA42910F84D009FDDE2 /* LocalStorageTests.swift */; };
 		2FB926E32974AF15008E7B03 /* FirestoreDataStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 2FB926E22974AF15008E7B03 /* FirestoreDataStorage */; };
-		2FBBBBDE299628B100F1E92B /* XCTTestCase+HealthDataType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBBBBDD299628B100F1E92B /* XCTTestCase+HealthDataType.swift */; };
 		2FC246C82941376600F75383 /* MultipleObservableObjectsTestsComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC246C72941376600F75383 /* MultipleObservableObjectsTestsComponent.swift */; };
 		2FC246CA29414FF200F75383 /* MockEmailPasswordAccountService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC246C929414FF200F75383 /* MockEmailPasswordAccountService.swift */; };
 		2FC246CC29414FFA00F75383 /* MockUsernamePasswordAccountService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC246CB29414FFA00F75383 /* MockUsernamePasswordAccountService.swift */; };
@@ -168,7 +168,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2F319E802994D44F00C29B45 /* XCTestExtensions in Frameworks */,
+				2F746D9F29962B2A00BF54FE /* XCTestExtensions in Frameworks */,
+				2F746DA229962B5100BF54FE /* XCTHealthKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -416,7 +417,8 @@
 			);
 			name = TestAppUITests;
 			packageProductDependencies = (
-				2F319E7F2994D44F00C29B45 /* XCTestExtensions */,
+				2F746D9E29962B2A00BF54FE /* XCTestExtensions */,
+				2F746DA129962B5100BF54FE /* XCTHealthKit */,
 			);
 			productName = ExampleUITests;
 			productReference = 2F6D13AC28F5F386007C25D6 /* TestAppUITests.xctest */;
@@ -451,7 +453,8 @@
 			);
 			mainGroup = 2F6D138928F5F384007C25D6;
 			packageReferences = (
-				2F319E7E2994D44F00C29B45 /* XCRemoteSwiftPackageReference "XCTestExtensions" */,
+				2F746D9D29962B2A00BF54FE /* XCRemoteSwiftPackageReference "XCTestExtensions" */,
+				2F746DA029962B5100BF54FE /* XCRemoteSwiftPackageReference "XCTHealthKit" */,
 			);
 			productRefGroup = 2F6D139328F5F384007C25D6 /* Products */;
 			projectDirPath = "";
@@ -528,7 +531,6 @@
 			files = (
 				2F2E4B8429749C5900FF710F /* FirestoreDataStorageTests.swift in Sources */,
 				2F9F07F529090BA900CDC598 /* ObservableObjectComponentTests.swift in Sources */,
-				2FBBBBDE299628B100F1E92B /* XCTTestCase+HealthDataType.swift in Sources */,
 				2F8CE161298C2C6D003799A8 /* FirebaseAccountTests.swift in Sources */,
 				2F1B82092942DE390037BC09 /* TestAppUITests.swift in Sources */,
 				2F817A4C294B16A000A39983 /* ViewsTests.swift in Sources */,
@@ -818,12 +820,20 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		2F319E7E2994D44F00C29B45 /* XCRemoteSwiftPackageReference "XCTestExtensions" */ = {
+		2F746D9D29962B2A00BF54FE /* XCRemoteSwiftPackageReference "XCTestExtensions" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/StanfordBDHG/XCTestExtensions";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 0.1.1;
+				minimumVersion = 0.2.1;
+			};
+		};
+		2F746DA029962B5100BF54FE /* XCRemoteSwiftPackageReference "XCTHealthKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/StanfordBDHG/XCTHealthKit";
+			requirement = {
+				kind = upToNextMinorVersion;
+				minimumVersion = 0.3.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -832,11 +842,6 @@
 		2F148BFC298BADD700031B7F /* FirebaseConfiguration */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = FirebaseConfiguration;
-		};
-		2F319E7F2994D44F00C29B45 /* XCTestExtensions */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 2F319E7E2994D44F00C29B45 /* XCRemoteSwiftPackageReference "XCTestExtensions" */;
-			productName = XCTestExtensions;
 		};
 		2F4F0385294A66FB0062D4C7 /* Account */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -877,6 +882,16 @@
 		2F532EA9294CD87900A4061E /* Views */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Views;
+		};
+		2F746D9E29962B2A00BF54FE /* XCTestExtensions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2F746D9D29962B2A00BF54FE /* XCRemoteSwiftPackageReference "XCTestExtensions" */;
+			productName = XCTestExtensions;
+		};
+		2F746DA129962B5100BF54FE /* XCTHealthKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2F746DA029962B5100BF54FE /* XCRemoteSwiftPackageReference "XCTHealthKit" */;
+			productName = XCTHealthKit;
 		};
 		2F8CC7D7294D2B6A00358B7E /* Scheduler */ = {
 			isa = XCSwiftPackageProductDependency;

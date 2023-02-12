@@ -278,7 +278,7 @@ extension XCUIApplication {
         textFields["Enter your given name ..."].enter(value: givenName)
         swipeUp()
         textFields["Enter your family name ..."].enter(value: familyName)
-        textFields["Enter your family name ..."].enter(value: "\n")
+        swipeUp()
         
         
         let allButtons = collectionViews.buttons.allElementsBoundByIndex

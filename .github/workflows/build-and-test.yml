@@ -55,9 +55,13 @@ jobs:
         java-version: '17'
     - name: Install Firebase CLI Tools
       run: npm install -g firebase-tools
+    - name: Install xcpretty
+      run: gem install xcpretty
+    - name: Resolve Dependencies
+      run: xcodebuild -resolvePackageDependencies
     - name: Build and Test Example App
       run: |
-          firebase emulators:exec 'xcodebuild test -project ${{ env.xcodeprojname }} -scheme ${{ env.scheme }} -destination "name=iPhone 14 Pro Max" -resultBundlePath ${{ env.scheme }}.xcresult CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO'
+          firebase emulators:exec 'set -o pipefail && xcodebuild test -project ${{ env.xcodeprojname }} -scheme ${{ env.scheme }} -destination "name=iPhone 14 Pro Max" -resultBundlePath ${{ env.scheme }}.xcresult CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | xcpretty'
     - name: Upload Artifact
       if: always()
       uses: actions/upload-artifact@v3
