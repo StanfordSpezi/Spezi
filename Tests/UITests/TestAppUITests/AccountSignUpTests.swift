@@ -114,8 +114,8 @@ final class AccountSignUpTests: TestAppUITests {
         XCTAssertTrue(app.alerts["Username is already taken"].waitForExistence(timeout: 10.0))
         app.alerts["Username is already taken"].scrollViews.otherElements.buttons["OK"].tap()
         
+        app.swipeDown()
         app.textFields[usernameField].delete(count: username.count)
-        app.textFields[usernameField].delete(count: username.count) // Delete twice as the text entry is a long one.
         app.textFields[usernameField].enter(value: usernameReplacement)
         app.testPrimaryButton(enabled: true, title: buttonTitle)
         

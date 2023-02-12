@@ -824,8 +824,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/StanfordBDHG/XCTestExtensions";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.1.1;
+				branch = feature/flakyTextEntry;
+				kind = branch;
 			};
 		};
 		2F746DA029962B5100BF54FE /* XCRemoteSwiftPackageReference "XCTHealthKit" */ = {
