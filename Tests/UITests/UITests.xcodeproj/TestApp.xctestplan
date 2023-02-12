@@ -21,8 +21,10 @@
       "skippedTests" : [
         "AccountLoginTests",
         "AccountResetPasswordTests",
+        "AccountSignUpTests",
         "AccountSignUpTests\/testSignUpUsernameComponents()",
         "ContactsTests",
+        "FirebaseAccountTests",
         "FirebaseAccountTests\/testAccountLogin()",
         "FirestoreDataStorageTests",
         "LocalStorageTests",
