@@ -12,6 +12,7 @@ import FirebaseAuth
 import FirebaseConfiguration
 import FirebaseCore
 import Foundation
+@_exported import class FirebaseAuth.User
 
 
 /// <#Description#>
@@ -64,6 +65,7 @@ public final class FirebaseAccountConfiguration<ComponentStandard: Standard>: Co
             guard let user else {
                 Task {
                     await MainActor.run {
+                        self.user = nil
                         self.account.signedIn = false
                     }
                 }
