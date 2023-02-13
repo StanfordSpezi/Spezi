@@ -50,8 +50,11 @@ public actor Firestore<ComponentStandard: Standard>: Module, DataStorageProvider
     ///   - adapter: A chain of adapter from your standard basetype and
     /// removal context to ``FirestoreElement`` and ``FirestoreRemovalContext`` instances.
     ///   - settings: The firestore settings according to the [Firebase Firestore Swift Package](https://firebase.google.com/docs/reference/swift/firebasefirestore/api/reference/Classes/FirestoreSettings)
-    public init(adapter: FirestoreAdapter, settings: FirestoreSettings = FirestoreSettings()) {
-        self.adapter = adapter
+    public init(
+        @AdapterBuilder<ComponentStandard.BaseType, ComponentStandard.RemovalContext> adapter: () -> (FirestoreAdapter),
+        settings: FirestoreSettings = FirestoreSettings()
+    ) {
+        self.adapter = adapter()
         self.settings = settings
     }
     

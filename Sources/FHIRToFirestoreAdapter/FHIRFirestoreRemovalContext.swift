@@ -15,7 +15,7 @@ import Foundation
 /// Provides a mapping from a FHIR standard `RemovalContext` to a type conforming to `FHIRFirestoreRemovalContext`.
 public struct FHIRFirestoreRemovalContext: FirestoreRemovalContext, @unchecked Sendable {
     public let id: String
-    public let collectionPath: String
+    public var collectionPath: String
     
     
     init(_ removalContext: FHIR.RemovalContext) {

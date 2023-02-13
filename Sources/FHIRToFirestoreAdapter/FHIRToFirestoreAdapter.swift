@@ -8,6 +8,7 @@
 
 import CardinalKit
 import FHIR
+import FirestoreDataStorage
 
 
 /// Adapts the output of the `FHIR` standard to be used with the `Firestore` data storage provider.
@@ -25,7 +26,7 @@ import FHIR
 ///     }
 /// }
 /// ```
-public actor FHIRToFirestoreAdapter: SingleValueAdapter {
+public actor FHIRToFirestoreAdapter: SingleValueAdapter, FirestoreElementAdapter {
     public typealias InputElement = FHIR.BaseType
     public typealias InputRemovalContext = FHIR.RemovalContext
     public typealias OutputElement = FHIRFirestoreElement

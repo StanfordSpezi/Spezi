@@ -17,7 +17,7 @@ public struct FHIRFirestoreElement: FirestoreElement, @unchecked Sendable {
     let resource: Resource
     
     public let id: String
-    public let collectionPath: String
+    public var collectionPath: String
     
     
     init(_ baseType: FHIR.BaseType) {
