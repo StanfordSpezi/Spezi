@@ -86,8 +86,8 @@ extension Adapter {
     /// <#Description#>
     /// - Parameter dataChanges: <#dataChanges description#>
     /// - Returns: <#description#>
-    public func transform(
-        dataChanges: [DataChange<InputElement, InputRemovalContext>]
+    public func transformDataChanges(
+        _ dataChanges: [DataChange<InputElement, InputRemovalContext>]
     ) async -> any TypedAsyncSequence<DataChange<OutputElement, OutputRemovalContext>> {
         await transform(
             AsyncStream { continuation in

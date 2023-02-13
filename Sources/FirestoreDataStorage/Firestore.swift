@@ -71,7 +71,7 @@ public actor Firestore<ComponentStandard: Standard>: Module, DataStorageProvider
     }
     
     public func process(_ element: DataChange<ComponentStandard.BaseType, ComponentStandard.RemovalContext>) async throws {
-        try await process(asyncSequence: adapter.transform(dataChanges: [element]))
+        try await process(asyncSequence: adapter.transformDataChanges([element]))
     }
     
     private func process(asyncSequence: some TypedAsyncSequence<DataChange<FirestoreElement, FirestoreRemovalContext>>) async throws {
