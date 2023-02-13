@@ -30,7 +30,12 @@ import SwiftUI
 /// }
 /// ```
 public actor Firestore<ComponentStandard: Standard>: Module, DataStorageProvider {
-    public typealias FirestoreAdapter = any FirestoreElementAdapter<ComponentStandard.BaseType, ComponentStandard.RemovalContext>
+    public typealias FirestoreAdapter = any SingleValueAdapter<
+        ComponentStandard.BaseType,
+        ComponentStandard.RemovalContext,
+        FirestoreElement,
+        FirestoreRemovalContext
+    >
     
     
     @Dependency private var configureFirebaseApp: ConfigureFirebaseApp
@@ -41,8 +46,8 @@ public actor Firestore<ComponentStandard: Standard>: Module, DataStorageProvider
     
     /// - Parameter settings: The firestore settings according to the [Firebase Firestore Swift Package](https://firebase.google.com/docs/reference/swift/firebasefirestore/api/reference/Classes/FirestoreSettings)
     public init(settings: FirestoreSettings = FirestoreSettings())
-    where ComponentStandard.BaseType: FirestoreElement, ComponentStandard.RemovalContext: FirestoreRemovalContext {
-        self.adapter = DefaultFirestoreElementAdapter()
+    where ComponentStandard.BaseType: AnyFirestoreElement, ComponentStandard.RemovalContext: AnyFirestoreRemovalContext {
+        self.adapter = DefaultFirestoreElementAdapter<ComponentStandard.BaseType, ComponentStandard.RemovalContext>()
         self.settings = settings
     }
     
@@ -51,7 +56,7 @@ public actor Firestore<ComponentStandard: Standard>: Module, DataStorageProvider
     /// removal context to ``FirestoreElement`` and ``FirestoreRemovalContext`` instances.
     ///   - settings: The firestore settings according to the [Firebase Firestore Swift Package](https://firebase.google.com/docs/reference/swift/firebasefirestore/api/reference/Classes/FirestoreSettings)
     public init(
-        @AdapterBuilder<ComponentStandard.BaseType, ComponentStandard.RemovalContext> adapter: () -> (FirestoreAdapter),
+        @AdapterBuilder<FirestoreElement, FirestoreRemovalContext> adapter: () -> (FirestoreAdapter),
         settings: FirestoreSettings = FirestoreSettings()
     ) {
         self.adapter = adapter()

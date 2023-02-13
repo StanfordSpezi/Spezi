@@ -7,8 +7,23 @@
 //
 
 
-/// Provides the nescessary removal context for the ``Firestore`` date storage component.
-public protocol FirestoreRemovalContext: Identifiable, Sendable where ID == String {
-    /// The collection path where the ``FirestoreElement`` is located at.
-    var collectionPath: String { get }
+/// Provides a mapping from a FHIR standard `RemovalContext` to a type conforming to `FHIRFirestoreRemovalContext`.
+public struct FirestoreRemovalContext: Identifiable, Sendable {
+    /// <#Description#>
+    public let id: String
+    /// <#Description#>
+    public var collectionPath: String
+    
+    
+    /// <#Description#>
+    /// - Parameters:
+    ///   - id: <#id description#>
+    ///   - collectionPath: <#collectionPath description#>
+    public init(
+        id: String,
+        collectionPath: String
+    ) {
+        self.id = id
+        self.collectionPath = collectionPath
+    }
 }

@@ -9,6 +9,7 @@
 import CardinalKit
 import FHIR
 import FirestoreDataStorage
+import Foundation
 
 
 /// Adapts the output of the `FHIR` standard to be used with the `Firestore` data storage provider.
@@ -26,21 +27,28 @@ import FirestoreDataStorage
 ///     }
 /// }
 /// ```
-public actor FHIRToFirestoreAdapter: SingleValueAdapter, FirestoreElementAdapter {
+public actor FHIRToFirestoreAdapter: SingleValueAdapter {
     public typealias InputElement = FHIR.BaseType
     public typealias InputRemovalContext = FHIR.RemovalContext
-    public typealias OutputElement = FHIRFirestoreElement
-    public typealias OutputRemovalContext = FHIRFirestoreRemovalContext
+    public typealias OutputElement = FirestoreElement
+    public typealias OutputRemovalContext = FirestoreRemovalContext
     
     
     public init() {}
     
     
-    public func transform(element: InputElement) throws -> FHIRFirestoreElement {
-        FHIRFirestoreElement(element)
+    public func transform(element: InputElement) throws -> FirestoreElement {
+        FirestoreElement(
+            id: element.id?.value?.string ?? UUID().uuidString,
+            collectionPath: ResourceProxy(with: element).resourceType,
+            element
+        )
     }
     
-    public func transform(removalContext: InputRemovalContext) throws -> FHIRFirestoreRemovalContext {
-        FHIRFirestoreRemovalContext(removalContext)
+    public func transform(removalContext: InputRemovalContext) throws -> FirestoreRemovalContext {
+        FirestoreRemovalContext(
+            id: removalContext.id?.value?.string ?? UUID().uuidString,
+            collectionPath: removalContext.resourceType.rawValue
+        )
     }
 }

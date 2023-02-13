@@ -7,8 +7,32 @@
 //
 
 
-/// Provides the nescessary information context for the ``Firestore`` date storage component to store a new element or update an existing element.
-public protocol FirestoreElement: Encodable, Identifiable, Sendable where ID == String {
-    /// The collection path where the ``FirestoreElement`` should be stored at.
-    var collectionPath: String { get }
+/// Provides a mapping from a FHIR `Resource` to a type conforming to `FirestoreElement`.
+public struct FirestoreElement: Encodable, Identifiable, Sendable {
+    /// <#Description#>
+    public let id: String
+    /// <#Description#>
+    public var collectionPath: String
+    let body: Encodable & Sendable
+    
+    
+    /// <#Description#>
+    /// - Parameters:
+    ///   - id: <#id description#>
+    ///   - collectionPath: <#collectionPath description#>
+    ///   - body: <#body description#>
+    public init<Body: Encodable & Sendable>(
+        id: String,
+        collectionPath: String,
+        _ body: Body
+    ) {
+        self.id = id
+        self.collectionPath = collectionPath
+        self.body = body
+    }
+    
+    
+    public func encode(to encoder: Encoder) throws {
+        try body.encode(to: encoder)
+    }
 }
