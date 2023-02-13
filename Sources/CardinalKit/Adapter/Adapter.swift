@@ -80,3 +80,22 @@ public protocol Adapter<InputElement, InputRemovalContext, OutputElement, Output
         _ asyncSequence: some TypedAsyncSequence<DataChange<InputElement, InputRemovalContext>>
     ) async -> any TypedAsyncSequence<DataChange<OutputElement, OutputRemovalContext>>
 }
+
+
+extension Adapter {
+    /// <#Description#>
+    /// - Parameter dataChanges: <#dataChanges description#>
+    /// - Returns: <#description#>
+    public func transform(
+        dataChanges: [DataChange<InputElement, InputRemovalContext>]
+    ) async -> any TypedAsyncSequence<DataChange<OutputElement, OutputRemovalContext>> {
+        await transform(
+            AsyncStream { continuation in
+                for dataChange in dataChanges {
+                    continuation.yield(dataChange)
+                }
+                continuation.finish()
+            }
+        )
+    }
+}
