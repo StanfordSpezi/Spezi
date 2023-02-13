@@ -8,11 +8,12 @@
 
 import Account
 import CardinalKit
-import FirebaseAuth
+@_exported import class FirebaseAuth.User
+import class FirebaseAuth.Auth
+import protocol FirebaseAuth.AuthStateDidChangeListenerHandle
 import FirebaseConfiguration
 import FirebaseCore
 import Foundation
-@_exported import class FirebaseAuth.User
 
 
 /// <#Description#>

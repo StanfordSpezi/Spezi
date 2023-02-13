@@ -136,7 +136,7 @@
 		2FC246D52941720600F75383 /* AccountSignUpTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSignUpTests.swift; sourceTree = "<group>"; };
 		2FC2C405291D84A600712676 /* HealthKitTestsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitTestsView.swift; sourceTree = "<group>"; };
 		2FC2C407291DCC8200712676 /* HealthKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitTests.swift; sourceTree = "<group>"; };
-		2FC42FD7290ADD5E00B08F18 /* CardinalKitSPM */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = CardinalKitSPM; path = ../..; sourceTree = "<group>"; };
+		2FC42FD7290ADD5E00B08F18 /* CardinalKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = CardinalKit; path = ../..; sourceTree = "<group>"; };
 		2FD6390B294B0A4B008BADFC /* OnboardingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingTests.swift; sourceTree = "<group>"; };
 		2FE122B1294247480016B162 /* XCUIApplication+TextEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCUIApplication+TextEntry.swift"; sourceTree = "<group>"; };
 		2FE62C3C2966074F00FCBE7F /* FirestoreDataStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreDataStorageTests.swift; sourceTree = "<group>"; };
@@ -217,7 +217,7 @@
 			isa = PBXGroup;
 			children = (
 				2F7B6CB4294C03C800FDC494 /* TestApp.xctestplan */,
-				2FC42FD7290ADD5E00B08F18 /* CardinalKitSPM */,
+				2FC42FD7290ADD5E00B08F18 /* CardinalKit */,
 				2F6D139428F5F384007C25D6 /* TestApp */,
 				2F6D13AF28F5F386007C25D6 /* TestAppUITests */,
 				2F6D139328F5F384007C25D6 /* Products */,
