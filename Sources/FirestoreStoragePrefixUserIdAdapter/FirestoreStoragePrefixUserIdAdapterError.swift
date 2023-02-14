@@ -7,8 +7,8 @@
 //
 
 
-/// <#Description#>
+/// Indicates an error on the ``FirestoreStoragePrefixUserIdAdapter``.
 public enum FirestoreStoragePrefixUserIdAdapterError: Error {
-    /// <#Description#>
+    /// The user is not yet signed in.
     case userNotSignedIn
 }

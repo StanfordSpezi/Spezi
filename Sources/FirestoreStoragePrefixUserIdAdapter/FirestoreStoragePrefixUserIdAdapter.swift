@@ -11,7 +11,19 @@ import FirebaseAuth
 import FirestoreDataStorage
 
 
-/// <#Description#>
+/// Adds a `users/<USER_ID>/` prefix to any uploaded or removed firestore element.
+///
+/// You can, e.g., use the ``FirestoreStoragePrefixUserIdAdapter`` as a final transformation step in the adapter chain to add the
+/// `users/<USER_ID>/` prefix:
+/// ```
+/// Firestore(
+///     adapter: {
+///         // ...
+///         FirestoreStoragePrefixUserIdAdapter()
+///     },
+///     settings: .emulator
+/// )
+/// ```
 public actor FirestoreStoragePrefixUserIdAdapter: SingleValueAdapter {
     public typealias InputElement = FirestoreElement
     public typealias InputRemovalContext = FirestoreRemovalContext

@@ -83,9 +83,9 @@ public protocol Adapter<InputElement, InputRemovalContext, OutputElement, Output
 
 
 extension Adapter {
-    /// <#Description#>
-    /// - Parameter dataChanges: <#dataChanges description#>
-    /// - Returns: <#description#>
+    /// Map a collection of `DataChange` elements using the adapter to an ``TypedAsyncSequence``.
+    /// - Parameter dataChanges: The data changes that should be transformed.
+    /// - Returns: Returns the mapped elements using the ``Adapter``'s ``transform(_:)`` function.
     public func transformDataChanges(
         _ dataChanges: [DataChange<InputElement, InputRemovalContext>]
     ) async -> any TypedAsyncSequence<DataChange<OutputElement, OutputRemovalContext>> {

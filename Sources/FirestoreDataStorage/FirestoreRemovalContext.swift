@@ -9,16 +9,15 @@
 
 /// Provides a mapping from a FHIR standard `RemovalContext` to a type conforming to `FHIRFirestoreRemovalContext`.
 public struct FirestoreRemovalContext: Identifiable, Sendable {
-    /// <#Description#>
+    /// The identifier that is used for the Firestore document.
     public let id: String
-    /// <#Description#>
+    /// The collection path that is used for the Firestore document.
     public var collectionPath: String
     
     
-    /// <#Description#>
     /// - Parameters:
-    ///   - id: <#id description#>
-    ///   - collectionPath: <#collectionPath description#>
+    ///   - id: The identifier that is used for the Firestore document.
+    ///   - collectionPath: The collection path that is used for the Firestore document.
     public init(
         id: String,
         collectionPath: String

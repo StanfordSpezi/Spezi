@@ -9,18 +9,17 @@
 
 /// Provides a mapping from a FHIR `Resource` to a type conforming to `FirestoreElement`.
 public struct FirestoreElement: Encodable, Identifiable, Sendable {
-    /// <#Description#>
+    /// The identifier that is used for the Firestore document.
     public let id: String
-    /// <#Description#>
+    /// The collection path that is used for the Firestore document.
     public var collectionPath: String
     let body: Encodable & Sendable
     
     
-    /// <#Description#>
     /// - Parameters:
-    ///   - id: <#id description#>
-    ///   - collectionPath: <#collectionPath description#>
-    ///   - body: <#body description#>
+    ///   - id: The identifier that is used for the Firestore document.
+    ///   - collectionPath: The collection path that is used for the Firestore document.
+    ///   - body: The body of the document, including all fields as defined by the `Encodable` implementation.
     public init<Body: Encodable & Sendable>(
         id: String,
         collectionPath: String,
