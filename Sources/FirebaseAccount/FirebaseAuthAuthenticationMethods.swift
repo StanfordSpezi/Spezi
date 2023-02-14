@@ -7,12 +7,12 @@
 //
 
 
-/// <#Description#>
+/// Definition of the authentication methods supported by the FirebaseAccount module.
 public struct FirebaseAuthAuthenticationMethods: OptionSet {
-    /// <#Description#>
+    /// E-Mail and password-based authentication.
     public static let emailAndPassword = FirebaseAuthAuthenticationMethods(rawValue: 1 << 0)
     
-    /// <#Description#>
+    /// All authentication methods.
     public static let all: FirebaseAuthAuthenticationMethods = [.emailAndPassword]
     
     

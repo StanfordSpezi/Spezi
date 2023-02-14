@@ -16,7 +16,7 @@ actor TestAppStandard: Standard, ObservableObjectProvider, ObservableObject {
     typealias RemovalContext = TestAppStandardRemovalContext
     
     
-    struct TestAppStandardBaseType: Identifiable, Sendable, FirestoreElement {
+    struct TestAppStandardBaseType: Identifiable, Sendable, AnyFirestoreElement {
         var id: String
         var content: Int
         var collectionPath: String
@@ -34,7 +34,7 @@ actor TestAppStandard: Standard, ObservableObjectProvider, ObservableObject {
         }
     }
     
-    struct TestAppStandardRemovalContext: Identifiable, Sendable, FirestoreRemovalContext {
+    struct TestAppStandardRemovalContext: Identifiable, Sendable, AnyFirestoreRemovalContext {
         var id: TestAppStandardBaseType.ID
         var collectionPath: String
         

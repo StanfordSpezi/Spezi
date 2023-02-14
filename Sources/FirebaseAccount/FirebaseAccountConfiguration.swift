@@ -8,13 +8,32 @@
 
 import Account
 import CardinalKit
-import FirebaseAuth
+@_exported import class FirebaseAuth.User
+import class FirebaseAuth.Auth
+import protocol FirebaseAuth.AuthStateDidChangeListenerHandle
 import FirebaseConfiguration
 import FirebaseCore
 import Foundation
 
 
-/// <#Description#>
+/// Configures Firebase Auth `AccountService`s that can be used in any views of the `Account` module.
+///
+/// The ``FirebaseAccountConfiguration`` offers a ``user`` property to access the current Firebase Auth user from, e.g., a SwiftUI view's environment:
+/// ```
+/// @EnvironmentObject var firebaseAccountConfiguration: FirebaseAccountConfiguration</* ... */>
+/// ```
+///
+/// The ``FirebaseAccountConfiguration`` can, e.g., be used to to connect to the Firebase Auth emulator:
+/// ```
+/// class ExampleAppDelegate: CardinalKitAppDelegate {
+///     override var configuration: Configuration {
+///         Configuration(standard: /* ... */) {
+///             FirebaseAccountConfiguration(emulatorSettings: (host: "localhost", port: 9099))
+///             // ...
+///         }
+///     }
+/// }
+/// ```
 public final class FirebaseAccountConfiguration<ComponentStandard: Standard>: Component, ObservableObject, ObservableObjectProvider {
     @Dependency private var configureFirebaseApp: ConfigureFirebaseApp
     
@@ -35,10 +54,9 @@ public final class FirebaseAccountConfiguration<ComponentStandard: Standard>: Co
     }
     
     
-    /// <#Description#>
     /// - Parameters:
-    ///   - emulatorSettings: <#emulatorSettings description#>
-    ///   - authenticationMethods: <#authenticationMethods description#>
+    ///   - emulatorSettings: The emulator settings. The default value is `nil`, connecting the FirebaseAccount module to the Firebase Auth cloud instance.
+    ///   - authenticationMethods: The authentication methods that should be supported.
     public init(
         emulatorSettings: (host: String, port: Int)? = nil,
         authenticationMethods: FirebaseAuthAuthenticationMethods = .all
@@ -64,6 +82,7 @@ public final class FirebaseAccountConfiguration<ComponentStandard: Standard>: Co
             guard let user else {
                 Task {
                     await MainActor.run {
+                        self.user = nil
                         self.account.signedIn = false
                     }
                 }
