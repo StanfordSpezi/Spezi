@@ -28,7 +28,7 @@ public actor FirestoreStoragePrefixUserIdAdapter: SingleValueAdapter {
         }
         
         var modifiedElement = element
-        modifiedElement.collectionPath = userID.id + "/" + element.collectionPath
+        modifiedElement.collectionPath = "users/" + userID.id + "/" + element.collectionPath
         return modifiedElement
     }
     
@@ -38,7 +38,7 @@ public actor FirestoreStoragePrefixUserIdAdapter: SingleValueAdapter {
         }
         
         var modifiedRemovalContext = removalContext
-        modifiedRemovalContext.collectionPath = userID.id + "/" + removalContext.collectionPath
+        modifiedRemovalContext.collectionPath = "users/" + userID.id + "/" + removalContext.collectionPath
         return modifiedRemovalContext
     }
 }
