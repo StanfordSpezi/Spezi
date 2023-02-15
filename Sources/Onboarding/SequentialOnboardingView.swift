@@ -14,22 +14,22 @@ import SwiftUI
 /// The ``OnboardingView`` provides an alternative to provide  information that is displayed all at once.
 ///
 /// The following example demonstrates the usage of the ``SequentialOnboardingView``:
-/// ```
+/// ```swift
 /// SequentialOnboardingView(
 ///     title: "Title",
 ///     subtitle: "Subtitle",
 ///     content: [
 ///         .init(
 ///             title: "A thing to know",
-///             description: "This is a first thing that you should know, read carfully!")
+///             description: "This is a first thing that you should know, read carefully!")
 ///         ,
 ///         .init(
 ///             title: "Second thing to know",
-///             description: "This is a second thing that you should know, read carfully!"
+///             description: "This is a second thing that you should know, read carefully!"
 ///         ),
 ///         .init(
 ///             title: "Third thing to know",
-///             description: "This is a third thing that you should know, read carfully!"
+///             description: "This is a third thing that you should know, read carefully!"
 ///         )
 ///     ],
 ///     actionText: "Continue"

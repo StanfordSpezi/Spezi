@@ -166,8 +166,39 @@ public struct ContactView: View {
     }
 }
 
+
 struct ContactView_Previews: PreviewProvider {
+    static var mock: Contact {
+        Contact(
+            name: PersonNameComponents(givenName: "Paul", familyName: "Schmiedmayer"),
+            image: Image(systemName: "figure.wave.circle"),
+            title: "A Title",
+            description: """
+            This is a description of a contact that will be displayed. It might even be longer than what has to be displayed in the contact card.
+            Why is this text so long, how much can you tell about one person?
+            """,
+            organization: "Stanford University",
+            address: {
+                let address = CNMutablePostalAddress()
+                address.country = "USA"
+                address.state = "CA"
+                address.postalCode = "94305"
+                address.city = "Stanford"
+                address.street = "450 Serra Mall"
+                return address
+            }(),
+            contactOptions: [
+                .call("+1 (234) 567-891"),
+                .call("+1 (234) 567-892"),
+                .text("+1 (234) 567-893"),
+                .email(addresses: ["lelandstanford@stanford.edu"], subject: "Hi Leland!"),
+                ContactOption(image: Image(systemName: "icloud.fill"), title: "Cloud", action: { })
+            ]
+        )
+    }
+    
+    
     static var previews: some View {
-        ContactView(contact: .mock)
+        ContactView(contact: Self.mock)
     }
 }

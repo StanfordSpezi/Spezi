@@ -12,7 +12,7 @@ import SwiftUI
 /// A ``ContactsList`` enables the display of different ``ContactView``s in a card-like style in a scroll view.
 ///
 /// You pass multiple ``Contact``s to the ``ContactsList`` to populate its content: ``ContactsList/init(contacts:)``:
-/// ```
+/// ```swift
 /// ContactsList(contacts: [/* ... */])
 ///     .navigationTitle("Contacts")
 ///     .background(Color(.systemGroupedBackground))
@@ -30,6 +30,7 @@ public struct ContactsList: View {
             }
                 .padding(.vertical, 6)
         }
+            .background(Color(.systemGroupedBackground))
     }
     
     
@@ -44,7 +45,13 @@ public struct ContactsList: View {
 struct ContactsList_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
-            ContactsList(contacts: [.mock, .mock, .mock])
+            ContactsList(
+                contacts: [
+                    ContactView_Previews.mock,
+                    ContactView_Previews.mock,
+                    ContactView_Previews.mock
+                ]
+            )
                 .navigationTitle("Contacts")
                 .background(Color(.systemGroupedBackground))
         }

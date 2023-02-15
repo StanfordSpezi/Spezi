@@ -13,23 +13,23 @@ import Security
 
 /// The ``LocalStorageSetting`` enables configuring how data in the ``LocalStorage/LocalStorage`` module can be stored and retrieved.
 public enum LocalStorageSetting {
-    /// Encryped using a `eciesEncryptionCofactorX963SHA256AESGCM` key: private key for encryption and a public key for decryption.
-    case unencryped(excludedFromBackup: Bool = true)
-    /// Encryped using a `eciesEncryptionCofactorX963SHA256AESGCM` key: private key for encryption and a public key for decryption.
-    case encryped(privateKey: SecKey, publicKey: SecKey, excludedFromBackup: Bool = true)
-    /// Encryped using a `eciesEncryptionCofactorX963SHA256AESGCM` key stored in the Secure Enclave.
-    case encrypedUsingSecureEnclave(userPresence: Bool = false)
-    /// Encryped using a `eciesEncryptionCofactorX963SHA256AESGCM` key stored in the Keychain.
-    case encrypedUsingKeyChain(userPresence: Bool = false, excludedFromBackup: Bool = true)
+    /// Unencrypted
+    case unencrypted(excludedFromBackup: Bool = true)
+    /// Encrypted using a `eciesEncryptionCofactorX963SHA256AESGCM` key: private key for encryption and a public key for decryption.
+    case encrypted(privateKey: SecKey, publicKey: SecKey, excludedFromBackup: Bool = true)
+    /// Encrypted using a `eciesEncryptionCofactorX963SHA256AESGCM` key stored in the Secure Enclave.
+    case encryptedUsingSecureEnclave(userPresence: Bool = false)
+    /// Encrypted using a `eciesEncryptionCofactorX963SHA256AESGCM` key stored in the Keychain.
+    case encryptedUsingKeyChain(userPresence: Bool = false, excludedFromBackup: Bool = true)
     
     
     var excludedFromBackup: Bool {
         switch self {
-        case let .unencryped(excludedFromBackup),
-             let .encryped(_, _, excludedFromBackup),
-             let .encrypedUsingKeyChain(_, excludedFromBackup):
+        case let .unencrypted(excludedFromBackup),
+             let .encrypted(_, _, excludedFromBackup),
+             let .encryptedUsingKeyChain(_, excludedFromBackup):
             return excludedFromBackup
-        case .encrypedUsingSecureEnclave:
+        case .encryptedUsingSecureEnclave:
             return true
         }
     }
@@ -38,13 +38,13 @@ public enum LocalStorageSetting {
     func keys<S: Standard>(from secureStorage: SecureStorage<S>) throws -> (privateKey: SecKey, publicKey: SecKey)? {
         let secureStorageScope: SecureStorageScope
         switch self {
-        case .unencryped:
+        case .unencrypted:
             return nil
-        case let .encryped(privateKey, publicKey, _):
+        case let .encrypted(privateKey, publicKey, _):
             return (privateKey, publicKey)
-        case let .encrypedUsingSecureEnclave(userPresence):
+        case let .encryptedUsingSecureEnclave(userPresence):
             secureStorageScope = .secureEnclave(userPresence: userPresence)
-        case let .encrypedUsingKeyChain(userPresence, _):
+        case let .encryptedUsingKeyChain(userPresence, _):
             secureStorageScope = .keychain(userPresence: userPresence)
         }
         

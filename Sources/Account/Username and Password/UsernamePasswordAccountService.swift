@@ -29,12 +29,18 @@ open class UsernamePasswordAccountService: @unchecked Sendable, AccountService, 
     
     /// The button that should be displayed in login-related views to represent the ``UsernamePasswordAccountService`` or its subclasses.
     open var loginButton: AnyView {
-        button(localization.signUp.buttonTitle, destination: UsernamePasswordLoginView())
+        button(
+            localization.signUp.buttonTitle,
+            destination: UsernamePasswordLoginView()
+        )
     }
     
     /// The button that should be displayed in sign up-related views to represent the ``UsernamePasswordAccountService`` or its subclasses.
     open var signUpButton: AnyView {
-        button(localization.signUp.buttonTitle, destination: UsernamePasswordSignUpView())
+        button(
+            localization.signUp.buttonTitle,
+            destination: UsernamePasswordSignUpView()
+        )
     }
     
     /// The button that should be displayed in password-reset-related views to represent the ``UsernamePasswordAccountService`` or its subclasses.

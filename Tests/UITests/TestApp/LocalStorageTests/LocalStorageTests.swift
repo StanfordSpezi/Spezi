@@ -32,18 +32,18 @@ final class LocalStorageTests: TestAppTestCase {
     
     
     func runTests() async throws {
-        try await testLocalStorageTestEncrypedManualKeys()
+        try await testLocalStorageTestEncryptedManualKeys()
         // Call test methods multiple times to test retrieval of keys.
-        try await testLocalStorageTestEncrypedKeychain()
-        try await testLocalStorageTestEncrypedKeychain()
+        try await testLocalStorageTestEncryptedKeychain()
+        try await testLocalStorageTestEncryptedKeychain()
         
         if SecureEnclave.isAvailable {
-            try await testLocalStorageTestEncrypedSecureEnclave()
-            try await testLocalStorageTestEncrypedSecureEnclave()
+            try await testLocalStorageTestEncryptedSecureEnclave()
+            try await testLocalStorageTestEncryptedSecureEnclave()
         }
     }
     
-    func testLocalStorageTestEncrypedManualKeys() async throws {
+    func testLocalStorageTestEncryptedManualKeys() async throws {
         let privateKey = try secureStorage.retrievePrivateKey(forTag: "LocalStorageTests") ?? secureStorage.createKey("LocalStorageTests")
         guard let publicKey = try secureStorage.retrievePublicKey(forTag: "LocalStorageTests") else {
             throw XCTestFailure()
@@ -51,26 +51,26 @@ final class LocalStorageTests: TestAppTestCase {
         
         let letter = Letter(greeting: "Hello Paul 👋\(String(repeating: "🚀", count: Int.random(in: 0...10)))")
         
-        try await localStorage.store(letter, settings: .encryped(privateKey: privateKey, publicKey: publicKey))
-        let storedLetter: Letter = try await localStorage.read(settings: .encryped(privateKey: privateKey, publicKey: publicKey))
+        try await localStorage.store(letter, settings: .encrypted(privateKey: privateKey, publicKey: publicKey))
+        let storedLetter: Letter = try await localStorage.read(settings: .encrypted(privateKey: privateKey, publicKey: publicKey))
         
         try XCTAssertEqual(letter, storedLetter)
     }
     
-    func testLocalStorageTestEncrypedKeychain() async throws {
+    func testLocalStorageTestEncryptedKeychain() async throws {
         let letter = Letter(greeting: "Hello Paul 👋\(String(repeating: "🚀", count: Int.random(in: 0...10)))")
 
-        try await localStorage.store(letter, settings: .encrypedUsingKeyChain())
-        let storedLetter: Letter = try await localStorage.read(settings: .encrypedUsingKeyChain())
+        try await localStorage.store(letter, settings: .encryptedUsingKeyChain())
+        let storedLetter: Letter = try await localStorage.read(settings: .encryptedUsingKeyChain())
 
         try XCTAssertEqual(letter, storedLetter)
     }
 
-    func testLocalStorageTestEncrypedSecureEnclave() async throws {
+    func testLocalStorageTestEncryptedSecureEnclave() async throws {
         let letter = Letter(greeting: "Hello Paul 👋\(String(repeating: "🚀", count: Int.random(in: 0...10)))")
         
-        try await localStorage.store(letter, settings: .encrypedUsingSecureEnclave())
-        let storedLetter: Letter = try await localStorage.read(settings: .encrypedUsingSecureEnclave())
+        try await localStorage.store(letter, settings: .encryptedUsingSecureEnclave())
+        let storedLetter: Letter = try await localStorage.read(settings: .encryptedUsingSecureEnclave())
         
         try XCTAssertEqual(letter, storedLetter)
     }

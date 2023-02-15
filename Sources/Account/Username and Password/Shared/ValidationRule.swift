@@ -10,7 +10,7 @@
 /// A rule used for validating text along with a message to display if the validation fails.
 ///
 /// The following example demonstrates a ``ValidationRule`` using a regex expression for an email.
-/// ```
+/// ```swift
 /// ValidationRule(
 ///     regex: try? Regex("[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"),
 ///     message: "The entered email is not correct."

@@ -99,7 +99,7 @@ private struct _CanvasView: UIViewRepresentable {
 /// current canvas size using the SwiftUI preference mechanisms.
 ///
 /// The view offers several bindings to observe the resulting drawing, check if a user is currently drawing, and showing or hiding the tool picker.
-/// ```
+/// ```swift
 /// @State var drawing = PKDrawing()
 /// @State var isDrawing = false
 /// @State var showToolPicker = false
@@ -147,7 +147,6 @@ public struct CanvasView: View {
                 .preference(key: CanvasSizePreferenceKey.self, value: proxy.size)
         }
     }
-    
     
     /// Creates a new ``CanvasView`` providing a SwiftUI wrapper around the PencilKit `PKCanvasView`
     /// - Parameters:

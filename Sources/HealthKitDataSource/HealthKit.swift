@@ -11,11 +11,11 @@ import HealthKit
 import SwiftUI
 
 
-/// The ``HealthKit`` module enables the collection of HealthKit data and transforms it to the component's standard's base type using a `DataSourceRegistryAdapter` (``HealthKit/HKSampleAdapter``)
+/// The ``HealthKit`` module enables the collection of HealthKit data and transforms it to the component's standard's base type using an `Adapter` (``HealthKit/HKSampleAdapter``)
 ///
 /// Use the ``HealthKit/init(_:adapter:)`` initializer to define different ``HealthKitDataSourceDescription``s to define the data collection.
 /// You can, e.g., use ``CollectSample`` to collect a wide variaty of `HKSampleTypes`:
-/// ```
+/// ```swift
 /// class ExampleAppDelegate: CardinalKitAppDelegate {
 ///     override var configuration: Configuration {
 ///         Configuration(standard: ExampleStandard()) {
@@ -51,7 +51,7 @@ import SwiftUI
 /// ```
 public final class HealthKit<ComponentStandard: Standard>: Module {
     /// The ``HealthKit/HKSampleAdapter`` type defines the mapping of `HKSample`s to the component's standard's base type.
-    public typealias HKSampleAdapter = any Adapter<HKSample, HKSample.ID, ComponentStandard.BaseType, ComponentStandard.RemovalContext>
+    public typealias HKSampleAdapter = any Adapter<HKSample, HKSampleRemovalContext, ComponentStandard.BaseType, ComponentStandard.RemovalContext>
     
     
     @StandardActor var standard: ComponentStandard
@@ -116,6 +116,13 @@ public final class HealthKit<ComponentStandard: Standard>: Module {
         
         for healthKitComponent in healthKitComponents {
             healthKitComponent.askedForAuthorization()
+        }
+    }
+    
+    
+    public func willFinishLaunchingWithOptions(_ application: UIApplication, launchOptions: [UIApplication.LaunchOptionsKey: Any]) {
+        for healthKitComponent in healthKitComponents {
+            healthKitComponent.willFinishLaunchingWithOptions(application, launchOptions: launchOptions)
         }
     }
     

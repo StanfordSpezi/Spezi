@@ -17,7 +17,7 @@ import SwiftUI
 /// sequential information that is displayed step by step.
 ///
 /// The following example demonstrates the usage of the ``OnboardingView`` using its default configuration.
-/// ```
+/// ```swift
 /// OnboardingView(
 ///     title: "Title",
 ///     subtitle: "Subtitle",

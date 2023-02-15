@@ -13,5 +13,6 @@ extension UserDefaults {
     enum Keys {
         static let healthKitRequestedSampleTypes = "CardinalKit.HealthKit.RequestedSampleTypes"
         static let healthKitAnchorPrefix = "CardinalKit.HealthKit.Anchors."
+        static let healthKitDefaultPredicateDatePrefix = "CardinalKit.HealthKit.DefaultPredicateDate."
     }
 }
