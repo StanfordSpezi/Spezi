@@ -35,12 +35,6 @@ jobs:
     - uses: maxim-lobanov/setup-xcode@v1
       with:
         xcode-version: latest-stable
-    - name: Check Environment
-      run: |
-          xcodebuild -version
-          swift --version
-          echo "env.xcodeprojname: ${{ env.xcodeprojname }}"
-          echo "env.scheme: ${{ env.scheme }}"
     - name: Cache Firebase Emulators
       uses: actions/cache@v3
       with:
