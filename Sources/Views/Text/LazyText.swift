@@ -9,7 +9,9 @@
 import SwiftUI
 
 
-/// <#Description#>
+/// A lazy loading text view that is especially useful for larger text files that should not be displayed all at once.
+///
+/// Uses a `LazyVStack` under the hood to load and display the text line-by-line.
 public struct LazyText: View {
     private let text: String
     @State private var lines: [(linenumber: Int, text: String)] = []
@@ -32,8 +34,8 @@ public struct LazyText: View {
     }
     
     
-    /// <#Description#>
-    /// - Parameter text: <#text description#>
+    /// A lazy loading text view that is especially useful for larger text files that should not be displayed all at once.
+    /// - Parameter text: The text that should be displayed in the ``LazyText`` view.
     public init(text: String) {
         self.text = text
     }
