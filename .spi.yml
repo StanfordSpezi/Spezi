@@ -10,12 +10,19 @@ version: 1
 builder:
   configs:
     - platform: ios
+      scheme: CardinalKit
       documentation_targets:
       - CardinalKit
       - Account
       - Contact
       - FHIR
+      - FHIRMockDataStorageProvider
+      - FirestoreDataStorage
+      - FirestoreStoragePrefixUserIdAdapter
+      - FirebaseConfiguration
+      - FirebaseAccount
       - HealthKitDataSource
+      - HealthKitToFHIRAdapter
       - LocalStorage
       - Onboarding
       - Scheduler
