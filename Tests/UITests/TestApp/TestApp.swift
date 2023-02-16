@@ -14,6 +14,7 @@ struct UITestsApp: App {
     enum Tests: String, CaseIterable, Identifiable {
         case account = "Account"
         case contacts = "Contacts"
+        case fhirMockDataStorageProvider = "FHIRMockDataStorageProvider"
         case firebaseAccount = "FirebaseAccount"
         case firestoreDataStorage = "FirestoreDataStorage"
         case healthKit = "HealthKit"
@@ -31,11 +32,15 @@ struct UITestsApp: App {
         @MainActor
         @ViewBuilder
         func view(withNavigationPath path: Binding<NavigationPath>) -> some View {
+            // swiftlint:disable:previous cyclomatic_complexity
+            // The function has a higher cyclomatic complexity because we want to display all possible tests in a single switch statement
             switch self {
             case .account:
                 AccountTestsView()
             case .contacts:
                 ContactsTestsView()
+            case .fhirMockDataStorageProvider:
+                FHIRMockDataStorageProviderTestsView()
             case .firebaseAccount:
                 FirebaseAccountTestsView()
             case .firestoreDataStorage:

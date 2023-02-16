@@ -30,8 +30,10 @@ struct NameFieldsTestView: View {
 }
 
 
+#if DEBUG
 struct NameFieldsTestView_Previews: PreviewProvider {
     static var previews: some View {
         NameFieldsTestView()
     }
 }
+#endif

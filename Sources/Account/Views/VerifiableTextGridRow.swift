@@ -120,6 +120,7 @@ struct VerifiableTextFieldGridRow<Description: View, TextField: View>: View {
 }
 
 
+#if DEBUG
 struct VerifiableTextFieldGridRow_Previews: PreviewProvider {
     private enum Field: Hashable {
         case first
@@ -176,3 +177,4 @@ struct VerifiableTextFieldGridRow_Previews: PreviewProvider {
         }
     }
 }
+#endif

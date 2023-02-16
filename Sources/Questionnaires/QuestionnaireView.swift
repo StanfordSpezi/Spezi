@@ -80,8 +80,10 @@ public struct QuestionnaireView: View {
 }
 
 
+#if DEBUG
 struct QuestionnaireView_Previews: PreviewProvider {
     static var previews: some View {
         QuestionnaireView(questionnaire: Questionnaire.dateTimeExample)
     }
 }
+#endif

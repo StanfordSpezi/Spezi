@@ -12,6 +12,10 @@
 		2F1B82092942DE390037BC09 /* TestAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1B82082942DE390037BC09 /* TestAppUITests.swift */; };
 		2F2A354F291CCF74000E8373 /* TestAppHealthKitAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2A354E291CCF74000E8373 /* TestAppHealthKitAdapter.swift */; };
 		2F2E4B8429749C5900FF710F /* FirestoreDataStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2E4B8329749C5900FF710F /* FirestoreDataStorageTests.swift */; };
+		2F36AD2C299DB0CC00B1077C /* FHIRMockDataStorageProvider in Frameworks */ = {isa = PBXBuildFile; productRef = 2F36AD2B299DB0CC00B1077C /* FHIRMockDataStorageProvider */; };
+		2F36AD2F299DB11D00B1077C /* FHIRMockDataStorageProviderTestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F36AD2E299DB11D00B1077C /* FHIRMockDataStorageProviderTestsView.swift */; };
+		2F36AD31299DB69F00B1077C /* HealthKitToFHIRAdapter in Frameworks */ = {isa = PBXBuildFile; productRef = 2F36AD30299DB69F00B1077C /* HealthKitToFHIRAdapter */; };
+		2F36AD33299DB72400B1077C /* FHIRMockDataStorageProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F36AD32299DB72400B1077C /* FHIRMockDataStorageProviderTests.swift */; };
 		2F4530C4293FD704000A858F /* AccountTestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4530C3293FD704000A858F /* AccountTestsView.swift */; };
 		2F4D91752948EA1A000E2D94 /* ContactsTestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4D91742948EA1A000E2D94 /* ContactsTestsView.swift */; };
 		2F4D91772948EB33000E2D94 /* ContactsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F4D91762948EB33000E2D94 /* ContactsTests.swift */; };
@@ -90,6 +94,8 @@
 		2F1B82082942DE390037BC09 /* TestAppUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestAppUITests.swift; sourceTree = "<group>"; };
 		2F2A354E291CCF74000E8373 /* TestAppHealthKitAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAppHealthKitAdapter.swift; sourceTree = "<group>"; };
 		2F2E4B8329749C5900FF710F /* FirestoreDataStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreDataStorageTests.swift; sourceTree = "<group>"; };
+		2F36AD2E299DB11D00B1077C /* FHIRMockDataStorageProviderTestsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FHIRMockDataStorageProviderTestsView.swift; sourceTree = "<group>"; };
+		2F36AD32299DB72400B1077C /* FHIRMockDataStorageProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FHIRMockDataStorageProviderTests.swift; sourceTree = "<group>"; };
 		2F4530C3293FD704000A858F /* AccountTestsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountTestsView.swift; sourceTree = "<group>"; };
 		2F4D91742948EA1A000E2D94 /* ContactsTestsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsTestsView.swift; sourceTree = "<group>"; };
 		2F4D91762948EB33000E2D94 /* ContactsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsTests.swift; sourceTree = "<group>"; };
@@ -148,6 +154,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2FC94CDC298B57E0009C8209 /* FirebaseAccount in Frameworks */,
+				2F36AD31299DB69F00B1077C /* HealthKitToFHIRAdapter in Frameworks */,
 				2F4F0390294A66FB0062D4C7 /* LocalStorage in Frameworks */,
 				2F4F0394294A66FB0062D4C7 /* SecureStorage in Frameworks */,
 				2F8CC7D8294D2B6A00358B7E /* Scheduler in Frameworks */,
@@ -157,6 +164,7 @@
 				2F4F0392294A66FB0062D4C7 /* Onboarding in Frameworks */,
 				2F148BFD298BADD700031B7F /* FirebaseConfiguration in Frameworks */,
 				2F4F0386294A66FB0062D4C7 /* Account in Frameworks */,
+				2F36AD2C299DB0CC00B1077C /* FHIRMockDataStorageProvider in Frameworks */,
 				2F4F0396294A66FB0062D4C7 /* XCTRuntimeAssertions in Frameworks */,
 				2F4F0388294A66FB0062D4C7 /* CardinalKit in Frameworks */,
 				2FB926E32974AF15008E7B03 /* FirestoreDataStorage in Frameworks */,
@@ -182,6 +190,14 @@
 				2F148BFF298BB15900031B7F /* FirebaseAccountTestsView.swift */,
 			);
 			path = FirebaseAccountTests;
+			sourceTree = "<group>";
+		};
+		2F36AD2D299DB0FF00B1077C /* FHIRMockDataStorageProviderTests */ = {
+			isa = PBXGroup;
+			children = (
+				2F36AD2E299DB11D00B1077C /* FHIRMockDataStorageProviderTestsView.swift */,
+			);
+			path = FHIRMockDataStorageProviderTests;
 			sourceTree = "<group>";
 		};
 		2F4530C0293FD617000A858F /* AccountTests */ = {
@@ -240,6 +256,7 @@
 				2FA7382B290ADFAA007ACEB9 /* TestApp.swift */,
 				2F4530C0293FD617000A858F /* AccountTests */,
 				2F4D91732948E9F1000E2D94 /* ContactsTests */,
+				2F36AD2D299DB0FF00B1077C /* FHIRMockDataStorageProviderTests */,
 				2F148BFE298BB14100031B7F /* FirebaseAccountTests */,
 				2FE62C3B2966071400FCBE7F /* FirestoreDataStorageTests */,
 				2FC2C404291D848600712676 /* HealthKitTests */,
@@ -266,6 +283,7 @@
 				2FA04AD62943165200648A48 /* AccountResetPasswordTests.swift */,
 				2FC246D52941720600F75383 /* AccountSignUpTests.swift */,
 				2F4D91762948EB33000E2D94 /* ContactsTests.swift */,
+				2F36AD32299DB72400B1077C /* FHIRMockDataStorageProviderTests.swift */,
 				2F8CE160298C2C6D003799A8 /* FirebaseAccountTests.swift */,
 				2F2E4B8329749C5900FF710F /* FirestoreDataStorageTests.swift */,
 				2FC2C407291DCC8200712676 /* HealthKitTests.swift */,
@@ -397,6 +415,8 @@
 				2FB926E22974AF15008E7B03 /* FirestoreDataStorage */,
 				2FC94CDB298B57E0009C8209 /* FirebaseAccount */,
 				2F148BFC298BADD700031B7F /* FirebaseConfiguration */,
+				2F36AD2B299DB0CC00B1077C /* FHIRMockDataStorageProvider */,
+				2F36AD30299DB69F00B1077C /* HealthKitToFHIRAdapter */,
 			);
 			productName = Example;
 			productReference = 2F6D139228F5F384007C25D6 /* TestApp.app */;
@@ -496,6 +516,7 @@
 				2F8A43222913172E005D2B8F /* ObservableComponentTestsComponent.swift in Sources */,
 				2FC246C82941376600F75383 /* MultipleObservableObjectsTestsComponent.swift in Sources */,
 				2F7B6CAD294BCA6F00FDC494 /* GeometryReaderTestView.swift in Sources */,
+				2F36AD2F299DB11D00B1077C /* FHIRMockDataStorageProviderTestsView.swift in Sources */,
 				2F7B6CB3294BCA8200FDC494 /* ViewStateTestView.swift in Sources */,
 				2FA7382C290ADFAA007ACEB9 /* TestApp.swift in Sources */,
 				2FE62C3D2966074F00FCBE7F /* FirestoreDataStorageTests.swift in Sources */,
@@ -542,6 +563,7 @@
 				2FB77BA52910F84D009FDDE2 /* LocalStorageTests.swift in Sources */,
 				2FE122B2294247480016B162 /* XCUIApplication+TextEntry.swift in Sources */,
 				2FC2C408291DCC8200712676 /* HealthKitTests.swift in Sources */,
+				2F36AD33299DB72400B1077C /* FHIRMockDataStorageProviderTests.swift in Sources */,
 				2FD6390C294B0A4B008BADFC /* OnboardingTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -593,6 +615,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_TESTING_SEARCH_PATHS = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -653,6 +676,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTING_SEARCH_PATHS = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -682,7 +706,6 @@
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 637867499T;
 				ENABLE_PREVIEWS = YES;
-				ENABLE_TESTING_SEARCH_PATHS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TestApp/Info.plist;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "The TestApp accesses your HealthKit data to run the tests.";
@@ -719,7 +742,6 @@
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 637867499T;
 				ENABLE_PREVIEWS = YES;
-				ENABLE_TESTING_SEARCH_PATHS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TestApp/Info.plist;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "The TestApp accesses your HealthKit data to run the tests.";
@@ -842,6 +864,14 @@
 		2F148BFC298BADD700031B7F /* FirebaseConfiguration */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = FirebaseConfiguration;
+		};
+		2F36AD2B299DB0CC00B1077C /* FHIRMockDataStorageProvider */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FHIRMockDataStorageProvider;
+		};
+		2F36AD30299DB69F00B1077C /* HealthKitToFHIRAdapter */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = HealthKitToFHIRAdapter;
 		};
 		2F4F0385294A66FB0062D4C7 /* Account */ = {
 			isa = XCSwiftPackageProductDependency;

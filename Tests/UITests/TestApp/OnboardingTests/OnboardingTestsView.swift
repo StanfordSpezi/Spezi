@@ -7,7 +7,7 @@
 //
 
 import CardinalKit
-@testable import Onboarding
+import Onboarding
 import SwiftUI
 
 
@@ -95,6 +95,7 @@ struct OnboardingTestsView: View {
 }
 
 
+#if DEBUG
 struct OnboardingTestsView_Previews: PreviewProvider {
     @State private static var path = NavigationPath()
     
@@ -105,3 +106,4 @@ struct OnboardingTestsView_Previews: PreviewProvider {
         }
     }
 }
+#endif

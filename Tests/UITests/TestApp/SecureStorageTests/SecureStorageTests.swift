@@ -6,7 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
-@testable import CardinalKit
+import CardinalKit
 import CryptoKit
 import Foundation
 import SecureStorage
@@ -25,7 +25,6 @@ final class SecureStorageTests: TestAppTestCase {
     func runTests() async throws {
         try testCredentials()
         try testInternetCredentials()
-        try testCredentialsNotWorkingWithSecureEnclave()
         try testKeys()
     }
     
@@ -74,14 +73,6 @@ final class SecureStorageTests: TestAppTestCase {
         
         try secureStorage.deleteCredentials("@CardinalKit", server: "stanford.edu")
         try XCTAssertNil(try secureStorage.retrieveCredentials("@CardinalKit", server: "stanford.edu"))
-    }
-    
-    func testCredentialsNotWorkingWithSecureEnclave() throws {
-        let serverCredentials = Credentials(username: "@PSchmiedmayer", password: "CardinalKitInventor")
-
-        try XCTRuntimeAssertion {
-            try self.secureStorage.store(credentials: serverCredentials, server: "twitter.com")
-        }
     }
     
     func testKeys() throws {

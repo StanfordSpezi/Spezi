@@ -7,10 +7,13 @@
 //
 
 import CardinalKit
+@preconcurrency import FHIR
+import FHIRMockDataStorageProvider
 import FirebaseAccount
 import FirestoreDataStorage
 @preconcurrency import HealthKit
 import HealthKitDataSource
+import HealthKitToFHIRAdapter
 import LocalStorage
 import SecureStorage
 import SwiftUI
@@ -18,20 +21,36 @@ import SwiftUI
 
 class TestAppDelegate: CardinalKitAppDelegate {
     override var configuration: Configuration {
-        Configuration(standard: TestAppStandard()) {
-            Firestore(settings: .emulator)
-            if CommandLine.arguments.contains("--firebaseAccount") {
-                FirebaseAccountConfiguration(emulatorSettings: (host: "localhost", port: 9099))
-            } else {
-                TestAccountConfiguration()
+        if CommandLine.arguments.contains("--fhirTests") {
+            return Configuration(standard: FHIR()) {
+                MockDataStorageProvider()
+                if HKHealthStore.isHealthDataAvailable() {
+                    HealthKit {
+                        CollectSample(
+                            HKQuantityType(.stepCount),
+                            deliverySetting: .background(.afterAuthorizationAndApplicationWillLaunch)
+                        )
+                    } adapter: {
+                        HealthKitToFHIRAdapter()
+                    }
+                }
             }
-            if HKHealthStore.isHealthDataAvailable() {
-                healthKit
+        } else {
+            return Configuration(standard: TestAppStandard()) {
+                Firestore(settings: .emulator)
+                if CommandLine.arguments.contains("--firebaseAccount") {
+                    FirebaseAccountConfiguration(emulatorSettings: (host: "localhost", port: 9099))
+                } else {
+                    TestAccountConfiguration()
+                }
+                if HKHealthStore.isHealthDataAvailable() {
+                    healthKit
+                }
+                LocalStorage()
+                MultipleObservableObjectsTestsComponent()
+                ObservableComponentTestsComponent(message: "Passed")
+                SecureStorage()
             }
-            LocalStorage()
-            MultipleObservableObjectsTestsComponent()
-            ObservableComponentTestsComponent(message: "Passed")
-            SecureStorage()
         }
     }
     

@@ -42,6 +42,7 @@ public struct ContactsList: View {
 }
 
 
+#if DEBUG
 struct ContactsList_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
@@ -57,3 +58,4 @@ struct ContactsList_Previews: PreviewProvider {
         }
     }
 }
+#endif

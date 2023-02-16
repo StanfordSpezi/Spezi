@@ -35,6 +35,7 @@ struct AccountServiceButton<Content: View>: View {
 }
 
 
+#if DEBUG
 struct UsernamePasswordLoginServiceButton_Previews: PreviewProvider {
     static var previews: some View {
         AccountServiceButton {
@@ -44,3 +45,4 @@ struct UsernamePasswordLoginServiceButton_Previews: PreviewProvider {
         }
     }
 }
+#endif

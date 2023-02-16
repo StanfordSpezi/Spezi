@@ -6,7 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
-#if DEBUG
+#if DEBUG || TEST
 import Foundation
 
 

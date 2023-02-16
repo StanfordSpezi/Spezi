@@ -22,6 +22,7 @@ let package = Package(
         .library(name: "CardinalKit", targets: ["CardinalKit"]),
         .library(name: "Contact", targets: ["Contact"]),
         .library(name: "FHIR", targets: ["FHIR"]),
+        .library(name: "FHIRMockDataStorageProvider", targets: ["FHIRMockDataStorageProvider"]),
         .library(name: "FHIRToFirestoreAdapter", targets: ["FHIRToFirestoreAdapter"]),
         .library(name: "FirestoreDataStorage", targets: ["FirestoreDataStorage"]),
         .library(name: "FirestoreStoragePrefixUserIdAdapter", targets: ["FirestoreStoragePrefixUserIdAdapter"]),
@@ -105,6 +106,17 @@ let package = Package(
                 .target(name: "CardinalKit"),
                 .target(name: "FirebaseConfiguration"),
                 .product(name: "FirebaseAuth", package: "firebase-ios-sdk")
+            ]
+        ),
+        .target(
+            name: "FHIRMockDataStorageProvider",
+            dependencies: [
+                .target(name: "CardinalKit"),
+                .target(name: "FHIR"),
+                .target(name: "Views")
+            ],
+            resources: [
+                .process("Resources")
             ]
         ),
         .target(

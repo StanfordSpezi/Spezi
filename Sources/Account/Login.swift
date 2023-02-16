@@ -36,6 +36,7 @@ public struct Login<Header: View>: View {
 }
 
 
+#if DEBUG
 struct Login_Previews: PreviewProvider {
     @StateObject private static var account: Account = {
         let accountServices: [any AccountService] = [
@@ -53,3 +54,4 @@ struct Login_Previews: PreviewProvider {
             .environmentObject(account)
     }
 }
+#endif

@@ -123,6 +123,7 @@ public struct OnboardingActionsView: View {
 }
 
 
+#if DEBUG
 struct OnboardingActionsView_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
@@ -142,3 +143,4 @@ struct OnboardingActionsView_Previews: PreviewProvider {
         }
     }
 }
+#endif

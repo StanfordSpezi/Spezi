@@ -92,8 +92,10 @@ public struct SignatureView: View {
 }
 
 
+#if DEBUG
 struct SignatureView_Previews: PreviewProvider {
     static var previews: some View {
         SignatureView()
     }
 }
+#endif

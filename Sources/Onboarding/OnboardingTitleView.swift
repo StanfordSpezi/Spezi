@@ -55,8 +55,10 @@ public struct OnboardingTitleView: View {
 }
 
 
+#if DEBUG
 struct OnboardingTitleView_Previews: PreviewProvider {
     static var previews: some View {
         OnboardingTitleView(title: "Title", subtitle: "Subtitle")
     }
 }
+#endif
