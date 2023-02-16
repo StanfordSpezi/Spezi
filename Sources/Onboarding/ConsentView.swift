@@ -121,6 +121,7 @@ public struct ConsentView<ContentView: View, Action: View>: View {
 }
 
 
+#if DEBUG
 struct ConsentView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
@@ -136,3 +137,4 @@ struct ConsentView_Previews: PreviewProvider {
         }
     }
 }
+#endif

@@ -42,6 +42,7 @@ public struct DescriptionGridRow<Description: View, Content: View>: View {
 }
 
 
+#if DEBUG
 struct DescriptionGridRow_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
@@ -83,3 +84,4 @@ struct DescriptionGridRow_Previews: PreviewProvider {
             .background(Color(.systemGroupedBackground))
     }
 }
+#endif

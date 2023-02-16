@@ -115,6 +115,7 @@ public struct OnboardingView<TitleView: View, ContentView: View, ActionView: Vie
 }
 
 
+#if DEBUG
 struct OnboardingView_Previews: PreviewProvider {
     static var previews: some View {
         OnboardingView(
@@ -127,3 +128,4 @@ struct OnboardingView_Previews: PreviewProvider {
         }
     }
 }
+#endif

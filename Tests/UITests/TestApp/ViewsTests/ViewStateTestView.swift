@@ -42,8 +42,10 @@ struct ViewStateTestView: View {
 }
 
 
+#if DEBUG
 struct ViewStateTestView_Previews: PreviewProvider {
     static var previews: some View {
         ViewStateTestView()
     }
 }
+#endif

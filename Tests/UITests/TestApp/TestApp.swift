@@ -14,6 +14,7 @@ struct UITestsApp: App {
     enum Tests: String, CaseIterable, Identifiable {
         case account = "Account"
         case contacts = "Contacts"
+        case fhirMockDataStorageProvider = "FHIRMockDataStorageProvider"
         case firebaseAccount = "FirebaseAccount"
         case firestoreDataStorage = "FirestoreDataStorage"
         case healthKit = "HealthKit"
@@ -36,6 +37,8 @@ struct UITestsApp: App {
                 AccountTestsView()
             case .contacts:
                 ContactsTestsView()
+            case .fhirMockDataStorageProvider:
+                FHIRMockDataStorageProviderTestsView()
             case .firebaseAccount:
                 FirebaseAccountTestsView()
             case .firestoreDataStorage:

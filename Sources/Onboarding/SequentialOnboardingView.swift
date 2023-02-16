@@ -184,6 +184,7 @@ public struct SequentialOnboardingView: View {
 }
 
 
+#if DEBUG
 struct SequentialOnboardingView_Previews: PreviewProvider {
     static var mock: [SequentialOnboardingView.Content] {
         [
@@ -204,3 +205,4 @@ struct SequentialOnboardingView_Previews: PreviewProvider {
         }
     }
 }
+#endif

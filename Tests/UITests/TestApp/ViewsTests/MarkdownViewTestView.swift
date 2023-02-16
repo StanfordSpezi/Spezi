@@ -34,8 +34,10 @@ struct MarkdownViewTestView: View {
 }
 
 
+#if DEBUG
 struct MarkdownViewTestView_Previews: PreviewProvider {
     static var previews: some View {
         MarkdownViewTestView()
     }
 }
+#endif

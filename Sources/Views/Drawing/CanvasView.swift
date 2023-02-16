@@ -171,6 +171,7 @@ public struct CanvasView: View {
 }
 
 
+#if DEBUG
 struct SignatureView_Previews: PreviewProvider {
     @State private static var isDrawing = false
     
@@ -182,3 +183,4 @@ struct SignatureView_Previews: PreviewProvider {
         }
     }
 }
+#endif

@@ -104,6 +104,7 @@ struct DataEntryAccountView: View {
 }
 
 
+#if DEBUG
 struct DataEntryView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
@@ -121,3 +122,4 @@ struct DataEntryView_Previews: PreviewProvider {
         }
     }
 }
+#endif

@@ -7,7 +7,7 @@
 //
 
 import CardinalKit
-@testable import FirestoreDataStorage
+import FirestoreDataStorage
 import SwiftUI
 
 
@@ -91,6 +91,7 @@ struct FirestoreDataStorageTestsView: View {
 }
 
 
+#if DEBUG
 struct FirebaseDataStorageTestsView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
@@ -98,3 +99,4 @@ struct FirebaseDataStorageTestsView_Previews: PreviewProvider {
         }
     }
 }
+#endif

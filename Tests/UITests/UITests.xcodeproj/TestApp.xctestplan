@@ -9,14 +9,11 @@
     }
   ],
   "defaultOptions" : {
-    "maximumTestRepetitions" : 2,
-    "repeatInNewRunnerProcess" : true,
     "targetForVariableExpansion" : {
       "containerPath" : "container:UITests.xcodeproj",
       "identifier" : "2F6D139128F5F384007C25D6",
       "name" : "TestApp"
-    },
-    "testRepetitionMode" : "retryOnFailure"
+    }
   },
   "testTargets" : [
     {

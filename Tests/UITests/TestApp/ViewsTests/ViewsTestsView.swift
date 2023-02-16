@@ -121,6 +121,7 @@ struct ViewsTestsView: View {
 }
 
 
+#if DEBUG
 struct ViewsTestsView_Previews: PreviewProvider {
     @State private static var path = NavigationPath()
     
@@ -131,3 +132,4 @@ struct ViewsTestsView_Previews: PreviewProvider {
         }
     }
 }
+#endif

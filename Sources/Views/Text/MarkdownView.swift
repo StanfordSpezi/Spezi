@@ -110,8 +110,10 @@ public struct MarkdownView<Header: View, Footer: View>: View {
 }
 
 
+#if DEBUG
 struct PrivacyPolicyView_Previews: PreviewProvider {
     static var previews: some View {
         MarkdownView(markdown: Data())
     }
 }
+#endif

@@ -126,6 +126,7 @@ public struct NameFields<FocusedField: Hashable>: View {
 }
 
 
+#if DEBUG
 struct NameFields_Previews: PreviewProvider {
     @State private static var name = PersonNameComponents()
     
@@ -134,3 +135,4 @@ struct NameFields_Previews: PreviewProvider {
         NameFields(name: $name)
     }
 }
+#endif

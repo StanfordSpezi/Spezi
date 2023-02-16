@@ -167,6 +167,7 @@ public struct UsernamePasswordResetPasswordView: View {
 }
 
 
+#if DEBUG
 struct UsernamePasswordResetPasswordView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
@@ -177,3 +178,4 @@ struct UsernamePasswordResetPasswordView_Previews: PreviewProvider {
         }
     }
 }
+#endif

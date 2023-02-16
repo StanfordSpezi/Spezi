@@ -62,6 +62,7 @@ public struct UserProfileView: View {
 }
 
 
+#if DEBUG
 struct ProfilePictureView_Previews: PreviewProvider {
     static var previews: some View {
         VStack(spacing: 16) {
@@ -95,3 +96,4 @@ struct ProfilePictureView_Previews: PreviewProvider {
         }
     }
 }
+#endif

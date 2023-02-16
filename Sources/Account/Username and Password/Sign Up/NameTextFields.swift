@@ -74,6 +74,7 @@ struct NameTextFields: View {
 }
 
 
+#if DEBUG
 struct NameTextFields_Previews: PreviewProvider {
     @State private static var name = PersonNameComponents()
     
@@ -91,3 +92,4 @@ struct NameTextFields_Previews: PreviewProvider {
             .background(Color(.systemGroupedBackground))
     }
 }
+#endif
