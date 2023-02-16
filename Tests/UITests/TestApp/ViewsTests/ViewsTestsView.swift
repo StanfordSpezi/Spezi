@@ -17,6 +17,7 @@ struct ViewsTestsView: View {
         case userProfile = "User Profile"
         case geometryReader = "Geometry Reader"
         case label = "Label"
+        case lazyText = "Lazy Text"
         case markdownView = "Markdown View"
         case viewState = "View State"
     }
@@ -42,6 +43,8 @@ struct ViewsTestsView: View {
                     geometryReader
                 case .label:
                     label
+                case .lazyText:
+                    lazyText
                 case .markdownView:
                     markdownView
                 case .viewState:
@@ -107,6 +110,21 @@ struct ViewsTestsView: View {
     @ViewBuilder
     private var markdownView: some View {
         MarkdownViewTestView()
+    }
+    
+    @ViewBuilder
+    private var lazyText: some View {
+        ScrollView {
+            LazyText(
+                text: """
+                This is a long text ...
+                
+                And some more lines ...
+                
+                And a third line ...
+                """
+            )
+        }
     }
     
     @ViewBuilder

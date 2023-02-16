@@ -100,6 +100,18 @@ final class ViewsTests: TestAppUITests {
         XCTAssertEqual(app.staticTexts.allElementsBoundByIndex.filter { $0.label.contains(text) }.count, 2)
     }
     
+    func testLazyText() throws {
+        let app = XCUIApplication()
+        app.launch()
+        
+        app.collectionViews.buttons["Views"].tap()
+        app.collectionViews.buttons["Lazy Text"].tap()
+        
+        XCTAssert(app.staticTexts["This is a long text ..."].exists)
+        XCTAssert(app.staticTexts["And some more lines ..."].exists)
+        XCTAssert(app.staticTexts["And a third line ..."].exists)
+    }
+    
     func testMardownView() throws {
         let app = XCUIApplication()
         app.launch()

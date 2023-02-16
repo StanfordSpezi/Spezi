@@ -12,8 +12,8 @@ import FHIRMockDataStorageProvider
 import FirebaseAccount
 import FirestoreDataStorage
 @preconcurrency import HealthKit
-import HealthKitToFHIRAdapter
 import HealthKitDataSource
+import HealthKitToFHIRAdapter
 import LocalStorage
 import SecureStorage
 import SwiftUI

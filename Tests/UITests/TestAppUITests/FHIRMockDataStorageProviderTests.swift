@@ -12,7 +12,7 @@ import XCTHealthKit
 
 
 final class FHIRMockDataStorageProviderTests: TestAppUITests {
-    func testHealthKit() throws { // swiftlint:disable:this function_body_length
+    func testFHIRMockDataStorageProviderTests() throws {
         let app = XCUIApplication()
         app.launchArguments = ["--fhirTests"]
         app.deleteAndLaunch(withSpringboardAppName: "TestApp")

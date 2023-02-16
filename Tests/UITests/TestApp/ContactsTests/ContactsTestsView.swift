@@ -12,7 +12,7 @@ import SwiftUI
 
 
 struct ContactsTestsView: View {
-    static let mock: Contact = Contact(
+    static let mock = Contact(
         name: PersonNameComponents(givenName: "Paul", familyName: "Schmiedmayer"),
         image: Image(systemName: "figure.wave.circle"),
         title: "A Title",
