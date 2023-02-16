@@ -16,43 +16,12 @@ on:
   workflow_dispatch:
 
 jobs:
-  build_and_test_spm:
+  build_and_test-spm:
     name: Build and Test Swift Package
-    runs-on: macos-12
-    env:
+    uses: StanfordBDHG/.github/.github/workflows/build-and-test-xcodebuild-spm.yml@v1
+    with:
       scheme: CardinalKit-Package
-    steps:
-    - uses: actions/checkout@v3
-    - uses: maxim-lobanov/setup-xcode@v1
-      with:
-        xcode-version: latest-stable
-    - name: Install xcpretty
-      run: gem install xcpretty
-    - name: Check Environment
-      run: |
-          xcodebuild -version
-          swift --version
-          echo "env.scheme: ${{ env.scheme }}"
-    - name: Resolve Dependencies
-      run: xcodebuild -resolvePackageDependencies
-    - name: Build and Test
-      run: |
-          set -o pipefail \
-          && xcodebuild test \
-            -scheme ${{ env.scheme }} \
-            -sdk iphonesimulator \
-            -destination "name=iPhone 14 Pro Max" \
-            -enableCodeCoverage YES \
-            -resultBundlePath ${{ env.scheme }}.xcresult \
-            CODE_SIGNING_ALLOWED=NO \
-            SWIFT_ACTIVE_COMPILATION_CONDITIONS=TEST \
-          | xcpretty
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: ${{ env.scheme }}.xcresult
-        path: ${{ env.scheme }}.xcresult
-  build_and_test_uitests:
+  build_and_test-uitests:
     name: Build and Test UITests
     runs-on: macos-12
     defaults:
@@ -101,7 +70,7 @@ jobs:
         path: Tests/UITests/${{ env.scheme }}.xcresult
   create-and-upload-coverage-report:
     name: Create and Upload Coverage Report
-    needs: [build_and_test_spm, build_and_test_uitests]
+    needs: [build_and_test-spm, build_and_test-uitests]
     uses: StanfordBDHG/.github/.github/workflows/create-and-upload-coverage-report.yml@v1
     with:
       coveragereports: CardinalKit-Package.xcresult TestApp.xcresult
