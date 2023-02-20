@@ -29,7 +29,7 @@ public struct SignUpValues: Sendable {
     ///   - name: The name as inputted in the sign-up user interface.
     ///   - genderIdentity: The self-identified gender as inputted in the sign-up user interface.
     ///   - dateOfBirth: The date of birth as inputted in the sign-up user interface.
-    init(username: String, password: String, name: PersonNameComponents, genderIdentity: GenderIdentity?, dateOfBirth: Date?) {
+    public init(username: String, password: String, name: PersonNameComponents, genderIdentity: GenderIdentity?, dateOfBirth: Date?) {
         self.username = username
         self.password = password
         self.name = name
