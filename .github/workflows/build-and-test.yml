@@ -30,7 +30,10 @@ jobs:
       artifactname: TestApp.xcresult
       runsonlabels: '["macOS", "self-hosted"]'
       setupfirebaseemulator: true
-      customcommand: firebase emulators:exec 'set -o pipbuild test -projefail && xcodeect Tests/UITests/UITests.xcodeproj -scheme TestApp -destination "name=iPhone 14 Pro Max" -resultBundlePath UITests.xcresult CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | xcpretty'
+      customcommand: |
+          cd Tests/UITests
+          firebase emulators:exec 'set -o pipbuild test -projefail && xcodeect UITests.xcodeproj -scheme TestApp -destination "name=iPhone 14 Pro Max" -resultBundlePath UITests.xcresult CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | xcpretty'
+          mv UITests.xcresult ../../UITests.xcresult
   uploadcoveragereport:
     name: Upload Coverage Report
     needs: [buildandtest, buildandtestuitests]
