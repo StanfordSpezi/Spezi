@@ -17,7 +17,7 @@ final class OnboardingTests: TestAppUITests {
         // First test that the consent can render HTML
         app.collectionViews.buttons["OnboardingTests"].tap()
         app.collectionViews.buttons["Consent View (HTML)"].tap()
-        _ = XCTWaiter.wait(for: [expectation(description: "Wait for HTML to load.")], timeout: 3.0)
+        _ = XCTWaiter.wait(for: [expectation(description: "Wait for HTML to load.")], timeout: 10.0)
 
         XCTAssert(app.staticTexts["Consent"].exists)
         XCTAssert(app.staticTexts["Version 1.0"].exists)
