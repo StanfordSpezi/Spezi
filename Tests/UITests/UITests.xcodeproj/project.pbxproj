@@ -7,12 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-<<<<<<< HEAD
 		27B76298297C472E007F1029 /* HTMLViewTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B76297297C472E007F1029 /* HTMLViewTestView.swift */; };
-=======
 		2F148BFD298BADD700031B7F /* FirebaseConfiguration in Frameworks */ = {isa = PBXBuildFile; productRef = 2F148BFC298BADD700031B7F /* FirebaseConfiguration */; };
 		2F148C00298BB15900031B7F /* FirebaseAccountTestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F148BFF298BB15900031B7F /* FirebaseAccountTestsView.swift */; };
->>>>>>> 5ad27f4b7c47d9d3ab1435eb55bcd3db139dbd8b
 		2F1B82092942DE390037BC09 /* TestAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1B82082942DE390037BC09 /* TestAppUITests.swift */; };
 		2F2A354F291CCF74000E8373 /* TestAppHealthKitAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2A354E291CCF74000E8373 /* TestAppHealthKitAdapter.swift */; };
 		2F2E4B8429749C5900FF710F /* FirestoreDataStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F2E4B8329749C5900FF710F /* FirestoreDataStorageTests.swift */; };

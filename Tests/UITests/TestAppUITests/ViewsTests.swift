@@ -100,9 +100,6 @@ final class ViewsTests: TestAppUITests {
         XCTAssertEqual(app.staticTexts.allElementsBoundByIndex.filter { $0.label.contains(text) }.count, 2)
     }
     
-<<<<<<< HEAD
-    func testMarkdownView() throws {
-=======
     func testLazyText() throws {
         let app = XCUIApplication()
         app.launch()
@@ -116,7 +113,6 @@ final class ViewsTests: TestAppUITests {
     }
     
     func testMardownView() throws {
->>>>>>> 5ad27f4b7c47d9d3ab1435eb55bcd3db139dbd8b
         let app = XCUIApplication()
         app.launch()
         
