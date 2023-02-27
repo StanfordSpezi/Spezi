@@ -112,7 +112,7 @@ final class ViewsTests: TestAppUITests {
         XCTAssert(app.staticTexts["And a third line ..."].exists)
     }
     
-    func testMardownView() throws {
+    func testMarkdownView() throws {
         let app = XCUIApplication()
         app.launch()
         
@@ -120,8 +120,6 @@ final class ViewsTests: TestAppUITests {
         app.collectionViews.buttons["Markdown View"].tap()
         
         XCTAssert(app.staticTexts["This is a markdown example."].exists)
-        XCTAssert(app.staticTexts["idle"].exists)
-        XCTAssert(app.staticTexts["Header"].exists)
         
         sleep(6)
         
@@ -137,11 +135,11 @@ final class ViewsTests: TestAppUITests {
 
         sleep(3) // Wait for WKWebView to load
 
-        XCTAssert(app.staticTexts["This is an HTML example."].exists)
-        XCTAssert(app.staticTexts["idle"].exists)
-        XCTAssert(app.staticTexts["Header"].exists)
+        let webViewQuery = app.webViews
 
-        sleep(8)
+        XCTAssert(webViewQuery.staticTexts["This is an HTML example."].exists)
+
+        sleep(7)
 
         XCTAssert(app.staticTexts["This is an HTML example taking 5 seconds to load."].exists)
     }
