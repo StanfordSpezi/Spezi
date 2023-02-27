@@ -28,11 +28,6 @@ jobs:
             -resolvePackageDependencies \
             -derivedDataPath ".derivedData" \
             || true
-          xcodebuild \
-            -scheme CardinalKit-Package \
-            -resolvePackageDependencies \
-            -derivedDataPath ".derivedData" \
-            || true
           xcodebuild test \
             -scheme CardinalKit-Package \
             -sdk iphonesimulator \
