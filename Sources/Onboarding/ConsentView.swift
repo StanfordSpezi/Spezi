@@ -133,7 +133,9 @@ public struct ConsentView<ContentView: View, Action: View>: View {
                 OnboardingActionsView(String(localized: "CONSENT_ACTION", bundle: .module)) {
                     action()
                 }
-            }
+            },
+            givenNameField: givenNameField,
+            familyNameField: familyNameField
         )
     }
 

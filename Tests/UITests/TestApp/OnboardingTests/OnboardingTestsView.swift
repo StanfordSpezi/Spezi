@@ -53,7 +53,9 @@ struct OnboardingTestsView: View {
             },
             action: {
                 path.append(OnboardingStep.onboardingView)
-            }
+            },
+            givenNameField: FieldLocalization(title: "First Name", placeholder: "Enter your first name ..."),
+            familyNameField: FieldLocalization(title: "Surname", placeholder: "Enter your surname ...")
         )
             .navigationBarTitleDisplayMode(.inline)
     }
