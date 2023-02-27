@@ -22,7 +22,22 @@ jobs:
     with:
       artifactname: CardinalKit-Package.xcresult
       runsonlabels: '["macOS", "self-hosted"]'
-      scheme: CardinalKit-Package
+      customcommand: |
+          xcodebuild \
+            -scheme CardinalKit \
+            -resolvePackageDependencies \
+            -derivedDataPath ".derivedData"
+          set -o pipefail \
+            && xcodebuild test \
+              -scheme CardinalKit-Package \
+              -sdk iphonesimulator \
+              -destination "name=iPhone 14 Pro Max" \
+              -enableCodeCoverage YES \
+              -derivedDataPath ".derivedData" \
+              -resultBundlePath CardinalKit-Package.xcresult \
+              CODE_SIGN_IDENTITY="" \
+              CODE_SIGNING_REQUIRED=NO \
+            | xcpretty
   buildandtestuitests:
     name: Build and Test
     uses: StanfordBDHG/.github/.github/workflows/xcodebuild-or-fastlane.yml@v2
@@ -32,7 +47,7 @@ jobs:
       setupfirebaseemulator: true
       customcommand: |
           cd Tests/UITests
-          firebase emulators:exec 'set -o pipbuild test -projefail && xcodeect UITests.xcodeproj -scheme TestApp -destination "name=iPhone 14 Pro Max" -resultBundlePath UITests.xcresult CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | xcpretty'
+          firebase emulators:exec 'set -o pipefail && xcodeect UITests.xcodeproj -scheme TestApp -destination "name=iPhone 14 Pro Max" -resultBundlePath UITests.xcresult CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | xcpretty'
           mv UITests.xcresult ../../UITests.xcresult
   uploadcoveragereport:
     name: Upload Coverage Report
