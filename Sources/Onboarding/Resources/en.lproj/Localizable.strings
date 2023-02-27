@@ -16,3 +16,9 @@
 
 // MARK: Signature View
 "SIGNATURE_VIEW_UNDO" = "Undo";
+
+// MARK: Name Fields
+"NAME_FIELD_GIVEN_NAME_TITLE" = "First Name";
+"NAME_FIELD_GIVEN_NAME_PLACEHOLDER" = "Enter your first name ...";
+"NAME_FIELD_FAMILY_NAME_TITLE" = "Last Name";
+"NAME_FIELD_FAMILY_NAME_PLACEHOLDER" = "Enter your last name ...";

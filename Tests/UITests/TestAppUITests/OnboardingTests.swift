@@ -30,8 +30,8 @@ final class OnboardingTests: TestAppUITests {
             throw XCTSkip("PKCanvas view-related tests are currently skipped on Intel-based iOS simulators due to a metal bug on the simulator.")
         #endif
         
-        app.textFields["Enter your given name ..."].enter(value: "Leland")
-        app.textFields["Enter your family name ..."].enter(value: "Stanford")
+        app.textFields["Enter your first name ..."].enter(value: "Leland")
+        app.textFields["Enter your surname ..."].enter(value: "Stanford")
         
         hitConsentButton(app)
         

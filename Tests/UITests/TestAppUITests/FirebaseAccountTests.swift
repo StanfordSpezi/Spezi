@@ -275,9 +275,9 @@ extension XCUIApplication {
         
         swipeUp()
         
-        textFields["Enter your given name ..."].enter(value: givenName)
+        textFields["Enter your first name ..."].enter(value: givenName)
         swipeUp()
-        textFields["Enter your family name ..."].enter(value: familyName)
+        textFields["Enter your last name ..."].enter(value: familyName)
         swipeUp()
         
         

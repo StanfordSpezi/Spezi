@@ -9,6 +9,7 @@
 import CardinalKit
 import Onboarding
 import SwiftUI
+import Views
 
 
 struct OnboardingTestsView: View {
@@ -38,8 +39,7 @@ struct OnboardingTestsView: View {
                 }
             }
     }
-    
-    
+
     private var consentView: some View {
         ConsentView(
             header: {
@@ -50,7 +50,17 @@ struct OnboardingTestsView: View {
             },
             action: {
                 path.append(OnboardingStep.onboardingView)
-            }
+            },
+            givenNameField:
+                FieldLocalization(
+                    title: "First Name",
+                    placeholder: "Enter your first name ..."
+                ),
+            familyNameField:
+                FieldLocalization(
+                    title: "Surname",
+                    placeholder: "Enter your surname ..."
+                )
         )
             .navigationBarTitleDisplayMode(.inline)
     }
