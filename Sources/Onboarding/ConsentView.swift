@@ -13,10 +13,10 @@ import Views
 
 /// The ``ConsentView`` allows the display of markdown-based documents that can be signed using a family and given name and a hand drawn signature.
 ///
-/// The ``ConsentView`` provides a convenience initalizer with a provided action view using an ``OnboardingActionsView`` (``ConsentView/init(header:asyncMarkdown:footer:action:)``)
+/// The ``ConsentView`` provides a convenience initializer with a provided action view using an ``OnboardingActionsView`` (``ConsentView/init(header:asyncMarkdown:footer:action:)``)
 /// or a more customized ``ConsentView/init(contentView:actionView:)`` initializer with a custom-provided content and action view.
 ///
-/// ```
+/// ```swift
 /// ConsentView(
 ///     asyncMarkdown: {
 ///         Data("This is a *markdown* **example**".utf8)
@@ -158,6 +158,11 @@ public struct ConsentView<ContentView: View, Action: View>: View {
     }
 }
 
+<<<<<<< HEAD
+=======
+
+#if DEBUG
+>>>>>>> 5ad27f4b7c47d9d3ab1435eb55bcd3db139dbd8b
 struct ConsentView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
@@ -173,3 +178,4 @@ struct ConsentView_Previews: PreviewProvider {
         }
     }
 }
+#endif

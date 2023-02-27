@@ -53,6 +53,7 @@ struct GenderIdentityPicker: View {
 }
 
 
+#if DEBUG
 struct GenderIdentityPicker_Previews: PreviewProvider {
     @State private static var genderIdentity: GenderIdentity = .male
     
@@ -74,3 +75,4 @@ struct GenderIdentityPicker_Previews: PreviewProvider {
             .background(Color(.systemGroupedBackground))
     }
 }
+#endif

@@ -22,7 +22,12 @@ let package = Package(
         .library(name: "CardinalKit", targets: ["CardinalKit"]),
         .library(name: "Contact", targets: ["Contact"]),
         .library(name: "FHIR", targets: ["FHIR"]),
+        .library(name: "FHIRMockDataStorageProvider", targets: ["FHIRMockDataStorageProvider"]),
+        .library(name: "FHIRToFirestoreAdapter", targets: ["FHIRToFirestoreAdapter"]),
         .library(name: "FirestoreDataStorage", targets: ["FirestoreDataStorage"]),
+        .library(name: "FirestoreStoragePrefixUserIdAdapter", targets: ["FirestoreStoragePrefixUserIdAdapter"]),
+        .library(name: "FirebaseConfiguration", targets: ["FirebaseConfiguration"]),
+        .library(name: "FirebaseAccount", targets: ["FirebaseAccount"]),
         .library(name: "HealthKitDataSource", targets: ["HealthKitDataSource"]),
         .library(name: "HealthKitToFHIRAdapter", targets: ["HealthKitToFHIRAdapter"]),
         .library(name: "LocalStorage", targets: ["LocalStorage"]),
@@ -88,11 +93,63 @@ let package = Package(
             ]
         ),
         .target(
+            name: "FirebaseConfiguration",
+            dependencies: [
+                .target(name: "CardinalKit"),
+                .product(name: "FirebaseFirestore", package: "firebase-ios-sdk")
+            ]
+        ),
+        .target(
+            name: "FirebaseAccount",
+            dependencies: [
+                .target(name: "Account"),
+                .target(name: "CardinalKit"),
+                .target(name: "FirebaseConfiguration"),
+                .product(name: "FirebaseAuth", package: "firebase-ios-sdk")
+            ]
+        ),
+        .target(
+            name: "FHIRMockDataStorageProvider",
+            dependencies: [
+                .target(name: "CardinalKit"),
+                .target(name: "FHIR"),
+                .target(name: "Views")
+            ],
+            resources: [
+                .process("Resources")
+            ]
+        ),
+        .target(
+            name: "FHIRToFirestoreAdapter",
+            dependencies: [
+                .target(name: "CardinalKit"),
+                .target(name: "FHIR"),
+                .target(name: "FirestoreDataStorage")
+            ]
+        ),
+        .testTarget(
+            name: "FHIRToFirestoreAdapterTests",
+            dependencies: [
+                .target(name: "FHIRToFirestoreAdapter"),
+                .target(name: "FHIR"),
+                .product(name: "ModelsR4", package: "FHIRModels")
+            ]
+        ),
+        .target(
             name: "FirestoreDataStorage",
             dependencies: [
                 .target(name: "CardinalKit"),
+                .target(name: "FirebaseConfiguration"),
                 .product(name: "FirebaseFirestore", package: "firebase-ios-sdk"),
                 .product(name: "FirebaseFirestoreSwift", package: "firebase-ios-sdk")
+            ]
+        ),
+        .target(
+            name: "FirestoreStoragePrefixUserIdAdapter",
+            dependencies: [
+                .target(name: "CardinalKit"),
+                .target(name: "FirestoreDataStorage"),
+                .product(name: "FirebaseAuth", package: "firebase-ios-sdk")
             ]
         ),
         .target(

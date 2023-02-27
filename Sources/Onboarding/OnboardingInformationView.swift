@@ -14,7 +14,7 @@ import Views
 /// by the ``OnboardingInformationView/Content`` type.
 ///
 /// The following example displays an ``OnboardingInformationView`` with two information areas:
-/// ```
+/// ```swift
 /// OnboardingInformationView(
 ///     areas: [
 ///         OnboardingInformationView.Content(
@@ -98,6 +98,7 @@ public struct OnboardingInformationView: View {
 }
 
 
+#if DEBUG
 struct AreasView_Previews: PreviewProvider {
     static var mock: [OnboardingInformationView.Content] {
         [
@@ -137,3 +138,4 @@ struct AreasView_Previews: PreviewProvider {
         )
     }
 }
+#endif

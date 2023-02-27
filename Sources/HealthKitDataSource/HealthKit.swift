@@ -15,7 +15,7 @@ import SwiftUI
 ///
 /// Use the ``HealthKit/init(_:adapter:)`` initializer to define different ``HealthKitDataSourceDescription``s to define the data collection.
 /// You can, e.g., use ``CollectSample`` to collect a wide variaty of `HKSampleTypes`:
-/// ```
+/// ```swift
 /// class ExampleAppDelegate: CardinalKitAppDelegate {
 ///     override var configuration: Configuration {
 ///         Configuration(standard: ExampleStandard()) {

@@ -99,7 +99,7 @@ private struct _CanvasView: UIViewRepresentable {
 /// current canvas size using the SwiftUI preference mechanisms.
 ///
 /// The view offers several bindings to observe the resulting drawing, check if a user is currently drawing, and showing or hiding the tool picker.
-/// ```
+/// ```swift
 /// @State var drawing = PKDrawing()
 /// @State var isDrawing = false
 /// @State var showToolPicker = false
@@ -171,6 +171,7 @@ public struct CanvasView: View {
 }
 
 
+#if DEBUG
 struct SignatureView_Previews: PreviewProvider {
     @State private static var isDrawing = false
     
@@ -182,3 +183,4 @@ struct SignatureView_Previews: PreviewProvider {
         }
     }
 }
+#endif

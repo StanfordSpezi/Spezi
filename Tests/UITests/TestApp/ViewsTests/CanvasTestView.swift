@@ -42,8 +42,10 @@ struct CanvasTestView: View {
 }
 
 
+#if DEBUG
 struct CanvasTestView_Previews: PreviewProvider {
     static var previews: some View {
         CanvasTestView()
     }
 }
+#endif

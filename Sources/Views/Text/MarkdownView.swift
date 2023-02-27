@@ -11,7 +11,7 @@ import SwiftUI
 
 /// A ``MarkdownView`` allows the display of a markdown file including the addition of a header and footer view.
 ///
-/// ```
+/// ```swift
 /// @State var viewState: ViewState = .idle
 ///
 /// MarkdownView(
@@ -88,8 +88,10 @@ public struct MarkdownView: View {
 }
 
 
+#if DEBUG
 struct PrivacyPolicyView_Previews: PreviewProvider {
     static var previews: some View {
         MarkdownView(markdown: Data())
     }
 }
+#endif

@@ -63,6 +63,7 @@ struct DateOfBirthPicker: View {
 }
 
 
+#if DEBUG
 struct DateOfBirthPicker_Previews: PreviewProvider {
     @State private static var date = Date.now
     
@@ -80,3 +81,4 @@ struct DateOfBirthPicker_Previews: PreviewProvider {
             .background(Color(.systemGroupedBackground))
     }
 }
+#endif

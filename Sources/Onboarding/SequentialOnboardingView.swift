@@ -14,7 +14,7 @@ import SwiftUI
 /// The ``OnboardingView`` provides an alternative to provide  information that is displayed all at once.
 ///
 /// The following example demonstrates the usage of the ``SequentialOnboardingView``:
-/// ```
+/// ```swift
 /// SequentialOnboardingView(
 ///     title: "Title",
 ///     subtitle: "Subtitle",
@@ -184,6 +184,7 @@ public struct SequentialOnboardingView: View {
 }
 
 
+#if DEBUG
 struct SequentialOnboardingView_Previews: PreviewProvider {
     static var mock: [SequentialOnboardingView.Content] {
         [
@@ -204,3 +205,4 @@ struct SequentialOnboardingView_Previews: PreviewProvider {
         }
     }
 }
+#endif

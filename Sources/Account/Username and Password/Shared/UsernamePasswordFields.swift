@@ -282,6 +282,7 @@ struct UsernamePasswordFields: View {
 }
 
 
+#if DEBUG
 struct UsernamePasswordFields_Previews: PreviewProvider {
     @State private static var username: String = ""
     @State private static var password: String = ""
@@ -330,3 +331,4 @@ struct UsernamePasswordFields_Previews: PreviewProvider {
             .environmentObject(UsernamePasswordAccountService())
     }
 }
+#endif

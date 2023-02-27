@@ -83,8 +83,13 @@ public actor FHIR: Standard, ObservableObject, ObservableObjectProvider {
     }
     
     
-    @Published
-    private var resources: [Resource.ID: ResourceProxy] = [:]
+    private var resources: [Resource.ID: ResourceProxy] = [:] {
+        didSet {
+            _Concurrency.Task { @MainActor in
+                objectWillChange.send()
+            }
+        }
+    }
     
     @DataStorageProviders
     var dataStorageProviders: [any DataStorageProvider<FHIR>]

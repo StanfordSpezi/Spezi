@@ -31,9 +31,11 @@ struct ContactCard: View {
 }
 
 
+#if DEBUG
 struct ContactCard_Previews: PreviewProvider {
     static var previews: some View {
         ContactCard(contact: ContactView_Previews.mock)
             .padding()
     }
 }
+#endif

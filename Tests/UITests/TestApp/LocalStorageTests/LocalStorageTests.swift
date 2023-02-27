@@ -7,7 +7,7 @@
 //
 
 import CryptoKit
-@testable import LocalStorage
+import LocalStorage
 import SecureStorage
 import XCTRuntimeAssertions
 

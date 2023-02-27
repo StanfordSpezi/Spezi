@@ -21,8 +21,9 @@ import Views
 /// Applications must ensure that an ``UsernamePasswordAccountService`` instance is injected in the SwiftUI environment by, e.g., using the `.environmentObject(_:)` view modifier.
 ///
 /// The view can automatically validate input using passed in ``ValidationRule``s and can be customized using header or footer views:
-/// ```
+/// ```swift
 /// UsernamePasswordSignUpView(
+///     signUpOptions: [.usernameAndPassword, .name, .genderIdentity, .dateOfBirth],
 ///     passwordValidationRules: [
 ///         /* ... */
 ///     ],
@@ -31,8 +32,7 @@ import Views
 ///     },
 ///     footer: {
 ///         Text("A Footer View ...")
-///     },
-///     signUpOptions: [.usernameAndPassword, .name, .genderIdentity, .dateOfBirth],
+///     }
 /// )
 ///     .environmentObject(UsernamePasswordAccountService())
 /// ```
@@ -257,6 +257,7 @@ public struct UsernamePasswordSignUpView: View {
 }
 
 
+#if DEBUG
 struct UsernamePasswordSignUpView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
@@ -265,3 +266,4 @@ struct UsernamePasswordSignUpView_Previews: PreviewProvider {
         }
     }
 }
+#endif

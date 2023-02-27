@@ -9,9 +9,46 @@
 import SwiftUI
 
 
-/// A ``Component`` can conform to ``ObservableObjectProvider`` to inject an `ObservableObject`s in the SwiftUI view hierachy using ``ObservableObjectProvider/observableObjects-6w1nz``
+/// A ``Component`` can conform to ``ObservableObjectProvider`` to inject `ObservableObject`s in the SwiftUI view hierarchy using ``ObservableObjectProvider/observableObjects-6w1nz``
+///
+///
+/// Reference types conforming to `ObservableObject` can be used in SwiftUI views to inform a view about changes in the object.
+/// You can create and use them in a view using `@ObservedObject` or get it from the SwiftUI environment using `@EnvironmentObject`.
+///
+/// A Component can conform to `ObservableObjectProvider` to inject `ObservableObject`s in the SwiftUI view hierarchy.
+/// You define all `ObservableObject`s that should be injected using the ``ObservableObjectProvider/observableObjects-5nl18`` property.
+/// ```swift
+/// class MyComponent<ComponentStandard: Standard>: ObservableObjectProvider {
+///     public var observableObjects: [any ObservableObject] {
+///         [/* ... */]
+///     }
+/// }
+/// ```
+///
+/// `ObservableObjectProvider` provides a default implementation of the ``ObservableObjectProvider/observableObjects-5nl18`` If your type conforms to `ObservableObject`
+/// that just injects itself into the SwiftUI view hierarchy:
+/// ```swift
+/// class MyComponent<ComponentStandard: Standard>: ObservableObject, ObservableObjectProvider {
+///     @Published
+///     var test: String
+///
+///     // ...
+/// }
+/// ```
 public protocol ObservableObjectProvider {
     /// The `ObservableObject` instances that should be injected in the SwiftUI environment.
+    ///
+    /// You define all `ObservableObject`s that should be injected using the ``ObservableObjectProvider/observableObjects-5nl18`` property.
+    /// ```swift
+    /// class MyComponent<ComponentStandard: Standard>: ObservableObjectProvider {
+    ///     public var observableObjects: [any ObservableObject] {
+    ///         [/* ... */]
+    ///     }
+    /// }
+    /// ```
+    ///
+    /// `ObservableObjectProvider` provides a default implementation of the ``ObservableObjectProvider/observableObjects-5nl18`` If your type conforms to `ObservableObject`
+    /// that just injects itself into the SwiftUI view hierarchy.
     var observableObjects: [any ObservableObject] { get }
 }
 

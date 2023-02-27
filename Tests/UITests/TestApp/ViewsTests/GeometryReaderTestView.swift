@@ -41,8 +41,10 @@ struct GeometryReaderTestView: View {
 }
 
 
+#if DEBUG
 struct GeometryReaderTestView_Previews: PreviewProvider {
     static var previews: some View {
         GeometryReaderTestView()
     }
 }
+#endif

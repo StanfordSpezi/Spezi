@@ -17,7 +17,7 @@ import SwiftUI
 /// sequential information that is displayed step by step.
 ///
 /// The following example demonstrates the usage of the ``OnboardingView`` using its default configuration.
-/// ```
+/// ```swift
 /// OnboardingView(
 ///     title: "Title",
 ///     subtitle: "Subtitle",
@@ -115,6 +115,7 @@ public struct OnboardingView<TitleView: View, ContentView: View, ActionView: Vie
 }
 
 
+#if DEBUG
 struct OnboardingView_Previews: PreviewProvider {
     static var previews: some View {
         OnboardingView(
@@ -127,3 +128,4 @@ struct OnboardingView_Previews: PreviewProvider {
         }
     }
 }
+#endif

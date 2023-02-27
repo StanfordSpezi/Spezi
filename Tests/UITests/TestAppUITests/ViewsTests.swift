@@ -53,11 +53,11 @@ final class ViewsTests: TestAppUITests {
         XCTAssert(app.staticTexts["Given Name"].exists)
         XCTAssert(app.staticTexts["Family Name"].exists)
         
-        app.enter(value: "Le", in: "First Placeholder")
-        app.enter(value: "Stan", in: "Second Placeholder")
+        app.textFields["First Placeholder"].enter(value: "Le")
+        app.textFields["Second Placeholder"].enter(value: "Stan")
         
-        app.enter(value: "land", in: "Enter your given name ...")
-        app.enter(value: "ford", in: "Enter your family name ...")
+        app.textFields["Enter your given name ..."].enter(value: "land")
+        app.textFields["Enter your family name ..."].enter(value: "ford")
         
         XCTAssert(app.textFields["Leland"].exists)
         XCTAssert(app.textFields["Stanford"].exists)
@@ -100,7 +100,23 @@ final class ViewsTests: TestAppUITests {
         XCTAssertEqual(app.staticTexts.allElementsBoundByIndex.filter { $0.label.contains(text) }.count, 2)
     }
     
+<<<<<<< HEAD
     func testMarkdownView() throws {
+=======
+    func testLazyText() throws {
+        let app = XCUIApplication()
+        app.launch()
+        
+        app.collectionViews.buttons["Views"].tap()
+        app.collectionViews.buttons["Lazy Text"].tap()
+        
+        XCTAssert(app.staticTexts["This is a long text ..."].exists)
+        XCTAssert(app.staticTexts["And some more lines ..."].exists)
+        XCTAssert(app.staticTexts["And a third line ..."].exists)
+    }
+    
+    func testMardownView() throws {
+>>>>>>> 5ad27f4b7c47d9d3ab1435eb55bcd3db139dbd8b
         let app = XCUIApplication()
         app.launch()
         

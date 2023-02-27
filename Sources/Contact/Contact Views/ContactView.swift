@@ -167,6 +167,7 @@ public struct ContactView: View {
 }
 
 
+#if DEBUG
 struct ContactView_Previews: PreviewProvider {
     static var mock: Contact {
         Contact(
@@ -202,3 +203,4 @@ struct ContactView_Previews: PreviewProvider {
         ContactView(contact: Self.mock)
     }
 }
+#endif

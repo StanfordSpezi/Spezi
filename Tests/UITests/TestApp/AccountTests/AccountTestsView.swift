@@ -6,7 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
-@testable import Account
+import Account
 import CardinalKit
 import SwiftUI
 import Views
@@ -55,6 +55,7 @@ struct AccountTestsView: View {
 }
 
 
+#if DEBUG
 struct AccountTestsView_Previews: PreviewProvider {
     @StateObject private static var account: Account = {
         let accountServices: [any AccountService] = [
@@ -72,3 +73,4 @@ struct AccountTestsView_Previews: PreviewProvider {
             .environmentObject(account)
     }
 }
+#endif
