@@ -115,7 +115,7 @@ public struct ConsentView<ContentView: View, Action: View>: View {
         action: @escaping () -> Void,
         givenNameField: FieldLocalization = LocalizationDefaults.givenName,
         familyNameField: FieldLocalization = LocalizationDefaults.familyName
-    ) where ContentView == MarkdownView<AnyView, AnyView>, Action == OnboardingActionsView {
+    ) where ContentView == AnyView, Action == OnboardingActionsView {
         self.init(
             contentView: {
                 AnyView(
@@ -147,7 +147,9 @@ public struct ConsentView<ContentView: View, Action: View>: View {
         @ViewBuilder header: () -> (some View) = { EmptyView() },
         asyncHTML: @escaping () async -> Data,
         @ViewBuilder footer: () -> (some View) = { EmptyView() },
-        action: @escaping () -> Void
+        action: @escaping () -> Void,
+        givenNameField: FieldLocalization = LocalizationDefaults.givenName,
+        familyNameField: FieldLocalization = LocalizationDefaults.familyName
     ) where ContentView == AnyView, Action == OnboardingActionsView {
         self.init(
             contentView: {

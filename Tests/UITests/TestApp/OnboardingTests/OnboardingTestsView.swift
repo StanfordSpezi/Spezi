@@ -43,7 +43,7 @@ struct OnboardingTestsView: View {
             }
     }
 
-    private var consentView: some View {
+    private var consentMarkdownView: some View {
         ConsentView(
             header: {
                 OnboardingTitleView(title: "Consent", subtitle: "Version 1.0")
@@ -53,17 +53,7 @@ struct OnboardingTestsView: View {
             },
             action: {
                 path.append(OnboardingStep.onboardingView)
-            },
-            givenNameField:
-                FieldLocalization(
-                    title: "First Name",
-                    placeholder: "Enter your first name ..."
-                ),
-            familyNameField:
-                FieldLocalization(
-                    title: "Surname",
-                    placeholder: "Enter your surname ..."
-                )
+            }
         )
             .navigationBarTitleDisplayMode(.inline)
     }
