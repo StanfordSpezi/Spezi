@@ -22,23 +22,7 @@ jobs:
     with:
       artifactname: CardinalKit-Package.xcresult
       runsonlabels: '["macOS", "self-hosted"]'
-      customcommand: |
-          xcodebuild \
-            -scheme CardinalKit-Package \
-            -resolvePackageDependencies \
-            -derivedDataPath ".derivedData" \
-            || true
-          set -o pipefail \
-            && xcodebuild test \
-              -scheme CardinalKit-Package \
-              -sdk iphonesimulator \
-              -destination "name=iPhone 14 Pro Max" \
-              -enableCodeCoverage YES \
-              -derivedDataPath ".derivedData" \
-              -resultBundlePath CardinalKit-Package.xcresult \
-              CODE_SIGN_IDENTITY="" \
-              CODE_SIGNING_REQUIRED=NO \
-            | xcpretty
+      scheme: CardinalKit-Package
   buildandtestuitests:
     name: Build and Test
     uses: StanfordBDHG/.github/.github/workflows/xcodebuild-or-fastlane.yml@v2
