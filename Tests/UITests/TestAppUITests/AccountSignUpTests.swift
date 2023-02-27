@@ -101,12 +101,12 @@ final class AccountSignUpTests: TestAppUITests {
         app.buttons["Male"].tap()
         app.testPrimaryButton(enabled: false, title: buttonTitle)
         
-        let givenNameField = "Enter your given name ..."
+        let givenNameField = "Enter your first name ..."
         let givenName = "Leland"
         app.textFields[givenNameField].enter(value: givenName)
         app.testPrimaryButton(enabled: false, title: buttonTitle)
         
-        let familyNameField = "Enter your family name ..."
+        let familyNameField = "Enter your last name ..."
         let familyName = "Stanford"
         app.textFields[familyNameField].enter(value: familyName)
         app.testPrimaryButton(enabled: true, title: buttonTitle)
