@@ -31,7 +31,7 @@ final class OnboardingTests: TestAppUITests {
         #endif
         
         app.textFields["Enter your first name ..."].enter(value: "Leland")
-        app.textFields["Enter your last name ..."].enter(value: "Stanford")
+        app.textFields["Enter your surname ..."].enter(value: "Stanford")
         
         hitConsentButton(app)
         

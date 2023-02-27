@@ -63,8 +63,8 @@ public struct ConsentView<ContentView: View, Action: View>: View {
                         Divider()
                         NameFields(
                             name: $name,
-                            givenNameField: LocalizationDefaults.givenName,
-                            familyNameField: LocalizationDefaults.familyName
+                            givenNameField: givenNameField,
+                            familyNameField: familyNameField
                         )
                         if showSignatureView {
                             Divider()
@@ -106,11 +106,15 @@ public struct ConsentView<ContentView: View, Action: View>: View {
     ///   - asyncMarkdown: The markdown content provided as an UTF8 encoded `Data` instance that can be provided asynchronously.
     ///   - footer: The footer view will be displayed above the markdown content.
     ///   - action: The action that should be performed once the consent has been given.
+    ///   - givenNameField: The localization to use for the given (first) name field
+    ///   - familyNameField: The localization to use for the family (last) name field
     public init(
         @ViewBuilder header: () -> (some View) = { EmptyView() },
         asyncMarkdown: @escaping () async -> Data,
         @ViewBuilder footer: () -> (some View) = { EmptyView() },
-        action: @escaping () -> Void
+        action: @escaping () -> Void,
+        givenNameField: FieldLocalization = LocalizationDefaults.givenName,
+        familyNameField: FieldLocalization = LocalizationDefaults.familyName
     ) where ContentView == MarkdownView<AnyView, AnyView>, Action == OnboardingActionsView {
         self.init(
             contentView: {
@@ -124,7 +128,9 @@ public struct ConsentView<ContentView: View, Action: View>: View {
                 OnboardingActionsView(String(localized: "CONSENT_ACTION", bundle: .module)) {
                     action()
                 }
-            }
+            },
+            givenNameField: givenNameField,
+            familyNameField: familyNameField
         )
     }
 
@@ -132,6 +138,8 @@ public struct ConsentView<ContentView: View, Action: View>: View {
     /// - Parameters:
     ///   - contentView: The content view providing context about the consent view.
     ///   - actionView: The action view that should be displayed under the name and signature boxes.
+    ///   - givenNameField: The localization to use for the given (first) name field
+    ///   - familyNameField: The localization to use for the family (last) name field
     public init(
         @ViewBuilder contentView: () -> (ContentView),
         @ViewBuilder actionView: () -> (Action),
