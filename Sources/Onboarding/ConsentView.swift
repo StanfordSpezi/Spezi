@@ -158,11 +158,7 @@ public struct ConsentView<ContentView: View, Action: View>: View {
     }
 }
 
-<<<<<<< HEAD
-=======
-
 #if DEBUG
->>>>>>> 5ad27f4b7c47d9d3ab1435eb55bcd3db139dbd8b
 struct ConsentView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
