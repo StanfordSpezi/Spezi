@@ -24,8 +24,9 @@ jobs:
       runsonlabels: '["macOS", "self-hosted"]'
       customcommand: |
           xcodebuild \
-            -scheme CardinalKit \
+            -scheme CardinalKit-Package \
             -resolvePackageDependencies \
+            -list \
             -derivedDataPath ".derivedData"
           set -o pipefail \
             && xcodebuild test \
