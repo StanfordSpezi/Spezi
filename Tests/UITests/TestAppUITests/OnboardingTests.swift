@@ -21,7 +21,7 @@ final class OnboardingTests: TestAppUITests {
 
         XCTAssert(app.staticTexts["Consent"].exists)
         XCTAssert(app.staticTexts["Version 1.0"].exists)
-        XCTAssert(app.staticTexts["This is an example of a study consent written in HTML."].exists)
+        XCTAssert(app.webViews.staticTexts["This is an example of a study consent written in HTML."].exists)
         
         app.navigationBars.buttons.element(boundBy: 0).tap()
 
