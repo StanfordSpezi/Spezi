@@ -20,18 +20,10 @@ import SwiftUI
 ///         try? await Task.sleep(for: .seconds(5))
 ///         return Data("This is a *markdown* **example** taking 5 seconds to load.".utf8)
 ///     },
-///     state: $viewState,
-///     header: {
-///         Text("Header")
-///     },
-///     footer: {
-///         Text("Footer")
-///     }
+///     state: $viewState
 /// )
 /// ```
-public struct MarkdownView<Header: View, Footer: View>: View {
-    private let header: Header
-    private let footer: Footer
+public struct MarkdownView: View {
     private let asyncMarkdown: () async -> Data
     
     @State private var markdown: Data?
@@ -54,7 +46,6 @@ public struct MarkdownView<Header: View, Footer: View>: View {
     
     public var body: some View {
         VStack {
-            header
             if markdown == nil {
                 ProgressView()
                     .padding()
@@ -62,7 +53,6 @@ public struct MarkdownView<Header: View, Footer: View>: View {
                 Text(markdownString)
                     .padding()
             }
-            footer
         }
             .task {
                 markdown = await asyncMarkdown()
@@ -74,16 +64,10 @@ public struct MarkdownView<Header: View, Footer: View>: View {
     /// - Parameters:
     ///   - asyncMarkdown: The async closure to load the markdown as an utf8 representation.
     ///   - state: A `Binding` to observe the ``ViewState`` of the ``MarkdownView``.
-    ///   - header: An optional header of the ``MarkdownView``
-    ///   - footer: An optional footer of the ``MarkdownView``
     public init(
         asyncMarkdown: @escaping () async -> Data,
-        state: Binding<ViewState> = .constant(.idle),
-        @ViewBuilder header: () -> (Header) = { EmptyView() },
-        @ViewBuilder footer: () -> (Footer) = { EmptyView() }
+        state: Binding<ViewState> = .constant(.idle)
     ) {
-        self.header = header()
-        self.footer = footer()
         self.asyncMarkdown = asyncMarkdown
         self._state = state
     }
@@ -92,19 +76,13 @@ public struct MarkdownView<Header: View, Footer: View>: View {
     /// - Parameters:
     ///   - asyncMarkdown: A `Data` instance containing the markdown file as an utf8 representation.
     ///   - state: A `Binding` to observe the ``ViewState`` of the ``MarkdownView``.
-    ///   - header: An optional header of the ``MarkdownView``
-    ///   - footer: An optional footer of the ``MarkdownView``
     public init(
         markdown: Data,
-        state: Binding<ViewState> = .constant(.idle),
-        @ViewBuilder header: () -> (Header) = { EmptyView() },
-        @ViewBuilder footer: () -> (Footer) = { EmptyView() }
+        state: Binding<ViewState> = .constant(.idle)
     ) {
         self.init(
             asyncMarkdown: { markdown },
-            state: state,
-            header: header,
-            footer: footer
+            state: state
         )
     }
 }

@@ -9,29 +9,25 @@
 import SwiftUI
 import Views
 
-
-struct MarkdownViewTestView: View {
+struct HTMLViewTestView: View {
     @State var viewState: ViewState = .idle
-    
+
     var body: some View {
         DocumentView(
             asyncData: {
                 try? await Task.sleep(for: .seconds(5))
-                return Data("This is a *markdown* **example** taking 5 seconds to load.".utf8)
+                return Data("This is an HTML example taking 5 seconds to load.".utf8)
             },
-            type: .markdown
+            type: .html
         )
-        MarkdownView(
-            markdown: Data("This is a *markdown* **example**.".utf8)
+        HTMLView(
+            html: Data("This is an HTML example.".utf8)
         )
     }
 }
 
-
-#if DEBUG
-struct MarkdownViewTestView_Previews: PreviewProvider {
+struct HTMLViewTestView_Previews: PreviewProvider {
     static var previews: some View {
-        MarkdownViewTestView()
+        HTMLViewTestView()
     }
 }
-#endif
