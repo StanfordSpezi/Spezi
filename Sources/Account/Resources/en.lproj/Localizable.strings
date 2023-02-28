@@ -55,7 +55,7 @@ Password";
 
 // MARK: - Email and Password
 "EAP_LOGIN_BUTTON_TITLE" = "Email and Password";
-"EAP_SIGNUP_BUTTION_TITLE" = "Email and Password";
+"EAP_SIGNUP_BUTTON_TITLE" = "Email and Password";
 "EAP_LOGIN_USERNAME_TITLE" = "Email";
 "EAP_LOGIN_USERNAME_PLACEHOLDER" = "Enter your email ...";
 "EAP_EMAIL_VERIFICATION_ERROR" = "The entered email is not correct.";
