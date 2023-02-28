@@ -53,7 +53,7 @@ open class EmailPasswordAccountService: UsernamePasswordAccountService {
     
     override open var signUpButton: AnyView {
         button(
-            localization.login.buttonTitle,
+            localization.signUp.buttonTitle,
             destination: UsernamePasswordSignUpView(
                 usernameValidationRules: [emailValidationRule]
             )
