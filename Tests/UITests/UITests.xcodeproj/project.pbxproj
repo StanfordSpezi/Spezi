@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		27B76298297C472E007F1029 /* HTMLViewTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B76297297C472E007F1029 /* HTMLViewTestView.swift */; };
 		2F148BFD298BADD700031B7F /* FirebaseConfiguration in Frameworks */ = {isa = PBXBuildFile; productRef = 2F148BFC298BADD700031B7F /* FirebaseConfiguration */; };
 		2F148C00298BB15900031B7F /* FirebaseAccountTestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F148BFF298BB15900031B7F /* FirebaseAccountTestsView.swift */; };
 		2F1B82092942DE390037BC09 /* TestAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1B82082942DE390037BC09 /* TestAppUITests.swift */; };
@@ -88,6 +89,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		27B76297297C472E007F1029 /* HTMLViewTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTMLViewTestView.swift; sourceTree = "<group>"; };
 		2F01E8CD291490B80089C46B /* TestApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TestApp.entitlements; sourceTree = "<group>"; };
 		2F01E8CE291493560089C46B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		2F148BFF298BB15900031B7F /* FirebaseAccountTestsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAccountTestsView.swift; sourceTree = "<group>"; };
@@ -311,6 +313,7 @@
 				2F7B6CAE294BCA7600FDC494 /* NameFieldsTestView.swift */,
 				2F7B6CB0294BCA7C00FDC494 /* MarkdownViewTestView.swift */,
 				2F7B6CB2294BCA8200FDC494 /* ViewStateTestView.swift */,
+				27B76297297C472E007F1029 /* HTMLViewTestView.swift */,
 			);
 			path = ViewsTests;
 			sourceTree = "<group>";
@@ -560,6 +563,7 @@
 				2FC246CE2941500100F75383 /* MockAccountServiceError.swift in Sources */,
 				2FC246CC29414FFA00F75383 /* MockUsernamePasswordAccountService.swift in Sources */,
 				2F4530C4293FD704000A858F /* AccountTestsView.swift in Sources */,
+				27B76298297C472E007F1029 /* HTMLViewTestView.swift in Sources */,
 				2F9F07E7290907C600CDC598 /* XCTest.swift in Sources */,
 				2F2A354F291CCF74000E8373 /* TestAppHealthKitAdapter.swift in Sources */,
 				2F9F07E5290906E200CDC598 /* SecureStorageTests.swift in Sources */,

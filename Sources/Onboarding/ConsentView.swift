@@ -84,7 +84,7 @@ public struct ConsentView<ContentView: View, Action: View>: View {
                     .animation(.easeInOut, value: showSignatureView)
                 }
             )
-                .scrollDisabled(isSigning)
+            .scrollDisabled(isSigning)
         }
     }
     
@@ -115,13 +115,55 @@ public struct ConsentView<ContentView: View, Action: View>: View {
         action: @escaping () -> Void,
         givenNameField: FieldLocalization = LocalizationDefaults.givenName,
         familyNameField: FieldLocalization = LocalizationDefaults.familyName
-    ) where ContentView == MarkdownView<AnyView, AnyView>, Action == OnboardingActionsView {
+    ) where ContentView == AnyView, Action == OnboardingActionsView {
         self.init(
             contentView: {
-                MarkdownView(
-                    asyncMarkdown: asyncMarkdown,
-                    header: { AnyView(header()) },
-                    footer: { AnyView(footer()) }
+                AnyView(
+                    VStack {
+                        header()
+                        DocumentView(
+                            asyncData: asyncMarkdown,
+                            type: .markdown
+                        )
+                        footer()
+                    }
+                )
+            },
+            actionView: {
+                OnboardingActionsView(String(localized: "CONSENT_ACTION", bundle: .module)) {
+                    action()
+                }
+            },
+            givenNameField: givenNameField,
+            familyNameField: familyNameField
+        )
+    }
+
+    /// Creates a ``ConsentView`` with a provided action view using  an``OnboardingActionsView`` and renders HTML in a web view.
+    /// - Parameters:
+    ///   - header: The header view will be displayed above the html content.
+    ///   - asyncHTML: The html content provided as an UTF8 encoded `Data` instance that can be provided asynchronously.
+    ///   - footer: The footer view will be displayed above the html content.
+    ///   - action: The action that should be performed once the consent has been given.
+    public init(
+        @ViewBuilder header: () -> (some View) = { EmptyView() },
+        asyncHTML: @escaping () async -> Data,
+        @ViewBuilder footer: () -> (some View) = { EmptyView() },
+        action: @escaping () -> Void,
+        givenNameField: FieldLocalization = LocalizationDefaults.givenName,
+        familyNameField: FieldLocalization = LocalizationDefaults.familyName
+    ) where ContentView == AnyView, Action == OnboardingActionsView {
+        self.init(
+            contentView: {
+                AnyView(
+                    VStack {
+                        header()
+                        DocumentView(
+                            asyncData: asyncHTML,
+                            type: .html
+                        )
+                        footer()
+                    }
                 )
             },
             actionView: {
@@ -153,7 +195,6 @@ public struct ConsentView<ContentView: View, Action: View>: View {
     }
 }
 
-
 #if DEBUG
 struct ConsentView_Previews: PreviewProvider {
     static var previews: some View {
@@ -166,7 +207,7 @@ struct ConsentView_Previews: PreviewProvider {
                     print("Next step ...")
                 }
             )
-                .navigationTitle("Consent")
+            .navigationTitle("Consent")
         }
     }
 }

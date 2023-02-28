@@ -14,9 +14,20 @@ final class OnboardingTests: TestAppUITests {
     func testOnboardingConsent() throws {
         let app = XCUIApplication()
         app.launch()
-        
+
+        // First test that the consent can render HTML
         app.collectionViews.buttons["OnboardingTests"].tap()
-        app.collectionViews.buttons["Consent View"].tap()
+        app.collectionViews.buttons["Consent View (HTML)"].tap()
+        _ = XCTWaiter.wait(for: [expectation(description: "Wait for HTML to load.")], timeout: 10.0)
+
+        XCTAssert(app.staticTexts["Consent"].exists)
+        XCTAssert(app.staticTexts["Version 1.0"].exists)
+        XCTAssert(app.webViews.staticTexts["This is an example of a study consent written in HTML."].exists)
+        
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+
+        // Now test that the consent view can render markdown
+        app.collectionViews.buttons["Consent View (Markdown)"].tap()
         
         XCTAssert(app.staticTexts["Consent"].exists)
         XCTAssert(app.staticTexts["Version 1.0"].exists)

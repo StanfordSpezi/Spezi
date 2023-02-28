@@ -19,6 +19,7 @@ struct ViewsTestsView: View {
         case label = "Label"
         case lazyText = "Lazy Text"
         case markdownView = "Markdown View"
+        case htmlView = "HTML View"
         case viewState = "View State"
     }
     
@@ -47,6 +48,8 @@ struct ViewsTestsView: View {
                     lazyText
                 case .markdownView:
                     markdownView
+                case .htmlView:
+                    htmlView
                 case .viewState:
                     viewState
                 }
@@ -110,6 +113,11 @@ struct ViewsTestsView: View {
     @ViewBuilder
     private var markdownView: some View {
         MarkdownViewTestView()
+    }
+
+    @ViewBuilder
+    private var htmlView: some View {
+        HTMLViewTestView()
     }
     
     @ViewBuilder
