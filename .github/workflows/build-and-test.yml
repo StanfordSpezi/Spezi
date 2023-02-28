@@ -17,14 +17,14 @@ on:
 
 jobs:
   buildandtest:
-    name: Build and Test
+    name: Build and Test Swift Package
     uses: StanfordBDHG/.github/.github/workflows/xcodebuild-or-fastlane.yml@v2
     with:
       artifactname: CardinalKit-Package.xcresult
       runsonlabels: '["macOS", "self-hosted"]'
       scheme: CardinalKit-Package
   buildandtestuitests:
-    name: Build and Test
+    name: Build and Test UI Tests
     uses: StanfordBDHG/.github/.github/workflows/xcodebuild-or-fastlane.yml@v2
     with:
       artifactname: UITests.xcresult
