@@ -40,10 +40,10 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/apple/FHIRModels", .upToNextMinor(from: "0.4.0")),
-        .package(url: "https://github.com/firebase/firebase-ios-sdk", from: "10.3.0"),
+        .package(url: "https://github.com/firebase/firebase-ios-sdk", from: "10.5.0"),
         .package(url: "https://github.com/StanfordBDHG/HealthKitOnFHIR", .upToNextMinor(from: "0.2.2")),
         .package(url: "https://github.com/StanfordBDHG/ResearchKit", from: "2.2.8"),
-        .package(url: "https://github.com/StanfordBDHG/ResearchKitOnFHIR", .upToNextMinor(from: "0.1.5"))
+        .package(url: "https://github.com/StanfordBDHG/ResearchKitOnFHIR", .upToNextMinor(from: "0.1.6"))
     ],
     targets: [
         .target(

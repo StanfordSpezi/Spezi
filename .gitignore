@@ -10,6 +10,7 @@
 *.xcodeproj
 .swiftpm
 .build/
+.derivedData
 .xcodebuild/
 coverage.lcov
 *.xcresult

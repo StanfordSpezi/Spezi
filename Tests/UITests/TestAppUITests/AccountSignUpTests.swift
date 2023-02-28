@@ -12,7 +12,7 @@ import XCTestExtensions
 
 final class AccountSignUpTests: TestAppUITests {
     func testSignUpUsernameComponents() throws {
-        disablePasswordAutofill()
+        try disablePasswordAutofill()
         
         let app = XCUIApplication()
         app.launch()
@@ -33,7 +33,7 @@ final class AccountSignUpTests: TestAppUITests {
     }
     
     func testSignUpEmailComponents() throws {
-        disablePasswordAutofill()
+        try disablePasswordAutofill()
         
         let app = XCUIApplication()
         app.launch()
@@ -51,12 +51,12 @@ final class AccountSignUpTests: TestAppUITests {
             username: username,
             usernameReplacement: usernameReplacement
         ) {
-            app.textFields[usernameField].enter(value: String(username.dropLast(4)))
+            try app.textFields[usernameField].enter(value: String(username.dropLast(4)))
             app.testPrimaryButton(enabled: false, title: "Sign Up")
             
             XCTAssertTrue(app.staticTexts["The entered email is not correct."].waitForExistence(timeout: 5.0))
             
-            app.textFields[usernameField].delete(count: username.count)
+            try app.textFields[usernameField].delete(count: username.count)
         }
     }
     
@@ -64,33 +64,33 @@ final class AccountSignUpTests: TestAppUITests {
         usernameField: String,
         username: String,
         usernameReplacement: String,
-        initialTests: () -> Void = { }
+        initialTests: () throws -> Void = { }
     ) throws {
         let app = XCUIApplication()
         let buttonTitle = "Sign Up"
         
         app.testPrimaryButton(enabled: false, title: buttonTitle)
         
-        initialTests()
+        try initialTests()
         
-        app.textFields[usernameField].enter(value: username)
+        try app.textFields[usernameField].enter(value: username)
         app.testPrimaryButton(enabled: false, title: buttonTitle)
         
         let passwordField = "Enter your password ..."
         let password = "StanfordRocks123!"
-        app.secureTextFields[passwordField].enter(value: password)
+        try app.secureTextFields[passwordField].enter(value: password)
         app.testPrimaryButton(enabled: false, title: buttonTitle)
         
         let passwordRepeatField = "Repeat your password ..."
         var passwordRepeat = "StanfordRocks123"
-        app.secureTextFields[passwordRepeatField].enter(value: passwordRepeat)
+        try app.secureTextFields[passwordRepeatField].enter(value: passwordRepeat)
         app.testPrimaryButton(enabled: false, title: buttonTitle)
         
         XCTAssertTrue(app.staticTexts["The entered passwords are not equal."].waitForExistence(timeout: 1.0))
         
-        app.secureTextFields[passwordRepeatField].delete(count: passwordRepeat.count)
+        try app.secureTextFields[passwordRepeatField].delete(count: passwordRepeat.count)
         passwordRepeat = password
-        app.secureTextFields[passwordRepeatField].enter(value: passwordRepeat)
+        try app.secureTextFields[passwordRepeatField].enter(value: passwordRepeat)
         app.testPrimaryButton(enabled: false, title: buttonTitle)
         
         app.datePickers.firstMatch.tap()
@@ -103,20 +103,20 @@ final class AccountSignUpTests: TestAppUITests {
         
         let givenNameField = "Enter your first name ..."
         let givenName = "Leland"
-        app.textFields[givenNameField].enter(value: givenName)
+        try app.textFields[givenNameField].enter(value: givenName)
         app.testPrimaryButton(enabled: false, title: buttonTitle)
         
         let familyNameField = "Enter your last name ..."
         let familyName = "Stanford"
-        app.textFields[familyNameField].enter(value: familyName)
+        try app.textFields[familyNameField].enter(value: familyName)
         app.testPrimaryButton(enabled: true, title: buttonTitle)
         
         XCTAssertTrue(app.alerts["Username is already taken"].waitForExistence(timeout: 10.0))
         app.alerts["Username is already taken"].scrollViews.otherElements.buttons["OK"].tap()
         
         app.swipeDown()
-        app.textFields[usernameField].delete(count: username.count)
-        app.textFields[usernameField].enter(value: usernameReplacement)
+        try app.textFields[usernameField].delete(count: username.count)
+        try app.textFields[usernameField].enter(value: usernameReplacement)
         app.testPrimaryButton(enabled: true, title: buttonTitle)
         
         XCTAssertTrue(app.collectionViews.staticTexts[usernameReplacement].waitForExistence(timeout: 10.0))
