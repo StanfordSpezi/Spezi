@@ -60,8 +60,8 @@ final class AccountLoginTests: TestAppUITests {
         let username = "lelandstanford@stanford.edu"
         let password = "StanfordRocks123!"
         
-        app.textFields[usernameField].enter(value: String(username.dropLast(4)))
-        app.secureTextFields[passwordField].enter(value: password)
+        try app.textFields[usernameField].enter(value: String(username.dropLast(4)))
+        try app.secureTextFields[passwordField].enter(value: password)
         
         XCTAssertTrue(app.staticTexts["The entered email is not correct."].waitForExistence(timeout: 1.0))
         XCTAssertFalse(app.scrollViews.otherElements.buttons["Login, In progress"].waitForExistence(timeout: 0.5))
@@ -96,8 +96,8 @@ final class AccountLoginTests: TestAppUITests {
     
 extension XCUIApplication {
     fileprivate func delete(username: (field: String, count: Int), password: (field: String, count: Int)) throws {
-        textFields[username.field].delete(count: username.count)
-        secureTextFields[password.field].delete(count: password.count)
+        try textFields[username.field].delete(count: username.count)
+        try secureTextFields[password.field].delete(count: password.count)
     }
     
     fileprivate func enterCredentials(username: (field: String, value: String), password: (field: String, value: String)) throws {
@@ -105,10 +105,10 @@ extension XCUIApplication {
         
         testPrimaryButton(enabled: false, title: buttonTitle)
         
-        textFields[username.field].enter(value: username.value)
+        try textFields[username.field].enter(value: username.value)
         testPrimaryButton(enabled: false, title: buttonTitle)
         
-        secureTextFields[password.field].enter(value: password.value)
+        try secureTextFields[password.field].enter(value: password.value)
         testPrimaryButton(enabled: true, title: buttonTitle)
     }
 }
