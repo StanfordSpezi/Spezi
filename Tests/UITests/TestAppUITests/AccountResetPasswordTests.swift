@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import XCTestExtensions
 
 
 final class AccountResetPasswordTests: TestAppUITests {
@@ -27,7 +28,7 @@ final class AccountResetPasswordTests: TestAppUITests {
         
         app.testPrimaryButton(enabled: false, title: buttonTitle, navigationBarButtonTitle: navigationBarButtonTitle)
         
-        app.textFields[usernameField].enter(value: username)
+        try app.textFields[usernameField].enter(value: username)
         
         app.testPrimaryButton(enabled: true, title: buttonTitle, navigationBarButtonTitle: navigationBarButtonTitle)
         
@@ -51,12 +52,12 @@ final class AccountResetPasswordTests: TestAppUITests {
         
         app.testPrimaryButton(enabled: false, title: buttonTitle, navigationBarButtonTitle: navigationBarButtonTitle)
         
-        app.textFields[usernameField].enter(value: String(username.dropLast(4)))
+        try app.textFields[usernameField].enter(value: String(username.dropLast(4)))
         
         XCTAssertTrue(app.staticTexts["The entered email is not correct."].waitForExistence(timeout: 1.0))
         
-        app.textFields[usernameField].delete(count: username.count)
-        app.textFields[usernameField].enter(value: username)
+        try app.textFields[usernameField].delete(count: username.count)
+        try app.textFields[usernameField].enter(value: username)
         
         app.testPrimaryButton(enabled: true, title: buttonTitle, navigationBarButtonTitle: navigationBarButtonTitle)
         

@@ -131,7 +131,6 @@
 		2FB77BA02910EF4A009FDDE2 /* LocalStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalStorageTests.swift; sourceTree = "<group>"; };
 		2FB77BA42910F84D009FDDE2 /* LocalStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalStorageTests.swift; sourceTree = "<group>"; };
 		2FB926E42974B0FC008E7B03 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		2FBBBBDD299628B100F1E92B /* XCTTestCase+HealthDataType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "XCTTestCase+HealthDataType.swift"; sourceTree = "<group>"; };
 		2FC246C72941376600F75383 /* MultipleObservableObjectsTestsComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipleObservableObjectsTestsComponent.swift; sourceTree = "<group>"; };
 		2FC246C929414FF200F75383 /* MockEmailPasswordAccountService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockEmailPasswordAccountService.swift; sourceTree = "<group>"; };
 		2FC246CB29414FFA00F75383 /* MockUsernamePasswordAccountService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUsernamePasswordAccountService.swift; sourceTree = "<group>"; };
@@ -369,7 +368,6 @@
 		2FE122AE294246D40016B162 /* Helper */ = {
 			isa = PBXGroup;
 			children = (
-				2FBBBBDD299628B100F1E92B /* XCTTestCase+HealthDataType.swift */,
 				2F1B82082942DE390037BC09 /* TestAppUITests.swift */,
 				2FE122B1294247480016B162 /* XCUIApplication+TextEntry.swift */,
 			);
@@ -394,6 +392,7 @@
 				2F6D138E28F5F384007C25D6 /* Sources */,
 				2F6D138F28F5F384007C25D6 /* Frameworks */,
 				2F6D139028F5F384007C25D6 /* Resources */,
+				2FB4E4A429AC746E00C771C8 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -504,6 +503,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		2FB4E4A429AC746E00C771C8 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint > /dev/null; then\n  cd ../../ && swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		2F6D138E28F5F384007C25D6 /* Sources */ = {
@@ -847,7 +867,7 @@
 			repositoryURL = "https://github.com/StanfordBDHG/XCTestExtensions";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 0.2.1;
+				minimumVersion = 0.3.0;
 			};
 		};
 		2F746DA029962B5100BF54FE /* XCRemoteSwiftPackageReference "XCTHealthKit" */ = {
@@ -855,7 +875,7 @@
 			repositoryURL = "https://github.com/StanfordBDHG/XCTHealthKit";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 0.3.0;
+				minimumVersion = 0.3.3;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

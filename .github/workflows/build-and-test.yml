@@ -16,61 +16,27 @@ on:
   workflow_dispatch:
 
 jobs:
-  build_and_test-spm:
+  buildandtest:
     name: Build and Test Swift Package
-    uses: StanfordBDHG/.github/.github/workflows/build-and-test-xcodebuild-spm.yml@v1
+    uses: StanfordBDHG/.github/.github/workflows/xcodebuild-or-fastlane.yml@v2
     with:
+      artifactname: CardinalKit-Package.xcresult
+      runsonlabels: '["macOS", "self-hosted"]'
       scheme: CardinalKit-Package
-  build_and_test-uitests:
-    name: Build and Test UITests
-    runs-on: macos-12
-    defaults:
-      run:
-        working-directory: Tests/UITests
-    env:
-      xcodeprojname: UITests.xcodeproj
-      scheme: TestApp
-    steps:
-    - uses: actions/checkout@v3
-    - uses: maxim-lobanov/setup-xcode@v1
-      with:
-        xcode-version: latest-stable
-    - name: Check Environment
-      run: |
-          xcodebuild -version
-          swift --version
-          echo "env.xcodeprojname: ${{ env.xcodeprojname }}"
-          echo "env.scheme: ${{ env.scheme }}"
-    - name: Cache Firebase Emulators
-      uses: actions/cache@v3
-      with:
-        path: ~/.cache/firebase/emulators
-        key: ${{ runner.os }}-firebase-emulators-${{ hashFiles('~/.cache/firebase/emulators/**') }}
-    - name: Setup NodeJS
-      uses: actions/setup-node@v3
-    - name: Setup Java
-      uses: actions/setup-java@v3
-      with:
-        distribution: 'microsoft'
-        java-version: '17'
-    - name: Install Firebase CLI Tools
-      run: npm install -g firebase-tools
-    - name: Install xcpretty
-      run: gem install xcpretty
-    - name: Resolve Dependencies
-      run: xcodebuild -resolvePackageDependencies
-    - name: Build and Test Example App
-      run: |
-          firebase emulators:exec 'set -o pipefail && xcodebuild test -project ${{ env.xcodeprojname }} -scheme ${{ env.scheme }} -destination "name=iPhone 14 Pro Max" -resultBundlePath ${{ env.scheme }}.xcresult CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | xcpretty'
-    - name: Upload Artifact
-      if: always()
-      uses: actions/upload-artifact@v3
-      with:
-        name: ${{ env.scheme }}.xcresult
-        path: Tests/UITests/${{ env.scheme }}.xcresult
-  create-and-upload-coverage-report:
-    name: Create and Upload Coverage Report
-    needs: [build_and_test-spm, build_and_test-uitests]
-    uses: StanfordBDHG/.github/.github/workflows/create-and-upload-coverage-report.yml@v1
+  buildandtestuitests:
+    name: Build and Test UI Tests
+    uses: StanfordBDHG/.github/.github/workflows/xcodebuild-or-fastlane.yml@v2
     with:
-      coveragereports: CardinalKit-Package.xcresult TestApp.xcresult
+      artifactname: UITests.xcresult
+      runsonlabels: '["macOS", "self-hosted"]'
+      setupfirebaseemulator: true
+      customcommand: |
+          cd Tests/UITests
+          firebase emulators:exec 'set -o pipefail && xcodebuild test -project UITests.xcodeproj -scheme TestApp -destination "name=iPhone 14 Pro Max" -resultBundlePath UITests.xcresult -derivedDataPath ".derivedData" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | xcpretty'
+          mv UITests.xcresult ../../UITests.xcresult
+  uploadcoveragereport:
+    name: Upload Coverage Report
+    needs: [buildandtest, buildandtestuitests]
+    uses: StanfordBDHG/.github/.github/workflows/create-and-upload-coverage-report.yml@v2
+    with:
+      coveragereports: CardinalKit-Package.xcresult UITests.xcresult

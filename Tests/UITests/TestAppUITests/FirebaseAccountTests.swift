@@ -59,7 +59,7 @@ final class FirebaseAccountTests: TestAppUITests {
     override func setUp() async throws {
         try await super.setUp()
         
-        disablePasswordAutofill()
+        try disablePasswordAutofill()
         
         try await deleteAllAccounts()
         try await Task.sleep(for: .seconds(0.5))
@@ -82,12 +82,12 @@ final class FirebaseAccountTests: TestAppUITests {
             app.buttons["Logout"].tap()
         }
         
-        app.signup(username: "test@username1.edu", password: "TestPassword1", givenName: "Test1", familyName: "Username1")
+        try app.signup(username: "test@username1.edu", password: "TestPassword1", givenName: "Test1", familyName: "Username1")
         
         XCTAssert(app.buttons["Logout"].waitForExistence(timeout: 10.0))
         app.buttons["Logout"].tap()
         
-        app.signup(username: "test@username2.edu", password: "TestPassword2", givenName: "Test2", familyName: "Username2")
+        try app.signup(username: "test@username2.edu", password: "TestPassword2", givenName: "Test2", familyName: "Username2")
 
         try await Task.sleep(for: .seconds(0.5))
         
@@ -130,13 +130,13 @@ final class FirebaseAccountTests: TestAppUITests {
             app.buttons["Logout"].tap()
         }
         
-        app.login(username: "test@username1.edu", password: "TestPassword1")
+        try app.login(username: "test@username1.edu", password: "TestPassword1")
         XCTAssert(app.staticTexts["test@username1.edu"].waitForExistence(timeout: 10.0))
         
         XCTAssert(app.buttons["Logout"].waitForExistence(timeout: 10.0))
         app.buttons["Logout"].tap()
         
-        app.login(username: "test@username2.edu", password: "TestPassword2")
+        try app.login(username: "test@username2.edu", password: "TestPassword2")
         XCTAssert(app.staticTexts["test@username2.edu"].waitForExistence(timeout: 10.0))
         
         XCTAssert(app.buttons["Logout"].waitForExistence(timeout: 10.0))
@@ -244,13 +244,13 @@ final class FirebaseAccountTests: TestAppUITests {
 
 
 extension XCUIApplication {
-    fileprivate func login(username: String, password: String) {
+    fileprivate func login(username: String, password: String) throws {
         buttons["Login"].tap()
         buttons["Email and Password"].tap()
         XCTAssertTrue(self.navigationBars.buttons["Login"].waitForExistence(timeout: 2.0))
         
-        textFields["Enter your email ..."].enter(value: username)
-        secureTextFields["Enter your password ..."].enter(value: password)
+        try textFields["Enter your email ..."].enter(value: username)
+        try secureTextFields["Enter your password ..."].enter(value: password)
         
         swipeUp()
         
@@ -264,20 +264,20 @@ extension XCUIApplication {
     }
     
     
-    fileprivate func signup(username: String, password: String, givenName: String, familyName: String) {
+    fileprivate func signup(username: String, password: String, givenName: String, familyName: String) throws {
         buttons["Sign Up"].tap()
         buttons["Email and Password"].tap()
         XCTAssertTrue(self.navigationBars.buttons["Sign Up"].waitForExistence(timeout: 2.0))
         
-        textFields["Enter your email ..."].enter(value: username)
-        secureTextFields["Enter your password ..."].enter(value: password)
-        secureTextFields["Repeat your password ..."].enter(value: password)
+        try textFields["Enter your email ..."].enter(value: username)
+        try secureTextFields["Enter your password ..."].enter(value: password)
+        try secureTextFields["Repeat your password ..."].enter(value: password)
         
         swipeUp()
         
-        textFields["Enter your first name ..."].enter(value: givenName)
+        try textFields["Enter your first name ..."].enter(value: givenName)
         swipeUp()
-        textFields["Enter your last name ..."].enter(value: familyName)
+        try textFields["Enter your last name ..."].enter(value: familyName)
         swipeUp()
         
         
