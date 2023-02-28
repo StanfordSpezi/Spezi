@@ -142,7 +142,7 @@
       <CommandLineArguments>
          <CommandLineArgument
             argument = "--firebaseAccount"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
       </CommandLineArguments>
    </LaunchAction>
