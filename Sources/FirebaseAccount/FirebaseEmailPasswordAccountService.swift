@@ -27,7 +27,7 @@ class FirebaseEmailPasswordAccountService: EmailPasswordAccountService {
     private var passwordValidationRule: ValidationRule
     
     
-    override open var loginButton: AnyView {
+    override var loginButton: AnyView {
         button(
             localization.login.buttonTitle,
             destination: UsernamePasswordLoginView(
