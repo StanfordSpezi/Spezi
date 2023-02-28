@@ -1,0 +1,25 @@
+//
+// This source file is part of the CardinalKit open-source project
+//
+// SPDX-FileCopyrightText: 2022 Stanford University and the project authors (see CONTRIBUTORS.md)
+//
+// SPDX-License-Identifier: MIT
+//
+
+// MARK: ERRORS
+"FIREBASE_ACCOUNT_DEFAULT_PASSWORD_RULE_ERROR" = "Ein Password muss mindestens acht Zeichen und keine Leerzeichen haben.";
+
+"FIREBASE_ACCOUNT_ERROR_INVALID_EMAIL" = "Inkorrekte E-Mail Adresse";
+"FIREBASE_ACCOUNT_ERROR_INVALID_EMAIL_SUGGESTION" = "Bitte geben Sie eine korrekte E-Mail Adressse ein.";
+
+"FIREBASE_ACCOUNT_ALREADY_IN_USE" = "Benutzerkonto existiert bereits";
+"FIREBASE_ACCOUNT_ALREADY_IN_USE_SUGGESTION" = "Ein Benutzerkonto mit dieser E-Mail Adresse existiert bereits. Bitte loggen Sie sich mit dem Account ein.";
+
+"FIREBASE_ACCOUNT_WEAK_PASSWORD" = "Schwaches Passwort";
+"FIREBASE_ACCOUNT_WEAK_PASSWORD_SUGGESTION" = "Bitte geben Sie ein stärkeres Password ein.";
+
+"FIREBASE_ACCOUNT_SETUP_ERROR" = "Benutzerkonto konnte nicht erstelle werden";
+"FIREBASE_ACCOUNT_SETUP_ERROR_SUGGESTION" = "Bitte überprüfen Sie Ihre E-Mail Adresse und versichen Sie es erneut";
+
+"FIREBASE_ACCOUNT_UNKNOWN" = "Benutzerkonto konnte nicht erstelle werden";
+"FIREBASE_ACCOUNT_UNKNOWN_SUGGESTION" = "Bitte überprüfen Sie Ihre E-Mail Adresse und versichen Sie es erneut";

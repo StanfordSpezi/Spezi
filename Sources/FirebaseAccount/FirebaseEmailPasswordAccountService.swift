@@ -12,18 +12,45 @@ import SwiftUI
 
 
 class FirebaseEmailPasswordAccountService: EmailPasswordAccountService {
-    override var signUpButton: AnyView {
+    static var defaultPasswordValidationRule: ValidationRule {
+        guard let regex = try? Regex(#"[^\s]{8,}"#) else {
+            fatalError("Invalid Password Regex in the FirebaseEmailPasswordAccountService")
+        }
+        
+        return ValidationRule(
+            regex: regex,
+            message: String(localized: "FIREBASE_ACCOUNT_DEFAULT_PASSWORD_RULE_ERROR", bundle: .module)
+        )
+    }
+    
+    
+    private var passwordValidationRule: ValidationRule
+    
+    
+    override var loginButton: AnyView {
         button(
             localization.login.buttonTitle,
+            destination: UsernamePasswordLoginView(
+                usernameValidationRules: [emailValidationRule],
+                passwordValidationRules: [passwordValidationRule]
+            )
+        )
+    }
+    
+    override var signUpButton: AnyView {
+        button(
+            localization.signUp.buttonTitle,
             destination: UsernamePasswordSignUpView(
                 signUpOptions: [.usernameAndPassword, .name],
-                usernameValidationRules: [emailValidationRule]
+                usernameValidationRules: [emailValidationRule],
+                passwordValidationRules: [passwordValidationRule]
             )
         )
     }
     
     
-    override init() {
+    init(passwordValidationRule: ValidationRule = FirebaseEmailPasswordAccountService.defaultPasswordValidationRule) {
+        self.passwordValidationRule = passwordValidationRule
         super.init()
     }
     
@@ -31,6 +58,10 @@ class FirebaseEmailPasswordAccountService: EmailPasswordAccountService {
     override func login(username: String, password: String) async throws {
         do {
             try await Auth.auth().signIn(withEmail: username, password: password)
+            
+            Task { @MainActor in
+                account?.objectWillChange.send()
+            }
         } catch let error as NSError {
             throw FirebaseAccountError(authErrorCode: AuthErrorCode(_nsError: error))
         } catch {

@@ -1,0 +1,26 @@
+//
+// This source file is part of the CardinalKit open-source project
+//
+// SPDX-FileCopyrightText: 2022 Stanford University and the project authors (see CONTRIBUTORS.md)
+//
+// SPDX-License-Identifier: MIT
+//
+
+
+// MARK: ERRORS
+"FIREBASE_ACCOUNT_DEFAULT_PASSWORD_RULE_ERROR" = "A password has to have at least eight characters and no whitespaces.";
+
+"FIREBASE_ACCOUNT_ERROR_INVALID_EMAIL" = "Invalid email address";
+"FIREBASE_ACCOUNT_ERROR_INVALID_EMAIL_SUGGESTION" = "Please enter a valid email address.";
+
+"FIREBASE_ACCOUNT_ALREADY_IN_USE" = "Account already exists";
+"FIREBASE_ACCOUNT_ALREADY_IN_USE_SUGGESTION" = "An account with this email already exists. Please login using your email and password.";
+
+"FIREBASE_ACCOUNT_WEAK_PASSWORD" = "Weak Password";
+"FIREBASE_ACCOUNT_WEAK_PASSWORD_SUGGESTION" = "Please choose a safer password.";
+
+"FIREBASE_ACCOUNT_SETUP_ERROR" = "Could not create the user account.";
+"FIREBASE_ACCOUNT_SETUP_ERROR_SUGGESTION" = "Please check your internet connection and try again.";
+
+"FIREBASE_ACCOUNT_UNKNOWN" = "Could not create the user account.";
+"FIREBASE_ACCOUNT_UNKNOWN_SUGGESTION" = "Please check your internet connection and try again.";

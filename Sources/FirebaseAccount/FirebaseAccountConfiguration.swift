@@ -80,21 +80,36 @@ public final class FirebaseAccountConfiguration<ComponentStandard: Standard>: Co
         
         authStateDidChangeListenerHandle = Auth.auth().addStateDidChangeListener { _, user in
             guard let user else {
-                Task {
-                    await MainActor.run {
-                        self.user = nil
-                        self.account.signedIn = false
-                    }
-                }
+                self.updateSignedOut()
                 return
             }
             
-            Task {
-                await MainActor.run {
-                    self.user = user
-                    if self.account.signedIn == false {
-                        self.account.signedIn = true
-                    }
+            self.updateSignedIn(user)
+        }
+        
+        Auth.auth().currentUser?.getIDTokenForcingRefresh(true) { _, error in
+            guard error == nil else {
+                self.updateSignedOut()
+                return
+            }
+        }
+    }
+    
+    private func updateSignedOut() {
+        Task {
+            await MainActor.run {
+                self.user = nil
+                self.account.signedIn = false
+            }
+        }
+    }
+    
+    private func updateSignedIn(_ user: User) {
+        Task {
+            await MainActor.run {
+                self.user = user
+                if self.account.signedIn == false {
+                    self.account.signedIn = true
                 }
             }
         }

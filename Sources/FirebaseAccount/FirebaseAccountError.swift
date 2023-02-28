@@ -21,15 +21,15 @@ enum FirebaseAccountError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .invalidEmail:
-            return ""
+            return "FIREBASE_ACCOUNT_ERROR_INVALID_EMAIL"
         case .accountAlreadyInUse:
-            return ""
+            return "FIREBASE_ACCOUNT_ALREADY_IN_USE"
         case .weakPassword:
-            return ""
+            return "FIREBASE_ACCOUNT_WEAK_PASSWORD"
         case .setupError:
-            return ""
+            return "FIREBASE_ACCOUNT_SETUP_ERROR"
         case .unknown:
-            return ""
+            return "FIREBASE_ACCOUNT_UNKNOWN"
         }
     }
     
@@ -40,15 +40,15 @@ enum FirebaseAccountError: LocalizedError {
     var recoverySuggestion: String? {
         switch self {
         case .invalidEmail:
-            return ""
+            return "FIREBASE_ACCOUNT_ERROR_INVALID_EMAIL_SUGGESTION"
         case .accountAlreadyInUse:
-            return ""
+            return "FIREBASE_ACCOUNT_ALREADY_IN_USE_SUGGESTION"
         case .weakPassword:
-            return ""
+            return "FIREBASE_ACCOUNT_WEAK_PASSWORD_SUGGESTION"
         case .setupError:
-            return ""
+            return "FIREBASE_ACCOUNT_SETUP_ERROR_SUGGESTION"
         case .unknown:
-            return ""
+            return "FIREBASE_ACCOUNT_UNKNOWN_SUGGESTION"
         }
     }
     

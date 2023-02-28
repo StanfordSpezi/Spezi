@@ -9,9 +9,9 @@
 # Swift Package Manager
 *.xcodeproj
 .swiftpm
-.build/
+.build
+.xcodebuild
 .derivedData
-.xcodebuild/
 coverage.lcov
 *.xcresult
 
