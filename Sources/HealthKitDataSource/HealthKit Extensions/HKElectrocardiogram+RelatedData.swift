@@ -12,11 +12,14 @@ import SwiftUI
 
 
 extension HKElectrocardiogram {
-    typealias Symptoms = [HKCategoryType: HKCategoryValueSeverity]
-    typealias VoltageMeasurements = [(TimeInterval, HKQuantity)]
+    /// A type alias used to associate symptoms in an `HKElectrocardiogram`.
+    public typealias Symptoms = [HKCategoryType: HKCategoryValueSeverity]
+    /// A type alias used to associate voltage measurements in an `HKElectrocardiogram`.
+    public typealias VoltageMeasurements = [(TimeInterval, HKQuantity)]
     
     
-    static let correlatedSymptomTypes: [HKCategoryType] = {
+    /// All possible `HKCategoryType`s (`HKCategoryTypeIdentifier`s) that can be associated with an `HKElectrocardiogram`.
+    public static let correlatedSymptomTypes: [HKCategoryType] = {
         // We disable the SwiftLint force unwrap rule here as all initializers use Apple's constants.
         // swiftlint:disable force_unwrapping
         [
@@ -32,7 +35,10 @@ extension HKElectrocardiogram {
     }()
     
     
-    func symptoms(from healthStore: HKHealthStore) async throws -> Symptoms {
+    /// Load the symptoms of an `HKElectrocardiogram` instance from an `HKHealthStore` instance.
+    /// - Parameter healthStore: The `HKHealthStore` instance that should be used to load the `Symptoms`.
+    /// - Returns: The symptoms associated with an `HKElectrocardiogram`.
+    public func symptoms(from healthStore: HKHealthStore) async throws -> Symptoms {
         let predicate = HKQuery.predicateForObjectsAssociated(electrocardiogram: self)
         
         try await healthStore.requestAuthorization(toShare: [], read: Set<HKObjectType>(HKElectrocardiogram.correlatedSymptomTypes))
@@ -52,7 +58,10 @@ extension HKElectrocardiogram {
         return symptoms
     }
     
-    func voltageMeasurements(from healthStore: HKHealthStore) async throws -> VoltageMeasurements {
+    /// Load the voltage measurements of an `HKElectrocardiogram` instance from an `HKHealthStore` instance.
+    /// - Parameter healthStore: The `HKHealthStore` instance that should be used to load the `VoltageMeasurements`.
+    /// - Returns: The voltage measurements associated with an `HKElectrocardiogram`.
+    public func voltageMeasurements(from healthStore: HKHealthStore) async throws -> VoltageMeasurements {
         var voltageMeasurements: VoltageMeasurements = []
         voltageMeasurements.reserveCapacity(numberOfVoltageMeasurements)
         
