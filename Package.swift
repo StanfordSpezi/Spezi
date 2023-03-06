@@ -205,8 +205,7 @@ let package = Package(
         .target(
             name: "Scheduler",
             dependencies: [
-                .target(name: "CardinalKit"),
-                .target(name: "LocalStorage")
+                .target(name: "CardinalKit")
             ]
         ),
         .testTarget(
