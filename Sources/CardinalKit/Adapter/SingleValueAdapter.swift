@@ -62,12 +62,12 @@ public protocol SingleValueAdapter<InputElement, InputRemovalContext, OutputElem
     /// Map the element of the transformed async streams from additions.
     /// - Parameter element: The element that should be transformed.
     /// - Returns: Returns the transformed element.
-    func transform(element: InputElement) throws -> OutputElement
+    func transform(element: InputElement) async throws -> OutputElement
     
     /// Map the element's removal of the transformed async streams from removals.
     /// - Parameter removalContext: The element's removal context that should be transformed.
     /// - Returns: Returns the transformed removal context.
-    func transform(removalContext: InputRemovalContext) throws -> OutputRemovalContext
+    func transform(removalContext: InputRemovalContext) async throws -> OutputRemovalContext
 }
 
 

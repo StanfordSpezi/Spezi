@@ -30,10 +30,9 @@ jobs:
       artifactname: UITests.xcresult
       runsonlabels: '["macOS", "self-hosted"]'
       setupfirebaseemulator: true
+      path: Tests/UITests
       customcommand: |
-          cd Tests/UITests
           firebase emulators:exec 'set -o pipefail && xcodebuild test -project UITests.xcodeproj -scheme TestApp -destination "name=iPhone 14 Pro Max" -resultBundlePath UITests.xcresult -derivedDataPath ".derivedData" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | xcpretty'
-          mv UITests.xcresult ../../UITests.xcresult
   uploadcoveragereport:
     name: Upload Coverage Report
     needs: [buildandtest, buildandtestuitests]
