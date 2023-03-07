@@ -11,32 +11,28 @@ import HealthKit
 
 
 /// Collects a specificied `HKSampleType`  in the ``HealthKit`` component.
-public struct CollectSample<SampleType: HKSampleType>: HealthKitDataSourceDescription {
-    let sampleType: SampleType
-    let deliverySetting: HealthKitDeliverySetting
+public struct CollectSample: HealthKitDataSourceDescription {
+    private let collectSamples: CollectSamples
     
     
     public var sampleTypes: Set<HKSampleType> {
-        [sampleType]
+        collectSamples.sampleTypes
     }
     
     
     /// - Parameters:
     ///   - sampleType: The `HKSampleType` that should be collected
     ///   - deliverySetting: The ``HealthKitDeliverySetting`` that should be used to collect the sample type. `.manual` is the default argument used.
-    public init(_ sampleType: SampleType, deliverySetting: HealthKitDeliverySetting = .manual()) {
-        self.sampleType = sampleType
-        self.deliverySetting = deliverySetting
+    public init<S: HKSampleType>(_ sampleType: S, deliverySetting: HealthKitDeliverySetting = .manual()) {
+        self.collectSamples = CollectSamples([sampleType], deliverySetting: deliverySetting)
     }
     
     
-    public func dataSource<S: Standard>(healthStore: HKHealthStore, standard: S, adapter: HealthKit<S>.HKSampleAdapter) -> HealthKitDataSource {
-        HealthKitSampleDataSource<S, SampleType>(
-            healthStore: healthStore,
-            standard: standard,
-            sampleType: sampleType,
-            deliverySetting: deliverySetting,
-            adapter: adapter
-        )
+    public func dataSources<S: Standard>(
+        healthStore: HKHealthStore,
+        standard: S,
+        adapter: HealthKit<S>.HKSampleAdapter
+    ) -> [any HealthKitDataSource] {
+        collectSamples.dataSources(healthStore: healthStore, standard: standard, adapter: adapter)
     }
 }

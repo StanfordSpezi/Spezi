@@ -61,7 +61,7 @@ public final class HealthKit<ComponentStandard: Standard>: Module {
     let adapter: HKSampleAdapter
     lazy var healthKitComponents: [any HealthKitDataSource] = {
         healthKitDataSourceDescriptions
-            .map { $0.dataSource(healthStore: healthStore, standard: standard, adapter: adapter) }
+            .flatMap { $0.dataSources(healthStore: healthStore, standard: standard, adapter: adapter) }
     }()
     
     

@@ -11,11 +11,11 @@ import HealthKit
 import SwiftUI
 
 
-final class HealthKitSampleDataSource<ComponentStandard: Standard, SampleType: HKSampleType>: HealthKitDataSource {
+final class HealthKitSampleDataSource<ComponentStandard: Standard>: HealthKitDataSource {
     let healthStore: HKHealthStore
     let standard: ComponentStandard
     
-    let sampleType: SampleType
+    let sampleType: HKSampleType
     let predicate: NSPredicate?
     let deliverySetting: HealthKitDeliverySetting
     let adapter: HealthKit<ComponentStandard>.HKSampleAdapter
@@ -33,7 +33,7 @@ final class HealthKitSampleDataSource<ComponentStandard: Standard, SampleType: H
     required init( // swiftlint:disable:this function_default_parameter_at_end
         healthStore: HKHealthStore,
         standard: ComponentStandard,
-        sampleType: SampleType,
+        sampleType: HKSampleType,
         predicate: NSPredicate? = nil, // We order the parameters in a logical order and therefore don't put the predicate at the end here.
         deliverySetting: HealthKitDeliverySetting,
         adapter: HealthKit<ComponentStandard>.HKSampleAdapter
@@ -46,7 +46,7 @@ final class HealthKitSampleDataSource<ComponentStandard: Standard, SampleType: H
         
         if predicate == nil {
             self.predicate = HKQuery.predicateForSamples(
-                withStart: HealthKitSampleDataSource<ComponentStandard, SampleType>.loadDefaultQueryDate(for: sampleType),
+                withStart: HealthKitSampleDataSource<ComponentStandard>.loadDefaultQueryDate(for: sampleType),
                 end: nil,
                 options: .strictEndDate
             )
@@ -56,7 +56,7 @@ final class HealthKitSampleDataSource<ComponentStandard: Standard, SampleType: H
     }
     
     
-    private static func loadDefaultQueryDate(for sampleType: SampleType) -> Date {
+    private static func loadDefaultQueryDate(for sampleType: HKSampleType) -> Date {
         let defaultPredicateDateUserDefaultsKey = UserDefaults.Keys.healthKitDefaultPredicateDatePrefix.appending(sampleType.identifier)
         guard let date = UserDefaults.standard.object(forKey: defaultPredicateDateUserDefaultsKey) as? Date else {
             // We start date collection at the previous full minute mark to make the
