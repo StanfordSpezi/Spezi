@@ -10,15 +10,14 @@ import SwiftUI
 import XCTestApp
 
 
-@main
-struct UITestsApp: App {
-    @UIApplicationDelegateAdaptor(TestAppDelegate.self) var appDelegate
+enum CardinalKitTests: String, TestAppTests {
+    case observableObject = "ObservableObject"
     
     
-    var body: some Scene {
-        WindowGroup {
-            TestAppTestsView<CardinalKitTests>()
-                .cardinalKit(appDelegate)
+    func view(withNavigationPath path: Binding<NavigationPath>) -> some View {
+        switch self {
+        case .observableObject:
+            ObservableObjectTestsView()
         }
     }
 }

@@ -19,6 +19,7 @@ actor TypedMockStandard<T: Hashable & Identifiable & Sendable>: Standard where T
     }
     
     
+    private let serialQueue = DispatchQueue(label: "TypedMockStandard")
     let dataSourceExpecations: (DataChange<BaseType, RemovalContext>) async throws -> Void
     let finishedDataSourceSequence: (any TypedAsyncSequence<DataChange<BaseType, RemovalContext>>.Type) async throws -> Void
     

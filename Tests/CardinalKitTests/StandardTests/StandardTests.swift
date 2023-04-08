@@ -59,7 +59,7 @@ final class StandardTests: XCTestCase {
         )
         _ = await standardInjectionTestApplicationDelegate.cardinalKit
         
-        wait(for: [expectation], timeout: 0.01)
+        await fulfillment(of: [expectation], timeout: 0.01)
     }
     
     func testInjectionPrecondition() throws {

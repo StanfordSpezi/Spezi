@@ -133,7 +133,7 @@ final class DataSourceTests: XCTestCase {
         }
     }
     
-    actor FloarToDoubleAdapterActor: SingleValueAdapter {
+    actor FloatToDoubleAdapterActor: SingleValueAdapter {
         typealias InputElement = MockStandard.CustomDataSourceType<Float>
         typealias InputRemovalContext = InputElement.ID
         typealias OutputElement = MockStandard.CustomDataSourceType<Double>
@@ -189,14 +189,14 @@ final class DataSourceTests: XCTestCase {
                     _DependencyPropertyWrapper(
                         wrappedValue: DataSourceTestComponent(
                             injectedData: [
-                                .addition(MockStandard.CustomDataSourceType(id: 1.1)),
-                                .addition(MockStandard.CustomDataSourceType(id: 2.2)),
-                                .addition(MockStandard.CustomDataSourceType(id: 3.3)),
-                                .removal(3.3),
-                                .addition(MockStandard.CustomDataSourceType(id: 42.42))
+                                .addition(MockStandard.CustomDataSourceType(id: Float(1.1))),
+                                .addition(MockStandard.CustomDataSourceType(id: Float(2.2))),
+                                .addition(MockStandard.CustomDataSourceType(id: Float(3.3))),
+                                .removal(Float(3.3)),
+                                .addition(MockStandard.CustomDataSourceType(id: Float(42.42)))
                             ]
                         ) {
-                            FloarToDoubleAdapterActor()
+                            FloatToDoubleAdapterActor()
                             DoubleToIntAdapterActor()
                             IntToStringAdapterActor()
                         }

@@ -1,165 +1,21 @@
 {
   "pins" : [
     {
-      "identity" : "abseil-cpp-swiftpm",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/firebase/abseil-cpp-SwiftPM.git",
-      "state" : {
-        "revision" : "583de9bd60f66b40e78d08599cc92036c2e7e4e1",
-        "version" : "0.20220203.2"
-      }
-    },
-    {
-      "identity" : "boringssl-swiftpm",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/firebase/boringssl-SwiftPM.git",
-      "state" : {
-        "revision" : "dd3eda2b05a3f459fc3073695ad1b28659066eab",
-        "version" : "0.9.1"
-      }
-    },
-    {
-      "identity" : "fhirmodels",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/FHIRModels",
-      "state" : {
-        "revision" : "e115442fb3c5d44ffb1dc9b4e039b77fd143ad96",
-        "version" : "0.4.0"
-      }
-    },
-    {
-      "identity" : "firebase-ios-sdk",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/firebase/firebase-ios-sdk",
-      "state" : {
-        "revision" : "f567ed9a2b30e29159df258049a9c662c517688e",
-        "version" : "10.5.0"
-      }
-    },
-    {
-      "identity" : "googleappmeasurement",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/google/GoogleAppMeasurement.git",
-      "state" : {
-        "revision" : "9a09ece724128e8d1e14c5133b87c0e236844ac0",
-        "version" : "10.4.0"
-      }
-    },
-    {
-      "identity" : "googledatatransport",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/google/GoogleDataTransport.git",
-      "state" : {
-        "revision" : "f6b558e3f801f2cac336b04f615ce111fa9ddaa0",
-        "version" : "9.2.1"
-      }
-    },
-    {
-      "identity" : "googleutilities",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/google/GoogleUtilities.git",
-      "state" : {
-        "revision" : "0543562f85620b5b7c510c6bcbef75b562a5127b",
-        "version" : "7.11.0"
-      }
-    },
-    {
-      "identity" : "grpc-ios",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/grpc/grpc-ios.git",
-      "state" : {
-        "revision" : "8440b914756e0d26d4f4d054a1c1581daedfc5b6",
-        "version" : "1.44.3-grpc"
-      }
-    },
-    {
-      "identity" : "gtm-session-fetcher",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/google/gtm-session-fetcher.git",
-      "state" : {
-        "revision" : "96d7cc73a71ce950723aa3c50ce4fb275ae180b8",
-        "version" : "3.1.0"
-      }
-    },
-    {
-      "identity" : "healthkitonfhir",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/StanfordBDHG/HealthKitOnFHIR",
-      "state" : {
-        "revision" : "1b7b7d71c30563f84d4c892421caf7f1c79ff09e",
-        "version" : "0.2.2"
-      }
-    },
-    {
-      "identity" : "leveldb",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/firebase/leveldb.git",
-      "state" : {
-        "revision" : "0706abcc6b0bd9cedfbb015ba840e4a780b5159b",
-        "version" : "1.22.2"
-      }
-    },
-    {
-      "identity" : "nanopb",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/firebase/nanopb.git",
-      "state" : {
-        "revision" : "819d0a2173aff699fb8c364b6fb906f7cdb1a692",
-        "version" : "2.30909.0"
-      }
-    },
-    {
-      "identity" : "promises",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/google/promises.git",
-      "state" : {
-        "revision" : "ec957ccddbcc710ccc64c9dcbd4c7006fcf8b73a",
-        "version" : "2.2.0"
-      }
-    },
-    {
-      "identity" : "researchkit",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/StanfordBDHG/ResearchKit",
-      "state" : {
-        "revision" : "52a9bd8bcf2112b2f70479cd192f8c5fa9850c31",
-        "version" : "2.2.8"
-      }
-    },
-    {
-      "identity" : "researchkitonfhir",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/StanfordBDHG/ResearchKitOnFHIR",
-      "state" : {
-        "revision" : "1bc7a15760916ade4c5058fa798a871e80c2955c",
-        "version" : "0.1.6"
-      }
-    },
-    {
-      "identity" : "swift-protobuf",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-protobuf.git",
-      "state" : {
-        "revision" : "0af9125c4eae12a4973fb66574c53a54962a9e1e",
-        "version" : "1.21.0"
-      }
-    },
-    {
       "identity" : "xctestextensions",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/StanfordBDHG/XCTestExtensions",
       "state" : {
-        "revision" : "a96a1680557507a9746bbb0529043b9767c503db",
-        "version" : "0.3.0"
+        "revision" : "3037f2e8ad1cd2e08a0dfbe5f0a4866445102150",
+        "version" : "0.4.0"
       }
     },
     {
-      "identity" : "xcthealthkit",
+      "identity" : "xctruntimeassertions",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/StanfordBDHG/XCTHealthKit",
+      "location" : "https://github.com/StanfordBDHG/XCTRuntimeAssertions",
       "state" : {
-        "revision" : "19395bbd14a2554e4c9d3fe5cf38aa626c807269",
-        "version" : "0.3.3"
+        "revision" : "12273382b048e8c9673660373601cc0ad26624fe",
+        "version" : "0.1.0"
       }
     }
   ],
