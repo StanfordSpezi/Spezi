@@ -133,7 +133,7 @@ final class DataSourceTests: XCTestCase {
         }
     }
     
-    actor FloarToDoubleAdapterActor: SingleValueAdapter {
+    actor FloatToDoubleAdapterActor: SingleValueAdapter {
         typealias InputElement = MockStandard.CustomDataSourceType<Float>
         typealias InputRemovalContext = InputElement.ID
         typealias OutputElement = MockStandard.CustomDataSourceType<Double>
@@ -156,6 +156,7 @@ final class DataSourceTests: XCTestCase {
         expecation.expectedFulfillmentCount = 3
         var dataChanges: [DataChange<TypedMockStandard<String>.BaseType, TypedMockStandard<String>.RemovalContext>] = []
         
+        let lock = NSLock()
         let delegate = DataSourceTestApplicationDelegate(
             dynamicDependencies: _DynamicDependenciesPropertyWrapper<TypedMockStandard<String>>(
                 componentProperties: [
@@ -189,14 +190,14 @@ final class DataSourceTests: XCTestCase {
                     _DependencyPropertyWrapper(
                         wrappedValue: DataSourceTestComponent(
                             injectedData: [
-                                .addition(MockStandard.CustomDataSourceType(id: 1.1)),
-                                .addition(MockStandard.CustomDataSourceType(id: 2.2)),
-                                .addition(MockStandard.CustomDataSourceType(id: 3.3)),
-                                .removal(3.3),
-                                .addition(MockStandard.CustomDataSourceType(id: 42.42))
+                                .addition(MockStandard.CustomDataSourceType(id: Float(1.1))),
+                                .addition(MockStandard.CustomDataSourceType(id: Float(2.2))),
+                                .addition(MockStandard.CustomDataSourceType(id: Float(3.3))),
+                                .removal(Float(3.3)),
+                                .addition(MockStandard.CustomDataSourceType(id: Float(42.42)))
                             ]
                         ) {
-                            FloarToDoubleAdapterActor()
+                            FloatToDoubleAdapterActor()
                             DoubleToIntAdapterActor()
                             IntToStringAdapterActor()
                         }
@@ -204,7 +205,9 @@ final class DataSourceTests: XCTestCase {
                 ]
             ),
             dataSourceExpecations: { dataChange in
-                dataChanges.append(dataChange)
+                lock.withLock {
+                    dataChanges.append(dataChange)
+                }
             },
             finishedDataSourceSequence: { _ in
                 expecation.fulfill()

@@ -7,6 +7,8 @@
 //
 
 import CardinalKit
+import XCTCardinalKit
+import XCTestApp
 
 
 class ObservableObjectTests: TestAppTestCase {

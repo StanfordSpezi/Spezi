@@ -7,6 +7,8 @@
 //
 
 import SwiftUI
+import XCTCardinalKit
+import XCTestApp
 
 
 struct ObservableObjectTestsView: View {
