@@ -27,7 +27,7 @@ jobs:
     name: Build and Test UI Tests
     uses: StanfordBDHG/.github/.github/workflows/xcodebuild-or-fastlane.yml@v2
     with:
-      artifactname: UITests.xcresult
+      artifactname: TestApp.xcresult
       runsonlabels: '["macOS", "self-hosted"]'
       path: Tests/UITests
       scheme: TestApp
@@ -36,4 +36,4 @@ jobs:
     needs: [buildandtest, buildandtestuitests]
     uses: StanfordBDHG/.github/.github/workflows/create-and-upload-coverage-report.yml@v2
     with:
-      coveragereports: CardinalKit-Package.xcresult UITests.xcresult
+      coveragereports: CardinalKit-Package.xcresult TestApp.xcresult
