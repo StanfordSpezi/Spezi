@@ -156,6 +156,7 @@ final class DataSourceTests: XCTestCase {
         expecation.expectedFulfillmentCount = 3
         var dataChanges: [DataChange<TypedMockStandard<String>.BaseType, TypedMockStandard<String>.RemovalContext>] = []
         
+        let lock = NSLock()
         let delegate = DataSourceTestApplicationDelegate(
             dynamicDependencies: _DynamicDependenciesPropertyWrapper<TypedMockStandard<String>>(
                 componentProperties: [
@@ -204,7 +205,9 @@ final class DataSourceTests: XCTestCase {
                 ]
             ),
             dataSourceExpecations: { dataChange in
-                dataChanges.append(dataChange)
+                lock.withLock {
+                    dataChanges.append(dataChange)
+                }
             },
             finishedDataSourceSequence: { _ in
                 expecation.fulfill()
