@@ -6,8 +6,8 @@
 // SPDX-License-Identifier: MIT
 //
 
-@testable import Spezi
 import os
+@testable import Spezi
 import XCTest
 
 

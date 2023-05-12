@@ -7,8 +7,8 @@
 //
 
 import Spezi
-import XCTSpezi
 import XCTestApp
+import XCTSpezi
 
 
 class ObservableObjectTests: TestAppTestCase {

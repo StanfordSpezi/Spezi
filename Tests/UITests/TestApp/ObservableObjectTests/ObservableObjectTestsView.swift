@@ -7,8 +7,8 @@
 //
 
 import SwiftUI
-import XCTSpezi
 import XCTestApp
+import XCTSpezi
 
 
 struct ObservableObjectTestsView: View {
