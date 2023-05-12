@@ -39,9 +39,9 @@
          </BuildableReference>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "CardinalKit"
-            BuildableName = "CardinalKit"
-            BlueprintName = "CardinalKit"
+            BlueprintIdentifier = "Spezi"
+            BuildableName = "Spezi"
+            BlueprintName = "Spezi"
             ReferencedContainer = "container:../..">
          </BuildableReference>
          <BuildableReference

@@ -11,10 +11,10 @@
 		2F5FA4C629E0A1620047A644 /* ObservableObjectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5FA4C229E0A1620047A644 /* ObservableObjectTests.swift */; };
 		2F5FA4C729E0A1620047A644 /* ObservableComponentTestsComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5FA4C329E0A1620047A644 /* ObservableComponentTestsComponent.swift */; };
 		2F5FA4C829E0A1620047A644 /* ObservableObjectTestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5FA4C429E0A1620047A644 /* ObservableObjectTestsView.swift */; };
-		2F5FA4CC29E0A2F40047A644 /* CardinalKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2F5FA4CB29E0A2F40047A644 /* CardinalKit */; };
-		2F5FA4CE29E0A3BA0047A644 /* CardinalKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5FA4CD29E0A3BA0047A644 /* CardinalKitTests.swift */; };
+		2F5FA4CC29E0A2F40047A644 /* Spezi in Frameworks */ = {isa = PBXBuildFile; productRef = 2F5FA4CB29E0A2F40047A644 /* Spezi */; };
+		2F5FA4CE29E0A3BA0047A644 /* SpeziTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5FA4CD29E0A3BA0047A644 /* SpeziTests.swift */; };
 		2F5FA4D029E0A4050047A644 /* XCTestApp in Frameworks */ = {isa = PBXBuildFile; productRef = 2F5FA4CF29E0A4050047A644 /* XCTestApp */; };
-		2F5FA4D229E0B38C0047A644 /* XCTCardinalKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2F5FA4D129E0B38C0047A644 /* XCTCardinalKit */; };
+		2F5FA4D229E0B38C0047A644 /* XCTSpezi in Frameworks */ = {isa = PBXBuildFile; productRef = 2F5FA4D129E0B38C0047A644 /* XCTSpezi */; };
 		2F6D139A28F5F386007C25D6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F6D139928F5F386007C25D6 /* Assets.xcassets */; };
 		2F9F07F129090B0500CDC598 /* TestAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9F07F029090B0500CDC598 /* TestAppDelegate.swift */; };
 		2F9F07F529090BA900CDC598 /* ObservableObjectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9F07F429090BA900CDC598 /* ObservableObjectTests.swift */; };
@@ -37,7 +37,7 @@
 		2F5FA4C229E0A1620047A644 /* ObservableObjectTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservableObjectTests.swift; sourceTree = "<group>"; };
 		2F5FA4C329E0A1620047A644 /* ObservableComponentTestsComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservableComponentTestsComponent.swift; sourceTree = "<group>"; };
 		2F5FA4C429E0A1620047A644 /* ObservableObjectTestsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservableObjectTestsView.swift; sourceTree = "<group>"; };
-		2F5FA4CD29E0A3BA0047A644 /* CardinalKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardinalKitTests.swift; sourceTree = "<group>"; };
+		2F5FA4CD29E0A3BA0047A644 /* SpeziTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeziTests.swift; sourceTree = "<group>"; };
 		2F6D139228F5F384007C25D6 /* TestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F6D139928F5F386007C25D6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2F6D13AC28F5F386007C25D6 /* TestAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TestAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -46,7 +46,7 @@
 		2F9F07F429090BA900CDC598 /* ObservableObjectTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservableObjectTests.swift; sourceTree = "<group>"; };
 		2FA7382B290ADFAA007ACEB9 /* TestApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestApp.swift; sourceTree = "<group>"; };
 		2FB926E42974B0FC008E7B03 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		2FC42FD7290ADD5E00B08F18 /* CardinalKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = CardinalKit; path = ../..; sourceTree = "<group>"; };
+		2FC42FD7290ADD5E00B08F18 /* Spezi */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Spezi; path = ../..; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,8 +54,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2F5FA4D229E0B38C0047A644 /* XCTCardinalKit in Frameworks */,
-				2F5FA4CC29E0A2F40047A644 /* CardinalKit in Frameworks */,
+				2F5FA4D229E0B38C0047A644 /* XCTSpezi in Frameworks */,
+				2F5FA4CC29E0A2F40047A644 /* Spezi in Frameworks */,
 				2F5FA4D029E0A4050047A644 /* XCTestApp in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -85,7 +85,7 @@
 			isa = PBXGroup;
 			children = (
 				2F7B6CB4294C03C800FDC494 /* TestApp.xctestplan */,
-				2FC42FD7290ADD5E00B08F18 /* CardinalKit */,
+				2FC42FD7290ADD5E00B08F18 /* Spezi */,
 				2F6D139428F5F384007C25D6 /* TestApp */,
 				2F6D13AF28F5F386007C25D6 /* TestAppUITests */,
 				2F6D139328F5F384007C25D6 /* Products */,
@@ -106,7 +106,7 @@
 			isa = PBXGroup;
 			children = (
 				2FA7382B290ADFAA007ACEB9 /* TestApp.swift */,
-				2F5FA4CD29E0A3BA0047A644 /* CardinalKitTests.swift */,
+				2F5FA4CD29E0A3BA0047A644 /* SpeziTests.swift */,
 				2F5FA4C029E0A1620047A644 /* ObservableObjectTests */,
 				2F9F07ED29090AF500CDC598 /* Shared */,
 				2F6D139928F5F386007C25D6 /* Assets.xcassets */,
@@ -157,9 +157,9 @@
 			);
 			name = TestApp;
 			packageProductDependencies = (
-				2F5FA4CB29E0A2F40047A644 /* CardinalKit */,
+				2F5FA4CB29E0A2F40047A644 /* Spezi */,
 				2F5FA4CF29E0A4050047A644 /* XCTestApp */,
-				2F5FA4D129E0B38C0047A644 /* XCTCardinalKit */,
+				2F5FA4D129E0B38C0047A644 /* XCTSpezi */,
 			);
 			productName = Example;
 			productReference = 2F6D139228F5F384007C25D6 /* TestApp.app */;
@@ -272,7 +272,7 @@
 			files = (
 				2F5FA4C729E0A1620047A644 /* ObservableComponentTestsComponent.swift in Sources */,
 				2F5FA4C629E0A1620047A644 /* ObservableObjectTests.swift in Sources */,
-				2F5FA4CE29E0A3BA0047A644 /* CardinalKitTests.swift in Sources */,
+				2F5FA4CE29E0A3BA0047A644 /* SpeziTests.swift in Sources */,
 				2F5FA4C529E0A1620047A644 /* MultipleObservableObjectsTestsComponent.swift in Sources */,
 				2FA7382C290ADFAA007ACEB9 /* TestApp.swift in Sources */,
 				2F5FA4C829E0A1620047A644 /* ObservableObjectTestsView.swift in Sources */,
@@ -438,7 +438,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = edu.stanford.cardinalkit.testapp;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.stanford.spezi.testapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -473,7 +473,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = edu.stanford.cardinalkit.testapp;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.stanford.spezi.testapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -496,7 +496,7 @@
 				INFOPLIST_FILE = TestAppUITests/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = edu.stanford.cardinalkit.testappuitests;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.stanford.spezi.testappuitests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_EMIT_LOC_STRINGS = NO;
@@ -517,7 +517,7 @@
 				INFOPLIST_FILE = TestAppUITests/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = edu.stanford.cardinalkit.testappuitests;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.stanford.spezi.testappuitests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_EMIT_LOC_STRINGS = NO;
@@ -562,7 +562,7 @@
 /* Begin XCRemoteSwiftPackageReference section */
 		2F746D9D29962B2A00BF54FE /* XCRemoteSwiftPackageReference "XCTestExtensions" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/StanfordBDHG/XCTestExtensions";
+			repositoryURL = "https://github.com/StanfordSpezi/XCTestExtensions";
 			requirement = {
 				kind = upToNextMinorVersion;
 				minimumVersion = 0.4.0;
@@ -571,18 +571,18 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		2F5FA4CB29E0A2F40047A644 /* CardinalKit */ = {
+		2F5FA4CB29E0A2F40047A644 /* Spezi */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = CardinalKit;
+			productName = Spezi;
 		};
 		2F5FA4CF29E0A4050047A644 /* XCTestApp */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 2F746D9D29962B2A00BF54FE /* XCRemoteSwiftPackageReference "XCTestExtensions" */;
 			productName = XCTestApp;
 		};
-		2F5FA4D129E0B38C0047A644 /* XCTCardinalKit */ = {
+		2F5FA4D129E0B38C0047A644 /* XCTSpezi */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = XCTCardinalKit;
+			productName = XCTSpezi;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

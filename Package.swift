@@ -1,7 +1,7 @@
 // swift-tools-version:5.7
 
 //
-// This source file is part of the CardinalKit open-source project
+// This source file is part of the Stanford Spezi open-source project
 //
 // SPDX-FileCopyrightText: 2022 Stanford University and the project authors (see CONTRIBUTORS.md)
 //
@@ -12,35 +12,35 @@ import PackageDescription
 
 
 let package = Package(
-    name: "CardinalKit",
+    name: "Spezi",
     defaultLocalization: "en",
     platforms: [
         .iOS(.v16)
     ],
     products: [
-        .library(name: "CardinalKit", targets: ["CardinalKit"]),
-        .library(name: "XCTCardinalKit", targets: ["XCTCardinalKit"])
+        .library(name: "Spezi", targets: ["Spezi"]),
+        .library(name: "XCTSpezi", targets: ["XCTSpezi"])
     ],
     dependencies: [
-        .package(url: "https://github.com/StanfordBDHG/XCTRuntimeAssertions", .upToNextMinor(from: "0.2.1"))
+        .package(url: "https://github.com/StanfordSpezi/XCTRuntimeAssertions", .upToNextMinor(from: "0.2.1"))
     ],
     targets: [
         .target(
-            name: "CardinalKit",
+            name: "Spezi",
             dependencies: [
                 .product(name: "XCTRuntimeAssertions", package: "XCTRuntimeAssertions")
             ]
         ),
         .target(
-            name: "XCTCardinalKit",
+            name: "XCTSpezi",
             dependencies: [
-                .target(name: "CardinalKit")
+                .target(name: "Spezi")
             ]
         ),
         .testTarget(
-            name: "CardinalKitTests",
+            name: "SpeziTests",
             dependencies: [
-                .target(name: "CardinalKit"),
+                .target(name: "Spezi"),
                 .product(name: "XCTRuntimeAssertions", package: "XCTRuntimeAssertions")
             ]
         )

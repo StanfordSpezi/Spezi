@@ -1,5 +1,5 @@
 #
-# This source file is part of the CardinalKit open-source project
+# This source file is part of the Stanford Spezi open-source project
 #
 # SPDX-FileCopyrightText: 2022 Stanford University and the project authors (see CONTRIBUTORS.md)
 #
@@ -18,6 +18,6 @@ authors:
 - family-names: "Aalami"
   given-names: "Oliver"
   orcid: "https://orcid.org/0000-0002-7799-2429"
-title: "CardinalKit"
+title: "Spezi"
 doi: 10.5281/zenodo.7538238
-url: "https://github.com/StanfordBDHG/CardinalKit"
+url: "https://github.com/StanfordSpezi/Spezi"
