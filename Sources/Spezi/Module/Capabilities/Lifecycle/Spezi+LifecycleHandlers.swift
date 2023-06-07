@@ -25,7 +25,33 @@ extension AnySpezi {
         lifecycleHandler.willFinishLaunchingWithOptions(application, launchOptions: launchOptions)
     }
     
-    func applicationWillTerminate(_ application: UIApplication) {
+    func applicationDidBecomeActive(
+        _ application: UIApplication
+    ) {
+        lifecycleHandler.applicationDidBecomeActive(application)
+    }
+    
+    func applicationWillResignActive(
+        _ application: UIApplication
+    ) {
+        lifecycleHandler.applicationWillResignActive(application)
+    }
+    
+    func applicationDidEnterBackground(
+        _ application: UIApplication
+    ) {
+        lifecycleHandler.applicationDidEnterBackground(application)
+    }
+    
+    func applicationWillEnterForeground(
+        _ application: UIApplication
+    ) {
+        lifecycleHandler.applicationWillEnterForeground(application)
+    }
+    
+    func applicationWillTerminate(
+        _ application: UIApplication
+    ) {
         lifecycleHandler.applicationWillTerminate(application)
     }
 }
