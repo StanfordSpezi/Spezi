@@ -101,6 +101,22 @@ open class SpeziAppDelegate: NSObject, UIApplicationDelegate {
         return true
     }
     
+    open func applicationDidBecomeActive(_ application: UIApplication) {
+        spezi.applicationDidBecomeActive(application)
+    }
+    
+    open func applicationWillResignActive(_ application: UIApplication) {
+        spezi.applicationWillResignActive(application)
+    }
+    
+    open func applicationDidEnterBackground(_ application: UIApplication) {
+        spezi.applicationDidEnterBackground(application)
+    }
+    
+    open func applicationWillEnterForeground(_ application: UIApplication) {
+        spezi.applicationWillEnterForeground(application)
+    }
+    
     open func applicationWillTerminate(_ application: UIApplication) {
         spezi.applicationWillTerminate(application)
     }
