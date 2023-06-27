@@ -50,7 +50,7 @@ import SwiftUI
 ///
 /// The ``Component`` documentation provides more information about the structure of components.
 /// Refer to the ``Configuration`` documentation to learn more about the Spezi configuration.
-open class SpeziAppDelegate: NSObject, UIApplicationDelegate {
+open class SpeziAppDelegate: NSObject, UIApplicationDelegate, UISceneDelegate {
     private actor DefaultStandard: Standard {
         typealias BaseType = StandardType
         typealias RemovalContext = BaseType
@@ -101,20 +101,30 @@ open class SpeziAppDelegate: NSObject, UIApplicationDelegate {
         return true
     }
     
-    open func applicationDidBecomeActive(_ application: UIApplication) {
-        spezi.applicationDidBecomeActive(application)
+    open func application(
+        _ application: UIApplication,
+        configurationForConnecting connectingSceneSession: UISceneSession,
+        options: UIScene.ConnectionOptions
+    ) -> UISceneConfiguration {
+        let sceneConfig = UISceneConfiguration(name: nil, sessionRole: connectingSceneSession.role)
+        sceneConfig.delegateClass = Self.self
+        return sceneConfig
     }
     
-    open func applicationWillResignActive(_ application: UIApplication) {
-        spezi.applicationWillResignActive(application)
+    open func sceneWillEnterForeground(_ scene: UIScene) {
+        spezi.sceneWillEnterForeground(scene)
     }
     
-    open func applicationDidEnterBackground(_ application: UIApplication) {
-        spezi.applicationDidEnterBackground(application)
+    open func sceneDidBecomeActive(_ scene: UIScene) {
+        spezi.sceneDidBecomeActive(scene)
     }
     
-    open func applicationWillEnterForeground(_ application: UIApplication) {
-        spezi.applicationWillEnterForeground(application)
+    open func sceneWillResignActive(_ scene: UIScene) {
+        spezi.sceneWillResignActive(scene)
+    }
+    
+    open func sceneDidEnterBackground(_ scene: UIScene) {
+        spezi.sceneDidEnterBackground(scene)
     }
     
     open func applicationWillTerminate(_ application: UIApplication) {

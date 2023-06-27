@@ -19,6 +19,11 @@
 		2F9F07F129090B0500CDC598 /* TestAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9F07F029090B0500CDC598 /* TestAppDelegate.swift */; };
 		2F9F07F529090BA900CDC598 /* ObservableObjectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9F07F429090BA900CDC598 /* ObservableObjectTests.swift */; };
 		2FA7382C290ADFAA007ACEB9 /* TestApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA7382B290ADFAA007ACEB9 /* TestApp.swift */; };
+		2FFDAD052A4AA9D300488F42 /* LifecycleHandlerTestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFDAD042A4AA9D300488F42 /* LifecycleHandlerTestsView.swift */; };
+		2FFDAD072A4AAA2E00488F42 /* LifecycleHandlerTestComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFDAD062A4AAA2E00488F42 /* LifecycleHandlerTestComponent.swift */; };
+		2FFDAD092A4AAEF400488F42 /* FeatureFlags.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFDAD082A4AAEF400488F42 /* FeatureFlags.swift */; };
+		2FFDAD0B2A4AAF3700488F42 /* LifecycleHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFDAD0A2A4AAF3600488F42 /* LifecycleHandlerTests.swift */; };
+		2FFDAD0D2A4AB0CE00488F42 /* XCTestExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 2FFDAD0C2A4AB0CE00488F42 /* XCTestExtensions */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +52,10 @@
 		2FA7382B290ADFAA007ACEB9 /* TestApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestApp.swift; sourceTree = "<group>"; };
 		2FB926E42974B0FC008E7B03 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		2FC42FD7290ADD5E00B08F18 /* Spezi */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Spezi; path = ../..; sourceTree = "<group>"; };
+		2FFDAD042A4AA9D300488F42 /* LifecycleHandlerTestsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleHandlerTestsView.swift; sourceTree = "<group>"; };
+		2FFDAD062A4AAA2E00488F42 /* LifecycleHandlerTestComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleHandlerTestComponent.swift; sourceTree = "<group>"; };
+		2FFDAD082A4AAEF400488F42 /* FeatureFlags.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlags.swift; sourceTree = "<group>"; };
+		2FFDAD0A2A4AAF3600488F42 /* LifecycleHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleHandlerTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +73,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2FFDAD0D2A4AB0CE00488F42 /* XCTestExtensions in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -107,6 +117,7 @@
 			children = (
 				2FA7382B290ADFAA007ACEB9 /* TestApp.swift */,
 				2F5FA4CD29E0A3BA0047A644 /* SpeziTests.swift */,
+				2FFDAD032A4AA99800488F42 /* LifecycleHandler */,
 				2F5FA4C029E0A1620047A644 /* ObservableObjectTests */,
 				2F9F07ED29090AF500CDC598 /* Shared */,
 				2F6D139928F5F386007C25D6 /* Assets.xcassets */,
@@ -120,6 +131,7 @@
 			children = (
 				2FB926E42974B0FC008E7B03 /* Info.plist */,
 				2F9F07F429090BA900CDC598 /* ObservableObjectTests.swift */,
+				2FFDAD0A2A4AAF3600488F42 /* LifecycleHandlerTests.swift */,
 			);
 			path = TestAppUITests;
 			sourceTree = "<group>";
@@ -135,8 +147,18 @@
 			isa = PBXGroup;
 			children = (
 				2F9F07F029090B0500CDC598 /* TestAppDelegate.swift */,
+				2FFDAD082A4AAEF400488F42 /* FeatureFlags.swift */,
 			);
 			path = Shared;
+			sourceTree = "<group>";
+		};
+		2FFDAD032A4AA99800488F42 /* LifecycleHandler */ = {
+			isa = PBXGroup;
+			children = (
+				2FFDAD042A4AA9D300488F42 /* LifecycleHandlerTestsView.swift */,
+				2FFDAD062A4AAA2E00488F42 /* LifecycleHandlerTestComponent.swift */,
+			);
+			path = LifecycleHandler;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -180,6 +202,7 @@
 			);
 			name = TestAppUITests;
 			packageProductDependencies = (
+				2FFDAD0C2A4AB0CE00488F42 /* XCTestExtensions */,
 			);
 			productName = ExampleUITests;
 			productReference = 2F6D13AC28F5F386007C25D6 /* TestAppUITests.xctest */;
@@ -274,9 +297,12 @@
 				2F5FA4C629E0A1620047A644 /* ObservableObjectTests.swift in Sources */,
 				2F5FA4CE29E0A3BA0047A644 /* SpeziTests.swift in Sources */,
 				2F5FA4C529E0A1620047A644 /* MultipleObservableObjectsTestsComponent.swift in Sources */,
+				2FFDAD092A4AAEF400488F42 /* FeatureFlags.swift in Sources */,
 				2FA7382C290ADFAA007ACEB9 /* TestApp.swift in Sources */,
 				2F5FA4C829E0A1620047A644 /* ObservableObjectTestsView.swift in Sources */,
 				2F9F07F129090B0500CDC598 /* TestAppDelegate.swift in Sources */,
+				2FFDAD072A4AAA2E00488F42 /* LifecycleHandlerTestComponent.swift in Sources */,
+				2FFDAD052A4AA9D300488F42 /* LifecycleHandlerTestsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -284,6 +310,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2FFDAD0B2A4AAF3700488F42 /* LifecycleHandlerTests.swift in Sources */,
 				2F9F07F529090BA900CDC598 /* ObservableObjectTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -565,7 +592,7 @@
 			repositoryURL = "https://github.com/StanfordSpezi/XCTestExtensions";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 0.4.0;
+				minimumVersion = 0.4.4;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -583,6 +610,11 @@
 		2F5FA4D129E0B38C0047A644 /* XCTSpezi */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = XCTSpezi;
+		};
+		2FFDAD0C2A4AB0CE00488F42 /* XCTestExtensions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2F746D9D29962B2A00BF54FE /* XCRemoteSwiftPackageReference "XCTestExtensions" */;
+			productName = XCTestExtensions;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

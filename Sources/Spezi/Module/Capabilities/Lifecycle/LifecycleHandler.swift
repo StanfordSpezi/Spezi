@@ -26,29 +26,45 @@ public protocol LifecycleHandler {
         launchOptions: [UIApplication.LaunchOptionsKey: Any]
     )
     
-    /// Replicates  the `applicationDidBecomeActive(_: UIApplication)` functionality of the `UIApplicationDelegate`.
+    /// Replicates  the `sceneWillEnterForeground(_: UIScene)` functionality of the `UISceneDelegate`.
     ///
-    /// Tells the delegate that the app has become active.
-    /// - Parameter application: Your singleton app object.
+    /// Tells the delegate that the scene is about to begin running in the foreground and become visible to the user.
+    /// - Parameter scene: The scene that is about to enter the foreground.
+    func sceneWillEnterForeground(_ scene: UIScene)
+    
+    /// Replicates  the `sceneDidBecomeActive(_: UIScene)` functionality of the `UISceneDelegate`.
+    ///
+    /// Tells the delegate that the scene became active and is now responding to user events.
+    /// - Parameter scene: The scene that became active and is now responding to user events.
+    func sceneDidBecomeActive(_ scene: UIScene)
+    
+    /// Replicates  the `sceneWillResignActive(_: UIScene)` functionality of the `UISceneDelegate`.
+    ///
+    /// Tells the delegate that the scene is about to resign the active state and stop responding to user events.
+    /// - Parameter scene: The scene that is about to stop responding to user events.
+    func sceneWillResignActive(_ scene: UIScene)
+    
+    /// Replicates  the `sceneDidEnterBackground(_: UIScene)` functionality of the `UISceneDelegate`.
+    ///
+    /// Tells the delegate that the scene is running in the background and is no longer onscreen.
+    /// - Parameter scene: The scene that entered the background.
+    func sceneDidEnterBackground(_ scene: UIScene)
+    
+    /// Depricated, use ``sceneWillEnterForeground(_:)-1k9os`` instead.
+    @available(*, deprecated, renamed: "sceneWillEnterForeground")
+    func applicationWillEnterForeground(_ application: UIApplication)
+    
+    /// Depricated, use ``sceneDidBecomeActive(_:)-6jf8j`` instead.
+    @available(*, deprecated, renamed: "sceneDidBecomeActive")
     func applicationDidBecomeActive(_ application: UIApplication)
     
-    /// Replicates  the `applicationWillResignActive(_: UIApplication)` functionality of the `UIApplicationDelegate`.
-    ///
-    /// Tells the delegate that the app is about to become inactive.
-    /// - Parameter application: Your singleton app object.
+    /// Depricated, use ``sceneWillResignActive(_:)-8e0ee`` instead.
+    @available(*, deprecated, renamed: "sceneWillResignActive")
     func applicationWillResignActive(_ application: UIApplication)
     
-    /// Replicates  the `applicationDidEnterBackground(_: UIApplication)` functionality of the `UIApplicationDelegate`.
-    ///
-    /// Tells the delegate that the app is now in the background.
-    /// - Parameter application: Your singleton app object.
+    /// Depricated, use ``sceneDidEnterBackground(_:)-3t146`` instead.
+    @available(*, deprecated, renamed: "sceneDidEnterBackground")
     func applicationDidEnterBackground(_ application: UIApplication)
-    
-    /// Replicates  the `applicationWillEnterForeground(_: UIApplication)` functionality of the `UIApplicationDelegate`.
-    ///
-    /// Tells the delegate that the app is about to enter the foreground.
-    /// - Parameter application: Your singleton app object.
-    func applicationWillEnterForeground(_ application: UIApplication)
     
     /// Replicates  the `applicationWillTerminate(_: UIApplication)` functionality of the `UIApplicationDelegate`.
     ///
@@ -67,6 +83,30 @@ extension LifecycleHandler {
         _ application: UIApplication,
         launchOptions: [UIApplication.LaunchOptionsKey: Any]
     ) { }
+    
+    // A documentation for this methodd exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
+    // swiftlint:disable:next missing_docs
+    public func sceneWillEnterForeground(_ scene: UIScene) {
+        applicationWillEnterForeground(UIApplication.shared)
+    }
+    
+    // A documentation for this methodd exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
+    // swiftlint:disable:next missing_docs
+    public func sceneDidBecomeActive(_ scene: UIScene) {
+        applicationDidBecomeActive(UIApplication.shared)
+    }
+    
+    // A documentation for this methodd exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
+    // swiftlint:disable:next missing_docs
+    public func sceneWillResignActive(_ scene: UIScene) {
+        applicationWillResignActive(UIApplication.shared)
+    }
+    
+    // A documentation for this methodd exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
+    // swiftlint:disable:next missing_docs
+    public func sceneDidEnterBackground(_ scene: UIScene) {
+        applicationDidEnterBackground(UIApplication.shared)
+    }
     
     // A documentation for this methodd exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
     // swiftlint:disable:next missing_docs
@@ -110,35 +150,27 @@ extension Array: LifecycleHandler where Element == LifecycleHandler {
         }
     }
     
-    public func applicationDidBecomeActive(
-        _ application: UIApplication
-    ) {
+    public func sceneWillEnterForeground(_ scene: UIScene) {
         for lifecycleHandler in self {
-            lifecycleHandler.applicationDidBecomeActive(application)
+            lifecycleHandler.sceneWillEnterForeground(scene)
         }
     }
     
-    public func applicationWillResignActive(
-        _ application: UIApplication
-    ) {
+    public func sceneDidBecomeActive(_ scene: UIScene) {
         for lifecycleHandler in self {
-            lifecycleHandler.applicationWillResignActive(application)
+            lifecycleHandler.sceneDidBecomeActive(scene)
         }
     }
     
-    public func applicationDidEnterBackground(
-        _ application: UIApplication
-    ) {
+    public func sceneWillResignActive(_ scene: UIScene) {
         for lifecycleHandler in self {
-            lifecycleHandler.applicationDidEnterBackground(application)
+            lifecycleHandler.sceneWillResignActive(scene)
         }
     }
     
-    public func applicationWillEnterForeground(
-        _ application: UIApplication
-    ) {
+    public func sceneDidEnterBackground(_ scene: UIScene) {
         for lifecycleHandler in self {
-            lifecycleHandler.applicationWillEnterForeground(application)
+            lifecycleHandler.sceneDidEnterBackground(scene)
         }
     }
     
