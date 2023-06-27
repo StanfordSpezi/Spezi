@@ -65,6 +65,9 @@ open class SpeziAppDelegate: NSObject, UIApplicationDelegate, UISceneDelegate {
     }
     
     
+    private(set) static weak var appDelegate: SpeziAppDelegate?
+    
+    
     private(set) lazy var spezi: AnySpezi = configuration.spezi
     
     
@@ -107,7 +110,8 @@ open class SpeziAppDelegate: NSObject, UIApplicationDelegate, UISceneDelegate {
         options: UIScene.ConnectionOptions
     ) -> UISceneConfiguration {
         let sceneConfig = UISceneConfiguration(name: nil, sessionRole: connectingSceneSession.role)
-        sceneConfig.delegateClass = Self.self
+        SpeziAppDelegate.appDelegate = self
+        sceneConfig.delegateClass = SpeziSceneDelegate.self
         return sceneConfig
     }
     
