@@ -14,9 +14,9 @@ import XCTSpezi
 class TestAppDelegate: SpeziAppDelegate {
     override var configuration: Configuration {
         Configuration(standard: TestAppStandard()) {
-            // if FeatureFlags.lifecycleTests {
+            if FeatureFlags.lifecycleTests {
                 LifecycleHandlerTestComponent()
-            // }
+            }
             MultipleObservableObjectsTestsComponent()
             ObservableComponentTestsComponent(message: "Passed")
         }
