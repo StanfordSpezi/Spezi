@@ -170,6 +170,7 @@ jobs:
       run: |
           if ${{ inputs.test }}; then
               XCODECOMMAND="test"
+              CODECOVERAGEFLAG="-enableCodeCoverage YES"
           else
               XCODECOMMAND="build"
           fi
@@ -177,8 +178,8 @@ jobs:
           && xcodebuild $XCODECOMMAND \
             -scheme ${{ inputs.scheme }} \
             -sdk iphonesimulator \
-            -destination "name=iPhone 14 Pro Max" \
-            -enableCodeCoverage YES \
+            -destination "name=iPhone 14 Pro" \
+            $CODECOVERAGEFLAG \
             -derivedDataPath ".derivedData" \
             -resultBundlePath ${{ inputs.scheme }}.xcresult \
             CODE_SIGN_IDENTITY="" \
