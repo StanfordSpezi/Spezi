@@ -18,7 +18,7 @@ on:
 jobs:
   buildandtest:
     name: Build and Test Swift Package
-    uses: StanfordSpezi/.github/.github/workflows/xcodebuild-or-fastlane.yml@v2
+    uses: ./.github/workflows/xcodebuild-or-fastlane.yml
     with:
       artifactname: Spezi-Package.xcresult
       runsonlabels: '["macOS", "self-hosted"]'
@@ -33,7 +33,7 @@ jobs:
       test: false
   buildandtestuitests:
     name: Build and Test UI Tests
-    uses: StanfordSpezi/.github/.github/workflows/xcodebuild-or-fastlane.yml@v2
+    uses: ./.github/workflows/xcodebuild-or-fastlane.yml
     with:
       artifactname: TestApp.xcresult
       runsonlabels: '["macOS", "self-hosted"]'
