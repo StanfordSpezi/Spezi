@@ -1,0 +1,198 @@
+#
+# This source file is part of the Stanford Spezi open-source project
+#
+# SPDX-FileCopyrightText: 2022 Stanford University and the project authors (see CONTRIBUTORS.md)
+#
+# SPDX-License-Identifier: MIT
+#
+
+name: Test using xcodebuild or run fastlane
+
+on:
+  workflow_call:
+    inputs:
+      path:
+        description: 'The path where the project is located. Defaults to $GITHUB_WORKSPACE'
+        required: false
+        type: string
+        default: '.'
+      runsonlabels:
+        description: 'JSON-based collection of labels indicating which type of github runner should be chosen'
+        required: false
+        type: string
+        default: '["macos-latest"]'
+      xcodeversion:
+        description: 'The Xcode version used for the build'
+        required: false
+        type: string
+        default: 'latest-stable'
+      scheme:
+        description: 'The scheme in the Xcode project. Either use `scheme` to use xcodebuild, `fastlanelane` to use fastlane, or a custom command using `customcommand`'
+        required: false
+        type: string
+        default: ''
+      fastlanelane:
+        description: 'The lane of the fastlane command. Either use `scheme` to use xcodebuild, `fastlanelane` to use fastlane, or a custom command using `customcommand`'
+        required: false
+        type: string
+        default: ''
+      customcommand:
+        description: 'A custom command that should be run after the setup. Either use `scheme` to use xcodebuild, `fastlanelane` to use fastlane, or a custom command using `customcommand`'
+        required: false
+        type: string
+        default: ''
+      artifactname:
+        description: 'The name & path of the artifact that should be uploaded at the end of the build.'
+        required: false
+        type: string
+        default: ''
+      setupsigning:
+        description: 'Setup the keychain to include Apple certificate and provisioning profile'
+        required: false
+        type: boolean
+        default: false
+      cacheDerivedData:
+        description: 'Cache the derived data folder for a build using xcodebuild'
+        required: false
+        type: boolean
+        default: false
+      setupfirebaseemulator:
+        description: 'Setup the Firebase Emulator'
+        required: false
+        type: boolean
+        default: false
+      codeql:
+        description: 'Use CodeQL code scanning'
+        required: false
+        type: boolean
+        default: true
+
+jobs:
+  build_and_test:
+    name: Test using xcodebuild or run fastlane
+    runs-on: ${{ fromJson(inputs.runsonlabels) }}
+    defaults:
+      run:
+        working-directory: ${{ inputs.path }}
+    steps:
+    - uses: actions/checkout@v3
+    - uses: maxim-lobanov/setup-xcode@v1
+      if: "!env.selfhosted"
+      with:
+        xcode-version: ${{ inputs.xcodeversion }}
+    - name: Check environment
+      run: |
+          xcodebuild -version
+          swift --version
+          echo "env.selfhosted: ${{ env.selfhosted }}"
+    - name: Install xcpretty
+      if: "!env.selfhosted && inputs.scheme != ''"
+      run: gem install xcpretty
+    - name: Cache .derivedData folder
+      if: "inputs.cacheDerivedData"
+      uses: actions/cache@v3
+      with:
+        path: .derivedData
+        key: ${{ runner.os }}-${{ runner.arch }}-derivedData-${{ hashFiles('**/Package.swift', '**/*.pbxproj') }}
+        restore-keys: |
+          ${{ runner.os }}-${{ runner.arch }}-derivedData-
+    - name: Cache Firebase Emulators
+      if: "!env.selfhosted && inputs.setupfirebaseemulator"
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/firebase/emulators
+        key: ${{ runner.os }}-${{ runner.arch }}-firebase-emulators-${{ hashFiles('~/.cache/firebase/emulators/**') }}
+    - name: Setup NodeJS
+      if: "!env.selfhosted && inputs.setupfirebaseemulator"
+      uses: actions/setup-node@v3
+    - name: Setup Java
+      if: "!env.selfhosted && inputs.setupfirebaseemulator"
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'microsoft'
+        java-version: '17'
+    - name: Install Firebase CLI Tools
+      if: "!env.selfhosted && inputs.setupfirebaseemulator"
+      run: npm install -g firebase-tools
+    - name: Install the Apple certificate and provisioning profile
+      if: ${{ inputs.setupsigning }}
+      env:
+        BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+        P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
+        BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
+        KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+      run: |
+        # create variables
+        CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
+        PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
+        KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+
+        # import certificate and provisioning profile from secrets
+        echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
+        echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o $PP_PATH
+
+        # create temporary keychain
+        security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+        security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
+        security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+
+        # import certificate to keychain
+        security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+        security list-keychain -d user -s $KEYCHAIN_PATH
+
+        # apply provisioning profile
+        mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+        cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+    - name: Initialize CodeQL
+      if: ${{ inputs.codeql }}
+      uses: github/codeql-action/init@v2
+      with:
+        languages: swift
+        db-location: '${{ inputs.path }}/.codeql'
+    - name: Run custom command
+      if: ${{ inputs.customcommand != '' }}
+      run: ${{ inputs.customcommand }}
+    - name: Resolve dependencies (xcodebuild)
+      if: ${{ inputs.scheme != '' }}
+      run: |
+          xcodebuild \
+            -scheme ${{ inputs.scheme }} \
+            -resolvePackageDependencies \
+            -derivedDataPath ".derivedData" \
+            || true
+    - name: Build and test (xcodebuild)
+      if: ${{ inputs.scheme != '' }}
+      run: |
+          set -o pipefail \
+          && xcodebuild test \
+            -scheme ${{ inputs.scheme }} \
+            -sdk iphonesimulator \
+            -destination "name=iPhone 14 Pro Max" \
+            -enableCodeCoverage YES \
+            -derivedDataPath ".derivedData" \
+            -resultBundlePath ${{ inputs.scheme }}.xcresult \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+          | xcpretty
+    - name: Fastlane
+      if: ${{ inputs.fastlanelane != '' }}
+      run: fastlane ${{ inputs.fastlanelane }}
+      env:
+        APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+        APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+        APP_STORE_CONNECT_API_KEY_BASE64: ${{ secrets.APP_STORE_CONNECT_API_KEY_BASE64 }}
+        APPLE_ID: ${{ secrets.APPLE_ID }}
+    - name: Perform CodeQL Analysis
+      if: ${{ inputs.codeql }}
+      uses: github/codeql-action/analyze@v2
+    - name: Upload artifact
+      if: ${{ (success() || failure()) && inputs.artifactname != '' }}
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ inputs.artifactname }}
+        path: ${{ inputs.path }}/${{ inputs.artifactname }}
+    - name: Clean up keychain and provisioning profile
+      if: "(inputs.setupsigning && env.selfhosted) || failure()"
+      run: |
+        security delete-keychain $RUNNER_TEMP/app-signing.keychain-db || true
+        rm ~/Library/MobileDevice/Provisioning\ Profiles/build_pp.mobileprovision || true
