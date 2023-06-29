@@ -145,7 +145,12 @@ final class DataStorageProviderTests: XCTestCase {
             }
         )
         
+        #if swift(>=5.8)
         await fulfillment(of: [expectation], timeout: 1)
+        #else
+        wait(for: [expectation], timeout: 1)
+        #endif
+        
         XCTAssertEqual(count, 4)
     }
     

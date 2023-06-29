@@ -24,11 +24,14 @@ jobs:
       runsonlabels: '["macOS", "self-hosted"]'
       scheme: Spezi-Package
   build:
-    name: Build Swift Package on Xcode 14
+    name: Build for CodeQL & Swift 5.7
     uses: StanfordSpezi/.github/.github/workflows/xcodebuild-or-fastlane.yml@v2
     with:
       runsonlabels: '["macos-13"]'
+      xcodeversion: 14.2.0
       scheme: Spezi-Package
+      test: false
+      codeql: true
   buildandtestuitests:
     name: Build and Test UI Tests
     uses: StanfordSpezi/.github/.github/workflows/xcodebuild-or-fastlane.yml@v2
