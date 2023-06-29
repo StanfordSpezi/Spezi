@@ -59,7 +59,11 @@ final class StandardTests: XCTestCase {
         )
         _ = await standardInjectionTestApplicationDelegate.spezi
         
+        #if swift(>=5.8)
         await fulfillment(of: [expectation], timeout: 0.01)
+        #else
+        wait(for: [expectation], timeout: 0.01)
+        #endif
     }
     
     func testInjectionPrecondition() throws {

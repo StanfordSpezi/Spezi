@@ -27,7 +27,8 @@ jobs:
     name: Build for CodeQL & Swift 5.7
     uses: ./.github/workflows/xcodebuild-or-fastlane.yml
     with:
-      runsonlabels: '["macos-12"]'
+      runsonlabels: '["macos-13"]'
+      xcodeversion: 14.2.0
       scheme: Spezi-Package
       test: false
   buildandtestuitests:
