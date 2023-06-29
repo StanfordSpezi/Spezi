@@ -31,6 +31,7 @@ jobs:
       xcodeversion: 14.2.0
       scheme: Spezi-Package
       test: false
+      codeql: true
   buildandtestuitests:
     name: Build and Test UI Tests
     uses: ./.github/workflows/xcodebuild-or-fastlane.yml

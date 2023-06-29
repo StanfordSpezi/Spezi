@@ -70,7 +70,7 @@ on:
         description: 'Use CodeQL code scanning'
         required: false
         type: boolean
-        default: true
+        default: false
 
 jobs:
   build_and_test:
