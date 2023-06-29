@@ -18,20 +18,20 @@ on:
 jobs:
   buildandtest:
     name: Build and Test Swift Package
-    uses: ./.github/.github/workflows/xcodebuild-or-fastlane.yml@v2
+    uses: ./.github/.github/workflows/xcodebuild-or-fastlane.yml
     with:
       artifactname: Spezi-Package.xcresult
       runsonlabels: '["macOS", "self-hosted"]'
       scheme: Spezi-Package
   build:
     name: Build Swift Package on Xcode 14
-    uses: ./.github/.github/workflows/xcodebuild-or-fastlane.yml@v2
+    uses: ./.github/.github/workflows/xcodebuild-or-fastlane.yml
     with:
       runsonlabels: '["macos-13"]'
       scheme: Spezi-Package
   buildandtestuitests:
     name: Build and Test UI Tests
-    uses: ./.github/.github/workflows/xcodebuild-or-fastlane.yml@v2
+    uses: ./.github/.github/workflows/xcodebuild-or-fastlane.yml
     with:
       artifactname: TestApp.xcresult
       runsonlabels: '["macOS", "self-hosted"]'
