@@ -168,7 +168,7 @@ jobs:
     - name: Build and test (xcodebuild)
       if: ${{ inputs.scheme != '' }}
       run: |
-          if [ ${{ inputs.test }} ]; then
+          if ${{ inputs.test }}; then
               XCODECOMMAND="test"
           else
               XCODECOMMAND="build"
