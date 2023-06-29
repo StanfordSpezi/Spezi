@@ -31,6 +31,11 @@ on:
         required: false
         type: string
         default: ''
+      test:
+        description: 'A flag indicating if the tests of the Xcode project scheme should run'
+        required: false
+        type: boolean
+        default: true
       fastlanelane:
         description: 'The lane of the fastlane command. Either use `scheme` to use xcodebuild, `fastlanelane` to use fastlane, or a custom command using `customcommand`'
         required: false
@@ -163,8 +168,13 @@ jobs:
     - name: Build and test (xcodebuild)
       if: ${{ inputs.scheme != '' }}
       run: |
+          if [ ${{ inputs.test }} ]; then
+              XCODECOMMAND="test"
+          else
+              XCODECOMMAND="build"
+          fi
           set -o pipefail \
-          && xcodebuild test \
+          && xcodebuild $XCODECOMMAND \
             -scheme ${{ inputs.scheme }} \
             -sdk iphonesimulator \
             -destination "name=iPhone 14 Pro Max" \
