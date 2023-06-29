@@ -25,6 +25,9 @@ jobs:
       scheme: Spezi-Package
   build:
     name: Build for CodeQL & Swift 5.7
+    permissions:
+      contents: read
+      security-events: write
     uses: StanfordSpezi/.github/.github/workflows/xcodebuild-or-fastlane.yml@v2
     with:
       runsonlabels: '["macos-13"]'
