@@ -71,7 +71,7 @@ private struct ObservableObjectInjectionViewModifier: ViewModifier {
 
 
 extension ObservableObjectProvider {
-    // A documentation for this methodd exists in the `ObservableObjectProvider` type which SwiftLint doesn't recognize.
+    // A documentation for this method exists in the `ObservableObjectProvider` type which SwiftLint doesn't recognize.
     // swiftlint:disable:next missing_docs
     public var observableObjects: [any ObservableObject] {
         []
@@ -89,7 +89,7 @@ extension ObservableObjectProvider {
 }
 
 extension ObservableObjectProvider where Self: ObservableObject {
-    // A documentation for this methodd exists in the `ObservableObjectProvider` type which SwiftLint doesn't recognize.
+    // A documentation for this method exists in the `ObservableObjectProvider` type which SwiftLint doesn't recognize.
     // swiftlint:disable:next missing_docs
     public var observableObjects: [any ObservableObject] {
         [self]

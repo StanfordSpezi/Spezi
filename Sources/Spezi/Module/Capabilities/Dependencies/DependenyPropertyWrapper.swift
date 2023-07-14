@@ -6,8 +6,6 @@
 // SPDX-License-Identifier: MIT
 //
 
-import XCTRuntimeAssertions
-
 
 /// Refer to ``Component/Dependency`` for information on how to use the `@Dependency` property wrapper. Do not use the `_DependencyPropertyWrapper` directly.
 @propertyWrapper

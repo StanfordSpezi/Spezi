@@ -13,8 +13,8 @@ import SwiftUI
 ///
 /// A ``Module`` is a ``Component`` that also includes
 /// - Conformance to a ``LifecycleHandler``
-/// - Persistance in the ``Spezi`` instance's ``Spezi/Spezi/typedCollection`` (using a conformance to ``TypedCollectionKey``)
-/// - Automatic injection in the SwiftUI view hierachy (``ObservableObjectProvider`` & `ObservableObject`)
+/// - Persistence in the ``Spezi`` instance's ``Spezi/Spezi/typedCollection`` (using a conformance to ``TypedCollectionKey``)
+/// - Automatic injection in the SwiftUI view hierarchy (``ObservableObjectProvider`` & `ObservableObject`)
 ///
 /// All functionality provided to ``Component``s is also available to ``Module``s including dependencies using the @``Component/Dependency`` property wrapper.
 ///

@@ -7,7 +7,7 @@
 //
 
 
-/// A ``DataSourceRegistry`` can recieve data from data sources using the ``DataSourceRegistry/registerDataSource(_:)`` method.
+/// A ``DataSourceRegistry`` can receive data from data sources using the ``DataSourceRegistry/registerDataSource(_:)`` method.
 ///
 /// Each ``DataSourceRegistry`` has a ``DataSourceRegistry/BaseType`` that all data sources should provide.
 /// Use ``Adapter``s to transform data from different data sources.
@@ -27,13 +27,13 @@ public protocol DataSourceRegistry<BaseType, RemovalContext>: Actor {
 
 
 extension DataSourceRegistry {
-    /// Overload of the ``DataSourceRegistry/registerDataSource(_:)`` method to recieve `AsyncStream`s.
+    /// Overload of the ``DataSourceRegistry/registerDataSource(_:)`` method to receive `AsyncStream`s.
     /// - Parameter asyncStream: The `AsyncStream<DataChange<BaseType, RemovalContext>>` providing the data to the ``DataSourceRegistry``.
     public func registerDataSource(asyncStream: AsyncStream<DataChange<BaseType, RemovalContext>>) {
         registerDataSource(asyncStream)
     }
     
-    /// Overload of the ``DataSourceRegistry/registerDataSource(_:)`` method to recieve `AsyncThrowingStream`s.
+    /// Overload of the ``DataSourceRegistry/registerDataSource(_:)`` method to receive `AsyncThrowingStream`s.
     /// - Parameter asyncThrowingStream: The `AsyncThrowingStream<DataChange<BaseType, RemovalContext>>` providing the data to the ``DataSourceRegistry``.
     public func registerDataSource(asyncThrowingStream: AsyncThrowingStream<DataChange<BaseType, RemovalContext>, Error>) {
         registerDataSource(asyncThrowingStream)

@@ -11,12 +11,12 @@
 public protocol EncodableAdapter<InputType, ID>: Actor {
     /// The input type conforming to `Sendable` and `Identifiable` where the `InputType.ID` is `Sendable` as well.
     associatedtype InputType: Sendable, Identifiable where InputType.ID: Sendable
-    /// The ouput of the ``transform(id:)`` function that has to confrom to `Sendable` and `Hashable`.
+    /// The output of the ``transform(id:)`` function that has to conform to `Sendable` and `Hashable`.
     associatedtype ID: Sendable, Hashable
     
     
     /// Transforms an element to an `Encodable` and `Sendable` value.
-    /// - Parameter element: The element that is tranformed.
+    /// - Parameter element: The element that is transformed.
     /// - Returns: Returns an element conforming to an `Encodable` and `Sendable`
     func transform(element: InputType) async -> any Encodable & Sendable
     

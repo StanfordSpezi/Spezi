@@ -17,7 +17,7 @@ public protocol LifecycleHandler {
     /// Replicates  the `application(_: UIApplication, willFinishLaunchingWithOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool`
     /// functionality of the `UIApplicationDelegate`.
     ///
-    /// Tells the delegate that the launch process has begun but that state restoration hasn’t occured.
+    /// Tells the delegate that the launch process has begun but that state restoration hasn't occurred.
     /// - Parameters:
     ///   - application: The singleton app object.
     ///   - launchOptions: A dictionary indicating the reason the app was launched (if any). The contents of this dictionary may be empty in situations where the user launched the app directly. For information about the possible keys in this dictionary and how to handle them, see UIApplication.LaunchOptionsKey.
@@ -77,14 +77,14 @@ public protocol LifecycleHandler {
 
 
 extension LifecycleHandler {
-    // A documentation for this methodd exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
+    // A documentation for this method exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
     // swiftlint:disable:next missing_docs
     public func willFinishLaunchingWithOptions(
         _ application: UIApplication,
         launchOptions: [UIApplication.LaunchOptionsKey: Any]
     ) { }
     
-    // A documentation for this methodd exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
+    // A documentation for this method exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
     // swiftlint:disable:next missing_docs
     public func sceneWillEnterForeground(_ scene: UIScene) {
         applicationWillEnterForeground(UIApplication.shared)

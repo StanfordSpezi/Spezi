@@ -13,3 +13,4 @@ Spezi contributors
 
 * [Paul Schmiedmayer](https://github.com/PSchmiedmayer)
 * [Vishnu Ravi](https://github.com/vishnuravi)
+* [Andreas Bauer](https://github.com/Supereg)

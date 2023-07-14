@@ -30,6 +30,7 @@ extension Component {
     
     
     /// Defines dynamic dependencies to other ``Component``s.
+    ///
     /// In contrast to the `@Dependency` property wrapper, the `@DynamicDependencies` enables the generation of the property wrapper in the initializer and generating an
     /// arbitrary amount of dependencies that are resolved in the Spezi initialization.
     ///
@@ -40,7 +41,7 @@ extension Component {
     ///
     ///
     ///     init() {
-    ///         self._healthKitComponents = DynamicDependencies(
+    ///         self._dynamicDependencies = DynamicDependencies(
     ///             componentProperties: [
     ///                 Dependency(wrappedValue: /* ... */),
     ///                 Dependency(wrappedValue: /* ... */)

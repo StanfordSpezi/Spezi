@@ -7,7 +7,7 @@
 //
 
 
-/// A ``ComponentDependency`` defines the interface of a ``Component/Dependency`` propety wrapper.
+/// A ``ComponentDependency`` defines the interface of a ``Component/Dependency`` property wrapper.
 public protocol ComponentDependency<PropertyStandard>: DependencyDescriptor, AnyObject {
     /// The type of the component that is defined as a dependency.
     associatedtype ComponentType: Component where ComponentType.ComponentStandard == PropertyStandard
@@ -15,7 +15,7 @@ public protocol ComponentDependency<PropertyStandard>: DependencyDescriptor, Any
     
     /// The default value defined by the ``Component`` describing the dependency.
     var defaultValue: () -> ComponentType { get }
-    /// The resolved dependency provided by the ``Component/Dependency`` propety wrapper.
+    /// The resolved dependency provided by the ``Component/Dependency`` property wrapper.
     var wrappedValue: ComponentType { get }
     
     

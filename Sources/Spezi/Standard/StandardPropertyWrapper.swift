@@ -6,8 +6,6 @@
 // SPDX-License-Identifier: MIT
 //
 
-import XCTRuntimeAssertions
-
 
 /// Refer to ``Component/StandardActor`` for information on how to use the `@StandardActor` property wrapper. Do not use the `_StandardPropertyWrapper` directly.
 @propertyWrapper

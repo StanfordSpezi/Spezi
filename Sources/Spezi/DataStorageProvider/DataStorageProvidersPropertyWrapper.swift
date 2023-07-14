@@ -6,8 +6,6 @@
 // SPDX-License-Identifier: MIT
 //
 
-import XCTRuntimeAssertions
-
 
 /// Refer to ``Standard/DataStorageProviders`` for information on how to use the `@DataStorageProviders` property wrapper.
 /// Do not use the `_DataStorageProvidersPropertyWrapper` directly.
@@ -21,7 +19,7 @@ public class _DataStorageProvidersPropertyWrapper<S: Standard> {
     private var dataStorageProviders: [any DataStorageProvider<S>]?
     
     
-    /// The injected ``[any DataStorageProvider<S>]`` that are resolved by ``Spezi``
+    /// The injected list of ``DataStorageProvider`` that are resolved by ``Spezi``
     public var wrappedValue: [any DataStorageProvider<S>] {
         guard let dataStorageProviders else {
             preconditionFailure(

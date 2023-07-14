@@ -72,7 +72,7 @@ public protocol SingleValueAdapter<InputElement, InputRemovalContext, OutputElem
 
 
 extension SingleValueAdapter {
-    // A documentation for this methodd exists in the `Adapter` type which SwiftLint doesn't recognize.
+    // A documentation for this method exists in the `Adapter` type which SwiftLint doesn't recognize.
     // swiftlint:disable:next missing_docs
     public func transform(
         _ asyncSequence: some TypedAsyncSequence<DataChange<InputElement, InputRemovalContext>>
