@@ -50,19 +50,19 @@ public protocol LifecycleHandler {
     /// - Parameter scene: The scene that entered the background.
     func sceneDidEnterBackground(_ scene: UIScene)
     
-    /// Depricated, use ``sceneWillEnterForeground(_:)-1k9os`` instead.
+    /// Deprecated, use ``sceneWillEnterForeground(_:)-1k9os`` instead.
     @available(*, deprecated, renamed: "sceneWillEnterForeground")
     func applicationWillEnterForeground(_ application: UIApplication)
     
-    /// Depricated, use ``sceneDidBecomeActive(_:)-6jf8j`` instead.
+    /// Deprecated, use ``sceneDidBecomeActive(_:)-6jf8j`` instead.
     @available(*, deprecated, renamed: "sceneDidBecomeActive")
     func applicationDidBecomeActive(_ application: UIApplication)
     
-    /// Depricated, use ``sceneWillResignActive(_:)-8e0ee`` instead.
+    /// Deprecated, use ``sceneWillResignActive(_:)-8e0ee`` instead.
     @available(*, deprecated, renamed: "sceneWillResignActive")
     func applicationWillResignActive(_ application: UIApplication)
     
-    /// Depricated, use ``sceneDidEnterBackground(_:)-3t146`` instead.
+    /// Deprecated, use ``sceneDidEnterBackground(_:)-3t146`` instead.
     @available(*, deprecated, renamed: "sceneDidEnterBackground")
     func applicationDidEnterBackground(_ application: UIApplication)
     
@@ -90,49 +90,49 @@ extension LifecycleHandler {
         applicationWillEnterForeground(UIApplication.shared)
     }
     
-    // A documentation for this methodd exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
+    // A documentation for this method exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
     // swiftlint:disable:next missing_docs
     public func sceneDidBecomeActive(_ scene: UIScene) {
         applicationDidBecomeActive(UIApplication.shared)
     }
     
-    // A documentation for this methodd exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
+    // A documentation for this method exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
     // swiftlint:disable:next missing_docs
     public func sceneWillResignActive(_ scene: UIScene) {
         applicationWillResignActive(UIApplication.shared)
     }
     
-    // A documentation for this methodd exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
+    // A documentation for this method exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
     // swiftlint:disable:next missing_docs
     public func sceneDidEnterBackground(_ scene: UIScene) {
         applicationDidEnterBackground(UIApplication.shared)
     }
     
-    // A documentation for this methodd exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
+    // A documentation for this method exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
     // swiftlint:disable:next missing_docs
     public func applicationDidBecomeActive(
         _ application: UIApplication
     ) { }
     
-    // A documentation for this methodd exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
+    // A documentation for this method exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
     // swiftlint:disable:next missing_docs
     public func applicationWillResignActive(
         _ application: UIApplication
     ) { }
     
-    // A documentation for this methodd exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
+    // A documentation for this method exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
     // swiftlint:disable:next missing_docs
     public func applicationDidEnterBackground(
         _ application: UIApplication
     ) { }
     
-    // A documentation for this methodd exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
+    // A documentation for this method exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
     // swiftlint:disable:next missing_docs
     public func applicationWillEnterForeground(
         _ application: UIApplication
     ) { }
     
-    // A documentation for this methodd exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
+    // A documentation for this method exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
     // swiftlint:disable:next missing_docs
     public func applicationWillTerminate(
         _ application: UIApplication
