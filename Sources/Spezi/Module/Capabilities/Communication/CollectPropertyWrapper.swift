@@ -18,26 +18,26 @@ extension Component { // TODO move this extension somewhere else!
     }
 }
 
-protocol AnyCollectPropertyWrapper {
+protocol AnyStorageValueProvider { // TODO move and generalize (maybe even public?)!
     func provide<Repository: SharedRepository<SpeziAnchor>>(from repository: Repository)
 }
 
 extension Component {
-    var collectPropertyWrappers: [AnyCollectPropertyWrapper] {
-        retrieveProperties(ofType: AnyCollectPropertyWrapper.self)
+    var storageValueProviders: [AnyStorageValueProvider] {
+        retrieveProperties(ofType: AnyStorageValueProvider.self)
     }
 
     // TODO all the namings?
     func injectComponentValues<Repository: SharedRepository<SpeziAnchor>>(from repository: Repository) {
-        for collect in collectPropertyWrappers {
-            collect.provide(from: repository)
+        for providers in storageValueProviders {
+            providers.provide(from: repository)
         }
     }
 }
 
 // TODO just return empty whatever?
 @propertyWrapper
-public class _CollectPropertyWrapper<Value>: AnyCollectPropertyWrapper {
+public class _CollectPropertyWrapper<Value>: AnyStorageValueProvider {
     // swiftlint:disable:previous type_name
     // We want the type to be hidden from autocompletion and documentation generation
 
@@ -55,7 +55,7 @@ public class _CollectPropertyWrapper<Value>: AnyCollectPropertyWrapper {
     public init() {}
 
     func provide<Repository: SharedRepository<SpeziAnchor>>(from repository: Repository) {
-        injectedValues = repository[ProvidedComponentValue<Value>.self]
+        injectedValues = repository[CollectedComponentValue<Value>.self]
     }
 }
 

@@ -10,15 +10,15 @@
 // TODO docs
 public struct SpeziAnchor: SharedRepositoryAnchor {}
 
-// TODO move to specific file!
-struct SpeziComponent<C: Component>: KnowledgeSource {
-    typealias Anchor = SpeziAnchor
-    typealias Value = C
-}
 
+// TODO move to specific file
 extension Component {
     func storeComponent<Repository: SharedRepository<SpeziAnchor>>(into repository: Repository) {
-        repository[SpeziComponent<Self>.self] = self
+        guard let value = self as? Value else {
+            // TODO print warning, can't store component as it was modified!
+            return
+        }
+        repository[Self.self] = value
     }
 }
 

@@ -7,26 +7,27 @@
 //
 
 
-// TODO AnyValueProvider
-protocol AnyProvidePropertyWrapper {
+protocol AnyStorageValueCollector { // TODO move and generalize (maybe even public?)!
     func collect<Repository: SharedRepository<SpeziAnchor>>(into repository: Repository)
 }
 
 extension Component {
-    var providePropertyWrappers: [AnyProvidePropertyWrapper] {
-        retrieveProperties(ofType: AnyProvidePropertyWrapper.self)
+    var storageValueCollectors: [AnyStorageValueCollector] {
+        retrieveProperties(ofType: AnyStorageValueCollector.self)
     }
 
     func collectComponentValues<Repository: SharedRepository<SpeziAnchor>>(into repository: Repository) {
-        for provider in providePropertyWrappers {
-            provider.collect(into: repository)
+        for collector in storageValueCollectors {
+            collector.collect(into: repository)
         }
     }
 }
 
 // TODO move
-struct ProvidedComponentValue<ComponentValue>: DefaultProvidingKnowledgeSource {
+struct CollectedComponentValue<ComponentValue>: DefaultProvidingKnowledgeSource {
     typealias Anchor = SpeziAnchor
+
+    // TODO can the value be a reference type that is shared between all and which can be subscribed to?
     typealias Value = [ComponentValue]
 
     static var defaultValue: [ComponentValue] {
@@ -35,7 +36,7 @@ struct ProvidedComponentValue<ComponentValue>: DefaultProvidingKnowledgeSource {
 }
 
 @propertyWrapper
-public class _ProvidePropertyWrapper<Value>: AnyProvidePropertyWrapper {
+public class _ProvidePropertyWrapper<Value>: AnyStorageValueCollector {
     // swiftlint:disable:previous type_name
     // We want the type to be hidden from autocompletion and documentation generation
 
@@ -64,11 +65,11 @@ public class _ProvidePropertyWrapper<Value>: AnyProvidePropertyWrapper {
             wrapperWithArray.collectArrayElements(into: repository)
         } else {
             // TODO reducible!
-            if var existing = repository[ProvidedComponentValue<Value>.self] {
+            if var existing = repository[CollectedComponentValue<Value>.self] {
                 existing.append(storedValue)
-                repository[ProvidedComponentValue<Value>.self] = existing
+                repository[CollectedComponentValue<Value>.self] = existing
             } else {
-                repository[ProvidedComponentValue<Value>.self] = [storedValue]
+                repository[CollectedComponentValue<Value>.self] = [storedValue]
             }
         }
     }
@@ -86,11 +87,11 @@ protocol OptionalBasedProvideProperty {
 extension _ProvidePropertyWrapper: ArrayBasedProvideProperty where Value: Collection {
     func collectArrayElements<Repository: SharedRepository<SpeziAnchor>>(into repository: Repository) {
         // TODO repated code!
-        if var existing = repository[ProvidedComponentValue<Value.Element>.self] {
+        if var existing = repository[CollectedComponentValue<Value.Element>.self] {
             existing.append(contentsOf: storedValue)
-            repository[ProvidedComponentValue<Value.Element>.self] = existing
+            repository[CollectedComponentValue<Value.Element>.self] = existing
         } else {
-            repository[ProvidedComponentValue<Value.Element>.self] = Array(storedValue)
+            repository[CollectedComponentValue<Value.Element>.self] = Array(storedValue)
         }
     }
 }
@@ -102,11 +103,11 @@ extension _ProvidePropertyWrapper: OptionalBasedProvideProperty where Value: Any
         }
 
         // TODO repated code!
-        if var existing = repository[ProvidedComponentValue<Value.Wrapped>.self] {
+        if var existing = repository[CollectedComponentValue<Value.Wrapped>.self] {
             existing.append(storedValue)
-            repository[ProvidedComponentValue<Value.Wrapped>.self] = existing
+            repository[CollectedComponentValue<Value.Wrapped>.self] = existing
         } else {
-            repository[ProvidedComponentValue<Value.Wrapped>.self] = [storedValue]
+            repository[CollectedComponentValue<Value.Wrapped>.self] = [storedValue]
         }
     }
 }

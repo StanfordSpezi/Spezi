@@ -47,7 +47,7 @@
 /// - ``ObservableObjectProvider``: A ``Component`` can conform to ``ObservableObjectProvider`` to inject `ObservableObject`s in the SwiftUI view hierarchy.
 ///
 /// All these protocols are combined in the ``Module`` protocol, making it an easy one-stop solution to support all these different functionalities and build a capable Spezi module.
-public protocol Component<ComponentStandard>: AnyObject {
+public protocol Component<ComponentStandard>: AnyObject, KnowledgeSource<SpeziAnchor> {
     /// A ``Component/ComponentStandard`` defines what ``Standard`` the component supports.
     associatedtype ComponentStandard: Standard
     
