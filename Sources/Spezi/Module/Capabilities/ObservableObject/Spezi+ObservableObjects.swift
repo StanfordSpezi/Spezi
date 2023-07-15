@@ -12,7 +12,7 @@ import SwiftUI
 extension AnySpezi {
     /// A collection of ``Spezi/Spezi`` `LifecycleHandler`s.
     var observableObjectProviders: [any ObservableObjectProvider] {
-        typedCollection.get(allThatConformTo: (any ObservableObjectProvider).self)
+        storage.collect(allOf: (any ObservableObjectProvider).self)
     }
 }
 

@@ -22,20 +22,24 @@ public class DependencyManager<S: Standard> {
     init(_ components: [any Component<S>]) {
         sortedComponents = components.filter { $0.dependencyDescriptors.isEmpty }
         componentsWithDependencies = components.filter { !$0.dependencyDescriptors.isEmpty }
-        
+    }
+
+
+    /// Resolves the dependency order.
+    ///
+    /// After calling `resolve` you can safely access `sortedComponents`.
+    func resolve() {
         // Start the dependency resolution on the first component.
         if let nextComponent = componentsWithDependencies.first {
             push(nextComponent)
         }
 
-        // TODO maybe move out!
         for sortedComponent in sortedComponents {
             for dependency in sortedComponent.dependencyDescriptors {
                 dependency.inject(dependencyManager: self)
             }
         }
     }
-    
     
     /// Injects a dependency into a `_DependencyPropertyWrapper` that is resolved in the `sortedComponents`.
     /// - Parameters:

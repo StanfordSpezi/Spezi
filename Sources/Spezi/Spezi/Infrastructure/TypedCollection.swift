@@ -23,7 +23,12 @@ private protocol AnyTypedCollectionValue {
     func shutdown(logger: Logger)
 }
 
+@available(*, deprecated, message: "TypedCollection class should be replaced by directly using DefaultSharedRepository<SpeziAnchor>.")
+public typealias TypedCollection = DefaultSharedRepository<SpeziAnchor>
 
+
+// TODO remove after docs?
+/*
 /// A typesafe `Collection` of arbitrary key value information
 public class TypedCollection {
     private struct Value<T>: AnyTypedCollectionValue {
@@ -34,8 +39,7 @@ public class TypedCollection {
         var anyValue: Any {
             value
         }
-        
-        
+
         func shutdown(logger: Logger) {
             do {
                 try self.onShutdown?(self.value)
@@ -60,7 +64,7 @@ public class TypedCollection {
     
     /// Clear the `TypedCollection` instance.
     func clear() {
-        self.typedCollection = [:]
+        self.typedCollection = [:] // TODO removal calls shutdown but not clear?
     }
 
     /// Check if  the `TypedCollection` instance contains a key.
@@ -82,6 +86,7 @@ public class TypedCollection {
     
     /// Get the value corresponding to a key or stores and returns a value defined by the passed in default value.
     /// - Parameter key: The metatype used as a key in the `TypedCollection` instance.
+    /// - Parameter defaultValue: A autoclosure to provide a default value if the request key is not stored.
     /// - Returns: The value for the `key` stored in the `TypedCollection` instance or the value defined by the passed in default value.
     public func get<Key: TypedCollectionKey>(_ key: Key.Type, default defaultValue: @autoclosure () -> Key.Value) -> Key.Value {
         guard let value = self.typedCollection[ObjectIdentifier(Key.self)] as? Value<Key.Value> else {
@@ -141,3 +146,4 @@ public class TypedCollection {
         }
     }
 }
+*/

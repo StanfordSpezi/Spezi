@@ -8,11 +8,7 @@
 
 extension Component {
     func inject(standard: ComponentStandard) {
-        let mirror = Mirror(reflecting: self)
-        for child in mirror.children {
-            guard let standardPropertyWrapper = child.value as? _StandardPropertyWrapper<ComponentStandard> else {
-                continue
-            }
+        for standardPropertyWrapper in retrieveProperties(ofType: _StandardPropertyWrapper<ComponentStandard>.self) {
             standardPropertyWrapper.inject(standard: standard)
         }
     }

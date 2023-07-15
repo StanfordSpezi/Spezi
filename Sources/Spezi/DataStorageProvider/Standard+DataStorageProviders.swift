@@ -9,12 +9,8 @@
 
 extension Standard {
     nonisolated func inject(dataStorageProviders: [any DataStorageProvider<Self>]) {
-        let mirror = Mirror(reflecting: self)
-        for child in mirror.children {
-            guard let standardPropertyWrapper = child.value as? DataStorageProviders else {
-                continue
-            }
-            standardPropertyWrapper.inject(dataStorageProviders: dataStorageProviders)
+        for provider in retrieveProperties(ofType: DataStorageProviders.self) {
+            provider.inject(dataStorageProviders: dataStorageProviders)
         }
     }
 }

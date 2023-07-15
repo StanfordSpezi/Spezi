@@ -9,6 +9,6 @@
 
 extension Spezi {
     nonisolated var dataStorageProviders: [any DataStorageProvider<S>] {
-        typedCollection.get(allThatConformTo: (any DataStorageProvider<S>).self)
+        storage.collect(allOf: (any DataStorageProvider<S>).self)
     }
 }
