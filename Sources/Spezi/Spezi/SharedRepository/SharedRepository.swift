@@ -117,6 +117,7 @@ extension SharedRepositoryValue {
 
 public typealias AnyDefaultSharedRepository<Value: SharedRepositoryValue> = DefaultSharedRepository<Any>
 
+// TODO we may just not provide a default implementation?
 // TODO heap based storage?
 // TODO rename to `HeapRepository`/`HeapSharedRepository`?
 public final class DefaultSharedRepository<Anchor>: SharedRepository {

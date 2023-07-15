@@ -56,6 +56,9 @@ public class _CollectPropertyWrapper<Value>: AnyStorageValueProvider {
 
     func provide<Repository: SharedRepository<SpeziAnchor>>(from repository: Repository) {
         injectedValues = repository[CollectedComponentValue<Value>.self]
+
+        // TODO this is kind of unsafe as it allows to circumvent the dependency manager order
+        // injectedValues?.append(contentsOf: repository.collect(allOf: Value.self))
     }
 }
 

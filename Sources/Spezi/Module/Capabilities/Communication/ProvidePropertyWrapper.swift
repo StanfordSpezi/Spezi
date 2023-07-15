@@ -40,6 +40,7 @@ public class _ProvidePropertyWrapper<Value>: AnyStorageValueCollector {
     // swiftlint:disable:previous type_name
     // We want the type to be hidden from autocompletion and documentation generation
 
+    // TODO implement some sort of storage base reference stuff, so we can update it?
     private var storedValue: Value
 
     public var wrappedValue: Value {
@@ -65,12 +66,25 @@ public class _ProvidePropertyWrapper<Value>: AnyStorageValueCollector {
             wrapperWithArray.collectArrayElements(into: repository)
         } else {
             // TODO reducible!
-            if var existing = repository[CollectedComponentValue<Value>.self] {
-                existing.append(storedValue)
-                repository[CollectedComponentValue<Value>.self] = existing
-            } else {
-                repository[CollectedComponentValue<Value>.self] = [storedValue]
-            }
+            store(value: storedValue, into: repository)
+        }
+    }
+
+    func store<StoredValue, Repository: SharedRepository<SpeziAnchor>>(value: StoredValue, into repository: Repository) {
+        if var existing = repository[CollectedComponentValue<StoredValue>.self] {
+            existing.append(value)
+            repository[CollectedComponentValue<StoredValue>.self] = existing
+        } else {
+            repository[CollectedComponentValue<StoredValue>.self] = [value]
+        }
+    }
+
+    func store<StoredValue, Repository: SharedRepository<SpeziAnchor>>(values: any Collection<StoredValue>, into repository: Repository) {
+        if var existing = repository[CollectedComponentValue<StoredValue>.self] {
+            existing.append(contentsOf: values)
+            repository[CollectedComponentValue<StoredValue>.self] = existing
+        } else {
+            repository[CollectedComponentValue<StoredValue>.self] = Array(values)
         }
     }
 }
@@ -86,28 +100,14 @@ protocol OptionalBasedProvideProperty {
 
 extension _ProvidePropertyWrapper: ArrayBasedProvideProperty where Value: Collection {
     func collectArrayElements<Repository: SharedRepository<SpeziAnchor>>(into repository: Repository) {
-        // TODO repated code!
-        if var existing = repository[CollectedComponentValue<Value.Element>.self] {
-            existing.append(contentsOf: storedValue)
-            repository[CollectedComponentValue<Value.Element>.self] = existing
-        } else {
-            repository[CollectedComponentValue<Value.Element>.self] = Array(storedValue)
-        }
+        store(values: storedValue, into: repository)
     }
 }
 
 extension _ProvidePropertyWrapper: OptionalBasedProvideProperty where Value: AnyOptional {
     func collectOptional<Repository: SharedRepository<SpeziAnchor>>(into repository: Repository) {
-        guard let storedValue = storedValue.unwrappedOptional else {
-            return
-        }
-
-        // TODO repated code!
-        if var existing = repository[CollectedComponentValue<Value.Wrapped>.self] {
-            existing.append(storedValue)
-            repository[CollectedComponentValue<Value.Wrapped>.self] = existing
-        } else {
-            repository[CollectedComponentValue<Value.Wrapped>.self] = [storedValue]
+        if let storedValue = storedValue.unwrappedOptional {
+            store(value: storedValue, into: repository)
         }
     }
 }

@@ -81,6 +81,8 @@ public class DependencyManager<S: Standard> {
             
             return
         }
+
+        // TODO can we try to consider @Provide @Collect patterns in the order of components?
         
         // Detect circles in the `recursiveSearch` collection.
         guard !recursiveSearch.contains(where: { type(of: $0) == C.self }) else {

@@ -90,6 +90,8 @@ public actor Spezi<S: Standard>: AnySpezi, ObservableObject {
             // TODO injection of dependencies can be backed by the SharedRepository pattern?
             component.storeComponent(into: storage)
         }
+
+        // TODO make use of a property wrapper that uses `collect(allOf:)`
         
         standard.inject(dataStorageProviders: dataStorageProviders)
     }
