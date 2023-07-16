@@ -16,22 +16,24 @@ Building a module provides an easy one-stop solution to support different Spezi 
 
 A ``Component`` defines a software subsystem that can be configured as part of the ``SpeziAppDelegate/configuration``.
 
-The ``Component/ComponentStandard`` defines what Standard the component supports.
 The ``Component/configure()-m7ic`` method is called on the initialization of Spezi.
+All @``Component/Dependency`` instances are injected before the ``Component/configure()`` method is called.
 
 ### The Component Standard
 
-A ``Component`` can support any generic standard or add additional constraints using an optional where clause:
-```swift
-class ExampleComponent<ComponentStandard: Standard>: Component where ComponentStandard: /* ... */ {
-    /*... */
-}
-```
+A ``Component`` can communicate with a standard that is injected using the @``Component/StandardActor`` property wrapper.
+A ``Component`` can enforce that a ``Standard`` conforms to specified protocols which are checked during the dependency resolution at the initial startup of the Spezi system.
+You have to ensure that your ``Standard`` type conforms to all enforced protocols defined by the configured components. 
 
-``Component``s can also specify support for only one specific ``Standard`` using a `typealias` definition:
 ```swift
-class ExampleFHIRComponent: Component {
-    typealias ComponentStandard = FHIR
+protocol ExampleConstraint: Standard {
+    // ...
+}
+
+class ExampleComponent: Component {
+    @StandardActor var standard: any ExampleConstraint
+    
+    // ...
 }
 ```
 
@@ -111,8 +113,8 @@ All these component capabilities are combined in the ``Module`` protocol, making
 
 A ``Module`` is a ``Component`` that also includes
 - Conformance to a ``LifecycleHandler``
-- Persistance in the ``Spezi`` instance's ``Spezi/Spezi/typedCollection`` (using a conformance to ``TypedCollectionKey``)
-- Automatic injection in the SwiftUI view hierachy (``ObservableObjectProvider`` & `ObservableObject`)
+- Persistence in the ``Spezi`` instance's ``Spezi/Spezi/typedCollection`` (using a conformance to ``TypedCollectionKey``)
+- Automatic injection in the SwiftUI view hierarchy (``ObservableObjectProvider`` & `ObservableObject`)
 
 
 ## Topics

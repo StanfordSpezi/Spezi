@@ -48,7 +48,7 @@ The standard defines a shared repository to facilitate communication between dif
 
 The ``Configuration/init(standard:_:)``'s components result builder allows the definition of different components, including conditional statements or loops.
 
-The following example demonstrates the usage of the `FHIR` standard and different built-in Spezi modules, including the `HealthKit` and `QuestionnaireDataSource` components:
+The following example demonstrates the usage of a `FHIR` standard and different built-in Spezi modules, including the `HealthKit` and `QuestionnaireDataSource` components:
 ```swift
 import Spezi
 import FHIR

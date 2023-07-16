@@ -79,7 +79,5 @@ public actor Spezi<S: Standard>: AnySpezi, ObservableObject {
             component.configure()
             component.saveInTypedCollection(spezi: self)
         }
-        
-        // standard.inject(dataStorageProviders: dataStorageProviders)
     }
 }
