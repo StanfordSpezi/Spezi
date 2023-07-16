@@ -29,13 +29,6 @@ import Foundation
 // TODO you might just use Any?
 public protocol SharedRepositoryAnchor {} // TODO should we provide a default?
 
-extension KnowledgeSource {
-    // TODO document because of the downcast
-    fileprivate static func retrieve<Repository: SharedRepository<Anchor>>(from repository: Repository) -> Value? {
-        repository[Self.self]
-    }
-}
-
 // TODO create SendableSharedRepository!
 public protocol SharedRepository<Anchor> { // TODO should all repos be sendable?
     associatedtype Anchor // TODO does not conform to Anchor, such that you can use `Any`
@@ -53,17 +46,31 @@ public protocol SharedRepository<Anchor> { // TODO should all repos be sendable?
     // TODO contains or computed (is hard to measure for computed knowledge sources? make a note on computed sources)
     func contains<Source: KnowledgeSource<Anchor>>(_ source: Source.Type) -> Bool
 
+    func get<Source: KnowledgeSource<Anchor>>(_ source: Source.Type) -> Source.Value?
+
+    // TODO make this mutating!
+    func set<Source: KnowledgeSource<Anchor>>(_ source: Source.Type, value newValue: Source.Value?)
+
     func collect<Value>(allOf type: Value.Type) -> [Value]
 }
 
 extension SharedRepository {
+    public subscript<Source: KnowledgeSource<Anchor>>(_ source: Source.Type) -> Source.Value? {
+        get {
+            get(source)
+        }
+        nonmutating set {
+            set(source, value: newValue)
+        }
+    }
+
     public subscript<Source: DefaultProvidingKnowledgeSource<Anchor>>(_ source: Source.Type) -> Source.Value {
-        source.retrieve(from: self) ?? source.defaultValue
+        self.get(source) ?? source.defaultValue
     }
 
     public subscript<Source: ComputedKnowledgeSource<Anchor>>(_ source: Source.Type) -> Source.Value {
         mutating get throws {
-            if let value = source.retrieve(from: self) {
+            if let value = self.get(source) {
                 return value
             }
 
@@ -75,8 +82,7 @@ extension SharedRepository {
 
     public subscript<Source: OptionalComputedKnowledgeSource<Anchor>>(_ source: Source.Type) -> Source.Value? {
         mutating get throws {
-            // TODO we could reuse the above?
-            if let value = source.retrieve(from: self) {
+            if let value = self.get(source) {
                 return value
             }
 
@@ -89,7 +95,7 @@ extension SharedRepository {
     }
 
     public func contains<Source: KnowledgeSource<Anchor>>(_ source: Source.Type) -> Bool {
-        source.retrieve(from: self) != nil
+        self.get(source) != nil
     }
 }
 
@@ -138,22 +144,21 @@ public final class DefaultSharedRepository<Anchor>: SharedRepository {
 
     public init() {}
 
-    public subscript<Source: KnowledgeSource<Anchor>>(source: Source.Type) -> Source.Value? {
-        get {
-            guard let value = storage[ObjectIdentifier(source)] as? Value<Source> else {
-                return nil
-            }
-
-            return value.value
+    public func get<Source: KnowledgeSource<Anchor>>(_ source: Source.Type) -> Source.Value? {
+        guard let value = storage[ObjectIdentifier(source)] as? Value<Source> else {
+            return nil
         }
-        set {
-            let key = ObjectIdentifier(source)
 
-            if let value = newValue {
-                self.storage[key] = Value<Source>(value)
-            } else {
-                self.storage[key] = nil
-            }
+        return value.value
+    }
+
+    public func set<Source: KnowledgeSource<Anchor>>(_ source: Source.Type, value newValue: Source.Value?) {
+        let key = ObjectIdentifier(source)
+
+        if let value = newValue {
+            self.storage[key] = Value<Source>(value)
+        } else {
+            self.storage[key] = nil
         }
     }
 
