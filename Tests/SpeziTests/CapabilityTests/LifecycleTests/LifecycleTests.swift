@@ -46,7 +46,7 @@ private class TestLifecycleHandlerApplicationDelegate: SpeziAppDelegate {
     
     
     override var configuration: Configuration {
-        Configuration() {
+        Configuration {
             TestLifecycleHandler(
                 expectationWillFinishLaunchingWithOption: expectationWillFinishLaunchingWithOption,
                 expectationApplicationWillTerminate: expectationApplicationWillTerminate

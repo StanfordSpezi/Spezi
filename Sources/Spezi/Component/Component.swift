@@ -60,26 +60,3 @@ extension Component {
     // swiftlint:disable:next missing_docs
     public func configure() {}
 }
-//
-//
-//actor ExampleStandard: Standard, ExampleConstraint {
-//    func test() {
-//        
-//    }
-//}
-//
-//protocol ExampleConstraint: Standard {
-//    func test()
-//}
-//
-//class ExampleComponent: Component {
-//    @StandardActor var standard: any ExampleConstraint
-//    
-//    var test: String {
-//        Task {
-//            await standard.test()
-//        }
-//        
-//        return ""
-//    }
-//}
