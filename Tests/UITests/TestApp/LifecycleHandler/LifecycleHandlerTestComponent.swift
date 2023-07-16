@@ -10,7 +10,7 @@ import Spezi
 import SwiftUI
 
 
-final class LifecycleHandlerTestComponent<ComponentStandard: Standard>: Module {
+final class LifecycleHandlerTestComponent: Module {
     @AppStorage("willFinishLaunchingWithOptions") var willFinishLaunchingWithOptions: Int = 0
     @AppStorage("sceneWillEnterForeground") var sceneWillEnterForeground: Int = 0
     @AppStorage("sceneDidBecomeActive") var sceneDidBecomeActive: Int = 0

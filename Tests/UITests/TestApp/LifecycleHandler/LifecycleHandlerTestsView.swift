@@ -12,10 +12,7 @@ import XCTSpezi
 
 
 struct LifecycleHandlerTestsView: View {
-    typealias LifecycleHandlerComponent = LifecycleHandlerTestComponent<TestAppStandard>
-    
-    
-    @EnvironmentObject var testAppComponent: LifecycleHandlerComponent
+    @EnvironmentObject var testAppComponent: LifecycleHandlerTestComponent
     
     
     var body: some View {

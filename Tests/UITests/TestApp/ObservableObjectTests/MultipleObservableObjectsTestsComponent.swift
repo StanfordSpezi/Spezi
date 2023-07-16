@@ -10,7 +10,7 @@ import Spezi
 import SwiftUI
 
 
-final class MultipleObservableObjectsTestsComponent<ComponentStandard: Standard>: Module {
+final class MultipleObservableObjectsTestsComponent: Module {
     class TestObservableObject<T>: ObservableObject {
         let value: T
         

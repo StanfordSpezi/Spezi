@@ -12,18 +12,15 @@ import XCTSpezi
 
 
 class ObservableObjectTests: TestAppTestCase {
-    typealias ObservableComponent = ObservableComponentTestsComponent<TestAppStandard>
-    typealias MultipleObservableComponent = MultipleObservableObjectsTestsComponent<TestAppStandard>
-    
-    let testAppComponent: ObservableComponent
-    let multipleObservableInt: MultipleObservableComponent.TestObservableObject<Int>
-    let multipleObservableString: MultipleObservableComponent.TestObservableObject<String>
+    let testAppComponent: ObservableComponentTestsComponent
+    let multipleObservableInt: MultipleObservableObjectsTestsComponent.TestObservableObject<Int>
+    let multipleObservableString: MultipleObservableObjectsTestsComponent.TestObservableObject<String>
     
     
     init(
-        testAppComponent: ObservableComponent,
-        multipleObservableInt: MultipleObservableComponent.TestObservableObject<Int>,
-        multipleObservableString: MultipleObservableComponent.TestObservableObject<String>
+        testAppComponent: ObservableComponentTestsComponent,
+        multipleObservableInt: MultipleObservableObjectsTestsComponent.TestObservableObject<Int>,
+        multipleObservableString: MultipleObservableObjectsTestsComponent.TestObservableObject<String>
     ) {
         self.testAppComponent = testAppComponent
         self.multipleObservableInt = multipleObservableInt
