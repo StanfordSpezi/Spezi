@@ -9,7 +9,7 @@
 
 /// A function builder used to aggregate multiple `Component`s
 @resultBuilder
-public enum ComponentBuilder<S: Standard> {
+public enum ComponentBuilder {
     /// If declared, provides contextual type information for statement expressions to translate them into partial results.
     public static func buildExpression<C: Component>(_ expression: C) -> [any Component] {
         [expression]

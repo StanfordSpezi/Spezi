@@ -53,13 +53,32 @@ public struct Configuration {
     
 
     /// A ``Configuration`` defines the ``Standard`` and ``Component``s that are used in a Spezi project.
+    ///
+    /// If no ``Standard`` is provided, Spezi injects a default empty standard instance only conforming to ``Standard``.
+    /// Ensure that your standard conforms to all protocols enforced by the ``Component``s. If your ``Component``s require protocol conformances
+    /// you must add them to your custom type conforming to ``Standard`` and passed to the initializer or extend a prebuild standard.
+    ///
     /// - Parameters:
-    ///   - standard: The ``Standard`` that is used in the Spezi project.
     ///   - components: The ``Component``s used in the Spezi project. You can define the ``Component``s using the ``ComponentBuilder`` result builder.
     public init<S: Standard>(
         standard: S,
-        @ComponentBuilder<S> _ components: () -> (ComponentCollection)
+        @ComponentBuilder _ components: () -> (ComponentCollection)
     ) {
         self.spezi = Spezi<S>(standard: standard, components: components().elements)
+    }
+    
+    
+    /// A ``Configuration`` defines the ``Standard`` and ``Component``s that are used in a Spezi project.
+    ///
+    /// If no ``Standard`` is provided, Spezi injects a default empty standard instance only conforming to ``Standard``.
+    /// Ensure that your standard conforms to all protocols enforced by the ``Component``s. If your ``Component``s require protocol conformances
+    /// you must add them to your custom type conforming to ``Standard`` and passed to the initializer or extend a prebuild standard.
+    ///
+    /// - Parameters:
+    ///   - components: The ``Component``s used in the Spezi project. You can define the ``Component``s using the ``ComponentBuilder`` result builder.
+    public init(
+        @ComponentBuilder _ components: () -> (ComponentCollection)
+    ) {
+        self.spezi = Spezi<DefaultStandard>(standard: DefaultStandard(), components: components().elements)
     }
 }

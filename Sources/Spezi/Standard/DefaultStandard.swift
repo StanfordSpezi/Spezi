@@ -6,11 +6,5 @@
 // SPDX-License-Identifier: MIT
 //
 
-import Spezi
 
-
-actor MockStandard: Standard {
-    func fulfill(expectation: XCTestExpectation) {
-        expectation.fulfill()
-    }
-}
+actor DefaultStandard: Standard {}

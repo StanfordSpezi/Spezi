@@ -12,62 +12,62 @@ import XCTest
 import XCTRuntimeAssertions
 
 
-private final class TestComponent1<ComponentStandard: Standard>: Component {
-    @Dependency var testComponent2 = TestComponent2<ComponentStandard>()
-    @Dependency var testComponent3: TestComponent3<ComponentStandard>
+private final class TestComponent1: Component {
+    @Dependency var testComponent2 = TestComponent2()
+    @Dependency var testComponent3: TestComponent3
 }
 
-private final class TestComponent2<ComponentStandard: Standard>: Component {
-    @Dependency var testComponent4 = TestComponent4<ComponentStandard>()
-    @Dependency var testComponent5 = TestComponent5<ComponentStandard>()
-    @Dependency var testComponent3: TestComponent3<ComponentStandard>
+private final class TestComponent2: Component {
+    @Dependency var testComponent4 = TestComponent4()
+    @Dependency var testComponent5 = TestComponent5()
+    @Dependency var testComponent3: TestComponent3
 }
 
-private final class TestComponent3<ComponentStandard: Standard>: Component, DefaultInitializable {}
+private final class TestComponent3: Component, DefaultInitializable {}
 
-private final class TestComponent4<ComponentStandard: Standard>: Component {
-    @Dependency var testComponent5 = TestComponent5<ComponentStandard>()
+private final class TestComponent4: Component {
+    @Dependency var testComponent5 = TestComponent5()
 }
 
-private final class TestComponent5<ComponentStandard: Standard>: Component {}
+private final class TestComponent5: Component {}
 
-private final class TestComponent6<ComponentStandard: Standard>: Component {}
+private final class TestComponent6: Component {}
 
-private final class TestComponent7<ComponentStandard: Standard>: Component {
-    @Dependency var testComponent1 = TestComponent1<ComponentStandard>()
+private final class TestComponent7: Component {
+    @Dependency var testComponent1 = TestComponent1()
 }
 
-private final class TestComponentCircle1<ComponentStandard: Standard>: Component {
-    @Dependency var testComponentCircle2 = TestComponentCircle2<ComponentStandard>()
+private final class TestComponentCircle1: Component {
+    @Dependency var testComponentCircle2 = TestComponentCircle2()
 }
 
-private final class TestComponentCircle2<ComponentStandard: Standard>: Component {
-    @Dependency var testComponentCircle1 = TestComponentCircle1<ComponentStandard>()
+private final class TestComponentCircle2: Component {
+    @Dependency var testComponentCircle1 = TestComponentCircle1()
 }
 
-private final class TestComponentItself<ComponentStandard: Standard>: Component {
-    @Dependency var testComponentItself = TestComponentItself<ComponentStandard>()
+private final class TestComponentItself: Component {
+    @Dependency var testComponentItself = TestComponentItself()
 }
 
 
 final class DependencyTests: XCTestCase {
     func testComponentDependencyChain() throws {
-        let components: [any Component<MockStandard>] = [
-            TestComponent6<MockStandard>(),
-            TestComponent1<MockStandard>(),
-            TestComponent7<MockStandard>()
+        let components: [any Component] = [
+            TestComponent6(),
+            TestComponent1(),
+            TestComponent7()
         ]
         let sortedComponents = DependencyManager(components).sortedComponents
 
         XCTAssertEqual(sortedComponents.count, 7)
         
-        _ = try XCTUnwrap(sortedComponents[0] as? TestComponent6<MockStandard>)
-        let testComponentMock5 = try XCTUnwrap(sortedComponents[1] as? TestComponent5<MockStandard>)
-        let testComponentMock4 = try XCTUnwrap(sortedComponents[2] as? TestComponent4<MockStandard>)
-        let testComponentMock3 = try XCTUnwrap(sortedComponents[3] as? TestComponent3<MockStandard>)
-        let testComponentMock2 = try XCTUnwrap(sortedComponents[4] as? TestComponent2<MockStandard>)
-        let testComponentMock1 = try XCTUnwrap(sortedComponents[5] as? TestComponent1<MockStandard>)
-        _ = try XCTUnwrap(sortedComponents[6] as? TestComponent7<MockStandard>)
+        _ = try XCTUnwrap(sortedComponents[0] as? TestComponent6)
+        let testComponentMock5 = try XCTUnwrap(sortedComponents[1] as? TestComponent5)
+        let testComponentMock4 = try XCTUnwrap(sortedComponents[2] as? TestComponent4)
+        let testComponentMock3 = try XCTUnwrap(sortedComponents[3] as? TestComponent3)
+        let testComponentMock2 = try XCTUnwrap(sortedComponents[4] as? TestComponent2)
+        let testComponentMock1 = try XCTUnwrap(sortedComponents[5] as? TestComponent1)
+        _ = try XCTUnwrap(sortedComponents[6] as? TestComponent7)
         
         XCTAssert(testComponentMock4.testComponent5 === testComponentMock5)
         XCTAssert(testComponentMock2.testComponent5 === testComponentMock5)
@@ -80,18 +80,18 @@ final class DependencyTests: XCTestCase {
     }
 
     func testAlreadyInDependableComponents() throws {
-        let components: [any Component<MockStandard>] = [
-            TestComponent2<MockStandard>(),
-            TestComponent5<MockStandard>()
+        let components: [any Component] = [
+            TestComponent2(),
+            TestComponent5()
         ]
         let sortedComponents = DependencyManager(components).sortedComponents
 
         XCTAssertEqual(sortedComponents.count, 4)
         
-        let testComponent5 = try XCTUnwrap(sortedComponents[0] as? TestComponent5<MockStandard>)
-        let testComponent4 = try XCTUnwrap(sortedComponents[1] as? TestComponent4<MockStandard>)
-        let testComponent3 = try XCTUnwrap(sortedComponents[2] as? TestComponent3<MockStandard>)
-        let testComponent2 = try XCTUnwrap(sortedComponents[3] as? TestComponent2<MockStandard>)
+        let testComponent5 = try XCTUnwrap(sortedComponents[0] as? TestComponent5)
+        let testComponent4 = try XCTUnwrap(sortedComponents[1] as? TestComponent4)
+        let testComponent3 = try XCTUnwrap(sortedComponents[2] as? TestComponent3)
+        let testComponent2 = try XCTUnwrap(sortedComponents[3] as? TestComponent2)
         
         XCTAssert(testComponent4.testComponent5 === testComponent5)
         XCTAssert(testComponent2.testComponent5 === testComponent5)
@@ -100,18 +100,18 @@ final class DependencyTests: XCTestCase {
     }
 
     func testComponentDependencyMultipleTimes() throws {
-        let components: [any Component<MockStandard>] = [
-            TestComponent5<MockStandard>(),
-            TestComponent4<MockStandard>(),
-            TestComponent4<MockStandard>()
+        let components: [any Component] = [
+            TestComponent5(),
+            TestComponent4(),
+            TestComponent4()
         ]
         let sortedComponents = DependencyManager(components).sortedComponents
 
         XCTAssertEqual(sortedComponents.count, 3)
 
-        let testComponent5 = try XCTUnwrap(sortedComponents[0] as? TestComponent5<MockStandard>)
-        let testComponent40 = try XCTUnwrap(sortedComponents[1] as? TestComponent4<MockStandard>)
-        let testComponent41 = try XCTUnwrap(sortedComponents[2] as? TestComponent4<MockStandard>)
+        let testComponent5 = try XCTUnwrap(sortedComponents[0] as? TestComponent5)
+        let testComponent40 = try XCTUnwrap(sortedComponents[1] as? TestComponent4)
+        let testComponent41 = try XCTUnwrap(sortedComponents[2] as? TestComponent4)
         
         XCTAssert(testComponent40 !== testComponent41)
         
@@ -120,19 +120,19 @@ final class DependencyTests: XCTestCase {
     }
 
     func testComponentDependencyChainMultipleTimes() throws {
-        let components: [any Component<MockStandard>] = [
-            TestComponent2<MockStandard>(),
-            TestComponent2<MockStandard>()
+        let components: [any Component] = [
+            TestComponent2(),
+            TestComponent2()
         ]
         let sortedComponents = DependencyManager(components).sortedComponents
 
         XCTAssertEqual(sortedComponents.count, 5)
 
-        let testComponent5 = try XCTUnwrap(sortedComponents[0] as? TestComponent5<MockStandard>)
-        let testComponent4 = try XCTUnwrap(sortedComponents[1] as? TestComponent4<MockStandard>)
-        let testComponent3 = try XCTUnwrap(sortedComponents[2] as? TestComponent3<MockStandard>)
-        let testComponent20 = try XCTUnwrap(sortedComponents[3] as? TestComponent2<MockStandard>)
-        let testComponent21 = try XCTUnwrap(sortedComponents[4] as? TestComponent2<MockStandard>)
+        let testComponent5 = try XCTUnwrap(sortedComponents[0] as? TestComponent5)
+        let testComponent4 = try XCTUnwrap(sortedComponents[1] as? TestComponent4)
+        let testComponent3 = try XCTUnwrap(sortedComponents[2] as? TestComponent3)
+        let testComponent20 = try XCTUnwrap(sortedComponents[3] as? TestComponent2)
+        let testComponent21 = try XCTUnwrap(sortedComponents[4] as? TestComponent2)
         
         XCTAssert(testComponent4.testComponent5 === testComponent5)
         
@@ -151,32 +151,32 @@ final class DependencyTests: XCTestCase {
 
 
     func testComponentNoDependency() throws {
-        let components: [any Component<MockStandard>] = [TestComponent5<MockStandard>()]
+        let components: [any Component] = [TestComponent5()]
         let sortedComponents = DependencyManager(components).sortedComponents
 
         XCTAssertEqual(sortedComponents.count, 1)
 
-        _ = try XCTUnwrap(sortedComponents[0] as? TestComponent5<MockStandard>)
+        _ = try XCTUnwrap(sortedComponents[0] as? TestComponent5)
     }
 
     func testComponentNoDependencyMultipleTimes() throws {
-        let components: [any Component<MockStandard>] = [
-            TestComponent5<MockStandard>(),
-            TestComponent5<MockStandard>(),
-            TestComponent5<MockStandard>()
+        let components: [any Component] = [
+            TestComponent5(),
+            TestComponent5(),
+            TestComponent5()
         ]
         let sortedComponents = DependencyManager(components).sortedComponents
 
         XCTAssertEqual(sortedComponents.count, 3)
 
-        _ = try XCTUnwrap(sortedComponents[0] as? TestComponent5<MockStandard>)
-        _ = try XCTUnwrap(sortedComponents[1] as? TestComponent5<MockStandard>)
-        _ = try XCTUnwrap(sortedComponents[2] as? TestComponent5<MockStandard>)
+        _ = try XCTUnwrap(sortedComponents[0] as? TestComponent5)
+        _ = try XCTUnwrap(sortedComponents[1] as? TestComponent5)
+        _ = try XCTUnwrap(sortedComponents[2] as? TestComponent5)
     }
 
     func testComponentCycle() throws {
-        let components: [any Component<MockStandard>] = [
-            TestComponentCircle1<MockStandard>()
+        let components: [any Component] = [
+            TestComponentCircle1()
         ]
 
         try XCTRuntimePrecondition {

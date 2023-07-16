@@ -42,8 +42,7 @@ let package = Package(
             dependencies: [
                 .target(name: "Spezi"),
                 .product(name: "XCTRuntimeAssertions", package: "XCTRuntimeAssertions")
-            ],
-            sources: ["BuildNoTests"]
+            ]
         )
     ]
 )

@@ -20,7 +20,7 @@ private enum DynamicDependenciesTestCase: CaseIterable {
     case dependencyCircle
     
     
-    var dynamicDependencies: _DynamicDependenciesPropertyWrapper<MockStandard> {
+    var dynamicDependencies: _DynamicDependenciesPropertyWrapper {
         switch self {
         case .twoDependencies:
             return _DynamicDependenciesPropertyWrapper(
@@ -62,17 +62,17 @@ private enum DynamicDependenciesTestCase: CaseIterable {
     }
     
     
-    func evaluateExpectations(components: [any Component<MockStandard>]) throws {
+    func evaluateExpectations(components: [any Component]) throws {
         switch self {
         case .twoDependencies:
             XCTAssertEqual(components.count, 2)
-            let testComponent2 = try components.componentOfType(TestComponent2<MockStandard>.self)
-            let testComponent3 = try components.componentOfType(TestComponent3<MockStandard>.self)
+            let testComponent2 = try components.componentOfType(TestComponent2.self)
+            let testComponent3 = try components.componentOfType(TestComponent3.self)
             XCTAssert(testComponent2 !== testComponent3)
         case .duplicatedDependencies:
             XCTAssertEqual(components.count, 3)
-            let testComponent2 = try components.componentOfType(TestComponent2<MockStandard>.self)
-            let testComponent3 = try components.componentOfType(TestComponent3<MockStandard>.self, expectedNumber: 2)
+            let testComponent2 = try components.componentOfType(TestComponent2.self)
+            let testComponent3 = try components.componentOfType(TestComponent3.self, expectedNumber: 2)
             XCTAssert(testComponent2 !== testComponent3)
         case .noDependencies:
             XCTAssertEqual(components.count, 0)
@@ -83,9 +83,7 @@ private enum DynamicDependenciesTestCase: CaseIterable {
 }
 
 private final class TestComponent1: Component {
-    typealias ComponentStandard = MockStandard
-    
-    @DynamicDependencies var dynamicDependencies: [any Component<ComponentStandard>]
+    @DynamicDependencies var dynamicDependencies: [any Component]
     let testCase: DynamicDependenciesTestCase
     
     
@@ -100,23 +98,23 @@ private final class TestComponent1: Component {
     }
 }
 
-private final class TestComponent2<ComponentStandard: Standard>: Component {}
+private final class TestComponent2: Component {}
 
-private final class TestComponent3<ComponentStandard: Standard>: Component {}
+private final class TestComponent3: Component {}
 
-private final class TestComponentCircle1<ComponentStandard: Standard>: Component {
-    @Dependency var testComponentCircle2 = TestComponentCircle2<ComponentStandard>()
+private final class TestComponentCircle1: Component {
+    @Dependency var testComponentCircle2 = TestComponentCircle2()
 }
 
-private final class TestComponentCircle2<ComponentStandard: Standard>: Component {
-    @Dependency var testComponentCircle1 = TestComponentCircle1<ComponentStandard>()
+private final class TestComponentCircle2: Component {
+    @Dependency var testComponentCircle1 = TestComponentCircle1()
 }
 
 
 final class DynamicDependenciesTests: XCTestCase {
     func testDynamicDependencies() throws {
         for dynamicDependenciesTestCase in DynamicDependenciesTestCase.allCases {
-            let components: [any Component<MockStandard>] = [
+            let components: [any Component] = [
                 TestComponent1(dynamicDependenciesTestCase)
             ]
             

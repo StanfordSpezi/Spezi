@@ -53,9 +53,9 @@ final class ComponentBuilderTests: XCTestCase {
     }
     
     
-    private func components(loopLimit: Int, condition: Bool, expecations: Expectations) -> ComponentCollection<MockStandard> {
-        @ComponentBuilder<MockStandard>
-        var components: ComponentCollection<MockStandard> {
+    private func components(loopLimit: Int, condition: Bool, expecations: Expectations) -> ComponentCollection {
+        @ComponentBuilder
+        var components: ComponentCollection {
             TestComponent(expectation: expecations.firstTestExpection)
             for _ in 0..<loopLimit {
                 TestComponent(expectation: expecations.loopTestExpection)
@@ -66,7 +66,7 @@ final class ComponentBuilderTests: XCTestCase {
             // The `#available(iOS 16, *)` mark is used to test `#available` in a result builder.
             // The availability check is not part of any part of the Spezi API.
             if #available(iOS 16, *) { // swiftlint:disable:this deployment_target
-                TestComponent<MockStandard>(expectation: expecations.availableConditionalTestExpection)
+                TestComponent(expectation: expecations.availableConditionalTestExpection)
             }
             if condition {
                 TestComponent(expectation: expecations.ifTestExpection)
@@ -89,7 +89,7 @@ final class ComponentBuilderTests: XCTestCase {
             expecations: expecations
         )
         
-        _ = Spezi<MockStandard>(standard: MockStandard(), components: components.elements)
+        _ = Spezi(standard: MockStandard(), components: components.elements)
         try expecations.wait()
     }
     
@@ -105,7 +105,7 @@ final class ComponentBuilderTests: XCTestCase {
             expecations: expecations
         )
         
-        _ = Spezi<MockStandard>(standard: MockStandard(), components: components.elements)
+        _ = Spezi(standard: MockStandard(), components: components.elements)
         try expecations.wait()
     }
 }

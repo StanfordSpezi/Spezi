@@ -9,7 +9,7 @@
 import Spezi
 
 
-extension Array where Element == any Component<MockStandard> {
+extension Array where Element == any Component {
     func componentOfType<C: Component>(_ componentType: C.Type = C.self, expectedNumber: Int = 1) throws -> C {
         let typedComponents = compactMap { $0 as? C }
         XCTAssertEqual(typedComponents.count, expectedNumber)

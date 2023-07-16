@@ -13,13 +13,13 @@ import XCTRuntimeAssertions
 final class DependencyDescriptorTests: XCTestCase {
     func testInjectionPreconditionDependencyPropertyWrapper() throws {
         try XCTRuntimePrecondition {
-            _ = _DependencyPropertyWrapper<TestComponent, MockStandard>(wrappedValue: TestComponent()).wrappedValue
+            _ = _DependencyPropertyWrapper<TestComponent>(wrappedValue: TestComponent()).wrappedValue
         }
     }
     
     func testInjectionPreconditionDynamicDependenciesPropertyWrapper() throws {
         try XCTRuntimePrecondition {
-            _ = _DynamicDependenciesPropertyWrapper<MockStandard>(
+            _ = _DynamicDependenciesPropertyWrapper(
                 componentProperties: [
                     _DependencyPropertyWrapper(wrappedValue: TestComponent())
                 ]
