@@ -6,6 +6,8 @@
 // SPDX-License-Identifier: MIT
 //
 
+import XCTRuntimeAssertions
+
 
 /// A ``DependencyManager`` in Spezi is used to gather information about components with dependencies.
 public class DependencyManager<S: Standard> {

@@ -6,6 +6,8 @@
 // SPDX-License-Identifier: MIT
 //
 
+import XCTRuntimeAssertions
+
 
 /// Refer to ``Standard/DataStorageProviders`` for information on how to use the `@DataStorageProviders` property wrapper.
 /// Do not use the `_DataStorageProvidersPropertyWrapper` directly.
