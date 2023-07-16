@@ -44,4 +44,4 @@
 /// You can access the current ``Standard`` instance in your ``Component`` or ``Module`` using the @``Component/StandardActor`` property wrapper.
 ///
 /// Spezi includes a built-in `FHIR` standard that you can use in your digital health applications.
-public protocol Standard<BaseType>: Actor, Component, DataSourceRegistry where ComponentStandard == Self { }
+public protocol Standard: Actor, Component { }

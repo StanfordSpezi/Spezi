@@ -47,10 +47,7 @@
 /// - ``ObservableObjectProvider``: A ``Component`` can conform to ``ObservableObjectProvider`` to inject `ObservableObject`s in the SwiftUI view hierarchy.
 ///
 /// All these protocols are combined in the ``Module`` protocol, making it an easy one-stop solution to support all these different functionalities and build a capable Spezi module.
-public protocol Component<ComponentStandard>: AnyObject, TypedCollectionKey {
-    /// A ``Component/ComponentStandard`` defines what ``Standard`` the component supports.
-    associatedtype ComponentStandard: Standard
-    
+public protocol Component: AnyObject, TypedCollectionKey {
     /// The ``Component/configure()-m7ic`` method is called on the initialization of the Spezi instance to perform a lightweight configuration of the component.
     ///
     /// It is advised that longer setup tasks are done in an asynchronous task and started during the call of the configure method.
@@ -62,4 +59,27 @@ extension Component {
     // A documentation for this methodd exists in the `Component` type which SwiftLint doesn't recognize.
     // swiftlint:disable:next missing_docs
     public func configure() {}
+}
+
+
+actor ExampleStandard: Standard, ExampleConstraint {
+    func test() {
+        
+    }
+}
+
+protocol ExampleConstraint: Standard {
+    func test()
+}
+
+class ExampleComponent: Component {
+    @StandardActor var standard: any ExampleConstraint
+    
+    var test: String {
+        Task {
+            await standard.test()
+        }
+        
+        return ""
+    }
 }

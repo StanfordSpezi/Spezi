@@ -10,18 +10,18 @@ import XCTRuntimeAssertions
 
 
 /// A ``DependencyManager`` in Spezi is used to gather information about components with dependencies.
-public class DependencyManager<S: Standard> {
+public class DependencyManager {
     /// Collection of sorted components after resolving all dependencies.
-    var sortedComponents: [any Component<S>]
+    var sortedComponents: [any Component]
     /// Collection of all omponents with dependencies that are not yet processed.
-    private var componentsWithDependencies: [any Component<S>]
+    private var componentsWithDependencies: [any Component]
     /// Collection used to keep track of components with dependencies in the recursive search.
-    private var recursiveSearch: [any Component<S>] = []
+    private var recursiveSearch: [any Component] = []
     
     
     /// A ``DependencyManager`` in Spezi is used to gather information about components with dependencies.
     /// - Parameter components: The components that should be resolved.
-    init(_ components: [any Component<S>]) {
+    init(_ components: [any Component]) {
         sortedComponents = components.filter { $0.dependencyDescriptors.isEmpty }
         componentsWithDependencies = components.filter { !$0.dependencyDescriptors.isEmpty }
         
@@ -45,7 +45,7 @@ public class DependencyManager<S: Standard> {
     func inject<D: ComponentDependency>(
         _ dependencyType: D.ComponentType.Type,
         into anyDependency: D
-    ) where D.PropertyStandard == S {
+    ) {
         guard let foundInSortedComponents = sortedComponents.first(where: { type(of: $0) == D.ComponentType.self }) as? D.ComponentType else {
             preconditionFailure("Could not find the injectable component in the `sortedComponents`.")
         }
@@ -57,7 +57,7 @@ public class DependencyManager<S: Standard> {
     /// - Parameters:
     ///   - dependencyType: The type of the dependency that should be resolved.
     ///   - defaultValue: A default instance of the dependency that is used when the `dependencyType` is not present in the `sortedComponents` or `componentsWithDependencies`.
-    func require<C: Component>(_ dependencyType: C.Type, defaultValue: @autoclosure () -> (C)) where C.ComponentStandard == S {
+    func require<C: Component>(_ dependencyType: C.Type, defaultValue: @autoclosure () -> (C)) {
         // 1. Return if thedepending component is found in the `sortedComponents` collection.
         if sortedComponents.contains(where: { type(of: $0) == C.self }) {
             return
@@ -102,7 +102,7 @@ public class DependencyManager<S: Standard> {
         push(foundInComponentsWithDependencies)
     }
     
-    private func resolvedAllDependencies(_ dependingComponent: any Component<S>) {
+    private func resolvedAllDependencies(_ dependingComponent: any Component) {
         guard !recursiveSearch.isEmpty else {
             preconditionFailure("Internal logic error in the `DependencyManager`")
         }
@@ -129,7 +129,7 @@ public class DependencyManager<S: Standard> {
     }
     
     
-    private func push(_ component: any Component<S>) {
+    private func push(_ component: any Component) {
         recursiveSearch.append(component)
         for dependency in component.dependencyDescriptors {
             dependency.gatherDependency(dependencyManager: self)

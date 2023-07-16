@@ -1,4 +1,4 @@
-// swift-tools-version:5.7
+// swift-tools-version:5.8
 
 //
 // This source file is part of the Stanford Spezi open-source project
@@ -42,7 +42,8 @@ let package = Package(
             dependencies: [
                 .target(name: "Spezi"),
                 .product(name: "XCTRuntimeAssertions", package: "XCTRuntimeAssertions")
-            ]
+            ],
+            sources: ["BuildNoTests"]
         )
     ]
 )

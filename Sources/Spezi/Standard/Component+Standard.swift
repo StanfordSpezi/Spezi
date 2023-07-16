@@ -7,10 +7,10 @@
 //
 
 extension Component {
-    func inject(standard: ComponentStandard) {
+    func inject<S: Standard>(standard: S) {
         let mirror = Mirror(reflecting: self)
         for child in mirror.children {
-            guard let standardPropertyWrapper = child.value as? _StandardPropertyWrapper<ComponentStandard> else {
+            guard let standardPropertyWrapper = child.value as? AnyStandardPropertyWrapper else {
                 continue
             }
             standardPropertyWrapper.inject(standard: standard)
@@ -33,5 +33,5 @@ extension Component {
     ///
     /// You can access the wrapped value of the ``Standard`` after the ``Component`` is configured using ``Component/configure()-m7ic``,
     /// e.g. in the ``LifecycleHandler/willFinishLaunchingWithOptions(_:launchOptions:)-26h4k`` function.
-    public typealias StandardActor = _StandardPropertyWrapper<ComponentStandard>
+    public typealias StandardActor = _StandardPropertyWrapper
 }

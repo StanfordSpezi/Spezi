@@ -11,25 +11,21 @@
 /// It is generally not needed to implement types conforming to ``DependencyDescriptor`` when using Spezi.
 ///
 /// Refer to the ``Component/Dependency`` and ``Component/DynamicDependencies`` property wrappers for more information.
-public protocol DependencyDescriptor<PropertyStandard> {
-    /// The ``Standard`` constraining the dependency.
-    associatedtype PropertyStandard: Standard
-    
-    
+public protocol DependencyDescriptor {
     /// Used by the ``DependencyManager`` to gather dependency information.
-    func gatherDependency(dependencyManager: DependencyManager<PropertyStandard>)
+    func gatherDependency(dependencyManager: DependencyManager)
     /// Used by the ``DependencyManager`` to inject resolved dependency information into a ``DependencyDescriptor``.
-    func inject(dependencyManager: DependencyManager<PropertyStandard>)
+    func inject(dependencyManager: DependencyManager)
 }
 
 
 extension Component {
-    var dependencyDescriptors: [any DependencyDescriptor<ComponentStandard>] {
+    var dependencyDescriptors: [any DependencyDescriptor] {
         let mirror = Mirror(reflecting: self)
-        var dependencies: [any DependencyDescriptor<ComponentStandard>] = []
+        var dependencies: [any DependencyDescriptor] = []
         
         for child in mirror.children {
-            guard let dependencyPropertyWrapper = child.value as? any DependencyDescriptor<ComponentStandard> else {
+            guard let dependencyPropertyWrapper = child.value as? any DependencyDescriptor else {
                 continue
             }
             dependencies.append(dependencyPropertyWrapper)

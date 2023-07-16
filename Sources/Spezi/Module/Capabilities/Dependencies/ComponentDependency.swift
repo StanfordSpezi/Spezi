@@ -8,9 +8,9 @@
 
 
 /// A ``ComponentDependency`` defines the interface of a ``Component/Dependency`` propety wrapper.
-public protocol ComponentDependency<PropertyStandard>: DependencyDescriptor, AnyObject {
+public protocol ComponentDependency: DependencyDescriptor, AnyObject {
     /// The type of the component that is defined as a dependency.
-    associatedtype ComponentType: Component where ComponentType.ComponentStandard == PropertyStandard
+    associatedtype ComponentType: Component
     
     
     /// The default value defined by the ``Component`` describing the dependency.

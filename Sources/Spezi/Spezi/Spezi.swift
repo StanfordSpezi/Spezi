@@ -62,7 +62,7 @@ public actor Spezi<S: Standard>: AnySpezi, ObservableObject {
     
     init(
         standard: S,
-        components: [any Component<S>],
+        components: [any Component],
         _ logger: Logger = Logger(subsystem: "edu.stanford.spezi", category: "spezi")
     ) {
         self.logger = logger
@@ -80,6 +80,6 @@ public actor Spezi<S: Standard>: AnySpezi, ObservableObject {
             component.saveInTypedCollection(spezi: self)
         }
         
-        standard.inject(dataStorageProviders: dataStorageProviders)
+        // standard.inject(dataStorageProviders: dataStorageProviders)
     }
 }
