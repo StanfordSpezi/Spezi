@@ -7,6 +7,9 @@
 //
 
 
+import XCTRuntimeAssertions
+
+
 /// A protocol that identifies a ``_ProvidePropertyWrapper`` which `Value` type is a `Collection`.
 protocol CollectionBasedProvideProperty {
     func collectArrayElements<Repository: SharedRepository<SpeziAnchor>>(into repository: inout Repository)
@@ -18,27 +21,30 @@ protocol OptionalBasedProvideProperty {
 }
 
 
-// TODO docs!
+/// Refer to the documentation of ``Component/Provide``.
 @propertyWrapper
 public class _ProvidePropertyWrapper<Value> {
     // swiftlint:disable:previous type_name
     // We want the type to be hidden from autocompletion and documentation generation
 
-    // TODO implement some sort of storage base reference stuff, so we can update it?
     private var storedValue: Value
+    private var collected = false
 
+    /// Access the store value.
+    /// - Note: You cannot access the value once it was collected.
     public var wrappedValue: Value {
         get {
             storedValue
         }
         set {
+            precondition(!collected, "You cannot update a @Provide property after it was already collected.")
             storedValue = newValue
-            // TODO either prevent updates after collection, or have them update still?
         }
     }
 
 
-    // TODO document how you can use an optional to not provide a value instantly?
+    /// Initialize a new `@Provide` property wrapper.
+    /// - Parameter value: The initial value.
     public init(wrappedValue value: Value) {
         self.storedValue = value
     }
@@ -46,6 +52,52 @@ public class _ProvidePropertyWrapper<Value> {
 
 
 extension Component {
+    /// The `@Provide` property wrapper can be used to communicate data with other ``Component``s by inserting
+    /// them into the central ``SpeziStorage`` repository.
+    ///
+    /// **Providing Data**
+    /// Data provided through ``Component/Provide`` can be retrieved through the ``Component/Collect`` property wrapper.
+    /// Note that the declaring type has to match what is requested by the other side (e.g., a common protocol implementation)
+    ///
+    /// Below is an example where the `ExampleComponent` provides a `Numeric` type to some other components.
+    /// ```swift
+    /// class ExampleComponent<ComponentStandard: Standard>: Component {
+    ///     @Provide var favoriteNumber: Numeric
+    ///
+    ///     init() {
+    ///         favoriteNumber = 42
+    ///     }
+    /// }
+    /// ```
+    ///
+    /// **Provide Conditionally**
+    /// You can conditionally provide data by using an `Optional` type for the property wrapper.
+    /// If `nil` is provided, nothing is collected, otherwise the underlying value of the optional is collected.
+    ///
+    /// ```swift
+    /// class ExampleComponent<ComponentStandard: Standard>: Component {
+    ///     @Provide var favoriteNumber: Numeric?
+    ///
+    ///     init() {
+    ///         if someGlobalOption {
+    ///             favoriteNumber = 42
+    ///         }
+    ///     }
+    /// }
+    /// ```
+    ///
+    /// **Provide Multiple**
+    /// If you want to provide more than one instance of a given value you may declare @Provide as an `Array` type.
+    ///
+    /// ```swift
+    /// class ExampleComponent<ComponentStandard: Standard>: Component {
+    ///     @Provide var favoriteNumbers: [Numeric]
+    ///
+    ///     init() {
+    ///         favoriteNumbers = [42, 3, 9]
+    ///     }
+    /// }
+    /// ```
     public typealias Provide = _ProvidePropertyWrapper
 }
 
@@ -57,42 +109,23 @@ extension _ProvidePropertyWrapper: StorageValueProvider {
         } else if let wrapperWithArray = self as? CollectionBasedProvideProperty {
             wrapperWithArray.collectArrayElements(into: &repository)
         } else {
-            // TODO reducible!
-            store(value: storedValue, into: &repository)
-        }
-    }
-
-    // stores a single value in the repository
-    func store<StoredValue, Repository: SharedRepository<SpeziAnchor>>(value: StoredValue, into repository: inout Repository) {
-        if var existing = repository[CollectedComponentValue<StoredValue>.self] {
-            existing.append(value)
-            repository[CollectedComponentValue<StoredValue>.self] = existing
-        } else {
-            repository[CollectedComponentValue<StoredValue>.self] = [value]
-        }
-    }
-
-    // stores all values of a collection in the repository
-    func store<StoredValue, Repository: SharedRepository<SpeziAnchor>>(values: any Collection<StoredValue>, into repository: inout Repository) {
-        if var existing = repository[CollectedComponentValue<StoredValue>.self] {
-            existing.append(contentsOf: values)
-            repository[CollectedComponentValue<StoredValue>.self] = existing
-        } else {
-            repository[CollectedComponentValue<StoredValue>.self] = Array(values)
+            // concatenation is handled by the `CollectedComponentValue/reduce` implementation.
+            repository[CollectedComponentValue<Value>.self] = [storedValue]
         }
     }
 }
 
 extension _ProvidePropertyWrapper: CollectionBasedProvideProperty where Value: Collection {
     func collectArrayElements<Repository: SharedRepository<SpeziAnchor>>(into repository: inout Repository) {
-        store(values: storedValue, into: &repository)
+        // concatenation is handled by the `CollectedComponentValue/reduce` implementation.
+        repository[CollectedComponentValue<Value.Element>.self] = Array(storedValue)
     }
 }
 
 extension _ProvidePropertyWrapper: OptionalBasedProvideProperty where Value: AnyOptional {
     func collectOptional<Repository: SharedRepository<SpeziAnchor>>(into repository: inout Repository) {
         if let storedValue = storedValue.unwrappedOptional {
-            store(value: storedValue, into: &repository)
+            repository[CollectedComponentValue<Value.Wrapped>.self] = [storedValue]
         }
     }
 }

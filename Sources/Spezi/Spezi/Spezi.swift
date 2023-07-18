@@ -6,13 +6,18 @@
 // SPDX-License-Identifier: MIT
 //
 
+
 import os
 import SwiftUI
+
+
+let speziLogger = Logger(subsystem: "edu.stanford.spezi", category: "spezi")
+
 
 /// A ``SharedRepository`` implementation that is anchored to ``SpeziAnchor``.
 ///
 /// This represents the central ``Spezi`` storage component.
-public typealias SpeziStorage = HeapRepository<SpeziAnchor> // TODO custom implementation with shutdown handler?
+public typealias SpeziStorage = HeapRepository<SpeziAnchor>
 
 /// Open-source framework for rapid development of modern, interoperable digital health applications.
 ///
@@ -67,7 +72,7 @@ public actor Spezi<S: Standard>: AnySpezi, ObservableObject {
     init(
         standard: S,
         components: [any Component<S>],
-        _ logger: Logger = Logger(subsystem: "edu.stanford.spezi", category: "spezi")
+        _ logger: Logger = speziLogger
     ) {
         // mutable property, as StorageValueProvider has inout protocol requirement.
         var storage = SpeziStorage()
@@ -84,8 +89,8 @@ public actor Spezi<S: Standard>: AnySpezi, ObservableObject {
         for component in dependencyManager.sortedComponents {
             component.inject(standard: standard)
 
-            // TODO should we allow for any registration steps?
-            //  => standard specific stuff?
+            // give the component last opportunity to prepare @Provide values (e.g. using state from the properties injected above)
+            component.prepare()
 
             // we pass through the whole list of components once to collect all @Provide values
             component.collectComponentValues(into: &storage)
@@ -102,5 +107,16 @@ public actor Spezi<S: Standard>: AnySpezi, ObservableObject {
         self.storage = storage
         
         standard.inject(dataStorageProviders: dataStorageProviders)
+    }
+}
+
+
+extension Component {
+    func storeComponent<Repository: SharedRepository<SpeziAnchor>>(into repository: inout Repository) {
+        guard let value = self as? Value else {
+            speziLogger.warning("Could not store \(Self.self) in the SpeziStorage as the `Value` typealias was modified.")
+            return
+        }
+        repository[Self.self] = value
     }
 }

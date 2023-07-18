@@ -24,8 +24,8 @@ extension Component {
     /// }
     /// ```
     ///
-    /// You can access the wrapped value of the ``Dependency`` after the ``Component`` is configured using ``Component/configure()-5lup3``,
-    /// e.g. in the ``LifecycleHandler/willFinishLaunchingWithOptions(_:launchOptions:)-26h4k`` function.
+    /// You can access the wrapped value of the ``Dependency`` after the ``Component`` is configured using ``Component/configure()``,
+    /// e.g. in the ``LifecycleHandler/willFinishLaunchingWithOptions(_:launchOptions:)-8jatp`` function.
     public typealias Dependency<C: Component> = _DependencyPropertyWrapper<C, ComponentStandard> where C.ComponentStandard == ComponentStandard
     
     
@@ -51,7 +51,7 @@ extension Component {
     /// }
     /// ```
     ///
-    /// You can access the wrapped value of the ``DynamicDependencies`` after the ``Component`` is configured using ``Component/configure()-5lup3``,
-    /// e.g. in the ``LifecycleHandler/willFinishLaunchingWithOptions(_:launchOptions:)-26h4k`` function.
+    /// You can access the wrapped value of the ``DynamicDependencies`` after the ``Component`` is configured using ``Component/configure()``,
+    /// e.g. in the ``LifecycleHandler/willFinishLaunchingWithOptions(_:launchOptions:)-8jatp`` function.
     public typealias DynamicDependencies = _DynamicDependenciesPropertyWrapper<ComponentStandard>
 }

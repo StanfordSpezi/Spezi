@@ -27,7 +27,19 @@ extension BuiltinRepository {
     }
 
     mutating func set0<Source: KnowledgeSource<Anchor>>(_ source: Source.Type, value newValue: Source.Value?) {
-        self.storage[ObjectIdentifier(source)] = newValue.map { SimpleRepositoryValue<Source>($0) }
+        let key = ObjectIdentifier(source)
+
+        guard let newValue else {
+            self.storage[key] = nil
+            return
+        }
+
+        if var existing = get0(source) {
+            Source.reduce(value: &existing, nextValue: newValue)
+            self.storage[key] = SimpleRepositoryValue<Source>(existing)
+        } else {
+            self.storage[key] = SimpleRepositoryValue<Source>(newValue)
+        }
     }
 
     func collect0<Value>(allOf type: Value.Type) -> [Value] {

@@ -7,12 +7,12 @@
 //
 
 
-public typealias UniversalHeapSharedRepository<Value: RepositoryValue> = HeapRepository<Any>
+/// A ``HeapRepository`` that allows to store any ``KnowledgeSource``s.
+public typealias UniversalHeapSharedRepository = HeapRepository<Any>
 
-// TODO provide ValueRepository (and SendableValueRepository!)
+
+/// A ``SharedRepository`` implementation that itself is a reference type.
 public final class HeapRepository<Anchor>: SharedRepository, BuiltinRepository {
-    public typealias Container = [ObjectIdentifier: AnyRepositoryValue]
-
     var storage: Container = [:]
 
     public init() {}

@@ -6,7 +6,6 @@
 // SPDX-License-Identifier: MIT
 //
 
-// TODO create SendableSharedRepository!
 
-
-
+/// The ``RepositoryAnchor`` for the ``SpeziStorage``.
+public struct SpeziAnchor: RepositoryAnchor {}

@@ -6,7 +6,6 @@
 // SPDX-License-Identifier: MIT
 //
 
-// TODO shared repository wrapper (read only and read-write)
 
 /// This protocol provides a common interface for a storage mechanism that allows multiple entities
 /// to access, provide and modify shared data.
@@ -52,7 +51,7 @@ public protocol SharedRepository<Anchor> {
     /// Checks if the provided ``KnowledgeSource`` in currently stored in the shared repository.
     ///
     /// - Note: You should not rely on the ``contains(_:)-4lsie`` method for checking existence of ``ComputedKnowledgeSource``
-    ///     ``OptionalComputedKnowledgeSource`` as these are entirely application defined. TODO revisit!
+    ///     ``OptionalComputedKnowledgeSource`` as these are entirely application defined.
     /// - Parameter source: The ``KnowledgeSource`` to check for.
     /// - Returns: Returns if the given ``KnowledgeSource`` is currently stored in the repository.
     func contains<Source: KnowledgeSource<Anchor>>(_ source: Source.Type) -> Bool
@@ -68,21 +67,28 @@ public protocol SharedRepository<Anchor> {
     subscript<Source: DefaultProvidingKnowledgeSource<Anchor>>(_ source: Source.Type) -> Source.Value { get }
 
     /// A subscript to retrieve or set a ``ComputedKnowledgeSource``.
+    ///
+    /// - Note: If the value was not present and got computed, the computed value will be stored in the repository.
     /// - Parameter source: The ``ComputedKnowledgeSource`` type.
     /// - Returns: The stored ``KnowledgeSource/Value`` or calls ``ComputedKnowledgeSource/compute(from:)`` to compute the value.
-    /// - Throws: // TODO do all throw?
-    subscript<Source: ComputedKnowledgeSource<Anchor>>(_ source: Source.Type) -> Source.Value { mutating get throws }
-    // TODO what is with the mutating get requirement?
+    subscript<Source: ComputedKnowledgeSource<Anchor>>(_ source: Source.Type) -> Source.Value { mutating get }
 
     /// A subscript to retrieve or set a ``OptionalComputedKnowledgeSource``.
+    ///
+    /// - Note: If the value was not present and got computed, the computed value will be stored in the repository.
     /// - Parameter source: The ``OptionalComputedKnowledgeSource`` type.
     /// - Returns: The stored ``KnowledgeSource/Value`` or calls ``OptionalComputedKnowledgeSource/compute(from:)`` to compute the value
     ///     or `nil` if the `compute` method returned nil.
-    /// - Throws: // TODO do all throw?
-    subscript<Source: OptionalComputedKnowledgeSource<Anchor>>(_ source: Source.Type) -> Source.Value? { mutating get throws }
+    subscript<Source: OptionalComputedKnowledgeSource<Anchor>>(_ source: Source.Type) -> Source.Value? { mutating get }
 }
 
 extension SharedRepository {
+    /// Default contains method calling ``get(_:)``.
+    public func contains<Source: KnowledgeSource<Anchor>>(_ source: Source.Type) -> Bool {
+        self.get(source) != nil
+    }
+
+    /// Default subscript implementation delegating to ``get(_:)`` or ``set(_:value:)``.
     public subscript<Source: KnowledgeSource<Anchor>>(_ source: Source.Type) -> Source.Value? {
         get {
             get(source)
@@ -92,37 +98,38 @@ extension SharedRepository {
         }
     }
 
+    /// Default subscript implementation delegating to ``get(_:)`` or providing a ``DefaultProvidingKnowledgeSource/defaultValue``.
     public subscript<Source: DefaultProvidingKnowledgeSource<Anchor>>(_ source: Source.Type) -> Source.Value {
         self.get(source) ?? source.defaultValue
     }
 
+    /// Default subscript implementation delegating to ``get(_:)`` or calling ``ComputedKnowledgeSource/compute(from:)``
+    /// and storing the result.
     public subscript<Source: ComputedKnowledgeSource<Anchor>>(_ source: Source.Type) -> Source.Value {
-        mutating get throws {
+        mutating get {
             if let value = self.get(source) {
                 return value
             }
 
-            let value = try source.compute(from: self)
+            let value = source.compute(from: self)
             self[source] = value
             return value
         }
     }
 
+    /// Default subscript implementation delegating to ``get(_:)`` or calling ``OptionalComputedKnowledgeSource/compute(from:)``
+    /// and storing the result.
     public subscript<Source: OptionalComputedKnowledgeSource<Anchor>>(_ source: Source.Type) -> Source.Value? {
-        mutating get throws {
+        mutating get {
             if let value = self.get(source) {
                 return value
             }
 
-            guard let value = try source.compute(from: self) else {
+            guard let value = source.compute(from: self) else {
                 return nil
             }
             self[source] = value
             return value
         }
-    }
-
-    public func contains<Source: KnowledgeSource<Anchor>>(_ source: Source.Type) -> Bool {
-        self.get(source) != nil
     }
 }
