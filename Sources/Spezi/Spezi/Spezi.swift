@@ -9,6 +9,10 @@
 import os
 import SwiftUI
 
+/// A ``SharedRepository`` implementation that is anchored to ``SpeziAnchor``.
+///
+/// This represents the central ``Spezi`` storage component.
+public typealias SpeziStorage = HeapRepository<SpeziAnchor> // TODO custom implementation with shutdown handler?
 
 /// Open-source framework for rapid development of modern, interoperable digital health applications.
 ///
@@ -53,7 +57,7 @@ import SwiftUI
 /// Refer to the ``Configuration`` documentation to learn more about the Spezi configuration.
 public actor Spezi<S: Standard>: AnySpezi, ObservableObject {
     /// A shared repository to store any ``KnowledgeSource``s restricted to the ``SpeziAnchor``.
-    public let storage: DefaultSharedRepository<SpeziAnchor> // TODO custom implementation with shutdown handler?
+    public let storage: SpeziStorage
     /// Logger used to log events in the ``Spezi/Spezi`` instance.
     public let logger: Logger
     /// The ``Standard`` used in the ``Spezi/Spezi`` instance.
@@ -65,8 +69,10 @@ public actor Spezi<S: Standard>: AnySpezi, ObservableObject {
         components: [any Component<S>],
         _ logger: Logger = Logger(subsystem: "edu.stanford.spezi", category: "spezi")
     ) {
+        // mutable property, as StorageValueProvider has inout protocol requirement.
+        var storage = SpeziStorage()
+
         self.logger = logger
-        self.storage = DefaultSharedRepository() // TODO previously we passed the logger
         self.standard = standard
         
         var componentsAndStandard = components
@@ -79,19 +85,21 @@ public actor Spezi<S: Standard>: AnySpezi, ObservableObject {
             component.inject(standard: standard)
 
             // TODO should we allow for any registration steps?
+            //  => standard specific stuff?
 
-            component.collectComponentValues(into: storage)
+            // we pass through the whole list of components once to collect all @Provide values
+            component.collectComponentValues(into: &storage)
         }
         
         for component in dependencyManager.sortedComponents {
+            // supply components values to all @Collect
             component.injectComponentValues(from: storage)
 
-            component.configure() // TODO allow for configures to be async?
-            // TODO injection of dependencies can be backed by the SharedRepository pattern?
-            component.storeComponent(into: storage)
+            component.configure()
+            component.storeComponent(into: &storage)
         }
 
-        // TODO make use of a property wrapper that uses `collect(allOf:)`
+        self.storage = storage
         
         standard.inject(dataStorageProviders: dataStorageProviders)
     }

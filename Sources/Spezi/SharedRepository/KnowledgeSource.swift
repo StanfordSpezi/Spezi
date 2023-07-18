@@ -8,13 +8,18 @@
 
 import Foundation
 
-public protocol KnowledgeSource<Anchor> { // TODO what is primary here?
-    associatedtype Value: Sendable = Self // TODO sendable requirement?
-    associatedtype Anchor: SharedRepositoryAnchor
-    // knowledge source can either be provided by manually setting them or by initializing it from the environment/shared repository!
+public protocol KnowledgeSource<Anchor> {
+    associatedtype Value = Self
+    associatedtype Anchor: RepositoryAnchor
 
-    // TODO abstract over an implementation type?
-    // TODO key based Knowledge sources?
+    static func reduce(value: inout Self.Value, nextValue: Self.Value)
+}
+
+extension KnowledgeSource {
+    // TODO use reduce function in implementations!
+    public static func reduce(value: inout Self.Value, nextValue: Self.Value) {
+        value = nextValue
+    }
 }
 
 public protocol DefaultProvidingKnowledgeSource<Anchor>: KnowledgeSource {
@@ -28,5 +33,6 @@ public protocol ComputedKnowledgeSource<Anchor>: KnowledgeSource {
 }
 
 public protocol OptionalComputedKnowledgeSource<Anchor>: KnowledgeSource {
+    // TODO determinisitc requirment!
     static func compute<Repository: SharedRepository<Anchor>>(from repository: Repository) throws -> Value?
 }

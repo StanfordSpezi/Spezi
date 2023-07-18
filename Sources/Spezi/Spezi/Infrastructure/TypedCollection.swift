@@ -24,7 +24,7 @@ private protocol AnyTypedCollectionValue {
 }
 
 @available(*, deprecated, message: "TypedCollection class should be replaced by directly using DefaultSharedRepository<SpeziAnchor>.")
-public typealias TypedCollection = DefaultSharedRepository<SpeziAnchor>
+public typealias TypedCollection = HeapRepository<SpeziAnchor>
 
 
 // TODO remove after docs?

@@ -46,7 +46,7 @@ public class DependencyManager<S: Standard> {
     /// Injects a dependency into a `_DependencyPropertyWrapper` that is resolved in the `sortedComponents`.
     /// - Parameters:
     ///   - dependencyType: The type of the dependency that should be injected.
-    ///   - anyDependency: `_DependencyPropertyWrapper` that the dependency should be injected into. TODO update docs
+    ///   - anyDependency: The ``ComponentDependency`` that the provided dependency should be injected into.
     func inject<D: ComponentDependency>(
         _ dependencyType: D.ComponentType.Type,
         into anyDependency: D
@@ -83,8 +83,6 @@ public class DependencyManager<S: Standard> {
             
             return
         }
-
-        // TODO can we try to consider @Provide @Collect patterns in the order of components?
         
         // Detect circles in the `recursiveSearch` collection.
         guard !recursiveSearch.contains(where: { type(of: $0) == C.self }) else {

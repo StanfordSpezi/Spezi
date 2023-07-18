@@ -6,62 +6,39 @@
 // SPDX-License-Identifier: MIT
 //
 
-import Foundation
 
-extension Component { // TODO move this extension somewhere else!
-    func retrieveProperties<Value>(ofType type: Value.Type) -> [Value] {
-        let mirror = Mirror(reflecting: self)
+import XCTRuntimeAssertions
 
-        return mirror.children.compactMap { _, value in
-            value as? Value
-        }
-    }
-}
 
-protocol AnyStorageValueProvider { // TODO move and generalize (maybe even public?)!
-    func provide<Repository: SharedRepository<SpeziAnchor>>(from repository: Repository)
-}
-
-extension Component {
-    var storageValueProviders: [AnyStorageValueProvider] {
-        retrieveProperties(ofType: AnyStorageValueProvider.self)
-    }
-
-    // TODO all the namings?
-    func injectComponentValues<Repository: SharedRepository<SpeziAnchor>>(from repository: Repository) {
-        for providers in storageValueProviders {
-            providers.provide(from: repository)
-        }
-    }
-}
-
-// TODO just return empty whatever?
 @propertyWrapper
-public class _CollectPropertyWrapper<Value>: AnyStorageValueProvider {
+public class _CollectPropertyWrapper<Value> {
     // swiftlint:disable:previous type_name
     // We want the type to be hidden from autocompletion and documentation generation
 
-    // TODO storage
-    private var injectedValues: [Value]? // TODO we might support singular values with a reducible?
+    private var injectedValues: [Value]?
 
     public var wrappedValue: [Value] {
         guard let values = injectedValues else {
-            fatalError("Something went wrong") // TODO message
+            preconditionFailure("""
+                                Tried to access @Collect for value [\(Value.self)] which wasn't injected yet. \
+                                Are you sure that you are only accessing @Collect within the `Component/configure` method?
+                                """)
         }
 
         return values
     }
 
     public init() {}
-
-    func provide<Repository: SharedRepository<SpeziAnchor>>(from repository: Repository) {
-        injectedValues = repository[CollectedComponentValue<Value>.self]
-
-        // TODO this is kind of unsafe as it allows to circumvent the dependency manager order
-        // injectedValues?.append(contentsOf: repository.collect(allOf: Value.self))
-    }
 }
+
 
 extension Component {
     public typealias Collect = _CollectPropertyWrapper
+}
+
+
+extension _CollectPropertyWrapper: StorageValueCollector {
+    public func retrieve<Repository: SharedRepository<SpeziAnchor>>(from repository: Repository) {
+        injectedValues = repository[CollectedComponentValue<Value>.self]
+    }
 }

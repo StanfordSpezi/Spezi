@@ -7,36 +7,20 @@
 //
 
 
-protocol AnyStorageValueCollector { // TODO move and generalize (maybe even public?)!
-    func collect<Repository: SharedRepository<SpeziAnchor>>(into repository: Repository)
+/// A protocol that identifies a ``_ProvidePropertyWrapper`` which `Value` type is a `Collection`.
+protocol CollectionBasedProvideProperty {
+    func collectArrayElements<Repository: SharedRepository<SpeziAnchor>>(into repository: inout Repository)
 }
 
-extension Component {
-    var storageValueCollectors: [AnyStorageValueCollector] {
-        retrieveProperties(ofType: AnyStorageValueCollector.self)
-    }
-
-    func collectComponentValues<Repository: SharedRepository<SpeziAnchor>>(into repository: Repository) {
-        for collector in storageValueCollectors {
-            collector.collect(into: repository)
-        }
-    }
+/// A protocol that identifies a  ``_ProvidePropertyWrapper`` which `Value` type is a `Optional`.
+protocol OptionalBasedProvideProperty {
+    func collectOptional<Repository: SharedRepository<SpeziAnchor>>(into repository: inout Repository)
 }
 
-// TODO move
-struct CollectedComponentValue<ComponentValue>: DefaultProvidingKnowledgeSource {
-    typealias Anchor = SpeziAnchor
 
-    // TODO can the value be a reference type that is shared between all and which can be subscribed to?
-    typealias Value = [ComponentValue]
-
-    static var defaultValue: [ComponentValue] {
-        []
-    }
-}
-
+// TODO docs!
 @propertyWrapper
-public class _ProvidePropertyWrapper<Value>: AnyStorageValueCollector {
+public class _ProvidePropertyWrapper<Value> {
     // swiftlint:disable:previous type_name
     // We want the type to be hidden from autocompletion and documentation generation
 
@@ -58,19 +42,28 @@ public class _ProvidePropertyWrapper<Value>: AnyStorageValueCollector {
     public init(wrappedValue value: Value) {
         self.storedValue = value
     }
+}
 
-    func collect<Repository: SharedRepository<SpeziAnchor>>(into repository: Repository) {
+
+extension Component {
+    public typealias Provide = _ProvidePropertyWrapper
+}
+
+
+extension _ProvidePropertyWrapper: StorageValueProvider {
+    public func collect<Repository: SharedRepository<SpeziAnchor>>(into repository: inout Repository) {
         if let wrapperWithOptional = self as? OptionalBasedProvideProperty {
-            wrapperWithOptional.collectOptional(into: repository)
-        } else if let wrapperWithArray = self as? ArrayBasedProvideProperty {
-            wrapperWithArray.collectArrayElements(into: repository)
+            wrapperWithOptional.collectOptional(into: &repository)
+        } else if let wrapperWithArray = self as? CollectionBasedProvideProperty {
+            wrapperWithArray.collectArrayElements(into: &repository)
         } else {
             // TODO reducible!
-            store(value: storedValue, into: repository)
+            store(value: storedValue, into: &repository)
         }
     }
 
-    func store<StoredValue, Repository: SharedRepository<SpeziAnchor>>(value: StoredValue, into repository: Repository) {
+    // stores a single value in the repository
+    func store<StoredValue, Repository: SharedRepository<SpeziAnchor>>(value: StoredValue, into repository: inout Repository) {
         if var existing = repository[CollectedComponentValue<StoredValue>.self] {
             existing.append(value)
             repository[CollectedComponentValue<StoredValue>.self] = existing
@@ -79,7 +72,8 @@ public class _ProvidePropertyWrapper<Value>: AnyStorageValueCollector {
         }
     }
 
-    func store<StoredValue, Repository: SharedRepository<SpeziAnchor>>(values: any Collection<StoredValue>, into repository: Repository) {
+    // stores all values of a collection in the repository
+    func store<StoredValue, Repository: SharedRepository<SpeziAnchor>>(values: any Collection<StoredValue>, into repository: inout Repository) {
         if var existing = repository[CollectedComponentValue<StoredValue>.self] {
             existing.append(contentsOf: values)
             repository[CollectedComponentValue<StoredValue>.self] = existing
@@ -89,29 +83,16 @@ public class _ProvidePropertyWrapper<Value>: AnyStorageValueCollector {
     }
 }
 
-// TODO pull out the optional?
-protocol ArrayBasedProvideProperty {
-    func collectArrayElements<Repository: SharedRepository<SpeziAnchor>>(into repository: Repository)
-}
-
-protocol OptionalBasedProvideProperty {
-    func collectOptional<Repository: SharedRepository<SpeziAnchor>>(into repository: Repository)
-}
-
-extension _ProvidePropertyWrapper: ArrayBasedProvideProperty where Value: Collection {
-    func collectArrayElements<Repository: SharedRepository<SpeziAnchor>>(into repository: Repository) {
-        store(values: storedValue, into: repository)
+extension _ProvidePropertyWrapper: CollectionBasedProvideProperty where Value: Collection {
+    func collectArrayElements<Repository: SharedRepository<SpeziAnchor>>(into repository: inout Repository) {
+        store(values: storedValue, into: &repository)
     }
 }
 
 extension _ProvidePropertyWrapper: OptionalBasedProvideProperty where Value: AnyOptional {
-    func collectOptional<Repository: SharedRepository<SpeziAnchor>>(into repository: Repository) {
+    func collectOptional<Repository: SharedRepository<SpeziAnchor>>(into repository: inout Repository) {
         if let storedValue = storedValue.unwrappedOptional {
-            store(value: storedValue, into: repository)
+            store(value: storedValue, into: &repository)
         }
     }
-}
-
-extension Component {
-    public typealias Provide = _ProvidePropertyWrapper
 }

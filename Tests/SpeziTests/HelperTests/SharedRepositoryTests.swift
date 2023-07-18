@@ -10,7 +10,7 @@ import os
 @testable import Spezi
 import XCTest
 
-struct TestAnchor: SharedRepositoryAnchor {}
+struct TestAnchor: RepositoryAnchor {}
 
 protocol TestTypes: Equatable {
     typealias Anchor = TestAnchor // default anchor
@@ -50,7 +50,7 @@ final class SharedRepositoryTests: XCTestCase {
     
 
     func testSetAndGet() {
-        let repository = DefaultSharedRepository<TestAnchor>()
+        var repository = HeapRepository<TestAnchor>()
 
         // test basic insertion and retrieval
         let testStruct = TestStruct(value: 42)
@@ -71,7 +71,7 @@ final class SharedRepositoryTests: XCTestCase {
     }
     
     func testGetWithDefault() {
-        let repository = DefaultSharedRepository<TestAnchor>()
+        let repository = HeapRepository<TestAnchor>()
 
         let testStruct = DefaultedTestStruct(value: 42)
 
@@ -85,7 +85,7 @@ final class SharedRepositoryTests: XCTestCase {
     }
     
     func testContains() {
-        let repository = DefaultSharedRepository<TestAnchor>()
+        var repository = HeapRepository<TestAnchor>()
         
         let testStruct = TestStruct(value: 42)
         XCTAssertFalse(repository.contains(TestStruct.self))
@@ -98,7 +98,7 @@ final class SharedRepositoryTests: XCTestCase {
     }
     
     func testGetAllThatConformTo() {
-        let repository = DefaultSharedRepository<TestAnchor>()
+        var repository = HeapRepository<TestAnchor>()
         
         let testStruct = TestStruct(value: 42)
         repository[TestStruct.self] = testStruct
@@ -111,7 +111,7 @@ final class SharedRepositoryTests: XCTestCase {
     }
     
     func testClear() {
-        let repository = DefaultSharedRepository<TestAnchor>()
+        var repository = HeapRepository<TestAnchor>()
         
         let testStruct = TestStruct(value: 42)
         repository[TestStruct.self] = testStruct
@@ -122,7 +122,7 @@ final class SharedRepositoryTests: XCTestCase {
     }
     
     func testMutationClass() {
-        let repository = DefaultSharedRepository<TestAnchor>()
+        var repository = HeapRepository<TestAnchor>()
         
         let testClass = TestClass(value: 42)
         repository[TestClass.self] = testClass
@@ -133,7 +133,7 @@ final class SharedRepositoryTests: XCTestCase {
     }
     
     func testMutationStruct() {
-        let repository = DefaultSharedRepository<TestAnchor>()
+        var repository = HeapRepository<TestAnchor>()
         
         let testStruct = TestStruct(value: 42)
         repository[TestStruct.self] = testStruct
@@ -145,7 +145,7 @@ final class SharedRepositoryTests: XCTestCase {
     }
     
     func testKeyLikeKnowledgeSource() {
-        let repository = DefaultSharedRepository<TestAnchor>()
+        var repository = HeapRepository<TestAnchor>()
         
         let testClass = TestClass(value: 42)
         repository[TestKeyLike.self] = testClass

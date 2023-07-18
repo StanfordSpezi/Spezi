@@ -8,12 +8,12 @@
 
 
 // TODO docs
-public struct SpeziAnchor: SharedRepositoryAnchor {}
+public struct SpeziAnchor: RepositoryAnchor {}
 
 
 // TODO move to specific file
 extension Component {
-    func storeComponent<Repository: SharedRepository<SpeziAnchor>>(into repository: Repository) {
+    func storeComponent<Repository: SharedRepository<SpeziAnchor>>(into repository: inout Repository) {
         guard let value = self as? Value else {
             // TODO print warning, can't store component as it was modified!
             return
