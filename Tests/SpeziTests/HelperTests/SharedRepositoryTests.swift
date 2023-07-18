@@ -115,10 +115,6 @@ final class SharedRepositoryTests: XCTestCase {
         
         let testStruct = TestStruct(value: 42)
         repository[TestStruct.self] = testStruct
-        
-        // TODO clear is not implemented: typedCollection.clear()
-        //  let newerContentOfTypedStruct = typedCollection.get(TestStruct.self)
-        //  XCTAssertNil(newerContentOfTypedStruct)
     }
     
     func testMutationClass() {
@@ -152,37 +148,5 @@ final class SharedRepositoryTests: XCTestCase {
         
         let contentOfClass = repository[TestKeyLike.self]
         XCTAssertEqual(contentOfClass, testClass)
-    }
-    
-    func testTypedCollectionShutdown() throws {
-        throw XCTSkip()
-        // TODO we don't have shutdown hooks anymore
-        /*
-        let repository = DefaultSharedRepository<TestAnchor>()
-
-        let structShutdownExpectation = XCTestExpectation(description: "Struct shutdown callback should be called.")
-        let classShutdownExpectation = XCTestExpectation(description: "Class shutdown callback should be called.")
-
-        let testTypedCollectionStruct = TestStruct(value: 42)
-        typedCollection.set(TestStruct.self, to: testTypedCollectionStruct, onShutdown: { _ in
-            structShutdownExpectation.fulfill()
-            
-            struct TestError: Error {}
-            throw TestError()
-        })
-        
-        let testTypedCollectionClass = TestClass(value: 42)
-        typedCollection.set(TestClass.self, to: testTypedCollectionClass, onShutdown: { _ in
-            classShutdownExpectation.fulfill()
-        })
-        
-        typedCollection.shutdown()
-        typedCollection.clear()
-        
-        wait(for: [structShutdownExpectation, classShutdownExpectation])
-        
-        let newerContentOfTypedStruct = typedCollection.get(TestStruct.self)
-        XCTAssertNil(newerContentOfTypedStruct)
-         */
     }
 }

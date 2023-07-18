@@ -14,8 +14,7 @@ import XCTRuntimeAssertions
 
 private final class TestComponent1<ComponentStandard: Standard>: Component {
     // TODO collect and provide?
-    @Provide
-    private var test: [Int] = []
+    @Provide private var test: [Int] = []
 
     @Dependency var testComponent2 = TestComponent2<ComponentStandard>()
     @Dependency var testComponent3: TestComponent3<ComponentStandard>
