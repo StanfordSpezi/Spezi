@@ -54,10 +54,10 @@ public struct Configuration {
 
     /// A ``Configuration`` defines the ``Standard`` and ``Component``s that are used in a Spezi project.
     ///
-    /// If no ``Standard`` is provided, Spezi injects a default empty standard instance only conforming to ``Standard``.
     /// Ensure that your standard conforms to all protocols enforced by the ``Component``s. If your ``Component``s require protocol conformances
     /// you must add them to your custom type conforming to ``Standard`` and passed to the initializer or extend a prebuild standard.
     ///
+    /// Use ``Configuration/init(_:)`` to use default empty standard instance only conforming to ``Standard`` if you do not use any ``Component`` requiring custom protocol conformances.
     /// - Parameters:
     ///   - components: The ``Component``s used in the Spezi project. You can define the ``Component``s using the ``ComponentBuilder`` result builder.
     public init<S: Standard>(
@@ -70,9 +70,8 @@ public struct Configuration {
     
     /// A ``Configuration`` defines the ``Standard`` and ``Component``s that are used in a Spezi project.
     ///
-    /// If no ``Standard`` is provided, Spezi injects a default empty standard instance only conforming to ``Standard``.
-    /// Ensure that your standard conforms to all protocols enforced by the ``Component``s. If your ``Component``s require protocol conformances
-    /// you must add them to your custom type conforming to ``Standard`` and passed to the initializer or extend a prebuild standard.
+    /// This initializer creates a default empty standard instance only conforming to ``Standard``.
+    /// Use ``Configuration/init(standard:_:)`` to provide a custom ``Standard`` instance if you use any ``Component`` requiring custom protocol conformances.
     ///
     /// - Parameters:
     ///   - components: The ``Component``s used in the Spezi project. You can define the ``Component``s using the ``ComponentBuilder`` result builder.
