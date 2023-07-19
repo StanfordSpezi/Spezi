@@ -6,6 +6,8 @@
 // SPDX-License-Identifier: MIT
 //
 
+import XCTRuntimeAssertions
+
 
 /// Refer to the documentation of ``Component/Collect``.
 @propertyWrapper
@@ -19,7 +21,7 @@ public class _CollectPropertyWrapper<Value> {
     /// - Note: The property is only accessible within the ``Component/configure()`` method.
     public var wrappedValue: [Value] {
         guard let values = injectedValues else {
-            fatalError("""
+            preconditionFailure("""
                                 Tried to access @Collect for value [\(Value.self)] which wasn't injected yet. \
                                 Are you sure that you are only accessing @Collect within the `Component/configure` method?
                                 """)

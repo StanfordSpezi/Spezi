@@ -64,4 +64,18 @@ final class ComponentCommunicationTests: XCTestCase {
         XCTAssertTrue(Self.collectComponent.nothingProvided.isEmpty)
         XCTAssertEqual(Self.collectComponent.strings, ["Hello World"])
     }
+
+    func testIllegalAccess() throws {
+        let delegate = TestApplicationDelegate()
+
+        try XCTRuntimePrecondition {
+            _ = Self.collectComponent.strings
+        }
+
+        _ = try XCTUnwrap(delegate.spezi as? Spezi<TestAppStandard>)
+
+        try XCTRuntimePrecondition {
+            Self.provideComponent.numMaybe2 = 12
+        }
+    }
 }
