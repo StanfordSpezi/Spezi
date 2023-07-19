@@ -11,9 +11,6 @@ import os
 import SwiftUI
 
 
-let speziLogger = Logger(subsystem: "edu.stanford.spezi", category: "spezi")
-
-
 /// A ``SharedRepository`` implementation that is anchored to ``SpeziAnchor``.
 ///
 /// This represents the central ``Spezi`` storage component.
@@ -71,13 +68,12 @@ public actor Spezi<S: Standard>: AnySpezi, ObservableObject {
     
     init(
         standard: S,
-        components: [any Component<S>],
-        _ logger: Logger = speziLogger
+        components: [any Component<S>]
     ) {
         // mutable property, as StorageValueProvider has inout protocol requirement.
         var storage = SpeziStorage()
 
-        self.logger = logger
+        self.logger = storage[SpeziLogger.self]
         self.standard = standard
         
         var componentsAndStandard = components
@@ -110,7 +106,7 @@ public actor Spezi<S: Standard>: AnySpezi, ObservableObject {
 extension Component {
     func storeComponent<Repository: SharedRepository<SpeziAnchor>>(into repository: inout Repository) {
         guard let value = self as? Value else {
-            speziLogger.warning("Could not store \(Self.self) in the SpeziStorage as the `Value` typealias was modified.")
+            repository[SpeziLogger.self].warning("Could not store \(Self.self) in the SpeziStorage as the `Value` typealias was modified.")
             return
         }
         repository[Self.self] = value
