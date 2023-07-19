@@ -6,7 +6,6 @@
 // SPDX-License-Identifier: MIT
 //
 
-
 import XCTRuntimeAssertions
 
 
@@ -37,7 +36,9 @@ public class _ProvidePropertyWrapper<Value> {
             storedValue
         }
         set {
-            precondition(!collected, "You cannot update a @Provide property after it was already collected.")
+            guard !collected else {
+                fatalError("You cannot update a @Provide property after it was already collected.")
+            }
             storedValue = newValue
         }
     }
@@ -112,13 +113,15 @@ extension _ProvidePropertyWrapper: StorageValueProvider {
             // concatenation is handled by the `CollectedComponentValue/reduce` implementation.
             repository[CollectedComponentValue<Value>.self] = [storedValue]
         }
+
+        collected = true
     }
 }
 
-extension _ProvidePropertyWrapper: CollectionBasedProvideProperty where Value: Collection {
+extension _ProvidePropertyWrapper: CollectionBasedProvideProperty where Value: AnyArray {
     func collectArrayElements<Repository: SharedRepository<SpeziAnchor>>(into repository: inout Repository) {
         // concatenation is handled by the `CollectedComponentValue/reduce` implementation.
-        repository[CollectedComponentValue<Value.Element>.self] = Array(storedValue)
+        repository[CollectedComponentValue<Value.Element>.self] = storedValue.unwrappedArray
     }
 }
 

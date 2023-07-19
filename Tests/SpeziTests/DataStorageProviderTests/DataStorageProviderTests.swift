@@ -115,7 +115,7 @@ final class DataStorageProviderTests: XCTestCase {
     
     @MainActor
     func testDataStorageProviderTests() async throws {
-        let expectation = expectation(description: "Timeout Expection")
+        let expectation = expectation(description: "Timeout Expectation")
         expectation.isInverted = true
         
         var count = 0

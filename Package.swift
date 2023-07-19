@@ -22,7 +22,7 @@ let package = Package(
         .library(name: "XCTSpezi", targets: ["XCTSpezi"])
     ],
     dependencies: [
-        .package(url: "https://github.com/StanfordSpezi/XCTRuntimeAssertions", .upToNextMinor(from: "0.2.3"))
+        .package(url: "https://github.com/StanfordBDHG/XCTRuntimeAssertions", .upToNextMinor(from: "0.2.4"))
     ],
     targets: [
         .target(
@@ -41,6 +41,7 @@ let package = Package(
             name: "SpeziTests",
             dependencies: [
                 .target(name: "Spezi"),
+                .target(name: "XCTSpezi"),
                 .product(name: "XCTRuntimeAssertions", package: "XCTRuntimeAssertions")
             ]
         )
