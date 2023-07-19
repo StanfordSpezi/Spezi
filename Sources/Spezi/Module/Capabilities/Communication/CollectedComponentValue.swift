@@ -15,9 +15,11 @@ struct CollectedComponentValue<ComponentValue>: DefaultProvidingKnowledgeSource 
 
     typealias Value = [ComponentValue]
 
+
     static var defaultValue: [ComponentValue] {
         []
     }
+
 
     static func reduce(value: inout [ComponentValue], nextValue: [ComponentValue]) {
         value.append(contentsOf: nextValue)

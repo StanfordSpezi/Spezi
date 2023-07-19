@@ -11,6 +11,7 @@ import XCTest
 import XCTRuntimeAssertions
 import XCTSpezi
 
+
 private final class ProvideComponent1<ComponentStandard: Standard>: Component {
     @Provide var num: Int = 2
     @Provide var numMaybe: Int? = 3
@@ -30,12 +31,14 @@ private final class ProvideComponent1<ComponentStandard: Standard>: Component {
     }
 }
 
+
 private final class CollectComponent<ComponentStandard: Standard>: Component {
     @Collect var nums: [Int]
     @Collect var strings: [String]
 
     @Collect var nothingProvided: [UUID]
 }
+
 
 final class ComponentCommunicationTests: XCTestCase {
     private class TestApplicationDelegate: SpeziAppDelegate {

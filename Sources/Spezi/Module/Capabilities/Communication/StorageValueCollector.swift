@@ -17,6 +17,7 @@ public protocol StorageValueCollector {
     func retrieve<Repository: SharedRepository<SpeziAnchor>>(from repository: Repository)
 }
 
+
 extension Component {
     var storageValueCollectors: [StorageValueCollector] {
         retrieveProperties(ofType: StorageValueCollector.self)

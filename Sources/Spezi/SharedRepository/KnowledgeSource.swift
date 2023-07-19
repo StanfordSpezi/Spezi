@@ -15,6 +15,7 @@ public protocol DefaultProvidingKnowledgeSource<Anchor>: KnowledgeSource {
     static var defaultValue: Value { get }
 }
 
+
 /// A ``KnowledgeSource`` that allows to compose it's values from it's surrounding knowledge environment.
 public protocol ComputedKnowledgeSource<Anchor>: KnowledgeSource {
     /// Computes the value of the ``KnowledgeSource``.
@@ -24,6 +25,7 @@ public protocol ComputedKnowledgeSource<Anchor>: KnowledgeSource {
     /// - Returns: Returns the computed value.
     static func compute<Repository: SharedRepository<Anchor>>(from repository: Repository) -> Value
 }
+
 
 /// A ``KnowledgeSource`` that allows to compose it's values from it's surrounding knowledge environment
 /// but may deliver a optional value.
@@ -46,6 +48,7 @@ public protocol KnowledgeSource<Anchor> {
     associatedtype Value = Self
     /// The ``RepositoryAnchor`` to which this `KnowledgeSource` is anchored to.
     associatedtype Anchor: RepositoryAnchor
+
 
     /// Optional reduction algorithm to handle overriding existing entries.
     ///

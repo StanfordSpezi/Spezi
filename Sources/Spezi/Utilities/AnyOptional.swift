@@ -7,6 +7,7 @@
 // SPDX-License-Identifier: MIT
 //
 
+
 /// A type erased `Optional`.
 ///
 /// This is useful to unwrapping, e.g.,  generics or associated types by declaring an extension under the condition of
@@ -16,11 +17,13 @@ public protocol AnyOptional {
     /// The underlying type of the Optional
     associatedtype Wrapped
 
+
     /// This property provides access
     var unwrappedOptional: Optional<Wrapped> { get }
     // swiftlint:disable:previous syntactic_sugar
     // Disabling syntactic_sugar, improves readability and showcases what really happens here.
 }
+
 
 extension Optional: AnyOptional {
     // Disabling syntactic_sugar, improves readability and showcases what really happens here.

@@ -17,7 +17,9 @@ public typealias UniversalValueRepository = ValueRepository<Any>
 public struct ValueRepository<Anchor>: SharedRepository, BuiltinRepository {
     var storage: Container = [:]
 
+
     public init() {}
+
 
     public func get<Source: KnowledgeSource<Anchor>>(_ source: Source.Type) -> Source.Value? {
         get0(source)

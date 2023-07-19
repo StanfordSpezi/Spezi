@@ -26,6 +26,7 @@ public protocol SharedRepository<Anchor> {
     ///     usage of `Any`. Using `Any` as an ``Anchor`` allows a repository to store an arbitrary set of ``KnowledgeSource``.
     associatedtype Anchor
 
+
     /// Retrieves a value from the shared repository.
     ///
     /// - Note: Do not use this method directly. Use the respective `subscript` implementations for a proper resolution
@@ -55,6 +56,7 @@ public protocol SharedRepository<Anchor> {
     /// - Parameter source: The ``KnowledgeSource`` to check for.
     /// - Returns: Returns if the given ``KnowledgeSource`` is currently stored in the repository.
     func contains<Source: KnowledgeSource<Anchor>>(_ source: Source.Type) -> Bool
+
 
     /// A subscript to retrieve or set a ``KnowledgeSource``.
     /// - Parameter source: The ``KnowledgeSource`` type.
@@ -87,6 +89,7 @@ extension SharedRepository {
     public func contains<Source: KnowledgeSource<Anchor>>(_ source: Source.Type) -> Bool {
         self.get(source) != nil
     }
+
 
     /// Default subscript implementation delegating to ``get(_:)`` or ``set(_:value:)``.
     public subscript<Source: KnowledgeSource<Anchor>>(_ source: Source.Type) -> Source.Value? {

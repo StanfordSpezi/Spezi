@@ -14,6 +14,7 @@ protocol CollectionBasedProvideProperty {
     func collectArrayElements<Repository: SharedRepository<SpeziAnchor>>(into repository: inout Repository)
 }
 
+
 /// A protocol that identifies a  ``_ProvidePropertyWrapper`` which `Value` type is a `Optional`.
 protocol OptionalBasedProvideProperty {
     func collectOptional<Repository: SharedRepository<SpeziAnchor>>(into repository: inout Repository)
@@ -28,6 +29,7 @@ public class _ProvidePropertyWrapper<Value> {
 
     private var storedValue: Value
     private var collected = false
+
 
     /// Access the store value.
     /// - Note: You cannot access the value once it was collected.
@@ -118,12 +120,14 @@ extension _ProvidePropertyWrapper: StorageValueProvider {
     }
 }
 
+
 extension _ProvidePropertyWrapper: CollectionBasedProvideProperty where Value: AnyArray {
     func collectArrayElements<Repository: SharedRepository<SpeziAnchor>>(into repository: inout Repository) {
         // concatenation is handled by the `CollectedComponentValue/reduce` implementation.
         repository[CollectedComponentValue<Value.Element>.self] = storedValue.unwrappedArray
     }
 }
+
 
 extension _ProvidePropertyWrapper: OptionalBasedProvideProperty where Value: AnyOptional {
     func collectOptional<Repository: SharedRepository<SpeziAnchor>>(into repository: inout Repository) {

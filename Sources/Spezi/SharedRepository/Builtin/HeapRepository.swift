@@ -15,7 +15,9 @@ public typealias UniversalHeapSharedRepository = HeapRepository<Any>
 public final class HeapRepository<Anchor>: SharedRepository, BuiltinRepository {
     var storage: Container = [:]
 
+
     public init() {}
+
 
     public func get<Source: KnowledgeSource<Anchor>>(_ source: Source.Type) -> Source.Value? {
         get0(source)

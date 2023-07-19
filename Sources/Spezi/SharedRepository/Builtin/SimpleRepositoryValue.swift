@@ -10,6 +10,7 @@
 public struct SimpleRepositoryValue<Source: KnowledgeSource>: RepositoryValue {
     public let value: Source.Value
 
+
     public init(_ value: Source.Value) {
         self.value = value
     }

@@ -17,6 +17,7 @@ public class _CollectPropertyWrapper<Value> {
 
     private var injectedValues: [Value]? // swiftlint:disable:this discouraged_optional_collection
 
+
     /// Access the collected values.
     /// - Note: The property is only accessible within the ``Component/configure()`` method.
     public var wrappedValue: [Value] {
@@ -30,14 +31,10 @@ public class _CollectPropertyWrapper<Value> {
         return values
     }
 
+
     /// Initialize a new `@Collect` property wrapper.
     public init() {}
 }
-
-/// A adopter of this protocol is a property of a ``Component`` that provides mechanisms to retrieve
-/// data provided by other ``Component``s.
-///
-/// Data requested through a Storage Value Collector might be provided through a ``StorageValueProvider``.
 
 
 extension Component {

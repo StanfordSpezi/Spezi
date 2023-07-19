@@ -21,8 +21,10 @@ public protocol RepositoryValue<Source>: AnyRepositoryValue {
     /// The ``KnowledgeSource`` for which the value is stored.
     associatedtype Source: KnowledgeSource
 
+
     /// The value instance of the ``KnowledgeSource``.
     var value: Source.Value { get }
+
 
     init(_ value: Source.Value)
 }
