@@ -33,29 +33,7 @@ public class _StandardPropertyWrapper<Constraint>: AnyStandardPropertyWrapper {
     
     
     /// Refer to ``Component/StandardActor`` for information on how to use the `@StandardActor` property wrapper. Do not use the `_StandardPropertyWrapper` directly.
-    public init(_ constraint: Constraint.Type = Constraint.self) {
-        guard Constraint.self is any Standard.Type else {
-            preconditionFailure(
-                """
-                The \(String(describing: Constraint.self)) constraint does not conform to `Standard`.
-                
-                Ensure that your constraint type conforms to the `Standard` protocol:
-                
-                ```swift
-                protocol ExampleConstraint: Standard {
-                    // ...
-                }
-                
-                class ExampleComponent: Component {
-                    @StandardActor var standard: any ExampleConstraint
-                    
-                    // ...
-                }
-                ```
-                """
-            )
-        }
-    }
+    public init(_ constraint: Constraint.Type = Constraint.self) { }
     
     
     func inject<S: Standard>(standard: S) {

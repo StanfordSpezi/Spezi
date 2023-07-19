@@ -41,6 +41,7 @@ let package = Package(
             name: "SpeziTests",
             dependencies: [
                 .target(name: "Spezi"),
+                .target(name: "XCTSpezi"),
                 .product(name: "XCTRuntimeAssertions", package: "XCTRuntimeAssertions")
             ]
         )

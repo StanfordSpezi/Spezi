@@ -12,7 +12,7 @@ import XCTest
 import XCTRuntimeAssertions
 
 
-final class StandardTests: XCTestCase {
+final class StandardInjectionTests: XCTestCase {
     final class StandardInjectionTestComponent: Component {
         @StandardActor var standard: MockStandard
         
