@@ -53,12 +53,13 @@ public protocol Component<ComponentStandard>: AnyObject, KnowledgeSource<SpeziAn
 
     /// The `prepare` method is an optional method you may use to prepare your ``Component`` before it is configured (see ``configure()``).
     ///
-    /// More specifically, the `prepare` method is called once the ``Component/StandardActor`` property is accessible and the ``Component/Provide``
-    /// properties are not yet collected.
+    /// More specifically, the ``prepare()`` method is called once the ``Component/StandardActor`` property is accessible and the ``Component/Provide``
+    /// properties are not yet collected. ``Component/Dependency`` and ``Component/DynamicDependencies`` are not yet available here.
     func prepare()
     
     /// The ``Component/configure()`` method is called on the initialization of the Spezi instance to perform a lightweight configuration of the component.
     ///
+    /// Both ``Component/Dependency`` and ``Component/DynamicDependencies`` are available and configured at this point.
     /// It is advised that longer setup tasks are done in an asynchronous task and started during the call of the configure method.
     func configure()
 }
