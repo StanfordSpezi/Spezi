@@ -17,15 +17,8 @@ private protocol ExampleConstraint: Standard {
 }
 
 
-extension MockStandard: ExampleConstraint {
-    func betterFulfill(expectation: XCTestExpectation) {
-        fulfill(expectation: expectation)
-    }
-}
-
-
 final class StandardConstraintTests: XCTestCase {
-    final class StandardConstraintTestComponent: Component {
+    final class StandardCTestComponent: Component {
         @StandardActor private var standard: any ExampleConstraint
         
         let expectation: XCTestExpectation
@@ -43,13 +36,13 @@ final class StandardConstraintTests: XCTestCase {
         }
     }
     
-    class StandardConstraintTestApplicationDelegate: SpeziAppDelegate {
+    class StandardCTestApplicationDelegate: SpeziAppDelegate {
         let expectation: XCTestExpectation
         
         
         override var configuration: Configuration {
             Configuration(standard: MockStandard()) {
-                StandardConstraintTestComponent(expectation: expectation)
+                StandardCTestComponent(expectation: expectation)
             }
         }
         
@@ -64,11 +57,18 @@ final class StandardConstraintTests: XCTestCase {
         let expectation = XCTestExpectation(description: "Component")
         expectation.assertForOverFulfill = true
         
-        let standardConstraintTestApplicationDelegate = await StandardConstraintTestApplicationDelegate(
+        let standardCTestApplicationDelegate = await StandardCTestApplicationDelegate(
             expectation: expectation
         )
-        _ = await standardConstraintTestApplicationDelegate.spezi
+        _ = await standardCTestApplicationDelegate.spezi
         
         await fulfillment(of: [expectation], timeout: 0.01)
+    }
+}
+
+
+extension MockStandard: ExampleConstraint {
+    func betterFulfill(expectation: XCTestExpectation) {
+        fulfill(expectation: expectation)
     }
 }
