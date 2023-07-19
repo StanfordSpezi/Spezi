@@ -81,28 +81,4 @@ final class ComponentCommunicationTests: XCTestCase {
             Self.provideComponent.numMaybe2 = 12
         }
     }
-
-    func testTests() throws {
-        struct SendbaleAnchor: RepositoryAnchor, Sendable {}
-
-        struct SSource: KnowledgeSource {
-            typealias Anchor = SendbaleAnchor
-            typealias Value = String
-        }
-
-        class Source: KnowledgeSource {
-            typealias Anchor = SendbaleAnchor
-
-            init() {}
-        }
-
-        func test() {
-            var repo = ValueRepository<SendbaleAnchor>()
-
-            repo[SSource.self] = "String"
-            repo[Source.self] = Source()
-        }
-
-        test()
-    }
 }

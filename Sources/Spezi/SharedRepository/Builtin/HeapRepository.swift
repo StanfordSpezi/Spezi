@@ -8,7 +8,7 @@
 
 
 /// A ``HeapRepository`` that allows to store any ``KnowledgeSource``s.
-public typealias UniversalHeapSharedRepository = HeapRepository<Any>
+public typealias UniversalHeapRepository = HeapRepository<Any>
 
 
 /// A ``SharedRepository`` implementation that itself is a reference type.

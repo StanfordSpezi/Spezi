@@ -52,3 +52,12 @@ We differentiate between five different types of modules:
 
 - ``DataStorageProvider``
 - ``EncodableAdapter``
+
+### Shared Repository
+
+- <doc:Shared-Repository>
+- ``SharedRepository``
+- ``RepositoryAnchor``
+- ``KnowledgeSource``
+- ``SpeziAnchor``
+- ``SpeziStorage``

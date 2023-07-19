@@ -10,7 +10,7 @@
 /// A `Component` defines a software subsystem that can be configured as part of the ``SpeziAppDelegate/configuration``.
 ///
 /// The ``Component/ComponentStandard`` defines what Standard the component supports.
-/// The ``Component/configure()`` method is called on the initialization of Spezi.
+/// The ``Component/configure()-27tt1`` method is called on the initialization of Spezi.
 ///
 ///
 /// **The Component Standard**
@@ -51,7 +51,7 @@ public protocol Component<ComponentStandard>: AnyObject, KnowledgeSource<SpeziAn
     /// A ``Component/ComponentStandard`` defines what ``Standard`` the component supports.
     associatedtype ComponentStandard: Standard
     
-    /// The ``Component/configure()`` method is called on the initialization of the Spezi instance to perform a lightweight configuration of the component.
+    /// The ``Component/configure()-27tt1`` method is called on the initialization of the Spezi instance to perform a lightweight configuration of the component.
     ///
     /// Both ``Component/Dependency`` and ``Component/DynamicDependencies`` are available and configured at this point.
     /// It is advised that longer setup tasks are done in an asynchronous task and started during the call of the configure method.

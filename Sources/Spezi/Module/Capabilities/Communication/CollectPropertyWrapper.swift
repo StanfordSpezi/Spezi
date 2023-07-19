@@ -57,7 +57,7 @@ extension Component {
     /// }
     /// ```
     ///
-    /// - Note: The property is only accessible within the ``Component/configure()`` method.
+    /// - Note: The property is only accessible within the ``Component/configure()-27tt1`` method.
     public typealias Collect = _CollectPropertyWrapper
 }
 

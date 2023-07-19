@@ -29,7 +29,7 @@ extension Standard {
     /// }
     /// ```
     /// 
-    /// You can access the wrapped value of the `@` ``Standard/DataStorageProviders`` after the ``Standard`` is configured using ``Component/configure()-5lup3``,
-    /// e.g. in the ``LifecycleHandler/willFinishLaunchingWithOptions(_:launchOptions:)-26h4k`` function.
+    /// You can access the wrapped value of the `@` ``Standard/DataStorageProviders`` after the ``Standard`` is configured using ``Component/configure()-27tt1``,
+    /// e.g. in the ``LifecycleHandler/willFinishLaunchingWithOptions(_:launchOptions:)-8jatp`` function.
     public typealias DataStorageProviders = _DataStorageProvidersPropertyWrapper<Self>
 }

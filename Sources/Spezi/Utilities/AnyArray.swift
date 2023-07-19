@@ -7,7 +7,7 @@
 //
 
 
-/// A type erase ``Array``.
+/// A type erase `Array`.
 public protocol AnyArray {
     /// The `Element` type of the Array.
     associatedtype Element
