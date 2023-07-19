@@ -41,9 +41,11 @@ extension Component {
     /// The `@Collect` property wrapper can be used to retrieve data communicated by other ``Component``s by
     /// retrieving them from the central ``SpeziStorage`` repository.
     ///
-    /// **Retrieving Data**
+    /// ### Retrieving Data
     /// ``Component/Collect`` retrieves data provided through the ``Component/Provide`` property wrapper.
     /// You declare `@Collect` as an Array with a given type. The type is used to match `@Provide` properties.
+    ///
+    /// - Important: The property is only accessible within the ``Component/configure()-27tt1`` method.
     ///
     /// Below is an example where the `ExampleComponent` collects an array of `Numeric` types from all other `Components`.
     ///
@@ -56,8 +58,6 @@ extension Component {
     ///     }
     /// }
     /// ```
-    ///
-    /// - Note: The property is only accessible within the ``Component/configure()-27tt1`` method.
     public typealias Collect = _CollectPropertyWrapper
 }
 

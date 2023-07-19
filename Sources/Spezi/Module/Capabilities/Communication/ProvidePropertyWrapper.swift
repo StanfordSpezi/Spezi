@@ -56,9 +56,13 @@ extension Component {
     /// The `@Provide` property wrapper can be used to communicate data with other ``Component``s by inserting
     /// them into the central ``SpeziStorage`` repository.
     ///
-    /// **Providing Data**
+    /// ### Providing Data
     /// Data provided through ``Component/Provide`` can be retrieved through the ``Component/Collect`` property wrapper.
-    /// Note that the declaring type has to match what is requested by the other side (e.g., a common protocol implementation)
+    ///
+    /// - Note: that the declaring type has to match what is requested by the other side (e.g., a common protocol implementation)
+    ///
+    /// - Important: All `@Provide` properties must be initialized within the initializer and cannot be modified within the
+    ///     ``Component/configure()-27tt1`` method.
     ///
     /// Below is an example where the `ExampleComponent` provides a `Numeric` type to some other components.
     /// ```swift
@@ -71,7 +75,7 @@ extension Component {
     /// }
     /// ```
     ///
-    /// **Provide Conditionally**
+    /// ### Provide Conditionally
     /// You can conditionally provide data by using an `Optional` type for the property wrapper.
     /// If `nil` is provided, nothing is collected, otherwise the underlying value of the optional is collected.
     ///
@@ -87,7 +91,7 @@ extension Component {
     /// }
     /// ```
     ///
-    /// **Provide Multiple**
+    /// ### Provide Multiple
     /// If you want to provide more than one instance of a given value you may declare @Provide as an `Array` type.
     ///
     /// ```swift
