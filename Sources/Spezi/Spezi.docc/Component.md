@@ -39,10 +39,10 @@ class ExampleFHIRComponent: Component {
 ### Dependencies
 
 ``Component``s can define dependencies between each other using the @``Component/Dependency`` property wrapper.
-The order in which the ``Component/configure()-27tt1`` method of each ``Component`` is called, is automatcially
+The order in which the ``Component/configure()-27tt1`` method of each ``Component`` is called, is automatically
 evaluated by the ``DependencyManager``.
 
-> Note: Declaring a cyclic dependecy will result in a runtime error. 
+> Note: Declaring a cyclic dependency will result in a runtime error. 
 
 ```swift
 class ExampleComponent<ComponentStandard: Standard>: Component {
@@ -52,10 +52,10 @@ class ExampleComponent<ComponentStandard: Standard>: Component {
 
 ### Communication
 
-``Component``s can easily communicate with each other using the ``Component/Provide`` and ``Component/Collect`` propert wrappers.
+``Component``s can easily communicate with each other using the ``Component/Provide`` and ``Component/Collect`` property wrappers.
 
-On configuration, the value of each ``Component/Collect`` property will be collected and stored in the ``SpeziStorage``. Therfore,
-all properties must have been property initialized after the initlizer of the ``Component`` has been called.
+On configuration, the value of each ``Component/Collect`` property will be collected and stored in the ``SpeziStorage``. Therefore,
+all properties must have been property initialized after the initializer of the ``Component`` has been called.
 Before the invocation of ``Component/configure()-27tt1``, the data of all ``Component/Provide`` properties will be made available.
 Refer to the documentation of the property wrappers for a more detailed overview of the available capabilities.
 

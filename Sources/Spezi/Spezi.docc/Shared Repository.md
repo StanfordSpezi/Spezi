@@ -29,18 +29,18 @@ You can constrain the applicable ``KnowledgeSource``s by defining a ``Repository
 Spezi provide two default implementations for the ``SharedRepository`` protocol:
 * ``HeapRepository``: A Shared Repository that itself is a reference type. This is useful to easily pass around a single instance of
     a shared repository by reference.
-* ``ValueRepository``: A Shared Repository that itself is a value type. This mimics behavior of Swift's `Array` or `Dictionary` types. It is usefule
+* ``ValueRepository``: A Shared Repository that itself is a value type. This mimics behavior of Swift's `Array` or `Dictionary` types. It is useful
     in cases where you want to restrict mutability of the Shared Repository based on the properties mutability (`var` vs. `let`).
 
 ### Sendable
 
-A Shared Repository is not `Sendable` by default and completly depends on the implementation.
+A Shared Repository is not `Sendable` by default and completely depends on the implementation.
 The ``ValueRepository`` adds `Sendable` conformance if the ``RepositoryAnchor`` adopts the `Sendable` protocol.
-This singifies to ``KnowledgeSource`` adopters, that their ``KnowledgeSource/Value`` type should be made `Sendable`.
+This signifies to ``KnowledgeSource`` adopters, that their ``KnowledgeSource/Value`` type should be made `Sendable`.
 
 > Warning: Due to Swift limitations, the ``ValueRepository`` implementation never checks if a given ``KnowledgeSource`` implementation actually has
-    a value type that conforms to `Sendable`. Therefore, implementors should make sure that their ``KnowledgeSource/Value`` confroms to `Sendable`.
-    If you require to check for such a conformance, you may write a Wrapper around the ``ValueRepository``, replicating it's interface.
+    a value type that conforms to `Sendable`. Therefore, implementors should make sure that their ``KnowledgeSource/Value`` conforms to `Sendable`.
+    If you require to check for such a conformance, you may write a Wrapper around the ``ValueRepository``, replicating its interface.
 
 ## Topics
 
