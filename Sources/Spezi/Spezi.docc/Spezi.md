@@ -38,10 +38,20 @@ We differentiate between five different types of modules:
 - ``SpeziAppDelegate``
 - ``Standard``
 
+### Component
+
+- ``Component``
+
 ### Modules
 
 - <doc:ModuleCapabilities>
 - ``Module``
+
+### Configuration
+
+- ``Configuration``
+- ``ComponentBuilder``
+- ``ComponentCollection``
 
 ### Data Sources
 
@@ -52,3 +62,17 @@ We differentiate between five different types of modules:
 
 - ``DataStorageProvider``
 - ``EncodableAdapter``
+
+### Shared Repository
+
+- <doc:Shared-Repository>
+- ``SharedRepository``
+- ``RepositoryAnchor``
+- ``KnowledgeSource``
+- ``SpeziAnchor``
+- ``SpeziStorage``
+
+### Utilities
+
+- ``AnyArray``
+- ``AnyOptional``

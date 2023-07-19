@@ -62,7 +62,7 @@ public struct Configuration {
     ///   - components: The ``Component``s used in the Spezi project. You can define the ``Component``s using the ``ComponentBuilder`` result builder.
     public init<S: Standard>(
         standard: S,
-        @ComponentBuilder _ components: () -> (ComponentCollection)
+        @ComponentBuilder _ components: () -> ComponentCollection
     ) {
         self.spezi = Spezi<S>(standard: standard, components: components().elements)
     }

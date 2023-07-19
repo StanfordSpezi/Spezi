@@ -21,16 +21,6 @@ public protocol DependencyDescriptor {
 
 extension Component {
     var dependencyDescriptors: [any DependencyDescriptor] {
-        let mirror = Mirror(reflecting: self)
-        var dependencies: [any DependencyDescriptor] = []
-        
-        for child in mirror.children {
-            guard let dependencyPropertyWrapper = child.value as? any DependencyDescriptor else {
-                continue
-            }
-            dependencies.append(dependencyPropertyWrapper)
-        }
-        
-        return dependencies
+        retrieveProperties(ofType: (any DependencyDescriptor).self)
     }
 }

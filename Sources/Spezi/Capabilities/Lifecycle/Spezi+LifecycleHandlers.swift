@@ -13,7 +13,7 @@ import SwiftUI
 extension AnySpezi {
     /// A collection of ``Spezi/Spezi`` `LifecycleHandler`s.
     private var lifecycleHandler: [LifecycleHandler] {
-        typedCollection.get(allThatConformTo: LifecycleHandler.self)
+        storage.collect(allOf: LifecycleHandler.self)
     }
     
     

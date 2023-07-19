@@ -57,7 +57,7 @@ final class DependencyTests: XCTestCase {
             TestComponent1(),
             TestComponent7()
         ]
-        let sortedComponents = DependencyManager(components).sortedComponents
+        let sortedComponents = DependencyManager.resolve(components)
 
         XCTAssertEqual(sortedComponents.count, 7)
         
@@ -84,7 +84,7 @@ final class DependencyTests: XCTestCase {
             TestComponent2(),
             TestComponent5()
         ]
-        let sortedComponents = DependencyManager(components).sortedComponents
+        let sortedComponents = DependencyManager.resolve(components)
 
         XCTAssertEqual(sortedComponents.count, 4)
         
@@ -105,7 +105,7 @@ final class DependencyTests: XCTestCase {
             TestComponent4(),
             TestComponent4()
         ]
-        let sortedComponents = DependencyManager(components).sortedComponents
+        let sortedComponents = DependencyManager.resolve(components)
 
         XCTAssertEqual(sortedComponents.count, 3)
 
@@ -124,7 +124,7 @@ final class DependencyTests: XCTestCase {
             TestComponent2(),
             TestComponent2()
         ]
-        let sortedComponents = DependencyManager(components).sortedComponents
+        let sortedComponents = DependencyManager.resolve(components)
 
         XCTAssertEqual(sortedComponents.count, 5)
 
@@ -152,7 +152,7 @@ final class DependencyTests: XCTestCase {
 
     func testComponentNoDependency() throws {
         let components: [any Component] = [TestComponent5()]
-        let sortedComponents = DependencyManager(components).sortedComponents
+        let sortedComponents = DependencyManager.resolve(components)
 
         XCTAssertEqual(sortedComponents.count, 1)
 
@@ -165,7 +165,7 @@ final class DependencyTests: XCTestCase {
             TestComponent5(),
             TestComponent5()
         ]
-        let sortedComponents = DependencyManager(components).sortedComponents
+        let sortedComponents = DependencyManager.resolve(components)
 
         XCTAssertEqual(sortedComponents.count, 3)
 
@@ -180,7 +180,7 @@ final class DependencyTests: XCTestCase {
         ]
 
         try XCTRuntimePrecondition {
-            _ = DependencyManager(components).sortedComponents
+            _ = DependencyManager.resolve(components)
         }
     }
 }
