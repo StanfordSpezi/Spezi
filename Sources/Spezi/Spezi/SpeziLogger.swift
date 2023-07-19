@@ -12,6 +12,7 @@ struct SpeziLogger: ComputedKnowledgeSource {
     typealias Anchor = SpeziAnchor
     typealias Value = Logger
 
+    
     static func compute<Repository: SharedRepository<Anchor>>(from repository: Repository) -> Logger {
         Logger(subsystem: "edu.stanford.spezi", category: "spezi")
     }
