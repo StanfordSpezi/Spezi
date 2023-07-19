@@ -15,3 +15,6 @@ public struct SimpleRepositoryValue<Source: KnowledgeSource>: RepositoryValue {
         self.value = value
     }
 }
+
+
+extension SimpleRepositoryValue: Sendable where Source.Value: Sendable {}

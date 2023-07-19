@@ -11,7 +11,7 @@
 /// to access, provide and modify shared data.
 ///
 /// A `SharedRepository` allows to easily integrate application functionality with a data-driven control flow or
-/// applications that operate on the same data, but do not share the same processing workflow or are split accross
+/// applications that operate on the same data, but do not share the same processing workflow or are split across
 /// multiple software systems (Buschmann et al. _Pattern-Oriented Software Architecture: A Pattern Language for Distributed Computing_).
 ///
 /// This concrete `SharedRepository` implementation acts as a typed collection. The stored data is defined and
