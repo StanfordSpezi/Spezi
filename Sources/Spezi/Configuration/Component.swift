@@ -50,12 +50,6 @@
 public protocol Component<ComponentStandard>: AnyObject, KnowledgeSource<SpeziAnchor> {
     /// A ``Component/ComponentStandard`` defines what ``Standard`` the component supports.
     associatedtype ComponentStandard: Standard
-
-    /// The `prepare` method is an optional method you may use to prepare your ``Component`` before it is configured (see ``configure()``).
-    ///
-    /// More specifically, the ``prepare()`` method is called once the ``Component/StandardActor`` property is accessible and the ``Component/Provide``
-    /// properties are not yet collected. ``Component/Dependency`` and ``Component/DynamicDependencies`` are not yet available here.
-    func prepare()
     
     /// The ``Component/configure()`` method is called on the initialization of the Spezi instance to perform a lightweight configuration of the component.
     ///
@@ -66,9 +60,6 @@ public protocol Component<ComponentStandard>: AnyObject, KnowledgeSource<SpeziAn
 
 
 extension Component {
-    /// Empty implementation.
-    public func prepare() {}
-
     // A documentation for this method exists in the `Component` type which SwiftLint doesn't recognize.
     // swiftlint:disable:next missing_docs
     public func configure() {}

@@ -87,16 +87,12 @@ public actor Spezi<S: Standard>: AnySpezi, ObservableObject {
         dependencyManager.resolve()
 
         for component in dependencyManager.sortedComponents {
-            component.inject(standard: standard)
-
-            // give the component last opportunity to prepare @Provide values (e.g. using state from the properties injected above)
-            component.prepare()
-
             // we pass through the whole list of components once to collect all @Provide values
             component.collectComponentValues(into: &storage)
         }
         
         for component in dependencyManager.sortedComponents {
+            component.inject(standard: standard)
             // supply components values to all @Collect
             component.injectComponentValues(from: storage)
 
