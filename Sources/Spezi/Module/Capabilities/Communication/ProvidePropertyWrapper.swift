@@ -38,9 +38,7 @@ public class _ProvidePropertyWrapper<Value> {
             storedValue
         }
         set {
-            guard !collected else {
-                preconditionFailure("You cannot update a @Provide property after it was already collected.")
-            }
+            precondition(!collected, "You cannot update a @Provide property after it was already collected.")
             storedValue = newValue
         }
     }
