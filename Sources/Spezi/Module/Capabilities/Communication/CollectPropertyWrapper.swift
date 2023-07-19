@@ -62,7 +62,7 @@ extension Component {
 }
 
 
-extension _CollectPropertyWrapper: StorageValueCollector {
+extension _CollectPropertyWrapper: _StorageValueCollector {
     public func retrieve<Repository: SharedRepository<SpeziAnchor>>(from repository: Repository) {
         injectedValues = repository[CollectedComponentValue<Value>.self] ?? []
     }
