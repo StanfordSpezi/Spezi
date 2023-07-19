@@ -47,11 +47,11 @@ public enum DataChange<
     /// Maps a ``DataChange`` to an other `Element` type.
     /// - Parameters:
     ///   - elementMap: The element map function maps the complete `Element` instance used for the ``DataChange/addition(_:)`` case.
-    ///   - idMap: The id map function only maps the identifier or an `Element` used for the ``DataChange/removal(_:)`` case.
+    ///   - removalContextMap: The id map function only maps the identifier or an `Element` used for the ``DataChange/removal(_:)`` case.
     /// - Returns: Returns the mapped element
     public func map<E, R> (
-        element elementMap: (Element) -> (E),
-        removalContext removalContextMap: (RemovalContext) -> (R)
+        element elementMap: (Element) -> E,
+        removalContext removalContextMap: (RemovalContext) -> R
     ) -> DataChange<E, R> {
         switch self {
         case let .addition(element):

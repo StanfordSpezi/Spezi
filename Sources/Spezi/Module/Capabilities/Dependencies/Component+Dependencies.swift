@@ -24,12 +24,13 @@ extension Component {
     /// }
     /// ```
     ///
-    /// You can access the wrapped value of the ``Dependency`` after the ``Component`` is configured using ``Component/configure()-5lup3``,
-    /// e.g. in the ``LifecycleHandler/willFinishLaunchingWithOptions(_:launchOptions:)-26h4k`` function.
+    /// You can access the wrapped value of the ``Dependency`` after the ``Component`` is configured using ``Component/configure()-27tt1``,
+    /// e.g. in the ``LifecycleHandler/willFinishLaunchingWithOptions(_:launchOptions:)-8jatp`` function.
     public typealias Dependency<C: Component> = _DependencyPropertyWrapper<C, ComponentStandard> where C.ComponentStandard == ComponentStandard
     
     
     /// Defines dynamic dependencies to other ``Component``s.
+    ///
     /// In contrast to the `@Dependency` property wrapper, the `@DynamicDependencies` enables the generation of the property wrapper in the initializer and generating an
     /// arbitrary amount of dependencies that are resolved in the Spezi initialization.
     ///
@@ -40,7 +41,7 @@ extension Component {
     ///
     ///
     ///     init() {
-    ///         self._healthKitComponents = DynamicDependencies(
+    ///         self._dynamicDependencies = DynamicDependencies(
     ///             componentProperties: [
     ///                 Dependency(wrappedValue: /* ... */),
     ///                 Dependency(wrappedValue: /* ... */)
@@ -50,7 +51,7 @@ extension Component {
     /// }
     /// ```
     ///
-    /// You can access the wrapped value of the ``DynamicDependencies`` after the ``Component`` is configured using ``Component/configure()-5lup3``,
-    /// e.g. in the ``LifecycleHandler/willFinishLaunchingWithOptions(_:launchOptions:)-26h4k`` function.
+    /// You can access the wrapped value of the ``DynamicDependencies`` after the ``Component`` is configured using ``Component/configure()-27tt1``,
+    /// e.g. in the ``LifecycleHandler/willFinishLaunchingWithOptions(_:launchOptions:)-8jatp`` function.
     public typealias DynamicDependencies = _DynamicDependenciesPropertyWrapper<ComponentStandard>
 }

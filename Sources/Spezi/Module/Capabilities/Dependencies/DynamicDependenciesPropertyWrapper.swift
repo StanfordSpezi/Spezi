@@ -27,18 +27,18 @@ public class _DynamicDependenciesPropertyWrapper<S: Standard>: DependencyDescrip
     
     /// Refer to ``Component/DynamicDependencies`` for information on how to use the `@DynamicDependencies` property wrapper.
     /// Do not use the `_DynamicDependenciesPropertyWrapper` directly.
-    public init(componentProperties: @escaping @autoclosure () -> ([any ComponentDependency<S>])) {
+    public init(componentProperties: @escaping @autoclosure () -> [any ComponentDependency<S>]) {
         self.componentProperties = componentProperties()
     }
     
     
     public func gatherDependency(dependencyManager: DependencyManager<S>) {
         for componentProperty in componentProperties {
-            garther(componentProperty, in: dependencyManager)
+            gather(componentProperty, in: dependencyManager)
         }
     }
-    
-    private func garther<D: ComponentDependency>(_ componentProperty: D, in dependencyManager: DependencyManager<S>) where D.PropertyStandard == S {
+
+    private func gather<D: ComponentDependency>(_ componentProperty: D, in dependencyManager: DependencyManager<S>) where D.PropertyStandard == S {
         dependencyManager.require(D.ComponentType.self, defaultValue: componentProperty.defaultValue())
     }
     

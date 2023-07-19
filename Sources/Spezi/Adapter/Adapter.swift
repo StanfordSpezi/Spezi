@@ -7,7 +7,7 @@
 //
 
 
-/// A ``Adapter`` can be used to transfrom an input `DataChange` (`InputElement` and `InputRemovalContext`)
+/// A ``Adapter`` can be used to transform an input `DataChange` (`InputElement` and `InputRemovalContext`)
 /// to an output `DataChange` (`OutputElement` and `OutputRemovalContext`).
 ///
 ///

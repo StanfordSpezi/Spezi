@@ -21,7 +21,7 @@ public class _DataStorageProvidersPropertyWrapper<S: Standard> {
     private var dataStorageProviders: [any DataStorageProvider<S>]?
     
     
-    /// The injected ``[any DataStorageProvider<S>]`` that are resolved by ``Spezi``
+    /// The injected list of ``DataStorageProvider`` that are resolved by ``Spezi``
     public var wrappedValue: [any DataStorageProvider<S>] {
         guard let dataStorageProviders else {
             preconditionFailure(

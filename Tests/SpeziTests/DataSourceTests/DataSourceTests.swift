@@ -151,9 +151,9 @@ final class DataSourceTests: XCTestCase {
     
     
     func testDataSourceRegistry() { // swiftlint:disable:this function_body_length
-        let expecation = XCTestExpectation(description: "Recieved all required data source elements")
-        expecation.assertForOverFulfill = true
-        expecation.expectedFulfillmentCount = 3
+        let expectation = XCTestExpectation(description: "Received all required data source elements")
+        expectation.assertForOverFulfill = true
+        expectation.expectedFulfillmentCount = 3
         var dataChanges: [DataChange<TypedMockStandard<String>.BaseType, TypedMockStandard<String>.RemovalContext>] = []
         
         let lock = NSLock()
@@ -210,14 +210,14 @@ final class DataSourceTests: XCTestCase {
                 }
             },
             finishedDataSourceSequence: { _ in
-                expecation.fulfill()
+                expectation.fulfill()
             }
         )
         
         let spezi = delegate.spezi
         spezi.willFinishLaunchingWithOptions(UIApplication.shared, launchOptions: [:])
         
-        wait(for: [expecation], timeout: 1)
+        wait(for: [expectation], timeout: 1)
         
         XCTAssertEqual(dataChanges.count, 15)
         XCTAssertEqual(dataChanges.filter { $0.id == "1" } .count, 3)

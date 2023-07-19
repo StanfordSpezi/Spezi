@@ -13,7 +13,7 @@ import XCTRuntimeAssertions
 public class DependencyManager<S: Standard> {
     /// Collection of sorted components after resolving all dependencies.
     var sortedComponents: [any Component<S>]
-    /// Collection of all omponents with dependencies that are not yet processed.
+    /// Collection of all components with dependencies that are not yet processed.
     private var componentsWithDependencies: [any Component<S>]
     /// Collection used to keep track of components with dependencies in the recursive search.
     private var recursiveSearch: [any Component<S>] = []
@@ -24,12 +24,18 @@ public class DependencyManager<S: Standard> {
     init(_ components: [any Component<S>]) {
         sortedComponents = components.filter { $0.dependencyDescriptors.isEmpty }
         componentsWithDependencies = components.filter { !$0.dependencyDescriptors.isEmpty }
-        
+    }
+
+
+    /// Resolves the dependency order.
+    ///
+    /// After calling `resolve` you can safely access `sortedComponents`.
+    func resolve() {
         // Start the dependency resolution on the first component.
         if let nextComponent = componentsWithDependencies.first {
             push(nextComponent)
         }
-        
+
         for sortedComponent in sortedComponents {
             for dependency in sortedComponent.dependencyDescriptors {
                 dependency.inject(dependencyManager: self)
@@ -37,11 +43,10 @@ public class DependencyManager<S: Standard> {
         }
     }
     
-    
     /// Injects a dependency into a `_DependencyPropertyWrapper` that is resolved in the `sortedComponents`.
     /// - Parameters:
     ///   - dependencyType: The type of the dependency that should be injected.
-    ///   - dependencyPropertyWrapper: `_DependencyPropertyWrapper` that the dependency should be injected into.
+    ///   - anyDependency: The ``ComponentDependency`` that the provided dependency should be injected into.
     func inject<D: ComponentDependency>(
         _ dependencyType: D.ComponentType.Type,
         into anyDependency: D
@@ -57,8 +62,8 @@ public class DependencyManager<S: Standard> {
     /// - Parameters:
     ///   - dependencyType: The type of the dependency that should be resolved.
     ///   - defaultValue: A default instance of the dependency that is used when the `dependencyType` is not present in the `sortedComponents` or `componentsWithDependencies`.
-    func require<C: Component>(_ dependencyType: C.Type, defaultValue: @autoclosure () -> (C)) where C.ComponentStandard == S {
-        // 1. Return if thedepending component is found in the `sortedComponents` collection.
+    func require<C: Component>(_ dependencyType: C.Type, defaultValue: @autoclosure () -> C) where C.ComponentStandard == S {
+        // 1. Return if the depending component is found in the `sortedComponents` collection.
         if sortedComponents.contains(where: { type(of: $0) == C.self }) {
             return
         }
@@ -90,7 +95,7 @@ public class DependencyManager<S: Standard> {
             let lastElement = recursiveSearch.last! // swiftlint:disable:this force_unwrapping
             preconditionFailure(
                 """
-                The `DependencyManager` has detected a depenency cycle of your Spezi components.
+                The `DependencyManager` has detected a dependency cycle of your Spezi components.
                 The current dependency chain is: \(dependencyChain). The \(String(describing: type(of: lastElement))) required a type already present in the dependency chain.
                 
                 Please ensure that the components you use or develop can not trigger a dependency cycle.
@@ -117,12 +122,12 @@ public class DependencyManager<S: Standard> {
         componentsWithDependencies.removeAll(where: { $0 === dependingComponent })
         precondition(
             dependingComponentsCount - 1 == componentsWithDependencies.count,
-            "Unexpected reduction of components. Esure that all your components conform to the same `Standard`"
+            "Unexpected reduction of components. Ensure that all your components conform to the same `Standard`"
         )
         
         sortedComponents.append(dependingComponent)
         
-        // Call the dependency resolution mechanism on the next element in the `dependingComponents` if we are not in a recursive serach.
+        // Call the dependency resolution mechanism on the next element in the `dependingComponents` if we are not in a recursive search.
         if recursiveSearch.isEmpty, let nextComponent = componentsWithDependencies.first {
             push(nextComponent)
         }

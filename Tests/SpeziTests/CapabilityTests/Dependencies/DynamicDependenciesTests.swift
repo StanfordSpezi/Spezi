@@ -122,12 +122,12 @@ final class DynamicDependenciesTests: XCTestCase {
             
             guard dynamicDependenciesTestCase != .dependencyCircle else {
                 try XCTRuntimePrecondition {
-                    _ = DependencyManager(components).sortedComponents
+                    _ = DependencyManager.resolve(components)
                 }
                 return
             }
             
-            let sortedComponents = DependencyManager(components).sortedComponents
+            let sortedComponents = DependencyManager.resolve(components)
             XCTAssertEqual(sortedComponents.count, dynamicDependenciesTestCase.expectedNumberOfComponents)
             
             try sortedComponents.componentOfType(TestComponent1.self).evaluateExpectations()
