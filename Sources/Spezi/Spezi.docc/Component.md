@@ -16,25 +16,40 @@ SPDX-License-Identifier: MIT
 
 ## Overview
 
-The ``Component/ComponentStandard`` defines what Standard the component supports.
-The ``Component/configure()-27tt1`` method is called on the initialization of Spezi.
+A ``Component``'s initializer can be used to configure its behavior as a subsystem in Spezi-based software.
 
-### The Component Standard
+The ``Component/configure()-27tt1`` method is called on the initialization of the Spezi instance to perform a lightweight configuration of the component.
+Both ``Component/Dependency`` and ``Component/DynamicDependencies`` are available and configured at this point.
+It is advised that longer setup tasks are done in an asynchronous task and started during the call of the configure method.
 
-A ``Component`` can support any generic standard or add additional constraints using an optional where clause:
+### Component Constraints
+
+Components can use the constraint mechanism to enforce a set of requirements to the ``Standard`` used in the Spezi-based software where the component is used.
+This mechanism follows a two-step process:
+
+#### 1. Standard Constraint
+
+Define a standard constraint that is required by your component.
+The constraint protocol **must** conform to the `Standard` protocol.
 ```swift
-class ExampleComponent<ComponentStandard: Standard>: Component where ComponentStandard: /* ... */ {
-    /*... */
+protocol ExampleConstraint: Standard {
+    // ...
 }
 ```
 
-``Component``s can also specify support for only one specific ``Standard`` using a `typealias` definition:
+
+#### 2. Enforcing and Utilizing the Constraint with the `@StandardActor` Property Wrapper
+
+Use the constraint in your component to access the `Standard` instance that conforms to the protocol.
 ```swift
-class ExampleFHIRComponent: Component {
-    typealias ComponentStandard = FHIR
+class ExampleComponent: Component {
+    @StandardActor var standard: any ExampleConstraint
+   
+    // ...
 }
 ```
 
+> Note: You can learn more about creating a ``Standard`` that must meet the requirements of all components in the ``Standard`` documentation.
 
 ### Dependencies
 

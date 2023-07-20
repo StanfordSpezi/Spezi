@@ -13,6 +13,12 @@ import SwiftUI
 /// Delegate methods are related to the  `UIApplication` and ``Spezi/Spezi`` lifecycle.
 ///
 /// Conform to the `LifecycleHandler` protocol to get updates about the application lifecycle similar to the `UIApplicationDelegate` on an app basis.
+///
+/// You can, e.g., implement the following functions to get informed about the application launching and being terminated:
+/// - ``LifecycleHandler/willFinishLaunchingWithOptions(_:launchOptions:)-8jatp``
+/// - ``LifecycleHandler/applicationWillTerminate(_:)-35fxv``
+///
+/// All methods supported by the component capability are listed blow.
 public protocol LifecycleHandler {
     /// Replicates  the `application(_: UIApplication, willFinishLaunchingWithOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool`
     /// functionality of the `UIApplicationDelegate`.

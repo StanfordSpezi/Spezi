@@ -32,16 +32,14 @@ import SwiftUI
 /// }
 /// ```
 ///
-/// Register your different ``Component``s (or more sophisticated ``Module``s) using the ``SpeziAppDelegate/configuration`` property, e.g., using the
-/// `FHIR` standard integrated into the Spezi framework:
+/// Register your different ``Component``s (or more sophisticated ``Module``s) using the ``SpeziAppDelegate/configuration`` property.
 /// ```swift
 /// import Spezi
-/// import FHIR
 ///
 ///
 /// class TemplateAppDelegate: SpeziAppDelegate {
 ///     override var configuration: Configuration {
-///         Configuration(standard: FHIR()) {
+///         Configuration(standard: ExampleStandard()) {
 ///             // Add your `Component`s here ...
 ///        }
 ///     }
