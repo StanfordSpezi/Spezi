@@ -21,7 +21,7 @@ final class ObservableObjectTests: XCTestCase {
         
         let observableObjectProviders = testApplicationDelegate.spezi.observableObjectProviders
         XCTAssertEqual(observableObjectProviders.count, 1)
-        _ = try XCTUnwrap(observableObjectProviders.first as? TestComponent<MockStandard>)
+        _ = try XCTUnwrap(observableObjectProviders.first as? TestComponent)
     }
     
     func testNoObservableObjectsRetrieval() {

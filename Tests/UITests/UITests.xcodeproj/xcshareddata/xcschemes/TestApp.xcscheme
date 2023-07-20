@@ -54,74 +54,7 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES"
-      codeCoverageEnabled = "YES"
-      onlyGenerateCoverageForSpecifiedTargets = "YES">
-      <CodeCoverageTargets>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "Account"
-            BuildableName = "Account"
-            BlueprintName = "Account"
-            ReferencedContainer = "container:../..">
-         </BuildableReference>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "Spezi"
-            BuildableName = "Spezi"
-            BlueprintName = "Spezi"
-            ReferencedContainer = "container:../..">
-         </BuildableReference>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "Contact"
-            BuildableName = "Contact"
-            BlueprintName = "Contact"
-            ReferencedContainer = "container:../..">
-         </BuildableReference>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "FHIR"
-            BuildableName = "FHIR"
-            BlueprintName = "FHIR"
-            ReferencedContainer = "container:../..">
-         </BuildableReference>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "HealthKitDataSource"
-            BuildableName = "HealthKitDataSource"
-            BlueprintName = "HealthKitDataSource"
-            ReferencedContainer = "container:../..">
-         </BuildableReference>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "LocalStorage"
-            BuildableName = "LocalStorage"
-            BlueprintName = "LocalStorage"
-            ReferencedContainer = "container:../..">
-         </BuildableReference>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "Onboarding"
-            BuildableName = "Onboarding"
-            BlueprintName = "Onboarding"
-            ReferencedContainer = "container:../..">
-         </BuildableReference>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "SecureStorage"
-            BuildableName = "SecureStorage"
-            BlueprintName = "SecureStorage"
-            ReferencedContainer = "container:../..">
-         </BuildableReference>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "XCTRuntimeAssertions"
-            BuildableName = "XCTRuntimeAssertions"
-            BlueprintName = "XCTRuntimeAssertions"
-            ReferencedContainer = "container:../..">
-         </BuildableReference>
-      </CodeCoverageTargets>
+      shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
             reference = "container:UITests.xcodeproj/TestApp.xctestplan"
@@ -139,11 +72,6 @@
                BlueprintName = "TestAppUITests"
                ReferencedContainer = "container:UITests.xcodeproj">
             </BuildableReference>
-            <SkippedTests>
-               <Test
-                  Identifier = "HealthKitTests">
-               </Test>
-            </SkippedTests>
          </TestableReference>
       </Testables>
    </TestAction>

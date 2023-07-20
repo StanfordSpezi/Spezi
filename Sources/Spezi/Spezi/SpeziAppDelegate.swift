@@ -32,16 +32,14 @@ import SwiftUI
 /// }
 /// ```
 ///
-/// Register your different ``Component``s (or more sophisticated ``Module``s) using the ``SpeziAppDelegate/configuration`` property, e.g., using the
-/// `FHIR` standard integrated into the Spezi framework:
+/// Register your different ``Component``s (or more sophisticated ``Module``s) using the ``SpeziAppDelegate/configuration`` property.
 /// ```swift
 /// import Spezi
-/// import FHIR
 ///
 ///
 /// class TemplateAppDelegate: SpeziAppDelegate {
 ///     override var configuration: Configuration {
-///         Configuration(standard: FHIR()) {
+///         Configuration(standard: ExampleStandard()) {
 ///             // Add your `Component`s here ...
 ///        }
 ///     }
@@ -51,36 +49,22 @@ import SwiftUI
 /// The ``Component`` documentation provides more information about the structure of components.
 /// Refer to the ``Configuration`` documentation to learn more about the Spezi configuration.
 open class SpeziAppDelegate: NSObject, UIApplicationDelegate, UISceneDelegate {
-    private actor DefaultStandard: Standard {
-        typealias BaseType = StandardType
-        typealias RemovalContext = BaseType
-        
-        
-        struct StandardType: Identifiable {
-            var id: UUID
-        }
-        
-        
-        func registerDataSource(_ asyncSequence: some TypedAsyncSequence<DataChange<BaseType, RemovalContext>>) { }
-    }
-    
-    
     private(set) static weak var appDelegate: SpeziAppDelegate?
     
     
     private(set) lazy var spezi: AnySpezi = configuration.spezi
     
     
-    /// Register your different ``Component``s (or more sophisticated ``Module``s) using the ``SpeziAppDelegate/configuration`` property, e.g., using the
-    /// `FHIR` standard integrated into the Spezi framework:
+    /// Register your different ``Component``s (or more sophisticated ``Module``s) using the ``SpeziAppDelegate/configuration`` property,.
+    ///
+    /// The ``Standard`` acts as a central message broker in the application.
     /// ```swift
     /// import Spezi
-    /// import FHIR
     ///
     ///
     /// class TemplateAppDelegate: SpeziAppDelegate {
     ///     override var configuration: Configuration {
-    ///         Configuration(standard: FHIR()) {
+    ///         Configuration(standard: ExampleStandard()) {
     ///             // Add your `Component`s here ...
     ///        }
     ///     }
@@ -90,7 +74,7 @@ open class SpeziAppDelegate: NSObject, UIApplicationDelegate, UISceneDelegate {
     /// The ``Component`` documentation provides more information about the structure of components.
     /// Refer to the ``Configuration`` documentation to learn more about the Spezi configuration.
     open var configuration: Configuration {
-        Configuration(standard: DefaultStandard()) { }
+        Configuration { }
     }
     
     

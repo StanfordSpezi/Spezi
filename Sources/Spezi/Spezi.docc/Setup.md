@@ -40,36 +40,30 @@ struct ExampleApp: App {
 
 A ``Configuration`` defines the ``Standard`` and ``Component``s that are used in a Spezi project.
 
-Register your different ``Component``s (or more sophisticated ``Module``s) using the ``SpeziAppDelegate/configuration`` property, e.g., using the
-`FHIR` standard integrated into the Spezi Swift Package.
+Ensure that your standard conforms to all protocols enforced by the ``Component``s. If your ``Component``s require protocol conformances
+you must add them to your custom type conforming to ``Standard`` and passed to the initializer or extend a prebuild standard.
 
-The ``Configuration`` initializer requires a ``Standard`` that is used in the Spezi project.
-The standard defines a shared repository to facilitate communication between different modules.
+Use ``Configuration/init(_:)`` to use default empty standard instance only conforming to ``Standard`` if you do not use any ``Component`` requiring custom protocol conformances.
 
-The ``Configuration/init(standard:_:)``'s components result builder allows the definition of different components, including conditional statements or loops.
 
-The following example demonstrates the usage of the `FHIR` standard and different built-in Spezi modules, including the `HealthKit` and `QuestionnaireDataSource` components:
+The following example demonstrates the usage of an `ExampleStandard` standard and reusable Spezi modules, including the `HealthKit` and `QuestionnaireDataSource` components:
 ```swift
 import Spezi
-import FHIR
 import HealthKit
 import HealthKitDataSource
-import HealthKitToFHIRAdapter
 import Questionnaires
 import SwiftUI
 
 
 class ExampleAppDelegate: SpeziAppDelegate {
     override var configuration: Configuration {
-        Configuration(standard: FHIR()) {
+        Configuration(standard: ExampleStandard()) {
             if HKHealthStore.isHealthDataAvailable() {
                 HealthKit {
                     CollectSample(
                         HKQuantityType(.stepCount),
                         deliverySetting: .background(.afterAuthorizationAndApplicationWillLaunch)
                     )
-                } adapter: {
-                    HealthKitToFHIRAdapter()
                 }
             }
             QuestionnaireDataSource()

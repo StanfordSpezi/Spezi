@@ -12,9 +12,6 @@ import XCTRuntimeAssertions
 
 
 private final class TestLifecycleHandler: Component, LifecycleHandler {
-    typealias ComponentStandard = MockStandard
-    
-    
     let expectationWillFinishLaunchingWithOption: XCTestExpectation
     let expectationApplicationWillTerminate: XCTestExpectation
     
@@ -41,9 +38,7 @@ private final class TestLifecycleHandler: Component, LifecycleHandler {
 }
 
 
-private final class EmpfyLifecycleHandler: Component, LifecycleHandler {
-    typealias ComponentStandard = MockStandard
-}
+private final class EmpfyLifecycleHandler: Component, LifecycleHandler { }
 
 private class TestLifecycleHandlerApplicationDelegate: SpeziAppDelegate {
     let expectationWillFinishLaunchingWithOption: XCTestExpectation
@@ -51,7 +46,7 @@ private class TestLifecycleHandlerApplicationDelegate: SpeziAppDelegate {
     
     
     override var configuration: Configuration {
-        Configuration(standard: MockStandard()) {
+        Configuration {
             TestLifecycleHandler(
                 expectationWillFinishLaunchingWithOption: expectationWillFinishLaunchingWithOption,
                 expectationApplicationWillTerminate: expectationApplicationWillTerminate

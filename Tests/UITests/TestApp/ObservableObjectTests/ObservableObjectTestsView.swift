@@ -12,13 +12,9 @@ import XCTSpezi
 
 
 struct ObservableObjectTestsView: View {
-    typealias ObservableComponent = ObservableComponentTestsComponent<TestAppStandard>
-    typealias MultipleObservableComponent = MultipleObservableObjectsTestsComponent<TestAppStandard>
-    
-    
-    @EnvironmentObject var testAppComponent: ObservableComponent
-    @EnvironmentObject var multipleObservableInt: MultipleObservableComponent.TestObservableObject<Int>
-    @EnvironmentObject var multipleObservableString: MultipleObservableComponent.TestObservableObject<String>
+    @EnvironmentObject var testAppComponent: ObservableComponentTestsComponent
+    @EnvironmentObject var multipleObservableInt: MultipleObservableObjectsTestsComponent.TestObservableObject<Int>
+    @EnvironmentObject var multipleObservableString: MultipleObservableObjectsTestsComponent.TestObservableObject<String>
     
     
     var body: some View {

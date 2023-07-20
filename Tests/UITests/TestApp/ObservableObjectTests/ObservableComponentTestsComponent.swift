@@ -10,7 +10,7 @@ import Spezi
 import SwiftUI
 
 
-final class ObservableComponentTestsComponent<ComponentStandard: Standard>: Module {
+final class ObservableComponentTestsComponent: Module {
     var message: String
     
     

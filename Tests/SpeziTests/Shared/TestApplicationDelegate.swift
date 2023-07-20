@@ -17,7 +17,7 @@ public class TestApplicationDelegate: SpeziAppDelegate {
     
     
     override public var configuration: Configuration {
-        Configuration(standard: MockStandard()) {
+        Configuration {
             TestComponent(expectation: expectation)
         }
     }

@@ -13,7 +13,7 @@ import XCTSpezi
 
 class TestAppDelegate: SpeziAppDelegate {
     override var configuration: Configuration {
-        Configuration(standard: TestAppStandard()) {
+        Configuration {
             if FeatureFlags.lifecycleTests {
                 LifecycleHandlerTestComponent()
             }

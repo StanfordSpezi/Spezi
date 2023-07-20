@@ -6,11 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
-import Spezi
 
-
-actor MockStandard: Standard {
-    func fulfill(expectation: XCTestExpectation) {
-        expectation.fulfill()
-    }
+protocol AnyStandardPropertyWrapper {
+    func inject<S: Standard>(standard: S)
 }
