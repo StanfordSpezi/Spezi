@@ -254,9 +254,10 @@ final class SharedRepositoryTests: XCTestCase {
         }
     }
 
-    private var repos: [AnyTestInstance] = []
     static var computedValue: Int = 3
     static var optionalComputedValue: Int?
+
+    private var repos: [AnyTestInstance] = []
 
     override func setUp() {
         repos = [TestInstance(HeapRepository<TestAnchor>()), TestInstance(ValueRepository<TestAnchor>())]

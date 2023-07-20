@@ -68,26 +68,41 @@ public protocol SharedRepository<Anchor> {
     /// - Returns: The stored ``KnowledgeSource/Value`` or the ``DefaultProvidingKnowledgeSource/defaultValue``.
     subscript<Source: DefaultProvidingKnowledgeSource<Anchor>>(_ source: Source.Type) -> Source.Value { get }
 
-    /// A subscript to retrieve or set a ``ComputedKnowledgeSource``.
+    /// A subscript to retrieve a ``ComputedKnowledgeSource``.
     ///
-    /// - Note: If the value was not present and got computed, the computed value will be stored in the repository.
+    /// - Note: This is the implementation for the ``ComputedKnowledgeSource/Store`` policy.
+    ///     If the value was not present and got computed, the computed value will be stored in the repository.
     /// - Parameter source: The ``ComputedKnowledgeSource`` type.
     /// - Returns: The stored ``KnowledgeSource/Value`` or calls ``ComputedKnowledgeSource/compute(from:)`` to compute the value.
     subscript<Source: ComputedKnowledgeSource<Anchor>>(_ source: Source.Type)
         -> Source.Value where Source.StoragePolicy == _StoreComputePolicy { mutating get }
 
+    /// A subscript to retrieve a ``ComputedKnowledgeSource``.
+    ///
+    /// - Note: This is the implementation for the ``ComputedKnowledgeSource/AlwaysCompute`` policy.
+    ///     The ``ComputedKnowledgeSource/compute(from:)`` method will always be called as a result of this subscript call.
+    /// - Parameter source: The ``ComputedKnowledgeSource`` type.
+    /// - Returns: The calls ``ComputedKnowledgeSource/compute(from:)`` to compute the value.
     subscript<Source: ComputedKnowledgeSource<Anchor>>(_ source: Source.Type)
         -> Source.Value where Source.StoragePolicy == _AlwaysComputePolicy { get }
 
-    /// A subscript to retrieve or set a ``OptionalComputedKnowledgeSource``.
+    /// A subscript to retrieve a ``OptionalComputedKnowledgeSource``.
     ///
-    /// - Note: If the value was not present and got computed, the computed value will be stored in the repository.
+    /// - Note: This is the implementation for the ``OptionalComputedKnowledgeSource/Store`` policy.
+    ///     If the value was not present and got computed, the computed value will be stored in the repository.
     /// - Parameter source: The ``OptionalComputedKnowledgeSource`` type.
     /// - Returns: The stored ``KnowledgeSource/Value`` or calls ``OptionalComputedKnowledgeSource/compute(from:)`` to compute the value
     ///     or `nil` if the `compute` method returned nil.
     subscript<Source: OptionalComputedKnowledgeSource<Anchor>>(_ source: Source.Type)
         -> Source.Value? where Source.StoragePolicy == _StoreComputePolicy { mutating get }
 
+    /// A subscript to retrieve a ``OptionalComputedKnowledgeSource``.
+    ///
+    /// - Note: This is the implementation for the ``OptionalComputedKnowledgeSource/AlwaysCompute`` policy.
+    ///     The ``OptionalComputedKnowledgeSource/compute(from:)`` method will always be called as a result of this subscript call.
+    /// - Parameter source: The ``OptionalComputedKnowledgeSource`` type.
+    /// - Returns: The calls ``OptionalComputedKnowledgeSource/compute(from:)`` to compute the value
+    ///     or `nil` if the `compute` method returned nil.
     subscript<Source: OptionalComputedKnowledgeSource<Anchor>>(_ source: Source.Type)
         -> Source.Value? where Source.StoragePolicy == _AlwaysComputePolicy { get }
 }
@@ -129,6 +144,7 @@ extension SharedRepository {
         }
     }
 
+    /// Default subscript implementation delegating calling ``ComputedKnowledgeSource/compute(from:)``.
     public subscript<Source: ComputedKnowledgeSource<Anchor>>(_ source: Source.Type)
         -> Source.Value where Source.StoragePolicy == _AlwaysComputePolicy {
         source.compute(from: self)
@@ -149,6 +165,7 @@ extension SharedRepository {
         }
     }
 
+    /// Default subscript implementation delegating calling ``OptionalComputedKnowledgeSource/compute(from:)``.
     public subscript<Source: OptionalComputedKnowledgeSource<Anchor>>(_ source: Source.Type)
         -> Source.Value? where Source.StoragePolicy == _AlwaysComputePolicy {
         source.compute(from: self)
