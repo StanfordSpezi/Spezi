@@ -10,6 +10,8 @@ import os
 
 struct SpeziLogger: ComputedKnowledgeSource {
     typealias Anchor = SpeziAnchor
+    typealias StoragePolicy = Store
+    
     typealias Value = Logger
 
     

@@ -68,3 +68,8 @@ This signifies to ``KnowledgeSource`` adopters, that their ``KnowledgeSource/Val
 - ``Spezi/RepositoryValue``
 - ``Spezi/AnyRepositoryValue``
 - ``Spezi/SimpleRepositoryValue``
+
+### Computed Knowlegde Sources
+
+- ``Spezi/SomeComputedKnowledgeSource``
+- ``Spezi/ComputedKnowledgeSourceStoragePolicy``

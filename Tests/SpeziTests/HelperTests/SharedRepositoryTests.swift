@@ -32,6 +32,12 @@ private protocol AnyTestInstance {
     func testMutationStruct()
 
     func testKeyLikeKnowledgeSource()
+
+    func testComputedKnowledgeSourceComputedOnlyPolicy()
+
+    func testComputedKnowledgeSourceComputedOnlyPolicyReadOnly()
+
+    func testComputedKnowledgeSourceStorePolicy()
 }
 
 
@@ -63,10 +69,34 @@ final class SharedRepositoryTests: XCTestCase {
         var value: Int
         static let defaultValue = DefaultedTestStruct(value: 0)
     }
+
+    struct ComputedTestStruct<Policy: ComputedKnowledgeSourceStoragePolicy>: ComputedKnowledgeSource {
+        typealias Anchor = TestAnchor
+        typealias Value = Int
+        typealias StoragePolicy = Policy
+
+        static func compute<Repository: SharedRepository<Anchor>>(from repository: Repository) -> Int {
+            computedValue
+        }
+    }
+
+    struct OptionalComputedTestStruct<Policy: ComputedKnowledgeSourceStoragePolicy>: OptionalComputedKnowledgeSource {
+        typealias Anchor = TestAnchor
+        typealias Value = Int
+        typealias StoragePolicy = Policy
+
+        static func compute<Repository: SharedRepository<Anchor>>(from repository: Repository) -> Int? {
+            optionalComputedValue
+        }
+    }
     
 
     class TestInstance<Repository: SharedRepository>: AnyTestInstance where Repository.Anchor == TestAnchor {
         var repository: Repository
+
+        var readRepository: Repository {
+            repository
+        }
 
         init(_ repository: Repository) {
             self.repository = repository
@@ -76,18 +106,18 @@ final class SharedRepositoryTests: XCTestCase {
             // test basic insertion and retrieval
             let testStruct = TestStruct(value: 42)
             repository[TestStruct.self] = testStruct
-            let contentOfStruct = repository[TestStruct.self]
+            let contentOfStruct = readRepository[TestStruct.self]
             XCTAssertEqual(contentOfStruct, testStruct)
 
             // test overwrite and retrieval
             let newTestStruct = TestStruct(value: 24)
             repository[TestStruct.self] = newTestStruct
-            let newContentOfStruct = repository[TestStruct.self]
+            let newContentOfStruct = readRepository[TestStruct.self]
             XCTAssertEqual(newContentOfStruct, newTestStruct)
 
             // test deletion
             repository[TestStruct.self] = nil
-            let newerContentOfStruct = repository[TestStruct.self]
+            let newerContentOfStruct = readRepository[TestStruct.self]
             XCTAssertNil(newerContentOfStruct)
         }
 
@@ -95,23 +125,23 @@ final class SharedRepositoryTests: XCTestCase {
             let testStruct = DefaultedTestStruct(value: 42)
 
             // test global default
-            let defaultStruct = repository[DefaultedTestStruct.self]
+            let defaultStruct = readRepository[DefaultedTestStruct.self]
             XCTAssertEqual(defaultStruct, DefaultedTestStruct(value: 0))
 
             // test that it falls back to the regular KnowledgeSource subscript if expecting a optional type
-            let regularSubscript = repository[DefaultedTestStruct.self] ?? testStruct
+            let regularSubscript = readRepository[DefaultedTestStruct.self] ?? testStruct
             XCTAssertEqual(regularSubscript, testStruct)
         }
 
         func testContains() {
             let testStruct = TestStruct(value: 42)
-            XCTAssertFalse(repository.contains(TestStruct.self))
+            XCTAssertFalse(readRepository.contains(TestStruct.self))
 
             repository[TestStruct.self] = testStruct
-            XCTAssertTrue(repository.contains(TestStruct.self))
+            XCTAssertTrue(readRepository.contains(TestStruct.self))
 
             repository[TestStruct.self] = nil
-            XCTAssertFalse(repository.contains(TestStruct.self))
+            XCTAssertFalse(readRepository.contains(TestStruct.self))
         }
 
         func testGetAllThatConformTo() {
@@ -120,7 +150,7 @@ final class SharedRepositoryTests: XCTestCase {
             let testClass = TestClass(value: 42)
             repository[TestClass.self] = testClass
 
-            let testTypes = repository.collect(allOf: (any TestTypes).self)
+            let testTypes = readRepository.collect(allOf: (any TestTypes).self)
             XCTAssertEqual(testTypes.count, 2)
             XCTAssertTrue(testTypes.allSatisfy { $0.value == 42 })
         }
@@ -129,7 +159,7 @@ final class SharedRepositoryTests: XCTestCase {
             let testClass = TestClass(value: 42)
             repository[TestClass.self] = testClass
 
-            let contentOfClass = repository[TestClass.self]
+            let contentOfClass = readRepository[TestClass.self]
             contentOfClass?.value = 24
             XCTAssertEqual(contentOfClass, testClass)
         }
@@ -138,7 +168,7 @@ final class SharedRepositoryTests: XCTestCase {
             let testStruct = TestStruct(value: 42)
             repository[TestStruct.self] = testStruct
 
-            var contentOfStruct = repository[TestStruct.self]
+            var contentOfStruct = readRepository[TestStruct.self]
             contentOfStruct?.value = 24
             XCTAssertEqual(testStruct.value, 42)
             XCTAssertEqual(contentOfStruct?.value, 24)
@@ -148,12 +178,92 @@ final class SharedRepositoryTests: XCTestCase {
             let testClass = TestClass(value: 42)
             repository[TestKeyLike.self] = testClass
 
-            let contentOfClass = repository[TestKeyLike.self]
+            let contentOfClass = readRepository[TestKeyLike.self]
             XCTAssertEqual(contentOfClass, testClass)
+        }
+
+        func testComputedKnowledgeSourceComputedOnlyPolicy() {
+            let value = repository[ComputedTestStruct<_AlwaysComputePolicy>.self]
+            let optionalValue = repository[OptionalComputedTestStruct<_AlwaysComputePolicy>.self]
+
+            XCTAssertEqual(value, computedValue)
+            XCTAssertEqual(optionalValue, optionalComputedValue)
+
+            // make sure computed knowledge sources with `AlwaysCompute` policy are re-computed
+            computedValue = 5
+            optionalComputedValue = 4
+
+            let newValue = repository[ComputedTestStruct<_AlwaysComputePolicy>.self]
+            let newOptionalValue = repository[OptionalComputedTestStruct<_AlwaysComputePolicy>.self]
+
+            XCTAssertEqual(newValue, computedValue)
+            XCTAssertEqual(newOptionalValue, optionalComputedValue)
+        }
+
+        func testComputedKnowledgeSourceComputedOnlyPolicyReadOnly() {
+            let repository = repository // read-only
+
+            let value = repository[ComputedTestStruct<_AlwaysComputePolicy>.self]
+            let optionalValue = repository[OptionalComputedTestStruct<_AlwaysComputePolicy>.self]
+
+            XCTAssertEqual(value, computedValue)
+            XCTAssertEqual(optionalValue, optionalComputedValue)
+
+            // make sure computed knowledge sources with `AlwaysCompute` policy are re-computed
+            computedValue = 5
+            optionalComputedValue = 4
+
+            let newValue = repository[ComputedTestStruct<_AlwaysComputePolicy>.self]
+            let newOptionalValue = repository[OptionalComputedTestStruct<_AlwaysComputePolicy>.self]
+
+            XCTAssertEqual(newValue, computedValue)
+            XCTAssertEqual(newOptionalValue, optionalComputedValue)
+        }
+
+        func testComputedKnowledgeSourceStorePolicy() {
+            let value = repository[ComputedTestStruct<_StoreComputePolicy>.self]
+            let optionalValue = repository[OptionalComputedTestStruct<_StoreComputePolicy>.self]
+
+            XCTAssertEqual(value, computedValue)
+            XCTAssertEqual(optionalValue, optionalComputedValue)
+
+            // get call bypasses the compute call, so tests if it's really stored
+            let getValue = repository.get(ComputedTestStruct<_StoreComputePolicy>.self)
+            let getOptionalValue = repository.get(OptionalComputedTestStruct<_StoreComputePolicy>.self)
+
+            XCTAssertEqual(getValue, computedValue)
+            XCTAssertEqual(getOptionalValue, optionalComputedValue) // this is nil
+
+            // make sure computed knowledge sources with `Store` policy are not re-computed
+            computedValue = 5
+            optionalComputedValue = 4
+
+            let newValue = repository[ComputedTestStruct<_StoreComputePolicy>.self]
+            let newOptionalValue = repository[OptionalComputedTestStruct<_StoreComputePolicy>.self]
+
+            XCTAssertEqual(newValue, value)
+            XCTAssertEqual(newOptionalValue, optionalComputedValue) // never stored as it was nil
+
+            // last check if its really written now
+            let writtenOptionalValue = repository.get(OptionalComputedTestStruct<_StoreComputePolicy>.self)
+            XCTAssertEqual(writtenOptionalValue, optionalComputedValue)
+
+            // check again that it doesn't change
+            optionalComputedValue = nil
+            XCTAssertEqual(repository[OptionalComputedTestStruct<_StoreComputePolicy>.self], 4)
         }
     }
 
-    private var repos: [AnyTestInstance] = [TestInstance(HeapRepository<TestAnchor>()), TestInstance(ValueRepository<TestAnchor>())]
+    static var computedValue: Int = 3
+    static var optionalComputedValue: Int?
+
+    private var repos: [AnyTestInstance] = []
+
+    override func setUp() {
+        repos = [TestInstance(HeapRepository<TestAnchor>()), TestInstance(ValueRepository<TestAnchor>())]
+        Self.computedValue = 3
+        Self.optionalComputedValue = nil
+    }
 
     func testSetAndGet() {
         repos.forEach { $0.testSetAndGet() }
@@ -181,5 +291,17 @@ final class SharedRepositoryTests: XCTestCase {
 
     func testKeyLikeKnowledgeSource() {
         repos.forEach { $0.testKeyLikeKnowledgeSource() }
+    }
+
+    func testComputedKnowledgeSourceComputedOnlyPolicy() {
+        repos.forEach { $0.testComputedKnowledgeSourceComputedOnlyPolicy() }
+    }
+
+    func testComputedKnowledgeSourceComputedOnlyPolicyReadOnly() {
+        repos.forEach { $0.testComputedKnowledgeSourceComputedOnlyPolicyReadOnly() }
+    }
+
+    func testComputedKnowledgeSourceStorePolicy() {
+        repos.forEach { $0.testComputedKnowledgeSourceStorePolicy() }
     }
 }
