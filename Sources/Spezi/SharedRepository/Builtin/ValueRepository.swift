@@ -6,6 +6,8 @@
 // SPDX-License-Identifier: MIT
 //
 
+import Foundation
+
 
 /// A ``ValueRepository`` that allows to store any ``KnowledgeSource``s.
 public typealias UniversalValueRepository = ValueRepository<Any>
@@ -31,6 +33,27 @@ public struct ValueRepository<Anchor>: SharedRepository, BuiltinRepository {
 
     public func collect<Value>(allOf type: Value.Type) -> [Value] {
         collect0(allOf: type)
+    }
+}
+
+extension ValueRepository: Collection {
+    public typealias Index = Dictionary<ObjectIdentifier, AnyRepositoryValue>.Index
+
+    public var startIndex: Index {
+        storage.values.startIndex
+    }
+
+    public var endIndex: Index {
+        storage.values.endIndex
+    }
+
+    public func index(after index: Index) -> Index {
+        storage.values.index(after: index)
+    }
+
+
+    public subscript(position: Index) -> AnyRepositoryValue {
+        storage.values[position]
     }
 }
 
