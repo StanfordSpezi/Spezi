@@ -6,8 +6,6 @@
 // SPDX-License-Identifier: MIT
 //
 
-import Foundation
-
 
 /// A ``ValueRepository`` that allows to store any ``KnowledgeSource``s.
 public typealias UniversalValueRepository = ValueRepository<Any>
