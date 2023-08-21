@@ -265,6 +265,27 @@ final class SharedRepositoryTests: XCTestCase {
         Self.optionalComputedValue = nil
     }
 
+    func testValueRepositoryIteration() {
+        var repository = ValueRepository<TestAnchor>()
+        repository[TestStruct.self] = TestStruct(value: 3)
+        iterationTest(repository)
+    }
+
+    func testHeapRepositoryIteration() {
+        var repository = HeapRepository<TestAnchor>()
+        repository[TestStruct.self] = TestStruct(value: 3)
+        iterationTest(repository)
+    }
+
+    func iterationTest<Repository: SharedRepository<TestAnchor>>(_ repository: Repository)
+        where Repository: Collection, Repository.Element == AnyRepositoryValue {
+        for value in repository {
+            XCTAssertTrue(value.anySource is TestStruct.Type)
+            XCTAssertTrue(value.anyValue is TestStruct)
+            XCTAssertEqual(value.anyValue as? TestStruct, TestStruct(value: 3))
+        }
+    }
+
     func testSetAndGet() {
         repos.forEach { $0.testSetAndGet() }
     }

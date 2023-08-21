@@ -34,5 +34,26 @@ public struct ValueRepository<Anchor>: SharedRepository, BuiltinRepository {
     }
 }
 
+extension ValueRepository: Collection {
+    public typealias Index = Dictionary<ObjectIdentifier, AnyRepositoryValue>.Index
+
+    public var startIndex: Index {
+        storage.values.startIndex
+    }
+
+    public var endIndex: Index {
+        storage.values.endIndex
+    }
+
+    public func index(after index: Index) -> Index {
+        storage.values.index(after: index)
+    }
+
+
+    public subscript(position: Index) -> AnyRepositoryValue {
+        storage.values[position]
+    }
+}
+
 
 extension ValueRepository: @unchecked Sendable where Anchor: Sendable {}

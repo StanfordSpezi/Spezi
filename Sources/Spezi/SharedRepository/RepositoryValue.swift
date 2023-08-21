@@ -9,6 +9,8 @@
 
 /// Represents type erased ``RepositoryValue``.
 public protocol AnyRepositoryValue {
+    /// This property gives access to a type-erased version of ``RepositoryValue/Source``
+    var anySource: any KnowledgeSource.Type { get }
     /// This property gives access to a type-erased version of ``RepositoryValue/value``.
     var anyValue: Any { get }
 }
@@ -31,6 +33,11 @@ public protocol RepositoryValue<Source>: AnyRepositoryValue {
 
 
 extension RepositoryValue {
+    /// The type erased ``RepositoryValue/Source``.
+    public var anySource: any KnowledgeSource.Type {
+        Source.self
+    }
+
     /// The type erased ``RepositoryValue/value``.
     public var anyValue: Any {
         value
