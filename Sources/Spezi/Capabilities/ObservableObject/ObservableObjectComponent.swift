@@ -18,7 +18,7 @@ import SwiftUI
 /// A Component can conform to `ObservableObjectProvider` to inject `ObservableObject`s in the SwiftUI view hierarchy.
 /// You define all `ObservableObject`s that should be injected using the ``ObservableObjectProvider/observableObjects-3hktb`` property.
 /// ```swift
-/// class MyComponent<ComponentStandard: Standard>: ObservableObjectProvider {
+/// class MyComponent: ObservableObjectProvider {
 ///     public var observableObjects: [any ObservableObject] {
 ///         [/* ... */]
 ///     }
@@ -28,7 +28,7 @@ import SwiftUI
 /// `ObservableObjectProvider` provides a default implementation of the ``ObservableObjectProvider/observableObjects-3hktb`` If your type conforms to `ObservableObject`
 /// that just injects itself into the SwiftUI view hierarchy:
 /// ```swift
-/// class MyComponent<ComponentStandard: Standard>: ObservableObject, ObservableObjectProvider {
+/// class MyComponent: ObservableObject, ObservableObjectProvider {
 ///     @Published
 ///     var test: String
 ///
@@ -40,7 +40,7 @@ public protocol ObservableObjectProvider {
     ///
     /// You define all `ObservableObject`s that should be injected using the ``ObservableObjectProvider/observableObjects-3hktb`` property.
     /// ```swift
-    /// class MyComponent<ComponentStandard: Standard>: ObservableObjectProvider {
+    /// class MyComponent: ObservableObjectProvider {
     ///     public var observableObjects: [any ObservableObject] {
     ///         [/* ... */]
     ///     }

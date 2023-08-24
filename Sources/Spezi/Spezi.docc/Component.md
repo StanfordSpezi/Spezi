@@ -60,7 +60,7 @@ evaluated by the ``DependencyManager``.
 > Note: Declaring a cyclic dependency will result in a runtime error. 
 
 ```swift
-class ExampleComponent<ComponentStandard: Standard>: Component {
+class ExampleComponent: Component {
     @Dependency var exampleComponentDependency = ExampleComponentDependency()
 }
 ```
@@ -80,11 +80,11 @@ Refer to the documentation of the property wrappers for a more detailed overview
 Below is a simple example of passing data between ``Component``s.
 
 ```swift
-class ComponentA<ComponentStandard: Standard>: Component {
+class ComponentA: Component {
     @Provide var someGreeting = "Hello World"
 }
 
-class ComponentB<ComponentStandard: Standard>: Component {
+class ComponentB: Component {
     @Collect var allGreetings: [String]
 
     func collect() {
@@ -111,6 +111,11 @@ All these protocols are combined in the ``Module`` protocol, making it an easy o
 - ``Component/Provide``
 - ``Component/Collect``
 - ``Component/StandardActor``
+
+### Capabilities
+
+- ``LifecycleHandler``
+- ``ObservableObjectProvider``
 
 ### Dependency
 

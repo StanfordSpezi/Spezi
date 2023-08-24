@@ -15,7 +15,7 @@ SPDX-License-Identifier: MIT
 }
 
 Components can use the constraint mechanism to enforce a set of requirements to the ``Standard`` used in the Spezi-based software where the component is used.
-This mechanism follows a two-step process detailed in the component documentation: <doc:Component>.
+This mechanism follows a two-step process detailed in the component documentation: ``Component``.
 
 The constraints are defined using a protocol that conforms to the `Standard` protocol:
 
@@ -58,17 +58,7 @@ var configuration: Configuration {
 }
 ```
 
-> Note: You can learn more about setting up your application in the <doc:Setup> article. You can learn more about the ``Configuration`` in its type documentation.
+> Note: You can learn more about setting up your application in the <doc:Initial-Setup> article. You can learn more about the ``Configuration`` in its type documentation.
 
 You can always access the current ``Standard`` instance in your ``Component`` using the @``Component/StandardActor`` property wrapper.
 It is also available using the `@EnvironmentObject` property wrapper in your SwiftUI views.
-
-
-## Topics
-
-### Modules & Component Capabilities
-
-- ``Component``
-- ``Module``
-- ``LifecycleHandler``
-- ``ObservableObjectProvider``

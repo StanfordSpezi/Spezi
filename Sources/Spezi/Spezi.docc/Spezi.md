@@ -14,7 +14,7 @@ Open-source framework for rapid development of modern, interoperable digital hea
 
 ## Overview
 
-> Note: Refer to the <doc:Setup> instructions on how to integrate Spezi into your application!
+> Note: Refer to the <doc:Initial-Setup> instructions on how to integrate Spezi into your application!
 
 Spezi introduces a standards-based modular approach to building digital health applications. 
 A ``Standard`` defines the key component that orchestrates the data flow in the application by meeting requirements defined by components.
@@ -23,7 +23,7 @@ You can learn more about the ``Standard`` protocol and when it is advised to cre
 A ``Component`` defines a software subsystem providing distinct and reusable functionality.
 Components can use the constraint mechanism to enforce a set of requirements to the standard used in the Spezi-based software where the component is used.
 Components also define dependencies on each other to reuse functionality and can communicate with other components by offering and collecting information.
-They can also conform to different additional protocols to provide additional access to Spezi features, such lifecycle management and triggering view updates in SwiftUI using the observable mechanisms in Swift.
+They can also conform to different additional protocols to provide additional access to Spezi features, such as lifecycle management and triggering view updates in SwiftUI using the observable mechanisms in Swift.
 You can learn more about components in the <doc:Component> documentation.
 
 To simplify the creation of components, a common set of functionalities typically used by components is summarized in the ``Module`` protocol, making it an easy one-stop solution to support all these different functionalities and build a capable Spezi module.
@@ -38,33 +38,23 @@ Check out the [Stanford Biodesign Digital Health Group GitHub organization](), f
 
 ## Topics
 
-### Spezi Setup
-
-- <doc:Setup>
-- ``Spezi/Spezi``
-- ``SpeziAppDelegate``
-- ``Standard``
-
-### Component
-
-- ``Component``
-
-### Modules
-
-- ``Module``
-
 ### Configuration
 
+- <doc:Initial-Setup>
+- ``SwiftUI/View/spezi(_:)``
+- ``SpeziAppDelegate``
 - ``Configuration``
-- ``ComponentBuilder``
-- ``ComponentCollection``
+
+### Essential Concepts
+
+- ``Spezi/Spezi``
+- ``Standard``
+- ``Component``
+- ``Module``
 
 ### Shared Repository
 
 - <doc:Shared-Repository>
-- ``SharedRepository``
-- ``RepositoryAnchor``
-- ``KnowledgeSource``
 - ``SpeziAnchor``
 - ``SpeziStorage``
 

@@ -42,6 +42,12 @@
 /// ```
 ///
 /// The ``Component`` documentation provides more information about the structure of components.
+///
+/// ## Topics
+///
+/// ### Result Builder
+/// - ``ComponentBuilder``
+/// - ``ComponentCollection``
 public struct Configuration {
     let spezi: AnySpezi
     
