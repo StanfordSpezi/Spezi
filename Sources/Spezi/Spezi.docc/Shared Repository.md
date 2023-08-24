@@ -40,7 +40,7 @@ This signifies to ``KnowledgeSource`` adopters, that their ``KnowledgeSource/Val
 
 > Warning: Due to Swift limitations, the ``ValueRepository`` implementation never checks if a given ``KnowledgeSource`` implementation actually has
     a value type that conforms to `Sendable`. Therefore, implementors should make sure that their ``KnowledgeSource/Value`` conforms to `Sendable`.
-    If you require to check for such a conformance, you may write a Wrapper around the ``ValueRepository``, replicating its interface.
+    If you are required to check for such a conformance, you may write a Wrapper around the ``ValueRepository``, replicating its interface.
 
 ## Topics
 
@@ -69,7 +69,7 @@ This signifies to ``KnowledgeSource`` adopters, that their ``KnowledgeSource/Val
 - ``Spezi/AnyRepositoryValue``
 - ``Spezi/SimpleRepositoryValue``
 
-### Computed Knowlegde Sources
+### Computed Knowledge Sources
 
 - ``Spezi/SomeComputedKnowledgeSource``
 - ``Spezi/ComputedKnowledgeSourceStoragePolicy``

@@ -1,4 +1,4 @@
-# Setup
+# Initial Setup
 
 <!--
                   
@@ -41,7 +41,7 @@ struct ExampleApp: App {
 A ``Configuration`` defines the ``Standard`` and ``Component``s that are used in a Spezi project.
 
 Ensure that your standard conforms to all protocols enforced by the ``Component``s. If your ``Component``s require protocol conformances
-you must add them to your custom type conforming to ``Standard`` and passed to the initializer or extend a prebuild standard.
+you must add them to your custom type conforming to ``Standard`` and passed to the initializer or extend a prebuilt standard.
 
 Use ``Configuration/init(_:)`` to use default empty standard instance only conforming to ``Standard`` if you do not use any ``Component`` requiring custom protocol conformances.
 
@@ -73,11 +73,3 @@ class ExampleAppDelegate: SpeziAppDelegate {
 ```
 
 The ``Component`` documentation provides more information about the structure of components.
-
-## Topics
-
-### Core Spezi Types
-
-- ``Spezi/Spezi``
-- ``SpeziAppDelegate``
-- ``Standard``

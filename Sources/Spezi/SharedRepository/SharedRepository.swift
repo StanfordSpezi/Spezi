@@ -70,7 +70,7 @@ public protocol SharedRepository<Anchor> {
 
     /// A subscript to retrieve a ``ComputedKnowledgeSource``.
     ///
-    /// - Note: This is the implementation for the ``ComputedKnowledgeSource/Store`` policy.
+    /// - Note: This is the implementation for the ``SomeComputedKnowledgeSource/Store`` policy.
     ///     If the value was not present and got computed, the computed value will be stored in the repository.
     /// - Parameter source: The ``ComputedKnowledgeSource`` type.
     /// - Returns: The stored ``KnowledgeSource/Value`` or calls ``ComputedKnowledgeSource/compute(from:)`` to compute the value.
@@ -79,7 +79,7 @@ public protocol SharedRepository<Anchor> {
 
     /// A subscript to retrieve a ``ComputedKnowledgeSource``.
     ///
-    /// - Note: This is the implementation for the ``ComputedKnowledgeSource/AlwaysCompute`` policy.
+    /// - Note: This is the implementation for the ``SomeComputedKnowledgeSource/AlwaysCompute`` policy.
     ///     The ``ComputedKnowledgeSource/compute(from:)`` method will always be called as a result of this subscript call.
     /// - Parameter source: The ``ComputedKnowledgeSource`` type.
     /// - Returns: The calls ``ComputedKnowledgeSource/compute(from:)`` to compute the value.
@@ -88,7 +88,7 @@ public protocol SharedRepository<Anchor> {
 
     /// A subscript to retrieve a ``OptionalComputedKnowledgeSource``.
     ///
-    /// - Note: This is the implementation for the ``OptionalComputedKnowledgeSource/Store`` policy.
+    /// - Note: This is the implementation for the ``SomeComputedKnowledgeSource/Store`` policy.
     ///     If the value was not present and got computed, the computed value will be stored in the repository.
     /// - Parameter source: The ``OptionalComputedKnowledgeSource`` type.
     /// - Returns: The stored ``KnowledgeSource/Value`` or calls ``OptionalComputedKnowledgeSource/compute(from:)`` to compute the value
@@ -98,7 +98,7 @@ public protocol SharedRepository<Anchor> {
 
     /// A subscript to retrieve a ``OptionalComputedKnowledgeSource``.
     ///
-    /// - Note: This is the implementation for the ``OptionalComputedKnowledgeSource/AlwaysCompute`` policy.
+    /// - Note: This is the implementation for the ``SomeComputedKnowledgeSource/AlwaysCompute`` policy.
     ///     The ``OptionalComputedKnowledgeSource/compute(from:)`` method will always be called as a result of this subscript call.
     /// - Parameter source: The ``OptionalComputedKnowledgeSource`` type.
     /// - Returns: The calls ``OptionalComputedKnowledgeSource/compute(from:)`` to compute the value

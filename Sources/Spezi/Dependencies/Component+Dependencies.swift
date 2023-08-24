@@ -12,14 +12,14 @@ extension Component {
     ///
     /// A ``Component`` can define the dependencies using the @``Component/Dependency`` property wrapper:
     /// ```swift
-    /// class ExampleComponent<ComponentStandard: Standard>: Component {
+    /// class ExampleComponent: Component {
     ///     @Dependency var exampleComponentDependency = ExampleComponentDependency()
     /// }
     /// ```
     ///
     /// Some components do not need a default value assigned to the property if they provide a default configuration and conform to ``DefaultInitializable``.
     /// ```swift
-    /// class ExampleComponent<ComponentStandard: Standard>: Component {
+    /// class ExampleComponent: Component {
     ///     @Dependency var exampleComponentDependency: ExampleComponentDependency
     /// }
     /// ```
@@ -36,7 +36,7 @@ extension Component {
     ///
     /// A ``Component`` can define dynamic dependencies using the @``Component/DynamicDependencies`` property wrapper and can, e.g., initialize its value in the initializer.
     /// ```swift
-    /// class ExampleComponent<ComponentStandard: Standard>: Component {
+    /// class ExampleComponent: Component {
     ///     @DynamicDependencies var dynamicDependencies: [any Component<ComponentStandard>]
     ///
     ///

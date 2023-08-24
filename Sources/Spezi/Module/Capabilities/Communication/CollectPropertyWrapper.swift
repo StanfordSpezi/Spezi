@@ -50,7 +50,7 @@ extension Component {
     /// Below is an example where the `ExampleComponent` collects an array of `Numeric` types from all other `Components`.
     ///
     /// ```swift
-    /// class ExampleComponent<ComponentStandard: Standard>: Component {
+    /// class ExampleComponent: Component {
     ///     @Collect var favoriteNumbers: [Numeric]
     ///
     ///     func configure() {

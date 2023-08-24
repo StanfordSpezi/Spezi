@@ -66,7 +66,7 @@ extension Component {
     ///
     /// Below is an example where the `ExampleComponent` provides a `Numeric` type to some other components.
     /// ```swift
-    /// class ExampleComponent<ComponentStandard: Standard>: Component {
+    /// class ExampleComponent: Component {
     ///     @Provide var favoriteNumber: Numeric
     ///
     ///     init() {
@@ -80,7 +80,7 @@ extension Component {
     /// If `nil` is provided, nothing is collected, otherwise the underlying value of the optional is collected.
     ///
     /// ```swift
-    /// class ExampleComponent<ComponentStandard: Standard>: Component {
+    /// class ExampleComponent: Component {
     ///     @Provide var favoriteNumber: Numeric?
     ///
     ///     init() {
@@ -95,7 +95,7 @@ extension Component {
     /// If you want to provide more than one instance of a given value you may declare @Provide as an `Array` type.
     ///
     /// ```swift
-    /// class ExampleComponent<ComponentStandard: Standard>: Component {
+    /// class ExampleComponent: Component {
     ///     @Provide var favoriteNumbers: [Numeric]
     ///
     ///     init() {
