@@ -32,6 +32,7 @@ jobs:
     with:
       runsonlabels: '["macos-13"]'
       xcodeversion: '14.3.1'
+      destination: 'platform=iOS Simulator,name=iPhone 14 Pro'
       scheme: Spezi-Package
       test: false
       codeql: true
