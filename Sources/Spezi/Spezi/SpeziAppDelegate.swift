@@ -9,7 +9,7 @@
 import SwiftUI
 
 
-/// The ``SpeziAppDelegate`` is used to configure the Spezi-based application using the ``SpeziAppDelegate/configuration`` property.
+/// Configure the Spezi-based application using the ``SpeziAppDelegate/configuration`` property.
 ///
 /// Set up the Spezi framework in your `App` instance of your SwiftUI application using the ``SpeziAppDelegate`` and the `@UIApplicationDelegateAdaptor` property wrapper.
 /// Use the `View.spezi(_: SpeziAppDelegate)` view modifier to apply your Spezi configuration to the main view in your SwiftUI `Scene`:

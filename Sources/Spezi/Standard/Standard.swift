@@ -8,5 +8,5 @@
 
 
 // note: detailed documentation is provided as an article extension in the DocC bundle
-/// A ``Standard`` defines the key component that orchestrates the data flow in the application by meeting requirements defined by components.
+/// Defines the key component that orchestrates the data flow in the application by meeting requirements defined by components.
 public protocol Standard: Actor, Component { }
