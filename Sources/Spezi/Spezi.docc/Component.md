@@ -114,6 +114,7 @@ All these protocols are combined in the ``Module`` protocol, making it an easy o
 
 ### Capabilities
 
+- ``Module``
 - ``LifecycleHandler``
 - ``ObservableObjectProvider``
 
