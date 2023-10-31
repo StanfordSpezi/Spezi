@@ -8,9 +8,8 @@
 
 import SwiftUI
 
-// TODO: review documentation!
 
-
+/// Refer to the documentation of ``Component/Modifier``.
 @propertyWrapper
 public class _ModifierPropertyWrapper<Modifier: ViewModifier> {
     // swiftlint:disable:previous type_name
@@ -20,6 +19,8 @@ public class _ModifierPropertyWrapper<Modifier: ViewModifier> {
     private var collected = false
 
 
+    /// Access the store value.
+    /// - Note: You cannot access the value once it was collected.
     public var wrappedValue: Modifier {
         get {
             storedValue
@@ -31,6 +32,8 @@ public class _ModifierPropertyWrapper<Modifier: ViewModifier> {
     }
 
 
+    /// Initialize a new `@Modifier` property wrapper.
+    /// - Parameter wrappedValue: The initial value.
     public init(wrappedValue: Modifier) {
         self.storedValue = wrappedValue
     }
@@ -38,7 +41,30 @@ public class _ModifierPropertyWrapper<Modifier: ViewModifier> {
 
 
 extension Component {
-    public typealias ViewModifier = _ModifierPropertyWrapper
+    /// Provide a SwiftUI `ViewModifier` to modify the global view hierarchy.
+    ///
+    /// The `@Modifier` property wrapper can be used inside your `Component` to modify
+    /// the global SwiftUI view hierarchy using the provided `ViewModifier` implementation.
+    ///
+    /// Below is a short code example that demonstrates the usage of a ViewModifier to set a global
+    /// environment key.
+    ///
+    /// ```swift
+    /// struct MyModifier: ViewModifier {
+    ///     func body(content: Content) -> some View {
+    ///         content
+    ///             .environment(\.exampleKey, /* your configuration value */)
+    ///     }
+    /// }
+    ///
+    /// class MyComponent: Component {
+    ///     @Modifier var modifier = MyModifier()
+    /// }
+    /// ```
+    ///
+    /// - Important: The value of the property must not be modified after the call to your ``Component/configure()``
+    ///     method returned.
+    public typealias Modifier = _ModifierPropertyWrapper
 }
 
 

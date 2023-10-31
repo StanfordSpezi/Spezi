@@ -21,10 +21,23 @@ class LifecycleHandlerModel {
 }
 
 
+struct LifecycleHandlerModifier: ViewModifier {
+    @State var model: LifecycleHandlerModel
+    
+    init(model: LifecycleHandlerModel) {
+        self.model = model
+    }
+    
+    func body(content: Content) -> some View {
+        content.environment(model)
+    }
+}
+
+
 final class LifecycleHandlerTestComponent: Module {
     private let model: LifecycleHandlerModel
 
-    @_ModifierPropertyWrapper var modifier: LifecycleHandlerModifier
+    @Modifier var modifier: LifecycleHandlerModifier
 
     init() {
         let model = LifecycleHandlerModel()
@@ -36,42 +49,29 @@ final class LifecycleHandlerTestComponent: Module {
         model.willFinishLaunchingWithOptions += 1
         precondition(model.willFinishLaunchingWithOptions - 1 == model.applicationWillTerminate)
     }
-    
+
     func sceneWillEnterForeground(_ scene: UIScene) {
         model.sceneWillEnterForeground += 1
         precondition(model.sceneWillEnterForeground - 1 == model.sceneDidBecomeActive)
     }
-    
+
     func sceneDidBecomeActive(_ scene: UIScene) {
         model.sceneDidBecomeActive += 1
         precondition(model.sceneWillEnterForeground == model.sceneDidBecomeActive)
     }
-    
+
     func sceneWillResignActive(_ scene: UIScene) {
         model.sceneWillResignActive += 1
         precondition(model.sceneWillResignActive - 1 == model.sceneDidEnterBackground)
     }
-    
+
     func sceneDidEnterBackground(_ scene: UIScene) {
         model.sceneDidEnterBackground += 1
         precondition(model.sceneWillResignActive == model.sceneDidEnterBackground)
     }
-    
+
     func applicationWillTerminate(_ application: UIApplication) {
         model.applicationWillTerminate += 1
         precondition(model.willFinishLaunchingWithOptions == model.applicationWillTerminate)
-    }
-}
-
-
-struct LifecycleHandlerModifier: ViewModifier {
-    @State var model: LifecycleHandlerModel
-
-    init(model: LifecycleHandlerModel) {
-        self.model = model
-    }
-
-    func body(content: Content) -> some View {
-        content.environment(model)
     }
 }

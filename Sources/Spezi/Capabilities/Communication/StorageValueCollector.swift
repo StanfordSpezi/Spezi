@@ -7,7 +7,7 @@
 //
 
 
-/// A adopter of this protocol is a property of a ``Component`` that provides mechanisms to retrieve
+/// An adopter of this protocol is a property of a ``Component`` that provides mechanisms to retrieve
 /// data provided by other ``Component``s.
 ///
 /// Data requested through a Storage Value Collector might be provided through a ``_StorageValueProvider``.

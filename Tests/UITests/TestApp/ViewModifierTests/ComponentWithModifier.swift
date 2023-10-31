@@ -11,17 +11,12 @@ import SwiftUI
 
 
 @Observable
-class MyModel { // TODO: modifications test
+class MyModel {
     var message: String
 
     init(message: String) {
         self.message = message
     }
-}
-
-
-class ComponentWithModifier: Component { // TODO: make it a module at some point?
-    @_ModifierPropertyWrapper var modelModifier = MyModifier(model: MyModel(message: "Hello World")) // TODO: rename!
 }
 
 
@@ -32,4 +27,9 @@ struct MyModifier: ViewModifier {
         content
             .environment(model)
     }
+}
+
+
+class ComponentWithModifier: Component {
+    @Modifier var modelModifier = MyModifier(model: MyModel(message: "Hello World"))
 }

@@ -18,11 +18,11 @@ struct TestViewModifier: ViewModifier {
     }
 }
 
-public final class TestComponent: ObservableObject, Component { // TODO: rename modifier!
+public final class TestComponent: ObservableObject, Component {
     let expectation: XCTestExpectation
 
-    @_ModifierPropertyWrapper var modifier1 = TestViewModifier(message: "Hello")
-    @_ModifierPropertyWrapper var modifier2 = TestViewModifier(message: "World")
+    @Modifier var modifier1 = TestViewModifier(message: "Hello")
+    @Modifier var modifier2 = TestViewModifier(message: "World")
 
     
     public init(expectation: XCTestExpectation = XCTestExpectation()) {

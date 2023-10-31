@@ -9,12 +9,16 @@
 import SwiftUI
 
 
+/// An adopter of this protocol is a property of a ``Component`` that provides a SwiftUI
+/// `ViewModifier` to be injected into the global view hierarchy.
 protocol ViewModifierProvider {
+    /// The view modifier instance that should be injected into the SwiftUI view hierarchy.
     var viewModifier: any ViewModifier { get }
 }
 
 
 extension Component {
+    /// All SwiftUI `ViewModifier` the component wants to modify the global view hierarchy with.
     var viewModifiers: [any SwiftUI.ViewModifier] {
         retrieveProperties(ofType: ViewModifierProvider.self).map { provider in
             provider.viewModifier

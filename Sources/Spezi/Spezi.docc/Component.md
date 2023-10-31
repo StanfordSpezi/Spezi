@@ -93,13 +93,23 @@ class ComponentB: Component {
 }
 ```
 
-### Additional Capabilities
+### Modifying the global View hierarchy
 
-Components can also conform to different additional protocols to provide additional access to Spezi features.
-- ``LifecycleHandler``: Delegate methods are related to the  `UIApplication` and ``Spezi/Spezi`` lifecycle.
-- ``ObservableObjectProvider``: A ``Component`` can conform to ``ObservableObjectProvider`` to inject `ObservableObject`s in the SwiftUI view hierarchy.
+By using the ``Component/Modifier`` property wrapper, your `Component` can provide a [ViewModifier](https://developer.apple.com/documentation/swiftui/viewmodifier) 
+to provide app-wide modifications.
 
-All these protocols are combined in the ``Module`` protocol, making it an easy one-stop solution to support all these different functionalities and build a capable Spezi module.
+You might find this property useful in scenarios like the following:
+* Providing access to a global model state. For more information refer to the [Managing model data in your app](https://developer.apple.com/documentation/Observation)
+    guide and the section [Share model data throughout a view hierarchy](https://developer.apple.com/documentation/swiftui/managing-model-data-in-your-app#Share-model-data-throughout-a-view-hierarchy).
+* Set global configurations using the [environment(_:_:)](https://developer.apple.com/documentation/swiftui/view/environment(_:_:)) modifier.
+* Display UI components with modifiers like [alert(_:isPresented:presenting:actions:message:)](https://developer.apple.com/documentation/swiftui/view/alert(_:ispresented:presenting:actions:message:)-8584l)
+
+> Note: We strongly advise to use the new `@Observable` macro instead of the previous `ObservableObject` protocol to achieve optimal performance and
+    avoid unnecessary view re-rendering.
+
+### Handling an App's Lifecycle
+
+My adopting the ``LifecycleHandler`` your `Component` can provide lifecycle methods to the underlying `UIApplication` and ``Spezi/Spezi`` lifecycle.
 
 
 ## Topics
@@ -111,12 +121,12 @@ All these protocols are combined in the ``Module`` protocol, making it an easy o
 - ``Component/Provide``
 - ``Component/Collect``
 - ``Component/StandardActor``
+- ``Component/Modifier``
 
 ### Capabilities
 
 - ``Module``
 - ``LifecycleHandler``
-- ``ObservableObjectProvider``
 
 ### Dependency
 

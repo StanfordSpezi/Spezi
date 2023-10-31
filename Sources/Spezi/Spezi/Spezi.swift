@@ -39,7 +39,7 @@ public typealias SpeziStorage = HeapRepository<SpeziAnchor>
 /// }
 /// ```
 ///
-/// Register your different ``Component``s (or more sophisticated ``Module``s) using the ``SpeziAppDelegate/configuration`` propert.
+/// Register your different ``Component``s (or more sophisticated ``Module``s) using the ``SpeziAppDelegate/configuration`` property.
 /// ```swift
 /// import Spezi
 ///
