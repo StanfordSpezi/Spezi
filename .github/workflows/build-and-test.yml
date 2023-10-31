@@ -23,19 +23,6 @@ jobs:
       artifactname: Spezi-Package.xcresult
       runsonlabels: '["macOS", "self-hosted"]'
       scheme: Spezi-Package
-  build:
-    name: CodeQL
-    permissions:
-      contents: read
-      security-events: write
-    uses: StanfordSpezi/.github/.github/workflows/xcodebuild-or-fastlane.yml@v2
-    with:
-      runsonlabels: '["macos-13"]'
-      xcodeversion: '14.3.1'
-      destination: 'platform=iOS Simulator,name=iPhone 14 Pro'
-      scheme: Spezi-Package
-      test: false
-      codeql: true
   buildandtestuitests:
     name: Build and Test UI Tests
     uses: StanfordSpezi/.github/.github/workflows/xcodebuild-or-fastlane.yml@v2
