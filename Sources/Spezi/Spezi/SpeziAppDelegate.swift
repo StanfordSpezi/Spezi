@@ -32,7 +32,7 @@ import SwiftUI
 /// }
 /// ```
 ///
-/// Register your different ``Component``s (or more sophisticated ``Module``s) using the ``SpeziAppDelegate/configuration`` property.
+/// Register your different ``Module``s (or more sophisticated ``Module``s) using the ``SpeziAppDelegate/configuration`` property.
 /// ```swift
 /// import Spezi
 ///
@@ -40,13 +40,13 @@ import SwiftUI
 /// class TemplateAppDelegate: SpeziAppDelegate {
 ///     override var configuration: Configuration {
 ///         Configuration(standard: ExampleStandard()) {
-///             // Add your `Component`s here ...
+///             // Add your `Module`s here ...
 ///        }
 ///     }
 /// }
 /// ```
 ///
-/// The ``Component`` documentation provides more information about the structure of components.
+/// The ``Module`` documentation provides more information about the structure of modules.
 /// Refer to the ``Configuration`` documentation to learn more about the Spezi configuration.
 open class SpeziAppDelegate: NSObject, UIApplicationDelegate, UISceneDelegate {
     private(set) static weak var appDelegate: SpeziAppDelegate?
@@ -55,7 +55,7 @@ open class SpeziAppDelegate: NSObject, UIApplicationDelegate, UISceneDelegate {
     private(set) lazy var spezi: AnySpezi = configuration.spezi
     
     
-    /// Register your different ``Component``s (or more sophisticated ``Module``s) using the ``SpeziAppDelegate/configuration`` property,.
+    /// Register your different ``Module``s (or more sophisticated ``Module``s) using the ``SpeziAppDelegate/configuration`` property,.
     ///
     /// The ``Standard`` acts as a central message broker in the application.
     /// ```swift
@@ -65,13 +65,13 @@ open class SpeziAppDelegate: NSObject, UIApplicationDelegate, UISceneDelegate {
     /// class TemplateAppDelegate: SpeziAppDelegate {
     ///     override var configuration: Configuration {
     ///         Configuration(standard: ExampleStandard()) {
-    ///             // Add your `Component`s here ...
+    ///             // Add your `Module`s here ...
     ///        }
     ///     }
     /// }
     /// ```
     ///
-    /// The ``Component`` documentation provides more information about the structure of components.
+    /// The ``Module`` documentation provides more information about the structure of modules.
     /// Refer to the ``Configuration`` documentation to learn more about the Spezi configuration.
     open var configuration: Configuration {
         Configuration { }

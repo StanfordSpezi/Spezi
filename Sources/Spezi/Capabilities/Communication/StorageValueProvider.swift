@@ -7,8 +7,8 @@
 //
 
 
-/// An adopter of this protocol is a property of a ``Component`` that provides mechanisms to communicate
-/// data with other ``Component``s.
+/// An adopter of this protocol is a property of a ``Module`` that provides mechanisms to communicate
+/// data with other ``Module``s.
 ///
 /// Data provided through a Storage Value Provider can be retrieved through a ``_StorageValueCollector``.
 public protocol _StorageValueProvider {
@@ -21,12 +21,12 @@ public protocol _StorageValueProvider {
 }
 
 
-extension Component {
+extension Module {
     var storageValueProviders: [_StorageValueProvider] {
         retrieveProperties(ofType: _StorageValueProvider.self)
     }
 
-    func collectComponentValues<Repository: SharedRepository<SpeziAnchor>>(into repository: inout Repository) {
+    func collectModuleValues<Repository: SharedRepository<SpeziAnchor>>(into repository: inout Repository) {
         for provider in storageValueProviders {
             provider.collect(into: &repository)
         }

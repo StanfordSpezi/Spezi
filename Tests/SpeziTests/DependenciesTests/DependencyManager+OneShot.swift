@@ -10,9 +10,9 @@
 
 
 extension DependencyManager {
-    static func resolve(_ components: [any Component]) -> [any Component] {
-        let dependencyManager = DependencyManager(components)
+    static func resolve(_ modules: [any Module]) -> [any Module] {
+        let dependencyManager = DependencyManager(modules)
         dependencyManager.resolve()
-        return dependencyManager.sortedComponents
+        return dependencyManager.sortedModules
     }
 }

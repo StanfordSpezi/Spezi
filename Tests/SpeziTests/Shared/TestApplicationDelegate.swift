@@ -18,7 +18,7 @@ public class TestApplicationDelegate: SpeziAppDelegate {
     
     override public var configuration: Configuration {
         Configuration {
-            TestComponent(expectation: expectation)
+            TestModule(expectation: expectation)
         }
     }
     

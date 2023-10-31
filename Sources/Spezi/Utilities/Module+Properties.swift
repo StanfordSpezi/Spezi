@@ -7,7 +7,7 @@
 //
 
 
-extension Component {
+extension Module {
     func retrieveProperties<Value>(ofType type: Value.Type) -> [Value] {
         let mirror = Mirror(reflecting: self)
 

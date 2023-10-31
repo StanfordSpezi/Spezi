@@ -18,7 +18,7 @@ struct TestViewModifier: ViewModifier {
     }
 }
 
-public final class TestComponent: ObservableObject, Component {
+public final class TestModule: Module {
     let expectation: XCTestExpectation
 
     @Modifier var modifier1 = TestViewModifier(message: "Hello")

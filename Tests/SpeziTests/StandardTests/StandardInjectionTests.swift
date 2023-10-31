@@ -13,7 +13,7 @@ import XCTRuntimeAssertions
 
 
 final class StandardInjectionTests: XCTestCase {
-    final class StandardInjectionTestComponent: Component {
+    final class StandardInjectionTestModule: Module {
         @StandardActor var standard: MockStandard
         
         let expectation: XCTestExpectation
@@ -37,7 +37,7 @@ final class StandardInjectionTests: XCTestCase {
         
         override var configuration: Configuration {
             Configuration(standard: MockStandard()) {
-                StandardInjectionTestComponent(expectation: expectation)
+                StandardInjectionTestModule(expectation: expectation)
             }
         }
         
@@ -48,8 +48,8 @@ final class StandardInjectionTests: XCTestCase {
     }
     
     
-    func testComponentFlow() async throws {
-        let expectation = XCTestExpectation(description: "Component")
+    func testModuleFlow() async throws {
+        let expectation = XCTestExpectation(description: "Module")
         expectation.assertForOverFulfill = true
         
         let standardInjectionTestApplicationDelegate = await StandardInjectionTestApplicationDelegate(

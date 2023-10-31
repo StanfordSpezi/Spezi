@@ -9,7 +9,7 @@
 import XCTRuntimeAssertions
 
 
-/// Refer to ``Component/StandardActor`` for information on how to use the `@StandardActor` property wrapper. Do not use the `_StandardPropertyWrapper` directly.
+/// Refer to ``Module/StandardActor`` for information on how to use the `@StandardActor` property wrapper. Do not use the `_StandardPropertyWrapper` directly.
 @propertyWrapper
 public class _StandardPropertyWrapper<Constraint>: AnyStandardPropertyWrapper {
     // swiftlint:disable:previous type_name
@@ -23,8 +23,8 @@ public class _StandardPropertyWrapper<Constraint>: AnyStandardPropertyWrapper {
         guard let standard else {
             preconditionFailure(
                 """
-                A `_StandardPropertyWrapper`'s wrappedValue was accessed before the `Component` was configured.
-                Only access dependencies once the component has been configured and the Spezi initialization is complete.
+                A `_StandardPropertyWrapper`'s wrappedValue was accessed before the `Module` was configured.
+                Only access dependencies once the module has been configured and the Spezi initialization is complete.
                 """
             )
         }
@@ -32,7 +32,7 @@ public class _StandardPropertyWrapper<Constraint>: AnyStandardPropertyWrapper {
     }
     
     
-    /// Refer to ``Component/StandardActor`` for information on how to use the `@StandardActor` property wrapper. Do not use the `_StandardPropertyWrapper` directly.
+    /// Refer to ``Module/StandardActor`` for information on how to use the `@StandardActor` property wrapper. Do not use the `_StandardPropertyWrapper` directly.
     public init(_ constraint: Constraint.Type = Constraint.self) { }
     
     

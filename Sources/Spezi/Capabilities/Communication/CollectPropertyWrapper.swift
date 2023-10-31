@@ -9,7 +9,7 @@
 import XCTRuntimeAssertions
 
 
-/// Refer to the documentation of ``Component/Collect``.
+/// Refer to the documentation of ``Module/Collect``.
 @propertyWrapper
 public class _CollectPropertyWrapper<Value> {
     // swiftlint:disable:previous type_name
@@ -19,12 +19,12 @@ public class _CollectPropertyWrapper<Value> {
 
 
     /// Access the collected values.
-    /// - Note: The property is only accessible within the ``Component/configure()`` method.
+    /// - Note: The property is only accessible within the ``Module/configure()`` method.
     public var wrappedValue: [Value] {
         guard let values = injectedValues else {
             preconditionFailure("""
                                 Tried to access @Collect for value [\(Value.self)] which wasn't injected yet. \
-                                Are you sure that you are only accessing @Collect within the `Component/configure` method?
+                                Are you sure that you are only accessing @Collect within the `Module/configure` method?
                                 """)
         }
 
@@ -37,20 +37,20 @@ public class _CollectPropertyWrapper<Value> {
 }
 
 
-extension Component {
-    /// The `@Collect` property wrapper can be used to retrieve data communicated by other ``Component``s by
+extension Module {
+    /// The `@Collect` property wrapper can be used to retrieve data communicated by other ``Module``s by
     /// retrieving them from the central ``SpeziStorage`` repository.
     ///
     /// ### Retrieving Data
-    /// ``Component/Collect`` retrieves data provided through the ``Component/Provide`` property wrapper.
+    /// ``Module/Collect`` retrieves data provided through the ``Module/Provide`` property wrapper.
     /// You declare `@Collect` as an Array with a given type. The type is used to match `@Provide` properties.
     ///
-    /// - Important: The property is only accessible within the ``Component/configure()-27tt1`` method.
+    /// - Important: The property is only accessible within the ``Module/configure()-27tt1`` method.
     ///
-    /// Below is an example where the `ExampleComponent` collects an array of `Numeric` types from all other `Components`.
+    /// Below is an example where the `ExampleModule` collects an array of `Numeric` types from all other `Modules`.
     ///
     /// ```swift
-    /// class ExampleComponent: Component {
+    /// class ExampleModule: Module {
     ///     @Collect var favoriteNumbers: [Numeric]
     ///
     ///     func configure() {
@@ -64,6 +64,6 @@ extension Component {
 
 extension _CollectPropertyWrapper: _StorageValueCollector {
     public func retrieve<Repository: SharedRepository<SpeziAnchor>>(from repository: Repository) {
-        injectedValues = repository[CollectedComponentValue<Value>.self] ?? []
+        injectedValues = repository[CollectedModuleValue<Value>.self] ?? []
     }
 }

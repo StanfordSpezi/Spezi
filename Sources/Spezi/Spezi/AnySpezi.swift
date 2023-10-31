@@ -16,6 +16,6 @@ protocol AnySpezi {
     var storage: HeapRepository<SpeziAnchor> { get }
     /// Logger used to log events in the ``Spezi/Spezi`` instance.
     var logger: Logger { get }
-    /// Array of all SwiftUI `ViewModifiers` collected using ``_ModifierPropertyWrapper`` from the configured ``Component``s.
+    /// Array of all SwiftUI `ViewModifiers` collected using ``_ModifierPropertyWrapper`` from the configured ``Module``s.
     var viewModifiers: [any ViewModifier] { get }
 }

@@ -17,7 +17,7 @@ class TestAppDelegate: SpeziAppDelegate {
             if FeatureFlags.lifecycleTests {
                 LifecycleHandlerTestComponent()
             }
-            ComponentWithModifier()
+            ModuleWithModifier()
         }
     }
 }

@@ -21,7 +21,7 @@ protocol OptionalBasedProvideProperty {
 }
 
 
-/// Refer to the documentation of ``Component/Provide``.
+/// Refer to the documentation of ``Module/Provide``.
 @propertyWrapper
 public class _ProvidePropertyWrapper<Value> {
     // swiftlint:disable:previous type_name
@@ -52,21 +52,21 @@ public class _ProvidePropertyWrapper<Value> {
 }
 
 
-extension Component {
-    /// The `@Provide` property wrapper can be used to communicate data with other ``Component``s by inserting
+extension Module {
+    /// The `@Provide` property wrapper can be used to communicate data with other ``Module``s by inserting
     /// them into the central ``SpeziStorage`` repository.
     ///
     /// ### Providing Data
-    /// Data provided through ``Component/Provide`` can be retrieved through the ``Component/Collect`` property wrapper.
+    /// Data provided through ``Module/Provide`` can be retrieved through the ``Module/Collect`` property wrapper.
     ///
     /// - Note: that the declaring type has to match what is requested by the other side (e.g., a common protocol implementation)
     ///
     /// - Important: All `@Provide` properties must be initialized within the initializer and cannot be modified within the
-    ///     ``Component/configure()-27tt1`` method.
+    ///     ``Module/configure()-27tt1`` method.
     ///
-    /// Below is an example where the `ExampleComponent` provides a `Numeric` type to some other components.
+    /// Below is an example where the `ExampleModule` provides a `Numeric` type to some other modules.
     /// ```swift
-    /// class ExampleComponent: Component {
+    /// class ExampleModule: Module {
     ///     @Provide var favoriteNumber: Numeric
     ///
     ///     init() {
@@ -80,7 +80,7 @@ extension Component {
     /// If `nil` is provided, nothing is collected, otherwise the underlying value of the optional is collected.
     ///
     /// ```swift
-    /// class ExampleComponent: Component {
+    /// class ExampleModule: Module {
     ///     @Provide var favoriteNumber: Numeric?
     ///
     ///     init() {
@@ -95,7 +95,7 @@ extension Component {
     /// If you want to provide more than one instance of a given value you may declare @Provide as an `Array` type.
     ///
     /// ```swift
-    /// class ExampleComponent: Component {
+    /// class ExampleModule: Module {
     ///     @Provide var favoriteNumbers: [Numeric]
     ///
     ///     init() {
@@ -114,8 +114,8 @@ extension _ProvidePropertyWrapper: _StorageValueProvider {
         } else if let wrapperWithArray = self as? CollectionBasedProvideProperty {
             wrapperWithArray.collectArrayElements(into: &repository)
         } else {
-            // concatenation is handled by the `CollectedComponentValue/reduce` implementation.
-            repository[CollectedComponentValue<Value>.self] = [storedValue]
+            // concatenation is handled by the `CollectedModuleValue/reduce` implementation.
+            repository[CollectedModuleValue<Value>.self] = [storedValue]
         }
 
         collected = true
@@ -125,8 +125,8 @@ extension _ProvidePropertyWrapper: _StorageValueProvider {
 
 extension _ProvidePropertyWrapper: CollectionBasedProvideProperty where Value: AnyArray {
     func collectArrayElements<Repository: SharedRepository<SpeziAnchor>>(into repository: inout Repository) {
-        // concatenation is handled by the `CollectedComponentValue/reduce` implementation.
-        repository[CollectedComponentValue<Value.Element>.self] = storedValue.unwrappedArray
+        // concatenation is handled by the `CollectedModuleValue/reduce` implementation.
+        repository[CollectedModuleValue<Value.Element>.self] = storedValue.unwrappedArray
     }
 }
 
@@ -134,7 +134,7 @@ extension _ProvidePropertyWrapper: CollectionBasedProvideProperty where Value: A
 extension _ProvidePropertyWrapper: OptionalBasedProvideProperty where Value: AnyOptional {
     func collectOptional<Repository: SharedRepository<SpeziAnchor>>(into repository: inout Repository) {
         if let storedValue = storedValue.unwrappedOptional {
-            repository[CollectedComponentValue<Value.Wrapped>.self] = [storedValue]
+            repository[CollectedModuleValue<Value.Wrapped>.self] = [storedValue]
         }
     }
 }

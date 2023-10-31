@@ -30,6 +30,6 @@ struct MyModifier: ViewModifier {
 }
 
 
-class ComponentWithModifier: Component {
+class ModuleWithModifier: Module {
     @Modifier var modelModifier = MyModifier(model: MyModel(message: "Hello World"))
 }

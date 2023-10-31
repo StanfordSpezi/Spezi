@@ -18,7 +18,7 @@ private protocol ExampleConstraint: Standard {
 
 
 final class StandardConstraintTests: XCTestCase {
-    final class StandardCTestComponent: Component {
+    final class StandardCTestModule: Module {
         @StandardActor private var standard: any ExampleConstraint
         
         let expectation: XCTestExpectation
@@ -42,7 +42,7 @@ final class StandardConstraintTests: XCTestCase {
         
         override var configuration: Configuration {
             Configuration(standard: MockStandard()) {
-                StandardCTestComponent(expectation: expectation)
+                StandardCTestModule(expectation: expectation)
             }
         }
         
@@ -54,7 +54,7 @@ final class StandardConstraintTests: XCTestCase {
     
     
     func testStandardConstraint() async throws {
-        let expectation = XCTestExpectation(description: "Component")
+        let expectation = XCTestExpectation(description: "Module")
         expectation.assertForOverFulfill = true
         
         let standardCTestApplicationDelegate = await StandardCTestApplicationDelegate(

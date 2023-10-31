@@ -9,23 +9,23 @@
 import XCTRuntimeAssertions
 
 
-/// Refer to ``Component/Dependency`` for information on how to use the `@Dependency` property wrapper. Do not use the `_DependencyPropertyWrapper` directly.
+/// Refer to ``Module/Dependency`` for information on how to use the `@Dependency` property wrapper. Do not use the `_DependencyPropertyWrapper` directly.
 @propertyWrapper
-public class _DependencyPropertyWrapper<C: Component>: ComponentDependency {
+public class _DependencyPropertyWrapper<M: Module>: ModuleDependency {
     // swiftlint:disable:previous type_name
     // We want the _DependencyPropertyWrapper type to be hidden from autocompletion and document generation.
     
-    public let defaultValue: () -> C
-    private var dependency: C?
+    public let defaultValue: () -> M
+    private var dependency: M?
     
     
     /// The dependency that is resolved by ``Spezi``
-    public var wrappedValue: C {
+    public var wrappedValue: M {
         guard let dependency else {
             preconditionFailure(
                 """
                 A `_DependencyPropertyWrapper`'s wrappedValue was accessed before the dependency was activated.
-                Only access dependencies once the component has been configured and the Spezi initialization is complete.
+                Only access dependencies once the module has been configured and the Spezi initialization is complete.
                 """
             )
         }
@@ -33,30 +33,30 @@ public class _DependencyPropertyWrapper<C: Component>: ComponentDependency {
     }
     
     
-    /// Refer to ``Component/Dependency`` for information on how to use the `@Dependency` property wrapper. Do not use the `_DependencyPropertyWrapper` directly.
-    public init(wrappedValue defaultValue: @escaping @autoclosure () -> C) {
+    /// Refer to ``Module/Dependency`` for information on how to use the `@Dependency` property wrapper. Do not use the `_DependencyPropertyWrapper` directly.
+    public init(wrappedValue defaultValue: @escaping @autoclosure () -> M) {
         self.defaultValue = defaultValue
     }
     
     
-    /// Refer to ``Component/Dependency`` for information on how to use the `@Dependency` property wrapper. Do not use the `_DependencyPropertyWrapper` directly.
-    public init() where C: DefaultInitializable {
-        self.defaultValue = { C() }
+    /// Refer to ``Module/Dependency`` for information on how to use the `@Dependency` property wrapper. Do not use the `_DependencyPropertyWrapper` directly.
+    public init() where M: DefaultInitializable {
+        self.defaultValue = { M() }
     }
     
     
     public func gatherDependency(dependencyManager: DependencyManager) {
-        dependencyManager.require(C.self, defaultValue: defaultValue())
+        dependencyManager.require(M.self, defaultValue: defaultValue())
     }
     
     public func inject(dependencyManager: DependencyManager) {
-        dependencyManager.inject(C.self, into: self)
+        dependencyManager.inject(M.self, into: self)
     }
     
-    public func inject(dependency: C) {
+    public func inject(dependency: M) {
         precondition(
             self.dependency == nil,
-            "Already injected a component: \(String(describing: dependency))"
+            "Already injected a module: \(String(describing: dependency))"
         )
         self.dependency = dependency
     }

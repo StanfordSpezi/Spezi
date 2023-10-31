@@ -38,15 +38,15 @@ struct ExampleApp: App {
 
 ## 2. Modify Your Spezi Configuration
 
-A ``Configuration`` defines the ``Standard`` and ``Component``s that are used in a Spezi project.
+A ``Configuration`` defines the ``Standard`` and ``Module``s that are used in a Spezi project.
 
-Ensure that your standard conforms to all protocols enforced by the ``Component``s. If your ``Component``s require protocol conformances
+Ensure that your standard conforms to all protocols enforced by the ``Module``s. If your ``Module``s require protocol conformances
 you must add them to your custom type conforming to ``Standard`` and passed to the initializer or extend a prebuilt standard.
 
-Use ``Configuration/init(_:)`` to use default empty standard instance only conforming to ``Standard`` if you do not use any ``Component`` requiring custom protocol conformances.
+Use ``Configuration/init(_:)`` to use default empty standard instance only conforming to ``Standard`` if you do not use any ``Module`` requiring custom protocol conformances.
 
 
-The following example demonstrates the usage of an `ExampleStandard` standard and reusable Spezi modules, including the `HealthKit` and `QuestionnaireDataSource` components:
+The following example demonstrates the usage of an `ExampleStandard` standard and reusable Spezi modules, including the `HealthKit` and `QuestionnaireDataSource` modules:
 ```swift
 import Spezi
 import HealthKit
@@ -72,4 +72,4 @@ class ExampleAppDelegate: SpeziAppDelegate {
 }
 ```
 
-The ``Component`` documentation provides more information about the structure of components.
+The ``Module`` documentation provides more information about the structure of modules.

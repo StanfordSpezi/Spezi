@@ -11,15 +11,15 @@ import XCTest
 import XCTRuntimeAssertions
 
 
-final class ComponentBuilderTests: XCTestCase {
+final class ModuleBuilderTests: XCTestCase {
     private struct Expectations {
         weak var xctestCase: XCTestCase?
-        var firstTestExpectation = Expectations.expectation(named: "FirstTestComponent")
-        var loopTestExpectation = Expectations.expectation(named: "LoopTestComponent")
-        var conditionalTestExpectation = Expectations.expectation(named: "ConditionalTestComponent")
+        var firstTestExpectation = Expectations.expectation(named: "FirstTestModule")
+        var loopTestExpectation = Expectations.expectation(named: "LoopTestModule")
+        var conditionalTestExpectation = Expectations.expectation(named: "ConditionalTestModule")
         var availableConditionalTestExpectation = Expectations.expectation(named: "AvailableConditionalTestExpection")
-        var ifTestExpectation = Expectations.expectation(named: "IfTestComponent")
-        var elseTestExpectation = Expectations.expectation(named: "FirstTestComponent")
+        var ifTestExpectation = Expectations.expectation(named: "IfTestModule")
+        var elseTestExpectation = Expectations.expectation(named: "FirstTestModule")
         
         
         init(xctestCase: XCTestCase) {
@@ -28,7 +28,7 @@ final class ComponentBuilderTests: XCTestCase {
         
         
         private static func expectation(named: String) -> XCTestExpectation {
-            let expectation = XCTestExpectation(description: "FirstTestComponent")
+            let expectation = XCTestExpectation(description: "FirstTestModule")
             expectation.assertForOverFulfill = true
             return expectation
         }
@@ -53,59 +53,59 @@ final class ComponentBuilderTests: XCTestCase {
     }
     
     
-    private func components(loopLimit: Int, condition: Bool, expectations: Expectations) -> ComponentCollection {
-        @ComponentBuilder
-        var components: ComponentCollection {
-            TestComponent(expectation: expectations.firstTestExpectation)
+    private func modules(loopLimit: Int, condition: Bool, expectations: Expectations) -> ModuleCollection {
+        @ModuleBuilder
+        var modules: ModuleCollection {
+            TestModule(expectation: expectations.firstTestExpectation)
             for _ in 0..<loopLimit {
-                TestComponent(expectation: expectations.loopTestExpectation)
+                TestModule(expectation: expectations.loopTestExpectation)
             }
             if condition {
-                TestComponent(expectation: expectations.conditionalTestExpectation)
+                TestModule(expectation: expectations.conditionalTestExpectation)
             }
             // The `#available(iOS 16, *)` mark is used to test `#available` in a result builder.
             // The availability check is not part of any part of the Spezi API.
             if #available(iOS 16, *) { // swiftlint:disable:this deployment_target
-                TestComponent(expectation: expectations.availableConditionalTestExpectation)
+                TestModule(expectation: expectations.availableConditionalTestExpectation)
             }
             if condition {
-                TestComponent(expectation: expectations.ifTestExpectation)
+                TestModule(expectation: expectations.ifTestExpectation)
             } else {
-                TestComponent(expectation: expectations.elseTestExpectation)
+                TestModule(expectation: expectations.elseTestExpectation)
             }
         }
-        return components
+        return modules
     }
     
     
-    func testComponentBuilderIf() throws {
+    func testModuleBuilderIf() throws {
         let expectations = Expectations(xctestCase: self)
         expectations.loopTestExpectation.expectedFulfillmentCount = 5
         expectations.elseTestExpectation.isInverted = true
         
-        let components = components(
+        let modules = modules(
             loopLimit: 5,
             condition: true,
             expectations: expectations
         )
         
-        _ = Spezi(standard: MockStandard(), components: components.elements)
+        _ = Spezi(standard: MockStandard(), modules: modules.elements)
         try expectations.wait()
     }
     
-    func testComponentBuilderElse() throws {
+    func testModuleBuilderElse() throws {
         let expectations = Expectations(xctestCase: self)
         expectations.conditionalTestExpectation.isInverted = true
         expectations.loopTestExpectation.expectedFulfillmentCount = 3
         expectations.ifTestExpectation.isInverted = true
         
-        let components = components(
+        let modules = modules(
             loopLimit: 3,
             condition: false,
             expectations: expectations
         )
         
-        _ = Spezi(standard: MockStandard(), components: components.elements)
+        _ = Spezi(standard: MockStandard(), modules: modules.elements)
         try expectations.wait()
     }
 }

@@ -11,7 +11,7 @@ import XCTest
 import XCTRuntimeAssertions
 
 
-private final class TestLifecycleHandler: Component, LifecycleHandler {
+private final class TestLifecycleHandler: Module, LifecycleHandler {
     let expectationWillFinishLaunchingWithOption: XCTestExpectation
     let expectationApplicationWillTerminate: XCTestExpectation
     
@@ -38,7 +38,7 @@ private final class TestLifecycleHandler: Component, LifecycleHandler {
 }
 
 
-private final class EmpfyLifecycleHandler: Component, LifecycleHandler { }
+private final class EmptyLifecycleHandler: Module, LifecycleHandler { }
 
 private class TestLifecycleHandlerApplicationDelegate: SpeziAppDelegate {
     let expectationWillFinishLaunchingWithOption: XCTestExpectation
@@ -51,7 +51,7 @@ private class TestLifecycleHandlerApplicationDelegate: SpeziAppDelegate {
                 expectationWillFinishLaunchingWithOption: expectationWillFinishLaunchingWithOption,
                 expectationApplicationWillTerminate: expectationApplicationWillTerminate
             )
-            EmpfyLifecycleHandler()
+            EmptyLifecycleHandler()
         }
     }
     

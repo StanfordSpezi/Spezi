@@ -12,9 +12,9 @@ import XCTest
 import XCTRuntimeAssertions
 
 
-final class ComponentTests: XCTestCase {
-    func testComponentFlow() throws {
-        let expectation = XCTestExpectation(description: "Component")
+final class ModuleTests: XCTestCase {
+    func testModuleFlow() throws {
+        let expectation = XCTestExpectation(description: "Module")
         expectation.assertForOverFulfill = true
         
         _ = try XCTUnwrap(

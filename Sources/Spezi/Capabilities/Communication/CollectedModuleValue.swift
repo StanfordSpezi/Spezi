@@ -7,21 +7,21 @@
 //
 
 /// Provides the ``KnowledgeSource`` for any value we store in the ``SpeziStorage`` that is
-/// provided or request from am ``Component``.
+/// provided or request from am ``Module``.
 ///
-/// For more information, look at the ``Component/Provide`` or ``Component/Collect`` property wrappers.
-struct CollectedComponentValue<ComponentValue>: DefaultProvidingKnowledgeSource {
+/// For more information, look at the ``Module/Provide`` or ``Module/Collect`` property wrappers.
+struct CollectedModuleValue<ModuleValue>: DefaultProvidingKnowledgeSource {
     typealias Anchor = SpeziAnchor
 
-    typealias Value = [ComponentValue]
+    typealias Value = [ModuleValue]
 
 
-    static var defaultValue: [ComponentValue] {
+    static var defaultValue: [ModuleValue] {
         []
     }
 
 
-    static func reduce(value: inout [ComponentValue], nextValue: [ComponentValue]) {
+    static func reduce(value: inout [ModuleValue], nextValue: [ModuleValue]) {
         value.append(contentsOf: nextValue)
     }
 }

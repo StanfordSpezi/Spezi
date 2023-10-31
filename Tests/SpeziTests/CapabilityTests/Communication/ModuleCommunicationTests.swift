@@ -12,7 +12,7 @@ import XCTRuntimeAssertions
 import XCTSpezi
 
 
-private final class ProvideComponent1: Component {
+private final class ProvideModule1: Module {
     @Provide var num: Int = 2
     @Provide var numMaybe: Int? = 3
     @Provide var numMaybe2: Int?
@@ -20,7 +20,7 @@ private final class ProvideComponent1: Component {
 
     @Provide var noCollect: Float = 1
 
-    @Provide var someString: String = "Hello Component"
+    @Provide var someString: String = "Hello Module"
 
     init() {
         someString = "Hello World"
@@ -32,7 +32,7 @@ private final class ProvideComponent1: Component {
 }
 
 
-private final class CollectComponent: Component {
+private final class CollectModule: Module {
     @Collect var nums: [Int]
     @Collect var strings: [String]
 
@@ -40,45 +40,45 @@ private final class CollectComponent: Component {
 }
 
 
-final class ComponentCommunicationTests: XCTestCase {
+final class ModuleCommunicationTests: XCTestCase {
     private class TestApplicationDelegate: SpeziAppDelegate {
         override var configuration: Configuration {
             Configuration {
-                provideComponent
-                collectComponent
+                provideModule
+                collectModule
             }
         }
     }
 
-    private static var provideComponent = ProvideComponent1()
-    private static var collectComponent = CollectComponent()
+    private static var provideModule = ProvideModule1()
+    private static var collectModule = CollectModule()
 
 
     override func setUp() {
-        Self.provideComponent = ProvideComponent1()
-        Self.collectComponent = CollectComponent()
+        Self.provideModule = ProvideModule1()
+        Self.collectModule = CollectModule()
     }
 
     func testSimpleCommunication() throws {
         let delegate = TestApplicationDelegate()
         _ = try XCTUnwrap(delegate.spezi as? Spezi<DefaultStandard>)
 
-        XCTAssertEqual(Self.collectComponent.nums, [2, 3, 4, 5, 6])
-        XCTAssertTrue(Self.collectComponent.nothingProvided.isEmpty)
-        XCTAssertEqual(Self.collectComponent.strings, ["Hello World"])
+        XCTAssertEqual(Self.collectModule.nums, [2, 3, 4, 5, 6])
+        XCTAssertTrue(Self.collectModule.nothingProvided.isEmpty)
+        XCTAssertEqual(Self.collectModule.strings, ["Hello World"])
     }
 
     func testIllegalAccess() throws {
         let delegate = TestApplicationDelegate()
 
         try XCTRuntimePrecondition {
-            _ = Self.collectComponent.strings
+            _ = Self.collectModule.strings
         }
 
         _ = try XCTUnwrap(delegate.spezi as? Spezi<DefaultStandard>)
 
         try XCTRuntimePrecondition {
-            Self.provideComponent.numMaybe2 = 12
+            Self.provideModule.numMaybe2 = 12
         }
     }
 }

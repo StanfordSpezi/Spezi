@@ -13,15 +13,15 @@ import XCTRuntimeAssertions
 final class DependencyDescriptorTests: XCTestCase {
     func testInjectionPreconditionDependencyPropertyWrapper() throws {
         try XCTRuntimePrecondition {
-            _ = _DependencyPropertyWrapper<TestComponent>(wrappedValue: TestComponent()).wrappedValue
+            _ = _DependencyPropertyWrapper<TestModule>(wrappedValue: TestModule()).wrappedValue
         }
     }
     
     func testInjectionPreconditionDynamicDependenciesPropertyWrapper() throws {
         try XCTRuntimePrecondition {
             _ = _DynamicDependenciesPropertyWrapper(
-                componentProperties: [
-                    _DependencyPropertyWrapper(wrappedValue: TestComponent())
+                moduleProperties: [
+                    _DependencyPropertyWrapper(wrappedValue: TestModule())
                 ]
             ).wrappedValue
         }

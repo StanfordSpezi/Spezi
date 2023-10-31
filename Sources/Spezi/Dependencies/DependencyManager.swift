@@ -9,83 +9,83 @@
 import XCTRuntimeAssertions
 
 
-/// A ``DependencyManager`` in Spezi is used to gather information about components with dependencies.
+/// A ``DependencyManager`` in Spezi is used to gather information about modules with dependencies.
 public class DependencyManager {
-    /// Collection of sorted components after resolving all dependencies.
-    var sortedComponents: [any Component]
-    /// Collection of all components with dependencies that are not yet processed.
-    private var componentsWithDependencies: [any Component]
-    /// Collection used to keep track of components with dependencies in the recursive search.
-    private var recursiveSearch: [any Component] = []
+    /// Collection of sorted modules after resolving all dependencies.
+    var sortedModules: [any Module]
+    /// Collection of all modules with dependencies that are not yet processed.
+    private var modulesWithDependencies: [any Module]
+    /// Collection used to keep track of modules with dependencies in the recursive search.
+    private var recursiveSearch: [any Module] = []
     
     
-    /// A ``DependencyManager`` in Spezi is used to gather information about components with dependencies.
-    /// - Parameter components: The components that should be resolved.
-    init(_ components: [any Component]) {
-        sortedComponents = components.filter { $0.dependencyDescriptors.isEmpty }
-        componentsWithDependencies = components.filter { !$0.dependencyDescriptors.isEmpty }
+    /// A ``DependencyManager`` in Spezi is used to gather information about modules with dependencies.
+    /// - Parameter module: The modules that should be resolved.
+    init(_ module: [any Module]) {
+        sortedModules = module.filter { $0.dependencyDescriptors.isEmpty }
+        modulesWithDependencies = module.filter { !$0.dependencyDescriptors.isEmpty }
     }
 
 
     /// Resolves the dependency order.
     ///
-    /// After calling `resolve` you can safely access `sortedComponents`.
+    /// After calling `resolve` you can safely access `sortedModules`.
     func resolve() {
-        // Start the dependency resolution on the first component.
-        if let nextComponent = componentsWithDependencies.first {
-            push(nextComponent)
+        // Start the dependency resolution on the first module.
+        if let nextModule = modulesWithDependencies.first {
+            push(nextModule)
         }
 
-        for sortedComponent in sortedComponents {
-            for dependency in sortedComponent.dependencyDescriptors {
+        for module in sortedModules {
+            for dependency in module.dependencyDescriptors {
                 dependency.inject(dependencyManager: self)
             }
         }
     }
     
-    /// Injects a dependency into a `_DependencyPropertyWrapper` that is resolved in the `sortedComponents`.
+    /// Injects a dependency into a `_DependencyPropertyWrapper` that is resolved in the `sortedModules`.
     /// - Parameters:
     ///   - dependencyType: The type of the dependency that should be injected.
-    ///   - anyDependency: The ``ComponentDependency`` that the provided dependency should be injected into.
-    func inject<D: ComponentDependency>(
-        _ dependencyType: D.ComponentType.Type,
+    ///   - anyDependency: The ``ModuleDependency`` that the provided dependency should be injected into.
+    func inject<D: ModuleDependency>(
+        _ dependencyType: D.ModuleType.Type,
         into anyDependency: D
     ) {
-        guard let foundInSortedComponents = sortedComponents.first(where: { type(of: $0) == D.ComponentType.self }) as? D.ComponentType else {
-            preconditionFailure("Could not find the injectable component in the `sortedComponents`.")
+        guard let foundInSortedModuless = sortedModules.first(where: { type(of: $0) == D.ModuleType.self }) as? D.ModuleType else {
+            preconditionFailure("Could not find the injectable module in the `sortedModules`.")
         }
         
-        anyDependency.inject(dependency: foundInSortedComponents)
+        anyDependency.inject(dependency: foundInSortedModuless)
     }
     
     /// Communicate a requirement to a `DependencyManager`
     /// - Parameters:
     ///   - dependencyType: The type of the dependency that should be resolved.
-    ///   - defaultValue: A default instance of the dependency that is used when the `dependencyType` is not present in the `sortedComponents` or `componentsWithDependencies`.
-    func require<C: Component>(_ dependencyType: C.Type, defaultValue: @autoclosure () -> C) {
-        // 1. Return if the depending component is found in the `sortedComponents` collection.
-        if sortedComponents.contains(where: { type(of: $0) == C.self }) {
+    ///   - defaultValue: A default instance of the dependency that is used when the `dependencyType` is not present in the `sortedModules` or `modulesWithDependencies`.
+    func require<M: Module>(_ dependencyType: M.Type, defaultValue: @autoclosure () -> M) {
+        // 1. Return if the depending module is found in the `sortedModules` collection.
+        if sortedModules.contains(where: { type(of: $0) == M.self }) {
             return
         }
         
-        // 2. Search for the required component is found in the `dependingComponents` collection.
+        // 2. Search for the required module is found in the `dependingModules` collection.
         // If not, use the default value calling the `defaultValue` autoclosure.
-        guard let foundInComponentsWithDependencies = componentsWithDependencies.first(where: { type(of: $0) == C.self }) else {
-            let newComponent = defaultValue()
+        guard let foundInModulesWithDependencies = modulesWithDependencies.first(where: { type(of: $0) == M.self }) else {
+            let newModule = defaultValue()
             
-            guard !newComponent.dependencyDescriptors.isEmpty else {
-                sortedComponents.append(newComponent)
+            guard !newModule.dependencyDescriptors.isEmpty else {
+                sortedModules.append(newModule)
                 return
             }
             
-            componentsWithDependencies.insert(newComponent, at: 0)
-            push(newComponent)
+            modulesWithDependencies.insert(newModule, at: 0)
+            push(newModule)
             
             return
         }
         
         // Detect circles in the `recursiveSearch` collection.
-        guard !recursiveSearch.contains(where: { type(of: $0) == C.self }) else {
+        guard !recursiveSearch.contains(where: { type(of: $0) == M.self }) else {
             let dependencyChain = recursiveSearch
                 .map { String(describing: type(of: $0)) }
                 .joined(separator: ", ")
@@ -95,50 +95,50 @@ public class DependencyManager {
             let lastElement = recursiveSearch.last! // swiftlint:disable:this force_unwrapping
             preconditionFailure(
                 """
-                The `DependencyManager` has detected a dependency cycle of your Spezi components.
+                The `DependencyManager` has detected a dependency cycle of your Spezi modules.
                 The current dependency chain is: \(dependencyChain). The \(String(describing: type(of: lastElement))) required a type already present in the dependency chain.
                 
-                Please ensure that the components you use or develop can not trigger a dependency cycle.
+                Please ensure that the modules you use or develop can not trigger a dependency cycle.
                 """
             )
         }
         
-        // If there is no cycle, resolved the dependencies of the component found in the `dependingComponents`.
-        push(foundInComponentsWithDependencies)
+        // If there is no cycle, resolved the dependencies of the module found in the `dependingModules`.
+        push(foundInModulesWithDependencies)
     }
     
-    private func resolvedAllDependencies(_ dependingComponent: any Component) {
+    private func resolvedAllDependencies(_ dependingModule: any Module) {
         guard !recursiveSearch.isEmpty else {
             preconditionFailure("Internal logic error in the `DependencyManager`")
         }
-        let component = recursiveSearch.removeLast()
+        let module = recursiveSearch.removeLast()
         
-        guard component === dependingComponent else {
+        guard module === dependingModule else {
             preconditionFailure("Internal logic error in the `DependencyManager`")
         }
         
         
-        let dependingComponentsCount = componentsWithDependencies.count
-        componentsWithDependencies.removeAll(where: { $0 === dependingComponent })
+        let dependingModulesCount = modulesWithDependencies.count
+        modulesWithDependencies.removeAll(where: { $0 === dependingModule })
         precondition(
-            dependingComponentsCount - 1 == componentsWithDependencies.count,
-            "Unexpected reduction of components. Ensure that all your components conform to the same `Standard`"
+            dependingModulesCount - 1 == modulesWithDependencies.count,
+            "Unexpected reduction of modules. Ensure that all your modules conform to the same `Standard`"
         )
         
-        sortedComponents.append(dependingComponent)
+        sortedModules.append(dependingModule)
         
-        // Call the dependency resolution mechanism on the next element in the `dependingComponents` if we are not in a recursive search.
-        if recursiveSearch.isEmpty, let nextComponent = componentsWithDependencies.first {
-            push(nextComponent)
+        // Call the dependency resolution mechanism on the next element in the `dependingModules` if we are not in a recursive search.
+        if recursiveSearch.isEmpty, let nextModule = modulesWithDependencies.first {
+            push(nextModule)
         }
     }
     
     
-    private func push(_ component: any Component) {
-        recursiveSearch.append(component)
-        for dependency in component.dependencyDescriptors {
+    private func push(_ module: any Module) {
+        recursiveSearch.append(module)
+        for dependency in module.dependencyDescriptors {
             dependency.gatherDependency(dependencyManager: self)
         }
-        resolvedAllDependencies(component)
+        resolvedAllDependencies(module)
     }
 }
