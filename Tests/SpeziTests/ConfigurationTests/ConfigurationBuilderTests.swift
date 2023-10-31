@@ -14,12 +14,12 @@ import XCTRuntimeAssertions
 final class ComponentBuilderTests: XCTestCase {
     private struct Expectations {
         weak var xctestCase: XCTestCase?
-        var firstTestExpection = Expectations.expecation(named: "FirstTestComponent")
-        var loopTestExpection = Expectations.expecation(named: "LoopTestComponent")
-        var conditionalTestExpection = Expectations.expecation(named: "ConditionalTestComponent")
-        var availableConditionalTestExpection = Expectations.expecation(named: "AvailableConditionalTestExpection")
-        var ifTestExpection = Expectations.expecation(named: "IfTestComponent")
-        var elseTestExpection = Expectations.expecation(named: "FirstTestComponent")
+        var firstTestExpectation = Expectations.expectation(named: "FirstTestComponent")
+        var loopTestExpectation = Expectations.expectation(named: "LoopTestComponent")
+        var conditionalTestExpectation = Expectations.expectation(named: "ConditionalTestComponent")
+        var availableConditionalTestExpectation = Expectations.expectation(named: "AvailableConditionalTestExpection")
+        var ifTestExpectation = Expectations.expectation(named: "IfTestComponent")
+        var elseTestExpectation = Expectations.expectation(named: "FirstTestComponent")
         
         
         init(xctestCase: XCTestCase) {
@@ -27,10 +27,10 @@ final class ComponentBuilderTests: XCTestCase {
         }
         
         
-        private static func expecation(named: String) -> XCTestExpectation {
-            let expecation = XCTestExpectation(description: "FirstTestComponent")
-            expecation.assertForOverFulfill = true
-            return expecation
+        private static func expectation(named: String) -> XCTestExpectation {
+            let expectation = XCTestExpectation(description: "FirstTestComponent")
+            expectation.assertForOverFulfill = true
+            return expectation
         }
         
         func wait() throws {
@@ -41,37 +41,37 @@ final class ComponentBuilderTests: XCTestCase {
             
             xctestCase.wait(
                 for: [
-                    firstTestExpection,
-                    loopTestExpection,
-                    conditionalTestExpection,
-                    availableConditionalTestExpection,
-                    ifTestExpection,
-                    elseTestExpection
+                    firstTestExpectation,
+                    loopTestExpectation,
+                    conditionalTestExpectation,
+                    availableConditionalTestExpectation,
+                    ifTestExpectation,
+                    elseTestExpectation
                 ]
             )
         }
     }
     
     
-    private func components(loopLimit: Int, condition: Bool, expecations: Expectations) -> ComponentCollection {
+    private func components(loopLimit: Int, condition: Bool, expectations: Expectations) -> ComponentCollection {
         @ComponentBuilder
         var components: ComponentCollection {
-            TestComponent(expectation: expecations.firstTestExpection)
+            TestComponent(expectation: expectations.firstTestExpectation)
             for _ in 0..<loopLimit {
-                TestComponent(expectation: expecations.loopTestExpection)
+                TestComponent(expectation: expectations.loopTestExpectation)
             }
             if condition {
-                TestComponent(expectation: expecations.conditionalTestExpection)
+                TestComponent(expectation: expectations.conditionalTestExpectation)
             }
             // The `#available(iOS 16, *)` mark is used to test `#available` in a result builder.
             // The availability check is not part of any part of the Spezi API.
             if #available(iOS 16, *) { // swiftlint:disable:this deployment_target
-                TestComponent(expectation: expecations.availableConditionalTestExpection)
+                TestComponent(expectation: expectations.availableConditionalTestExpectation)
             }
             if condition {
-                TestComponent(expectation: expecations.ifTestExpection)
+                TestComponent(expectation: expectations.ifTestExpectation)
             } else {
-                TestComponent(expectation: expecations.elseTestExpection)
+                TestComponent(expectation: expectations.elseTestExpectation)
             }
         }
         return components
@@ -79,33 +79,33 @@ final class ComponentBuilderTests: XCTestCase {
     
     
     func testComponentBuilderIf() throws {
-        let expecations = Expectations(xctestCase: self)
-        expecations.loopTestExpection.expectedFulfillmentCount = 5
-        expecations.elseTestExpection.isInverted = true
+        let expectations = Expectations(xctestCase: self)
+        expectations.loopTestExpectation.expectedFulfillmentCount = 5
+        expectations.elseTestExpectation.isInverted = true
         
         let components = components(
             loopLimit: 5,
             condition: true,
-            expecations: expecations
+            expectations: expectations
         )
         
         _ = Spezi(standard: MockStandard(), components: components.elements)
-        try expecations.wait()
+        try expectations.wait()
     }
     
     func testComponentBuilderElse() throws {
-        let expecations = Expectations(xctestCase: self)
-        expecations.conditionalTestExpection.isInverted = true
-        expecations.loopTestExpection.expectedFulfillmentCount = 3
-        expecations.ifTestExpection.isInverted = true
+        let expectations = Expectations(xctestCase: self)
+        expectations.conditionalTestExpectation.isInverted = true
+        expectations.loopTestExpectation.expectedFulfillmentCount = 3
+        expectations.ifTestExpectation.isInverted = true
         
         let components = components(
             loopLimit: 3,
             condition: false,
-            expecations: expecations
+            expectations: expectations
         )
         
         _ = Spezi(standard: MockStandard(), components: components.elements)
-        try expecations.wait()
+        try expectations.wait()
     }
 }
