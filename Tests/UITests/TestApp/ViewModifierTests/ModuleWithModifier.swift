@@ -20,7 +20,7 @@ class MyModel {
 }
 
 
-struct MyModifier: ViewModifier {
+private struct MyModifier: ViewModifier {
     let model: MyModel
 
     func body(content: Content) -> some View {
@@ -31,5 +31,5 @@ struct MyModifier: ViewModifier {
 
 
 class ModuleWithModifier: Module {
-    @Modifier var modelModifier = MyModifier(model: MyModel(message: "Hello World"))
+    @Modifier fileprivate var modelModifier = MyModifier(model: MyModel(message: "Hello World"))
 }

@@ -12,27 +12,30 @@ import XCTestApp
 import XCTSpezi
 
 
-class MyModelTestCase: TestAppTestCase {
-    let model: MyModel
+class MyModel2TestCase: TestAppTestCase {
+    let model: MyModel2
+    let flag: Bool
 
 
-    init(model: MyModel) {
+    init(model: MyModel2, flag: Bool) {
         self.model = model
+        self.flag = flag
     }
 
 
     func runTests() async throws {
         try XCTAssertEqual(model.message, "Hello World")
+        try XCTAssert(flag)
     }
 }
 
-
-struct ViewModifierTestView: View {
-    @Environment(MyModel.self)
+struct ModelTestView: View {
+    @Environment(MyModel2.self)
     var model
-
+    @Environment(\.customKey)
+    var flag
 
     var body: some View {
-        TestAppView(testCase: MyModelTestCase(model: model))
+        TestAppView(testCase: MyModel2TestCase(model: model, flag: flag))
     }
 }

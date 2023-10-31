@@ -25,7 +25,7 @@ extension Module {
     /// }
     /// ```
     ///
-    /// You can access the wrapped value of the ``Standard`` after the ``Module`` is configured using ``Module/configure()-27tt1``,
+    /// You can access the wrapped value of the ``Standard`` after the ``Module`` is configured using ``Module/configure()-5pa83``,
     /// e.g. in the ``LifecycleHandler/willFinishLaunchingWithOptions(_:launchOptions:)-8jatp`` function.
     public typealias StandardActor = _StandardPropertyWrapper
 }

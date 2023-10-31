@@ -18,6 +18,7 @@ class TestAppDelegate: SpeziAppDelegate {
                 LifecycleHandlerTestComponent()
             }
             ModuleWithModifier()
+            ModuleWithModel()
         }
     }
 }

@@ -45,7 +45,7 @@ extension Module {
     /// ``Module/Collect`` retrieves data provided through the ``Module/Provide`` property wrapper.
     /// You declare `@Collect` as an Array with a given type. The type is used to match `@Provide` properties.
     ///
-    /// - Important: The property is only accessible within the ``Module/configure()-27tt1`` method.
+    /// - Important: The property is only accessible within the ``Module/configure()-5pa83`` method.
     ///
     /// Below is an example where the `ExampleModule` collects an array of `Numeric` types from all other `Modules`.
     ///

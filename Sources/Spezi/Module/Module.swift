@@ -10,7 +10,7 @@
 // note: detailed documentation is provided as an article extension in the DocC bundle
 /// A `Module` defines a software subsystem that can be configured as part of the ``SpeziAppDelegate/configuration``.
 public protocol Module: AnyObject, KnowledgeSource<SpeziAnchor> {
-    /// The ``Module/configure()-27tt1`` method is called on the initialization of the Spezi instance to perform a lightweight configuration of the module.
+    /// The ``Module/configure()-5pa83`` method is called on the initialization of the Spezi instance to perform a lightweight configuration of the module.
     ///
     /// Both ``Module/Dependency`` and ``Module/DynamicDependencies`` are available and configured at this point.
     /// It is advised that longer setup tasks are done in an asynchronous task and started during the call of the configure method.

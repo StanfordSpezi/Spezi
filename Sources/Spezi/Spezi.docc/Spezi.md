@@ -87,7 +87,6 @@ To simplify the creation of modules, a common set of functionalities typically u
 - ``Spezi/Spezi``
 - ``Standard``
 - ``Module``
-- ``Module``
 
 ### Shared Repository
 

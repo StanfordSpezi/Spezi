@@ -22,6 +22,9 @@
 		2FFDAD0D2A4AB0CE00488F42 /* XCTestExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 2FFDAD0C2A4AB0CE00488F42 /* XCTestExtensions */; };
 		A9F2ECD42AF0B85C0057C7DD /* ModuleWithModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F2ECD32AF0B85C0057C7DD /* ModuleWithModifier.swift */; };
 		A9F2ECD62AF0BA500057C7DD /* ViewModifierTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F2ECD52AF0BA500057C7DD /* ViewModifierTestView.swift */; };
+		A9F2ECD92AF198510057C7DD /* ModuleWithModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F2ECD82AF198510057C7DD /* ModuleWithModel.swift */; };
+		A9F2ECDB2AF198590057C7DD /* ModelTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F2ECDA2AF198590057C7DD /* ModelTestView.swift */; };
+		A9F2ECDD2AF198690057C7DD /* ModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F2ECDC2AF198690057C7DD /* ModelTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +55,9 @@
 		2FFDAD0A2A4AAF3600488F42 /* LifecycleHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleHandlerTests.swift; sourceTree = "<group>"; };
 		A9F2ECD32AF0B85C0057C7DD /* ModuleWithModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModuleWithModifier.swift; sourceTree = "<group>"; };
 		A9F2ECD52AF0BA500057C7DD /* ViewModifierTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModifierTestView.swift; sourceTree = "<group>"; };
+		A9F2ECD82AF198510057C7DD /* ModuleWithModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModuleWithModel.swift; sourceTree = "<group>"; };
+		A9F2ECDA2AF198590057C7DD /* ModelTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelTestView.swift; sourceTree = "<group>"; };
+		A9F2ECDC2AF198690057C7DD /* ModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +109,7 @@
 				2FA7382B290ADFAA007ACEB9 /* TestApp.swift */,
 				2F5FA4CD29E0A3BA0047A644 /* SpeziTests.swift */,
 				2FFDAD032A4AA99800488F42 /* LifecycleHandler */,
+				A9F2ECD72AF198330057C7DD /* ModelTests */,
 				2F9F07ED29090AF500CDC598 /* Shared */,
 				A9F2ECD22AF0B8460057C7DD /* ViewModifierTests */,
 				2F6D139928F5F386007C25D6 /* Assets.xcassets */,
@@ -117,6 +124,7 @@
 				2FB926E42974B0FC008E7B03 /* Info.plist */,
 				2F9F07F429090BA900CDC598 /* ViewModifierTests.swift */,
 				2FFDAD0A2A4AAF3600488F42 /* LifecycleHandlerTests.swift */,
+				A9F2ECDC2AF198690057C7DD /* ModelTests.swift */,
 			);
 			path = TestAppUITests;
 			sourceTree = "<group>";
@@ -153,6 +161,15 @@
 				A9F2ECD52AF0BA500057C7DD /* ViewModifierTestView.swift */,
 			);
 			path = ViewModifierTests;
+			sourceTree = "<group>";
+		};
+		A9F2ECD72AF198330057C7DD /* ModelTests */ = {
+			isa = PBXGroup;
+			children = (
+				A9F2ECD82AF198510057C7DD /* ModuleWithModel.swift */,
+				A9F2ECDA2AF198590057C7DD /* ModelTestView.swift */,
+			);
+			path = ModelTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -293,8 +310,10 @@
 				A9F2ECD62AF0BA500057C7DD /* ViewModifierTestView.swift in Sources */,
 				2F9F07F129090B0500CDC598 /* TestAppDelegate.swift in Sources */,
 				2FFDAD072A4AAA2E00488F42 /* LifecycleHandlerTestComponent.swift in Sources */,
+				A9F2ECDB2AF198590057C7DD /* ModelTestView.swift in Sources */,
 				A9F2ECD42AF0B85C0057C7DD /* ModuleWithModifier.swift in Sources */,
 				2FFDAD052A4AA9D300488F42 /* LifecycleHandlerTestsView.swift in Sources */,
+				A9F2ECD92AF198510057C7DD /* ModuleWithModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -302,6 +321,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9F2ECDD2AF198690057C7DD /* ModelTests.swift in Sources */,
 				2FFDAD0B2A4AAF3700488F42 /* LifecycleHandlerTests.swift in Sources */,
 				2F9F07F529090BA900CDC598 /* ViewModifierTests.swift in Sources */,
 			);

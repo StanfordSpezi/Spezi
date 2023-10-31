@@ -8,20 +8,43 @@
 
 import SwiftUI
 
+enum ModifierPlacement: Int {
+    case regular
+    case outermost
+}
+
 
 /// An adopter of this protocol is a property of a ``Module`` that provides a SwiftUI
 /// `ViewModifier` to be injected into the global view hierarchy.
 protocol ViewModifierProvider {
     /// The view modifier instance that should be injected into the SwiftUI view hierarchy.
     var viewModifier: any ViewModifier { get }
+
+    /// Defines the placement order of this view modifier.
+    ///
+    /// `ViewModifier`s retrieved from a `Component` might modify the view hierarchy in a different order than they
+    /// are supplied. This is important to, e.g., ensure that modifiers injecting model types are placed at the outermost
+    /// level to ensure other view modifiers supplied by the Component can access those model types.
+    var placement: ModifierPlacement { get }
+}
+
+
+extension ViewModifierProvider {
+    var placement: ModifierPlacement {
+        .regular
+    }
 }
 
 
 extension Module {
     /// All SwiftUI `ViewModifier` the module wants to modify the global view hierarchy with.
     var viewModifiers: [any SwiftUI.ViewModifier] {
-        retrieveProperties(ofType: ViewModifierProvider.self).map { provider in
-            provider.viewModifier
-        }
+        retrieveProperties(ofType: ViewModifierProvider.self)
+            .sorted { lhs, rhs in
+                lhs.placement.rawValue < rhs.placement.rawValue
+            }
+            .map { provider in
+                provider.viewModifier
+            }
     }
 }

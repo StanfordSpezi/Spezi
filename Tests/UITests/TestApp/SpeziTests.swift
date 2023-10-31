@@ -13,6 +13,7 @@ import XCTestApp
 enum SpeziTests: String, TestAppTests {
     case viewModifier = "ViewModifier"
     case lifecycleHandler = "LifecycleHandler"
+    case model = "Model"
     
     
     func view(withNavigationPath path: Binding<NavigationPath>) -> some View {
@@ -21,6 +22,8 @@ enum SpeziTests: String, TestAppTests {
             ViewModifierTestView()
         case .lifecycleHandler:
             LifecycleHandlerTestsView()
+        case .model:
+            ModelTestView()
         }
     }
 }

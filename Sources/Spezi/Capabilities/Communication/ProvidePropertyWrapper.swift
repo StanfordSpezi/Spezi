@@ -62,7 +62,7 @@ extension Module {
     /// - Note: that the declaring type has to match what is requested by the other side (e.g., a common protocol implementation)
     ///
     /// - Important: All `@Provide` properties must be initialized within the initializer and cannot be modified within the
-    ///     ``Module/configure()-27tt1`` method.
+    ///     ``Module/configure()-5pa83`` method.
     ///
     /// Below is an example where the `ExampleModule` provides a `Numeric` type to some other modules.
     /// ```swift

@@ -24,7 +24,7 @@ extension Module {
     /// }
     /// ```
     ///
-    /// You can access the wrapped value of the ``Dependency`` after the ``Module`` is configured using ``Module/configure()-27tt1``,
+    /// You can access the wrapped value of the ``Dependency`` after the ``Module`` is configured using ``Module/configure()-5pa83``,
     /// e.g. in the ``LifecycleHandler/willFinishLaunchingWithOptions(_:launchOptions:)-8jatp`` function.
     public typealias Dependency<M: Module> = _DependencyPropertyWrapper<M>
     
@@ -51,7 +51,7 @@ extension Module {
     /// }
     /// ```
     ///
-    /// You can access the wrapped value of the ``DynamicDependencies`` after the ``Module`` is configured using ``Module/configure()-27tt1``,
+    /// You can access the wrapped value of the ``DynamicDependencies`` after the ``Module`` is configured using ``Module/configure()-5pa83``,
     /// e.g. in the ``LifecycleHandler/willFinishLaunchingWithOptions(_:launchOptions:)-8jatp`` function.
     public typealias DynamicDependencies = _DynamicDependenciesPropertyWrapper
 }
