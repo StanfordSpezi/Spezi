@@ -62,7 +62,10 @@ public actor Spezi<S: Standard>: AnySpezi, ObservableObject {
     public let logger: Logger
     /// The ``Standard`` used in the ``Spezi/Spezi`` instance.
     public let standard: S
-    
+
+    /// Array of all SwiftUI `ViewModifiers` collected using ``_ModifierPropertyWrapper`` from the configured ``Component``s.
+    let viewModifiers: [any ViewModifier]
+
     
     init(
         standard: S,
@@ -70,12 +73,12 @@ public actor Spezi<S: Standard>: AnySpezi, ObservableObject {
     ) {
         // mutable property, as StorageValueProvider has inout protocol requirement.
         var storage = SpeziStorage()
+        var collectedModifiers: [any ViewModifier] = []
+        var componentsAndStandard = components
+        componentsAndStandard.append(standard)
 
         self.logger = storage[SpeziLogger.self]
         self.standard = standard
-        
-        var componentsAndStandard = components
-        componentsAndStandard.append(standard)
 
         let dependencyManager = DependencyManager(componentsAndStandard)
         dependencyManager.resolve()
@@ -92,9 +95,12 @@ public actor Spezi<S: Standard>: AnySpezi, ObservableObject {
 
             component.configure()
             component.storeComponent(into: &storage)
+
+            collectedModifiers.append(contentsOf: component.viewModifiers)
         }
 
         self.storage = storage
+        self.viewModifiers = collectedModifiers
     }
 }
 

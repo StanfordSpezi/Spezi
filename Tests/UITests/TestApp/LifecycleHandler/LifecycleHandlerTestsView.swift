@@ -12,17 +12,18 @@ import XCTSpezi
 
 
 struct LifecycleHandlerTestsView: View {
-    @EnvironmentObject var testAppComponent: LifecycleHandlerTestComponent
+    @Environment(LifecycleHandlerModel.self)
+    var model
     
     
     var body: some View {
         VStack {
-            Text("WillFinishLaunchingWithOptions: \(testAppComponent.willFinishLaunchingWithOptions)")
-            Text("SceneWillEnterForeground: \(testAppComponent.sceneWillEnterForeground)")
-            Text("SceneDidBecomeActive: \(testAppComponent.sceneDidBecomeActive)")
-            Text("SceneWillResignActive: \(testAppComponent.sceneWillResignActive)")
-            Text("SceneDidEnterBackground: \(testAppComponent.sceneDidEnterBackground)")
-            Text("ApplicationWillTerminate: \(testAppComponent.applicationWillTerminate)")
+            Text("WillFinishLaunchingWithOptions: \(model.willFinishLaunchingWithOptions)")
+            Text("SceneWillEnterForeground: \(model.sceneWillEnterForeground)")
+            Text("SceneDidBecomeActive: \(model.sceneDidBecomeActive)")
+            Text("SceneWillResignActive: \(model.sceneWillResignActive)")
+            Text("SceneDidEnterBackground: \(model.sceneDidEnterBackground)")
+            Text("ApplicationWillTerminate: \(model.applicationWillTerminate)")
         }
     }
 }

@@ -11,14 +11,14 @@ import XCTestApp
 
 
 enum SpeziTests: String, TestAppTests {
-    case observableObject = "ObservableObject"
+    case viewModifier = "ViewModifier"
     case lifecycleHandler = "LifecycleHandler"
     
     
     func view(withNavigationPath path: Binding<NavigationPath>) -> some View {
         switch self {
-        case .observableObject:
-            ObservableObjectTestsView()
+        case .viewModifier:
+            ViewModifierTestView()
         case .lifecycleHandler:
             LifecycleHandlerTestsView()
         }

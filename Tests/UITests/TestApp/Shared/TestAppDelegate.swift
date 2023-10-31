@@ -17,8 +17,7 @@ class TestAppDelegate: SpeziAppDelegate {
             if FeatureFlags.lifecycleTests {
                 LifecycleHandlerTestComponent()
             }
-            MultipleObservableObjectsTestsComponent()
-            ObservableComponentTestsComponent(message: "Passed")
+            ComponentWithModifier()
         }
     }
 }

@@ -12,16 +12,16 @@ import SwiftUI
 
 
 struct SpeziViewModifier: ViewModifier {
-    var observableObjectProviders: [any ObservableObjectProvider]
+    let speziViewModifiers: [any ViewModifier]
     
     
     init(_ anySpezi: AnySpezi) {
-        self.observableObjectProviders = anySpezi.observableObjectProviders
+        self.speziViewModifiers = anySpezi.viewModifiers
     }
     
     
     func body(content: Content) -> some View {
-        AnyView(content.inject(observableObjectProviders: observableObjectProviders))
+        speziViewModifiers.modify(content)
     }
 }
 
@@ -32,5 +32,23 @@ extension View {
     /// - Returns: A SwiftUI view configured using the Spezi framework
     public func spezi(_ delegate: SpeziAppDelegate) -> some View {
         modifier(SpeziViewModifier(delegate.spezi))
+    }
+}
+
+
+extension Array where Element == any ViewModifier {
+    fileprivate func modify<V: View>(_ view: V) -> AnyView {
+        var view = AnyView(view)
+        for modifier in self {
+            view = modifier.modify(view)
+        }
+        return view
+    }
+}
+
+
+extension ViewModifier {
+    fileprivate func modify(_ view: AnyView) -> AnyView {
+        AnyView(view.modifier(self))
     }
 }

@@ -9,12 +9,12 @@
 import XCTest
 
 
-final class ObservableObjectTests: XCTestCase {
-    func testObservableObject() throws {
+final class ViewModifierTests: XCTestCase {
+    func testViewModifierPropertyWrapper() throws {
         let app = XCUIApplication()
         app.launch()
         
-        app.staticTexts["ObservableObject"].tap()
+        app.staticTexts["ViewModifier"].tap()
         
         XCTAssert(app.staticTexts["Passed"].waitForExistence(timeout: 1))
     }
