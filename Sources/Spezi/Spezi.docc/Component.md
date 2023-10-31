@@ -51,20 +51,6 @@ class ExampleComponent: Component {
 
 > Note: You can learn more about creating a ``Standard`` that must meet the requirements of all components in the ``Standard`` documentation.
 
-### Dependencies
-
-``Component``s can define dependencies between each other using the @``Component/Dependency`` property wrapper.
-The order in which the ``Component/configure()-27tt1`` method of each ``Component`` is called, is automatically
-evaluated by the ``DependencyManager``.
-
-> Note: Declaring a cyclic dependency will result in a runtime error. 
-
-```swift
-class ExampleComponent: Component {
-    @Dependency var exampleComponentDependency = ExampleComponentDependency()
-}
-```
-
 ### Communication
 
 ``Component``s can easily communicate with each other using the ``Component/Provide`` and ``Component/Collect`` property wrappers.
@@ -112,27 +98,44 @@ You might find this property useful in scenarios like the following:
 My adopting the ``LifecycleHandler`` your `Component` can provide lifecycle methods to the underlying `UIApplication` and ``Spezi/Spezi`` lifecycle.
 
 
+### Dependencies
+
+``Component``s can define dependencies between each other using the @``Component/Dependency`` property wrapper.
+The order in which the ``Component/configure()-27tt1`` method of each ``Component`` is called, is automatically
+evaluated by the ``DependencyManager``.
+
+> Note: Declaring a cyclic dependency will result in a runtime error. 
+
+```swift
+class ExampleComponent: Component {
+    @Dependency var exampleComponentDependency = ExampleComponentDependency()
+}
+```
+
 ## Topics
 
-### Properties
+### Standard
 
-- ``Component/Dependency``
-- ``Component/DynamicDependencies``
+- ``Component/StandardActor``
+
+### Communication
+
 - ``Component/Provide``
 - ``Component/Collect``
-- ``Component/StandardActor``
+
+### Modifying the View hierarchy
+
 - ``Component/Modifier``
 
-### Capabilities
+### Lifecycle Handling
 
-- ``Module``
 - ``LifecycleHandler``
 
 ### Dependency
 
+- ``Component/Dependency``
+- ``Component/DynamicDependencies``
 - ``DefaultInitializable``
 - ``DependencyManager``
 - ``ComponentDependency``
 - ``DependencyDescriptor``
-
-
