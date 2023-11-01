@@ -15,7 +15,7 @@ class TestAppDelegate: SpeziAppDelegate {
     override var configuration: Configuration {
         Configuration {
             if FeatureFlags.lifecycleTests {
-                LifecycleHandlerTestComponent()
+                LifecycleHandlerTestModule()
             }
             ModuleWithModifier()
             ModuleWithModel()

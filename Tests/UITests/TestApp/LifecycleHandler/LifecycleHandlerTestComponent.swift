@@ -34,7 +34,7 @@ struct LifecycleHandlerModifier: ViewModifier {
 }
 
 
-final class LifecycleHandlerTestComponent: Module, LifecycleHandler {
+final class LifecycleHandlerTestModule: Module, LifecycleHandler {
     private let model: LifecycleHandlerModel
 
     @Modifier var modifier: LifecycleHandlerModifier

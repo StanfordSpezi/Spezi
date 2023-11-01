@@ -59,7 +59,7 @@ Check out the [Stanford Biodesign Digital Health GitHub organization](https://gi
 
 > Tip: The <doc:Spezi-Guide> and <doc:Documentation-Guide> guides define the requirements for Spezi-based modules, including terminology, hints, and examples of structuring your Spezi module, Swift Package, and surrounding repository.
 
-A ``Standard`` defines the key component that orchestrates the data flow in the application by meeting requirements defined by modules.
+A ``Standard`` defines the key coordinator that orchestrates the data flow in the application by meeting requirements defined by modules.
 You can learn more about the ``Standard`` protocol and when it is advised to create your own standard in your application in the <doc:Standard> documentation.
 
 A ``Module`` defines a software subsystem providing distinct and reusable functionality.

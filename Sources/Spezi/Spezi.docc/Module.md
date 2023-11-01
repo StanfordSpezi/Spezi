@@ -107,7 +107,7 @@ to provide app-wide modifications.
 You might find this property useful in scenarios like the following:
 * Set global configurations using the [environment(_:_:)](https://developer.apple.com/documentation/swiftui/view/environment(_:_:)) modifier.
 * Providing access to a global model state. For more information have a look at [Share model data throughout a view hierarchy](https://developer.apple.com/documentation/swiftui/managing-model-data-in-your-app#Share-model-data-throughout-a-view-hierarchy).
-* Display UI components with modifiers like [alert(_:isPresented:presenting:actions:message:)](https://developer.apple.com/documentation/swiftui/view/alert(_:ispresented:presenting:actions:message:)-8584l)
+* Display UI components using modifiers like [alert(_:isPresented:presenting:actions:message:)](https://developer.apple.com/documentation/swiftui/view/alert(_:ispresented:presenting:actions:message:)-8584l)
 
 > Note: We strongly advise using the new `@Observable` macro instead of the previous `ObservableObject` protocol to achieve optimal performance and
     avoid unnecessary view re-rendering.

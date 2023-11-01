@@ -39,7 +39,7 @@ The best way to get started and explore the functionality of Spezi is by taking 
 You can find a list of modules and reusable Swift Packages offered by the Spezi team at Stanford at [the Swift Package Index Stanford Spezi page](https://swiftpackageindex.com/StanfordSpezi).
 
 > [!NOTE] 
-> Spezi relies on an ecosystem of modules. Think about what modules you want to build and contribute to the open-source community! Refer to the [Spezi Guide](https://swiftpackageindex.com/stanfordspezi/spezi/documentation/spezi/spezi-guide) and [Documentation Guide](https://swiftpackageindex.com/stanfordspezi/spezi/documentation/spezi/documentation-guide) about the requirements for Spezi-based software components and the ``Module`` documentation to learn more about building your modules.
+> Spezi relies on an ecosystem of modules. Think about what modules you want to build and contribute to the open-source community! Refer to the [Spezi Guide](https://swiftpackageindex.com/stanfordspezi/spezi/documentation/spezi/spezi-guide) and [Documentation Guide](https://swiftpackageindex.com/stanfordspezi/spezi/documentation/spezi/documentation-guide) about the requirements for Spezi-based software and the ``Module`` documentation to learn more about building your modules.
 
 Learn more about Spezi at [spezi.stanford.edu](https://spezi.stanford.edu).
 Reach out to us on social media and use the [Stanford Spezi Discussion Forum](https://github.com/orgs/StanfordSpezi/discussions) to ask any Spezi-related questions or share the projects you built with Spezi.
@@ -52,7 +52,7 @@ Check out the [Stanford Biodesign Digital Health GitHub organization](https://gi
 > [!NOTE]
 > The [Spezi Guide](https://swiftpackageindex.com/stanfordspezi/spezi/documentation/spezi/spezi-guide) and [Documentation Guide](https://swiftpackageindex.com/stanfordspezi/spezi/documentation/spezi/documentation-guide) guides define the requirements for Spezi-based modules, including terminology, hints, and examples on structuring your Spezi module, Swift Package, and surrounding repository.
 
-A ``Standard`` defines the key component that orchestrates the data flow in the application by meeting requirements defined by modules.
+A ``Standard`` defines the key coordinator that orchestrates the data flow in the application by meeting requirements defined by modules.
 You can learn more about the ``Standard`` protocol and when it is advised to create your own standard in your application in the [`Standard`](https://swiftpackageindex.com/stanfordspezi/spezi/documentation/spezi/standard) documentation.
 
 A ``Module`` defines a software subsystem providing distinct and reusable functionality.

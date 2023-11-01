@@ -17,7 +17,7 @@ The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SH
 
 The following guide defines the following terminology:
 - **Module**: A module is the fundamental building block of the Spezi ecosystem. A module can range from standalone functionality using frameworks used in Spezi, such as Swift, SwiftUI, or interoperability standards, to being deeply embedded in Spezi and providing complex functionality, including user interfaces and data management. The simplest way to be integrated into Spezi is the Swift ``Module`` protocol. A module MAY use the ``Module`` protocol but is not REQUIRED to do so. Some modules MAY provide functionality independent of the Spezi integration mechanisms. We generally refer to Spezi as a _modularized_ ecosystem.
-- **Swift Package**: Each software component is embedded in a Swift Package. A Swift Package can include multiple Swift Package targets and modules.
+- **Swift Package**: Each software subsystem or module is embedded in a Swift Package. A Swift Package can include multiple Swift Package targets and modules.
 - **Repository**: A repository is a collection of versioned files embedded in a version control system. The Spezi context contains a single Swift Package and other configuration files, such as a continuous integration (CI) setup. Repositories are typically hosted on GitHub but can also be hosted on other platforms.
 
 To be featured by the Spezi team, a module, as well as the surrounding Swift Package and repository, MUST conform to this guide.
