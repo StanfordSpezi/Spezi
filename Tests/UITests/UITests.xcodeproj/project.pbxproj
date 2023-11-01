@@ -7,23 +7,24 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2F5FA4C529E0A1620047A644 /* MultipleObservableObjectsTestsComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5FA4C129E0A1620047A644 /* MultipleObservableObjectsTestsComponent.swift */; };
-		2F5FA4C629E0A1620047A644 /* ObservableObjectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5FA4C229E0A1620047A644 /* ObservableObjectTests.swift */; };
-		2F5FA4C729E0A1620047A644 /* ObservableComponentTestsComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5FA4C329E0A1620047A644 /* ObservableComponentTestsComponent.swift */; };
-		2F5FA4C829E0A1620047A644 /* ObservableObjectTestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5FA4C429E0A1620047A644 /* ObservableObjectTestsView.swift */; };
 		2F5FA4CC29E0A2F40047A644 /* Spezi in Frameworks */ = {isa = PBXBuildFile; productRef = 2F5FA4CB29E0A2F40047A644 /* Spezi */; };
 		2F5FA4CE29E0A3BA0047A644 /* SpeziTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5FA4CD29E0A3BA0047A644 /* SpeziTests.swift */; };
 		2F5FA4D029E0A4050047A644 /* XCTestApp in Frameworks */ = {isa = PBXBuildFile; productRef = 2F5FA4CF29E0A4050047A644 /* XCTestApp */; };
 		2F5FA4D229E0B38C0047A644 /* XCTSpezi in Frameworks */ = {isa = PBXBuildFile; productRef = 2F5FA4D129E0B38C0047A644 /* XCTSpezi */; };
 		2F6D139A28F5F386007C25D6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F6D139928F5F386007C25D6 /* Assets.xcassets */; };
 		2F9F07F129090B0500CDC598 /* TestAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9F07F029090B0500CDC598 /* TestAppDelegate.swift */; };
-		2F9F07F529090BA900CDC598 /* ObservableObjectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9F07F429090BA900CDC598 /* ObservableObjectTests.swift */; };
+		2F9F07F529090BA900CDC598 /* ViewModifierTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9F07F429090BA900CDC598 /* ViewModifierTests.swift */; };
 		2FA7382C290ADFAA007ACEB9 /* TestApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA7382B290ADFAA007ACEB9 /* TestApp.swift */; };
 		2FFDAD052A4AA9D300488F42 /* LifecycleHandlerTestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFDAD042A4AA9D300488F42 /* LifecycleHandlerTestsView.swift */; };
-		2FFDAD072A4AAA2E00488F42 /* LifecycleHandlerTestComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFDAD062A4AAA2E00488F42 /* LifecycleHandlerTestComponent.swift */; };
+		2FFDAD072A4AAA2E00488F42 /* LifecycleHandlerTestModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFDAD062A4AAA2E00488F42 /* LifecycleHandlerTestModule.swift */; };
 		2FFDAD092A4AAEF400488F42 /* FeatureFlags.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFDAD082A4AAEF400488F42 /* FeatureFlags.swift */; };
 		2FFDAD0B2A4AAF3700488F42 /* LifecycleHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFDAD0A2A4AAF3600488F42 /* LifecycleHandlerTests.swift */; };
 		2FFDAD0D2A4AB0CE00488F42 /* XCTestExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 2FFDAD0C2A4AB0CE00488F42 /* XCTestExtensions */; };
+		A9F2ECD42AF0B85C0057C7DD /* ModuleWithModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F2ECD32AF0B85C0057C7DD /* ModuleWithModifier.swift */; };
+		A9F2ECD62AF0BA500057C7DD /* ViewModifierTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F2ECD52AF0BA500057C7DD /* ViewModifierTestView.swift */; };
+		A9F2ECD92AF198510057C7DD /* ModuleWithModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F2ECD82AF198510057C7DD /* ModuleWithModel.swift */; };
+		A9F2ECDB2AF198590057C7DD /* ModelTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F2ECDA2AF198590057C7DD /* ModelTestView.swift */; };
+		A9F2ECDD2AF198690057C7DD /* ModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F2ECDC2AF198690057C7DD /* ModelTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,24 +39,25 @@
 
 /* Begin PBXFileReference section */
 		2F01E8CE291493560089C46B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		2F5FA4C129E0A1620047A644 /* MultipleObservableObjectsTestsComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultipleObservableObjectsTestsComponent.swift; sourceTree = "<group>"; };
-		2F5FA4C229E0A1620047A644 /* ObservableObjectTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservableObjectTests.swift; sourceTree = "<group>"; };
-		2F5FA4C329E0A1620047A644 /* ObservableComponentTestsComponent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservableComponentTestsComponent.swift; sourceTree = "<group>"; };
-		2F5FA4C429E0A1620047A644 /* ObservableObjectTestsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservableObjectTestsView.swift; sourceTree = "<group>"; };
 		2F5FA4CD29E0A3BA0047A644 /* SpeziTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeziTests.swift; sourceTree = "<group>"; };
 		2F6D139228F5F384007C25D6 /* TestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F6D139928F5F386007C25D6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2F6D13AC28F5F386007C25D6 /* TestAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TestAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F7B6CB4294C03C800FDC494 /* TestApp.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = TestApp.xctestplan; path = UITests.xcodeproj/TestApp.xctestplan; sourceTree = "<group>"; };
 		2F9F07F029090B0500CDC598 /* TestAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAppDelegate.swift; sourceTree = "<group>"; };
-		2F9F07F429090BA900CDC598 /* ObservableObjectTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservableObjectTests.swift; sourceTree = "<group>"; };
+		2F9F07F429090BA900CDC598 /* ViewModifierTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewModifierTests.swift; sourceTree = "<group>"; };
 		2FA7382B290ADFAA007ACEB9 /* TestApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestApp.swift; sourceTree = "<group>"; };
 		2FB926E42974B0FC008E7B03 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		2FC42FD7290ADD5E00B08F18 /* Spezi */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Spezi; path = ../..; sourceTree = "<group>"; };
 		2FFDAD042A4AA9D300488F42 /* LifecycleHandlerTestsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleHandlerTestsView.swift; sourceTree = "<group>"; };
-		2FFDAD062A4AAA2E00488F42 /* LifecycleHandlerTestComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleHandlerTestComponent.swift; sourceTree = "<group>"; };
+		2FFDAD062A4AAA2E00488F42 /* LifecycleHandlerTestModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleHandlerTestModule.swift; sourceTree = "<group>"; };
 		2FFDAD082A4AAEF400488F42 /* FeatureFlags.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlags.swift; sourceTree = "<group>"; };
 		2FFDAD0A2A4AAF3600488F42 /* LifecycleHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleHandlerTests.swift; sourceTree = "<group>"; };
+		A9F2ECD32AF0B85C0057C7DD /* ModuleWithModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModuleWithModifier.swift; sourceTree = "<group>"; };
+		A9F2ECD52AF0BA500057C7DD /* ViewModifierTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModifierTestView.swift; sourceTree = "<group>"; };
+		A9F2ECD82AF198510057C7DD /* ModuleWithModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModuleWithModel.swift; sourceTree = "<group>"; };
+		A9F2ECDA2AF198590057C7DD /* ModelTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelTestView.swift; sourceTree = "<group>"; };
+		A9F2ECDC2AF198690057C7DD /* ModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,17 +82,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		2F5FA4C029E0A1620047A644 /* ObservableObjectTests */ = {
-			isa = PBXGroup;
-			children = (
-				2F5FA4C129E0A1620047A644 /* MultipleObservableObjectsTestsComponent.swift */,
-				2F5FA4C229E0A1620047A644 /* ObservableObjectTests.swift */,
-				2F5FA4C329E0A1620047A644 /* ObservableComponentTestsComponent.swift */,
-				2F5FA4C429E0A1620047A644 /* ObservableObjectTestsView.swift */,
-			);
-			path = ObservableObjectTests;
-			sourceTree = "<group>";
-		};
 		2F6D138928F5F384007C25D6 = {
 			isa = PBXGroup;
 			children = (
@@ -118,8 +109,9 @@
 				2FA7382B290ADFAA007ACEB9 /* TestApp.swift */,
 				2F5FA4CD29E0A3BA0047A644 /* SpeziTests.swift */,
 				2FFDAD032A4AA99800488F42 /* LifecycleHandler */,
-				2F5FA4C029E0A1620047A644 /* ObservableObjectTests */,
+				A9F2ECD72AF198330057C7DD /* ModelTests */,
 				2F9F07ED29090AF500CDC598 /* Shared */,
+				A9F2ECD22AF0B8460057C7DD /* ViewModifierTests */,
 				2F6D139928F5F386007C25D6 /* Assets.xcassets */,
 				2F01E8CE291493560089C46B /* Info.plist */,
 			);
@@ -130,8 +122,9 @@
 			isa = PBXGroup;
 			children = (
 				2FB926E42974B0FC008E7B03 /* Info.plist */,
-				2F9F07F429090BA900CDC598 /* ObservableObjectTests.swift */,
+				2F9F07F429090BA900CDC598 /* ViewModifierTests.swift */,
 				2FFDAD0A2A4AAF3600488F42 /* LifecycleHandlerTests.swift */,
+				A9F2ECDC2AF198690057C7DD /* ModelTests.swift */,
 			);
 			path = TestAppUITests;
 			sourceTree = "<group>";
@@ -156,9 +149,27 @@
 			isa = PBXGroup;
 			children = (
 				2FFDAD042A4AA9D300488F42 /* LifecycleHandlerTestsView.swift */,
-				2FFDAD062A4AAA2E00488F42 /* LifecycleHandlerTestComponent.swift */,
+				2FFDAD062A4AAA2E00488F42 /* LifecycleHandlerTestModule.swift */,
 			);
 			path = LifecycleHandler;
+			sourceTree = "<group>";
+		};
+		A9F2ECD22AF0B8460057C7DD /* ViewModifierTests */ = {
+			isa = PBXGroup;
+			children = (
+				A9F2ECD32AF0B85C0057C7DD /* ModuleWithModifier.swift */,
+				A9F2ECD52AF0BA500057C7DD /* ViewModifierTestView.swift */,
+			);
+			path = ViewModifierTests;
+			sourceTree = "<group>";
+		};
+		A9F2ECD72AF198330057C7DD /* ModelTests */ = {
+			isa = PBXGroup;
+			children = (
+				A9F2ECD82AF198510057C7DD /* ModuleWithModel.swift */,
+				A9F2ECDA2AF198590057C7DD /* ModelTestView.swift */,
+			);
+			path = ModelTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -293,16 +304,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2F5FA4C729E0A1620047A644 /* ObservableComponentTestsComponent.swift in Sources */,
-				2F5FA4C629E0A1620047A644 /* ObservableObjectTests.swift in Sources */,
 				2F5FA4CE29E0A3BA0047A644 /* SpeziTests.swift in Sources */,
-				2F5FA4C529E0A1620047A644 /* MultipleObservableObjectsTestsComponent.swift in Sources */,
 				2FFDAD092A4AAEF400488F42 /* FeatureFlags.swift in Sources */,
 				2FA7382C290ADFAA007ACEB9 /* TestApp.swift in Sources */,
-				2F5FA4C829E0A1620047A644 /* ObservableObjectTestsView.swift in Sources */,
+				A9F2ECD62AF0BA500057C7DD /* ViewModifierTestView.swift in Sources */,
 				2F9F07F129090B0500CDC598 /* TestAppDelegate.swift in Sources */,
-				2FFDAD072A4AAA2E00488F42 /* LifecycleHandlerTestComponent.swift in Sources */,
+				2FFDAD072A4AAA2E00488F42 /* LifecycleHandlerTestModule.swift in Sources */,
+				A9F2ECDB2AF198590057C7DD /* ModelTestView.swift in Sources */,
+				A9F2ECD42AF0B85C0057C7DD /* ModuleWithModifier.swift in Sources */,
 				2FFDAD052A4AA9D300488F42 /* LifecycleHandlerTestsView.swift in Sources */,
+				A9F2ECD92AF198510057C7DD /* ModuleWithModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -310,8 +321,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9F2ECDD2AF198690057C7DD /* ModelTests.swift in Sources */,
 				2FFDAD0B2A4AAF3700488F42 /* LifecycleHandlerTests.swift in Sources */,
-				2F9F07F529090BA900CDC598 /* ObservableObjectTests.swift in Sources */,
+				2F9F07F529090BA900CDC598 /* ViewModifierTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -377,7 +389,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -432,7 +444,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -459,7 +471,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -494,7 +506,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

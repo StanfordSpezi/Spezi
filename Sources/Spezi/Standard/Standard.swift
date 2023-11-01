@@ -8,5 +8,5 @@
 
 
 // note: detailed documentation is provided as an article extension in the DocC bundle
-/// Defines the key component that orchestrates the data flow in the application by meeting requirements defined by components.
-public protocol Standard: Actor, Component { }
+/// Defines the key module that orchestrates the data flow in the application by meeting requirements defined by modules.
+public protocol Standard: Actor, Module { }

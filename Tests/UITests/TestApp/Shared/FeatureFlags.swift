@@ -6,9 +6,11 @@
 // SPDX-License-Identifier: MIT
 //
 
+import Foundation
+
 
 /// A collection of feature flags for the Spezi Test App app.
 enum FeatureFlags {
     /// Run the lifecycleTests
-    static let lifecycleTests = CommandLine.arguments.contains("--lifecycleTests")
+    static let lifecycleTests = ProcessInfo.processInfo.arguments.contains("--lifecycleTests")
 }

@@ -7,15 +7,15 @@
 //
 
 
-/// Defines the ``Standard`` and ``Component``s that are used in a Spezi project.
+/// Defines the ``Standard`` and ``Module``s that are used in a Spezi project.
 ///
-/// Ensure that your standard conforms to all protocols enforced by the ``Component``s. If your ``Component``s require protocol conformances
+/// Ensure that your standard conforms to all protocols enforced by the ``Module``s. If your ``Module``s require protocol conformances
 /// you must add them to your custom type conforming to ``Standard`` and passed to the initializer or extend a prebuild standard.
 ///
-/// Use ``Configuration/init(_:)`` to use default empty standard instance only conforming to ``Standard`` if you do not use any ``Component`` requiring custom protocol conformances.
+/// Use ``Configuration/init(_:)`` to use default empty standard instance only conforming to ``Standard`` if you do not use any ``Module`` requiring custom protocol conformances.
 ///
 ///
-/// The following example demonstrates the usage of an `ExampleStandard` standard and reusable Spezi modules, including the `HealthKit` and `QuestionnaireDataSource` components:
+/// The following example demonstrates the usage of an `ExampleStandard` standard and reusable Spezi modules, including the `HealthKit` and `QuestionnaireDataSource` modules:
 /// ```swift
 /// import Spezi
 /// import HealthKit
@@ -41,43 +41,44 @@
 /// }
 /// ```
 ///
-/// The ``Component`` documentation provides more information about the structure of components.
+/// The ``Module`` documentation provides more information about the structure of modules.
 ///
 /// ## Topics
 ///
 /// ### Result Builder
-/// - ``ComponentBuilder``
-/// - ``ComponentCollection``
+/// - ``ModuleBuilder``
+/// - ``ModuleCollection``
 public struct Configuration {
     let spezi: AnySpezi
     
 
-    /// A ``Configuration`` defines the ``Standard`` and ``Component``s that are used in a Spezi project.
+    /// A ``Configuration`` defines the ``Standard`` and ``Module``s that are used in a Spezi project.
     ///
-    /// Ensure that your standard conforms to all protocols enforced by the ``Component``s. If your ``Component``s require protocol conformances
+    /// Ensure that your standard conforms to all protocols enforced by the ``Module``s. If your ``Module``s require protocol conformances
     /// you must add them to your custom type conforming to ``Standard`` and passed to the initializer or extend a prebuild standard.
     ///
-    /// Use ``Configuration/init(_:)`` to use default empty standard instance only conforming to ``Standard`` if you do not use any ``Component`` requiring custom protocol conformances.
+    /// Use ``Configuration/init(_:)`` to use default empty standard instance only conforming to ``Standard`` if you do not use any ``Module`` requiring custom protocol conformances.
     /// - Parameters:
-    ///   - components: The ``Component``s used in the Spezi project. You can define the ``Component``s using the ``ComponentBuilder`` result builder.
+    ///   - standard: The global ``Standard`` used throughout the app to manage global data flow.
+    ///   - modules: The ``Module``s used in the Spezi project. You can define the ``Module``s using the ``ModuleBuilder`` result builder.
     public init<S: Standard>(
         standard: S,
-        @ComponentBuilder _ components: () -> ComponentCollection
+        @ModuleBuilder _ modules: () -> ModuleCollection
     ) {
-        self.spezi = Spezi<S>(standard: standard, components: components().elements)
+        self.spezi = Spezi<S>(standard: standard, modules: modules().elements)
     }
     
     
-    /// A ``Configuration`` defines the ``Standard`` and ``Component``s that are used in a Spezi project.
+    /// A ``Configuration`` defines the ``Standard`` and ``Module``s that are used in a Spezi project.
     ///
     /// This initializer creates a default empty standard instance only conforming to ``Standard``.
-    /// Use ``Configuration/init(standard:_:)`` to provide a custom ``Standard`` instance if you use any ``Component`` requiring custom protocol conformances.
+    /// Use ``Configuration/init(standard:_:)`` to provide a custom ``Standard`` instance if you use any ``Module`` requiring custom protocol conformances.
     ///
     /// - Parameters:
-    ///   - components: The ``Component``s used in the Spezi project. You can define the ``Component``s using the ``ComponentBuilder`` result builder.
+    ///   - modules: The ``Module``s used in the Spezi project. You can define the ``Module``s using the ``ModuleBuilder`` result builder.
     public init(
-        @ComponentBuilder _ components: () -> (ComponentCollection)
+        @ModuleBuilder _ modules: () -> ModuleCollection
     ) {
-        self.spezi = Spezi<DefaultStandard>(standard: DefaultStandard(), components: components().elements)
+        self.spezi = Spezi<DefaultStandard>(standard: DefaultStandard(), modules: modules().elements)
     }
 }

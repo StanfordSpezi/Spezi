@@ -7,10 +7,10 @@
 //
 
 
-/// The ``DependencyDescriptor`` protocol is the base for any property wrapper used to describe ``Component`` dependencies.
+/// The ``DependencyDescriptor`` protocol is the base for any property wrapper used to describe ``Module`` dependencies.
 /// It is generally not needed to implement types conforming to ``DependencyDescriptor`` when using Spezi.
 ///
-/// Refer to the ``Component/Dependency`` and ``Component/DynamicDependencies`` property wrappers for more information.
+/// Refer to the ``Module/Dependency`` and ``Module/DynamicDependencies`` property wrappers for more information.
 public protocol DependencyDescriptor {
     /// Used by the ``DependencyManager`` to gather dependency information.
     func gatherDependency(dependencyManager: DependencyManager)
@@ -19,7 +19,7 @@ public protocol DependencyDescriptor {
 }
 
 
-extension Component {
+extension Module {
     var dependencyDescriptors: [any DependencyDescriptor] {
         retrieveProperties(ofType: (any DependencyDescriptor).self)
     }

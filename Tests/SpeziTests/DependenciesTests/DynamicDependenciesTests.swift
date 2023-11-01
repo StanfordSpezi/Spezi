@@ -24,32 +24,32 @@ private enum DynamicDependenciesTestCase: CaseIterable {
         switch self {
         case .twoDependencies:
             return _DynamicDependenciesPropertyWrapper(
-                componentProperties: [
-                    _DependencyPropertyWrapper(wrappedValue: TestComponent2()),
-                    _DependencyPropertyWrapper(wrappedValue: TestComponent3())
+                moduleProperties: [
+                    _DependencyPropertyWrapper(wrappedValue: TestModule2()),
+                    _DependencyPropertyWrapper(wrappedValue: TestModule3())
                 ]
             )
         case .duplicatedDependencies:
             return _DynamicDependenciesPropertyWrapper(
-                componentProperties: [
-                    _DependencyPropertyWrapper(wrappedValue: TestComponent2()),
-                    _DependencyPropertyWrapper(wrappedValue: TestComponent3()),
-                    _DependencyPropertyWrapper(wrappedValue: TestComponent3())
+                moduleProperties: [
+                    _DependencyPropertyWrapper(wrappedValue: TestModule2()),
+                    _DependencyPropertyWrapper(wrappedValue: TestModule3()),
+                    _DependencyPropertyWrapper(wrappedValue: TestModule3())
                 ]
             )
         case .noDependencies:
-            return _DynamicDependenciesPropertyWrapper(componentProperties: [])
+            return _DynamicDependenciesPropertyWrapper(moduleProperties: [])
         case .dependencyCircle:
             return _DynamicDependenciesPropertyWrapper(
-                componentProperties: [
-                    _DependencyPropertyWrapper(wrappedValue: TestComponentCircle1()),
-                    _DependencyPropertyWrapper(wrappedValue: TestComponentCircle2())
+                moduleProperties: [
+                    _DependencyPropertyWrapper(wrappedValue: TestModuleCircle1()),
+                    _DependencyPropertyWrapper(wrappedValue: TestModuleCircle2())
                 ]
             )
         }
     }
     
-    var expectedNumberOfComponents: Int {
+    var expectedNumberOfModules: Int {
         switch self {
         case .twoDependencies, .duplicatedDependencies:
             return 3
@@ -62,28 +62,28 @@ private enum DynamicDependenciesTestCase: CaseIterable {
     }
     
     
-    func evaluateExpectations(components: [any Component]) throws {
+    func evaluateExpectations(modules: [any Module]) throws {
         switch self {
         case .twoDependencies:
-            XCTAssertEqual(components.count, 2)
-            let testComponent2 = try components.componentOfType(TestComponent2.self)
-            let testComponent3 = try components.componentOfType(TestComponent3.self)
-            XCTAssert(testComponent2 !== testComponent3)
+            XCTAssertEqual(modules.count, 2)
+            let testModule2 = try modules.moduleOfType(TestModule2.self)
+            let testModule3 = try modules.moduleOfType(TestModule3.self)
+            XCTAssert(testModule2 !== testModule3)
         case .duplicatedDependencies:
-            XCTAssertEqual(components.count, 3)
-            let testComponent2 = try components.componentOfType(TestComponent2.self)
-            let testComponent3 = try components.componentOfType(TestComponent3.self, expectedNumber: 2)
-            XCTAssert(testComponent2 !== testComponent3)
+            XCTAssertEqual(modules.count, 3)
+            let testModule2 = try modules.moduleOfType(TestModule2.self)
+            let testModule3 = try modules.moduleOfType(TestModule3.self, expectedNumber: 2)
+            XCTAssert(testModule2 !== testModule3)
         case .noDependencies:
-            XCTAssertEqual(components.count, 0)
+            XCTAssertEqual(modules.count, 0)
         case .dependencyCircle:
             XCTFail("Should never be called!")
         }
     }
 }
 
-private final class TestComponent1: Component {
-    @DynamicDependencies var dynamicDependencies: [any Component]
+private final class TestModule1: Module {
+    @DynamicDependencies var dynamicDependencies: [any Module]
     let testCase: DynamicDependenciesTestCase
     
     
@@ -94,41 +94,41 @@ private final class TestComponent1: Component {
     
     
     func evaluateExpectations() throws {
-        try testCase.evaluateExpectations(components: dynamicDependencies)
+        try testCase.evaluateExpectations(modules: dynamicDependencies)
     }
 }
 
-private final class TestComponent2: Component {}
+private final class TestModule2: Module {}
 
-private final class TestComponent3: Component {}
+private final class TestModule3: Module {}
 
-private final class TestComponentCircle1: Component {
-    @Dependency var testComponentCircle2 = TestComponentCircle2()
+private final class TestModuleCircle1: Module {
+    @Dependency var testModuleCircle2 = TestModuleCircle2()
 }
 
-private final class TestComponentCircle2: Component {
-    @Dependency var testComponentCircle1 = TestComponentCircle1()
+private final class TestModuleCircle2: Module {
+    @Dependency var testModuleCircle1 = TestModuleCircle1()
 }
 
 
 final class DynamicDependenciesTests: XCTestCase {
     func testDynamicDependencies() throws {
         for dynamicDependenciesTestCase in DynamicDependenciesTestCase.allCases {
-            let components: [any Component] = [
-                TestComponent1(dynamicDependenciesTestCase)
+            let modules: [any Module] = [
+                TestModule1(dynamicDependenciesTestCase)
             ]
             
             guard dynamicDependenciesTestCase != .dependencyCircle else {
                 try XCTRuntimePrecondition {
-                    _ = DependencyManager.resolve(components)
+                    _ = DependencyManager.resolve(modules)
                 }
                 return
             }
             
-            let sortedComponents = DependencyManager.resolve(components)
-            XCTAssertEqual(sortedComponents.count, dynamicDependenciesTestCase.expectedNumberOfComponents)
+            let sortedModules = DependencyManager.resolve(modules)
+            XCTAssertEqual(sortedModules.count, dynamicDependenciesTestCase.expectedNumberOfModules)
             
-            try sortedComponents.componentOfType(TestComponent1.self).evaluateExpectations()
+            try sortedModules.moduleOfType(TestModule1.self).evaluateExpectations()
         }
     }
 }

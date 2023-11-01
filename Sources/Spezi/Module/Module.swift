@@ -6,16 +6,20 @@
 // SPDX-License-Identifier: MIT
 //
 
-import SwiftUI
+
+// note: detailed documentation is provided as an article extension in the DocC bundle
+/// A `Module` defines a software subsystem that can be configured as part of the ``SpeziAppDelegate/configuration``.
+public protocol Module: AnyObject, KnowledgeSource<SpeziAnchor> {
+    /// The ``Module/configure()-5pa83`` method is called on the initialization of the Spezi instance to perform a lightweight configuration of the module.
+    ///
+    /// Both ``Module/Dependency`` and ``Module/DynamicDependencies`` are available and configured at this point.
+    /// It is advised that longer setup tasks are done in an asynchronous task and started during the call of the configure method.
+    func configure()
+}
 
 
-/// A sophisticated ``Component`` with several built-in functionality.
-///
-/// A ``Module`` is a ``Component`` that also includes
-/// - Conformance to a ``LifecycleHandler``
-/// - Automatic injection in the SwiftUI view hierarchy (``ObservableObjectProvider`` & `ObservableObject`)
-///
-/// All functionality provided to ``Component``s is also available to ``Module``s including dependencies using the @``Component/Dependency`` property wrapper.
-///
-/// Please take a look at the ``Component`` documentation for more information.
-public typealias Module = Component & LifecycleHandler & ObservableObjectProvider & ObservableObject
+extension Module {
+    // A documentation for this method exists in the `Module` type which SwiftLint doesn't recognize.
+    // swiftlint:disable:next missing_docs
+    public func configure() {}
+}

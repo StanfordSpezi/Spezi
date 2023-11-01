@@ -16,13 +16,12 @@ Defines the requirements for Spezi modules, including hints and examples on stru
 The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in [RFC 2119](https://www.ietf.org/rfc/rfc2119.txt).
 
 The following guide defines the following terminology:
-- **Module**: A module is the fundamental building block of the Spezi ecosystem. A module can range from standalone functionality using frameworks used in Spezi, such as Swift, SwiftUI, or interoperability standards, to being deeply embedded in Spezi and providing complex functionality, including user interfaces and data management. The simplest way to be integrated into Spezi is the Swift ``Component`` protocol or by providing more sophisticated functionality using the ``Module`` protocol. A module MAY use the ``Component`` or ``Module`` protocol but is not REQUIRED to do so. Some modules MAY provide functionality independent of the Spezi integration mechanisms. We generally refer to Spezi as a _modularized_ ecosystem.
-- **Component**: The term component can describe the technical functionality enabled by the ``Component`` protocol and is mostly used for technical definitions and discussions, while _module_ is considered an outwards facing and marketing-friendly term.
-- **Swift Package**: Each software component is embedded in a Swift Package. A Swift Package can include multiple Swift Package targets, components, and modules.
+- **Module**: A module is the fundamental building block of the Spezi ecosystem. A module can range from standalone functionality using frameworks used in Spezi, such as Swift, SwiftUI, or interoperability standards, to being deeply embedded in Spezi and providing complex functionality, including user interfaces and data management. The simplest way to be integrated into Spezi is the Swift ``Module`` protocol. A module MAY use the ``Module`` protocol but is not REQUIRED to do so. Some modules MAY provide functionality independent of the Spezi integration mechanisms. We generally refer to Spezi as a _modularized_ ecosystem.
+- **Swift Package**: Each software subsystem or module is embedded in a Swift Package. A Swift Package can include multiple Swift Package targets and modules.
 - **Repository**: A repository is a collection of versioned files embedded in a version control system. The Spezi context contains a single Swift Package and other configuration files, such as a continuous integration (CI) setup. Repositories are typically hosted on GitHub but can also be hosted on other platforms.
 
 To be featured by the Spezi team, a module, as well as the surrounding Swift Package and repository, MUST conform to this guide.
-The definitive endorsement or feature of a Spezi module is determined by the Spezi core team.
+The Spezi core team determines the definitive endorsement or feature of a Spezi module.
 A module SHOULD be submitted for consideration by sharing it in the [Show & Tell section of the Stanford Spezi Discussions forum](https://github.com/orgs/StanfordSpezi/discussions/categories/show-and-tell).
 
 The module, as well as the surrounding Swift Package and repository, MUST conform to this guide within two months after changes have been published to be considered in conformance with this guide.
@@ -33,8 +32,8 @@ Check out the [Swift Package Template](https://github.com/StanfordBDHG/SwiftPack
 ## Repository Setup
 
 A repository MUST be in full conformance to the GitHub Community Standards, checked by the insights tab of your repository, e.g., the [Spezi Community Standards Insights](https://github.com/StanfordSpezi/Spezi/community).
-Feel free to link and use the Spezi community guidelines and other community standards of Spezi. P
-lease ensure you reference and credit the Spezi team if you reuse any setup.
+Feel free to link and use the Spezi community guidelines and other community standards of Spezi.
+Please ensure you reference and credit the Spezi team if you reuse any setup.
 You can learn more about open-source best practices at the [Open Source Guides page](https://opensource.guide).
 
 The repository MUST follow the [GitHub Flow](https://docs.github.com/en/get-started/quickstart/github-flow) with automated safeguards before merging the code as defined in the sections below.

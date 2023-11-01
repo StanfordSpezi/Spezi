@@ -18,7 +18,7 @@ import SwiftUI
 /// - ``LifecycleHandler/willFinishLaunchingWithOptions(_:launchOptions:)-8jatp``
 /// - ``LifecycleHandler/applicationWillTerminate(_:)-35fxv``
 ///
-/// All methods supported by the component capability are listed blow.
+/// All methods supported by the module capability are listed blow.
 public protocol LifecycleHandler {
     /// Replicates  the `application(_: UIApplication, willFinishLaunchingWithOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool`
     /// functionality of the `UIApplicationDelegate`.

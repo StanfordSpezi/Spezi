@@ -18,7 +18,7 @@ private protocol UnfulfilledExampleConstraint: Standard {
 
 
 final class StandardUnfulfilledConstraintTests: XCTestCase {
-    final class StandardUCTestComponent: Component {
+    final class StandardUCTestModule: Module {
         @StandardActor private var standard: any UnfulfilledExampleConstraint
         
         
@@ -32,7 +32,7 @@ final class StandardUnfulfilledConstraintTests: XCTestCase {
     class StandardUCTestApplicationDelegate: SpeziAppDelegate {
         override var configuration: Configuration {
             Configuration(standard: MockStandard()) {
-                StandardUCTestComponent()
+                StandardUCTestModule()
             }
         }
     }

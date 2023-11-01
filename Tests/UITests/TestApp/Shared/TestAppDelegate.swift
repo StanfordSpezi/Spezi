@@ -15,10 +15,10 @@ class TestAppDelegate: SpeziAppDelegate {
     override var configuration: Configuration {
         Configuration {
             if FeatureFlags.lifecycleTests {
-                LifecycleHandlerTestComponent()
+                LifecycleHandlerTestModule()
             }
-            MultipleObservableObjectsTestsComponent()
-            ObservableComponentTestsComponent(message: "Passed")
+            ModuleWithModifier()
+            ModuleWithModel()
         }
     }
 }
