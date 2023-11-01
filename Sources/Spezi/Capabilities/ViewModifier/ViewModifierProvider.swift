@@ -8,9 +8,13 @@
 
 import SwiftUI
 
-enum ModifierPlacement: Int {
+enum ModifierPlacement: Int, Comparable {
     case regular
     case outermost
+
+    static func < (lhs: ModifierPlacement, rhs: ModifierPlacement) -> Bool {
+        lhs == .regular && rhs == .outermost
+    }
 }
 
 
@@ -41,7 +45,7 @@ extension Module {
     var viewModifiers: [any SwiftUI.ViewModifier] {
         retrieveProperties(ofType: ViewModifierProvider.self)
             .sorted { lhs, rhs in
-                lhs.placement.rawValue < rhs.placement.rawValue
+                lhs.placement < rhs.placement
             }
             .map { provider in
                 provider.viewModifier
