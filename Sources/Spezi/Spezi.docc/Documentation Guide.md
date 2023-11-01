@@ -114,7 +114,7 @@ The Header MUST display the most essential documentation for a Spezi Module, inc
 - One-line description of the module.
 
 It is RECOMMENDED to include a:
-- DOI for scientific citations, e.g., using [Zenodo.org](zenodo.org)
+- DOI for scientific citations, e.g., using [Zenodo.org](https://zenodo.org)
 - Badges to the [Swift Package Index](https://swiftpackageindex.com) for Swift package-based Spezi modules to indicate the supported Swift version and operating systems.
 
 
