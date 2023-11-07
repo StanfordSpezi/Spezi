@@ -6,6 +6,8 @@
 // SPDX-License-Identifier: MIT
 //
 
+import SpeziFoundation
+
 
 /// An adopter of this protocol is a property of a ``Module`` that provides mechanisms to communicate
 /// data with other ``Module``s.

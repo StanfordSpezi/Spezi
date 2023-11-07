@@ -55,7 +55,7 @@ class ExampleModule: Module {
 
 ``Module``s can easily communicate with each other using the ``Module/Provide`` and ``Module/Collect`` property wrappers.
 
-On configuration, the value of each ``Module/Collect`` property will be collected and stored in the ``SpeziStorage``. Therefore,
+On configuration, the value of each ``Module/Collect`` property will be collected. Therefore,
 all properties must have been property initialized after the initializer of the ``Module`` has been called.
 Before the invocation of ``Module/configure()-5pa83``, the data of all ``Module/Provide`` properties will be made available.
 Refer to the documentation of the property wrappers for a more detailed overview of the available capabilities.

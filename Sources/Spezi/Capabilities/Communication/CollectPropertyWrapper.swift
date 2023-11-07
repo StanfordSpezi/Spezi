@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
+import SpeziFoundation
 import XCTRuntimeAssertions
 
 
@@ -38,8 +39,7 @@ public class _CollectPropertyWrapper<Value> {
 
 
 extension Module {
-    /// The `@Collect` property wrapper can be used to retrieve data communicated by other ``Module``s by
-    /// retrieving them from the central ``SpeziStorage`` repository.
+    /// The `@Collect` property wrapper can be used to retrieve data communicated by other ``Module``s.
     ///
     /// ### Retrieving Data
     /// ``Module/Collect`` retrieves data provided through the ``Module/Provide`` property wrapper.

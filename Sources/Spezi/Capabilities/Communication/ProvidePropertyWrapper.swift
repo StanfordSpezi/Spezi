@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
+import SpeziFoundation
 import XCTRuntimeAssertions
 
 
@@ -53,8 +54,7 @@ public class _ProvidePropertyWrapper<Value> {
 
 
 extension Module {
-    /// The `@Provide` property wrapper can be used to communicate data with other ``Module``s by inserting
-    /// them into the central ``SpeziStorage`` repository.
+    /// The `@Provide` property wrapper can be used to communicate data with other ``Module``s.
     ///
     /// ### Providing Data
     /// Data provided through ``Module/Provide`` can be retrieved through the ``Module/Collect`` property wrapper.

@@ -87,15 +87,4 @@ To simplify the creation of modules, a common set of functionalities typically u
 - ``Spezi/Spezi``
 - ``Standard``
 - ``Module``
-
-### Shared Repository
-
-- <doc:Shared-Repository>
-- ``SpeziAnchor``
-- ``SpeziStorage``
-
-### Utilities
-
-- ``AnyArray``
-- ``AnyOptional``
  

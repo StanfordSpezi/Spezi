@@ -6,6 +6,9 @@
 // SPDX-License-Identifier: MIT
 //
 
+import SpeziFoundation
+
 
 /// The ``RepositoryAnchor`` for the ``SpeziStorage``.
+@_documentation(visibility: internal)
 public struct SpeziAnchor: RepositoryAnchor {}

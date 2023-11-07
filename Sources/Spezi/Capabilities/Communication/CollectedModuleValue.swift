@@ -6,6 +6,9 @@
 // SPDX-License-Identifier: MIT
 //
 
+import SpeziFoundation
+
+
 /// Provides the ``KnowledgeSource`` for any value we store in the ``SpeziStorage`` that is
 /// provided or request from am ``Module``.
 ///

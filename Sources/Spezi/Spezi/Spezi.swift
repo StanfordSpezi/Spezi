@@ -8,12 +8,14 @@
 
 
 import os
+import SpeziFoundation
 import SwiftUI
 
 
 /// A ``SharedRepository`` implementation that is anchored to ``SpeziAnchor``.
 ///
 /// This represents the central ``Spezi`` storage module.
+@_documentation(visibility: internal)
 public typealias SpeziStorage = HeapRepository<SpeziAnchor>
 
 /// Open-source framework for rapid development of modern, interoperable digital health applications.
@@ -57,7 +59,7 @@ public typealias SpeziStorage = HeapRepository<SpeziAnchor>
 /// Refer to the ``Configuration`` documentation to learn more about the Spezi configuration.
 public actor Spezi<S: Standard>: AnySpezi {
     /// A shared repository to store any ``KnowledgeSource``s restricted to the ``SpeziAnchor``.
-    public let storage: SpeziStorage
+    let storage: SpeziStorage
     /// Logger used to log events in the ``Spezi/Spezi`` instance.
     public let logger: Logger
     /// The ``Standard`` used in the ``Spezi/Spezi`` instance.
