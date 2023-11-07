@@ -16,16 +16,17 @@ extension Module {
 
 
 extension Module {
-    /// Defines access to the shared ``Standard`` actor.
+    /// Defines access to the shared `Standard` actor.
     ///
-    /// A ``Module`` can define the injection of a ``Standard`` using the @``Module/StandardActor`` property wrapper:
+    /// A ``Module`` can define the injection of a ``Standard`` using the @``Module/StandardActor`` property wrapper.
+    ///
+    /// - Note: You can access `@StandardActor` once your ``Module/configure()-5pa83`` method is called (e.g., it must not be used in the `init`)
+    ///     and can continue to access the Standard actor in methods like ``LifecycleHandler/willFinishLaunchingWithOptions(_:launchOptions:)-8jatp``.
+    ///
     /// ```swift
     /// class ExampleModule: Module {
     ///     @StandardActor var standard: ExampleStandard
     /// }
     /// ```
-    ///
-    /// You can access the wrapped value of the ``Standard`` after the ``Module`` is configured using ``Module/configure()-5pa83``,
-    /// e.g. in the ``LifecycleHandler/willFinishLaunchingWithOptions(_:launchOptions:)-8jatp`` function.
     public typealias StandardActor = _StandardPropertyWrapper
 }
