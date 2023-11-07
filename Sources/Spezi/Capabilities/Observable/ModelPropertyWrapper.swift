@@ -15,7 +15,7 @@ public class _ModelPropertyWrapper<Model: Observable & AnyObject> {
     // swiftlint:disable:previous type_name
     // We want the type to be hidden from autocompletion and documentation generation
 
-    private var storedValue: Model
+    private var storedValue: Model?
     private var collected = false
 
 
@@ -23,7 +23,10 @@ public class _ModelPropertyWrapper<Model: Observable & AnyObject> {
     /// - Note: You cannot access the value once it was collected.
     public var wrappedValue: Model {
         get {
-            storedValue
+            guard let storedValue else {
+                preconditionFailure("@Model was accessed before it was initialized for the first time.")
+            }
+            return storedValue
         }
         set {
             precondition(!collected, "You cannot reassign a @Model property after it was already collected.")
@@ -31,6 +34,9 @@ public class _ModelPropertyWrapper<Model: Observable & AnyObject> {
         }
     }
 
+
+    /// Initialize a new `@Model` property wrappe
+    public init() {}
 
     /// Initialize a new `@Model` property wrapper.
     /// - Parameter wrappedValue: The initial value.
@@ -67,8 +73,14 @@ extension Module {
 
 
 extension _ModelPropertyWrapper: ViewModifierProvider {
-    var viewModifier: any ViewModifier {
+    var viewModifier: (any ViewModifier)? {
         collected = true
+
+        guard let storedValue else {
+            assertionFailure("@Model with type \(Model.self) was collected but no value was provided!")
+            return nil
+        }
+
         return ModelModifier(model: storedValue)
     }
 

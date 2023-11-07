@@ -15,7 +15,7 @@ public class _ModifierPropertyWrapper<Modifier: ViewModifier> {
     // swiftlint:disable:previous type_name
     // We want the type to be hidden from autocompletion and documentation generation
 
-    private var storedValue: Modifier
+    private var storedValue: Modifier?
     private var collected = false
 
 
@@ -23,7 +23,10 @@ public class _ModifierPropertyWrapper<Modifier: ViewModifier> {
     /// - Note: You cannot access the value once it was collected.
     public var wrappedValue: Modifier {
         get {
-            storedValue
+            guard let storedValue else {
+                preconditionFailure("@Modifier was accessed before it was initialized for the first time.")
+            }
+            return storedValue
         }
         set {
             precondition(!collected, "You cannot update a @Modifier property after it was already collected.")
@@ -31,6 +34,9 @@ public class _ModifierPropertyWrapper<Modifier: ViewModifier> {
         }
     }
 
+
+    /// Initialize a new `@Modifier` property wrapper.
+    public init() {}
 
     /// Initialize a new `@Modifier` property wrapper.
     /// - Parameter wrappedValue: The initial value.
@@ -69,8 +75,14 @@ extension Module {
 
 
 extension _ModifierPropertyWrapper: ViewModifierProvider {
-    var viewModifier: any ViewModifier {
+    var viewModifier: (any ViewModifier)? {
         collected = true
+
+        guard let storedValue else {
+            assertionFailure("@Modifier with type \(Modifier.self) was collected but no value was provided!")
+            return nil
+        }
+
         return storedValue
     }
 }

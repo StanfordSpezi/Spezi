@@ -95,6 +95,11 @@ public actor Spezi<S: Standard>: AnySpezi {
             module.storeModule(into: &storage)
 
             collectedModifiers.append(contentsOf: module.viewModifiers)
+
+            // If a module is @Observable, we automatically inject it view the `ModelModifier` into the environment.
+            if let observable = module as? EnvironmentAccessible {
+                collectedModifiers.append(observable.viewModifier)
+            }
         }
 
         self.storage = storage
