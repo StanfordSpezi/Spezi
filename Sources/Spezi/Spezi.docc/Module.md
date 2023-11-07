@@ -142,13 +142,11 @@ class ExampleModule: Module {
 - ``Module/Provide``
 - ``Module/Collect``
 
-### Managing Model state
+### Interaction with SwiftUI
 
 - ``Module/Model``
-
-### Modifying the View hierarchy
-
 - ``Module/Modifier``
+- ``EnvironmentAccessible``
 
 ### Lifecycle Handling
 

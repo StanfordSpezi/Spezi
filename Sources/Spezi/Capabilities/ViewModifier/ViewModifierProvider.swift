@@ -22,7 +22,9 @@ enum ModifierPlacement: Int, Comparable {
 /// [`ViewModifier`](https://developer.apple.com/documentation/swiftui/viewmodifier) to be injected into the global view hierarchy.
 protocol ViewModifierProvider {
     /// The view modifier instance that should be injected into the SwiftUI view hierarchy.
-    var viewModifier: any ViewModifier { get }
+    ///
+    /// Does nothing if `nil` is provided.
+    var viewModifier: (any ViewModifier)? { get }
 
     /// Defines the placement order of this view modifier.
     ///
@@ -47,7 +49,7 @@ extension Module {
             .sorted { lhs, rhs in
                 lhs.placement < rhs.placement
             }
-            .map { provider in
+            .compactMap { provider in
                 provider.viewModifier
             }
     }

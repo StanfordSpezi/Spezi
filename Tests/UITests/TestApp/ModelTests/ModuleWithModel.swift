@@ -27,17 +27,23 @@ class MyModel2 {
 private struct MyModifier: ViewModifier {
     @Environment(MyModel2.self)
     var model
+    @Environment(ModuleWithModel.self)
+    var module
 
     func body(content: Content) -> some View {
         content
-            .environment(\.customKey, model.message == "Hello World")
+            .environment(\.customKey, model.message == "Hello World" && module.message == "MODEL")
     }
 }
 
 
-class ModuleWithModel: Module {
+class ModuleWithModel: Module, EnvironmentAccessible {
     @Model var model = MyModel2(message: "Hello World")
-    @Modifier fileprivate var modifier = MyModifier() // ensure reordering happens, ViewModifier must be able to access the model from environment
+
+    // ensure reordering happens, ViewModifier must be able to access the model from environment
+    @Modifier fileprivate var modifier = MyModifier()
+
+    let message: String = "MODEL"
 }
 
 
