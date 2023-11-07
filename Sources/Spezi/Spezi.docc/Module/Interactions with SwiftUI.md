@@ -2,6 +2,16 @@
 
 Interact with the SwiftUI view hierarchy and its environment.
 
+<!--
+
+This source file is part of the Stanford Spezi open-source project
+
+SPDX-FileCopyrightText: 2023 Stanford University and the project authors (see CONTRIBUTORS.md)
+
+SPDX-License-Identifier: MIT
+
+-->
+
 ## Overview
 
 A `Module` has several ways of interacting with the SwiftUI view hierarchy and its environment.

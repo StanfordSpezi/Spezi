@@ -1,6 +1,16 @@
 # Module Communication
 
-<!--@START_MENU_TOKEN@-->Summary<!--@END_MENU_TOKEN@-->
+Establish data flow between `Module`s without establishing a dependency hierarchy.  
+
+<!--
+
+This source file is part of the Stanford Spezi open-source project
+
+SPDX-FileCopyrightText: 2023 Stanford University and the project authors (see CONTRIBUTORS.md)
+
+SPDX-License-Identifier: MIT
+
+-->
 
 ## Overview
 
