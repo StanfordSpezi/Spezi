@@ -23,8 +23,8 @@ all properties must have been property initialized after the initializer of the 
 Before the invocation of ``Module/configure()-5pa83``, the data of all ``Module/Provide`` properties will be made available.
 Refer to the documentation of the property wrappers for a more detailed overview of the available capabilities.
 
-> Important: Accessing `@Provide` properties within the ``Module/configure()-5pa83`` method or accessing `@Collect` properties before
-``Module/configure()-5pa83``, will result in a runtime error. 
+> Important: Values must be written to `@Provide` within the initializer and cannot be changed afterwards. `@Collect` properties
+    may only be accessed once the ``Module/configure()-5pa83`` method is getting called. Failure to comply will result in a runtime crash. 
 
 Below is a simple example of passing data between ``Module``s.
 
@@ -34,14 +34,18 @@ class ModuleA: Module {
 }
 
 class ModuleB: Module {
-    @Provide var someGreeting = ["Hola", "Hallo"]
+    @Provide var someGreeting: [String]
+
+    init() {
+        someGreeting = = ["Hola", "Hallo"]
+    }
 }
 
 
 class ModuleC: Module {
     @Collect var allGreetings: [String]
 
-    func collect() {
+    func configure() {
         print("All the greetings we received: \(allGreetings)") // prints "Hello", "Hola", "Hallo" in any order
     }
 }
