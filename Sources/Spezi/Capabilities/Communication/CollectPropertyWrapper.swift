@@ -65,7 +65,7 @@ extension Module {
 }
 
 
-extension _CollectPropertyWrapper: _StorageValueCollector {
+extension _CollectPropertyWrapper: StorageValueCollector {
     public func retrieve<Repository: SharedRepository<SpeziAnchor>>(from repository: Repository) {
         injectedValues = repository[CollectedModuleValue<Value>.self] ?? []
     }

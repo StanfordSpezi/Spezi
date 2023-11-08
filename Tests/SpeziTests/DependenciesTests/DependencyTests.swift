@@ -50,6 +50,11 @@ private final class TestModuleItself: Module {
 }
 
 
+private final class OptionalModuleDependency: Module {
+    @Dependency var testModule3: TestModule3?
+}
+
+
 final class DependencyTests: XCTestCase {
     func testModuleDependencyChain() throws {
         let modules: [any Module] = [
@@ -182,5 +187,33 @@ final class DependencyTests: XCTestCase {
         try XCTRuntimePrecondition {
             _ = DependencyManager.resolve(modules)
         }
+    }
+
+    func testOptionalDependenceNonPresent() throws {
+        let nonPresent: [any Module] = [
+            OptionalModuleDependency()
+        ]
+
+        let modules = DependencyManager.resolve(nonPresent)
+
+        XCTAssertEqual(modules.count, 1)
+
+        let module = try XCTUnwrap(modules[0] as? OptionalModuleDependency)
+        XCTAssertNil(module.testModule3)
+    }
+
+    func testOptionalDependencePresent() throws {
+        let nonPresent: [any Module] = [
+            OptionalModuleDependency(),
+            TestModule3()
+        ]
+
+        let modules = DependencyManager.resolve(nonPresent)
+
+        XCTAssertEqual(modules.count, 2)
+
+        let module3 = try XCTUnwrap(modules[0] as? TestModule3)
+        let module = try XCTUnwrap(modules[1] as? OptionalModuleDependency)
+        XCTAssert(module.testModule3 === module3)
     }
 }
