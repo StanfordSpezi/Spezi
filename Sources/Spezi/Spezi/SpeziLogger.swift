@@ -7,6 +7,8 @@
 //
 
 import os
+import SpeziFoundation
+
 
 struct SpeziLogger: ComputedKnowledgeSource {
     typealias Anchor = SpeziAnchor

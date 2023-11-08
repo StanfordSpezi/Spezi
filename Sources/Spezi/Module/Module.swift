@@ -6,6 +6,8 @@
 // SPDX-License-Identifier: MIT
 //
 
+import SpeziFoundation
+
 
 // note: detailed documentation is provided as an article extension in the DocC bundle
 /// A `Module` defines a software subsystem that can be configured as part of the ``SpeziAppDelegate/configuration``.

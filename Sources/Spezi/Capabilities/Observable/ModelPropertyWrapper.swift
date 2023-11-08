@@ -35,7 +35,7 @@ public class _ModelPropertyWrapper<Model: Observable & AnyObject> {
     }
 
 
-    /// Initialize a new `@Model` property wrappe
+    /// Initialize a new `@Model` property wrapper.
     public init() {}
 
     /// Initialize a new `@Model` property wrapper.
@@ -51,6 +51,9 @@ extension Module {
     ///
     /// The `@Model` property wrapper can be used inside your `Module` to place an
     /// observable model type into the global SwiftUI view environment.
+    ///
+    /// - Note: The contents of the `@Model` property wrapper are collected after the ``Module/configure()-5pa83`` call returns.
+    ///     After collection, the model instance passed to `@Model` cannot be changed again.
     ///
     /// Below is a short code example:
     /// ```swift

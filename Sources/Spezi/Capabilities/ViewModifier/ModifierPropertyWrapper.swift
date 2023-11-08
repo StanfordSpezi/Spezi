@@ -52,6 +52,9 @@ extension Module {
     /// The `@Modifier` property wrapper can be used inside your `Module` to modify
     /// the global SwiftUI view hierarchy using the provided `ViewModifier` implementation.
     ///
+    /// - Note: The contents of the `@Modifier` property wrapper are collected after the ``Module/configure()-5pa83`` call returns.
+    ///     After collection, the modifier to `@Modifier` cannot be changed again.
+    ///
     /// Below is a short code example that demonstrates the usage of a ViewModifier to set a global
     /// environment key.
     ///

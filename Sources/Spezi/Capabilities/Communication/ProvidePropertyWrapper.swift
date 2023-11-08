@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
+import SpeziFoundation
 import XCTRuntimeAssertions
 
 
@@ -53,16 +54,17 @@ public class _ProvidePropertyWrapper<Value> {
 
 
 extension Module {
-    /// The `@Provide` property wrapper can be used to communicate data with other ``Module``s by inserting
-    /// them into the central ``SpeziStorage`` repository.
+    /// The `@Provide` property wrapper can be used to communicate data with other `Module`s.
     ///
-    /// ### Providing Data
-    /// Data provided through ``Module/Provide`` can be retrieved through the ``Module/Collect`` property wrapper.
-    ///
-    /// - Note: that the declaring type has to match what is requested by the other side (e.g., a common protocol implementation)
+    /// The `@Provide` modifier can be used a establish a data flow between ``Module``s without requiring a dependency relationship.
     ///
     /// - Important: All `@Provide` properties must be initialized within the initializer and cannot be modified within the
     ///     ``Module/configure()-5pa83`` method.
+    ///
+    /// ### Providing Data
+    /// Data provided through `@Provide` can be retrieved through the ``Module/Collect`` property wrapper.
+    ///
+    /// - Note: that the declaring type has to match what is requested by the other side (e.g., a common protocol implementation)
     ///
     /// Below is an example where the `ExampleModule` provides a `Numeric` type to some other modules.
     /// ```swift
