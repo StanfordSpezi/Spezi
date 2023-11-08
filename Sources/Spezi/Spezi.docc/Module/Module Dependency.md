@@ -14,7 +14,7 @@ SPDX-License-Identifier: MIT
 
 ## Overview
 
-``Module``s can define dependencies using the @``Module/Dependency`` property wrapper.
+``Module``s can define dependencies using the @`Dependency` property wrapper.
 
 This establishes a strict order in which the ``Module/configure()-5pa83`` methods of each ``Module`` are called,
 to ensure functionality of a dependency is available at configuration.
@@ -27,7 +27,7 @@ class ExampleModule: Module {
 }
 ```
 
-> Note: When the number of dependencies is dynamic, you might want to look at the ``Module/DynamicDependencies`` property wrapper.
+> Note: Refer to the documentation of ``Module/Dependency`` if you need to dynamically compute your list of dependencies in the initializer.
 
 ### Default Initialization of Dependencies
 
@@ -57,11 +57,13 @@ class ExampleModule: Module {
 ### Declaring Dependencies
 
 - ``Module/Dependency``
-- ``Module/DynamicDependencies``
 
 ### Managing Dependencies
 
 - ``DefaultInitializable``
-- ``ModuleDependency``
 - ``DependencyManager``
-- ``DependencyDescriptor``
+
+### Building Dependencies
+
+- ``DependencyBuilder``
+- ``DependencyCollection``

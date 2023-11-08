@@ -16,14 +16,14 @@ public class DependencyManager {
     /// Collection of all modules with dependencies that are not yet processed.
     private var modulesWithDependencies: [any Module]
     /// Collection used to keep track of modules with dependencies in the recursive search.
-    private var recursiveSearch: [any Module] = []
-    
-    
+    private var searchStack: [any Module] = []
+
+
     /// A ``DependencyManager`` in Spezi is used to gather information about modules with dependencies.
     /// - Parameter module: The modules that should be resolved.
     init(_ module: [any Module]) {
-        sortedModules = module.filter { $0.dependencyDescriptors.isEmpty }
-        modulesWithDependencies = module.filter { !$0.dependencyDescriptors.isEmpty }
+        sortedModules = module.filter { $0.dependencyDeclarations.isEmpty }
+        modulesWithDependencies = module.filter { !$0.dependencyDeclarations.isEmpty }
     }
 
 
@@ -37,43 +37,42 @@ public class DependencyManager {
         }
 
         for module in sortedModules {
-            for dependency in module.dependencyDescriptors {
-                dependency.inject(dependencyManager: self)
+            for dependency in module.dependencyDeclarations {
+                dependency.inject(from: self)
             }
         }
     }
-    
-    /// Injects a dependency into a `_DependencyPropertyWrapper` that is resolved in the `sortedModules`.
-    /// - Parameters:
-    ///   - dependencyType: The type of the dependency that should be injected.
-    ///   - anyDependency: The ``ModuleDependency`` that the provided dependency should be injected into.
-    func inject<D: ModuleDependency>(
-        _ dependencyType: D.ModuleType.Type,
-        into anyDependency: D
-    ) {
-        guard let foundInSortedModuless = sortedModules.first(where: { type(of: $0) == D.ModuleType.self }) as? D.ModuleType else {
-            preconditionFailure("Could not find the injectable module in the `sortedModules`.")
+
+    /// Push a module on the search stack and resolve dependency information.
+    private func push(_ module: any Module) {
+        searchStack.append(module)
+        for dependency in module.dependencyDeclarations {
+            dependency.collect(into: self) // leads to calls to `require(_:defaultValue:)`
         }
-        
-        anyDependency.inject(dependency: foundInSortedModuless)
+        resolvedAllDependencies(module)
     }
-    
+
     /// Communicate a requirement to a `DependencyManager`
     /// - Parameters:
-    ///   - dependencyType: The type of the dependency that should be resolved.
+    ///   - dependency: The type of the dependency that should be resolved.
     ///   - defaultValue: A default instance of the dependency that is used when the `dependencyType` is not present in the `sortedModules` or `modulesWithDependencies`.
-    func require<M: Module>(_ dependencyType: M.Type, defaultValue: @autoclosure () -> M) {
+    func require<M: Module>(_ dependency: M.Type, defaultValue: (() -> M)?) {
         // 1. Return if the depending module is found in the `sortedModules` collection.
         if sortedModules.contains(where: { type(of: $0) == M.self }) {
             return
         }
         
         // 2. Search for the required module is found in the `dependingModules` collection.
-        // If not, use the default value calling the `defaultValue` autoclosure.
+        // If not, use the default value calling the `defaultValue` auto-closure.
         guard let foundInModulesWithDependencies = modulesWithDependencies.first(where: { type(of: $0) == M.self }) else {
+            guard let defaultValue else {
+                // optional dependency. The user didn't supply anything. So we can't deliver anything.
+                return
+            }
+
             let newModule = defaultValue()
             
-            guard !newModule.dependencyDescriptors.isEmpty else {
+            guard !newModule.dependencyDeclarations.isEmpty else {
                 sortedModules.append(newModule)
                 return
             }
@@ -85,14 +84,14 @@ public class DependencyManager {
         }
         
         // Detect circles in the `recursiveSearch` collection.
-        guard !recursiveSearch.contains(where: { type(of: $0) == M.self }) else {
-            let dependencyChain = recursiveSearch
+        guard !searchStack.contains(where: { type(of: $0) == M.self }) else {
+            let dependencyChain = searchStack
                 .map { String(describing: type(of: $0)) }
                 .joined(separator: ", ")
             
             // The last element must exist as we entered the statement using a successful `contains` statement.
             // There is not chance to recover here: If there is a crash here, we would fail in the precondition statement in the next line anyways
-            let lastElement = recursiveSearch.last! // swiftlint:disable:this force_unwrapping
+            let lastElement = searchStack.last! // swiftlint:disable:this force_unwrapping
             preconditionFailure(
                 """
                 The `DependencyManager` has detected a dependency cycle of your Spezi modules.
@@ -106,12 +105,26 @@ public class DependencyManager {
         // If there is no cycle, resolved the dependencies of the module found in the `dependingModules`.
         push(foundInModulesWithDependencies)
     }
+
+    /// Retrieve a resolved dependency for a given type.
+    ///
+    /// - Parameters:
+    ///   - module: The ``Module`` type to return.
+    ///   - optional: Flag indicating if it is a optional return.
+    func retrieve<M: Module>(module: M.Type = M.self, optional: Bool = false) -> M? {
+        guard let module = sortedModules.first(where: { $0 is M }) as? M else {
+            precondition(optional, "Could not located dependency of type \(M.self)!")
+            return nil
+        }
+
+        return module
+    }
     
     private func resolvedAllDependencies(_ dependingModule: any Module) {
-        guard !recursiveSearch.isEmpty else {
+        guard !searchStack.isEmpty else {
             preconditionFailure("Internal logic error in the `DependencyManager`")
         }
-        let module = recursiveSearch.removeLast()
+        let module = searchStack.removeLast()
         
         guard module === dependingModule else {
             preconditionFailure("Internal logic error in the `DependencyManager`")
@@ -128,17 +141,8 @@ public class DependencyManager {
         sortedModules.append(dependingModule)
         
         // Call the dependency resolution mechanism on the next element in the `dependingModules` if we are not in a recursive search.
-        if recursiveSearch.isEmpty, let nextModule = modulesWithDependencies.first {
+        if searchStack.isEmpty, let nextModule = modulesWithDependencies.first {
             push(nextModule)
         }
-    }
-    
-    
-    private func push(_ module: any Module) {
-        recursiveSearch.append(module)
-        for dependency in module.dependencyDescriptors {
-            dependency.gatherDependency(dependencyManager: self)
-        }
-        resolvedAllDependencies(module)
     }
 }

@@ -8,52 +8,66 @@
 
 
 extension Module {
-    /// Defines a dependency to another ``Module``.
+    /// Define dependency to other `Module`s.
     ///
-    /// A ``Module`` can define the dependencies using the @``Module/Dependency`` property wrapper.
+    /// You can use this property wrapper inside your `Module` to define dependencies to other ``Module``s.
     ///
     /// - Note: You can access the contents of `@Dependency` once your ``Module/configure()-5pa83`` method is called (e.g., it must not be used in the `init`)
-    ///     and can continue to access the Standard actor in methods like ``LifecycleHandler/willFinishLaunchingWithOptions(_:launchOptions:)-8jatp``.
+    ///     and can continue to access the dependency in methods like ``LifecycleHandler/willFinishLaunchingWithOptions(_:launchOptions:)-8jatp``.
     ///
-    /// The below code example demonstrates a simple dependence on the `ExampleModuleDependency` module.
+    /// The below code sample demonstrates a simple, singular dependence on the `ExampleModuleDependency` module.
+    ///
     /// ```swift
     /// class ExampleModule: Module {
-    ///     @Dependency var exampleModuleDependency = ExampleModuleDependency()
+    ///     @Dependency var exampleDependency = ExampleModuleDependency()
     /// }
     /// ```
     ///
     /// Some modules do not need a default value assigned to the property if they provide a default configuration and conform to ``DefaultInitializable``.
     /// ```swift
     /// class ExampleModule: Module {
-    ///     @Dependency var exampleModuleDependency: ExampleModuleDependency
+    ///     @Dependency var exampleDependency: ExampleModuleDependency
     /// }
     /// ```
-    public typealias Dependency<M: Module> = _DependencyPropertyWrapper<M>
-    
-    
-    /// Defines dynamic dependencies to other ``Module``s.
     ///
-    /// In contrast to the `@Dependency` property wrapper, the `@DynamicDependencies` enables the generation of the property wrapper in the initializer and generating an
-    /// arbitrary amount of dependencies that are resolved in the Spezi initialization.
+    /// ### Optional Dependencies
     ///
-    /// - Note: You can access the contents of `@DynamicDependencies` once your ``Module/configure()-5pa83`` method is called (e.g., it must not be used in the `init`)
-    ///     and can continue to access the Standard actor in methods like ``LifecycleHandler/willFinishLaunchingWithOptions(_:launchOptions:)-8jatp``.
+    /// You can define dependencies to be optional by declaring the `@Dependency` property wrapper optional.
+    /// The below code examples demonstrates this functionality.
     ///
-    /// A ``Module`` can define dynamic dependencies using the @``Module/DynamicDependencies`` property wrapper and can, e.g., initialize its value in the initializer.
     /// ```swift
     /// class ExampleModule: Module {
-    ///     @DynamicDependencies var dynamicDependencies: [any Module]
+    ///     @Dependency var exampleDependency: ExampleModuleDependency?
     ///
-    ///
-    ///     init() {
-    ///         self._dynamicDependencies = DynamicDependencies(
-    ///             moduleProperty: [
-    ///                 Dependency(wrappedValue: /* ... */),
-    ///                 Dependency(wrappedValue: /* ... */)
-    ///             ]
-    ///         )
+    ///     func configure() {
+    ///         if let exampleDependency {
+    ///             // Dependency was defined by the user ...
+    ///         }
     ///     }
     /// }
     /// ```
-    public typealias DynamicDependencies = _DynamicDependenciesPropertyWrapper
+    ///
+    /// ### Computed Dependencies
+    ///
+    /// In certain circumstances your list of dependencies might not be statically known. Instead you might want to generate
+    /// your list of dependencies within the initializer, based on external factors.
+    /// The `@Dependency` property wrapper, allows you to define your dependencies using a result-builder-based appraoch.
+    ///
+    /// Below is a short code example that demonstrates this functionality.
+    ///
+    /// ```swift
+    /// class ExampleModule: Module {
+    ///     @Dependency var computedDependencies: [any Module]
+    ///
+    ///
+    ///     init() {
+    ///         // a result builder to declare your module dependencies
+    ///         self._computedDependencies = Dependency {
+    ///             ModuleA()
+    ///             ModuleB()
+    ///         }
+    ///     }
+    /// }
+    /// ```
+    public typealias Dependency<Value> = _DependencyPropertyWrapper<Value>
 }

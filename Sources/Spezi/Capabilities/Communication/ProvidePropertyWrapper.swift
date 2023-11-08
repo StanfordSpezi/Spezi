@@ -109,7 +109,7 @@ extension Module {
 }
 
 
-extension _ProvidePropertyWrapper: _StorageValueProvider {
+extension _ProvidePropertyWrapper: StorageValueProvider {
     public func collect<Repository: SharedRepository<SpeziAnchor>>(into repository: inout Repository) {
         if let wrapperWithOptional = self as? OptionalBasedProvideProperty {
             wrapperWithOptional.collectOptional(into: &repository)

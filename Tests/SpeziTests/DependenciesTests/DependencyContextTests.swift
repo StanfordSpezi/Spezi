@@ -9,8 +9,9 @@
 import Spezi
 import XCTRuntimeAssertions
 
+private final class ExampleModule: Module {}
 
-final class DependencyDescriptorTests: XCTestCase {
+final class DependencyContextTests: XCTestCase {
     func testInjectionPreconditionDependencyPropertyWrapper() throws {
         try XCTRuntimePrecondition {
             _ = _DependencyPropertyWrapper<TestModule>(wrappedValue: TestModule()).wrappedValue
@@ -19,11 +20,10 @@ final class DependencyDescriptorTests: XCTestCase {
     
     func testInjectionPreconditionDynamicDependenciesPropertyWrapper() throws {
         try XCTRuntimePrecondition {
-            _ = _DynamicDependenciesPropertyWrapper(
-                moduleProperties: [
-                    _DependencyPropertyWrapper(wrappedValue: TestModule())
-                ]
-            ).wrappedValue
+            _ = _DependencyPropertyWrapper {
+                ExampleModule()
+            }
+                .wrappedValue
         }
     }
 }

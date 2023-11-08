@@ -13,10 +13,7 @@ import SpeziFoundation
 /// data with other ``Module``s.
 ///
 /// Data provided through a Storage Value Provider can be retrieved through a ``_StorageValueCollector``.
-public protocol _StorageValueProvider {
-    // swiftlint:disable:previous type_name
-    // to be hidden from documentation
-
+protocol StorageValueProvider {
     /// This method is called to collect all provided values into the given ``SpeziStorage`` repository.
     /// - Parameter repository: Provides access to the ``SpeziStorage`` repository.
     func collect<Repository: SharedRepository<SpeziAnchor>>(into repository: inout Repository)
@@ -24,8 +21,8 @@ public protocol _StorageValueProvider {
 
 
 extension Module {
-    var storageValueProviders: [_StorageValueProvider] {
-        retrieveProperties(ofType: _StorageValueProvider.self)
+    var storageValueProviders: [StorageValueProvider] {
+        retrieveProperties(ofType: StorageValueProvider.self)
     }
 
     func collectModuleValues<Repository: SharedRepository<SpeziAnchor>>(into repository: inout Repository) {

@@ -20,32 +20,26 @@ private enum DynamicDependenciesTestCase: CaseIterable {
     case dependencyCircle
     
     
-    var dynamicDependencies: _DynamicDependenciesPropertyWrapper {
+    var dynamicDependencies: _DependencyPropertyWrapper<[any Module]> {
         switch self {
         case .twoDependencies:
-            return _DynamicDependenciesPropertyWrapper(
-                moduleProperties: [
-                    _DependencyPropertyWrapper(wrappedValue: TestModule2()),
-                    _DependencyPropertyWrapper(wrappedValue: TestModule3())
-                ]
-            )
+            return .init {
+                TestModule2()
+                TestModule3()
+            }
         case .duplicatedDependencies:
-            return _DynamicDependenciesPropertyWrapper(
-                moduleProperties: [
-                    _DependencyPropertyWrapper(wrappedValue: TestModule2()),
-                    _DependencyPropertyWrapper(wrappedValue: TestModule3()),
-                    _DependencyPropertyWrapper(wrappedValue: TestModule3())
-                ]
-            )
+            return .init {
+                TestModule2()
+                TestModule3()
+                TestModule3()
+            }
         case .noDependencies:
-            return _DynamicDependenciesPropertyWrapper(moduleProperties: [])
+            return .init()
         case .dependencyCircle:
-            return _DynamicDependenciesPropertyWrapper(
-                moduleProperties: [
-                    _DependencyPropertyWrapper(wrappedValue: TestModuleCircle1()),
-                    _DependencyPropertyWrapper(wrappedValue: TestModuleCircle2())
-                ]
-            )
+            return .init {
+                TestModuleCircle1()
+                TestModuleCircle2()
+            }
         }
     }
     
@@ -83,7 +77,7 @@ private enum DynamicDependenciesTestCase: CaseIterable {
 }
 
 private final class TestModule1: Module {
-    @DynamicDependencies var dynamicDependencies: [any Module]
+    @Dependency var dynamicDependencies: [any Module]
     let testCase: DynamicDependenciesTestCase
     
     
