@@ -25,11 +25,17 @@ protocol ExampleConstraint: Standard {
 }
 ```
 
-You will have to define your own ``Standard`` type or use a predefined one that either conforms to all requirements or is extended to support these requirements using Swift extensions if your application uses any modules that enforce constraints on the ``Standard`` instance.
+You will have to define your own ``Standard`` type or use a predefined one that either conforms to all requirements or is extended to support these requirements
+using Swift extensions if your application uses any modules that enforce constraints on the ``Standard`` instance.
 
-#### 1. Standard Conformance 
+> Tip: You can always access the current ``Standard`` instance in your ``Module`` using the ``Module/StandardActor`` property wrapper.
+    It is also available using the [Environment](https://developer.apple.com/documentation/swiftui/environment)
+    property wrapper in your SwiftUI views, when you declare conformance to ``EnvironmentAccessible``.
 
-The `Standard` defined in the `Configuration` must conform to all constraints defined by `Modules` using their `@StandardActor`s, or you need to write an extension to an existing `Standard` that you use to implement the conformance.
+#### Standard Conformance 
+
+The `Standard` defined in the `Configuration` must conform to all constraints defined by `Modules` using their `@StandardActor`s,
+or you need to write an extension to an existing `Standard` that you use to implement the conformance.
 
 If you define your own standard, you can define the conformance and complete implementation in your code:
 ```swift
@@ -45,7 +51,7 @@ extension ExistingStandard: ExampleConstraint {
 }
 ```
 
-#### 2. Standard Definition 
+#### Standard Definition 
 
 The standard as well as all modules, are defined using the ``Configuration`` in the app delegate conforming to ``SpeziAppDelegate``.
 Ensure that you define an appropriate standard in your configuration in your `SpeziAppDelegate` subclass:
@@ -59,6 +65,3 @@ var configuration: Configuration {
 ```
 
 > Note: You can learn more about setting up your application in the <doc:Initial-Setup> article. You can learn more about the ``Configuration`` in its type documentation.
-
-You can always access the current ``Standard`` instance in your ``Module`` using the @``Module/StandardActor`` property wrapper.
-It is also available using the `@EnvironmentObject` property wrapper in your SwiftUI views.
