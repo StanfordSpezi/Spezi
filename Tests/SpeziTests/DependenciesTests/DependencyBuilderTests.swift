@@ -16,23 +16,23 @@ private final class ExampleDependencyModule: ExampleTypeConstraint {}
 @resultBuilder
 private enum ExampleDependencyBuilder: DependencyCollectionBuilder {
     /// An auto-closure expression, providing the default dependency value, building the ``DependencyCollection``.
-    public static func buildExpression<L: ExampleTypeConstraint>(_ expression: @escaping @autoclosure () -> L) -> DependencyCollection {
+    static func buildExpression<L: ExampleTypeConstraint>(_ expression: @escaping @autoclosure () -> L) -> DependencyCollection {
         DependencyCollection(singleEntry: expression)
     }
 }
 
-private class ExampleModule: Module {
+class ExampleModule: Module {
     @Dependency var dependencies: [any Module]
     
     
-    public init(
+    init(
         @ExampleDependencyBuilder _ dependencies: () -> DependencyCollection
     ) {
         self._dependencies = Dependency(dependencies)
     }
 }
 
-private class ExampleConfiguration {
+enum ExampleConfiguration {
     static let exampleModule = ExampleModule {
         ExampleDependencyModule()
     }
