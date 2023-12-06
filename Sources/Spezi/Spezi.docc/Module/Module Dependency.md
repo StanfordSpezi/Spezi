@@ -66,4 +66,5 @@ class ExampleModule: Module {
 ### Building Dependencies
 
 - ``DependencyBuilder``
+- ``DependencyCollectionBuilder``
 - ``DependencyCollection``
