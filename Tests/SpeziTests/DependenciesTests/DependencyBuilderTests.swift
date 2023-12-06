@@ -28,7 +28,7 @@ class ExampleDependencyModule: Module {
     init(
         @ExampleDependencyBuilder _ dependencies: () -> DependencyCollection
     ) {
-        self._dependencies = Dependency(dependencies)
+        self._dependencies = Dependency(using: dependencies())
     }
 }
 
