@@ -11,7 +11,7 @@ import XCTRuntimeAssertions
 
 private protocol ExampleTypeConstraint: Module {}
 
-private final class ExampleDependencyModule: ExampleTypeConstraint {}
+private final class ExampleDependentModule: ExampleTypeConstraint {}
 
 @resultBuilder
 private enum ExampleDependencyBuilder: DependencyCollectionBuilder {
@@ -21,7 +21,7 @@ private enum ExampleDependencyBuilder: DependencyCollectionBuilder {
     }
 }
 
-class ExampleModule: Module {
+class ExampleDependencyModule: Module {
     @Dependency var dependencies: [any Module]
     
     
@@ -32,16 +32,15 @@ class ExampleModule: Module {
     }
 }
 
-enum ExampleConfiguration {
-    static let exampleModule = ExampleModule {
-        ExampleDependencyModule()
-    }
-}
-
 
 final class DependencyBuilderTests: XCTestCase {
     func testDependencyBuilder() throws {
-        XCTAssertEqual(ExampleConfiguration.exampleModule.dependencies.count, 1)
-        _ = try XCTUnwrap(ExampleConfiguration.exampleModule.dependencies[0] as? ExampleDependencyModule)
+        let module = ExampleDependencyModule {
+            ExampleDependentModule()
+        }
+        let sortedModules = DependencyManager.resolve([module])
+        XCTAssertEqual(sortedModules.count, 2)
+        _ = try XCTUnwrap(sortedModules[0] as? ExampleDependentModule)
+        _ = try XCTUnwrap(sortedModules[1] as? ExampleDependencyModule)
     }
 }
