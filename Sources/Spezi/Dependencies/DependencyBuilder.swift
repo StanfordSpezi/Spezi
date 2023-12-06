@@ -6,15 +6,19 @@
 // SPDX-License-Identifier: MIT
 //
 
+/// A protocol enabling the implementation of a result builder to build a ``DependencyCollection``.
+/// Enables the simple construction of a result builder accepting ``Module``s with additional type constraints (useful for DSL implementations).
+///
+/// Upon conformance, developers are required to implement a single result builder function transforming an arbitrary ``Module`` type constraint (M in the example below) to a ``DependencyCollection``.
+/// All other result builder functions for constructing a ``DependencyCollection`` are provided as a default protocol implementation.
+/// ```swift
+/// static func buildExpression<M: Module>(_ expression: @escaping @autoclosure () -> M) -> DependencyCollection
+/// ```
+public protocol DependencyCollectionBuilder {}
 
-/// A result builder to build a ``DependencyCollection``.
-@resultBuilder
-public enum DependencyBuilder {
-    /// An auto-closure expression, providing the default dependency value, building the ``DependencyCollection``.
-    public static func buildExpression<M: Module>(_ expression: @escaping @autoclosure () -> M) -> DependencyCollection {
-        DependencyCollection(DependencyContext(defaultValue: expression))
-    }
 
+/// Default protocol implementations of a result builder constructing a ``DependencyCollection``.
+extension DependencyCollectionBuilder {
     /// Build a block of ``DependencyCollection``s.
     public static func buildBlock(_ components: DependencyCollection...) -> DependencyCollection {
         buildArray(components)
@@ -45,5 +49,15 @@ public enum DependencyBuilder {
         DependencyCollection(components.reduce(into: []) { result, component in
             result.append(contentsOf: component.entries)
         })
+    }
+}
+
+
+/// A result builder to build a ``DependencyCollection``.
+@resultBuilder
+public enum DependencyBuilder: DependencyCollectionBuilder {
+    /// An auto-closure expression, providing the default dependency value, building the ``DependencyCollection``.
+    public static func buildExpression<M: Module>(_ expression: @escaping @autoclosure () -> M) -> DependencyCollection {
+        DependencyCollection(DependencyContext(defaultValue: expression))
     }
 }

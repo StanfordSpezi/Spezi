@@ -97,11 +97,18 @@ extension _DependencyPropertyWrapper: ModuleArrayDependency where Value == [any 
     public convenience init() {
         self.init(DependencyCollection())
     }
-
+    
+    /// Creates the `@Dependency` property wrapper from an instantiated ``DependencyCollection``.
+    /// - Parameters:
+    ///    - dependencies: The ``DependencyCollection`` to be wrapped.
+    public convenience init(using dependencies: DependencyCollection) {
+        self.init(dependencies)
+    }
 
     public convenience init(@DependencyBuilder _ dependencies: () -> DependencyCollection) {
         self.init(dependencies())
     }
+    
 
     func wrappedValue<WrappedValue>(as value: WrappedValue.Type) -> WrappedValue {
         guard let modules = dependencies.retrieveModules() as? WrappedValue else {

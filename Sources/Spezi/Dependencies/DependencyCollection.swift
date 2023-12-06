@@ -19,6 +19,14 @@ public struct DependencyCollection: DependencyDeclaration {
     init(_ entries: AnyDependencyContext...) {
         self.init(entries)
     }
+    
+    /// Creates a ``DependencyCollection`` from a closure resulting in a single generic type conforming to the Spezi  ``Module``.
+    /// - Parameters:
+    ///   - type: The generic type resulting from the passed closure, has to conform to ``Module``.
+    ///   - singleEntry: Closure returning a dependency conforming to ``Module``, stored within the ``DependencyCollection``.
+    public init<Dependency: Module>(for type: Dependency.Type = Dependency.self, singleEntry: (() -> Dependency)? = nil) {
+        self.init(DependencyContext(for: type, defaultValue: singleEntry))
+    }
 
 
     func collect(into dependencyManager: DependencyManager) {
