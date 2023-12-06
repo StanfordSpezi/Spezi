@@ -24,7 +24,7 @@ public struct DependencyCollection: DependencyDeclaration {
     /// - Parameters:
     ///   - type: The generic type resulting from the passed closure, has to conform to ``Module``.
     ///   - singleEntry: Closure returning a dependency conforming to ``Module``, stored within the ``DependencyCollection``.
-    public init<Dependency: Module>(for type: Dependency.Type = Dependency.self, singleEntry: (() -> Dependency)? = nil) {
+    public init<Dependency: Module>(for type: Dependency.Type = Dependency.self, singleEntry: @escaping (() -> Dependency)) {
         self.init(DependencyContext(for: type, defaultValue: singleEntry))
     }
 
