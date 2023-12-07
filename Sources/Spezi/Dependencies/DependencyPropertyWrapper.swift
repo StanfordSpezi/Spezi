@@ -98,13 +98,28 @@ extension _DependencyPropertyWrapper: ModuleArrayDependency where Value == [any 
         self.init(DependencyCollection())
     }
     
-    /// Creates the `@Dependency` property wrapper from an instantiated ``DependencyCollection``.
+    /// Creates the `@Dependency` property wrapper from an instantiated ``DependencyCollection``, enabling the use of a custom ``DependencyBuilder`` enforcing certain type constraints on the passed, nested ``Dependency``s.
     /// - Parameters:
     ///    - dependencies: The ``DependencyCollection`` to be wrapped.
+    ///
+    /// ### Usage
+    /// 
+    /// The `ExampleModule` is initialized with nested ``Module/Dependency``s (``Module``s) enforcing certain type constraints via the `SomeCustomDependencyBuilder`.
+    /// Spezi automatically injects declared ``Dependency``s within the passed ``Dependency``s from the initializer, enabling proper nesting of ``Module``s.
+    ///
+    /// ```swift
+    /// class ExampleModule: Module {
+    ///     @Dependency var dependentModules: [any Module]
+    ///
+    ///     init(@SomeCustomDependencyBuilder _ dependencies: @Sendable () -> DependencyCollection) {
+    ///         self._dependentModules = Dependency(using: dependencies())
+    ///     }
+    /// }
+    /// ```
     public convenience init(using dependencies: DependencyCollection) {
         self.init(dependencies)
     }
-
+    
     public convenience init(@DependencyBuilder _ dependencies: () -> DependencyCollection) {
         self.init(dependencies())
     }
