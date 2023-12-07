@@ -27,16 +27,19 @@ public struct DependencyCollection: DependencyDeclaration {
     ///
     /// ### Usage
     ///
-    /// The `ExampleDependencyBuilder` enforces certain type constraints (e.g., `SomeTypeConstraint`, more specific than `Module`) during aggregation of ``Module/Dependency``s (``Module``s)  via a result builder. The individual dependency expressions within the result builder conforming to `SomeTypeConstraint` are then transformed to a ``DependencyCollection`` via ``DependencyCollection/init(for:singleEntry:)``.
+    /// The `SomeCustomDependencyBuilder` enforces certain type constraints (e.g., `SomeTypeConstraint`, more specific than ``Module`) during aggregation of ``Module/Dependency``s (``Module``s)  via a result builder.
+    /// The individual dependency expressions within the result builder conforming to `SomeTypeConstraint` are then transformed to a ``DependencyCollection`` via ``DependencyCollection/init(for:singleEntry:)``.
     ///
     /// ```swift
     /// @resultBuilder
-    /// public enum ExampleDependencyBuilder: DependencyCollectionBuilder {
+    /// public enum SomeCustomDependencyBuilder: DependencyCollectionBuilder {
     ///     public static func buildExpression<T: SomeTypeConstraint>(_ expression: @escaping @autoclosure () -> T) -> DependencyCollection {
     ///         DependencyCollection(singleEntry: expression)
     ///     }
     /// }
     /// ```
+    ///
+    /// See `_DependencyPropertyWrapper/init(using:)` for a continued example regarding the usage of the implemented result builder.
     public init<Dependency: Module>(for type: Dependency.Type = Dependency.self, singleEntry: @escaping (() -> Dependency)) {
         self.init(DependencyContext(for: type, defaultValue: singleEntry))
     }

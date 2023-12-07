@@ -105,7 +105,7 @@ extension _DependencyPropertyWrapper: ModuleArrayDependency where Value == [any 
     /// ### Usage
     /// 
     /// The `ExampleModule` is initialized with nested ``Module/Dependency``s (``Module``s) enforcing certain type constraints via the `SomeCustomDependencyBuilder`.
-    /// Spezi automatically injects declared ``Dependency``s within the passed ``Dependency``s from the initializer, enabling proper nesting of ``Module``s.
+    /// Spezi automatically injects declared ``Dependency``s within the passed ``Dependency``s in the initializer, enabling proper nesting of ``Module``s.
     ///
     /// ```swift
     /// class ExampleModule: Module {
@@ -116,6 +116,8 @@ extension _DependencyPropertyWrapper: ModuleArrayDependency where Value == [any 
     ///     }
     /// }
     /// ```
+    ///
+    /// See ``DependencyCollection/init(for:singleEntry:)`` for a continued example, specifically the implementation of the `SomeCustomDependencyBuilder` result builder.
     public convenience init(using dependencies: DependencyCollection) {
         self.init(dependencies)
     }
