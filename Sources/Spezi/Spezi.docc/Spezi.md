@@ -93,9 +93,9 @@ To simplify the creation of modules, a common set of functionalities typically u
 ### Configuration
 
 - <doc:Initial-Setup>
-- ``SwiftUI/View/spezi(_:)``
 - ``SpeziAppDelegate``
 - ``Configuration``
+- ``SwiftUI/View/spezi(_:)-3bn89``
 
 ### Essential Concepts
 
@@ -104,4 +104,8 @@ To simplify the creation of modules, a common set of functionalities typically u
 - ``Spezi/Spezi``
 - ``Standard``
 - ``Module``
- 
+
+### Previews
+
+- ``SwiftUI/View/spezi(standard:_:)``
+- ``SwiftUI/View/spezi(_:)-8giv6``

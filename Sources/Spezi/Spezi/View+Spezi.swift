@@ -27,11 +27,39 @@ struct SpeziViewModifier: ViewModifier {
 
 
 extension View {
-    /// Use the `spezi()` `View` modifier to configure Spezi for your application.
-    /// - Parameter delegate: The `SpeziAppDelegate` used in the SwiftUI `App` instance.
-    /// - Returns: A SwiftUI view configured using the Spezi framework
+    /// Configure Spezi for your application using a delegate.
+    /// - Parameter delegate: The ``SpeziAppDelegate`` used in the SwiftUI App instance.
+    /// - Returns: The configured view using the Spezi framework.
     public func spezi(_ delegate: SpeziAppDelegate) -> some View {
         modifier(SpeziViewModifier(delegate.spezi))
+    }
+
+    /// Configure Spezi for your previews using a Standard and a collection of Modules.
+    ///
+    /// This modifier can be used to configure Spezi with a Standard a collection of Modules without declaring a ``SpeziAppDelegate``.
+    ///
+    /// - Important: This modifier is only recommended for Previews. As it doesn't configure a ``SpeziAppDelegate`` lifecycle handling
+    ///     functionality, using ``LifecycleHandler``,  of modules won't work.
+    ///
+    /// - Parameters:
+    ///   - standard: The global ``Standard`` used throughout the app to manage global data flow.
+    ///   - modules: The ``Module``s used in the Spezi project.
+    /// - Returns: The configured view using the Spezi framework.
+    public func spezi<S: Standard>(standard: S, @ModuleBuilder _ modules: () -> ModuleCollection) -> some View {
+        modifier(SpeziViewModifier(Spezi(standard: standard, modules: modules().elements)))
+    }
+
+    /// Configure Spezi for your previews using a collection of Modules.
+    ///
+    /// This modifier can be used to configure Spezi with a collection of Modules without declaring a ``SpeziAppDelegate``.
+    ///
+    /// - Important: This modifier is only recommended for Previews. As it doesn't configure a ``SpeziAppDelegate`` lifecycle handling
+    ///     functionality, using ``LifecycleHandler``,  of modules won't work.
+    ///
+    /// - Parameter modules: The ``Module``s used in the Spezi project.
+    /// - Returns: The configured view using the Spezi framework.
+    public func spezi(@ModuleBuilder _ modules: () -> ModuleCollection) -> some View {
+        spezi(standard: DefaultStandard(), modules)
     }
 }
 
