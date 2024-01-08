@@ -107,5 +107,7 @@ To simplify the creation of modules, a common set of functionalities typically u
 
 ### Previews
 
-- ``SwiftUI/View/spezi(standard:_:)``
-- ``SwiftUI/View/spezi(_:)-8giv6``
+- ``SwiftUI/View/previewWith(standard:simulateLifecycle:_:)``
+- ``SwiftUI/View/previewWith(simulateLifecycle:_:)``
+- ``Foundation/ProcessInfo/isPreviewSimulator``
+- ``LifecycleSimulationOptions``

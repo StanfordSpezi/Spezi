@@ -12,7 +12,7 @@ import SwiftUI
 
 extension AnySpezi {
     /// A collection of ``Spezi/Spezi`` `LifecycleHandler`s.
-    private var lifecycleHandler: [LifecycleHandler] {
+    var lifecycleHandler: [LifecycleHandler] {
         storage.collect(allOf: LifecycleHandler.self)
     }
     
