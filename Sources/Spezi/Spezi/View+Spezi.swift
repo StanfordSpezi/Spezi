@@ -61,7 +61,7 @@ extension View {
         simulateLifecycle: LifecycleSimulationOptions = .disabled,
         @ModuleBuilder _ modules: () -> ModuleCollection
     ) -> some View {
-        let _ = precondition(
+        precondition(
             ProcessInfo.processInfo.isPreviewSimulator,
             "The Spezi previewWith(standard:_:) modifier can only used within Xcode preview processes."
         )
