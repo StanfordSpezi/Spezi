@@ -9,6 +9,7 @@
 import Dispatch
 import Foundation
 import SwiftUI
+import XCTRuntimeAssertions
 
 
 struct SpeziViewModifier: ViewModifier {
@@ -45,8 +46,12 @@ extension View {
     ///   - standard: The global ``Standard`` used throughout the app to manage global data flow.
     ///   - modules: The ``Module``s used in the Spezi project.
     /// - Returns: The configured view using the Spezi framework.
-    public func spezi<S: Standard>(standard: S, @ModuleBuilder _ modules: () -> ModuleCollection) -> some View {
-        modifier(SpeziViewModifier(Spezi(standard: standard, modules: modules().elements)))
+    public func previewWith<S: Standard>(standard: S, @ModuleBuilder _ modules: () -> ModuleCollection) -> some View {
+        precondition(
+            ProcessInfo.processInfo.isPreviewSimulator,
+            "The Spezi previewWith(standard:_:) modifier can only used within Xcode preview processes."
+        )
+        return modifier(SpeziViewModifier(Spezi(standard: standard, modules: modules().elements)))
     }
 
     /// Configure Spezi for your previews using a collection of Modules.
@@ -58,8 +63,8 @@ extension View {
     ///
     /// - Parameter modules: The ``Module``s used in the Spezi project.
     /// - Returns: The configured view using the Spezi framework.
-    public func spezi(@ModuleBuilder _ modules: () -> ModuleCollection) -> some View {
-        spezi(standard: DefaultStandard(), modules)
+    public func previewWith(@ModuleBuilder _ modules: () -> ModuleCollection) -> some View {
+        previewWith(standard: DefaultStandard(), modules)
     }
 }
 
