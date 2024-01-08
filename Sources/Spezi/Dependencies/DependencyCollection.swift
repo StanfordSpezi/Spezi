@@ -27,7 +27,7 @@ public struct DependencyCollection: DependencyDeclaration {
     ///
     /// ### Usage
     ///
-    /// The `SomeCustomDependencyBuilder` enforces certain type constraints (e.g., `SomeTypeConstraint`, more specific than ``Module`) during aggregation of ``Module/Dependency``s (``Module``s)  via a result builder.
+    /// The `SomeCustomDependencyBuilder` enforces certain type constraints (e.g., `SomeTypeConstraint`, more specific than ``Module``) during aggregation of ``Module/Dependency``s (``Module``s)  via a result builder.
     /// The individual dependency expressions within the result builder conforming to `SomeTypeConstraint` are then transformed to a ``DependencyCollection`` via ``DependencyCollection/init(for:singleEntry:)``.
     ///
     /// ```swift

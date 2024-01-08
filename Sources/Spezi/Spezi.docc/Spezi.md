@@ -39,6 +39,23 @@ Unfortunately, DocC currently does not support dark mode images: https://github.
         }
     }
 }
+@Row {
+    @Column {
+        @Image(source: "https://raw.githubusercontent.com/StanfordSpezi/SpeziAccount/main/Sources/SpeziAccount/SpeziAccount.docc/Resources/AccountSetup.png", alt: "Screenshot displaying the account setup view with an email and password prompt and a Sign In with Apple button using the Spezi Account module.") {
+            [The Spezi Account Module](https://github.com/StanfordSpezi/SpeziAccount)
+        }
+    }
+    @Column {
+        @Image(source: "https://raw.githubusercontent.com/StanfordSpezi/SpeziViews/main/Sources/SpeziValidation/SpeziValidation.docc/Resources/Validation.png", alt: "Three different kinds of text fields showing validation errors in red text using Spezi Validation package.") {
+            The `SpeziValidation` package of the [Spezi Views Module](https://github.com/StanfordSpezi/SpeziViews).
+        }
+    }
+    @Column {
+        @Image(source: "https://raw.githubusercontent.com/StanfordSpezi/SpeziLLM/main/Sources/SpeziLLMLocal/SpeziLLMLocal.docc/Resources/ChatView.png", alt: "A Chat View of a locally executed LLM using the Spezi LLM module.") {
+            [The Spezi LLM Module](https://github.com/StanfordSpezi/SpeziLLM)
+        }
+    }
+}
 
 The best way to get started and explore the functionality of Spezi is by taking a look at the [Spezi Template Application](https://github.com/StanfordSpezi/SpeziTemplateApplication). The application incorporates a wide variety of sophisticated modules and demonstrates the usage of these modules in a simple-to-use and easy-to-extend application.
 
