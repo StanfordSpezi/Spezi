@@ -29,11 +29,12 @@ extension View {
     /// This modifier can be used to configure Spezi with a Standard a collection of Modules without declaring a ``SpeziAppDelegate``.
     ///
     /// - Important: This modifier is only recommended for Previews. As it doesn't configure a ``SpeziAppDelegate`` lifecycle handling
-    ///     functionality, using ``LifecycleHandler``,  of modules won't work.
+    ///     functionality, using ``LifecycleHandler``,  of modules is not fully supported. You may use the `simulateLifecycle`
+    ///     parameter to simulate a call to ``LifecycleHandler/willFinishLaunchingWithOptions(_:launchOptions:)-8jatp``.
     ///
     /// - Parameters:
     ///   - standard: The global  ``Standard`` used throughout the app to manage global data flow.
-    ///   - simulateLifecycle: Options to simulate behavior for ``LifecycleHandler``s.
+    ///   - simulateLifecycle: Options to simulate behavior for ``LifecycleHandler``s. Disabled by default.
     ///   - modules: The ``Module``s used in the Spezi project.
     /// - Returns: The configured view using the Spezi framework.
     public func previewWith<S: Standard>(
@@ -62,10 +63,11 @@ extension View {
     /// This modifier can be used to configure Spezi with a collection of Modules without declaring a ``SpeziAppDelegate``.
     ///
     /// - Important: This modifier is only recommended for Previews. As it doesn't configure a ``SpeziAppDelegate`` lifecycle handling
-    ///     functionality, using ``LifecycleHandler``,  of modules won't work.
+    ///     functionality, using ``LifecycleHandler``,  of modules is not fully supported. You may use the `simulateLifecycle`
+    ///     parameter to simulate a call to ``LifecycleHandler/willFinishLaunchingWithOptions(_:launchOptions:)-8jatp``.
     ///
     /// - Parameters:
-    ///   - simulateLifecycle: Options to simulate behavior for ``LifecycleHandler``s.
+    ///   - simulateLifecycle: Options to simulate behavior for ``LifecycleHandler``s. Disabled by default.
     ///   - modules: The ``Module``s used in the Spezi project.
     /// - Returns: The configured view using the Spezi framework.
     public func previewWith(
