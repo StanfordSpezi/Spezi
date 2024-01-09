@@ -6,7 +6,6 @@
 // SPDX-License-Identifier: MIT
 //
 
-import Dispatch
 import Foundation
 import SwiftUI
 
@@ -27,9 +26,9 @@ struct SpeziViewModifier: ViewModifier {
 
 
 extension View {
-    /// Use the `spezi()` `View` modifier to configure Spezi for your application.
-    /// - Parameter delegate: The `SpeziAppDelegate` used in the SwiftUI `App` instance.
-    /// - Returns: A SwiftUI view configured using the Spezi framework
+    /// Configure Spezi for your application using a delegate.
+    /// - Parameter delegate: The ``SpeziAppDelegate`` used in the SwiftUI App instance.
+    /// - Returns: The configured view using the Spezi framework.
     public func spezi(_ delegate: SpeziAppDelegate) -> some View {
         modifier(SpeziViewModifier(delegate.spezi))
     }
