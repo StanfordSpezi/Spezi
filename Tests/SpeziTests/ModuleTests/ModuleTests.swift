@@ -10,6 +10,24 @@
 import SwiftUI
 import XCTest
 import XCTRuntimeAssertions
+import XCTSpezi
+
+
+private final class DependingTestModule: Module {
+    let expectation: XCTestExpectation
+    @Dependency var module = TestModule()
+
+
+    init(expectation: XCTestExpectation = XCTestExpectation(), dependencyExpectation: XCTestExpectation = XCTestExpectation()) {
+        self.expectation = expectation
+        self._module = Dependency(wrappedValue: TestModule(expectation: dependencyExpectation))
+    }
+
+
+    func configure() {
+        self.expectation.fulfill()
+    }
+}
 
 
 final class ModuleTests: XCTestCase {
@@ -49,5 +67,22 @@ final class ModuleTests: XCTestCase {
                     TestModule()
                 }
         }
+    }
+
+    func testModuleCreation() {
+        let expectation = XCTestExpectation(description: "DependingTestModule")
+        expectation.assertForOverFulfill = true
+        let dependencyExpectation = XCTestExpectation(description: "TestModule")
+        dependencyExpectation.assertForOverFulfill = true
+
+        let module = DependingTestModule(expectation: expectation, dependencyExpectation: dependencyExpectation)
+
+        withDependencyResolution {
+            module
+        }
+
+        wait(for: [expectation, dependencyExpectation])
+
+        _ = module.module
     }
 }
