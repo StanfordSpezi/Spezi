@@ -84,7 +84,15 @@ open class SpeziAppDelegate: NSObject, UIApplicationDelegate, UISceneDelegate {
         // swiftlint:disable:next discouraged_optional_collection
         willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
-        spezi.willFinishLaunchingWithOptions(application, launchOptions: launchOptions ?? [:])
+        if !ProcessInfo.processInfo.isPreviewSimulator {
+            // If you are running an Xcode Preview and you have your global SwiftUI `App` defined with
+            // the `@UIApplicationDelegateAdaptor` property wrapper, it will still instantiate the App Delegate
+            // and call this willFinishLaunchingWithOptions delegate method. This results in an instantiation of Spezi
+            // and configuration of the respective modules. This might and will cause troubles with Modules that
+            // are only meant to be instantiated once. Therefore, we skip execution of this if running inside the PreviewSimulator.
+            // This is also not a problem, as there is no way to set up an application delegate within a Xcode preview.
+            spezi.willFinishLaunchingWithOptions(application, launchOptions: launchOptions ?? [:])
+        }
         return true
     }
     
