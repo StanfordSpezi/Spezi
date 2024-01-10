@@ -50,6 +50,7 @@ public class _DependencyPropertyWrapper<Value>: DependencyDeclaration { // swift
         self.dependencies = dependencies
     }
 
+    /// Declare a dependency to a module that can provide a default value on its own.
     public convenience init() where Value: Module & DefaultInitializable {
         // this init is placed here directly, otherwise Swift has problems resolving this init
         self.init(wrappedValue: Value())
@@ -67,6 +68,8 @@ public class _DependencyPropertyWrapper<Value>: DependencyDeclaration { // swift
 
 
 extension _DependencyPropertyWrapper: SingleModuleDependency where Value: Module {
+    /// Create a dependency and supply a default value.
+    /// - Parameter defaultValue: The default value to be used if there is no other instance configured.
     public convenience init(wrappedValue defaultValue: @escaping @autoclosure () -> Value) {
         self.init(DependencyCollection(DependencyContext(defaultValue: defaultValue)))
     }
@@ -79,8 +82,18 @@ extension _DependencyPropertyWrapper: SingleModuleDependency where Value: Module
 
 
 extension _DependencyPropertyWrapper: OptionalModuleDependency where Value: AnyOptional, Value.Wrapped: Module {
+    /// Create a empty, optional dependency.
     public convenience init() {
         self.init(DependencyCollection(DependencyContext(for: Value.Wrapped.self)))
+    }
+
+    /// Create a optional dependency but supplying a default value.
+    ///
+    /// This allows to dynamically build the dependency tree on runtime.
+    /// For example, you might only declare a dependency to a Module if a given runtime check succeeds.
+    /// - Parameter defaultValue: The default value to be used if declared.
+    public convenience init(wrappedValue defaultValue: @escaping @autoclosure () -> Value.Wrapped) {
+        self.init(DependencyCollection(DependencyContext(defaultValue: defaultValue)))
     }
 
 
@@ -98,12 +111,13 @@ extension _DependencyPropertyWrapper: ModuleArrayDependency where Value == [any 
         self.init(DependencyCollection())
     }
     
-    /// Creates the `@Dependency` property wrapper from an instantiated ``DependencyCollection``, enabling the use of a custom ``DependencyBuilder`` enforcing certain type constraints on the passed, nested ``Dependency``s.
-    /// - Parameters:
-    ///    - dependencies: The ``DependencyCollection`` to be wrapped.
+    /// Create a dependency from a ``DependencyCollection``.
+    ///
+    /// Creates the `@Dependency` property wrapper from an instantiated ``DependencyCollection``,
+    /// enabling the use of a custom ``DependencyBuilder`` enforcing certain type constraints on the passed, nested ``Dependency``s.
     ///
     /// ### Usage
-    /// 
+    ///
     /// The `ExampleModule` is initialized with nested ``Module/Dependency``s (``Module``s) enforcing certain type constraints via the `SomeCustomDependencyBuilder`.
     /// Spezi automatically injects declared ``Dependency``s within the passed ``Dependency``s in the initializer, enabling proper nesting of ``Module``s.
     ///
@@ -118,10 +132,15 @@ extension _DependencyPropertyWrapper: ModuleArrayDependency where Value == [any 
     /// ```
     ///
     /// See ``DependencyCollection/init(for:singleEntry:)`` for a continued example, specifically the implementation of the `SomeCustomDependencyBuilder` result builder.
+    ///
+    /// - Parameters:
+    ///    - dependencies: The ``DependencyCollection``.
     public convenience init(using dependencies: DependencyCollection) {
         self.init(dependencies)
     }
-    
+
+    /// Create a dependency from a list of dependencies.
+    /// - Parameter dependencies: The result builder to build the dependency tree.
     public convenience init(@DependencyBuilder _ dependencies: () -> DependencyCollection) {
         self.init(dependencies())
     }
