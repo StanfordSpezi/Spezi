@@ -23,7 +23,17 @@ private final class TestModule2: Module {
     @Dependency var testModule3: TestModule3
 }
 
-private final class TestModule3: Module, DefaultInitializable {}
+private final class TestModule3: Module, DefaultInitializable {
+    let state: Int
+
+    convenience init() {
+        self.init(state: 0)
+    }
+
+    init(state: Int) {
+        self.state = state
+    }
+}
 
 private final class TestModule4: Module {
     @Dependency var testModule5 = TestModule5()
@@ -52,6 +62,16 @@ private final class TestModuleItself: Module {
 
 private final class OptionalModuleDependency: Module {
     @Dependency var testModule3: TestModule3?
+}
+
+private final class OptionalDependencyWithRuntimeDefault: Module {
+    @Dependency var testModule3: TestModule3?
+
+    init(defaultValue: Int?) {
+        if let defaultValue {
+            _testModule3 = Dependency(wrappedValue: TestModule3(state: defaultValue))
+        }
+    }
 }
 
 
@@ -215,5 +235,40 @@ final class DependencyTests: XCTestCase {
         let module3 = try XCTUnwrap(modules[0] as? TestModule3)
         let module = try XCTUnwrap(modules[1] as? OptionalModuleDependency)
         XCTAssert(module.testModule3 === module3)
+    }
+
+    func testOptionalDependencyWithDynamicRuntimeDefaultValue() throws {
+        let nonPresent = DependencyManager.resolve([
+            OptionalDependencyWithRuntimeDefault(defaultValue: nil) // stays optional
+        ])
+
+        let dut1 = try XCTUnwrap(nonPresent[0] as? OptionalDependencyWithRuntimeDefault)
+        XCTAssertNil(dut1.testModule3)
+
+        let configured = DependencyManager.resolve([
+            TestModule3(state: 1),
+            OptionalDependencyWithRuntimeDefault(defaultValue: nil)
+        ])
+
+        let dut2 = try XCTUnwrap(configured[1] as? OptionalDependencyWithRuntimeDefault)
+        let dut2Module = try XCTUnwrap(dut2.testModule3)
+        XCTAssertEqual(dut2Module.state, 1)
+
+        let defaulted = DependencyManager.resolve([
+            OptionalDependencyWithRuntimeDefault(defaultValue: 2)
+        ])
+
+        let dut3 = try XCTUnwrap(defaulted[1] as? OptionalDependencyWithRuntimeDefault)
+        let dut3Module = try XCTUnwrap(dut3.testModule3)
+        XCTAssertEqual(dut3Module.state, 2)
+
+        let configuredAndDefaulted = DependencyManager.resolve([
+            TestModule3(state: 4),
+            OptionalDependencyWithRuntimeDefault(defaultValue: 3)
+        ])
+
+        let dut4 = try XCTUnwrap(configuredAndDefaulted[1] as? OptionalDependencyWithRuntimeDefault)
+        let dut4Module = try XCTUnwrap(dut4.testModule3)
+        XCTAssertEqual(dut4Module.state, 4)
     }
 }
