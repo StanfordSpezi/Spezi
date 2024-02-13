@@ -14,7 +14,7 @@ The Spezi framework can be integrated into any iOS application. You can define w
 
 ## 1. Add the Spezi View Modifier
 
-Set up the Spezi framework in your `App` instance of your SwiftUI application using the ``SpeziAppDelegate`` and the `@UIApplicationDelegateAdaptor` property wrapper.
+Set up the Spezi framework in your `App` instance of your SwiftUI application using the ``SpeziAppDelegate`` and the `@ApplicationDelegateAdaptor` property wrapper.
 Use the `View.spezi(_: SpeziAppDelegate)` view modifier to apply your Spezi configuration to the main view in your SwiftUI `Scene`:
 ```swift
 import Spezi
@@ -23,7 +23,7 @@ import SwiftUI
 
 @main
 struct ExampleApp: App {
-    @UIApplicationDelegateAdaptor(SpeziAppDelegate.self) var appDelegate
+    @ApplicationDelegateAdaptor(SpeziAppDelegate.self) var appDelegate
 
 
     var body: some Scene {

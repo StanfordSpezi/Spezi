@@ -19,29 +19,28 @@ extension AnySpezi {
     
     // MARK: LifecycleHandler Functions
     func willFinishLaunchingWithOptions(
-        _ application: UIApplication,
-        launchOptions: [UIApplication.LaunchOptionsKey: Any]
+        launchOptions: [LaunchOptionsKey: Any]
     ) {
-        lifecycleHandler.willFinishLaunchingWithOptions(application, launchOptions: launchOptions)
+        lifecycleHandler.willFinishLaunchingWithOptions(launchOptions: launchOptions)
     }
     
-    func sceneWillEnterForeground(_ scene: UIScene) {
-        lifecycleHandler.sceneWillEnterForeground(scene)
+    func sceneWillEnterForeground() {
+        lifecycleHandler.sceneWillEnterForeground()
     }
     
-    func sceneDidBecomeActive(_ scene: UIScene) {
-        lifecycleHandler.sceneDidBecomeActive(scene)
+    func sceneDidBecomeActive() {
+        lifecycleHandler.sceneDidBecomeActive()
     }
     
-    func sceneWillResignActive(_ scene: UIScene) {
-        lifecycleHandler.sceneWillResignActive(scene)
+    func sceneWillResignActive() {
+        lifecycleHandler.sceneWillResignActive()
     }
     
-    func sceneDidEnterBackground(_ scene: UIScene) {
-        lifecycleHandler.sceneDidEnterBackground(scene)
+    func sceneDidEnterBackground() {
+        lifecycleHandler.sceneDidEnterBackground()
     }
     
-    func applicationWillTerminate(_ application: UIApplication) {
-        lifecycleHandler.applicationWillTerminate(application)
+    func applicationWillTerminate() {
+        lifecycleHandler.applicationWillTerminate()
     }
 }

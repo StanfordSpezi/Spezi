@@ -17,7 +17,7 @@ public enum LifecycleSimulationOptions {
     case disabled
     /// The ``LifecycleHandler/willFinishLaunchingWithOptions(_:launchOptions:)-8jatp`` method will be called for all
     /// configured ``Module``s that conform to ``LifecycleHandler``.
-    case launchWithOptions(_ launchOptions: [UIApplication.LaunchOptionsKey: Any])
+    case launchWithOptions(_ launchOptions: [LaunchOptionsKey: Any])
 
     static let launchWithOptions: LifecycleSimulationOptions = .launchWithOptions([:])
 }
@@ -53,7 +53,7 @@ extension View {
         return modifier(SpeziViewModifier(spezi))
             .task {
                 if case let .launchWithOptions(options) = simulateLifecycle {
-                    await lifecycleHandlers.willFinishLaunchingWithOptions(UIApplication.shared, launchOptions: options)
+                    lifecycleHandlers.willFinishLaunchingWithOptions(launchOptions: options)
                 }
             }
     }

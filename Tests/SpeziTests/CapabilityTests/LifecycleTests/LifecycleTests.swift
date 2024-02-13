@@ -26,13 +26,12 @@ private final class TestLifecycleHandler: Module, LifecycleHandler {
     
     
     func willFinishLaunchingWithOptions(
-        _ application: UIApplication,
-        launchOptions: [UIApplication.LaunchOptionsKey: Any]
+        launchOptions: [LaunchOptionsKey: Any]
     ) {
         expectationWillFinishLaunchingWithOption.fulfill()
     }
     
-    func applicationWillTerminate(_ application: UIApplication) {
+    func applicationWillTerminate() {
         expectationApplicationWillTerminate.fulfill()
     }
 }
@@ -76,15 +75,27 @@ final class LifecycleTests: XCTestCase {
             expectationWillFinishLaunchingWithOption: expectationWillFinishLaunchingWithOption,
             expectationApplicationWillTerminate: expectationApplicationWillTerminate
         )
-        
+
+
+        #if os(iOS) || os(visionOS) || os(tvOS)
         let willFinishLaunchingWithOptions = try testApplicationDelegate.application(
             UIApplication.shared,
             willFinishLaunchingWithOptions: [UIApplication.LaunchOptionsKey.url: XCTUnwrap(URL(string: "spezi.stanford.edu"))]
         )
         XCTAssertTrue(willFinishLaunchingWithOptions)
+        #elseif os(macOS)
+        testApplicationDelegate.applicationWillFinishLaunching(Notification(name: NSApplication.willFinishLaunchingNotification))
+        #elseif os(watchOS)
+        testApplicationDelegate.applicationDidFinishLaunching()
+        #endif
         wait(for: [expectationWillFinishLaunchingWithOption])
         
+        #if os(iOS) || os(visionOS) || os(tvOS)
         testApplicationDelegate.applicationWillTerminate(UIApplication.shared)
         wait(for: [expectationApplicationWillTerminate])
+        #elseif os(macOS)
+        testApplicationDelegate.applicationWillTerminate(.init(name: NSApplication.willTerminateNotification))
+        wait(for: [expectationApplicationWillTerminate])
+        #endif
     }
 }

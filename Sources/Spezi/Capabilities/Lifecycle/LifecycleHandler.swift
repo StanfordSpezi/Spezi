@@ -10,6 +10,15 @@ import os
 import SwiftUI
 
 
+// TODO: Docs
+#if os(iOS) || os(visionOS) || os(tvOS)
+public typealias LaunchOptionsKey = UIApplication.LaunchOptionsKey
+#else
+// Launch options are not part of WKApplicationDelegate or NSApplicationDelegate
+public typealias LaunchOptionsKey = Never
+#endif
+
+
 /// Delegate methods are related to the  `UIApplication` and ``Spezi/Spezi`` lifecycle.
 ///
 /// Conform to the `LifecycleHandler` protocol to get updates about the application lifecycle similar to the `UIApplicationDelegate` on an app basis.
@@ -27,116 +36,103 @@ public protocol LifecycleHandler {
     /// - Parameters:
     ///   - application: The singleton app object.
     ///   - launchOptions: A dictionary indicating the reason the app was launched (if any). The contents of this dictionary may be empty in situations where the user launched the app directly. For information about the possible keys in this dictionary and how to handle them, see UIApplication.LaunchOptionsKey.
-    func willFinishLaunchingWithOptions(
-        _ application: UIApplication,
-        launchOptions: [UIApplication.LaunchOptionsKey: Any]
-    )
+    func willFinishLaunchingWithOptions(launchOptions: [LaunchOptionsKey: Any])
     
     /// Replicates  the `sceneWillEnterForeground(_: UIScene)` functionality of the `UISceneDelegate`.
     ///
     /// Tells the delegate that the scene is about to begin running in the foreground and become visible to the user.
     /// - Parameter scene: The scene that is about to enter the foreground.
-    func sceneWillEnterForeground(_ scene: UIScene)
+    func sceneWillEnterForeground()
     
     /// Replicates  the `sceneDidBecomeActive(_: UIScene)` functionality of the `UISceneDelegate`.
     ///
     /// Tells the delegate that the scene became active and is now responding to user events.
     /// - Parameter scene: The scene that became active and is now responding to user events.
-    func sceneDidBecomeActive(_ scene: UIScene)
-    
+    func sceneDidBecomeActive()
+
     /// Replicates  the `sceneWillResignActive(_: UIScene)` functionality of the `UISceneDelegate`.
     ///
     /// Tells the delegate that the scene is about to resign the active state and stop responding to user events.
     /// - Parameter scene: The scene that is about to stop responding to user events.
-    func sceneWillResignActive(_ scene: UIScene)
+    func sceneWillResignActive()
     
     /// Replicates  the `sceneDidEnterBackground(_: UIScene)` functionality of the `UISceneDelegate`.
     ///
     /// Tells the delegate that the scene is running in the background and is no longer onscreen.
     /// - Parameter scene: The scene that entered the background.
-    func sceneDidEnterBackground(_ scene: UIScene)
+    func sceneDidEnterBackground()
     
     /// Replicates  the `applicationWillTerminate(_: UIApplication)` functionality of the `UIApplicationDelegate`.
     ///
     /// Tells the delegate when the app is about to terminate.
     /// - Parameter application: Your singleton app object.
-    func applicationWillTerminate(
-        _ application: UIApplication
-    )
+    func applicationWillTerminate()
+
+    // TODO: update ALL docs
 }
 
 
 extension LifecycleHandler {
     // A documentation for this method exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
     // swiftlint:disable:next missing_docs
-    public func willFinishLaunchingWithOptions(
-        _ application: UIApplication,
-        launchOptions: [UIApplication.LaunchOptionsKey: Any]
-    ) { }
+    public func willFinishLaunchingWithOptions(launchOptions: [LaunchOptionsKey: Any]) {}
+
+    // A documentation for this method exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
+    // swiftlint:disable:next missing_docs
+    public func sceneWillEnterForeground() { }
     
     // A documentation for this method exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
     // swiftlint:disable:next missing_docs
-    public func sceneWillEnterForeground(_ scene: UIScene) { }
+    public func sceneDidBecomeActive() { }
     
     // A documentation for this method exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
     // swiftlint:disable:next missing_docs
-    public func sceneDidBecomeActive(_ scene: UIScene) { }
+    public func sceneWillResignActive() { }
     
     // A documentation for this method exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
     // swiftlint:disable:next missing_docs
-    public func sceneWillResignActive(_ scene: UIScene) { }
+    public func sceneDidEnterBackground() { }
     
     // A documentation for this method exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
     // swiftlint:disable:next missing_docs
-    public func sceneDidEnterBackground(_ scene: UIScene) { }
-    
-    // A documentation for this method exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
-    // swiftlint:disable:next missing_docs
-    public func applicationWillTerminate(
-        _ application: UIApplication
-    ) { }
+    public func applicationWillTerminate() { }
 }
 
 
 extension Array: LifecycleHandler where Element == LifecycleHandler {
-    public func willFinishLaunchingWithOptions(
-        _ application: UIApplication,
-        launchOptions: [UIApplication.LaunchOptionsKey: Any]
-    ) {
+    public func willFinishLaunchingWithOptions(launchOptions: [LaunchOptionsKey: Any]) {
         for lifecycleHandler in self {
-            lifecycleHandler.willFinishLaunchingWithOptions(application, launchOptions: launchOptions)
+            lifecycleHandler.willFinishLaunchingWithOptions(launchOptions: launchOptions)
         }
     }
     
-    public func sceneWillEnterForeground(_ scene: UIScene) {
+    public func sceneWillEnterForeground() {
         for lifecycleHandler in self {
-            lifecycleHandler.sceneWillEnterForeground(scene)
+            lifecycleHandler.sceneWillEnterForeground()
         }
     }
     
-    public func sceneDidBecomeActive(_ scene: UIScene) {
+    public func sceneDidBecomeActive() {
         for lifecycleHandler in self {
-            lifecycleHandler.sceneDidBecomeActive(scene)
+            lifecycleHandler.sceneDidBecomeActive()
         }
     }
     
-    public func sceneWillResignActive(_ scene: UIScene) {
+    public func sceneWillResignActive() {
         for lifecycleHandler in self {
-            lifecycleHandler.sceneWillResignActive(scene)
+            lifecycleHandler.sceneWillResignActive()
         }
     }
     
-    public func sceneDidEnterBackground(_ scene: UIScene) {
+    public func sceneDidEnterBackground() {
         for lifecycleHandler in self {
-            lifecycleHandler.sceneDidEnterBackground(scene)
+            lifecycleHandler.sceneDidEnterBackground()
         }
     }
     
-    public func applicationWillTerminate(
-        _ application: UIApplication
-    ) {
+    public func applicationWillTerminate() {
         for lifecycleHandler in self {
-            lifecycleHandler.applicationWillTerminate(application)
+            lifecycleHandler.applicationWillTerminate()
         }
     }
 }

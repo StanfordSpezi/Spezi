@@ -9,6 +9,7 @@
 import SwiftUI
 
 
+#if os(iOS) || os(visionOS) || os(tvOS)
 class SpeziSceneDelegate: NSObject, UISceneDelegate {
     func sceneWillEnterForeground(_ scene: UIScene) {
         guard let delegate = SpeziAppDelegate.appDelegate else {
@@ -38,3 +39,4 @@ class SpeziSceneDelegate: NSObject, UISceneDelegate {
         delegate.sceneDidEnterBackground(scene)
     }
 }
+#endif

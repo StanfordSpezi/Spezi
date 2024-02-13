@@ -20,7 +20,7 @@ public typealias SpeziStorage = HeapRepository<SpeziAnchor>
 
 /// Open-source framework for rapid development of modern, interoperable digital health applications.
 ///
-/// Set up the Spezi framework in your `App` instance of your SwiftUI application using the ``SpeziAppDelegate`` and the `@UIApplicationDelegateAdaptor` property wrapper.
+/// Set up the Spezi framework in your `App` instance of your SwiftUI application using the ``SpeziAppDelegate`` and the `@ApplicationDelegateAdaptor` property wrapper.
 /// Use the `View.spezi(_: SpeziAppDelegate)` view modifier to apply your Spezi configuration to the main view in your SwiftUI `Scene`:
 /// ```swift
 /// import Spezi
@@ -29,7 +29,7 @@ public typealias SpeziStorage = HeapRepository<SpeziAnchor>
 ///
 /// @main
 /// struct ExampleApp: App {
-///     @UIApplicationDelegateAdaptor(SpeziAppDelegate.self) var appDelegate
+///     @ApplicationDelegateAdaptor(SpeziAppDelegate.self) var appDelegate
 ///
 ///
 ///     var body: some Scene {

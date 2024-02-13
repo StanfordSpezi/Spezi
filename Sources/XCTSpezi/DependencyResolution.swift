@@ -26,7 +26,7 @@ public func withDependencyResolution<S: Standard>(
     let spezi = Spezi(standard: standard, modules: modules().elements)
 
     if case let .launchWithOptions(options) = simulateLifecycle {
-        spezi.lifecycleHandler.willFinishLaunchingWithOptions(UIApplication.shared, launchOptions: options)
+        spezi.lifecycleHandler.willFinishLaunchingWithOptions(launchOptions: options)
     }
 }
 

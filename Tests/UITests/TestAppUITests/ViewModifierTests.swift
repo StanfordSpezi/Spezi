@@ -14,7 +14,7 @@ final class ViewModifierTests: XCTestCase {
         let app = XCUIApplication()
         app.launch()
         
-        app.staticTexts["ViewModifier"].tap()
+        app.buttons["ViewModifier"].tap()
         
         XCTAssert(app.staticTexts["Passed"].waitForExistence(timeout: 1))
     }
