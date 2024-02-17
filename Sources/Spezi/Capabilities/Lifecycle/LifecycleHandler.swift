@@ -10,15 +10,6 @@ import os
 import SwiftUI
 
 
-// TODO: Docs
-#if os(iOS) || os(visionOS) || os(tvOS)
-public typealias LaunchOptionsKey = UIApplication.LaunchOptionsKey
-#else
-// Launch options are not part of WKApplicationDelegate or NSApplicationDelegate
-public typealias LaunchOptionsKey = Never
-#endif
-
-
 /// Delegate methods are related to the  `UIApplication` and ``Spezi/Spezi`` lifecycle.
 ///
 /// Conform to the `LifecycleHandler` protocol to get updates about the application lifecycle similar to the `UIApplicationDelegate` on an app basis.
@@ -28,7 +19,16 @@ public typealias LaunchOptionsKey = Never
 /// - ``LifecycleHandler/applicationWillTerminate(_:)-35fxv``
 ///
 /// All methods supported by the module capability are listed blow.
+@available(
+    *,
+    deprecated,
+    message: """
+             Please use the new @Application property wrapper to access delegate functionality. \
+             Otherwise use the SwiftUI onReceive(_:perform:) for UI related notifications.
+             """
+)
 public protocol LifecycleHandler {
+#if os(iOS) || os(visionOS) || os(tvOS)
     /// Replicates  the `application(_: UIApplication, willFinishLaunchingWithOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool`
     /// functionality of the `UIApplicationDelegate`.
     ///
@@ -36,103 +36,232 @@ public protocol LifecycleHandler {
     /// - Parameters:
     ///   - application: The singleton app object.
     ///   - launchOptions: A dictionary indicating the reason the app was launched (if any). The contents of this dictionary may be empty in situations where the user launched the app directly. For information about the possible keys in this dictionary and how to handle them, see UIApplication.LaunchOptionsKey.
-    func willFinishLaunchingWithOptions(launchOptions: [LaunchOptionsKey: Any])
-    
+    @available(
+        *,
+        deprecated,
+        message: """
+                 Please use the new @Application(\\.launchOptions) property wrapper within your Module \
+                 to access launchOptions in a platform independent way.
+                 """
+    )
+    func willFinishLaunchingWithOptions(_ application: UIApplication, launchOptions: [UIApplication.LaunchOptionsKey: Any])
+
     /// Replicates  the `sceneWillEnterForeground(_: UIScene)` functionality of the `UISceneDelegate`.
     ///
     /// Tells the delegate that the scene is about to begin running in the foreground and become visible to the user.
+    ///
+    /// - Important: This method is deprecated. This method is only called on iOS and not supported on other platforms.
+    ///
+    ///
     /// - Parameter scene: The scene that is about to enter the foreground.
-    func sceneWillEnterForeground()
-    
+    @available(
+        *,
+        deprecated,
+        message: """
+                 Using UISceneDelegate is deprecated. \
+                 Use the SwiftUI onReceive(_:perform:) modifier with the UIScene.willEnterForegroundNotification publisher on iOS \
+                 or other platform-specific mechanisms as a replacement.
+                 """
+    )
+    func sceneWillEnterForeground(_ scene: UIScene)
+
     /// Replicates  the `sceneDidBecomeActive(_: UIScene)` functionality of the `UISceneDelegate`.
     ///
     /// Tells the delegate that the scene became active and is now responding to user events.
     /// - Parameter scene: The scene that became active and is now responding to user events.
-    func sceneDidBecomeActive()
+    @available(
+        *,
+         deprecated,
+         message: """
+                 Using UISceneDelegate is deprecated. \
+                 Use the SwiftUI onReceive(_:perform:) modifier with the UIScene.didActivateNotification publisher on iOS \
+                 or other platform-specific mechanisms as a replacement.
+                 """
+    )
+    func sceneDidBecomeActive(_ scene: UIScene)
 
     /// Replicates  the `sceneWillResignActive(_: UIScene)` functionality of the `UISceneDelegate`.
     ///
     /// Tells the delegate that the scene is about to resign the active state and stop responding to user events.
     /// - Parameter scene: The scene that is about to stop responding to user events.
-    func sceneWillResignActive()
-    
+    @available(
+        *,
+         deprecated,
+         message: """
+                 Using UISceneDelegate is deprecated. \
+                 Use the SwiftUI onReceive(_:perform:) modifier with the UIScene.willDeactivateNotification publisher on iOS \
+                 or other platform-specific mechanisms as a replacement.
+                 """
+    )
+    func sceneWillResignActive(_ scene: UIScene)
+
     /// Replicates  the `sceneDidEnterBackground(_: UIScene)` functionality of the `UISceneDelegate`.
     ///
     /// Tells the delegate that the scene is running in the background and is no longer onscreen.
     /// - Parameter scene: The scene that entered the background.
-    func sceneDidEnterBackground()
-    
+    @available(
+        *,
+         deprecated,
+         message: """
+                 Using UISceneDelegate is deprecated. \
+                 Use the SwiftUI onReceive(_:perform:) modifier with the UIScene.didEnterBackgroundNotification publisher on iOS \
+                 or other platform-specific mechanisms as a replacement.
+                 """
+    )
+    func sceneDidEnterBackground(_ scene: UIScene)
+
     /// Replicates  the `applicationWillTerminate(_: UIApplication)` functionality of the `UIApplicationDelegate`.
     ///
     /// Tells the delegate when the app is about to terminate.
     /// - Parameter application: Your singleton app object.
-    func applicationWillTerminate()
-
-    // TODO: update ALL docs
+    @available(
+        *,
+        deprecated,
+        message: """
+                 Using UISceneDelegate is deprecated. \
+                 Use the SwiftUI onReceive(_:perform:) modifier with the UIApplication.willTerminateNotification publisher on iOS \
+                 or other platform-specific mechanisms as a replacement.
+                 """
+    )
+    func applicationWillTerminate(_ application: UIApplication)
+#endif
 }
 
 
+@available(
+    *,
+     deprecated,
+     message: """
+             Please use the new @Application property wrapper to access delegate functionality. \
+             Otherwise use the SwiftUI onReceive(_:perform:) for UI related notifications.
+             """
+)
 extension LifecycleHandler {
+#if os(iOS) || os(visionOS) || os(tvOS)
     // A documentation for this method exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
     // swiftlint:disable:next missing_docs
-    public func willFinishLaunchingWithOptions(launchOptions: [LaunchOptionsKey: Any]) {}
+    public func willFinishLaunchingWithOptions(_ application: UIApplication, launchOptions: [UIApplication.LaunchOptionsKey: Any]) {}
 
     // A documentation for this method exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
     // swiftlint:disable:next missing_docs
-    public func sceneWillEnterForeground() { }
-    
+    public func sceneWillEnterForeground(_ scene: UIScene) { }
+
     // A documentation for this method exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
     // swiftlint:disable:next missing_docs
-    public func sceneDidBecomeActive() { }
-    
+    public func sceneDidBecomeActive(_ scene: UIScene) { }
+
     // A documentation for this method exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
     // swiftlint:disable:next missing_docs
-    public func sceneWillResignActive() { }
-    
+    public func sceneWillResignActive(_ scene: UIScene) { }
+
     // A documentation for this method exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
     // swiftlint:disable:next missing_docs
-    public func sceneDidEnterBackground() { }
-    
+    public func sceneDidEnterBackground(_ scene: UIScene) { }
+
     // A documentation for this method exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
     // swiftlint:disable:next missing_docs
-    public func applicationWillTerminate() { }
+    public func applicationWillTerminate(_ application: UIApplication) { }
+#endif
 }
 
 
+@available(
+    *,
+     deprecated,
+     message: """
+             Please use the new @Application property wrapper to access delegate functionality. \
+             Otherwise use the SwiftUI onReceive(_:perform:) for UI related notifications.
+             """
+)
 extension Array: LifecycleHandler where Element == LifecycleHandler {
-    public func willFinishLaunchingWithOptions(launchOptions: [LaunchOptionsKey: Any]) {
+#if os(iOS) || os(visionOS) || os(tvOS)
+    @available(
+        *,
+        deprecated,
+        message: """
+                 Please use the new @Application(\\.launchOptions) property wrapper within your Module \
+                 to access launchOptions in a platform independent way.
+                 """
+    )
+    public func willFinishLaunchingWithOptions(_ application: UIApplication, launchOptions: [UIApplication.LaunchOptionsKey: Any]) {
         for lifecycleHandler in self {
-            lifecycleHandler.willFinishLaunchingWithOptions(launchOptions: launchOptions)
+            lifecycleHandler.willFinishLaunchingWithOptions(application, launchOptions: launchOptions)
+        }
+    }
+
+    @available(
+        *,
+         deprecated,
+         message: """
+                 Using UISceneDelegate is deprecated. \
+                 Use the SwiftUI onReceive(_:perform:) modifier with the UIScene.willEnterForegroundNotification publisher on iOS \
+                 or other platform-specific mechanisms as a replacement.
+                 """
+    )
+    public func sceneWillEnterForeground(_ scene: UIScene) {
+        for lifecycleHandler in self {
+            lifecycleHandler.sceneWillEnterForeground(scene)
         }
     }
     
-    public func sceneWillEnterForeground() {
+    @available(
+        *,
+         deprecated,
+         message: """
+                 Using UISceneDelegate is deprecated. \
+                 Use the SwiftUI onReceive(_:perform:) modifier with the UIScene.didActivateNotification publisher on iOS \
+                 or other platform-specific mechanisms as a replacement.
+                 """
+    )
+    public func sceneDidBecomeActive(_ scene: UIScene) {
         for lifecycleHandler in self {
-            lifecycleHandler.sceneWillEnterForeground()
+            lifecycleHandler.sceneDidBecomeActive(scene)
         }
     }
     
-    public func sceneDidBecomeActive() {
+    @available(
+        *,
+         deprecated,
+         message: """
+                 Using UISceneDelegate is deprecated. \
+                 Use the SwiftUI onReceive(_:perform:) modifier with the UIScene.willDeactivateNotification publisher on iOS \
+                 or other platform-specific mechanisms as a replacement.
+                 """
+    )
+    public func sceneWillResignActive(_ scene: UIScene) {
         for lifecycleHandler in self {
-            lifecycleHandler.sceneDidBecomeActive()
+            lifecycleHandler.sceneWillResignActive(scene)
         }
     }
     
-    public func sceneWillResignActive() {
+    @available(
+        *,
+         deprecated,
+         message: """
+                 Using UISceneDelegate is deprecated. \
+                 Use the SwiftUI onReceive(_:perform:) modifier with the UIScene.didEnterBackgroundNotification publisher on iOS \
+                 or other platform-specific mechanisms as a replacement.
+                 """
+    )
+    public func sceneDidEnterBackground(_ scene: UIScene) {
         for lifecycleHandler in self {
-            lifecycleHandler.sceneWillResignActive()
+            lifecycleHandler.sceneDidEnterBackground(scene)
         }
     }
-    
-    public func sceneDidEnterBackground() {
+
+    @available(
+        *,
+        deprecated,
+        message: """
+                 Using UISceneDelegate is deprecated. \
+                 Use the SwiftUI onReceive(_:perform:) modifier with the UIApplication.willTerminateNotification publisher on iOS \
+                 or other platform-specific mechanisms as a replacement.
+                 """
+    )
+    public func applicationWillTerminate(_ application: UIApplication) {
         for lifecycleHandler in self {
-            lifecycleHandler.sceneDidEnterBackground()
+            lifecycleHandler.applicationWillTerminate(application)
         }
     }
-    
-    public func applicationWillTerminate() {
-        for lifecycleHandler in self {
-            lifecycleHandler.applicationWillTerminate()
-        }
-    }
+#endif
 }

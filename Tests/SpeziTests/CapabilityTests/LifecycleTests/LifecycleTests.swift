@@ -11,10 +11,14 @@ import XCTest
 import XCTRuntimeAssertions
 
 
+@available(*, deprecated, message: "Propagate deprecation warning")
 private final class TestLifecycleHandler: Module, LifecycleHandler {
     let expectationWillFinishLaunchingWithOption: XCTestExpectation
     let expectationApplicationWillTerminate: XCTestExpectation
-    
+
+    @Application(\.launchOptions)
+    var launchOptions
+
     
     init(
         expectationWillFinishLaunchingWithOption: XCTestExpectation,
@@ -24,77 +28,77 @@ private final class TestLifecycleHandler: Module, LifecycleHandler {
         self.expectationApplicationWillTerminate = expectationApplicationWillTerminate
     }
     
-    
+#if os(iOS) || os(visionOS) || os(tvOS)
     func willFinishLaunchingWithOptions(
-        launchOptions: [LaunchOptionsKey: Any]
+        _ application: UIApplication,
+        launchOptions: [UIApplication.LaunchOptionsKey: Any]
     ) {
         expectationWillFinishLaunchingWithOption.fulfill()
     }
     
-    func applicationWillTerminate() {
+    func applicationWillTerminate(_ application: UIApplication) {
         expectationApplicationWillTerminate.fulfill()
     }
+#endif
 }
 
 
+@available(*, deprecated, message: "Propagate deprecation warning")
 private final class EmptyLifecycleHandler: Module, LifecycleHandler { }
 
+@available(*, deprecated, message: "Propagate deprecation warning")
 private class TestLifecycleHandlerApplicationDelegate: SpeziAppDelegate {
-    let expectationWillFinishLaunchingWithOption: XCTestExpectation
-    let expectationApplicationWillTerminate: XCTestExpectation
+    private let injectedModule: TestLifecycleHandler
     
     
     override var configuration: Configuration {
         Configuration {
-            TestLifecycleHandler(
-                expectationWillFinishLaunchingWithOption: expectationWillFinishLaunchingWithOption,
-                expectationApplicationWillTerminate: expectationApplicationWillTerminate
-            )
+            injectedModule
             EmptyLifecycleHandler()
         }
     }
-    
-    
-    init(
-        expectationWillFinishLaunchingWithOption: XCTestExpectation,
-        expectationApplicationWillTerminate: XCTestExpectation
-    ) {
-        self.expectationWillFinishLaunchingWithOption = expectationWillFinishLaunchingWithOption
-        self.expectationApplicationWillTerminate = expectationApplicationWillTerminate
+
+    init(injectedModule: TestLifecycleHandler) {
+        self.injectedModule = injectedModule
     }
 }
 
 
 final class LifecycleTests: XCTestCase {
     @MainActor
+    @available(*, deprecated, message: "Propagate deprecation warning")
     func testUIApplicationLifecycleMethods() async throws {
         let expectationWillFinishLaunchingWithOption = XCTestExpectation(description: "WillFinishLaunchingWithOptions")
         let expectationApplicationWillTerminate = XCTestExpectation(description: "ApplicationWillTerminate")
-        
-        let testApplicationDelegate = TestLifecycleHandlerApplicationDelegate(
+
+        let module = TestLifecycleHandler(
             expectationWillFinishLaunchingWithOption: expectationWillFinishLaunchingWithOption,
             expectationApplicationWillTerminate: expectationApplicationWillTerminate
         )
+        let testApplicationDelegate = TestLifecycleHandlerApplicationDelegate(injectedModule: module)
 
 
         #if os(iOS) || os(visionOS) || os(tvOS)
-        let willFinishLaunchingWithOptions = try testApplicationDelegate.application(
+        let launchOptions = try [UIApplication.LaunchOptionsKey.url: XCTUnwrap(URL(string: "spezi.stanford.edu"))]
+        let willFinishLaunchingWithOptions = testApplicationDelegate.application(
             UIApplication.shared,
-            willFinishLaunchingWithOptions: [UIApplication.LaunchOptionsKey.url: XCTUnwrap(URL(string: "spezi.stanford.edu"))]
+            willFinishLaunchingWithOptions: launchOptions
         )
         XCTAssertTrue(willFinishLaunchingWithOptions)
-        #elseif os(macOS)
-        testApplicationDelegate.applicationWillFinishLaunching(Notification(name: NSApplication.willFinishLaunchingNotification))
-        #elseif os(watchOS)
-        testApplicationDelegate.applicationDidFinishLaunching()
-        #endif
         wait(for: [expectationWillFinishLaunchingWithOption])
+
+        XCTAssertTrue(module.launchOptions.keys.allSatisfy { launchOptions[$0] != nil })
+        #elseif os(macOS)
+        let launchOptions: [AnyHashable: Any] = [:] // TODO: put in some values
+        testApplicationDelegate.applicationWillFinishLaunching(
+            Notification(name: NSApplication.willFinishLaunchingNotification, userInfo: launchOptions)
+        )
+
+        XCTAssertTrue(module.launchOptions.keys.allSatisfy { launchOptions[$0] != nil })
+        #endif
         
         #if os(iOS) || os(visionOS) || os(tvOS)
         testApplicationDelegate.applicationWillTerminate(UIApplication.shared)
-        wait(for: [expectationApplicationWillTerminate])
-        #elseif os(macOS)
-        testApplicationDelegate.applicationWillTerminate(.init(name: NSApplication.willTerminateNotification))
         wait(for: [expectationApplicationWillTerminate])
         #endif
     }

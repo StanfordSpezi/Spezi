@@ -48,7 +48,8 @@
 /// - ``ModuleBuilder``
 /// - ``ModuleCollection``
 public struct Configuration {
-    let spezi: AnySpezi
+    let standard: any Standard
+    let modules: ModuleCollection
     
 
     /// A ``Configuration`` defines the ``Standard`` and ``Module``s that are used in a Spezi project.
@@ -64,7 +65,8 @@ public struct Configuration {
         standard: S,
         @ModuleBuilder _ modules: () -> ModuleCollection
     ) {
-        self.spezi = Spezi<S>(standard: standard, modules: modules().elements)
+        self.standard = standard
+        self.modules = modules()
     }
     
     
@@ -78,6 +80,6 @@ public struct Configuration {
     public init(
         @ModuleBuilder _ modules: () -> ModuleCollection
     ) {
-        self.spezi = Spezi<DefaultStandard>(standard: DefaultStandard(), modules: modules().elements)
+        self.init(standard: DefaultStandard(), modules)
     }
 }

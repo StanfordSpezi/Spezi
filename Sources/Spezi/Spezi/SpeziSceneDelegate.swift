@@ -11,6 +11,7 @@ import SwiftUI
 
 #if os(iOS) || os(visionOS) || os(tvOS)
 class SpeziSceneDelegate: NSObject, UISceneDelegate {
+    @available(*, deprecated, message: "Propagate deprecation warning.")
     func sceneWillEnterForeground(_ scene: UIScene) {
         guard let delegate = SpeziAppDelegate.appDelegate else {
             return
@@ -18,6 +19,7 @@ class SpeziSceneDelegate: NSObject, UISceneDelegate {
         delegate.sceneWillEnterForeground(scene)
     }
     
+    @available(*, deprecated, message: "Propagate deprecation warning.")
     func sceneDidBecomeActive(_ scene: UIScene) {
         guard let delegate = SpeziAppDelegate.appDelegate else {
             return
@@ -25,6 +27,7 @@ class SpeziSceneDelegate: NSObject, UISceneDelegate {
         delegate.sceneDidBecomeActive(scene)
     }
     
+    @available(*, deprecated, message: "Propagate deprecation warning.")
     func sceneWillResignActive(_ scene: UIScene) {
         guard let delegate = SpeziAppDelegate.appDelegate else {
             return
@@ -32,6 +35,7 @@ class SpeziSceneDelegate: NSObject, UISceneDelegate {
         delegate.sceneWillResignActive(scene)
     }
     
+    @available(*, deprecated, message: "Propagate deprecation warning.")
     func sceneDidEnterBackground(_ scene: UIScene) {
         guard let delegate = SpeziAppDelegate.appDelegate else {
             return

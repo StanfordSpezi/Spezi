@@ -57,28 +57,45 @@ public typealias SpeziStorage = HeapRepository<SpeziAnchor>
 ///
 /// The ``Module`` documentation provides more information about the structure of modules.
 /// Refer to the ``Configuration`` documentation to learn more about the Spezi configuration.
-public actor Spezi<S: Standard>: AnySpezi {
+public class Spezi {
     /// A shared repository to store any ``KnowledgeSource``s restricted to the ``SpeziAnchor``.
-    let storage: SpeziStorage
+    ///
+    /// Every `Module` automatically conforms to `KnowledgeSource` and is stored within this storage object.
+    fileprivate(set) var storage: SpeziStorage
     /// Logger used to log events in the ``Spezi/Spezi`` instance.
     public let logger: Logger
-    /// The ``Standard`` used in the ``Spezi/Spezi`` instance.
-    public let standard: S
 
     /// Array of all SwiftUI `ViewModifiers` collected using ``_ModifierPropertyWrapper`` from the configured ``Module``s.
-    let viewModifiers: [any ViewModifier]
+    var viewModifiers: [any ViewModifier]
 
+    /// A collection of ``Spezi/Spezi`` `LifecycleHandler`s.
+    @available(
+        *,
+         deprecated,
+         message: """
+             Please use the new @Application property wrapper to access delegate functionality. \
+             Otherwise use the SwiftUI onReceive(_:perform:) for UI related notifications.
+             """
+    )
+    nonisolated var lifecycleHandler: [LifecycleHandler] {
+        storage.collect(allOf: LifecycleHandler.self)
+    }
+
+
+    convenience init(from configuration: Configuration, storage: consuming SpeziStorage = SpeziStorage()) {
+        self.init(standard: configuration.standard, modules: configuration.modules.elements, storage: storage)
+    }
     
     init(
-        standard: S,
-        modules: [any Module]
+        standard: any Standard,
+        modules: [any Module],
+        storage: consuming SpeziStorage = SpeziStorage()
     ) {
         // mutable property, as StorageValueProvider has inout protocol requirement.
-        var storage = SpeziStorage()
+        var storage = consume storage
         var collectedModifiers: [any ViewModifier] = []
 
         self.logger = storage[SpeziLogger.self]
-        self.standard = standard
 
         let dependencyManager = DependencyManager(modules + [standard])
         dependencyManager.resolve()
@@ -87,14 +104,19 @@ public actor Spezi<S: Standard>: AnySpezi {
             // we pass through the whole list of modules once to collect all @Provide values
             module.collectModuleValues(into: &storage)
         }
-        
+
+        self.storage = storage
+        self.viewModifiers = [] // init all properties, we will store the final result later on
+
         for module in dependencyManager.sortedModules {
             module.inject(standard: standard)
+            module.inject(spezi: self)
+
             // supply modules values to all @Collect
-            module.injectModuleValues(from: storage)
+            module.injectModuleValues(from: self.storage)
 
             module.configure()
-            module.storeModule(into: &storage)
+            module.storeModule(into: self)
 
             collectedModifiers.append(contentsOf: module.viewModifiers)
 
@@ -104,18 +126,17 @@ public actor Spezi<S: Standard>: AnySpezi {
             }
         }
 
-        self.storage = storage
         self.viewModifiers = collectedModifiers
     }
 }
 
 
 extension Module {
-    func storeModule<Repository: SharedRepository<SpeziAnchor>>(into repository: inout Repository) {
+    func storeModule(into spezi: Spezi) {
         guard let value = self as? Value else {
-            repository[SpeziLogger.self].warning("Could not store \(Self.self) in the SpeziStorage as the `Value` typealias was modified.")
+            spezi.logger.warning("Could not store \(Self.self) in the SpeziStorage as the `Value` typealias was modified.")
             return
         }
-        repository[Self.self] = value
+        spezi.storage[Self.self] = value
     }
 }

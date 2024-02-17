@@ -9,28 +9,6 @@
 import SwiftUI
 
 
-#if os(iOS) || os(visionOS)
-typealias ApplicationDelegate = UIApplicationDelegate & UISceneDelegate
-/// Platform agnostic ApplicationDelegateAdaptor.
-///
-/// Type-alias for the `UIApplicationDelegateAdaptor`.
-public typealias ApplicationDelegateAdaptor = UIApplicationDelegateAdaptor
-#elseif os(macOS)
-typealias ApplicationDelegate = NSApplicationDelegate
-/// Platform agnostic ApplicationDelegateAdaptor.
-///
-/// Type-alias for the `NSApplicationDelegateAdaptor`.
-public typealias ApplicationDelegateAdaptor = NSApplicationDelegateAdaptor
-#elseif os(watchOS)
-typealias ApplicationDelegate = WKApplicationDelegate
-/// Platform agnostic ApplicationDelegateAdaptor.
-///
-/// Type-alias for the `WKApplicationDelegateAdaptor`.
-public typealias ApplicationDelegateAdaptor = WKApplicationDelegateAdaptor
-#endif
-
-
-
 /// Configure the Spezi-based application using the ``SpeziAppDelegate/configuration`` property.
 ///
 /// Set up the Spezi framework in your `App` instance of your SwiftUI application using the ``SpeziAppDelegate`` and the `@ApplicationDelegateAdaptor` property wrapper.
@@ -72,9 +50,17 @@ public typealias ApplicationDelegateAdaptor = WKApplicationDelegateAdaptor
 /// Refer to the ``Configuration`` documentation to learn more about the Spezi configuration.
 open class SpeziAppDelegate: NSObject, ApplicationDelegate {
     private(set) static weak var appDelegate: SpeziAppDelegate?
-    
-    
-    private(set) lazy var spezi: AnySpezi = configuration.spezi
+
+    private var _spezi: Spezi?
+
+    var spezi: Spezi {
+        guard let spezi = _spezi else {
+            let spezi = Spezi(from: configuration)
+            self._spezi = spezi
+            return spezi
+        }
+        return spezi
+    }
     
     
     /// Register your different ``Module``s (or more sophisticated ``Module``s) using the ``SpeziAppDelegate/configuration`` property,.
@@ -100,6 +86,7 @@ open class SpeziAppDelegate: NSObject, ApplicationDelegate {
     }
 
 #if os(iOS) || os(visionOS) || os(tvOS)
+    @available(*, deprecated, message: "Propagate deprecation warning.")
     open func application(
         _ application: UIApplication,
         // The usage of an optional collection is impossible to avoid as the function signature is defined by the `UIApplicationDelegate`
@@ -113,7 +100,15 @@ open class SpeziAppDelegate: NSObject, ApplicationDelegate {
             // and configuration of the respective modules. This might and will cause troubles with Modules that
             // are only meant to be instantiated once. Therefore, we skip execution of this if running inside the PreviewSimulator.
             // This is also not a problem, as there is no way to set up an application delegate within a Xcode preview.
-            spezi.willFinishLaunchingWithOptions(launchOptions: launchOptions ?? [:])
+
+            precondition(_spezi == nil, "\(#function) was called when Spezi was already initialized. Unable to pass options!")
+
+            var storage = SpeziStorage()
+            storage[LaunchOptionsKey.self] = launchOptions
+            self._spezi = Spezi(from: configuration, storage: storage)
+
+            // backwards compatibility
+            spezi.lifecycleHandler.willFinishLaunchingWithOptions(application, launchOptions: launchOptions ?? [:])
         }
         return true
     }
@@ -129,74 +124,41 @@ open class SpeziAppDelegate: NSObject, ApplicationDelegate {
         return sceneConfig
     }
 
+    @available(*, deprecated, message: "Propagate deprecation warning.")
     open func applicationWillTerminate(_ application: UIApplication) {
-        spezi.applicationWillTerminate()
+        spezi.lifecycleHandler.applicationWillTerminate(application)
     }
 
+    @available(*, deprecated, message: "Propagate deprecation warning.")
     open func sceneWillEnterForeground(_ scene: UIScene) {
-        spezi.sceneWillEnterForeground()
+        spezi.lifecycleHandler.sceneWillEnterForeground(scene)
     }
     
+    @available(*, deprecated, message: "Propagate deprecation warning.")
     open func sceneDidBecomeActive(_ scene: UIScene) {
-        spezi.sceneDidBecomeActive()
+        spezi.lifecycleHandler.sceneDidBecomeActive(scene)
     }
     
+    @available(*, deprecated, message: "Propagate deprecation warning.")
     open func sceneWillResignActive(_ scene: UIScene) {
-        spezi.sceneWillResignActive()
+        spezi.lifecycleHandler.sceneWillResignActive(scene)
     }
     
+    @available(*, deprecated, message: "Propagate deprecation warning.")
     open func sceneDidEnterBackground(_ scene: UIScene) {
-        spezi.sceneDidEnterBackground()
+        spezi.lifecycleHandler.sceneDidEnterBackground(scene)
     }
 #elseif os(macOS)
     open func applicationWillFinishLaunching(_ notification: Notification) {
         if !ProcessInfo.processInfo.isPreviewSimulator {
-            spezi.willFinishLaunchingWithOptions(launchOptions: [:])
+            // see note above for why we don't launch this within the preview simulator!
+
+            precondition(_spezi == nil, "\(#function) was called when Spezi was already initialized. Unable to pass options!")
+
+            var storage = SpeziStorage()
+            storage[LaunchOptionsKey.self] = notification.userInfo
+            self._spezi = Spezi(from: configuration, storage: storage)
         }
-    }
-
-    open func applicationWillTerminate(_ notification: Notification) {
-        spezi.applicationWillTerminate()
-    }
-
-    open func applicationWillBecomeActive(_ notification: Notification) {
-        spezi.sceneWillEnterForeground() // TODO: is that accurate?
-    }
-
-    open func applicationDidBecomeActive(_ notification: Notification) {
-        spezi.sceneDidBecomeActive()
-    }
-
-    open func applicationWillResignActive(_ notification: Notification) {
-        spezi.sceneWillResignActive()
-    }
-
-    open func applicationDidResignActive(_ notification: Notification) {
-        spezi.sceneDidEnterBackground()
-    }
-#elseif os(watchOS)
-    open func applicationDidFinishLaunching() {
-        if !ProcessInfo.processInfo.isPreviewSimulator {
-            spezi.willFinishLaunchingWithOptions(launchOptions: [:])
-        }
-    }
-
-    // applicationWillTerminate(_:) not supported for WatchKit
-
-    open func applicationWillEnterForeground() {
-        spezi.sceneWillEnterForeground()
-    }
-
-    open func applicationDidBecomeActive() {
-        spezi.sceneDidBecomeActive()
-    }
-
-    open func applicationWillResignActive() {
-        spezi.sceneWillResignActive()
-    }
-
-    open func applicationDidEnterBackground() {
-        spezi.sceneDidEnterBackground()
     }
 #endif
 }
