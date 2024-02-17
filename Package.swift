@@ -27,7 +27,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/StanfordSpezi/SpeziFoundation", from: "1.0.2"),
-        .package(url: "https://github.com/StanfordBDHG/XCTRuntimeAssertions", branch: "feature/platform-support")
+        .package(url: "https://github.com/StanfordBDHG/XCTRuntimeAssertions", from: "1.0.1")
     ],
     targets: [
         .target(
