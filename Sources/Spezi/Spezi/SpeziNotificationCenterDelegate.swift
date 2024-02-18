@@ -10,6 +10,7 @@ import UserNotifications
 
 
 class SpeziNotificationCenterDelegate: NSObject, UNUserNotificationCenterDelegate {
+#if !os(tvOS)
     @MainActor
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) async {
         guard let delegate = SpeziAppDelegate.appDelegate else {
@@ -26,6 +27,7 @@ class SpeziNotificationCenterDelegate: NSObject, UNUserNotificationCenterDelegat
             for await _ in group {}
         }
     }
+#endif
 
     @MainActor
     func userNotificationCenter(

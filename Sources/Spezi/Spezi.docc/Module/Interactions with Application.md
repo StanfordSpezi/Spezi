@@ -16,8 +16,6 @@ SPDX-License-Identifier: MIT
 
 <!--@START_MENU_TOKEN@-->Text<!--@END_MENU_TOKEN@-->
 
-### Section header
-
 ## Topics
 
 ### Application Interaction

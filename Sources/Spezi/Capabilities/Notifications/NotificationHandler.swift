@@ -11,6 +11,7 @@ import UserNotifications
 
 /// Get notified about receiving notifications.
 public protocol NotificationHandler {
+#if !os(tvOS)
     /// Handle user-selected notification action.
     ///
     /// This method is called with your app in the background to handle the selected user action.
@@ -18,8 +19,11 @@ public protocol NotificationHandler {
     /// For more information refer to [Handle user-selected actions](https://developer.apple.com/documentation/usernotifications/handling-notifications-and-notification-related-actions#Handle-user-selected-actions)
     /// and [`userNotificationCenter(_:didReceive:withCompletionHandler:)`](https://developer.apple.com/documentation/usernotifications/unusernotificationcenterdelegate/usernotificationcenter(_:didreceive:withcompletionhandler:)).
     ///
+    /// - Note: Notification Actions are not supported on `tvOS`.
+    ///
     /// - Parameter response: The user's response to the notification.
     func handleNotificationAction(_ response: UNNotificationResponse) async
+#endif
 
     /// Handle incoming notification when the app is running in foreground.
     ///
@@ -43,6 +47,8 @@ public protocol NotificationHandler {
     /// [`application(_:didReceiveRemoteNotification:fetchCompletionHandler:)`](https://developer.apple.com/documentation/uikit/uiapplicationdelegate/1623013-application)
     /// or [`didReceiveRemoteNotification(_:fetchCompletionHandler:)`](https://developer.apple.com/documentation/watchkit/wkextensiondelegate/3152235-didreceiveremotenotification).
     ///
+    /// - Note: The signature for this method on macOS is slightly different. It is not `async` and doesn't have a return value.
+    ///
     /// - Parameter remoteNotification: The data of the notification payload.
     /// - Returns: Return the respective ``BackgroundFetchResult``.
     func receiveRemoteNotification(_ remoteNotification: [AnyHashable: Any]) async -> BackgroundFetchResult
@@ -62,8 +68,10 @@ public protocol NotificationHandler {
 
 
 extension NotificationHandler {
+#if !os(tvOS)
     /// Empty default implementation.
     func handleNotificationAction(_ response: UNNotificationResponse) async {}
+#endif
 
     /// Empty default implementation.
     func receiveIncomingNotification(_ notification: UNNotification) async -> UNNotificationPresentationOptions {
