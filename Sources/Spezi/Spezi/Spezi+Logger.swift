@@ -18,7 +18,7 @@ extension Module {
 
 
 extension Spezi {
-    /// The global Spezi logger.
+    /// Access the application logger.
     ///
     /// Access the global Spezi Logger. If used with ``Module/Application`` property wrapper you can create and access your module-specific `Logger`.
     ///

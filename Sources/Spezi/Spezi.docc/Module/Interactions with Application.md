@@ -14,7 +14,11 @@ SPDX-License-Identifier: MIT
 
 ## Overview
 
-<!--@START_MENU_TOKEN@-->Text<!--@END_MENU_TOKEN@-->
+Spezi provides platform-agnostic mechanisms to interact with your application instance.
+To access application properties or actions you can use the ``Module/Application`` property wrapper within your
+``Module`` or ``Standard``.
+
+> Tip: The <doc:Notifications> articles illustrates how you can easily manage user notifications within your Spezi application. 
 
 ## Topics
 
