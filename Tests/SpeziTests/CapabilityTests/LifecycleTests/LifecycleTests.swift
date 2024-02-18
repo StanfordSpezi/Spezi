@@ -89,7 +89,7 @@ final class LifecycleTests: XCTestCase {
 
         XCTAssertTrue(module.launchOptions.keys.allSatisfy { launchOptions[$0] != nil })
         #elseif os(macOS)
-        let launchOptions: [AnyHashable: Any] = [:] // TODO: put in some values
+        let launchOptions: [AnyHashable: Any] = [UUID(): "Some value"]
         testApplicationDelegate.applicationWillFinishLaunching(
             Notification(name: NSApplication.willFinishLaunchingNotification, userInfo: launchOptions)
         )

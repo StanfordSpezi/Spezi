@@ -12,8 +12,7 @@ extension Module {
     ///
     /// You can use this property wrapper inside your `Module` to define dependencies to other ``Module``s.
     ///
-    /// - Note: You can access the contents of `@Dependency` once your ``Module/configure()-5pa83`` method is called (e.g., it must not be used in the `init`)
-    ///     and can continue to access the dependency in methods like ``LifecycleHandler/willFinishLaunchingWithOptions(_:launchOptions:)-8jatp``.
+    /// - Note: You can access the contents of `@Dependency` once your ``Module/configure()-5pa83`` method is called (e.g., it must not be used in the `init`).
     ///
     /// The below code sample demonstrates a simple, singular dependence on the `ExampleModuleDependency` module.
     ///

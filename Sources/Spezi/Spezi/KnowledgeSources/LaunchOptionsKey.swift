@@ -26,14 +26,40 @@ struct LaunchOptionsKey: DefaultProvidingKnowledgeSource {
 
 extension Spezi {
 #if os(iOS) || os(visionOS) || os(tvOS)
+    /// The launch options of the application.
+    ///
+    /// You can access the launch options within your `configure()` method of your ``Module`` or ``Standard``.
+    ///
+    /// - Note: For more information refer to the documentation of
+    ///     [`application(_:willFinishLaunchingWithOptions:)`](https://developer.apple.com/documentation/uikit/uiapplicationdelegate/1623032-application).
+    ///
+    /// Below is a short code example on how to access the launch options within your `Module`.
+    ///
+    /// ```swift
+    /// class ExampleModule: Module {
+    ///     @Application(\.launchOptions)
+    ///     var launchOptions
+    ///
+    ///     func configure() {
+    ///         // interact with your launchOptions upon application launch
+    ///     }
+    /// }
+    /// ```
     public var launchOptions: [UIApplication.LaunchOptionsKey: Any] {
         storage[LaunchOptionsKey.self]
     }
 #elseif os(macOS)
+    /// The launch options of the application.
+    ///
+    /// You can access the launch options within your `configure()` method of your ``Module`` or ``Standard``.
+    ///
+    /// - Note: For more information refer to the documentation of
+    ///     [`applicationWillFinishLaunching(_:)`](https://developer.apple.com/documentation/appkit/nsapplicationdelegate/1428623-applicationwillfinishlaunching).
     public var launchOptions: [AnyHashable: Any] {
         storage[LaunchOptionsKey.self]
     }
 #else // os(watchOS)
+    /// The launch options of the application on platforms that don't support launch options.
     public var launchOptions: [Never: Any] {
         storage[LaunchOptionsKey.self]
     }

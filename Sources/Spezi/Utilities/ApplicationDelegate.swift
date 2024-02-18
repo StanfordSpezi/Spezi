@@ -10,7 +10,7 @@ import SwiftUI
 
 
 #if os(iOS) || os(visionOS) || os(tvOS)
-typealias ApplicationDelegate = UIApplicationDelegate & UISceneDelegate // swiftlint:disable:this file_types_order
+typealias ApplicationDelegate = UIApplicationDelegate // swiftlint:disable:this file_types_order
 #elseif os(macOS)
 typealias ApplicationDelegate = NSApplicationDelegate
 #elseif os(watchOS)

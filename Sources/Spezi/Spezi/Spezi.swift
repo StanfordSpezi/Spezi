@@ -57,13 +57,25 @@ public typealias SpeziStorage = HeapRepository<SpeziAnchor>
 ///
 /// The ``Module`` documentation provides more information about the structure of modules.
 /// Refer to the ``Configuration`` documentation to learn more about the Spezi configuration.
+///
+/// ## Topics
+///
+/// ### Properties
+/// - ``logger``
+/// - ``launchOptions``
+///
+/// ### Actions
+/// - ``registerRemoteNotifications``
+/// - ``unregisterRemoteNotifications``
 public class Spezi {
+    static let logger = Logger(subsystem: "edu.stanford.spezi", category: "Spezi")
+
+    @TaskLocal static var moduleInitContext: (any Module)?
+
     /// A shared repository to store any ``KnowledgeSource``s restricted to the ``SpeziAnchor``.
     ///
     /// Every `Module` automatically conforms to `KnowledgeSource` and is stored within this storage object.
     fileprivate(set) var storage: SpeziStorage
-    /// Logger used to log events in the ``Spezi/Spezi`` instance.
-    public let logger: Logger
 
     /// Array of all SwiftUI `ViewModifiers` collected using ``_ModifierPropertyWrapper`` from the configured ``Module``s.
     var viewModifiers: [any ViewModifier]
@@ -77,8 +89,18 @@ public class Spezi {
              Otherwise use the SwiftUI onReceive(_:perform:) for UI related notifications.
              """
     )
-    nonisolated var lifecycleHandler: [LifecycleHandler] {
+
+
+    var lifecycleHandler: [LifecycleHandler] {
         storage.collect(allOf: LifecycleHandler.self)
+    }
+
+    var notificationTokenHandler: [NotificationTokenHandler] {
+        storage.collect(allOf: NotificationTokenHandler.self)
+    }
+
+    var notificationHandler: [NotificationHandler] {
+        storage.collect(allOf: NotificationHandler.self)
     }
 
 
@@ -95,8 +117,6 @@ public class Spezi {
         var storage = consume storage
         var collectedModifiers: [any ViewModifier] = []
 
-        self.logger = storage[SpeziLogger.self]
-
         let dependencyManager = DependencyManager(modules + [standard])
         dependencyManager.resolve()
 
@@ -109,24 +129,31 @@ public class Spezi {
         self.viewModifiers = [] // init all properties, we will store the final result later on
 
         for module in dependencyManager.sortedModules {
-            module.inject(standard: standard)
-            module.inject(spezi: self)
+            Self.$moduleInitContext.withValue(module) {
+                module.inject(standard: standard)
+                module.inject(spezi: self)
 
-            // supply modules values to all @Collect
-            module.injectModuleValues(from: self.storage)
+                // supply modules values to all @Collect
+                module.injectModuleValues(from: self.storage)
 
-            module.configure()
-            module.storeModule(into: self)
+                module.configure()
+                module.storeModule(into: self)
 
-            collectedModifiers.append(contentsOf: module.viewModifiers)
+                collectedModifiers.append(contentsOf: module.viewModifiers)
 
-            // If a module is @Observable, we automatically inject it view the `ModelModifier` into the environment.
-            if let observable = module as? EnvironmentAccessible {
-                collectedModifiers.append(observable.viewModifier)
+                // If a module is @Observable, we automatically inject it view the `ModelModifier` into the environment.
+                if let observable = module as? EnvironmentAccessible {
+                    collectedModifiers.append(observable.viewModifier)
+                }
             }
         }
 
         self.viewModifiers = collectedModifiers
+    }
+
+
+    func createsCopy<Value>(_ keyPath: KeyPath<Spezi, Value>) -> Bool {
+        keyPath == \.logger // loggers are created per Module.
     }
 }
 

@@ -59,7 +59,7 @@ public protocol LifecycleHandler {
         deprecated,
         message: """
                  Using UISceneDelegate is deprecated. \
-                 Use the SwiftUI onReceive(_:perform:) modifier with the UIScene.willEnterForegroundNotification publisher on iOS \
+                 Use the SwiftUI ScenePhase environment property or the UIScene.willEnterForegroundNotification publisher on iOS \
                  or other platform-specific mechanisms as a replacement.
                  """
     )
@@ -73,10 +73,10 @@ public protocol LifecycleHandler {
         *,
          deprecated,
          message: """
-                 Using UISceneDelegate is deprecated. \
-                 Use the SwiftUI onReceive(_:perform:) modifier with the UIScene.didActivateNotification publisher on iOS \
-                 or other platform-specific mechanisms as a replacement.
-                 """
+                  Using UISceneDelegate is deprecated. \
+                  Use the SwiftUI ScenePhase environment property or the UIScene.didActivateNotification publisher on iOS \
+                  or other platform-specific mechanisms as a replacement.
+                  """
     )
     func sceneDidBecomeActive(_ scene: UIScene)
 
@@ -88,10 +88,10 @@ public protocol LifecycleHandler {
         *,
          deprecated,
          message: """
-                 Using UISceneDelegate is deprecated. \
-                 Use the SwiftUI onReceive(_:perform:) modifier with the UIScene.willDeactivateNotification publisher on iOS \
-                 or other platform-specific mechanisms as a replacement.
-                 """
+                  Using UISceneDelegate is deprecated. \
+                  Use the SwiftUI ScenePhase environment property or the UIScene.willDeactivateNotification publisher on iOS \
+                  or other platform-specific mechanisms as a replacement.
+                  """
     )
     func sceneWillResignActive(_ scene: UIScene)
 
@@ -103,10 +103,10 @@ public protocol LifecycleHandler {
         *,
          deprecated,
          message: """
-                 Using UISceneDelegate is deprecated. \
-                 Use the SwiftUI onReceive(_:perform:) modifier with the UIScene.didEnterBackgroundNotification publisher on iOS \
-                 or other platform-specific mechanisms as a replacement.
-                 """
+                  Using UISceneDelegate is deprecated. \
+                  Use the SwiftUI ScenePhase environment property or the UIScene.didEnterBackgroundNotification publisher on iOS \
+                  or other platform-specific mechanisms as a replacement.
+                  """
     )
     func sceneDidEnterBackground(_ scene: UIScene)
 
@@ -169,9 +169,9 @@ extension LifecycleHandler {
     *,
      deprecated,
      message: """
-             Please use the new @Application property wrapper to access delegate functionality. \
-             Otherwise use the SwiftUI onReceive(_:perform:) for UI related notifications.
-             """
+              Please use the new @Application property wrapper to access delegate functionality. \
+              Otherwise use the SwiftUI onReceive(_:perform:) for UI related notifications.
+              """
 )
 extension Array: LifecycleHandler where Element == LifecycleHandler {
 #if os(iOS) || os(visionOS) || os(tvOS)
@@ -193,10 +193,10 @@ extension Array: LifecycleHandler where Element == LifecycleHandler {
         *,
          deprecated,
          message: """
-                 Using UISceneDelegate is deprecated. \
-                 Use the SwiftUI onReceive(_:perform:) modifier with the UIScene.willEnterForegroundNotification publisher on iOS \
-                 or other platform-specific mechanisms as a replacement.
-                 """
+                  Using UISceneDelegate is deprecated. \
+                  Use the SwiftUI ScenePhase environment property or the UIScene.willEnterForegroundNotification publisher on iOS \
+                  or other platform-specific mechanisms as a replacement.
+                  """
     )
     public func sceneWillEnterForeground(_ scene: UIScene) {
         for lifecycleHandler in self {
@@ -208,10 +208,10 @@ extension Array: LifecycleHandler where Element == LifecycleHandler {
         *,
          deprecated,
          message: """
-                 Using UISceneDelegate is deprecated. \
-                 Use the SwiftUI onReceive(_:perform:) modifier with the UIScene.didActivateNotification publisher on iOS \
-                 or other platform-specific mechanisms as a replacement.
-                 """
+                  Using UISceneDelegate is deprecated. \
+                  Use the SwiftUI ScenePhase environment property or the UIScene.didActivateNotification publisher on iOS \
+                  or other platform-specific mechanisms as a replacement.
+                  """
     )
     public func sceneDidBecomeActive(_ scene: UIScene) {
         for lifecycleHandler in self {
@@ -223,10 +223,10 @@ extension Array: LifecycleHandler where Element == LifecycleHandler {
         *,
          deprecated,
          message: """
-                 Using UISceneDelegate is deprecated. \
-                 Use the SwiftUI onReceive(_:perform:) modifier with the UIScene.willDeactivateNotification publisher on iOS \
-                 or other platform-specific mechanisms as a replacement.
-                 """
+                  Using UISceneDelegate is deprecated. \
+                  Use the SwiftUI ScenePhase environment property or the UIScene.willDeactivateNotification publisher on iOS \
+                  or other platform-specific mechanisms as a replacement.
+                  """
     )
     public func sceneWillResignActive(_ scene: UIScene) {
         for lifecycleHandler in self {
@@ -238,10 +238,10 @@ extension Array: LifecycleHandler where Element == LifecycleHandler {
         *,
          deprecated,
          message: """
-                 Using UISceneDelegate is deprecated. \
-                 Use the SwiftUI onReceive(_:perform:) modifier with the UIScene.didEnterBackgroundNotification publisher on iOS \
-                 or other platform-specific mechanisms as a replacement.
-                 """
+                  Using UISceneDelegate is deprecated. \
+                  Use the SwiftUI ScenePhase environment property or the UIScene.didEnterBackgroundNotification publisher on iOS \
+                  or other platform-specific mechanisms as a replacement.
+                  """
     )
     public func sceneDidEnterBackground(_ scene: UIScene) {
         for lifecycleHandler in self {
