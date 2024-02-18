@@ -90,7 +90,7 @@ open class SpeziAppDelegate: NSObject, ApplicationDelegate {
 
 #if os(iOS) || os(visionOS) || os(tvOS)
     @available(*, deprecated, message: "Propagate deprecation warning.")
-    open func application(
+    public func application(
         _ application: UIApplication,
         // The usage of an optional collection is impossible to avoid as the function signature is defined by the `UIApplicationDelegate`
         // swiftlint:disable:next discouraged_optional_collection
@@ -162,6 +162,7 @@ open class SpeziAppDelegate: NSObject, ApplicationDelegate {
         }
     }
 
+#if !os(macOS)
     private func handleReceiveRemoteNotification(_ userInfo: [AnyHashable: Any]) async -> BackgroundFetchResult {
         let handlers = spezi.notificationHandler
         guard !handlers.isEmpty else {
@@ -188,6 +189,7 @@ open class SpeziAppDelegate: NSObject, ApplicationDelegate {
             return .noData
         }
     }
+#endif
 
 #if os(iOS) || os(visionOS) || os(tvOS)
     public func application(

@@ -54,27 +54,28 @@ final class LifecycleHandlerTestModule: Module, LifecycleHandler {
         self.modifier = LifecycleHandlerModifier(model: model)
     }
 
-    func willFinishLaunchingWithOptions(launchOptions: [LaunchOptionsKey: Any]) {
+#if os(iOS) || os(visionOS) || os(tvOS)
+    func willFinishLaunchingWithOptions(_ application: UIApplication, launchOptions: [UIApplication.LaunchOptionsKey: Any]) {
         model.reset() // avoids the need to delete the app.
         model.willFinishLaunchingWithOptions += 1
         precondition(model.willFinishLaunchingWithOptions - 1 == model.applicationWillTerminate)
     }
 
-    func sceneWillEnterForeground() {
+    func sceneWillEnterForeground(_ scene: UIScene) {
         model.sceneWillEnterForeground += 1
         #if !os(visionOS)
         precondition(model.sceneWillEnterForeground - 1 == model.sceneDidBecomeActive)
         #endif
     }
 
-    func sceneDidBecomeActive() {
+    func sceneDidBecomeActive(_ scene: UIScene) {
         model.sceneDidBecomeActive += 1
         #if !os(visionOS)
         precondition(model.sceneWillEnterForeground == model.sceneDidBecomeActive)
         #endif
     }
 
-    func sceneWillResignActive() {
+    func sceneWillResignActive(_ scene: UIScene) {
         model.sceneWillResignActive += 1
         // on visionOS an app might resign active without entering the background (and become active again after that).
         #if !os(visionOS)
@@ -82,17 +83,18 @@ final class LifecycleHandlerTestModule: Module, LifecycleHandler {
         #endif
     }
 
-    func sceneDidEnterBackground() {
+    func sceneDidEnterBackground(_ scene: UIScene) {
         model.sceneDidEnterBackground += 1
         #if !os(visionOS)
         precondition(model.sceneWillResignActive == model.sceneDidEnterBackground)
         #endif
     }
 
-    func applicationWillTerminate() {
+    func applicationWillTerminate(_ application: UIApplication) {
         model.applicationWillTerminate += 1
         #if !os(visionOS)
         precondition(model.willFinishLaunchingWithOptions == model.applicationWillTerminate)
         #endif
     }
+#endif
 }

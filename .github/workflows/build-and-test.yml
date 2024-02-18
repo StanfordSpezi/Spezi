@@ -79,19 +79,9 @@ jobs:
       destination: 'platform=visionOS Simulator,name=Apple Vision Pro'
       resultBundle: TestApp-visionOS.xcresult
       artifactname: TestApp-visionOS.xcresult
-  buildandtestuitests_macos:
-    name: Build and Test UI Tests macOS
-    uses: StanfordSpezi/.github/.github/workflows/xcodebuild-or-fastlane.yml@v2
-    with:
-      runsonlabels: '["macOS", "self-hosted"]'
-      path: Tests/UITests
-      scheme: TestApp
-      destination: 'platform=macOS,arch=arm64'
-      resultBundle: TestApp-macOS.xcresult
-      artifactname: TestApp-macOS.xcresult
   uploadcoveragereport:
     name: Upload Coverage Report
-    needs: [buildandtest_ios, buildandtest_watchos, buildandtest_visionos, buildandtest_tvos, buildandtest_macos, buildandtestuitests_ios, buildandtestuitests_visionos, buildandtestuitests_macos]
+    needs: [buildandtest_ios, buildandtest_watchos, buildandtest_visionos, buildandtest_tvos, buildandtest_macos, buildandtestuitests_ios, buildandtestuitests_visionos]
     uses: StanfordSpezi/.github/.github/workflows/create-and-upload-coverage-report.yml@v2
     with:
-      coveragereports: Spezi-Package-iOS.xcresult Spezi-Package-watchOS.xcresult Spezi-Package-visionOS.xcresult Spezi-Package-tvOS.xcresult Spezi-Package-macOS.xcresult TestApp-iOS.xcresult TestApp-visionOS.xcresult TestApp-macOS.xcresult
+      coveragereports: Spezi-Package-iOS.xcresult Spezi-Package-watchOS.xcresult Spezi-Package-visionOS.xcresult Spezi-Package-tvOS.xcresult Spezi-Package-macOS.xcresult TestApp-iOS.xcresult TestApp-visionOS.xcresult

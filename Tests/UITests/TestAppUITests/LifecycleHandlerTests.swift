@@ -12,6 +12,10 @@ import XCTestExtensions
 
 final class LifecycleHandlerTests: XCTestCase {
     func testLifecycleHandler() throws {
+        #if os(macOS) || os(watchOS)
+            throw XCTSkip("LifecycleHandler is not supported on macOS or watchOS.")
+        #endif
+
         let app = XCUIApplication()
         app.launchArguments = ["--lifecycleTests"]
         app.launch()
@@ -26,17 +30,13 @@ final class LifecycleHandlerTests: XCTestCase {
         XCTAssert(app.staticTexts["ApplicationWillTerminate: 0"].exists)
 
 
-        #if os(macOS)
-        let preferences = XCUIApplication(bundleIdentifier: "com.apple.systempreferences")
-        preferences.launch()
-        app.activate()
-        #elseif os(visionOS)
+        #if os(visionOS)
         let chrome = XCUIApplication(bundleIdentifier: "com.apple.RealityChrome")
         XCTAssert(chrome.buttons["CloseButton"].exists)
         chrome.buttons["CloseButton"].tap()
         sleep(1)
         app.activate()
-        #else
+        #elseif !os(macOS)
         let homeScreen = XCUIApplication(bundleIdentifier: XCUIApplication.homeScreenBundle)
         homeScreen.activate()
         app.activate()
