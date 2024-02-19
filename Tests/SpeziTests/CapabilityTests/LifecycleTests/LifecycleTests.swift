@@ -95,8 +95,10 @@ final class LifecycleTests: XCTestCase {
         )
 
         XCTAssertTrue(module.launchOptions.keys.allSatisfy { launchOptions[$0] != nil })
+        #elseif os(watchOS)
+        testApplicationDelegate.applicationDidFinishLaunching()
         #endif
-        
+
         #if os(iOS) || os(visionOS) || os(tvOS)
         testApplicationDelegate.applicationWillTerminate(UIApplication.shared)
         wait(for: [expectationApplicationWillTerminate])

@@ -28,20 +28,17 @@ import SwiftUI
 /// }
 /// ```
 public struct UnregisterRemoteNotificationsAction {
-    private let application: _Application
-
-    
-    init() {
-        #if os(watchOS)
-        self.application = _Application.shared()
-        #else
-        self.application = _Application.shared
-        #endif
-    }
+    init() {}
 
 
     /// Unregisters for all remote notifications received through Apple Push Notification service.
     public func callAsFunction() {
+#if os(watchOS)
+        let application = _Application.shared()
+#else
+        let application = _Application.shared
+#endif
+        
         application.unregisterForRemoteNotifications()
     }
 }

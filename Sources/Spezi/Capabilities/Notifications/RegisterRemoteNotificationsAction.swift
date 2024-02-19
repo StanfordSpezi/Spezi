@@ -51,15 +51,9 @@ public struct RegisterRemoteNotificationsAction {
         case concurrentAccess
     }
 
-    private let application: _Application
     private weak var spezi: Spezi?
 
     init(_ spezi: Spezi) {
-        #if os(watchOS)
-        self.application = _Application.shared()
-        #else
-        self.application = _Application.shared
-        #endif
         self.spezi = spezi
     }
 
@@ -80,6 +74,12 @@ public struct RegisterRemoteNotificationsAction {
         guard let spezi else {
             preconditionFailure("RegisterRemoteNotificationsAction was used in a scope where Spezi was not available anymore!")
         }
+
+#if os(watchOS)
+        let application = _Application.shared()
+#else
+        let application = _Application.shared
+#endif
 
         let registration = spezi.storage[RemoteNotificationContinuation.self]
         if registration.continuation != nil {
@@ -132,6 +132,7 @@ extension RegisterRemoteNotificationsAction {
             // This can be handled through the `NotificationHandler` protocol.
             return
         }
+        registration.continuation = nil
         continuation.resume(returning: deviceToken)
     }
 
@@ -142,6 +143,7 @@ extension RegisterRemoteNotificationsAction {
             spezi.logger.warning("Received a call to \(#function) while we were not waiting for a notifications registration request.")
             return
         }
+        registration.continuation = nil
         continuation.resume(throwing: error)
     }
 }
