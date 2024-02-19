@@ -48,9 +48,11 @@ private final class TestNotificationHandler: Module, NotificationHandler, Notifi
         lastDeviceToken = deviceToken
     }
 
+#if !os(tvOS)
     func handleNotificationAction(_ response: UNNotificationResponse) async {
         actionExpectation.fulfill()
     }
+#endif
 
     func receiveIncomingNotification(_ notification: UNNotification) async -> UNNotificationPresentationOptions? {
         incomingNotificationExpectation.fulfill()
