@@ -61,7 +61,7 @@ final class ModuleCommunicationTests: XCTestCase {
 
     func testSimpleCommunication() throws {
         let delegate = TestApplicationDelegate()
-        _ = try XCTUnwrap(delegate.spezi as? Spezi<DefaultStandard>)
+        _ = delegate.spezi // ensure init
 
         XCTAssertEqual(Self.collectModule.nums, [2, 3, 4, 5, 6])
         XCTAssertTrue(Self.collectModule.nothingProvided.isEmpty)
@@ -75,7 +75,7 @@ final class ModuleCommunicationTests: XCTestCase {
             _ = Self.collectModule.strings
         }
 
-        _ = try XCTUnwrap(delegate.spezi as? Spezi<DefaultStandard>)
+        _ = delegate.spezi // ensure init
 
         try XCTRuntimePrecondition {
             Self.provideModule.numMaybe2 = 12

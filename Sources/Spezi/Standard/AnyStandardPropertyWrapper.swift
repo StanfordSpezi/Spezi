@@ -10,3 +10,12 @@
 protocol AnyStandardPropertyWrapper {
     func inject<S: Standard>(standard: S)
 }
+
+
+extension Module {
+    func inject(standard: any Standard) {
+        for standardPropertyWrapper in retrieveProperties(ofType: AnyStandardPropertyWrapper.self) {
+            standardPropertyWrapper.inject(standard: standard)
+        }
+    }
+}

@@ -20,6 +20,7 @@ public class _ModelPropertyWrapper<Model: Observable & AnyObject> {
 
 
     /// Access the store model.
+    ///
     /// - Note: You cannot access the value once it was collected.
     public var wrappedValue: Model {
         get {

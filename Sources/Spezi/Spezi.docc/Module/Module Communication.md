@@ -14,8 +14,6 @@ SPDX-License-Identifier: MIT
 
 ## Overview
 
-### Communication
-
 ``Module``s can easily communicate with each other using the ``Module/Provide`` and ``Module/Collect`` property wrappers.
 
 Upon configuration, the value of each ``Module/Collect`` property will be collected. Therefore,

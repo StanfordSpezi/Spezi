@@ -15,9 +15,16 @@ import XCTRuntimeAssertions
 public enum LifecycleSimulationOptions {
     /// Simulation is disabled.
     case disabled
-    /// The ``LifecycleHandler/willFinishLaunchingWithOptions(_:launchOptions:)-8jatp`` method will be called for all
-    /// configured ``Module``s that conform to ``LifecycleHandler``.
+#if os(iOS) || os(visionOS) || os(tvOS)
+    /// Injects the ``Spezi/launchOptions`` property to be accessed via the `@Application` property wrapper.
     case launchWithOptions(_ launchOptions: [UIApplication.LaunchOptionsKey: Any])
+#elseif os(macOS)
+    /// Injects the ``Spezi/launchOptions`` property to be accessed via the `@Application` property wrapper.
+    case launchWithOptions(_ launchOptions: [AnyHashable: Any])
+#else // os(watchOS)
+    /// Injects the ``Spezi/launchOptions`` property to be accessed via the `@Application` property wrapper.
+    case launchWithOptions(_ launchOptions: [Never: Any])
+#endif
 
     static let launchWithOptions: LifecycleSimulationOptions = .launchWithOptions([:])
 }
@@ -47,15 +54,22 @@ extension View {
             "The Spezi previewWith(standard:_:) modifier can only used within Xcode preview processes."
         )
 
-        let spezi = Spezi(standard: standard, modules: modules().elements)
+        var storage = SpeziStorage()
+        if case let .launchWithOptions(options) = simulateLifecycle {
+            storage[LaunchOptionsKey.self] = options
+        }
+
+        let spezi = Spezi(standard: standard, modules: modules().elements, storage: storage)
         let lifecycleHandlers = spezi.lifecycleHandler
 
         return modifier(SpeziViewModifier(spezi))
-            .task {
+#if os(iOS) || os(visionOS) || os(tvOS)
+            .task { @MainActor in
                 if case let .launchWithOptions(options) = simulateLifecycle {
-                    await lifecycleHandlers.willFinishLaunchingWithOptions(UIApplication.shared, launchOptions: options)
+                    lifecycleHandlers.willFinishLaunchingWithOptions(UIApplication.shared, launchOptions: options)
                 }
             }
+#endif
     }
 
     /// Configure Spezi for your previews using a collection of Modules.
