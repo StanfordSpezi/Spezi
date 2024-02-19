@@ -6,14 +6,15 @@
 // SPDX-License-Identifier: MIT
 //
 
+import Spezi
 import SwiftUI
 import XCTestApp
 
 
 @main
 struct UITestsApp: App {
-    @UIApplicationDelegateAdaptor(TestAppDelegate.self) var appDelegate
-    
+    @ApplicationDelegateAdaptor(TestAppDelegate.self) var appDelegate
+
     
     var body: some Scene {
         WindowGroup {

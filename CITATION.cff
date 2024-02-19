@@ -18,6 +18,9 @@ authors:
 - family-names: "Aalami"
   given-names: "Oliver"
   orcid: "https://orcid.org/0000-0002-7799-2429"
+- family-names: "Bauer"
+  given-names: "Andreas"
+  orcid: "https://orcid.org/0000-0002-1680-237X"
 title: "Spezi"
 doi: 10.5281/zenodo.7538238
 url: "https://github.com/StanfordSpezi/Spezi"

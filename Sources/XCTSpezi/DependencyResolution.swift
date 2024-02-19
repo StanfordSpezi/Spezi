@@ -23,11 +23,19 @@ public func withDependencyResolution<S: Standard>(
     simulateLifecycle: LifecycleSimulationOptions = .disabled,
     @ModuleBuilder _ modules: () -> ModuleCollection
 ) {
-    let spezi = Spezi(standard: standard, modules: modules().elements)
-
+    var storage = SpeziStorage()
     if case let .launchWithOptions(options) = simulateLifecycle {
+        storage[LaunchOptionsKey.self] = options
+    }
+
+    let spezi = Spezi(standard: standard, modules: modules().elements, storage: storage)
+
+#if os(iOS) || os(visionOS) || os(tvOS)
+    if case let .launchWithOptions(options) = simulateLifecycle {
+        // maintain backwards compatibility
         spezi.lifecycleHandler.willFinishLaunchingWithOptions(UIApplication.shared, launchOptions: options)
     }
+#endif
 }
 
 /// Configure and resolve the dependency tree for a collection of [`Module`](https://swiftpackageindex.com/stanfordspezi/spezi/documentation/spezi/module)s.

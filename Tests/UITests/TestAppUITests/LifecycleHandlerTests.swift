@@ -12,29 +12,41 @@ import XCTestExtensions
 
 final class LifecycleHandlerTests: XCTestCase {
     func testLifecycleHandler() throws {
+        #if os(macOS) || os(watchOS)
+            throw XCTSkip("LifecycleHandler is not supported on macOS or watchOS.")
+        #endif
+
         let app = XCUIApplication()
         app.launchArguments = ["--lifecycleTests"]
-        app.deleteAndLaunch(withSpringboardAppName: "TestApp")
-        
-        app.staticTexts["LifecycleHandler"].tap()
-        
+        app.launch()
+
+        app.buttons["LifecycleHandler"].tap()
+
         XCTAssert(app.staticTexts["WillFinishLaunchingWithOptions: 1"].waitForExistence(timeout: 2))
-        XCTAssert(app.staticTexts["SceneWillEnterForeground: 1"].waitForExistence(timeout: 2))
-        XCTAssert(app.staticTexts["SceneDidBecomeActive: 1"].waitForExistence(timeout: 2))
-        XCTAssert(app.staticTexts["SceneWillResignActive: 0"].waitForExistence(timeout: 2))
-        XCTAssert(app.staticTexts["SceneDidEnterBackground: 0"].waitForExistence(timeout: 2))
-        XCTAssert(app.staticTexts["ApplicationWillTerminate: 0"].waitForExistence(timeout: 2))
-        
-        
-        let springBoard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
-        springBoard.activate()
+        XCTAssert(app.staticTexts["SceneWillEnterForeground: 1"].exists)
+        XCTAssert(app.staticTexts["SceneDidBecomeActive: 1"].exists)
+        XCTAssert(app.staticTexts["SceneWillResignActive: 0"].exists)
+        XCTAssert(app.staticTexts["SceneDidEnterBackground: 0"].exists)
+        XCTAssert(app.staticTexts["ApplicationWillTerminate: 0"].exists)
+
+
+        #if os(visionOS)
+        let chrome = XCUIApplication(bundleIdentifier: "com.apple.RealityChrome")
+        XCTAssert(chrome.buttons["CloseButton"].exists)
+        chrome.buttons["CloseButton"].tap()
+        sleep(1)
         app.activate()
-        
+        #elseif !os(macOS)
+        let homeScreen = XCUIApplication(bundleIdentifier: XCUIApplication.homeScreenBundle)
+        homeScreen.activate()
+        app.activate()
+        #endif
+
         XCTAssert(app.staticTexts["WillFinishLaunchingWithOptions: 1"].waitForExistence(timeout: 2))
-        XCTAssert(app.staticTexts["SceneWillEnterForeground: 2"].waitForExistence(timeout: 2))
-        XCTAssert(app.staticTexts["SceneDidBecomeActive: 2"].waitForExistence(timeout: 2))
-        XCTAssert(app.staticTexts["SceneWillResignActive: 1"].waitForExistence(timeout: 2))
-        XCTAssert(app.staticTexts["SceneDidEnterBackground: 1"].waitForExistence(timeout: 2))
-        XCTAssert(app.staticTexts["ApplicationWillTerminate: 0"].waitForExistence(timeout: 2))
+        XCTAssert(app.staticTexts["SceneWillEnterForeground: 2"].exists)
+        XCTAssert(app.staticTexts["SceneDidBecomeActive: 2"].exists)
+        XCTAssert(app.staticTexts["SceneWillResignActive: 1"].exists)
+        XCTAssert(app.staticTexts["SceneDidEnterBackground: 1"].exists)
+        XCTAssert(app.staticTexts["ApplicationWillTerminate: 0"].exists)
     }
 }

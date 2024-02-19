@@ -14,7 +14,7 @@ struct SpeziViewModifier: ViewModifier {
     let speziViewModifiers: [any ViewModifier]
     
     
-    init(_ anySpezi: AnySpezi) {
+    init(_ anySpezi: Spezi) {
         self.speziViewModifiers = anySpezi.viewModifiers
     }
     

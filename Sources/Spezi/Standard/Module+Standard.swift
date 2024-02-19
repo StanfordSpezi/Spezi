@@ -6,14 +6,6 @@
 // SPDX-License-Identifier: MIT
 //
 
-extension Module {
-    func inject(standard: any Standard) {
-        for standardPropertyWrapper in retrieveProperties(ofType: AnyStandardPropertyWrapper.self) {
-            standardPropertyWrapper.inject(standard: standard)
-        }
-    }
-}
-
 
 extension Module {
     /// Defines access to the shared `Standard` actor.
