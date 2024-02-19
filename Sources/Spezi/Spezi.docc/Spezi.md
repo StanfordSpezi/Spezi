@@ -99,8 +99,6 @@ To simplify the creation of modules, a common set of functionalities typically u
 
 ### Essential Concepts
 
-- <doc:Spezi-Guide>
-- <doc:Documentation-Guide>
 - ``Spezi/Spezi``
 - ``Standard``
 - ``Module``
@@ -111,3 +109,9 @@ To simplify the creation of modules, a common set of functionalities typically u
 - ``SwiftUI/View/previewWith(simulateLifecycle:_:)``
 - ``Foundation/ProcessInfo/isPreviewSimulator``
 - ``LifecycleSimulationOptions``
+
+### Contribute to Spezi
+
+- <doc:Contributing-Guide>
+- <doc:Spezi-Guide>
+- <doc:Documentation-Guide>
