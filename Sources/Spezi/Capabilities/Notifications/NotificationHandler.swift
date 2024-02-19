@@ -35,7 +35,7 @@ public protocol NotificationHandler {
     ///
     /// - Parameter notification: The notification that is about to be delivered.
     /// - Returns: The option for notifying the user. Use `[]` to silence the notification.
-    func receiveIncomingNotification(_ notification: UNNotification) async -> UNNotificationPresentationOptions
+    func receiveIncomingNotification(_ notification: UNNotification) async -> UNNotificationPresentationOptions?
 
 #if !os(macOS)
     /// Handle remote notification when the app is running in background.
@@ -74,9 +74,8 @@ extension NotificationHandler {
 #endif
 
     /// Empty default implementation.
-    func receiveIncomingNotification(_ notification: UNNotification) async -> UNNotificationPresentationOptions {
-        // TODO: is there are better default?
-        [.badge, .badge, .list, .sound] // default is to fully present the notification
+    func receiveIncomingNotification(_ notification: UNNotification) async -> UNNotificationPresentationOptions? {
+        nil
     }
 
 #if !os(macOS)

@@ -39,16 +39,27 @@ class SpeziNotificationCenterDelegate: NSObject, UNUserNotificationCenterDelegat
         }
 
 
-        return await withTaskGroup(of: UNNotificationPresentationOptions.self) { group in
+        return await withTaskGroup(of: UNNotificationPresentationOptions?.self) { group in
             for handler in delegate.spezi.notificationHandler {
                 group.addTask {
                     await handler.receiveIncomingNotification(notification)
                 }
             }
-            
-            // TODO: fine to just merge all options? (this doesn't work with the empty default implementation!)
-            return await group.reduce(into: []) { result, options in
+
+            var hasSpecified = false
+            let unionOptions: UNNotificationPresentationOptions = await group.reduce(into: []) { result, options in
+                guard let options else {
+                    return
+                }
+
+                hasSpecified = true
                 result.formUnion(options)
+            }
+
+            if hasSpecified {
+                return unionOptions
+            } else {
+                return [.badge, .badge, .list, .sound]
             }
         }
     }
