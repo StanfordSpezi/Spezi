@@ -124,12 +124,6 @@ open class SpeziAppDelegate: NSObject, ApplicationDelegate {
             return // see note above for why we don't launch this within the preview simulator!
         }
 
-        precondition(_spezi == nil, "\(#function) was called when Spezi was already initialized. Unable to pass options!")
-
-        var storage = SpeziStorage()
-        storage[LaunchOptionsKey.self] = notification.userInfo
-        self._spezi = Spezi(from: configuration, storage: storage)
-
         setupNotificationDelegate()
     }
 #elseif os(watchOS)

@@ -15,7 +15,9 @@ struct LaunchOptionsKey: DefaultProvidingKnowledgeSource {
 #if os(iOS) || os(visionOS) || os(tvOS)
     typealias Value = [UIApplication.LaunchOptionsKey: Any]
 #elseif os(macOS)
-    typealias Value = [AnyHashable: Any]
+    /// Currently not supported as ``SpeziAppDelegate/applicationWillFinishLaunching(_:)`` on macOS
+    /// is called after the initialization of ``Spezi`` via `View/spezi(_:)` is done, breaking our precondition assumption in ``SpeziAppDelegate/applicationWillFinishLaunching(_:)``.
+    typealias Value = [Never: Any]
 #else // os(watchOS)
     typealias Value = [Never: Any]
 #endif
@@ -48,17 +50,7 @@ extension Spezi {
     public var launchOptions: [UIApplication.LaunchOptionsKey: Any] {
         storage[LaunchOptionsKey.self]
     }
-#elseif os(macOS)
-    /// The launch options of the application.
-    ///
-    /// You can access the launch options within your `configure()` method of your ``Module`` or ``Standard``.
-    ///
-    /// - Note: For more information refer to the documentation of
-    ///     [`applicationWillFinishLaunching(_:)`](https://developer.apple.com/documentation/appkit/nsapplicationdelegate/1428623-applicationwillfinishlaunching).
-    public var launchOptions: [AnyHashable: Any] {
-        storage[LaunchOptionsKey.self]
-    }
-#else // os(watchOS)
+#else // os(watchOS) || os(macOS)
     /// The launch options of the application on platforms that don't support launch options.
     public var launchOptions: [Never: Any] {
         storage[LaunchOptionsKey.self]
