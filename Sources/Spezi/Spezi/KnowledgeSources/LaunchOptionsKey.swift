@@ -9,6 +9,7 @@
 import SpeziFoundation
 import SwiftUI
 
+
 struct LaunchOptionsKey: DefaultProvidingKnowledgeSource {
     typealias Anchor = SpeziAnchor
 
@@ -16,7 +17,7 @@ struct LaunchOptionsKey: DefaultProvidingKnowledgeSource {
     typealias Value = [UIApplication.LaunchOptionsKey: Any]
 #elseif os(macOS)
     /// Currently not supported as ``SpeziAppDelegate/applicationWillFinishLaunching(_:)`` on macOS
-    /// is called after the initialization of ``Spezi`` via `View/spezi(_:)` is done, breaking our precondition assumption in ``SpeziAppDelegate/applicationWillFinishLaunching(_:)``.
+    /// is executed after the initialization of ``Spezi`` via `View/spezi(_:)` is done, breaking our initialization assumption in ``SpeziAppDelegate/applicationWillFinishLaunching(_:)``.
     typealias Value = [Never: Any]
 #else // os(watchOS)
     typealias Value = [Never: Any]
