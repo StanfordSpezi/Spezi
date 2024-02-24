@@ -34,7 +34,7 @@ final class LifecycleHandlerTests: XCTestCase {
         let chrome = XCUIApplication(bundleIdentifier: "com.apple.RealityChrome")
         XCTAssert(chrome.buttons["CloseButton"].exists)
         chrome.buttons["CloseButton"].tap()
-        sleep(1)
+        sleep(3)
         app.activate()
         #elseif !os(macOS)
         let homeScreen = XCUIApplication(bundleIdentifier: XCUIApplication.homeScreenBundle)
