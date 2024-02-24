@@ -20,7 +20,7 @@ public enum LifecycleSimulationOptions {
     case launchWithOptions(_ launchOptions: [UIApplication.LaunchOptionsKey: Any])
 #elseif os(macOS)
     /// Injects the ``Spezi/launchOptions`` property to be accessed via the `@Application` property wrapper.
-    case launchWithOptions(_ launchOptions: [AnyHashable: Any])
+    case launchWithOptions(_ launchOptions: [Never: Any])
 #else // os(watchOS)
     /// Injects the ``Spezi/launchOptions`` property to be accessed via the `@Application` property wrapper.
     case launchWithOptions(_ launchOptions: [Never: Any])
