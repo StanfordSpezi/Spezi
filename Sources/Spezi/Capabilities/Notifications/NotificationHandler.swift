@@ -70,19 +70,21 @@ public protocol NotificationHandler {
 extension NotificationHandler {
 #if !os(tvOS)
     /// Empty default implementation.
-    func handleNotificationAction(_ response: UNNotificationResponse) async {}
+    public func handleNotificationAction(_ response: UNNotificationResponse) async {}
 #endif
 
     /// Empty default implementation.
-    func receiveIncomingNotification(_ notification: UNNotification) async -> UNNotificationPresentationOptions? {
+    public func receiveIncomingNotification(_ notification: UNNotification) async -> UNNotificationPresentationOptions? {
         nil
     }
 
 #if !os(macOS)
-    func receiveRemoteNotification(_ remoteNotification: [AnyHashable: Any]) async -> BackgroundFetchResult {
+    /// Empty default implementation.
+    public func receiveRemoteNotification(_ remoteNotification: [AnyHashable: Any]) async -> BackgroundFetchResult {
         .noData
     }
 #else
-    func receiveRemoteNotification(_ remoteNotification: [AnyHashable: Any]) {}
+    /// Empty default implementation.
+    public func receiveRemoteNotification(_ remoteNotification: [AnyHashable: Any]) {}
 #endif
 }
