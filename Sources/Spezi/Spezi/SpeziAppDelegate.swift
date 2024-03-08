@@ -90,7 +90,7 @@ open class SpeziAppDelegate: NSObject, ApplicationDelegate {
 
 #if os(iOS) || os(visionOS) || os(tvOS)
     @available(*, deprecated, message: "Propagate deprecation warning.")
-    public func application(
+    open func application(
         _ application: UIApplication,
         // The usage of an optional collection is impossible to avoid as the function signature is defined by the `UIApplicationDelegate`
         // swiftlint:disable:next discouraged_optional_collection
@@ -127,7 +127,7 @@ open class SpeziAppDelegate: NSObject, ApplicationDelegate {
         setupNotificationDelegate()
     }
 #elseif os(watchOS)
-    public func applicationDidFinishLaunching() {
+    open func applicationDidFinishLaunching() {
         guard !ProcessInfo.processInfo.isPreviewSimulator else {
             return // see note above for why we don't launch this within the preview simulator!
         }
@@ -139,7 +139,7 @@ open class SpeziAppDelegate: NSObject, ApplicationDelegate {
 
     // MARK: - Notifications
 
-    public func application(_ application: _Application, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+    open func application(_ application: _Application, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         MainActor.assumeIsolated { // on macOS there is a missing MainActor annotation
             RegisterRemoteNotificationsAction.handleDeviceTokenUpdate(spezi, deviceToken)
 
@@ -150,7 +150,7 @@ open class SpeziAppDelegate: NSObject, ApplicationDelegate {
         }
     }
 
-    public func application(_ application: _Application, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+    open func application(_ application: _Application, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         MainActor.assumeIsolated { // on macOS there is a missing MainActor annotation
             RegisterRemoteNotificationsAction.handleFailedRegistration(spezi, error)
         }
@@ -186,20 +186,20 @@ open class SpeziAppDelegate: NSObject, ApplicationDelegate {
 #endif
 
 #if os(iOS) || os(visionOS) || os(tvOS)
-    public func application(
+    open func application(
         _ application: UIApplication,
         didReceiveRemoteNotification userInfo: [AnyHashable: Any]
     ) async -> UIBackgroundFetchResult {
         await handleReceiveRemoteNotification(userInfo)
     }
 #elseif os(macOS)
-    public func application(_ application: NSApplication, didReceiveRemoteNotification userInfo: [String: Any]) {
+    open func application(_ application: NSApplication, didReceiveRemoteNotification userInfo: [String: Any]) {
         for handler in spezi.notificationHandler {
             handler.receiveRemoteNotification(userInfo)
         }
     }
 #elseif os(watchOS)
-    public func didReceiveRemoteNotification(_ userInfo: [AnyHashable: Any]) async -> WKBackgroundFetchResult {
+    open func didReceiveRemoteNotification(_ userInfo: [AnyHashable: Any]) async -> WKBackgroundFetchResult {
         await handleReceiveRemoteNotification(userInfo)
     }
 #endif
