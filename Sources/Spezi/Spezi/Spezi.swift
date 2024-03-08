@@ -91,7 +91,8 @@ public class Spezi {
     )
 
 
-    var lifecycleHandler: [LifecycleHandler] {
+    @_spi(Spezi)
+    public var lifecycleHandler: [LifecycleHandler] {
         storage.collect(allOf: LifecycleHandler.self)
     }
 
@@ -108,7 +109,8 @@ public class Spezi {
         self.init(standard: configuration.standard, modules: configuration.modules.elements, storage: storage)
     }
     
-    init(
+    @_spi(Spezi)
+    public init(
         standard: any Standard,
         modules: [any Module],
         storage: consuming SpeziStorage = SpeziStorage()

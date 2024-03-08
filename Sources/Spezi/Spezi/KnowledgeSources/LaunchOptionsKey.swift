@@ -9,21 +9,21 @@
 import SpeziFoundation
 import SwiftUI
 
-
-struct LaunchOptionsKey: DefaultProvidingKnowledgeSource {
-    typealias Anchor = SpeziAnchor
+@_spi(Spezi)
+public struct LaunchOptionsKey: DefaultProvidingKnowledgeSource {
+    public typealias Anchor = SpeziAnchor
 
 #if os(iOS) || os(visionOS) || os(tvOS)
-    typealias Value = [UIApplication.LaunchOptionsKey: Any]
+    public typealias Value = [UIApplication.LaunchOptionsKey: Any]
 #elseif os(macOS)
     /// Currently not supported as ``SpeziAppDelegate/applicationWillFinishLaunching(_:)`` on macOS
     /// is executed after the initialization of ``Spezi`` via `View/spezi(_:)` is done, breaking our initialization assumption in ``SpeziAppDelegate/applicationWillFinishLaunching(_:)``.
-    typealias Value = [Never: Any]
+    public typealias Value = [Never: Any]
 #else // os(watchOS)
-    typealias Value = [Never: Any]
+    public typealias Value = [Never: Any]
 #endif
 
-    static let defaultValue: Value = [:]
+    public static let defaultValue: Value = [:]
 }
 
 
