@@ -6,8 +6,8 @@
 // SPDX-License-Identifier: MIT
 //
 
-@testable import Spezi
-@_implementationOnly import SwiftUI
+@_spi(Spezi) import Spezi
+import SwiftUI
 
 
 /// Configure and resolve the dependency tree for a collection of [`Module`](https://swiftpackageindex.com/stanfordspezi/spezi/documentation/spezi/module)s.

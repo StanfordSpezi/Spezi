@@ -91,7 +91,8 @@ public class Spezi {
     )
 
 
-    var lifecycleHandler: [LifecycleHandler] {
+    @_spi(Spezi)
+    public var lifecycleHandler: [LifecycleHandler] {
         storage.collect(allOf: LifecycleHandler.self)
     }
 
@@ -108,7 +109,15 @@ public class Spezi {
         self.init(standard: configuration.standard, modules: configuration.modules.elements, storage: storage)
     }
     
-    init(
+
+    /// Create a new Spezi instance.
+    ///
+    /// - Parameters:
+    ///   - standard: The standard to use.
+    ///   - modules: The collection of modules to initialize.
+    ///   - storage: Optional, initial storage to inject.
+    @_spi(Spezi)
+    public init(
         standard: any Standard,
         modules: [any Module],
         storage: consuming SpeziStorage = SpeziStorage()

@@ -7,4 +7,7 @@
 //
 
 
-actor DefaultStandard: Standard {}
+@_spi(Spezi)
+public actor DefaultStandard: Standard {
+    public init() {}
+}
