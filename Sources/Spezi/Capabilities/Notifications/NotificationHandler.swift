@@ -79,10 +79,12 @@ extension NotificationHandler {
     }
 
 #if !os(macOS)
+    /// Empty default implementation.
     public func receiveRemoteNotification(_ remoteNotification: [AnyHashable: Any]) async -> BackgroundFetchResult {
         .noData
     }
 #else
+    /// Empty default implementation.
     public func receiveRemoteNotification(_ remoteNotification: [AnyHashable: Any]) {}
 #endif
 }
