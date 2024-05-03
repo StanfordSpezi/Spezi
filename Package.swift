@@ -10,6 +10,15 @@
 
 import PackageDescription
 
+#if swift(<6)
+let swiftSettings: [SwiftSetting] = [
+    .enableExperimentalFeature("SwiftConcurrency")
+]
+#else
+let swiftSettings: [SwiftSetting] = [
+    .enableUpcomingFeature("SwiftConcurrency")
+]
+#endif
 
 let package = Package(
     name: "Spezi",
@@ -35,13 +44,15 @@ let package = Package(
             dependencies: [
                 .product(name: "SpeziFoundation", package: "SpeziFoundation"),
                 .product(name: "XCTRuntimeAssertions", package: "XCTRuntimeAssertions")
-            ]
+            ],
+            swiftSettings: swiftSettings
         ),
         .target(
             name: "XCTSpezi",
             dependencies: [
                 .target(name: "Spezi")
-            ]
+            ],
+            swiftSettings: swiftSettings
         ),
         .testTarget(
             name: "SpeziTests",
@@ -49,7 +60,8 @@ let package = Package(
                 .target(name: "Spezi"),
                 .target(name: "XCTSpezi"),
                 .product(name: "XCTRuntimeAssertions", package: "XCTRuntimeAssertions")
-            ]
+            ],
+            swiftSettings: swiftSettings
         )
     ]
 )
