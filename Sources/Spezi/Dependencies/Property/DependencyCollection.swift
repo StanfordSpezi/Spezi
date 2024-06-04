@@ -11,6 +11,11 @@
 public struct DependencyCollection: DependencyDeclaration {
     let entries: [AnyDependencyContext]
 
+    var injectedDependencies: [any Module] {
+        entries.reduce(into: []) { result, dependencies in
+            result.append(contentsOf: dependencies.injectedDependencies)
+        }
+    }
 
     init(_ entries: [AnyDependencyContext]) {
         self.entries = entries
@@ -42,6 +47,19 @@ public struct DependencyCollection: DependencyDeclaration {
     /// See `_DependencyPropertyWrapper/init(using:)` for a continued example regarding the usage of the implemented result builder.
     public init<Dependency: Module>(for type: Dependency.Type = Dependency.self, singleEntry: @escaping (() -> Dependency)) {
         self.init(DependencyContext(for: type, defaultValue: singleEntry))
+    }
+
+
+    func dependencyRelation(to module: any Module) -> DependencyRelation {
+        let relations = entries.map { $0.dependencyRelation(to: module) }
+
+        if relations.contains(.dependent) {
+            return .dependent
+        } else if relations.contains(.optional) {
+            return .optional
+        } else {
+            return .unrelated
+        }
     }
 
 

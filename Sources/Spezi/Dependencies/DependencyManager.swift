@@ -13,12 +13,17 @@ import XCTRuntimeAssertions
 public class DependencyManager {
     /// Collection of already initialized modules.
     private let existingModules: [any Module]
-    // TODO: existing modules collection, or just a Spezi reference?
 
     /// Collection of initialized Modules.
     ///
     /// Order is determined by the dependency tree. This represents the result of the dependency resolution process.
-    var initializedModules: [any Module]
+    private(set) var initializedModules: [any Module]
+    /// List of implicitly created Modules.
+    ///
+    /// A List of `ModuleReference`s that where implicitly created (e.g., due to another module requesting it as a Dependency and
+    /// conforming to ``DefaultInitializable``).
+    /// This list is important to keep for the unload mechanism.
+    private(set) var implicitlyCreatedModules: ModuleReferences = []
 
     /// Collection of all modules with dependencies that are not yet processed.
     private var modulesWithDependencies: [any Module] // TODO: different name?
@@ -50,7 +55,13 @@ public class DependencyManager {
             push(nextModule)
         }
 
-        for module in initializedModules {
+        injectDependencies()
+    }
+
+    private func injectDependencies() {
+        // We inject dependencies into existingModules as well as a new dependency might be an optional dependency from a existing module
+        // that wasn't previously injected.
+        for module in initializedModules + existingModules {
             for dependency in module.dependencyDeclarations {
                 dependency.inject(from: self)
             }
@@ -72,10 +83,10 @@ public class DependencyManager {
     ///   - defaultValue: A default instance of the dependency that is used when the `dependencyType` is not present in the `initializedModules` or `modulesWithDependencies`.
     func require<M: Module>(_ dependency: M.Type, defaultValue: (() -> M)?) {
         // 1. Return if the depending module is found in the `initializedModules` collection.
-        if initializedModules.contains(where: { type(of: $0) == M.self }) {
+        if initializedModules.contains(where: { type(of: $0) == M.self })
+            || existingModules.contains(where: { type(of: $0) == M.self }) {
             return
         }
-        // TODO: or it is a existing module!
 
 
         // 2. Search for the required module is found in the `dependingModules` collection.
@@ -86,8 +97,10 @@ public class DependencyManager {
                 return
             }
 
-            let newModule = defaultValue() // TODO: mark as "dangling"?
-            
+            let newModule = defaultValue()
+
+            implicitlyCreatedModules.append(ModuleReference(newModule))
+
             guard !newModule.dependencyDeclarations.isEmpty else {
                 initializedModules.append(newModule)
                 return
@@ -118,8 +131,8 @@ public class DependencyManager {
             )
         }
         
-        // If there is no cycle, resolved the dependencies of the module found in the `dependingModules`.
-        push(foundInModulesWithDependencies) // TODO: not dangling?
+        // If there is no cycle, resolve the dependencies of the module found in the `dependingModules`.
+        push(foundInModulesWithDependencies)
     }
 
     /// Retrieve a resolved dependency for a given type.
@@ -129,8 +142,8 @@ public class DependencyManager {
     ///   - optional: Flag indicating if it is a optional return.
     /// - Returns: Returns the Module instance. Only optional, if `optional` is set to `true` and no Module was found.
     func retrieve<M: Module>(module: M.Type = M.self, optional: Bool = false) -> M? {
-        // TODO: or retrieve from existing modules!
-        guard let module = initializedModules.first(where: { $0 is M }) as? M else {
+        guard let candidate = initializedModules.first(where: { type(of: $0) == M.self }) ?? existingModules.first(where: { type(of: $0) == M.self }),
+            let module = candidate as? M else {
             precondition(optional, "Could not located dependency of type \(M.self)!")
             return nil
         }

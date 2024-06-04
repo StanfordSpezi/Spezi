@@ -10,6 +10,7 @@
 import os
 import SpeziFoundation
 import SwiftUI
+import XCTRuntimeAssertions
 
 
 /// A ``SharedRepository`` implementation that is anchored to ``SpeziAnchor``.
@@ -68,7 +69,7 @@ public typealias SpeziStorage = HeapRepository<SpeziAnchor>
 /// - ``registerRemoteNotifications``
 /// - ``unregisterRemoteNotifications``
 @Observable
-public class Spezi { // TODO: decide which properties should be observable!
+public class Spezi {
     static let logger = Logger(subsystem: "edu.stanford.spezi", category: "Spezi")
 
     @TaskLocal static var moduleInitContext: (any Module)?
@@ -145,21 +146,16 @@ public class Spezi { // TODO: decide which properties should be observable!
         loadModules([module])
     }
 
-    public func unloadModule(_ module: any Module) {
-        // TODO: fail if there are modules depending on it!
-
-        // TODO: just remove from storage??
-
-        // TODO: check for "dangling" modules (ones that are only in @Dependency property wrappers),
-        //  => not explicitly requested to be loaded (e.g., standard or dynamically loaded).
-    }
-    // TODO: unload module?
-
     private func loadModules(_ modules: [any Module]) { // TODO: docs
         let existingModules = self.modules
 
         let dependencyManager = DependencyManager(modules, existing: existingModules)
         dependencyManager.resolve()
+
+        // TODO: make sure this has Set semantics!
+        var implicitlyCreatedModules = storage[ModuleReferences.self]
+        implicitlyCreatedModules.append(contentsOf: dependencyManager.implicitlyCreatedModules)
+        storage[ModuleReferences.self] = implicitlyCreatedModules
 
         for module in dependencyManager.initializedModules {
             // we pass through the whole list of modules once to collect all @Provide values
@@ -174,8 +170,53 @@ public class Spezi { // TODO: decide which properties should be observable!
         // Newly loaded modules might have @Provide values that need to be updated in @Collect properties in existing modules.
         for existingModule in existingModules {
             // TODO: do we really want to support that?, that gets super chaotic with unload modules???
-            // TODO: create an issue to have e.g. update functionality (rework that whole thing?)
+            // TODO: create an issue to have e.g. update functionality (rework that whole thing?), remove that system altogether?
             existingModule.injectModuleValues(from: storage)
+        }
+    }
+
+    public func unloadModule(_ module: any Module) { // TODO: docs
+        guard module.isLoaded(in: self) else {
+            return // module is not loaded
+        }
+
+        let dependents = retrieveDependingModules(module)
+        precondition(dependents.isEmpty, "Tried to unload Module \(type(of: module)) that is still required by peer Modules: \(dependents)")
+
+        module.clearModule(from: self)
+
+        // TODO: this is complicated boi!!
+        if storage[ModuleReferences.self].contains(ModuleReference(module)) {
+            var implicitlyCreatedModules = storage[ModuleReferences.self]
+            implicitlyCreatedModules.removeAll(where: { $0 == ModuleReference(module) })
+            storage[ModuleReferences.self] = implicitlyCreatedModules
+        }
+
+        // TODO: remove @Collect values that were previously provided by this Module
+
+        // re-injecting all dependencies ensures that the unloaded module is cleared from optional Dependencies from
+        // pre-existing Modules.
+        let dependencyManager = DependencyManager([], existing: modules)
+        dependencyManager.resolve()
+
+
+        // Check if we need to unload additional modules that were not explicitly created.
+        // For example a explicitly loaded Module might have recursive @Dependency declarations that are automatically loaded.
+        // Such modules are unloaded as well if they are no longer required.
+        for dependencyDeclaration in module.dependencyDeclarations {
+            let dependencies = dependencyDeclaration.injectedDependencies
+            for dependency in dependencies {
+                // TODO: accessor naming!
+                guard storage[ModuleReferences.self].contains(ModuleReference(dependency)) else {
+                    continue // TODO: docs!
+                }
+
+                guard retrieveDependingModules(dependency).isEmpty else {
+                    continue
+                }
+
+                unloadModule(dependency)
+            }
         }
     }
 
@@ -188,6 +229,8 @@ public class Spezi { // TODO: decide which properties should be observable!
     ///   - module:
     ///   - standard:
     private func initModule(_ module: any Module) { // TODO: docs
+        precondition(!module.isLoaded(in: self), "Tried to initialize Module \(type(of: module)) that was already loaded!")
+
         Self.$moduleInitContext.withValue(module) {
             module.inject(spezi: self)
 
@@ -210,6 +253,25 @@ public class Spezi { // TODO: decide which properties should be observable!
     func createsCopy<Value>(_ keyPath: KeyPath<Spezi, Value>) -> Bool {
         keyPath == \.logger // loggers are created per Module.
     }
+
+    private func retrieveDependingModules(_ dependency: any Module, considerOptionals: Bool = false) -> [any Module] {
+        var result: [any Module] = []
+
+        for module in modules {
+            switch module.dependencyRelation(to: dependency) {
+            case .dependent:
+                result.append(module)
+            case .optional:
+                if considerOptionals {
+                    result.append(module)
+                }
+            case .unrelated:
+                continue
+            }
+        }
+
+        return result
+    }
 }
 
 
@@ -220,5 +282,13 @@ extension Module {
             return
         }
         spezi.storage[Self.self] = value
+    }
+
+    fileprivate func isLoaded(in spezi: Spezi) -> Bool {
+        spezi.storage[Self.self] != nil
+    }
+
+    fileprivate func clearModule(from spezi: Spezi) {
+        spezi.storage[Self.self] = nil
     }
 }

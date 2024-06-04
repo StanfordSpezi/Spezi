@@ -77,25 +77,41 @@ private final class OptionalDependencyWithRuntimeDefault: Module {
 
 final class DependencyTests: XCTestCase {
     func testLoadingAdditionalDependency() throws {
-        let spezi = Spezi(standard: DefaultStandard(), modules: [TestModule3()])
+        let spezi = Spezi(standard: DefaultStandard(), modules: [OptionalModuleDependency()])
 
-        spezi.loadModule(TestModule1())
-
-        let modules = spezi.modules
-
-        XCTAssertEqual(modules.count, 6)
-        print(modules)
-
+        var modules = spezi.modules
         func getModule<M: Module>(_ module: M.Type = M.self) throws -> M {
             try XCTUnwrap(modules.first(where: { $0 is M }) as? M)
         }
 
+        XCTAssertEqual(modules.count, 2)
+        _ = try getModule(DefaultStandard.self)
+        var optionalModuleDependency: OptionalModuleDependency = try getModule()
+
+        XCTAssertNil(optionalModuleDependency.testModule3)
+
+        spezi.loadModule(TestModule3())
+        
+        modules = spezi.modules
+        XCTAssertEqual(modules.count, 3)
+        _ = try getModule(DefaultStandard.self)
+        optionalModuleDependency = try getModule()
+        var testModule3: TestModule3 = try getModule()
+
+        XCTAssert(optionalModuleDependency.testModule3 === testModule3)
+
+        spezi.loadModule(TestModule1())
+
+        modules = spezi.modules
+        XCTAssertEqual(modules.count, 7)
+
         _ = try getModule(DefaultStandard.self)
         let testModule1: TestModule1 = try getModule()
         let testModule2: TestModule2 = try getModule()
-        let testModule3: TestModule3 = try getModule()
+        testModule3 = try getModule()
         let testModule4: TestModule4 = try getModule()
         let testModule5: TestModule5 = try getModule()
+        optionalModuleDependency = try getModule()
 
         XCTAssert(testModule4.testModule5 === testModule5)
         XCTAssert(testModule2.testModule5 === testModule5)
@@ -105,6 +121,52 @@ final class DependencyTests: XCTestCase {
         XCTAssert(testModule1.testModule3 === testModule3)
         XCTAssert(testModule1.testModule2.testModule3 === testModule3)
         XCTAssert(testModule1.testModule2.testModule4.testModule5 === testModule5)
+        XCTAssert(optionalModuleDependency.testModule3 === testModule3)
+    }
+
+    func testUnloadingDependencies() throws {
+        let optionalModule = OptionalModuleDependency()
+        let module3 = TestModule3()
+        let module1 = TestModule1()
+
+        let spezi = Spezi(standard: DefaultStandard(), modules: [optionalModule])
+
+
+        spezi.loadModule(module3)
+        spezi.loadModule(module1)
+
+        try XCTRuntimePrecondition {
+            spezi.unloadModule(module3) // cannot unload module that other modules still depend on
+        }
+
+        spezi.unloadModule(module1)
+
+        var modules = spezi.modules
+        func getModule<M: Module>(_ module: M.Type = M.self) throws -> M {
+            try XCTUnwrap(modules.first(where: { $0 is M }) as? M)
+        }
+
+        let optionalModuleLoaded: OptionalModuleDependency = try getModule()
+        let module3Loaded: TestModule3 = try getModule()
+
+        XCTAssertNil(modules.first(where: { $0 is TestModule1 }))
+        XCTAssertNil(modules.first(where: { $0 is TestModule2 }))
+        XCTAssertNil(modules.first(where: { $0 is TestModule4 }))
+        XCTAssertNil(modules.first(where: { $0 is TestModule5 }))
+
+        XCTAssert(optionalModuleLoaded.testModule3 === module3Loaded)
+
+        spezi.unloadModule(module3)
+
+        modules = spezi.modules
+
+        XCTAssertNil(modules.first(where: { $0 is TestModule1 }))
+        XCTAssertNil(modules.first(where: { $0 is TestModule2 }))
+        XCTAssertNil(modules.first(where: { $0 is TestModule3 }))
+        XCTAssertNil(modules.first(where: { $0 is TestModule4 }))
+        XCTAssertNil(modules.first(where: { $0 is TestModule5 }))
+
+        XCTAssertNil(try getModule(OptionalModuleDependency.self).testModule3)
     }
 
     func testModuleDependencyChain() throws {
