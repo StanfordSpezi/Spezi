@@ -13,6 +13,6 @@ extension DependencyManager {
     static func resolve(_ modules: [any Module]) -> [any Module] {
         let dependencyManager = DependencyManager(modules)
         dependencyManager.resolve()
-        return dependencyManager.sortedModules
+        return dependencyManager.initializedModules
     }
 }

@@ -6,7 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
-@testable import Spezi
+@_spi(Spezi) @testable import Spezi
 import SwiftUI
 import XCTest
 import XCTRuntimeAssertions
@@ -76,23 +76,54 @@ private final class OptionalDependencyWithRuntimeDefault: Module {
 
 
 final class DependencyTests: XCTestCase {
+    func testLoadingAdditionalDependency() throws {
+        let spezi = Spezi(standard: DefaultStandard(), modules: [TestModule3()])
+
+        spezi.loadModule(TestModule1())
+
+        let modules = spezi.modules
+
+        XCTAssertEqual(modules.count, 6)
+        print(modules)
+
+        func getModule<M: Module>(_ module: M.Type = M.self) throws -> M {
+            try XCTUnwrap(modules.first(where: { $0 is M }) as? M)
+        }
+
+        _ = try getModule(DefaultStandard.self)
+        let testModule1: TestModule1 = try getModule()
+        let testModule2: TestModule2 = try getModule()
+        let testModule3: TestModule3 = try getModule()
+        let testModule4: TestModule4 = try getModule()
+        let testModule5: TestModule5 = try getModule()
+
+        XCTAssert(testModule4.testModule5 === testModule5)
+        XCTAssert(testModule2.testModule5 === testModule5)
+        XCTAssert(testModule2.testModule4 === testModule4)
+        XCTAssert(testModule2.testModule3 === testModule3)
+        XCTAssert(testModule1.testModule2 === testModule2)
+        XCTAssert(testModule1.testModule3 === testModule3)
+        XCTAssert(testModule1.testModule2.testModule3 === testModule3)
+        XCTAssert(testModule1.testModule2.testModule4.testModule5 === testModule5)
+    }
+
     func testModuleDependencyChain() throws {
         let modules: [any Module] = [
             TestModule6(),
             TestModule1(),
             TestModule7()
         ]
-        let sortedModules = DependencyManager.resolve(modules)
+        let initializedModules = DependencyManager.resolve(modules)
 
-        XCTAssertEqual(sortedModules.count, 7)
+        XCTAssertEqual(initializedModules.count, 7)
         
-        _ = try XCTUnwrap(sortedModules[0] as? TestModule6)
-        let testModuleMock5 = try XCTUnwrap(sortedModules[1] as? TestModule5)
-        let testModuleMock4 = try XCTUnwrap(sortedModules[2] as? TestModule4)
-        let testModuleMock3 = try XCTUnwrap(sortedModules[3] as? TestModule3)
-        let testModuleMock2 = try XCTUnwrap(sortedModules[4] as? TestModule2)
-        let testModuleMock1 = try XCTUnwrap(sortedModules[5] as? TestModule1)
-        _ = try XCTUnwrap(sortedModules[6] as? TestModule7)
+        _ = try XCTUnwrap(initializedModules[0] as? TestModule6)
+        let testModuleMock5 = try XCTUnwrap(initializedModules[1] as? TestModule5)
+        let testModuleMock4 = try XCTUnwrap(initializedModules[2] as? TestModule4)
+        let testModuleMock3 = try XCTUnwrap(initializedModules[3] as? TestModule3)
+        let testModuleMock2 = try XCTUnwrap(initializedModules[4] as? TestModule2)
+        let testModuleMock1 = try XCTUnwrap(initializedModules[5] as? TestModule1)
+        _ = try XCTUnwrap(initializedModules[6] as? TestModule7)
         
         XCTAssert(testModuleMock4.testModule5 === testModuleMock5)
         XCTAssert(testModuleMock2.testModule5 === testModuleMock5)
@@ -109,14 +140,14 @@ final class DependencyTests: XCTestCase {
             TestModule2(),
             TestModule5()
         ]
-        let sortedModules = DependencyManager.resolve(modules)
+        let initializedModules = DependencyManager.resolve(modules)
 
-        XCTAssertEqual(sortedModules.count, 4)
+        XCTAssertEqual(initializedModules.count, 4)
         
-        let testModule5 = try XCTUnwrap(sortedModules[0] as? TestModule5)
-        let testModule4 = try XCTUnwrap(sortedModules[1] as? TestModule4)
-        let testModule3 = try XCTUnwrap(sortedModules[2] as? TestModule3)
-        let testModule2 = try XCTUnwrap(sortedModules[3] as? TestModule2)
+        let testModule5 = try XCTUnwrap(initializedModules[0] as? TestModule5)
+        let testModule4 = try XCTUnwrap(initializedModules[1] as? TestModule4)
+        let testModule3 = try XCTUnwrap(initializedModules[2] as? TestModule3)
+        let testModule2 = try XCTUnwrap(initializedModules[3] as? TestModule2)
         
         XCTAssert(testModule4.testModule5 === testModule5)
         XCTAssert(testModule2.testModule5 === testModule5)
@@ -130,13 +161,13 @@ final class DependencyTests: XCTestCase {
             TestModule4(),
             TestModule4()
         ]
-        let sortedModules = DependencyManager.resolve(modules)
+        let initializedModules = DependencyManager.resolve(modules)
 
-        XCTAssertEqual(sortedModules.count, 3)
+        XCTAssertEqual(initializedModules.count, 3)
 
-        let testModule5 = try XCTUnwrap(sortedModules[0] as? TestModule5)
-        let testModule40 = try XCTUnwrap(sortedModules[1] as? TestModule4)
-        let testModule41 = try XCTUnwrap(sortedModules[2] as? TestModule4)
+        let testModule5 = try XCTUnwrap(initializedModules[0] as? TestModule5)
+        let testModule40 = try XCTUnwrap(initializedModules[1] as? TestModule4)
+        let testModule41 = try XCTUnwrap(initializedModules[2] as? TestModule4)
         
         XCTAssert(testModule40 !== testModule41)
         
@@ -149,15 +180,15 @@ final class DependencyTests: XCTestCase {
             TestModule2(),
             TestModule2()
         ]
-        let sortedModules = DependencyManager.resolve(modules)
+        let initializedModules = DependencyManager.resolve(modules)
 
-        XCTAssertEqual(sortedModules.count, 5)
+        XCTAssertEqual(initializedModules.count, 5)
 
-        let testModule5 = try XCTUnwrap(sortedModules[0] as? TestModule5)
-        let testModule4 = try XCTUnwrap(sortedModules[1] as? TestModule4)
-        let testModule3 = try XCTUnwrap(sortedModules[2] as? TestModule3)
-        let testModule20 = try XCTUnwrap(sortedModules[3] as? TestModule2)
-        let testModule21 = try XCTUnwrap(sortedModules[4] as? TestModule2)
+        let testModule5 = try XCTUnwrap(initializedModules[0] as? TestModule5)
+        let testModule4 = try XCTUnwrap(initializedModules[1] as? TestModule4)
+        let testModule3 = try XCTUnwrap(initializedModules[2] as? TestModule3)
+        let testModule20 = try XCTUnwrap(initializedModules[3] as? TestModule2)
+        let testModule21 = try XCTUnwrap(initializedModules[4] as? TestModule2)
         
         XCTAssert(testModule4.testModule5 === testModule5)
         
@@ -177,11 +208,11 @@ final class DependencyTests: XCTestCase {
 
     func testModuleNoDependency() throws {
         let modules: [any Module] = [TestModule5()]
-        let sortedModules = DependencyManager.resolve(modules)
+        let initializedModules = DependencyManager.resolve(modules)
 
-        XCTAssertEqual(sortedModules.count, 1)
+        XCTAssertEqual(initializedModules.count, 1)
 
-        _ = try XCTUnwrap(sortedModules[0] as? TestModule5)
+        _ = try XCTUnwrap(initializedModules[0] as? TestModule5)
     }
 
     func testModuleNoDependencyMultipleTimes() throws {
@@ -190,13 +221,13 @@ final class DependencyTests: XCTestCase {
             TestModule5(),
             TestModule5()
         ]
-        let sortedModules = DependencyManager.resolve(modules)
+        let initializedModules = DependencyManager.resolve(modules)
 
-        XCTAssertEqual(sortedModules.count, 3)
+        XCTAssertEqual(initializedModules.count, 3)
 
-        _ = try XCTUnwrap(sortedModules[0] as? TestModule5)
-        _ = try XCTUnwrap(sortedModules[1] as? TestModule5)
-        _ = try XCTUnwrap(sortedModules[2] as? TestModule5)
+        _ = try XCTUnwrap(initializedModules[0] as? TestModule5)
+        _ = try XCTUnwrap(initializedModules[1] as? TestModule5)
+        _ = try XCTUnwrap(initializedModules[2] as? TestModule5)
     }
 
     func testModuleCycle() throws {

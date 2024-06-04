@@ -38,9 +38,9 @@ final class DependencyBuilderTests: XCTestCase {
         let module = ExampleDependencyModule {
             ExampleDependentModule()
         }
-        let sortedModules = DependencyManager.resolve([module])
-        XCTAssertEqual(sortedModules.count, 2)
-        _ = try XCTUnwrap(sortedModules[0] as? ExampleDependentModule)
-        _ = try XCTUnwrap(sortedModules[1] as? ExampleDependencyModule)
+        let initializedModules = DependencyManager.resolve([module])
+        XCTAssertEqual(initializedModules.count, 2)
+        _ = try XCTUnwrap(initializedModules[0] as? ExampleDependentModule)
+        _ = try XCTUnwrap(initializedModules[1] as? ExampleDependencyModule)
     }
 }

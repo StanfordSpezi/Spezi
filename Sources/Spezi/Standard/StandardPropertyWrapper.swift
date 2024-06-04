@@ -11,7 +11,7 @@ import XCTRuntimeAssertions
 
 /// Refer to ``Module/StandardActor`` for information on how to use the `@StandardActor` property wrapper. Do not use the `_StandardPropertyWrapper` directly.
 @propertyWrapper
-public class _StandardPropertyWrapper<Constraint>: AnyStandardPropertyWrapper {
+public class _StandardPropertyWrapper<Constraint> {
     // swiftlint:disable:previous type_name
     // We want the _StandardPropertyWrapper type to be hidden from autocompletion and document generation.
     
@@ -33,35 +33,38 @@ public class _StandardPropertyWrapper<Constraint>: AnyStandardPropertyWrapper {
     
     
     /// Refer to ``Module/StandardActor`` for information on how to use the `@StandardActor` property wrapper. Do not use the `_StandardPropertyWrapper` directly.
-    public init(_ constraint: Constraint.Type = Constraint.self) { }
-    
-    
-    func inject<S: Standard>(standard: S) {
-        guard let standard = standard as? Constraint else {
+    public init(_ constraint: Constraint.Type = Constraint.self) {}
+}
+
+
+extension _StandardPropertyWrapper: SpeziPropertyWrapper {
+    func inject(spezi: Spezi) {
+        guard let standard = spezi.standard as? Constraint else {
+            let standardType = type(of: spezi.standard)
             preconditionFailure(
                 """
                 The `Standard` defined in the `Configuration` does not conform to \(String(describing: Constraint.self)).
-                
+
                 Ensure that you define an appropriate standard in your configuration in your `SpeziAppDelegate` subclass ...
                 ```
                 var configuration: Configuration {
-                    Configuration(standard: \(String(describing: S.self))()) {
+                    Configuration(standard: \(String(describing: standardType))()) {
                         // ...
                     }
                 }
                 ```
-                
+
                 ... and that your standard conforms to \(String(describing: Constraint.self)):
-                
+
                 ```swift
-                actor \(String(describing: S.self)): Standard, \(String(describing: Constraint.self)) {
+                actor \(String(describing: standardType)): Standard, \(String(describing: Constraint.self)) {
                     // ...
                 }
                 ```
                 """
             )
         }
-        
+
         self.standard = standard
     }
 }

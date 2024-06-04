@@ -119,10 +119,10 @@ final class DynamicDependenciesTests: XCTestCase {
                 return
             }
             
-            let sortedModules = DependencyManager.resolve(modules)
-            XCTAssertEqual(sortedModules.count, dynamicDependenciesTestCase.expectedNumberOfModules)
+            let initializedModules = DependencyManager.resolve(modules)
+            XCTAssertEqual(initializedModules.count, dynamicDependenciesTestCase.expectedNumberOfModules)
             
-            try sortedModules.moduleOfType(TestModule1.self).evaluateExpectations()
+            try initializedModules.moduleOfType(TestModule1.self).evaluateExpectations()
         }
     }
 }

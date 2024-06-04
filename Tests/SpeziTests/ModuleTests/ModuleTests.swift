@@ -6,7 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
-@testable import Spezi
+@_spi(Spezi) @testable import Spezi
 import SwiftUI
 import XCTest
 import XCTRuntimeAssertions
@@ -40,6 +40,16 @@ final class ModuleTests: XCTestCase {
                 .spezi(TestApplicationDelegate(expectation: expectation)) as? ModifiedContent<Text, SpeziViewModifier>
         )
         wait(for: [expectation])
+    }
+
+    func testSpezi() throws {
+        let spezi = Spezi(standard: DefaultStandard(), modules: [DependingTestModule()])
+
+        let modules = spezi.modules
+        XCTAssertEqual(modules.count, 3)
+        XCTAssert(modules.contains(where: { $0 is DefaultStandard }))
+        XCTAssert(modules.contains(where: { $0 is DependingTestModule }))
+        XCTAssert(modules.contains(where: { $0 is TestModule }))
     }
 
     func testPreviewModifier() throws {

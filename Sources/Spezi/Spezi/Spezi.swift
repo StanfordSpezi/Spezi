@@ -67,15 +67,17 @@ public typealias SpeziStorage = HeapRepository<SpeziAnchor>
 /// ### Actions
 /// - ``registerRemoteNotifications``
 /// - ``unregisterRemoteNotifications``
-public class Spezi {
+@Observable
+public class Spezi { // TODO: decide which properties should be observable!
     static let logger = Logger(subsystem: "edu.stanford.spezi", category: "Spezi")
 
     @TaskLocal static var moduleInitContext: (any Module)?
 
+    let standard: any Standard
     /// A shared repository to store any ``KnowledgeSource``s restricted to the ``SpeziAnchor``.
     ///
     /// Every `Module` automatically conforms to `KnowledgeSource` and is stored within this storage object.
-    fileprivate(set) var storage: SpeziStorage
+    @ObservationIgnored fileprivate(set) var storage: SpeziStorage
 
     /// Array of all SwiftUI `ViewModifiers` collected using ``_ModifierPropertyWrapper`` from the configured ``Module``s.
     var viewModifiers: [any ViewModifier]
@@ -104,6 +106,16 @@ public class Spezi {
         storage.collect(allOf: NotificationHandler.self)
     }
 
+    var modules: [any Module] {
+        storage.collect(allOf: (any Module).self)
+    }
+
+    /// Access the global Spezi instance.
+    public var spezi: Spezi { // TODO: example via @Application property wrapper, docs
+        // this seems nonsensical, but is essential to support Spezi access from the @Application modifier
+        self
+    }
+
 
     convenience init(from configuration: Configuration, storage: consuming SpeziStorage = SpeziStorage()) {
         self.init(standard: configuration.standard, modules: configuration.modules.elements, storage: storage)
@@ -122,45 +134,79 @@ public class Spezi {
         modules: [any Module],
         storage: consuming SpeziStorage = SpeziStorage()
     ) {
-        // mutable property, as StorageValueProvider has inout protocol requirement.
-        var storage = consume storage
-        var collectedModifiers: [any ViewModifier] = []
+        self.standard = standard
+        self.storage = consume storage
+        self.viewModifiers = []
 
-        let dependencyManager = DependencyManager(modules + [standard])
+        self.loadModules([self.standard] + modules)
+    }
+
+    public func loadModule(_ module: any Module) {
+        loadModules([module])
+    }
+
+    public func unloadModule(_ module: any Module) {
+        // TODO: fail if there are modules depending on it!
+
+        // TODO: just remove from storage??
+
+        // TODO: check for "dangling" modules (ones that are only in @Dependency property wrappers),
+        //  => not explicitly requested to be loaded (e.g., standard or dynamically loaded).
+    }
+    // TODO: unload module?
+
+    private func loadModules(_ modules: [any Module]) { // TODO: docs
+        let existingModules = self.modules
+
+        let dependencyManager = DependencyManager(modules, existing: existingModules)
         dependencyManager.resolve()
 
-        for module in dependencyManager.sortedModules {
+        for module in dependencyManager.initializedModules {
             // we pass through the whole list of modules once to collect all @Provide values
             module.collectModuleValues(into: &storage)
         }
 
-        self.storage = storage
-        self.viewModifiers = [] // init all properties, we will store the final result later on
-
-        for module in dependencyManager.sortedModules {
-            Self.$moduleInitContext.withValue(module) {
-                module.inject(standard: standard)
-                module.inject(spezi: self)
-
-                // supply modules values to all @Collect
-                module.injectModuleValues(from: self.storage)
-
-                module.configure()
-                module.storeModule(into: self)
-
-                collectedModifiers.append(contentsOf: module.viewModifiers)
-
-                // If a module is @Observable, we automatically inject it view the `ModelModifier` into the environment.
-                if let observable = module as? EnvironmentAccessible {
-                    collectedModifiers.append(observable.viewModifier)
-                }
-            }
+        for module in dependencyManager.initializedModules {
+            self.initModule(module)
         }
 
-        self.viewModifiers = collectedModifiers
+
+        // Newly loaded modules might have @Provide values that need to be updated in @Collect properties in existing modules.
+        for existingModule in existingModules {
+            // TODO: do we really want to support that?, that gets super chaotic with unload modules???
+            // TODO: create an issue to have e.g. update functionality (rework that whole thing?)
+            existingModule.injectModuleValues(from: storage)
+        }
     }
 
+    /// Initialize a Module.
+    ///
+    /// Call this method to initialize a Module, injecting necessary information into Spezi property wrappers.
+    ///
+    ///
+    /// - Parameters:
+    ///   - module:
+    ///   - standard:
+    private func initModule(_ module: any Module) { // TODO: docs
+        Self.$moduleInitContext.withValue(module) {
+            module.inject(spezi: self)
 
+            // supply modules values to all @Collect
+            module.injectModuleValues(from: storage)
+
+            module.configure()
+            module.storeModule(into: self)
+
+            viewModifiers.append(contentsOf: module.viewModifiers)
+
+            // If a module is @Observable, we automatically inject it view the `ModelModifier` into the environment.
+            if let observable = module as? EnvironmentAccessible {
+                viewModifiers.append(observable.viewModifier)
+            }
+        }
+    }
+
+    /// Determine if a application property is stored as a copy in a `@Application` property wrapper.
     func createsCopy<Value>(_ keyPath: KeyPath<Spezi, Value>) -> Bool {
         keyPath == \.logger // loggers are created per Module.
     }
@@ -168,7 +214,7 @@ public class Spezi {
 
 
 extension Module {
-    func storeModule(into spezi: Spezi) {
+    fileprivate func storeModule(into spezi: Spezi) {
         guard let value = self as? Value else {
             spezi.logger.warning("Could not store \(Self.self) in the SpeziStorage as the `Value` typealias was modified.")
             return
