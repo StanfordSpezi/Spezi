@@ -68,11 +68,30 @@ private struct ImplicitlyCreatedModulesKey: DefaultProvidingKnowledgeSource {
 /// The ``Module`` documentation provides more information about the structure of modules.
 /// Refer to the ``Configuration`` documentation to learn more about the Spezi configuration.
 ///
+/// ### Dynamically Loading Modules
+///
+/// While the above examples demonstrated how Modules are configured within your ``SpeziAppDelegate``, they can also be loaded and unloaded dynamically based on demand.
+/// To do so you, you need to access the global `Spezi` instance from within your Module.
+///
+/// Below is a short code example:
+/// ```swift
+/// class ExampleModule: Module {
+///     @Application(\.spezi)
+///     var spezi
+///
+///     func userAuthenticated() {
+///         spezi.loadModule(AccountManagement())
+///         // ...
+///     }
+/// }
+/// ```
+///
 /// ## Topics
 ///
 /// ### Properties
 /// - ``logger``
 /// - ``launchOptions``
+/// - ``spezi``
 ///
 /// ### Actions
 /// - ``registerRemoteNotifications``
@@ -182,6 +201,7 @@ public class Spezi {
     }
 
     private func loadModules(_ modules: [any Module]) {
+        precondition(Self.moduleInitContext == nil, "Modules cannot be loaded within the `configure()` method.")
         let existingModules = self.modules
 
         let dependencyManager = DependencyManager(modules, existing: existingModules)
@@ -189,9 +209,11 @@ public class Spezi {
 
         implicitlyCreatedModules.formUnion(dependencyManager.implicitlyCreatedModules)
 
+        // we pass through the whole list of modules once to collect all @Provide values
         for module in dependencyManager.initializedModules {
-            // we pass through the whole list of modules once to collect all @Provide values
-            module.collectModuleValues(into: &storage)
+            Self.$moduleInitContext.withValue(module) {
+                module.collectModuleValues(into: &storage)
+            }
         }
 
         for module in dependencyManager.initializedModules {
@@ -201,8 +223,6 @@ public class Spezi {
 
         // Newly loaded modules might have @Provide values that need to be updated in @Collect properties in existing modules.
         for existingModule in existingModules {
-            // TODO: do we really want to support that?, that gets super chaotic with unload modules???
-            // TODO: create an issue to have e.g. update functionality (rework that whole thing?), remove that system altogether?
             existingModule.injectModuleValues(from: storage)
         }
     }
@@ -217,6 +237,8 @@ public class Spezi {
     ///
     /// - Parameter module: The Module to unload.
     public func unloadModule(_ module: any Module) {
+        precondition(Self.moduleInitContext == nil, "Modules cannot be unloaded within the `configure()` method.")
+
         guard module.isLoaded(in: self) else {
             return // module is not loaded
         }
@@ -228,7 +250,7 @@ public class Spezi {
 
         implicitlyCreatedModules.remove(ModuleReference(module))
 
-        // TODO: remove @Collect values that were previously provided by this Module
+        removeCollectValues(for: module)
 
         // re-injecting all dependencies ensures that the unloaded module is cleared from optional Dependencies from
         // pre-existing Modules.
@@ -253,6 +275,29 @@ public class Spezi {
 
                 unloadModule(dependency)
             }
+        }
+    }
+
+    private func removeCollectValues(for module: any Module) {
+        let valueContainers = storage.collect(allOf: (any AnyCollectModuleValues).self)
+
+        var changed = false
+        for var container in valueContainers {
+            let didChange = container.removeValues(from: module)
+            guard didChange else {
+                continue
+            }
+
+            changed = true
+            container.store(into: &storage)
+        }
+
+        guard changed else {
+            return
+        }
+
+        for module in modules {
+            module.injectModuleValues(from: storage)
         }
     }
 

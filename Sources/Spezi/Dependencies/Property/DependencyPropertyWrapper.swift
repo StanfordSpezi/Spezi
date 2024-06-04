@@ -33,6 +33,7 @@ private protocol ModuleArrayDependency {
 public class _DependencyPropertyWrapper<Value> { // swiftlint:disable:this type_name
     private let dependencies: DependencyCollection
 
+    /// The dependency value.
     public var wrappedValue: Value {
         if let singleModule = self as? SingleModuleDependency {
             return singleModule.wrappedValue(as: Value.self)

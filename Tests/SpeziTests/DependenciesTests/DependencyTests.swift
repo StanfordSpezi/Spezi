@@ -15,16 +15,22 @@ import XCTRuntimeAssertions
 private final class TestModule1: Module {
     @Dependency var testModule2 = TestModule2()
     @Dependency var testModule3: TestModule3
+
+    @Provide var num: Int = 1
 }
 
 private final class TestModule2: Module {
     @Dependency var testModule4 = TestModule4()
     @Dependency var testModule5 = TestModule5()
     @Dependency var testModule3: TestModule3
+
+    @Provide var num: Int = 2
 }
 
 private final class TestModule3: Module, DefaultInitializable {
     let state: Int
+
+    @Provide var num: Int = 3
 
     convenience init() {
         self.init(state: 0)
@@ -37,9 +43,13 @@ private final class TestModule3: Module, DefaultInitializable {
 
 private final class TestModule4: Module {
     @Dependency var testModule5 = TestModule5()
+
+    @Provide var num: Int = 4
 }
 
-private final class TestModule5: Module {}
+private final class TestModule5: Module {
+    @Provide var num: Int = 5
+}
 
 private final class TestModule6: Module {}
 
@@ -62,6 +72,8 @@ private final class TestModuleItself: Module {
 
 private final class OptionalModuleDependency: Module {
     @Dependency var testModule3: TestModule3?
+
+    @Collect var nums: [Int]
 }
 
 private final class OptionalDependencyWithRuntimeDefault: Module {
@@ -122,9 +134,6 @@ final class DependencyTests: XCTestCase {
         XCTAssert(testModule1.testModule2.testModule3 === testModule3)
         XCTAssert(testModule1.testModule2.testModule4.testModule5 === testModule5)
         XCTAssert(optionalModuleDependency.testModule3 === testModule3)
-
-        // TODO: test updated view modifiers
-        // TODO: test updated @Collect properties!
     }
 
     func testUnloadingDependencies() throws {
@@ -134,15 +143,21 @@ final class DependencyTests: XCTestCase {
 
         let spezi = Spezi(standard: DefaultStandard(), modules: [optionalModule])
 
+        // test loading and unloading of @Collect/@Provide property values
+        XCTAssertEqual(optionalModule.nums, [])
 
         spezi.loadModule(module3)
+        XCTAssertEqual(optionalModule.nums, [3])
+
         spezi.loadModule(module1)
+        XCTAssertEqual(optionalModule.nums, [3, 5, 4, 2, 1])
 
         try XCTRuntimePrecondition {
             spezi.unloadModule(module3) // cannot unload module that other modules still depend on
         }
 
         spezi.unloadModule(module1)
+        XCTAssertEqual(optionalModule.nums, [3])
 
         var modules = spezi.modules
         func getModule<M: Module>(_ module: M.Type = M.self) throws -> M {
@@ -160,6 +175,7 @@ final class DependencyTests: XCTestCase {
         XCTAssert(optionalModuleLoaded.testModule3 === module3Loaded)
 
         spezi.unloadModule(module3)
+        XCTAssertEqual(optionalModule.nums, [])
 
         modules = spezi.modules
 
