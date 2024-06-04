@@ -23,10 +23,10 @@ public class DependencyManager {
     /// A List of `ModuleReference`s that where implicitly created (e.g., due to another module requesting it as a Dependency and
     /// conforming to ``DefaultInitializable``).
     /// This list is important to keep for the unload mechanism.
-    private(set) var implicitlyCreatedModules: ModuleReferences = []
+    private(set) var implicitlyCreatedModules: Set<ModuleReference> = []
 
     /// Collection of all modules with dependencies that are not yet processed.
-    private var modulesWithDependencies: [any Module] // TODO: different name?
+    private var modulesWithDependencies: [any Module]
     /// Recursive search stack to keep track of potential circular dependencies.
     private var searchStack: [any Module] = []
 
@@ -51,7 +51,7 @@ public class DependencyManager {
     /// After calling `resolve` you can safely access `initializedModules`.
     func resolve() {
         // Start the dependency resolution on the first module.
-        if let nextModule = modulesWithDependencies.first {
+        while let nextModule = modulesWithDependencies.first {
             push(nextModule)
         }
 
@@ -74,7 +74,7 @@ public class DependencyManager {
         for dependency in module.dependencyDeclarations {
             dependency.collect(into: self) // leads to calls to `require(_:defaultValue:)`
         }
-        resolvedAllDependencies(module)
+        finishSearch(module)
     }
 
     /// Communicate a requirement to a `DependencyManager`
@@ -99,7 +99,7 @@ public class DependencyManager {
 
             let newModule = defaultValue()
 
-            implicitlyCreatedModules.append(ModuleReference(newModule))
+            implicitlyCreatedModules.insert(ModuleReference(newModule))
 
             guard !newModule.dependencyDeclarations.isEmpty else {
                 initializedModules.append(newModule)
@@ -150,33 +150,25 @@ public class DependencyManager {
 
         return module
     }
-    
-    private func resolvedAllDependencies(_ dependingModule: any Module) {
+
+    private func finishSearch(_ dependingModule: any Module) {
         guard !searchStack.isEmpty else {
             preconditionFailure("Internal logic error in the `DependencyManager`. Search Stack is empty.")
         }
         let module = searchStack.removeLast()
-        
+
         guard module === dependingModule else {
             preconditionFailure("Internal logic error in the `DependencyManager`. Search Stack element was not the one we are resolving for.")
         }
-        
-        
+
+
         let dependingModulesCount = modulesWithDependencies.count
         modulesWithDependencies.removeAll(where: { $0 === dependingModule })
         precondition(
             dependingModulesCount - 1 == modulesWithDependencies.count,
-            "Unexpected reduction of modules. Ensure that all your modules conform to the same `Standard`" // TODO: update message!
+            "Unexpected reduction of modules."
         )
-        
+
         initializedModules.append(dependingModule)
-        // TODO: move all above out into a separate method? (cleanup like?)
-
-
-        // TODO: why is this a recursive search? just make it iterative?
-        // Call the dependency resolution mechanism on the next element in the `dependingModules` if we are not in a recursive search.
-        if searchStack.isEmpty, let nextModule = modulesWithDependencies.first {
-            push(nextModule)
-        }
     }
 }

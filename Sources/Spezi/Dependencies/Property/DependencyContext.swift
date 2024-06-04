@@ -52,7 +52,6 @@ class DependencyContext<Dependency: Module>: AnyDependencyContext {
     }
 
     func inject(from dependencyManager: DependencyManager) {
-        // TODO: precondition(injectedDependency == nil, "Dependency of type \(Dependency.self) is already injected!")
         injectedDependency = dependencyManager.retrieve(optional: isOptional)
     }
 

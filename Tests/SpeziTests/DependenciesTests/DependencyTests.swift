@@ -122,6 +122,9 @@ final class DependencyTests: XCTestCase {
         XCTAssert(testModule1.testModule2.testModule3 === testModule3)
         XCTAssert(testModule1.testModule2.testModule4.testModule5 === testModule5)
         XCTAssert(optionalModuleDependency.testModule3 === testModule3)
+
+        // TODO: test updated view modifiers
+        // TODO: test updated @Collect properties!
     }
 
     func testUnloadingDependencies() throws {

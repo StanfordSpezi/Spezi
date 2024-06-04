@@ -12,7 +12,6 @@ import SwiftUI
 
 struct SpeziViewModifier: ViewModifier {
     @State private var spezi: Spezi
-    // let speziViewModifiers: [any ViewModifier] // TODO: this can now change!
     
     
     init(_ spezi: Spezi) {

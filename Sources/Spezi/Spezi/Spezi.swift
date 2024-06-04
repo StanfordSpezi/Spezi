@@ -19,6 +19,15 @@ import XCTRuntimeAssertions
 @_documentation(visibility: internal)
 public typealias SpeziStorage = HeapRepository<SpeziAnchor>
 
+
+private struct ImplicitlyCreatedModulesKey: DefaultProvidingKnowledgeSource {
+    typealias Value = Set<ModuleReference>
+    typealias Anchor = SpeziAnchor
+
+    static let defaultValue: Value = []
+}
+
+
 /// Open-source framework for rapid development of modern, interoperable digital health applications.
 ///
 /// Set up the Spezi framework in your `App` instance of your SwiftUI application using the ``SpeziAppDelegate`` and the `@ApplicationDelegateAdaptor` property wrapper.
@@ -111,8 +120,28 @@ public class Spezi {
         storage.collect(allOf: (any Module).self)
     }
 
+    private var implicitlyCreatedModules: Set<ModuleReference> {
+        get {
+            storage[ImplicitlyCreatedModulesKey.self]
+        }
+        set {
+            storage[ImplicitlyCreatedModulesKey.self] = newValue
+        }
+    }
+
     /// Access the global Spezi instance.
-    public var spezi: Spezi { // TODO: example via @Application property wrapper, docs
+    ///
+    /// Access the global Spezi instance using the ``Module/Application`` property wrapper inside your ``Module``.
+    ///
+    /// Below is a short code example on how to access the Spezi instance.
+    ///
+    /// ```swift
+    /// class ExampleModule: Module {
+    ///     @Application(\.spezi)
+    ///     var spezi
+    /// }
+    /// ```
+    public var spezi: Spezi {
         // this seems nonsensical, but is essential to support Spezi access from the @Application modifier
         self
     }
@@ -142,20 +171,23 @@ public class Spezi {
         self.loadModules([self.standard] + modules)
     }
 
+    /// Load a new Module.
+    ///
+    /// Loads a new Spezi ``Module`` resolving all dependencies.
+    /// - Note: Trying to load the same ``Module`` instance multiple times results in a runtime crash.
+    ///
+    /// - Parameter module: The new Module instance to load.
     public func loadModule(_ module: any Module) {
         loadModules([module])
     }
 
-    private func loadModules(_ modules: [any Module]) { // TODO: docs
+    private func loadModules(_ modules: [any Module]) {
         let existingModules = self.modules
 
         let dependencyManager = DependencyManager(modules, existing: existingModules)
         dependencyManager.resolve()
 
-        // TODO: make sure this has Set semantics!
-        var implicitlyCreatedModules = storage[ModuleReferences.self]
-        implicitlyCreatedModules.append(contentsOf: dependencyManager.implicitlyCreatedModules)
-        storage[ModuleReferences.self] = implicitlyCreatedModules
+        implicitlyCreatedModules.formUnion(dependencyManager.implicitlyCreatedModules)
 
         for module in dependencyManager.initializedModules {
             // we pass through the whole list of modules once to collect all @Provide values
@@ -175,7 +207,16 @@ public class Spezi {
         }
     }
 
-    public func unloadModule(_ module: any Module) { // TODO: docs
+    /// Unload a Module.
+    ///
+    /// Unloads a ``Module`` from the Spezi system.
+    /// - Important: Unloading a ``Module`` that is still required by other modules results in a runtime crash.
+    ///     However, unloading a Module that is the **optional** dependency of another Module works.
+    ///
+    /// Unloading a Module will recursively unload its dependencies that were not loaded explicitly.
+    ///
+    /// - Parameter module: The Module to unload.
+    public func unloadModule(_ module: any Module) {
         guard module.isLoaded(in: self) else {
             return // module is not loaded
         }
@@ -185,12 +226,7 @@ public class Spezi {
 
         module.clearModule(from: self)
 
-        // TODO: this is complicated boi!!
-        if storage[ModuleReferences.self].contains(ModuleReference(module)) {
-            var implicitlyCreatedModules = storage[ModuleReferences.self]
-            implicitlyCreatedModules.removeAll(where: { $0 == ModuleReference(module) })
-            storage[ModuleReferences.self] = implicitlyCreatedModules
-        }
+        implicitlyCreatedModules.remove(ModuleReference(module))
 
         // TODO: remove @Collect values that were previously provided by this Module
 
@@ -206,9 +242,9 @@ public class Spezi {
         for dependencyDeclaration in module.dependencyDeclarations {
             let dependencies = dependencyDeclaration.injectedDependencies
             for dependency in dependencies {
-                // TODO: accessor naming!
-                guard storage[ModuleReferences.self].contains(ModuleReference(dependency)) else {
-                    continue // TODO: docs!
+                guard implicitlyCreatedModules.contains(ModuleReference(dependency)) else {
+                    // we only recursively unload modules that have been created implicitly
+                    continue
                 }
 
                 guard retrieveDependingModules(dependency).isEmpty else {
@@ -224,11 +260,9 @@ public class Spezi {
     ///
     /// Call this method to initialize a Module, injecting necessary information into Spezi property wrappers.
     ///
-    ///
     /// - Parameters:
-    ///   - module:
-    ///   - standard:
-    private func initModule(_ module: any Module) { // TODO: docs
+    ///   - module: The module to initialize.
+    private func initModule(_ module: any Module) {
         precondition(!module.isLoaded(in: self), "Tried to initialize Module \(type(of: module)) that was already loaded!")
 
         Self.$moduleInitContext.withValue(module) {
