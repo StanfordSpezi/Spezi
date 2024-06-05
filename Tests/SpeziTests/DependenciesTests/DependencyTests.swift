@@ -13,10 +13,20 @@ import XCTRuntimeAssertions
 
 
 private final class TestModule1: Module {
+    let deinitExpectation: XCTestExpectation
+
     @Dependency var testModule2 = TestModule2()
     @Dependency var testModule3: TestModule3
 
     @Provide var num: Int = 1
+
+    init(deinitExpectation: XCTestExpectation = XCTestExpectation()) {
+        self.deinitExpectation = deinitExpectation
+    }
+
+    deinit {
+        deinitExpectation.fulfill()
+    }
 }
 
 private final class TestModule2: Module {
@@ -27,8 +37,10 @@ private final class TestModule2: Module {
     @Provide var num: Int = 2
 }
 
-private final class TestModule3: Module, DefaultInitializable {
+private final class TestModule3: Module, DefaultInitializable, EnvironmentAccessible {
+    // EnvironmentAccessible conformance tests that `ModelModifier(model: self)` are removed and no memory leaks occur in Module unloading
     let state: Int
+    let deinitExpectation: XCTestExpectation
 
     @Provide var num: Int = 3
 
@@ -36,8 +48,13 @@ private final class TestModule3: Module, DefaultInitializable {
         self.init(state: 0)
     }
 
-    init(state: Int) {
+    init(state: Int, deinitExpectation: XCTestExpectation = .init()) {
         self.state = state
+        self.deinitExpectation = deinitExpectation
+    }
+
+    deinit {
+        deinitExpectation.fulfill()
     }
 }
 
@@ -74,6 +91,25 @@ private final class OptionalModuleDependency: Module {
     @Dependency var testModule3: TestModule3?
 
     @Collect var nums: [Int]
+}
+
+private final class AllPropertiesModule: Module {
+    @Observable
+    class MyModel {}
+    struct MyViewModifier: ViewModifier {
+        func body(content: Content) -> some View {
+            content
+        }
+    }
+
+    @Dependency var testModule3: TestModule3
+    @Application(\.logger) var logger
+    @Application(\.spezi) var spezi
+    @Collect var nums: [Int]
+    @Provide var num: Int = 3
+    @Model var model = MyModel()
+    @Modifier var modifier = MyViewModifier()
+    @StandardActor var defaultStandard: any Standard
 }
 
 private final class OptionalDependencyWithRuntimeDefault: Module {
@@ -136,56 +172,83 @@ final class DependencyTests: XCTestCase {
         XCTAssert(optionalModuleDependency.testModule3 === testModule3)
     }
 
-    func testUnloadingDependencies() throws {
-        let optionalModule = OptionalModuleDependency()
+    func testImpossibleUnloading() throws {
         let module3 = TestModule3()
-        let module1 = TestModule1()
-
-        let spezi = Spezi(standard: DefaultStandard(), modules: [optionalModule])
-
-        // test loading and unloading of @Collect/@Provide property values
-        XCTAssertEqual(optionalModule.nums, [])
-
-        spezi.loadModule(module3)
-        XCTAssertEqual(optionalModule.nums, [3])
-
-        spezi.loadModule(module1)
-        XCTAssertEqual(optionalModule.nums, [3, 5, 4, 2, 1])
+        let spezi = Spezi(standard: DefaultStandard(), modules: [TestModule1(), module3])
 
         try XCTRuntimePrecondition {
-            spezi.unloadModule(module3) // cannot unload module that other modules still depend on
+            // cannot unload module that other modules still depend on
+            spezi.unloadModule(module3)
+        }
+    }
+
+    func testMultiLoading() throws {
+        let module = AllPropertiesModule()
+        let spezi = Spezi(standard: DefaultStandard(), modules: [module])
+
+        spezi.unloadModule(module)
+        spezi.loadModule(module)
+        spezi.unloadModule(module)
+    }
+
+    func testUnloadingDependencies() throws {
+        func runUnloadingTests(deinitExpectation1: XCTestExpectation, deinitExpectation3: XCTestExpectation) throws -> Spezi {
+            let optionalModule = OptionalModuleDependency()
+            let module3 = TestModule3(state: 0, deinitExpectation: deinitExpectation3)
+            let module1 = TestModule1(deinitExpectation: deinitExpectation1)
+
+            let spezi = Spezi(standard: DefaultStandard(), modules: [optionalModule])
+
+            // test loading and unloading of @Collect/@Provide property values
+            XCTAssertEqual(optionalModule.nums, [])
+
+            spezi.loadModule(module3)
+            XCTAssertEqual(optionalModule.nums, [3])
+
+            spezi.loadModule(module1)
+            XCTAssertEqual(optionalModule.nums, [3, 5, 4, 2, 1])
+
+            spezi.unloadModule(module1)
+            XCTAssertEqual(optionalModule.nums, [3])
+
+            var modules = spezi.modules
+            func getModule<M: Module>(_ module: M.Type = M.self) throws -> M {
+                try XCTUnwrap(modules.first(where: { $0 is M }) as? M)
+            }
+
+            let optionalModuleLoaded: OptionalModuleDependency = try getModule()
+            let module3Loaded: TestModule3 = try getModule()
+
+            XCTAssertNil(modules.first(where: { $0 is TestModule1 }))
+            XCTAssertNil(modules.first(where: { $0 is TestModule2 }))
+            XCTAssertNil(modules.first(where: { $0 is TestModule4 }))
+            XCTAssertNil(modules.first(where: { $0 is TestModule5 }))
+
+            XCTAssert(optionalModuleLoaded.testModule3 === module3Loaded)
+
+            spezi.unloadModule(module3)
+            XCTAssertEqual(optionalModule.nums, [])
+
+            modules = spezi.modules
+
+            XCTAssertNil(modules.first(where: { $0 is TestModule1 }))
+            XCTAssertNil(modules.first(where: { $0 is TestModule2 }))
+            XCTAssertNil(modules.first(where: { $0 is TestModule3 }))
+            XCTAssertNil(modules.first(where: { $0 is TestModule4 }))
+            XCTAssertNil(modules.first(where: { $0 is TestModule5 }))
+
+            XCTAssertNil(try getModule(OptionalModuleDependency.self).testModule3)
+            return spezi
         }
 
-        spezi.unloadModule(module1)
-        XCTAssertEqual(optionalModule.nums, [3])
+        let deinitExpectation1 = XCTestExpectation(description: "Deinit TestModule1")
+        let deinitExpectation3 = XCTestExpectation(description: "Deinit TestModule3")
 
-        var modules = spezi.modules
-        func getModule<M: Module>(_ module: M.Type = M.self) throws -> M {
-            try XCTUnwrap(modules.first(where: { $0 is M }) as? M)
-        }
+        // make sure we keep the reference to `Spezi`, but loose all references to TestModule3 to test deinit getting called
+        let spezi = try runUnloadingTests(deinitExpectation1: deinitExpectation1, deinitExpectation3: deinitExpectation3)
+        _ = spezi // silence warning
 
-        let optionalModuleLoaded: OptionalModuleDependency = try getModule()
-        let module3Loaded: TestModule3 = try getModule()
-
-        XCTAssertNil(modules.first(where: { $0 is TestModule1 }))
-        XCTAssertNil(modules.first(where: { $0 is TestModule2 }))
-        XCTAssertNil(modules.first(where: { $0 is TestModule4 }))
-        XCTAssertNil(modules.first(where: { $0 is TestModule5 }))
-
-        XCTAssert(optionalModuleLoaded.testModule3 === module3Loaded)
-
-        spezi.unloadModule(module3)
-        XCTAssertEqual(optionalModule.nums, [])
-
-        modules = spezi.modules
-
-        XCTAssertNil(modules.first(where: { $0 is TestModule1 }))
-        XCTAssertNil(modules.first(where: { $0 is TestModule2 }))
-        XCTAssertNil(modules.first(where: { $0 is TestModule3 }))
-        XCTAssertNil(modules.first(where: { $0 is TestModule4 }))
-        XCTAssertNil(modules.first(where: { $0 is TestModule5 }))
-
-        XCTAssertNil(try getModule(OptionalModuleDependency.self).testModule3)
+        wait(for: [deinitExpectation1, deinitExpectation3])
     }
 
     func testModuleDependencyChain() throws {

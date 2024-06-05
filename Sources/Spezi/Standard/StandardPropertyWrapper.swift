@@ -18,7 +18,7 @@ public class _StandardPropertyWrapper<Constraint> {
     private var standard: Constraint?
     
     
-    /// The injected ``Standard`` that is resolved by ``Spezi``
+    /// The injected ``Standard`` that is resolved by ``Spezi/Spezi``.
     public var wrappedValue: Constraint {
         guard let standard else {
             preconditionFailure(
@@ -66,5 +66,9 @@ extension _StandardPropertyWrapper: SpeziPropertyWrapper {
         }
 
         self.standard = standard
+    }
+
+    func clear() {
+        standard = nil
     }
 }

@@ -59,6 +59,13 @@ public class _DependencyPropertyWrapper<Value> { // swiftlint:disable:this type_
 }
 
 
+extension _DependencyPropertyWrapper: SpeziPropertyWrapper {
+    func clear() {
+        uninjectDependencies()
+    }
+}
+
+
 extension _DependencyPropertyWrapper: DependencyDeclaration {
     var injectedDependencies: [any Module] {
         dependencies.injectedDependencies
@@ -75,6 +82,10 @@ extension _DependencyPropertyWrapper: DependencyDeclaration {
 
     func inject(from dependencyManager: DependencyManager) {
         dependencies.inject(from: dependencyManager)
+    }
+
+    func uninjectDependencies() {
+        dependencies.uninjectDependencies()
     }
 }
 

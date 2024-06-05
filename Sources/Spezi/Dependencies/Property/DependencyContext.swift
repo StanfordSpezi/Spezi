@@ -55,6 +55,10 @@ class DependencyContext<Dependency: Module>: AnyDependencyContext {
         injectedDependency = dependencyManager.retrieve(optional: isOptional)
     }
 
+    func uninjectDependencies() {
+        injectedDependency = nil
+    }
+
     func retrieve<M>(dependency: M.Type) -> M {
         guard let injectedDependency else {
             preconditionFailure(

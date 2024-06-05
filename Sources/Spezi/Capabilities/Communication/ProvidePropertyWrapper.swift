@@ -121,6 +121,10 @@ extension _ProvidePropertyWrapper: StorageValueProvider {
 
         collected = true
     }
+
+    func clear() {
+        collected = false
+    }
 }
 
 

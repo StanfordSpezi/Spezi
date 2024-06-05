@@ -75,6 +75,12 @@ public struct DependencyCollection: DependencyDeclaration {
         }
     }
 
+    func uninjectDependencies() {
+        for entry in entries {
+            entry.uninjectDependencies()
+        }
+    }
+
     private func singleDependencyContext() -> AnyDependencyContext {
         guard let dependency = entries.first else {
             preconditionFailure("DependencyCollection unexpectedly empty!")

@@ -17,7 +17,7 @@ public struct LaunchOptionsKey: DefaultProvidingKnowledgeSource {
     public typealias Value = [UIApplication.LaunchOptionsKey: Any]
 #elseif os(macOS)
     /// Currently not supported as ``SpeziAppDelegate/applicationWillFinishLaunching(_:)`` on macOS
-    /// is executed after the initialization of ``Spezi`` via `View/spezi(_:)` is done, breaking our initialization assumption in ``SpeziAppDelegate/applicationWillFinishLaunching(_:)``.
+    /// is executed after the initialization of ``Spezi/Spezi`` via `View/spezi(_:)` is done, breaking our initialization assumption in ``SpeziAppDelegate/applicationWillFinishLaunching(_:)``.
     public typealias Value = [Never: Any]
 #else // os(watchOS)
     public typealias Value = [Never: Any]

@@ -15,9 +15,9 @@ import XCTRuntimeAssertions
 
 /// A ``SharedRepository`` implementation that is anchored to ``SpeziAnchor``.
 ///
-/// This represents the central ``Spezi`` storage module.
+/// This represents the central ``Spezi/Spezi`` storage module.
 @_documentation(visibility: internal)
-public typealias SpeziStorage = HeapRepository<SpeziAnchor>
+public typealias SpeziStorage = ValueRepository<SpeziAnchor>
 
 
 private struct ImplicitlyCreatedModulesKey: DefaultProvidingKnowledgeSource {
@@ -99,17 +99,23 @@ private struct ImplicitlyCreatedModulesKey: DefaultProvidingKnowledgeSource {
 @Observable
 public class Spezi {
     static let logger = Logger(subsystem: "edu.stanford.spezi", category: "Spezi")
-
+    
     @TaskLocal static var moduleInitContext: (any Module)?
-
+    
     let standard: any Standard
-    /// A shared repository to store any ``KnowledgeSource``s restricted to the ``SpeziAnchor``.
+    /// A shared repository to store any `KnowledgeSource`s restricted to the ``SpeziAnchor``.
     ///
     /// Every `Module` automatically conforms to `KnowledgeSource` and is stored within this storage object.
-    @ObservationIgnored fileprivate(set) var storage: SpeziStorage
+    fileprivate(set) var storage: SpeziStorage
 
-    /// Array of all SwiftUI `ViewModifiers` collected using ``_ModifierPropertyWrapper`` from the configured ``Module``s.
-    var viewModifiers: [any ViewModifier]
+    private var _viewModifiers: [ModuleReference: [any ViewModifier]] = [:]
+
+    /// Array of all SwiftUI `ViewModifiers` collected using `_ModifierPropertyWrapper` from the configured ``Module``s.
+    var viewModifiers: [any ViewModifier] {
+        _viewModifiers.reduce(into: []) { partialResult, entry in
+            partialResult.append(contentsOf: entry.value)
+        }
+    }
 
     /// A collection of ``Spezi/Spezi`` `LifecycleHandler`s.
     @available(
@@ -120,34 +126,36 @@ public class Spezi {
              Otherwise use the SwiftUI onReceive(_:perform:) for UI related notifications.
              """
     )
-
-
     @_spi(Spezi)
     public var lifecycleHandler: [LifecycleHandler] {
         storage.collect(allOf: LifecycleHandler.self)
     }
-
+    
     var notificationTokenHandler: [NotificationTokenHandler] {
         storage.collect(allOf: NotificationTokenHandler.self)
     }
-
+    
     var notificationHandler: [NotificationHandler] {
         storage.collect(allOf: NotificationHandler.self)
     }
-
+    
     var modules: [any Module] {
         storage.collect(allOf: (any Module).self)
     }
-
+    
     private var implicitlyCreatedModules: Set<ModuleReference> {
         get {
             storage[ImplicitlyCreatedModulesKey.self]
         }
         set {
-            storage[ImplicitlyCreatedModulesKey.self] = newValue
+            if newValue.isEmpty {
+                storage[ImplicitlyCreatedModulesKey.self] = nil
+            } else {
+                storage[ImplicitlyCreatedModulesKey.self] = newValue
+            }
         }
     }
-
+    
     /// Access the global Spezi instance.
     ///
     /// Access the global Spezi instance using the ``Module/Application`` property wrapper inside your ``Module``.
@@ -164,13 +172,13 @@ public class Spezi {
         // this seems nonsensical, but is essential to support Spezi access from the @Application modifier
         self
     }
-
-
+    
+    
     convenience init(from configuration: Configuration, storage: consuming SpeziStorage = SpeziStorage()) {
         self.init(standard: configuration.standard, modules: configuration.modules.elements, storage: storage)
     }
     
-
+    
     /// Create a new Spezi instance.
     ///
     /// - Parameters:
@@ -185,11 +193,10 @@ public class Spezi {
     ) {
         self.standard = standard
         self.storage = consume storage
-        self.viewModifiers = []
-
+        
         self.loadModules([self.standard] + modules)
     }
-
+    
     /// Load a new Module.
     ///
     /// Loads a new Spezi ``Module`` resolving all dependencies.
@@ -199,34 +206,34 @@ public class Spezi {
     public func loadModule(_ module: any Module) {
         loadModules([module])
     }
-
+    
     private func loadModules(_ modules: [any Module]) {
         precondition(Self.moduleInitContext == nil, "Modules cannot be loaded within the `configure()` method.")
         let existingModules = self.modules
-
+        
         let dependencyManager = DependencyManager(modules, existing: existingModules)
         dependencyManager.resolve()
-
+        
         implicitlyCreatedModules.formUnion(dependencyManager.implicitlyCreatedModules)
-
+        
         // we pass through the whole list of modules once to collect all @Provide values
         for module in dependencyManager.initializedModules {
             Self.$moduleInitContext.withValue(module) {
                 module.collectModuleValues(into: &storage)
             }
         }
-
+        
         for module in dependencyManager.initializedModules {
             self.initModule(module)
         }
-
-
+        
+        
         // Newly loaded modules might have @Provide values that need to be updated in @Collect properties in existing modules.
         for existingModule in existingModules {
             existingModule.injectModuleValues(from: storage)
         }
     }
-
+    
     /// Unload a Module.
     ///
     /// Unloads a ``Module`` from the Spezi system.
@@ -238,26 +245,27 @@ public class Spezi {
     /// - Parameter module: The Module to unload.
     public func unloadModule(_ module: any Module) {
         precondition(Self.moduleInitContext == nil, "Modules cannot be unloaded within the `configure()` method.")
-
+        
         guard module.isLoaded(in: self) else {
             return // module is not loaded
         }
-
+        
         let dependents = retrieveDependingModules(module)
         precondition(dependents.isEmpty, "Tried to unload Module \(type(of: module)) that is still required by peer Modules: \(dependents)")
-
+        
         module.clearModule(from: self)
-
+        
         implicitlyCreatedModules.remove(ModuleReference(module))
-
+        
         removeCollectValues(for: module)
-
+        _viewModifiers[ModuleReference(module)] = nil
+        
         // re-injecting all dependencies ensures that the unloaded module is cleared from optional Dependencies from
         // pre-existing Modules.
         let dependencyManager = DependencyManager([], existing: modules)
         dependencyManager.resolve()
-
-
+        
+        
         // Check if we need to unload additional modules that were not explicitly created.
         // For example a explicitly loaded Module might have recursive @Dependency declarations that are automatically loaded.
         // Such modules are unloaded as well if they are no longer required.
@@ -268,34 +276,36 @@ public class Spezi {
                     // we only recursively unload modules that have been created implicitly
                     continue
                 }
-
+                
                 guard retrieveDependingModules(dependency).isEmpty else {
                     continue
                 }
-
+                
                 unloadModule(dependency)
             }
         }
+        
+        module.clear()
     }
-
+    
     private func removeCollectValues(for module: any Module) {
         let valueContainers = storage.collect(allOf: (any AnyCollectModuleValues).self)
-
+        
         var changed = false
         for var container in valueContainers {
             let didChange = container.removeValues(from: module)
             guard didChange else {
                 continue
             }
-
+            
             changed = true
             container.store(into: &storage)
         }
-
+        
         guard changed else {
             return
         }
-
+        
         for module in modules {
             module.injectModuleValues(from: storage)
         }
@@ -319,11 +329,11 @@ public class Spezi {
             module.configure()
             module.storeModule(into: self)
 
-            viewModifiers.append(contentsOf: module.viewModifiers)
+            _viewModifiers[ModuleReference(module), default: []].append(contentsOf: module.viewModifiers)
 
             // If a module is @Observable, we automatically inject it view the `ModelModifier` into the environment.
             if let observable = module as? EnvironmentAccessible {
-                viewModifiers.append(observable.viewModifier)
+                _viewModifiers[ModuleReference(module), default: []].append(observable.viewModifier)
             }
         }
     }

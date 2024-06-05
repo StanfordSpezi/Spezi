@@ -29,6 +29,9 @@ protocol DependencyDeclaration {
     /// Inject the dependency instance from the ``DependencyManager``. Use `DependencyManager/retrieve(module:)`.
     func inject(from dependencyManager: DependencyManager)
 
+    /// Remove all dependency injections.
+    func uninjectDependencies()
+
     /// Determine the dependency relationship to a given module.
     /// - Parameter module: The module to retrieve the dependency relationship for.
     /// - Returns: Returns the `DependencyRelation`

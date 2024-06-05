@@ -46,6 +46,13 @@ public class _ModifierPropertyWrapper<Modifier: ViewModifier> {
 }
 
 
+extension _ModifierPropertyWrapper: SpeziPropertyWrapper {
+    func clear() {
+        collected = false
+    }
+}
+
+
 extension Module {
     /// Provide a SwiftUI `ViewModifier` to modify the global view hierarchy.
     ///

@@ -44,6 +44,11 @@ extension _ApplicationPropertyWrapper: SpeziPropertyWrapper {
             self.shadowCopy = spezi[keyPath: keyPath]
         }
     }
+
+    func clear() {
+        spezi = nil
+        shadowCopy = nil
+    }
 }
 
 

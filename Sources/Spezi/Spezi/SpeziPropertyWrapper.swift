@@ -8,7 +8,20 @@
 
 
 protocol SpeziPropertyWrapper {
+    /// Inject the global Spezi instance.
+    ///
+    /// This call happens right before ``Module/configure()-5pa83`` is called.
+    /// An empty default implementation is provided.
+    /// - Parameter spezi: The global ``Spezi/Spezi`` instance.
     func inject(spezi: Spezi)
+
+    /// Clear the property wrapper state before the Module is unloaded.
+    func clear()
+}
+
+
+extension SpeziPropertyWrapper {
+    func inject(spezi: Spezi) {}
 }
 
 
@@ -16,6 +29,12 @@ extension Module {
     func inject(spezi: Spezi) {
         for wrapper in retrieveProperties(ofType: SpeziPropertyWrapper.self) {
             wrapper.inject(spezi: spezi)
+        }
+    }
+
+    func clear() {
+        for wrapper in retrieveProperties(ofType: SpeziPropertyWrapper.self) {
+            wrapper.clear()
         }
     }
 }
