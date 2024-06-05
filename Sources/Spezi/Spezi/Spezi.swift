@@ -111,7 +111,7 @@ public class Spezi {
     private var _viewModifiers: [ModuleReference: [any ViewModifier]] = [:]
 
     /// Array of all SwiftUI `ViewModifiers` collected using `_ModifierPropertyWrapper` from the configured ``Module``s.
-    var viewModifiers: [any ViewModifier] {
+    var viewModifiers: [any ViewModifier] { // TODO: doc that this rerenders the whole swiftui view stack!
         _viewModifiers.reduce(into: []) { partialResult, entry in
             partialResult.append(contentsOf: entry.value)
         }
@@ -202,6 +202,10 @@ public class Spezi {
     /// Loads a new Spezi ``Module`` resolving all dependencies.
     /// - Note: Trying to load the same ``Module`` instance multiple times results in a runtime crash.
     ///
+    /// - Important: While ``Module/Modifier`` and ``Module/Model`` properties and the ``EnvironmentAccessible`` protocol
+    ///     are generally supported with dynamically loaded Modules, they will cause the global SwiftUI view hierarchy to re-render.
+    ///     This might be undesirable und will cause interruptions. Therefore, avoid dynamcially loading Modules with these properties.
+    ///
     /// - Parameter module: The new Module instance to load.
     public func loadModule(_ module: any Module) {
         loadModules([module])
@@ -258,8 +262,12 @@ public class Spezi {
         implicitlyCreatedModules.remove(ModuleReference(module))
         
         removeCollectValues(for: module)
-        _viewModifiers[ModuleReference(module)] = nil
-        
+
+        // this check is important. Change to viewModifiers re-renders the whole SwiftUI view hierarchy. So avoid to do it unnecessarily
+        if _viewModifiers[ModuleReference(module)] != nil {
+            _viewModifiers[ModuleReference(module)] = nil
+        }
+
         // re-injecting all dependencies ensures that the unloaded module is cleared from optional Dependencies from
         // pre-existing Modules.
         let dependencyManager = DependencyManager([], existing: modules)
@@ -329,7 +337,11 @@ public class Spezi {
             module.configure()
             module.storeModule(into: self)
 
-            _viewModifiers[ModuleReference(module), default: []].append(contentsOf: module.viewModifiers)
+            let viewModifiers = module.viewModifiers
+            // this check is important. Change to viewModifiers re-renders the whole SwiftUI view hierarchy. So avoid to do it unnecessarily
+            if !viewModifiers.isEmpty {
+                _viewModifiers[ModuleReference(module), default: []].append(contentsOf: module.viewModifiers)
+            }
 
             // If a module is @Observable, we automatically inject it view the `ModelModifier` into the environment.
             if let observable = module as? EnvironmentAccessible {
