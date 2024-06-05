@@ -30,9 +30,10 @@ private protocol ModuleArrayDependency {
 
 /// Refer to the documentation of ``Module/Dependency`` for information on how to use the `@Dependency` property wrapper.
 @propertyWrapper
-public class _DependencyPropertyWrapper<Value>: DependencyDeclaration { // swiftlint:disable:this type_name
+public class _DependencyPropertyWrapper<Value> { // swiftlint:disable:this type_name
     private let dependencies: DependencyCollection
 
+    /// The dependency value.
     public var wrappedValue: Value {
         if let singleModule = self as? SingleModuleDependency {
             return singleModule.wrappedValue(as: Value.self)
@@ -55,7 +56,25 @@ public class _DependencyPropertyWrapper<Value>: DependencyDeclaration { // swift
         // this init is placed here directly, otherwise Swift has problems resolving this init
         self.init(wrappedValue: Value())
     }
+}
 
+
+extension _DependencyPropertyWrapper: SpeziPropertyWrapper {
+    func clear() {
+        uninjectDependencies()
+    }
+}
+
+
+extension _DependencyPropertyWrapper: DependencyDeclaration {
+    var injectedDependencies: [any Module] {
+        dependencies.injectedDependencies
+    }
+
+
+    func dependencyRelation(to module: any Module) -> DependencyRelation {
+        dependencies.dependencyRelation(to: module)
+    }
 
     func collect(into dependencyManager: DependencyManager) {
         dependencies.collect(into: dependencyManager)
@@ -63,6 +82,10 @@ public class _DependencyPropertyWrapper<Value>: DependencyDeclaration { // swift
 
     func inject(from dependencyManager: DependencyManager) {
         dependencies.inject(from: dependencyManager)
+    }
+
+    func uninjectDependencies() {
+        dependencies.uninjectDependencies()
     }
 }
 

@@ -20,8 +20,31 @@ class DependencyContext<Dependency: Module>: AnyDependencyContext {
     let defaultValue: (() -> Dependency)?
     private var injectedDependency: Dependency?
 
+
+    var isOptional: Bool {
+        defaultValue == nil
+    }
+
+    var injectedDependencies: [any Module] {
+        injectedDependency.map { [$0] } ?? []
+    }
+
     init(for type: Dependency.Type = Dependency.self, defaultValue: (() -> Dependency)? = nil) {
         self.defaultValue = defaultValue
+    }
+
+    func dependencyRelation(to module: any Module) -> DependencyRelation {
+        let type = type(of: module)
+
+        guard type == Dependency.self else {
+            return .unrelated
+        }
+
+        if isOptional {
+            return .optional
+        } else {
+            return .dependent
+        }
     }
 
     func collect(into dependencyManager: DependencyManager) {
@@ -29,8 +52,11 @@ class DependencyContext<Dependency: Module>: AnyDependencyContext {
     }
 
     func inject(from dependencyManager: DependencyManager) {
-        precondition(injectedDependency == nil, "Dependency of type \(Dependency.self) is already injected!")
-        injectedDependency = dependencyManager.retrieve(optional: defaultValue == nil)
+        injectedDependency = dependencyManager.retrieve(optional: isOptional)
+    }
+
+    func uninjectDependencies() {
+        injectedDependency = nil
     }
 
     func retrieve<M>(dependency: M.Type) -> M {

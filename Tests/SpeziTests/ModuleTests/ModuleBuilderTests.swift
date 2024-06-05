@@ -88,8 +88,13 @@ final class ModuleBuilderTests: XCTestCase {
             condition: true,
             expectations: expectations
         )
-        
-        _ = Spezi(standard: MockStandard(), modules: modules.elements)
+
+        let dependencyManager = DependencyManager(modules.elements)
+        dependencyManager.resolve()
+        for module in dependencyManager.initializedModules {
+            module.configure()
+        }
+
         try expectations.wait()
     }
     
@@ -105,7 +110,12 @@ final class ModuleBuilderTests: XCTestCase {
             expectations: expectations
         )
         
-        _ = Spezi(standard: MockStandard(), modules: modules.elements)
+        let dependencyManager = DependencyManager(modules.elements)
+        dependencyManager.resolve()
+        for module in dependencyManager.initializedModules {
+            module.configure()
+        }
+
         try expectations.wait()
     }
 }

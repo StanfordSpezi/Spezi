@@ -47,13 +47,15 @@ class SpeziNotificationCenterDelegate: NSObject, UNUserNotificationCenterDelegat
             }
 
             var hasSpecified = false
-            let unionOptions: UNNotificationPresentationOptions = await group.reduce(into: []) { result, options in
+
+            var unionOptions: UNNotificationPresentationOptions = []
+            for await options in group {
                 guard let options else {
-                    return
+                    continue
                 }
 
                 hasSpecified = true
-                result.formUnion(options)
+                unionOptions.formUnion(options)
             }
 
             if hasSpecified {

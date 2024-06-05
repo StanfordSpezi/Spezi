@@ -47,6 +47,13 @@ public class _ModelPropertyWrapper<Model: Observable & AnyObject> {
 }
 
 
+extension _ModelPropertyWrapper: SpeziPropertyWrapper {
+    func clear() {
+        collected = false
+    }
+}
+
+
 extension Module {
     /// Places an observable object in the global view environment.
     ///

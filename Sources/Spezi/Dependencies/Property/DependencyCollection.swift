@@ -11,6 +11,11 @@
 public struct DependencyCollection: DependencyDeclaration {
     let entries: [AnyDependencyContext]
 
+    var injectedDependencies: [any Module] {
+        entries.reduce(into: []) { result, dependencies in
+            result.append(contentsOf: dependencies.injectedDependencies)
+        }
+    }
 
     init(_ entries: [AnyDependencyContext]) {
         self.entries = entries
@@ -45,6 +50,19 @@ public struct DependencyCollection: DependencyDeclaration {
     }
 
 
+    func dependencyRelation(to module: any Module) -> DependencyRelation {
+        let relations = entries.map { $0.dependencyRelation(to: module) }
+
+        if relations.contains(.dependent) {
+            return .dependent
+        } else if relations.contains(.optional) {
+            return .optional
+        } else {
+            return .unrelated
+        }
+    }
+
+
     func collect(into dependencyManager: DependencyManager) {
         for entry in entries {
             entry.collect(into: dependencyManager)
@@ -54,6 +72,12 @@ public struct DependencyCollection: DependencyDeclaration {
     func inject(from dependencyManager: DependencyManager) {
         for entry in entries {
             entry.inject(from: dependencyManager)
+        }
+    }
+
+    func uninjectDependencies() {
+        for entry in entries {
+            entry.uninjectDependencies()
         }
     }
 

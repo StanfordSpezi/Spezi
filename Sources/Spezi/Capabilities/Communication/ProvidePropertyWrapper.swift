@@ -116,19 +116,21 @@ extension _ProvidePropertyWrapper: StorageValueProvider {
         } else if let wrapperWithArray = self as? CollectionBasedProvideProperty {
             wrapperWithArray.collectArrayElements(into: &repository)
         } else {
-            // concatenation is handled by the `CollectedModuleValue/reduce` implementation.
-            repository[CollectedModuleValue<Value>.self] = [storedValue]
+            repository.appendValues([CollectModuleValue(storedValue)])
         }
 
         collected = true
+    }
+
+    func clear() {
+        collected = false
     }
 }
 
 
 extension _ProvidePropertyWrapper: CollectionBasedProvideProperty where Value: AnyArray {
     func collectArrayElements<Repository: SharedRepository<SpeziAnchor>>(into repository: inout Repository) {
-        // concatenation is handled by the `CollectedModuleValue/reduce` implementation.
-        repository[CollectedModuleValue<Value.Element>.self] = storedValue.unwrappedArray
+        repository.appendValues(storedValue.unwrappedArray.map { CollectModuleValue($0) })
     }
 }
 
@@ -136,7 +138,16 @@ extension _ProvidePropertyWrapper: CollectionBasedProvideProperty where Value: A
 extension _ProvidePropertyWrapper: OptionalBasedProvideProperty where Value: AnyOptional {
     func collectOptional<Repository: SharedRepository<SpeziAnchor>>(into repository: inout Repository) {
         if let storedValue = storedValue.unwrappedOptional {
-            repository[CollectedModuleValue<Value.Wrapped>.self] = [storedValue]
+            repository.appendValues([CollectModuleValue(storedValue)])
         }
+    }
+}
+
+
+extension SharedRepository where Anchor == SpeziAnchor {
+    fileprivate mutating func appendValues<Value>(_ values: [CollectModuleValue<Value>]) {
+        var current = self[CollectedModuleValues<Value>.self]
+        current.append(contentsOf: values)
+        self[CollectedModuleValues<Value>.self] = current
     }
 }

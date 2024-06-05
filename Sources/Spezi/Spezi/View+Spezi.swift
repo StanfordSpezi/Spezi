@@ -11,16 +11,17 @@ import SwiftUI
 
 
 struct SpeziViewModifier: ViewModifier {
-    let speziViewModifiers: [any ViewModifier]
+    @State private var spezi: Spezi
     
     
-    init(_ anySpezi: Spezi) {
-        self.speziViewModifiers = anySpezi.viewModifiers
+    init(_ spezi: Spezi) {
+        self.spezi = spezi
     }
     
     
     func body(content: Content) -> some View {
-        speziViewModifiers.modify(content)
+        spezi.viewModifiers
+            .modify(content)
     }
 }
 

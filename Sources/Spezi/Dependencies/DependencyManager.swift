@@ -9,34 +9,59 @@
 import XCTRuntimeAssertions
 
 
-/// A ``DependencyManager`` in Spezi is used to gather information about modules with dependencies.
+/// Gather information about modules with dependencies.
 public class DependencyManager {
-    /// Collection of sorted modules after resolving all dependencies.
-    var sortedModules: [any Module]
+    /// Collection of already initialized modules.
+    private let existingModules: [any Module]
+
+    /// Collection of initialized Modules.
+    ///
+    /// Order is determined by the dependency tree. This represents the result of the dependency resolution process.
+    private(set) var initializedModules: [any Module]
+    /// List of implicitly created Modules.
+    ///
+    /// A List of `ModuleReference`s that where implicitly created (e.g., due to another module requesting it as a Dependency and
+    /// conforming to ``DefaultInitializable``).
+    /// This list is important to keep for the unload mechanism.
+    private(set) var implicitlyCreatedModules: Set<ModuleReference> = []
+
     /// Collection of all modules with dependencies that are not yet processed.
     private var modulesWithDependencies: [any Module]
-    /// Collection used to keep track of modules with dependencies in the recursive search.
+    /// Recursive search stack to keep track of potential circular dependencies.
     private var searchStack: [any Module] = []
 
 
     /// A ``DependencyManager`` in Spezi is used to gather information about modules with dependencies.
-    /// - Parameter module: The modules that should be resolved.
-    init(_ module: [any Module]) {
-        sortedModules = module.filter { $0.dependencyDeclarations.isEmpty }
-        modulesWithDependencies = module.filter { !$0.dependencyDeclarations.isEmpty }
+    ///
+    /// - Parameters:
+    ///   - modules: The modules that should be resolved.
+    ///   - existingModules: Collection of already initialized modules.
+    init(_ modules: [any Module], existing existingModules: [any Module] = []) {
+        // modules without dependencies are already considered resolved
+        self.initializedModules = modules.filter { $0.dependencyDeclarations.isEmpty }
+
+        self.modulesWithDependencies = modules.filter { !$0.dependencyDeclarations.isEmpty }
+
+        self.existingModules = existingModules
     }
 
 
     /// Resolves the dependency order.
     ///
-    /// After calling `resolve` you can safely access `sortedModules`.
+    /// After calling `resolve` you can safely access `initializedModules`.
     func resolve() {
         // Start the dependency resolution on the first module.
-        if let nextModule = modulesWithDependencies.first {
+        while let nextModule = modulesWithDependencies.first {
             push(nextModule)
         }
 
-        for module in sortedModules {
+        injectDependencies()
+    }
+
+    private func injectDependencies() {
+        // We inject dependencies into existingModules as well as a new dependency might be an optional dependency from a existing module
+        // that wasn't previously injected.
+        for module in initializedModules + existingModules {
             for dependency in module.dependencyDeclarations {
                 dependency.inject(from: self)
             }
@@ -49,19 +74,21 @@ public class DependencyManager {
         for dependency in module.dependencyDeclarations {
             dependency.collect(into: self) // leads to calls to `require(_:defaultValue:)`
         }
-        resolvedAllDependencies(module)
+        finishSearch(module)
     }
 
     /// Communicate a requirement to a `DependencyManager`
     /// - Parameters:
     ///   - dependency: The type of the dependency that should be resolved.
-    ///   - defaultValue: A default instance of the dependency that is used when the `dependencyType` is not present in the `sortedModules` or `modulesWithDependencies`.
+    ///   - defaultValue: A default instance of the dependency that is used when the `dependencyType` is not present in the `initializedModules` or `modulesWithDependencies`.
     func require<M: Module>(_ dependency: M.Type, defaultValue: (() -> M)?) {
-        // 1. Return if the depending module is found in the `sortedModules` collection.
-        if sortedModules.contains(where: { type(of: $0) == M.self }) {
+        // 1. Return if the depending module is found in the `initializedModules` collection.
+        if initializedModules.contains(where: { type(of: $0) == M.self })
+            || existingModules.contains(where: { type(of: $0) == M.self }) {
             return
         }
-        
+
+
         // 2. Search for the required module is found in the `dependingModules` collection.
         // If not, use the default value calling the `defaultValue` auto-closure.
         guard let foundInModulesWithDependencies = modulesWithDependencies.first(where: { type(of: $0) == M.self }) else {
@@ -71,9 +98,11 @@ public class DependencyManager {
             }
 
             let newModule = defaultValue()
-            
+
+            implicitlyCreatedModules.insert(ModuleReference(newModule))
+
             guard !newModule.dependencyDeclarations.isEmpty else {
-                sortedModules.append(newModule)
+                initializedModules.append(newModule)
                 return
             }
             
@@ -102,7 +131,7 @@ public class DependencyManager {
             )
         }
         
-        // If there is no cycle, resolved the dependencies of the module found in the `dependingModules`.
+        // If there is no cycle, resolve the dependencies of the module found in the `dependingModules`.
         push(foundInModulesWithDependencies)
     }
 
@@ -111,38 +140,35 @@ public class DependencyManager {
     /// - Parameters:
     ///   - module: The ``Module`` type to return.
     ///   - optional: Flag indicating if it is a optional return.
+    /// - Returns: Returns the Module instance. Only optional, if `optional` is set to `true` and no Module was found.
     func retrieve<M: Module>(module: M.Type = M.self, optional: Bool = false) -> M? {
-        guard let module = sortedModules.first(where: { $0 is M }) as? M else {
+        guard let candidate = initializedModules.first(where: { type(of: $0) == M.self }) ?? existingModules.first(where: { type(of: $0) == M.self }),
+            let module = candidate as? M else {
             precondition(optional, "Could not located dependency of type \(M.self)!")
             return nil
         }
 
         return module
     }
-    
-    private func resolvedAllDependencies(_ dependingModule: any Module) {
+
+    private func finishSearch(_ dependingModule: any Module) {
         guard !searchStack.isEmpty else {
-            preconditionFailure("Internal logic error in the `DependencyManager`")
+            preconditionFailure("Internal logic error in the `DependencyManager`. Search Stack is empty.")
         }
         let module = searchStack.removeLast()
-        
+
         guard module === dependingModule else {
-            preconditionFailure("Internal logic error in the `DependencyManager`")
+            preconditionFailure("Internal logic error in the `DependencyManager`. Search Stack element was not the one we are resolving for.")
         }
-        
-        
+
+
         let dependingModulesCount = modulesWithDependencies.count
         modulesWithDependencies.removeAll(where: { $0 === dependingModule })
         precondition(
             dependingModulesCount - 1 == modulesWithDependencies.count,
-            "Unexpected reduction of modules. Ensure that all your modules conform to the same `Standard`"
+            "Unexpected reduction of modules."
         )
-        
-        sortedModules.append(dependingModule)
-        
-        // Call the dependency resolution mechanism on the next element in the `dependingModules` if we are not in a recursive search.
-        if searchStack.isEmpty, let nextModule = modulesWithDependencies.first {
-            push(nextModule)
-        }
+
+        initializedModules.append(dependingModule)
     }
 }

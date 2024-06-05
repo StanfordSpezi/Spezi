@@ -170,9 +170,11 @@ open class SpeziAppDelegate: NSObject, ApplicationDelegate {
                 }
             }
 
-            return await group.reduce(into: []) { result, backgroundFetchResult in
+            var result: Set<BackgroundFetchResult> = []
+            for await backgroundFetchResult in group {
                 result.insert(backgroundFetchResult)
             }
+            return result
         }
 
         if result.contains(.failed) {
