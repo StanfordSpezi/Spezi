@@ -111,7 +111,9 @@ public class Spezi {
     private var _viewModifiers: [ModuleReference: [any ViewModifier]] = [:]
 
     /// Array of all SwiftUI `ViewModifiers` collected using `_ModifierPropertyWrapper` from the configured ``Module``s.
-    var viewModifiers: [any ViewModifier] { // TODO: doc that this rerenders the whole swiftui view stack!
+    ///
+    /// Any changes to this property will cause a complete re-render of the SwiftUI view hierarchy. See `SpeziViewModifier`.
+    var viewModifiers: [any ViewModifier] {
         _viewModifiers.reduce(into: []) { partialResult, entry in
             partialResult.append(contentsOf: entry.value)
         }
