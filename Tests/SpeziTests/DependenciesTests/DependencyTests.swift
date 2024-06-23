@@ -283,7 +283,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
             XCTAssertEqual(optionalModule.nums, [5, 5, 4, 3, 2, 1, 9, 10, 11])
 
             // leaving this scope causes the module1 to deallocate and should automatically unload it from Spezi!
-            XCTAssertEqual(spezi.modules.count, 8)
+            XCTAssertEqual(spezi.modules.count, 9)
             return spezi
         }
 
