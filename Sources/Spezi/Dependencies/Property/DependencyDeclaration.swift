@@ -30,7 +30,7 @@ protocol DependencyDeclaration {
     func inject(from dependencyManager: DependencyManager)
 
     /// Remove all dependency injections.
-    func uninjectDependencies()
+    func uninjectDependencies(notifying spezi: Spezi)
 
     /// Determine the dependency relationship to a given module.
     /// - Parameter module: The module to retrieve the dependency relationship for.

@@ -31,6 +31,7 @@ private protocol ModuleArrayDependency {
 /// Refer to the documentation of ``Module/Dependency`` for information on how to use the `@Dependency` property wrapper.
 @propertyWrapper
 public class _DependencyPropertyWrapper<Value> { // swiftlint:disable:this type_name
+    private weak var spezi: Spezi?
     private let dependencies: DependencyCollection
 
     /// The dependency value.
@@ -56,12 +57,26 @@ public class _DependencyPropertyWrapper<Value> { // swiftlint:disable:this type_
         // this init is placed here directly, otherwise Swift has problems resolving this init
         self.init(wrappedValue: Value())
     }
+
+    deinit {
+        guard let spezi = spezi else {
+            return
+        }
+        uninjectDependencies(notifying: spezi)
+    }
 }
 
 
 extension _DependencyPropertyWrapper: SpeziPropertyWrapper {
+    func inject(spezi: Spezi) {
+        self.spezi = spezi
+    }
+
     func clear() {
-        uninjectDependencies()
+        guard let spezi else {
+            preconditionFailure("\(Self.self) was clear without a Spezi instance available")
+        }
+        uninjectDependencies(notifying: spezi)
     }
 }
 
@@ -84,8 +99,8 @@ extension _DependencyPropertyWrapper: DependencyDeclaration {
         dependencies.inject(from: dependencyManager)
     }
 
-    func uninjectDependencies() {
-        dependencies.uninjectDependencies()
+    func uninjectDependencies(notifying spezi: Spezi) {
+        dependencies.uninjectDependencies(notifying: spezi)
     }
 }
 

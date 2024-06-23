@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
+import OrderedCollections
 import SwiftUI
 
 enum ModifierPlacement: Int, Comparable {
@@ -21,6 +22,9 @@ enum ModifierPlacement: Int, Comparable {
 /// An adopter of this protocol is a property of a ``Module`` that provides a SwiftUI
 /// [`ViewModifier`](https://developer.apple.com/documentation/swiftui/viewmodifier) to be injected into the global view hierarchy.
 protocol ViewModifierProvider {
+    /// The persistent identifier for the view modifier provider.
+    var id: UUID { get }
+
     /// The view modifier instance that should be injected into the SwiftUI view hierarchy.
     ///
     /// Does nothing if `nil` is provided.
@@ -44,13 +48,16 @@ extension ViewModifierProvider {
 
 extension Module {
     /// All SwiftUI `ViewModifier` the module wants to modify the global view hierarchy with.
-    var viewModifiers: [any SwiftUI.ViewModifier] {
+    var viewModifierEntires: [(UUID, any SwiftUI.ViewModifier)] {
         retrieveProperties(ofType: ViewModifierProvider.self)
             .sorted { lhs, rhs in
                 lhs.placement < rhs.placement
             }
             .compactMap { provider in
-                provider.viewModifier
+                guard let modifier = provider.viewModifier else {
+                    return nil
+                }
+                return (provider.id, modifier)
             }
     }
 }

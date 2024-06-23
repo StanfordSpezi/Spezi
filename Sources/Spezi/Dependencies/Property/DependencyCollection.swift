@@ -75,9 +75,9 @@ public struct DependencyCollection: DependencyDeclaration {
         }
     }
 
-    func uninjectDependencies() {
+    func uninjectDependencies(notifying spezi: Spezi) {
         for entry in entries {
-            entry.uninjectDependencies()
+            entry.uninjectDependencies(notifying: spezi)
         }
     }
 

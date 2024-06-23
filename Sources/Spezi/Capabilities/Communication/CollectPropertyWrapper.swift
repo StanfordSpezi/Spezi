@@ -40,7 +40,9 @@ public class _CollectPropertyWrapper<Value> {
 
 extension _CollectPropertyWrapper: StorageValueCollector {
     public func retrieve<Repository: SharedRepository<SpeziAnchor>>(from repository: Repository) {
-        injectedValues = repository[CollectedModuleValues<Value>.self]?.map { $0.value } ?? []
+        injectedValues = repository[CollectedModuleValues<Value>.self].reduce(into: []) { partialResult, entry in
+            partialResult.append(contentsOf: entry.value)
+        }
     }
 
     func clear() {

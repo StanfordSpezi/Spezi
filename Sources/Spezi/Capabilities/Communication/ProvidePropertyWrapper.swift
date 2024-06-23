@@ -6,6 +6,8 @@
 // SPDX-License-Identifier: MIT
 //
 
+
+import Foundation
 import SpeziFoundation
 import XCTRuntimeAssertions
 
@@ -13,12 +15,16 @@ import XCTRuntimeAssertions
 /// A protocol that identifies a ``_ProvidePropertyWrapper`` which `Value` type is a `Collection`.
 protocol CollectionBasedProvideProperty {
     func collectArrayElements<Repository: SharedRepository<SpeziAnchor>>(into repository: inout Repository)
+
+    func clearValues()
 }
 
 
 /// A protocol that identifies a  ``_ProvidePropertyWrapper`` which `Value` type is a `Optional`.
 protocol OptionalBasedProvideProperty {
     func collectOptional<Repository: SharedRepository<SpeziAnchor>>(into repository: inout Repository)
+
+    func clearValues()
 }
 
 
@@ -28,8 +34,14 @@ public class _ProvidePropertyWrapper<Value> {
     // swiftlint:disable:previous type_name
     // We want the type to be hidden from autocompletion and documentation generation
 
+    /// Persistent identifier to store and remove @Provide values.
+    fileprivate let id = UUID()
+
     private var storedValue: Value
     private var collected = false
+
+
+    private weak var spezi: Spezi?
 
 
     /// Access the store value.
@@ -49,6 +61,15 @@ public class _ProvidePropertyWrapper<Value> {
     /// - Parameter value: The initial value.
     public init(wrappedValue value: Value) {
         self.storedValue = value
+    }
+
+    func inject(spezi: Spezi) {
+        self.spezi = spezi
+    }
+
+
+    deinit {
+        clear()
     }
 }
 
@@ -116,7 +137,7 @@ extension _ProvidePropertyWrapper: StorageValueProvider {
         } else if let wrapperWithArray = self as? CollectionBasedProvideProperty {
             wrapperWithArray.collectArrayElements(into: &repository)
         } else {
-            repository.appendValues([CollectModuleValue(storedValue)])
+            repository.setValues(for: id, [storedValue])
         }
 
         collected = true
@@ -124,13 +145,25 @@ extension _ProvidePropertyWrapper: StorageValueProvider {
 
     func clear() {
         collected = false
+
+        if let wrapperWithOptional = self as? OptionalBasedProvideProperty {
+            wrapperWithOptional.clearValues()
+        } else if let wrapperWithArray = self as? CollectionBasedProvideProperty {
+            wrapperWithArray.clearValues()
+        } else {
+            spezi?.handleCollectedValueRemoval(for: id, of: Value.self)
+        }
     }
 }
 
 
 extension _ProvidePropertyWrapper: CollectionBasedProvideProperty where Value: AnyArray {
     func collectArrayElements<Repository: SharedRepository<SpeziAnchor>>(into repository: inout Repository) {
-        repository.appendValues(storedValue.unwrappedArray.map { CollectModuleValue($0) })
+        repository.setValues(for: id, storedValue.unwrappedArray)
+    }
+
+    func clearValues() {
+        spezi?.handleCollectedValueRemoval(for: id, of: Value.Element.self)
     }
 }
 
@@ -138,16 +171,20 @@ extension _ProvidePropertyWrapper: CollectionBasedProvideProperty where Value: A
 extension _ProvidePropertyWrapper: OptionalBasedProvideProperty where Value: AnyOptional {
     func collectOptional<Repository: SharedRepository<SpeziAnchor>>(into repository: inout Repository) {
         if let storedValue = storedValue.unwrappedOptional {
-            repository.appendValues([CollectModuleValue(storedValue)])
+            repository.setValues(for: id, [storedValue])
         }
+    }
+
+    func clearValues() {
+        spezi?.handleCollectedValueRemoval(for: id, of: Value.Wrapped.self)
     }
 }
 
 
 extension SharedRepository where Anchor == SpeziAnchor {
-    fileprivate mutating func appendValues<Value>(_ values: [CollectModuleValue<Value>]) {
+    fileprivate mutating func setValues<Value>(for id: UUID, _ values: [Value]) {
         var current = self[CollectedModuleValues<Value>.self]
-        current.append(contentsOf: values)
+        current[id] = values
         self[CollectedModuleValues<Value>.self] = current
     }
 }
