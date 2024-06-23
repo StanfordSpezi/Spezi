@@ -279,7 +279,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
 
             let spezi = Spezi(standard: DefaultStandard(), modules: [optionalModule, moduleX, module8])
 
-            spezi.loadModule(module1, policy: .selfManaged) // LOAD AS SELFMANAGED
+            spezi.loadModule(module1, ownership: .external) // LOAD AS EXTERNAL
             XCTAssertEqual(optionalModule.nums, [5, 5, 4, 3, 2, 1, 9, 10, 11])
 
             // leaving this scope causes the module1 to deallocate and should automatically unload it from Spezi!
