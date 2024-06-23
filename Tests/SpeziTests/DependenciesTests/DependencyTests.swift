@@ -304,10 +304,6 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
 
         XCTAssertEqual(optionalModule.nums, [5, 3])
 
-
-        // TODO: test more!
-        // TODO: test viewModifers as well!
-
         wait(for: [deinitExpectation])
     }
 
