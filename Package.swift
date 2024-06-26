@@ -8,6 +8,7 @@
 // SPDX-License-Identifier: MIT
 //
 
+import class Foundation.ProcessInfo
 import PackageDescription
 
 
@@ -39,14 +40,20 @@ let package = Package(
                 .product(name: "XCTRuntimeAssertions", package: "XCTRuntimeAssertions"),
                 .product(name: "OrderedCollections", package: "swift-collections")
             ],
-            plugins: [.swiftLintPlugin]
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency")
+            ],
+            plugins: [] + swiftLintPlugin()
         ),
         .target(
             name: "XCTSpezi",
             dependencies: [
                 .target(name: "Spezi")
             ],
-            plugins: [.swiftLintPlugin]
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency")
+            ],
+            plugins: [] + swiftLintPlugin()
         ),
         .testTarget(
             name: "SpeziTests",
@@ -55,13 +62,19 @@ let package = Package(
                 .target(name: "XCTSpezi"),
                 .product(name: "XCTRuntimeAssertions", package: "XCTRuntimeAssertions")
             ],
-            plugins: [.swiftLintPlugin]
+            swiftSettings: [
+                .enableUpcomingFeature("StrictConcurrency")
+            ],
+            plugins: [] + swiftLintPlugin()
         )
     ]
 )
 
-extension Target.PluginUsage {
-    static var swiftLintPlugin: Target.PluginUsage {
-        .plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")
+func swiftLintPlugin() -> [Target.PluginUsage] {
+    // Fully quit Xcode and open again with `open --env SPEZI_DEVELOPMENT_SWIFTLINT /Applications/Xcode.app`
+    if ProcessInfo.processInfo.environment["SPEZI_DEVELOPMENT_SWIFTLINT"] != nil {
+        [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]
+    } else {
+        []
     }
 }

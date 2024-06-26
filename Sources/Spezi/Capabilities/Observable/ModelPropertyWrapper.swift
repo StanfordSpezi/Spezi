@@ -97,7 +97,7 @@ extension Module {
 
 
 extension _ModelPropertyWrapper: ViewModifierProvider {
-    var viewModifier: (any ViewModifier)? {
+    var viewModifierInitialization: (any ViewModifierInitialization)? {
         collected = true
 
         guard let storedValue else {
@@ -105,7 +105,7 @@ extension _ModelPropertyWrapper: ViewModifierProvider {
             return nil
         }
 
-        return ModelModifier(model: storedValue)
+        return ModelModifierInitialization(model: storedValue)
     }
 
     var placement: ModifierPlacement {

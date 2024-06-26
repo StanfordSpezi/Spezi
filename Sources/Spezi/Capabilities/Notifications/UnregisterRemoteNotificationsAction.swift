@@ -32,6 +32,7 @@ public struct UnregisterRemoteNotificationsAction {
 
 
     /// Unregisters for all remote notifications received through Apple Push Notification service.
+    @MainActor
     public func callAsFunction() {
 #if os(watchOS)
         let application = _Application.shared()

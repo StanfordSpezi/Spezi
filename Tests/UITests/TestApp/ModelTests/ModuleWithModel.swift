@@ -11,7 +11,7 @@ import SwiftUI
 
 
 struct CustomKey: EnvironmentKey {
-    static var defaultValue = false
+    static let defaultValue = false
 }
 
 @Observable

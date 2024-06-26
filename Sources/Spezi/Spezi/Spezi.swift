@@ -122,8 +122,8 @@ struct WeaklyStoredModule<M: Module>: KnowledgeSource {
 public class Spezi {
     static let logger = Logger(subsystem: "edu.stanford.spezi", category: "Spezi")
     
-    @TaskLocal static var moduleInitContext: (any Module)?
-    
+    @TaskLocal static var moduleInitContext: ModuleDescription?
+
     let standard: any Standard
 
     /// Recursive lock for module loading.
@@ -135,12 +135,12 @@ public class Spezi {
     fileprivate(set) var storage: SpeziStorage
 
     /// Key is either a UUID for `@Modifier` or `@Model` property wrappers, or a `ModuleReference` for `EnvironmentAccessible` modifiers.
-    private var _viewModifiers: OrderedDictionary<AnyHashable, any ViewModifier> = [:]
+    private var _viewModifiers: OrderedDictionary<AnyHashable, any ViewModifierInitialization> = [:]
 
     /// Array of all SwiftUI `ViewModifiers` collected using `_ModifierPropertyWrapper` from the configured ``Module``s.
     ///
     /// Any changes to this property will cause a complete re-render of the SwiftUI view hierarchy. See `SpeziViewModifier`.
-    var viewModifiers: [any ViewModifier] {
+    var viewModifiers: [any ViewModifierInitialization] {
         _viewModifiers.reduce(into: []) { partialResult, entry in
             partialResult.append(entry.value)
         }
@@ -253,7 +253,7 @@ public class Spezi {
         
         // we pass through the whole list of modules once to collect all @Provide values
         for module in dependencyManager.initializedModules {
-            Self.$moduleInitContext.withValue(module) {
+            Self.$moduleInitContext.withValue(module.moduleDescription) {
                 module.collectModuleValues(into: &storage)
             }
         }
@@ -335,7 +335,7 @@ public class Spezi {
     private func initModule(_ module: any Module, ownership: ModuleOwnership) {
         precondition(!module.isLoaded(in: self), "Tried to initialize Module \(type(of: module)) that was already loaded!")
 
-        Self.$moduleInitContext.withValue(module) {
+        Self.$moduleInitContext.withValue(module.moduleDescription) {
             module.inject(spezi: self)
 
             // supply modules values to all @Collect
@@ -362,7 +362,7 @@ public class Spezi {
             if let observable = module as? EnvironmentAccessible {
                 // we can't guarantee weak references for EnvironmentAccessible modules
                 precondition(ownership != .external, "Modules loaded with self-managed policy cannot conform to `EnvironmentAccessible`.")
-                _viewModifiers[ModuleReference(module)] = observable.viewModifier
+                _viewModifiers[ModuleReference(module)] = observable.viewModifierInitialization
             }
         }
     }

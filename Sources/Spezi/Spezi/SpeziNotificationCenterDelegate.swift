@@ -6,42 +6,44 @@
 // SPDX-License-Identifier: MIT
 //
 
-import UserNotifications
+@preconcurrency import UserNotifications
 
 
 class SpeziNotificationCenterDelegate: NSObject, UNUserNotificationCenterDelegate {
 #if !os(tvOS)
-    @MainActor
-    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) async {
-        guard let delegate = SpeziAppDelegate.appDelegate else {
-            return
-        }
 
-        await withTaskGroup(of: Void.self) { group in
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) async {
+        await withTaskGroup(of: Void.self) { @MainActor group in
+            // Moving this inside here (@MainActor isolated task group body) helps us avoid making the whole delegate method @MainActor.
+            // Apparently having the non-Sendable `UNNotificationResponse` as a parameter to a @MainActor annotated method doesn't suppress
+            // the warning with @preconcurrency, but capturing `response` in a @MainActor isolated closure does.
+            guard let delegate = SpeziAppDelegate.appDelegate else {
+                return
+            }
+
             for handler in delegate.spezi.notificationHandler {
-                group.addTask {
+                group.addTask { @MainActor in
                     await handler.handleNotificationAction(response)
                 }
             }
 
-            for await _ in group {}
+            await group.waitForAll()
         }
     }
 #endif
 
-    @MainActor
     func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         willPresent notification: UNNotification
     ) async -> UNNotificationPresentationOptions {
-        guard let delegate = SpeziAppDelegate.appDelegate else {
-            return []
-        }
+        await withTaskGroup(of: UNNotificationPresentationOptions?.self) { @MainActor group in
+            // See comment in method above.
+            guard let delegate = SpeziAppDelegate.appDelegate else {
+                return []
+            }
 
-
-        return await withTaskGroup(of: UNNotificationPresentationOptions?.self) { group in
             for handler in delegate.spezi.notificationHandler {
-                group.addTask {
+                group.addTask { @MainActor in
                     await handler.receiveIncomingNotification(notification)
                 }
             }
@@ -49,7 +51,7 @@ class SpeziNotificationCenterDelegate: NSObject, UNUserNotificationCenterDelegat
             var hasSpecified = false
 
             var unionOptions: UNNotificationPresentationOptions = []
-            for await options in group {
+            while let options = await group.next() {
                 guard let options else {
                     continue
                 }

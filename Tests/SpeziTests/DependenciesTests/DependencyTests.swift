@@ -84,10 +84,12 @@ private final class TestModule7: Module {
     @Dependency var testModule1 = TestModule1()
 }
 
+// Swift 6 compiler doesn't allow circular references (even when there is a property wrapper in between)
+// Review this in future versions.
+#if compiler(<6)
 private final class TestModuleCircle1: Module {
     @Dependency var testModuleCircle2 = TestModuleCircle2()
 }
-
 private final class TestModuleCircle2: Module {
     @Dependency var testModuleCircle1 = TestModuleCircle1()
 }
@@ -95,6 +97,7 @@ private final class TestModuleCircle2: Module {
 private final class TestModuleItself: Module {
     @Dependency var testModuleItself = TestModuleItself()
 }
+#endif
 
 
 private final class OptionalModuleDependency: Module {
@@ -430,6 +433,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
         _ = try XCTUnwrap(initializedModules[2] as? TestModule5)
     }
 
+#if compiler(<6)
     func testModuleCycle() throws {
         let modules: [any Module] = [
             TestModuleCircle1()
@@ -439,6 +443,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
             _ = DependencyManager.resolve(modules)
         }
     }
+#endif
 
     func testOptionalDependenceNonPresent() throws {
         let nonPresent: [any Module] = [

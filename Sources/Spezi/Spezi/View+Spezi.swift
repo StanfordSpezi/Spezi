@@ -21,6 +21,7 @@ struct SpeziViewModifier: ViewModifier {
     
     func body(content: Content) -> some View {
         spezi.viewModifiers
+            .map { $0.initializeModifier() }
             .modify(content)
     }
 }
@@ -37,6 +38,7 @@ extension View {
 
 
 extension Array where Element == any ViewModifier {
+    @MainActor
     fileprivate func modify<V: View>(_ view: V) -> AnyView {
         var view = AnyView(view)
         for modifier in self {
