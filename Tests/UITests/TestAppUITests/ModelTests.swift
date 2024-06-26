@@ -10,6 +10,7 @@ import XCTest
 
 
 final class ModelTests: XCTestCase {
+    @MainActor
     func testModelPropertyWrapper() throws {
         let app = XCUIApplication()
         app.launch()
