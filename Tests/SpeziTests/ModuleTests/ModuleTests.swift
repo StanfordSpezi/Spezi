@@ -31,6 +31,7 @@ private final class DependingTestModule: Module {
 
 
 final class ModuleTests: XCTestCase {
+    @MainActor
     func testModuleFlow() throws {
         let expectation = XCTestExpectation(description: "Module")
         expectation.assertForOverFulfill = true
@@ -52,6 +53,7 @@ final class ModuleTests: XCTestCase {
         XCTAssert(modules.contains(where: { $0 is TestModule }))
     }
 
+    @MainActor
     func testPreviewModifier() throws {
         let expectation = XCTestExpectation(description: "Preview Module")
         expectation.assertForOverFulfill = true
@@ -70,6 +72,7 @@ final class ModuleTests: XCTestCase {
         unsetenv(ProcessInfo.xcodeRunningForPreviewKey)
     }
 
+    @MainActor
     func testPreviewModifierOnlyWithinPreview() throws {
         try XCTRuntimePrecondition {
             _ = Text("Spezi")
@@ -79,6 +82,7 @@ final class ModuleTests: XCTestCase {
         }
     }
 
+    @MainActor
     func testModuleCreation() {
         let expectation = XCTestExpectation(description: "DependingTestModule")
         expectation.assertForOverFulfill = true

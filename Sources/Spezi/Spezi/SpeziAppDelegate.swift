@@ -165,14 +165,15 @@ open class SpeziAppDelegate: NSObject, ApplicationDelegate {
 
         let result: Set<BackgroundFetchResult> = await withTaskGroup(of: BackgroundFetchResult.self) { group in
             for handler in handlers {
-                group.addTask {
+                group.addTask { @MainActor in
                     await handler.receiveRemoteNotification(userInfo)
                 }
             }
 
             var result: Set<BackgroundFetchResult> = []
-            for await backgroundFetchResult in group {
-                result.insert(backgroundFetchResult)
+            while let next = await group.next() {
+                // don't ask why, but the for in or .reduce versions trigger Swift 6 concurrency warnings, this one doesn't
+                result.insert(next)
             }
             return result
         }

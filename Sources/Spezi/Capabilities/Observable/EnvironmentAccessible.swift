@@ -32,7 +32,7 @@ public protocol EnvironmentAccessible: AnyObject, Observable {}
 
 
 extension EnvironmentAccessible {
-    var viewModifier: any ViewModifier {
-        ModelModifier(model: self)
+    var viewModifierInitialization: any ViewModifierInitialization {
+        ModelModifierInitialization(model: self)
     }
 }

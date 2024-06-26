@@ -10,7 +10,7 @@ import SpeziFoundation
 import SwiftUI
 
 
-private class RemoteNotificationContinuation: DefaultProvidingKnowledgeSource {
+private final class RemoteNotificationContinuation: DefaultProvidingKnowledgeSource {
     typealias Anchor = SpeziAnchor
 
     static let defaultValue = RemoteNotificationContinuation()

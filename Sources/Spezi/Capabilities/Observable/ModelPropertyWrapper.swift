@@ -15,8 +15,11 @@ public class _ModelPropertyWrapper<Model: Observable & AnyObject> {
     // swiftlint:disable:previous type_name
     // We want the type to be hidden from autocompletion and documentation generation
 
+    let id = UUID()
     private var storedValue: Model?
     private var collected = false
+
+    private weak var spezi: Spezi?
 
 
     /// Access the store model.
@@ -44,12 +47,22 @@ public class _ModelPropertyWrapper<Model: Observable & AnyObject> {
     public init(wrappedValue: Model) {
         self.storedValue = wrappedValue
     }
+
+
+    deinit {
+        clear()
+    }
 }
 
 
 extension _ModelPropertyWrapper: SpeziPropertyWrapper {
     func clear() {
         collected = false
+        spezi?.handleViewModifierRemoval(for: id)
+    }
+
+    func inject(spezi: Spezi) {
+        self.spezi = spezi
     }
 }
 
@@ -84,7 +97,7 @@ extension Module {
 
 
 extension _ModelPropertyWrapper: ViewModifierProvider {
-    var viewModifier: (any ViewModifier)? {
+    var viewModifierInitialization: (any ViewModifierInitialization)? {
         collected = true
 
         guard let storedValue else {
@@ -92,7 +105,7 @@ extension _ModelPropertyWrapper: ViewModifierProvider {
             return nil
         }
 
-        return ModelModifier(model: storedValue)
+        return ModelModifierInitialization(model: storedValue)
     }
 
     var placement: ModifierPlacement {

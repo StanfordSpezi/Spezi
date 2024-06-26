@@ -7,6 +7,7 @@
 //
 
 
+import OrderedCollections
 import os
 import SpeziFoundation
 import SwiftUI
@@ -25,6 +26,27 @@ private struct ImplicitlyCreatedModulesKey: DefaultProvidingKnowledgeSource {
     typealias Anchor = SpeziAnchor
 
     static let defaultValue: Value = []
+}
+
+
+private protocol AnyWeaklyStoredModule {
+    var anyModule: (any Module)? { get }
+
+    @discardableResult
+    func retrievePurgingIfNil<Repository: SharedRepository<SpeziAnchor>>(in storage: inout Repository) -> (any Module)?
+}
+
+
+struct WeaklyStoredModule<M: Module>: KnowledgeSource {
+    typealias Anchor = SpeziAnchor
+    typealias Value = Self
+
+    weak var module: M?
+
+
+    init(_ module: M) {
+        self.module = module
+    }
 }
 
 
@@ -100,22 +122,27 @@ private struct ImplicitlyCreatedModulesKey: DefaultProvidingKnowledgeSource {
 public class Spezi {
     static let logger = Logger(subsystem: "edu.stanford.spezi", category: "Spezi")
     
-    @TaskLocal static var moduleInitContext: (any Module)?
-    
+    @TaskLocal static var moduleInitContext: ModuleDescription?
+
     let standard: any Standard
+
+    /// Recursive lock for module loading.
+    private let lock = NSRecursiveLock()
+
     /// A shared repository to store any `KnowledgeSource`s restricted to the ``SpeziAnchor``.
     ///
     /// Every `Module` automatically conforms to `KnowledgeSource` and is stored within this storage object.
     fileprivate(set) var storage: SpeziStorage
 
-    private var _viewModifiers: [ModuleReference: [any ViewModifier]] = [:]
+    /// Key is either a UUID for `@Modifier` or `@Model` property wrappers, or a `ModuleReference` for `EnvironmentAccessible` modifiers.
+    private var _viewModifiers: OrderedDictionary<AnyHashable, any ViewModifierInitialization> = [:]
 
     /// Array of all SwiftUI `ViewModifiers` collected using `_ModifierPropertyWrapper` from the configured ``Module``s.
     ///
     /// Any changes to this property will cause a complete re-render of the SwiftUI view hierarchy. See `SpeziViewModifier`.
-    var viewModifiers: [any ViewModifier] {
+    var viewModifiers: [any ViewModifierInitialization] {
         _viewModifiers.reduce(into: []) { partialResult, entry in
-            partialResult.append(contentsOf: entry.value)
+            partialResult.append(entry.value)
         }
     }
 
@@ -143,8 +170,9 @@ public class Spezi {
     
     var modules: [any Module] {
         storage.collect(allOf: (any Module).self)
+            + storage.collect(allOf: (any AnyWeaklyStoredModule).self).compactMap { $0.retrievePurgingIfNil(in: &storage) }
     }
-    
+
     private var implicitlyCreatedModules: Set<ModuleReference> {
         get {
             storage[ImplicitlyCreatedModulesKey.self]
@@ -156,23 +184,6 @@ public class Spezi {
                 storage[ImplicitlyCreatedModulesKey.self] = newValue
             }
         }
-    }
-    
-    /// Access the global Spezi instance.
-    ///
-    /// Access the global Spezi instance using the ``Module/Application`` property wrapper inside your ``Module``.
-    ///
-    /// Below is a short code example on how to access the Spezi instance.
-    ///
-    /// ```swift
-    /// class ExampleModule: Module {
-    ///     @Application(\.spezi)
-    ///     var spezi
-    /// }
-    /// ```
-    public var spezi: Spezi {
-        // this seems nonsensical, but is essential to support Spezi access from the @Application modifier
-        self
     }
     
     
@@ -196,7 +207,7 @@ public class Spezi {
         self.standard = standard
         self.storage = consume storage
         
-        self.loadModules([self.standard] + modules)
+        self.loadModules([self.standard] + modules, ownership: .spezi)
     }
     
     /// Load a new Module.
@@ -206,31 +217,54 @@ public class Spezi {
     ///
     /// - Important: While ``Module/Modifier`` and ``Module/Model`` properties and the ``EnvironmentAccessible`` protocol
     ///     are generally supported with dynamically loaded Modules, they will cause the global SwiftUI view hierarchy to re-render.
-    ///     This might be undesirable und will cause interruptions. Therefore, avoid dynamcially loading Modules with these properties.
+    ///     This might be undesirable und will cause interruptions. Therefore, avoid dynamically loading Modules with these properties.
     ///
-    /// - Parameter module: The new Module instance to load.
-    public func loadModule(_ module: any Module) {
-        loadModules([module])
+    /// - Parameters:
+    ///   - module: The new Module instance to load.
+    ///   - ownership: Define the type of ownership when loading the module.
+    ///
+    /// ## Topics
+    /// ### Ownership
+    /// - ``ModuleOwnership``
+    public func loadModule(_ module: any Module, ownership: ModuleOwnership = .spezi) {
+        loadModules([module], ownership: ownership)
     }
     
-    private func loadModules(_ modules: [any Module]) {
+    private func loadModules(_ modules: [any Module], ownership: ModuleOwnership) {
         precondition(Self.moduleInitContext == nil, "Modules cannot be loaded within the `configure()` method.")
+
+        lock.lock()
+        defer {
+            lock.unlock()
+        }
+
+        purgeWeaklyReferenced()
+
+        let requestedModules = Set(modules.map { ModuleReference($0) })
+        logger.debug("Loading module(s) \(modules.map { "\(type(of: $0))" }.joined(separator: ", ")) ...")
+
+
         let existingModules = self.modules
-        
+
         let dependencyManager = DependencyManager(modules, existing: existingModules)
         dependencyManager.resolve()
-        
+
         implicitlyCreatedModules.formUnion(dependencyManager.implicitlyCreatedModules)
         
         // we pass through the whole list of modules once to collect all @Provide values
         for module in dependencyManager.initializedModules {
-            Self.$moduleInitContext.withValue(module) {
+            Self.$moduleInitContext.withValue(module.moduleDescription) {
                 module.collectModuleValues(into: &storage)
             }
         }
         
         for module in dependencyManager.initializedModules {
-            self.initModule(module)
+            if requestedModules.contains(ModuleReference(module)) {
+                // the policy only applies to the request modules, all other are always managed and owned by Spezi
+                self.initModule(module, ownership: ownership)
+            } else {
+                self.initModule(module, ownership: .spezi)
+            }
         }
         
         
@@ -251,23 +285,36 @@ public class Spezi {
     /// - Parameter module: The Module to unload.
     public func unloadModule(_ module: any Module) {
         precondition(Self.moduleInitContext == nil, "Modules cannot be unloaded within the `configure()` method.")
-        
+
+        lock.lock()
+        defer {
+            lock.unlock()
+        }
+
+        purgeWeaklyReferenced()
+
         guard module.isLoaded(in: self) else {
             return // module is not loaded
         }
-        
-        let dependents = retrieveDependingModules(module)
+
+        logger.debug("Unloading module \(type(of: module)) ...")
+
+        let dependents = retrieveDependingModules(module, considerOptionals: false)
         precondition(dependents.isEmpty, "Tried to unload Module \(type(of: module)) that is still required by peer Modules: \(dependents)")
         
         module.clearModule(from: self)
         
         implicitlyCreatedModules.remove(ModuleReference(module))
-        
-        removeCollectValues(for: module)
 
         // this check is important. Change to viewModifiers re-renders the whole SwiftUI view hierarchy. So avoid to do it unnecessarily
         if _viewModifiers[ModuleReference(module)] != nil {
-            _viewModifiers[ModuleReference(module)] = nil
+            var keys: Set<AnyHashable> = [ModuleReference(module)]
+            keys.formUnion(module.viewModifierEntires.map { $0.0 })
+
+            // remove all at once
+            _viewModifiers.removeAll { entry in
+                keys.contains(entry.key)
+            }
         }
 
         // re-injecting all dependencies ensures that the unloaded module is cleared from optional Dependencies from
@@ -275,50 +322,7 @@ public class Spezi {
         let dependencyManager = DependencyManager([], existing: modules)
         dependencyManager.resolve()
         
-        
-        // Check if we need to unload additional modules that were not explicitly created.
-        // For example a explicitly loaded Module might have recursive @Dependency declarations that are automatically loaded.
-        // Such modules are unloaded as well if they are no longer required.
-        for dependencyDeclaration in module.dependencyDeclarations {
-            let dependencies = dependencyDeclaration.injectedDependencies
-            for dependency in dependencies {
-                guard implicitlyCreatedModules.contains(ModuleReference(dependency)) else {
-                    // we only recursively unload modules that have been created implicitly
-                    continue
-                }
-                
-                guard retrieveDependingModules(dependency).isEmpty else {
-                    continue
-                }
-                
-                unloadModule(dependency)
-            }
-        }
-        
-        module.clear()
-    }
-    
-    private func removeCollectValues(for module: any Module) {
-        let valueContainers = storage.collect(allOf: (any AnyCollectModuleValues).self)
-        
-        var changed = false
-        for var container in valueContainers {
-            let didChange = container.removeValues(from: module)
-            guard didChange else {
-                continue
-            }
-            
-            changed = true
-            container.store(into: &storage)
-        }
-        
-        guard changed else {
-            return
-        }
-        
-        for module in modules {
-            module.injectModuleValues(from: storage)
-        }
+        module.clear() // automatically removes @Provide values and recursively unloads implicitly created modules
     }
 
     /// Initialize a Module.
@@ -327,27 +331,38 @@ public class Spezi {
     ///
     /// - Parameters:
     ///   - module: The module to initialize.
-    private func initModule(_ module: any Module) {
+    ///   - ownership: Define the type of ownership when loading the module.
+    private func initModule(_ module: any Module, ownership: ModuleOwnership) {
         precondition(!module.isLoaded(in: self), "Tried to initialize Module \(type(of: module)) that was already loaded!")
 
-        Self.$moduleInitContext.withValue(module) {
+        Self.$moduleInitContext.withValue(module.moduleDescription) {
             module.inject(spezi: self)
 
             // supply modules values to all @Collect
             module.injectModuleValues(from: storage)
 
             module.configure()
-            module.storeModule(into: self)
 
-            let viewModifiers = module.viewModifiers
+            switch ownership {
+            case .spezi:
+                module.storeModule(into: self)
+            case .external:
+                module.storeWeakly(into: self)
+            }
+
+            let modifierEntires = module.viewModifierEntires
             // this check is important. Change to viewModifiers re-renders the whole SwiftUI view hierarchy. So avoid to do it unnecessarily
-            if !viewModifiers.isEmpty {
-                _viewModifiers[ModuleReference(module), default: []].append(contentsOf: module.viewModifiers)
+            if !modifierEntires.isEmpty {
+                _viewModifiers.merge(modifierEntires) { _, rhs in
+                    rhs
+                }
             }
 
             // If a module is @Observable, we automatically inject it view the `ModelModifier` into the environment.
             if let observable = module as? EnvironmentAccessible {
-                _viewModifiers[ModuleReference(module), default: []].append(observable.viewModifier)
+                // we can't guarantee weak references for EnvironmentAccessible modules
+                precondition(ownership != .external, "Modules loaded with self-managed policy cannot conform to `EnvironmentAccessible`.")
+                _viewModifiers[ModuleReference(module)] = observable.viewModifierInitialization
             }
         }
     }
@@ -357,7 +372,7 @@ public class Spezi {
         keyPath == \.logger // loggers are created per Module.
     }
 
-    private func retrieveDependingModules(_ dependency: any Module, considerOptionals: Bool = false) -> [any Module] {
+    private func retrieveDependingModules(_ dependency: any Module, considerOptionals: Bool) -> [any Module] {
         var result: [any Module] = []
 
         for module in modules {
@@ -375,6 +390,66 @@ public class Spezi {
 
         return result
     }
+
+    func handleDependencyUninjection<M: Module>(_ dependency: M) {
+        lock.lock()
+        defer {
+            lock.unlock()
+        }
+
+        guard implicitlyCreatedModules.contains(ModuleReference(dependency)) else {
+            // we only recursively unload modules that have been created implicitly
+            return
+        }
+
+        guard retrieveDependingModules(dependency, considerOptionals: true).isEmpty else {
+            return
+        }
+
+        unloadModule(dependency)
+    }
+
+    func handleCollectedValueRemoval<Value>(for id: UUID, of type: Value.Type) {
+        lock.lock()
+        defer {
+            lock.unlock()
+        }
+
+        var entries = storage[CollectedModuleValues<Value>.self]
+        let removed = entries.removeValue(forKey: id)
+        guard removed != nil else {
+            return
+        }
+
+        storage[CollectedModuleValues<Value>.self] = entries
+
+        for module in modules {
+            module.injectModuleValues(from: storage)
+        }
+    }
+
+    func handleViewModifierRemoval(for id: UUID) {
+        lock.lock()
+        defer {
+            lock.unlock()
+        }
+
+        if _viewModifiers[id] != nil {
+            _viewModifiers.removeValue(forKey: id)
+        }
+    }
+
+    /// Iterates through weakly referenced modules and purges any nil references.
+    ///
+    /// These references are purged lazily. This is generally no problem because the overall overhead will be linear.
+    /// If you load `n` modules with self-managed storage policy and then all `n` modules will eventually be deallocated, there might be `n` weak references still stored
+    /// till the next module interaction is performed (e.g., new module is loaded or unloaded).
+    private func purgeWeaklyReferenced() {
+        let elements = storage.collect(allOf: (any AnyWeaklyStoredModule).self)
+        for reference in elements {
+            reference.retrievePurgingIfNil(in: &storage)
+        }
+    }
 }
 
 
@@ -387,11 +462,38 @@ extension Module {
         spezi.storage[Self.self] = value
     }
 
+    fileprivate func storeWeakly(into spezi: Spezi) {
+        guard self is Value else {
+            spezi.logger.warning("Could not store \(Self.self) in the SpeziStorage as the `Value` typealias was modified.")
+            return
+        }
+
+        spezi.storage[WeaklyStoredModule<Self>.self] = WeaklyStoredModule(self)
+    }
+
     fileprivate func isLoaded(in spezi: Spezi) -> Bool {
         spezi.storage[Self.self] != nil
+            || spezi.storage[WeaklyStoredModule<Self>.self]?.retrievePurgingIfNil(in: &spezi.storage) != nil
     }
 
     fileprivate func clearModule(from spezi: Spezi) {
         spezi.storage[Self.self] = nil
+        spezi.storage[WeaklyStoredModule<Self>.self] = nil
+    }
+}
+
+
+extension WeaklyStoredModule: AnyWeaklyStoredModule {
+    var anyModule: (any Module)? {
+        module
+    }
+
+
+    func retrievePurgingIfNil<Repository: SharedRepository<SpeziAnchor>>(in storage: inout Repository) -> (any Module)? {
+        guard let module else {
+            storage[Self.self] = nil
+            return nil
+        }
+        return module
     }
 }

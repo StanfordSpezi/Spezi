@@ -13,6 +13,7 @@ import XCTRuntimeAssertions
 
 
 final class ViewModifierTests: XCTestCase {
+    @MainActor
     func testViewModifierRetrieval() throws {
         let expectation = XCTestExpectation(description: "Module")
         expectation.assertForOverFulfill = true
@@ -22,9 +23,10 @@ final class ViewModifierTests: XCTestCase {
         let modifiers = testApplicationDelegate.spezi.viewModifiers
         XCTAssertEqual(modifiers.count, 2)
 
+        print(modifiers)
         let message = modifiers
-            .compactMap { $0 as? TestViewModifier }
-            .map { $0.message }
+            .compactMap { $0 as? WrappedViewModifier<TestViewModifier> }
+            .map { $0.initializeModifier().message }
             .joined(separator: " ")
         XCTAssertEqual(message, "Hello World")
     }

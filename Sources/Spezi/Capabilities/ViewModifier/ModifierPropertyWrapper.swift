@@ -15,8 +15,11 @@ public class _ModifierPropertyWrapper<Modifier: ViewModifier> {
     // swiftlint:disable:previous type_name
     // We want the type to be hidden from autocompletion and documentation generation
 
+    let id = UUID()
     private var storedValue: Modifier?
     private var collected = false
+
+    private weak var spezi: Spezi?
 
 
     /// Access the store value.
@@ -43,12 +46,21 @@ public class _ModifierPropertyWrapper<Modifier: ViewModifier> {
     public init(wrappedValue: Modifier) {
         self.storedValue = wrappedValue
     }
+
+    deinit {
+        clear()
+    }
 }
 
 
 extension _ModifierPropertyWrapper: SpeziPropertyWrapper {
     func clear() {
         collected = false
+        spezi?.handleViewModifierRemoval(for: id)
+    }
+
+    func inject(spezi: Spezi) {
+        self.spezi = spezi
     }
 }
 
@@ -85,7 +97,7 @@ extension Module {
 
 
 extension _ModifierPropertyWrapper: ViewModifierProvider {
-    var viewModifier: (any ViewModifier)? {
+    var viewModifierInitialization: (any ViewModifierInitialization)? {
         collected = true
 
         guard let storedValue else {
@@ -93,6 +105,6 @@ extension _ModifierPropertyWrapper: ViewModifierProvider {
             return nil
         }
 
-        return storedValue
+        return WrappedViewModifier(modifier: storedValue)
     }
 }

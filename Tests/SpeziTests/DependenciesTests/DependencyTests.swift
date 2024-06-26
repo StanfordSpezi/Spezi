@@ -6,7 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
-@_spi(Spezi) @testable import Spezi
+@_spi(Spezi) @_spi(APISupport) @testable import Spezi
 import SwiftUI
 import XCTest
 import XCTRuntimeAssertions
@@ -19,6 +19,8 @@ private final class TestModule1: Module {
     @Dependency var testModule3: TestModule3
 
     @Provide var num: Int = 1
+    @Provide var nums: [Int] = [9, 10]
+    @Provide var numsO: Int? = 11
 
     init(deinitExpectation: XCTestExpectation = XCTestExpectation()) {
         self.deinitExpectation = deinitExpectation
@@ -26,6 +28,14 @@ private final class TestModule1: Module {
 
     deinit {
         deinitExpectation.fulfill()
+    }
+}
+
+private final class TestModuleX: Module {
+    @Provide var numX: Int
+
+    init(_ num: Int) {
+        numX = num
     }
 }
 
@@ -74,10 +84,12 @@ private final class TestModule7: Module {
     @Dependency var testModule1 = TestModule1()
 }
 
+// Swift 6 compiler doesn't allow circular references (even when there is a property wrapper in between)
+// Review this in future versions.
+#if compiler(<6)
 private final class TestModuleCircle1: Module {
     @Dependency var testModuleCircle2 = TestModuleCircle2()
 }
-
 private final class TestModuleCircle2: Module {
     @Dependency var testModuleCircle1 = TestModuleCircle1()
 }
@@ -85,6 +97,7 @@ private final class TestModuleCircle2: Module {
 private final class TestModuleItself: Module {
     @Dependency var testModuleItself = TestModuleItself()
 }
+#endif
 
 
 private final class OptionalModuleDependency: Module {
@@ -122,8 +135,14 @@ private final class OptionalDependencyWithRuntimeDefault: Module {
     }
 }
 
+private final class TestModule8: Module {
+    @Dependency var testModule1: TestModule1?
 
-final class DependencyTests: XCTestCase {
+    init() {}
+}
+
+
+final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_length
     func testLoadingAdditionalDependency() throws {
         let spezi = Spezi(standard: DefaultStandard(), modules: [OptionalModuleDependency()])
 
@@ -206,7 +225,9 @@ final class DependencyTests: XCTestCase {
             XCTAssertEqual(optionalModule.nums, [3])
 
             spezi.loadModule(module1)
-            XCTAssertEqual(optionalModule.nums, [3, 5, 4, 2, 1])
+            XCTAssertEqual(optionalModule.nums, [3, 5, 4, 2, 1, 9, 10, 11])
+
+            XCTAssertEqual(spezi.modules.count, 7)
 
             spezi.unloadModule(module1)
             XCTAssertEqual(optionalModule.nums, [3])
@@ -249,6 +270,44 @@ final class DependencyTests: XCTestCase {
         _ = spezi // silence warning
 
         wait(for: [deinitExpectation1, deinitExpectation3])
+    }
+
+    func testSelfManagedModules() throws {
+        let optionalModule = OptionalModuleDependency()
+        let moduleX = TestModuleX(5)
+        let module8 = TestModule8()
+
+        func runModuleTests(deinitExpectation: XCTestExpectation) throws -> Spezi {
+            let module1 = TestModule1(deinitExpectation: deinitExpectation)
+
+            let spezi = Spezi(standard: DefaultStandard(), modules: [optionalModule, moduleX, module8])
+
+            spezi.loadModule(module1, ownership: .external) // LOAD AS EXTERNAL
+            XCTAssertEqual(optionalModule.nums, [5, 5, 4, 3, 2, 1, 9, 10, 11])
+
+            // leaving this scope causes the module1 to deallocate and should automatically unload it from Spezi!
+            XCTAssertEqual(spezi.modules.count, 9)
+            return spezi
+        }
+
+        let deinitExpectation = XCTestExpectation(description: "Deinit TestModule1")
+
+        // make sure we keep the reference to `Spezi`, but loose all references to TestModule3 to test deinit getting called
+        let spezi = try runModuleTests(deinitExpectation: deinitExpectation)
+        _ = spezi
+
+        print(spezi.modules)
+        XCTAssertEqual(spezi.modules.count, 5)
+
+        XCTAssertNil(module8.testModule1) // tests that optional @Dependency reference modules weakly
+        
+        // While TestModule3 was loaded because of TestModule1, the OptionalModule still has a dependency to it.
+        // Therefore, they stay loaded.
+        XCTAssertNotNil(optionalModule.testModule3)
+
+        XCTAssertEqual(optionalModule.nums, [5, 3])
+
+        wait(for: [deinitExpectation])
     }
 
     func testModuleDependencyChain() throws {
@@ -374,6 +433,7 @@ final class DependencyTests: XCTestCase {
         _ = try XCTUnwrap(initializedModules[2] as? TestModule5)
     }
 
+#if compiler(<6)
     func testModuleCycle() throws {
         let modules: [any Module] = [
             TestModuleCircle1()
@@ -383,6 +443,7 @@ final class DependencyTests: XCTestCase {
             _ = DependencyManager.resolve(modules)
         }
     }
+#endif
 
     func testOptionalDependenceNonPresent() throws {
         let nonPresent: [any Module] = [
@@ -447,3 +508,5 @@ final class DependencyTests: XCTestCase {
         XCTAssertEqual(dut4Module.state, 4)
     }
 }
+
+// swiftlint:disable:this file_length

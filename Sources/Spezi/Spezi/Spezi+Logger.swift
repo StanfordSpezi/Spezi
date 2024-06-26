@@ -10,13 +10,6 @@ import os
 import SpeziFoundation
 
 
-extension Module {
-    fileprivate var loggerCategory: String {
-        "\(Self.self)"
-    }
-}
-
-
 extension Spezi {
     /// Access the application logger.
     ///

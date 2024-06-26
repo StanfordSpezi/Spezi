@@ -23,7 +23,10 @@ public struct LaunchOptionsKey: DefaultProvidingKnowledgeSource {
     public typealias Value = [Never: Any]
 #endif
 
-    public static let defaultValue: Value = [:]
+    // We inherit the type from UIKit, Any is inherently unsafe and also contains objects which might not conform to sendable.
+    // The dictionary access itself is not unsafe and our empty default value isn't as well.
+    // So annotating it as non-isolated is fine and passing LaunchOptions Values around actor boundaries is specific to the application.
+    public static nonisolated(unsafe) let defaultValue: Value = [:]
 }
 
 
