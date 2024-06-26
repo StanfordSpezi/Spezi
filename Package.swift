@@ -29,9 +29,8 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/StanfordSpezi/SpeziFoundation", from: "1.0.2"),
         .package(url: "https://github.com/StanfordBDHG/XCTRuntimeAssertions", from: "1.0.1"),
-        .package(url: "https://github.com/apple/swift-collections.git", from: "1.1.1"),
-        .package(url: "https://github.com/realm/SwiftLint.git", .upToNextMinor(from: "0.55.1"))
-    ],
+        .package(url: "https://github.com/apple/swift-collections.git", from: "1.1.1")
+    ] + swiftLintPackage(),
     targets: [
         .target(
             name: "Spezi",
@@ -74,6 +73,14 @@ func swiftLintPlugin() -> [Target.PluginUsage] {
     // Fully quit Xcode and open again with `open --env SPEZI_DEVELOPMENT_SWIFTLINT /Applications/Xcode.app`
     if ProcessInfo.processInfo.environment["SPEZI_DEVELOPMENT_SWIFTLINT"] != nil {
         [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]
+    } else {
+        []
+    }
+}
+
+func swiftLintPackage() -> [PackageDescription.Package.Dependency] {
+    if ProcessInfo.processInfo.environment["SPEZI_DEVELOPMENT_SWIFTLINT"] != nil {
+        [.package(url: "https://github.com/realm/SwiftLint.git", .upToNextMinor(from: "0.55.1"))]
     } else {
         []
     }
