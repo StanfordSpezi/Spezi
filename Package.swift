@@ -11,6 +11,12 @@
 import class Foundation.ProcessInfo
 import PackageDescription
 
+#if swift(<6)
+let swiftConcurrency: SwiftSetting = .enableExperimentalFeature("SwiftConcurrency")
+#else
+let swiftConcurrency: SwiftSetting = .enableUpcomingFeature("SwiftConcurrency")
+#endif
+
 
 let package = Package(
     name: "Spezi",
@@ -40,7 +46,7 @@ let package = Package(
                 .product(name: "OrderedCollections", package: "swift-collections")
             ],
             swiftSettings: [
-                .enableUpcomingFeature("StrictConcurrency")
+                swiftConcurrency
             ],
             plugins: [] + swiftLintPlugin()
         ),
@@ -50,7 +56,7 @@ let package = Package(
                 .target(name: "Spezi")
             ],
             swiftSettings: [
-                .enableUpcomingFeature("StrictConcurrency")
+                swiftConcurrency
             ],
             plugins: [] + swiftLintPlugin()
         ),
@@ -62,7 +68,7 @@ let package = Package(
                 .product(name: "XCTRuntimeAssertions", package: "XCTRuntimeAssertions")
             ],
             swiftSettings: [
-                .enableUpcomingFeature("StrictConcurrency")
+                swiftConcurrency
             ],
             plugins: [] + swiftLintPlugin()
         )
