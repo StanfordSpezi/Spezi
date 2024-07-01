@@ -8,7 +8,7 @@
 
 
 import OrderedCollections
-import os
+import OSLog
 import SpeziFoundation
 import SwiftUI
 import XCTRuntimeAssertions
@@ -120,8 +120,10 @@ struct WeaklyStoredModule<M: Module>: KnowledgeSource {
 /// - ``unregisterRemoteNotifications``
 @Observable
 public class Spezi {
-    static let logger = Logger(subsystem: "edu.stanford.spezi", category: "Spezi")
-    
+    static var logger: Logger {
+        Logger(subsystem: "edu.stanford.spezi", category: "Spezi")
+    }
+
     @TaskLocal static var moduleInitContext: ModuleDescription?
 
     let standard: any Standard
@@ -341,7 +343,7 @@ public class Spezi {
             // supply modules values to all @Collect
             module.injectModuleValues(from: storage)
 
-            module.configure()
+            module.configure() // TODO: do we want to guarantee @MainActor?
 
             switch ownership {
             case .spezi:

@@ -10,7 +10,7 @@ import UserNotifications
 
 
 /// Get notified about receiving notifications.
-public protocol NotificationHandler {
+public protocol NotificationHandler { // TODO: really all MainActor?
 #if !os(tvOS)
     /// Handle user-selected notification action.
     ///
@@ -22,6 +22,7 @@ public protocol NotificationHandler {
     /// - Note: Notification Actions are not supported on `tvOS`.
     ///
     /// - Parameter response: The user's response to the notification.
+    @MainActor
     func handleNotificationAction(_ response: UNNotificationResponse) async
 #endif
 
@@ -35,6 +36,7 @@ public protocol NotificationHandler {
     ///
     /// - Parameter notification: The notification that is about to be delivered.
     /// - Returns: The option for notifying the user. Use `[]` to silence the notification.
+    @MainActor
     func receiveIncomingNotification(_ notification: UNNotification) async -> UNNotificationPresentationOptions?
 
 #if !os(macOS)
@@ -51,6 +53,7 @@ public protocol NotificationHandler {
     ///
     /// - Parameter remoteNotification: The data of the notification payload.
     /// - Returns: Return the respective ``BackgroundFetchResult``.
+    @MainActor
     func receiveRemoteNotification(_ remoteNotification: [AnyHashable: Any]) async -> BackgroundFetchResult
 #else
     /// Handle remote notification when the app is running in background.
@@ -62,6 +65,7 @@ public protocol NotificationHandler {
     /// [`application(_:didReceiveRemoteNotification:)`](https://developer.apple.com/documentation/appkit/nsapplicationdelegate/1428430-application).
     ///
     /// - Parameter remoteNotification: The data of the notification payload.
+    @MainActor
     func receiveRemoteNotification(_ remoteNotification: [AnyHashable: Any])
 #endif
 }

@@ -11,7 +11,6 @@
 
 class SpeziNotificationCenterDelegate: NSObject, UNUserNotificationCenterDelegate {
 #if !os(tvOS)
-
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) async {
         await withTaskGroup(of: Void.self) { @MainActor group in
             // Moving this inside here (@MainActor isolated task group body) helps us avoid making the whole delegate method @MainActor.
