@@ -31,6 +31,7 @@ extension View {
     /// Configure Spezi for your application using a delegate.
     /// - Parameter delegate: The ``SpeziAppDelegate`` used in the SwiftUI App instance.
     /// - Returns: The configured view using the Spezi framework.
+    @MainActor
     public func spezi(_ delegate: SpeziAppDelegate) -> some View {
         modifier(SpeziViewModifier(delegate.spezi))
     }

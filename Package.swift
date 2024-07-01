@@ -12,9 +12,9 @@ import class Foundation.ProcessInfo
 import PackageDescription
 
 #if swift(<6)
-let swiftConcurrency: SwiftSetting = .enableExperimentalFeature("SwiftConcurrency")
+let swiftConcurrency: SwiftSetting = .enableExperimentalFeature("StrictConcurrency")
 #else
-let swiftConcurrency: SwiftSetting = .enableUpcomingFeature("SwiftConcurrency")
+let swiftConcurrency: SwiftSetting = .enableUpcomingFeature("StrictConcurrency")
 #endif
 
 
