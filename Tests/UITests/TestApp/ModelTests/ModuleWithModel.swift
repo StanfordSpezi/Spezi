@@ -38,7 +38,7 @@ private struct MyModifier: ViewModifier {
 
 
 class ModuleWithModel: Module, EnvironmentAccessible {
-    @Application(\.launchOptions) private var launchOptions // TODO: how to ensure main actor isolation?
+    @Application(\.launchOptions) private var launchOptions
 
     @Model var model = MyModel2(message: "Hello World")
 
