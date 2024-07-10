@@ -43,6 +43,7 @@ final class ModuleTests: XCTestCase {
         wait(for: [expectation])
     }
 
+    @MainActor
     func testSpezi() throws {
         let spezi = Spezi(standard: DefaultStandard(), modules: [DependingTestModule()])
 

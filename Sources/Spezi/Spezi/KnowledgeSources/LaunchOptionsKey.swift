@@ -24,9 +24,11 @@ public struct LaunchOptionsKey: DefaultProvidingKnowledgeSource {
     public typealias Value = [Never: Any]
 #endif
 
+    // Unsafe, non-isolated is fine as we have an empty dictionary.
     // We inherit the type from UIKit, Any is inherently unsafe and also contains objects which might not conform to sendable.
-    // Therefore, public access to launch options (e.g., Spezi/launchOptions) is isolated to the MainActor.
-    // The dictionary access itself is not unsafe and our empty default value isn't as well.
+    // So, dealing with launch options in a safe way is up to the implementing Module to do so. Ideally we would make
+    // `Application/launchOptions` to be isolated to the MainActor. However, we can't really do that selectively with the @Application
+    // property wrapper. Most likely, you would interact with launch options in the `configure()` method which is @MainActor isolated.
     public static nonisolated(unsafe) let defaultValue: Value = [:]
 }
 
@@ -52,13 +54,11 @@ extension Spezi {
     ///     }
     /// }
     /// ```
-    @MainActor
     public var launchOptions: [UIApplication.LaunchOptionsKey: Any] {
         storage[LaunchOptionsKey.self]
     }
 #else // os(watchOS) || os(macOS)
     /// The launch options of the application on platforms that don't support launch options.
-    @MainActor
     public var launchOptions: [Never: Any] {
         storage[LaunchOptionsKey.self]
     }

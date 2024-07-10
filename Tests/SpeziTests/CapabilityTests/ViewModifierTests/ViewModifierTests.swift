@@ -25,12 +25,13 @@ final class ViewModifierTests: XCTestCase {
 
         print(modifiers)
         let message = modifiers
-            .compactMap { $0 as? WrappedViewModifier<TestViewModifier> }
-            .map { $0.initializeModifier().message }
+            .compactMap { $0 as? TestViewModifier }
+            .map { $0.message }
             .joined(separator: " ")
         XCTAssertEqual(message, "Hello World")
     }
-    
+
+    @MainActor
     func testEmptyRetrieval() {
         let speziAppDelegate = SpeziAppDelegate()
         XCTAssert(speziAppDelegate.spezi.viewModifiers.isEmpty)

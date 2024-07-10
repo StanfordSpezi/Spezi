@@ -116,6 +116,7 @@ private final class TestModuleCircle2: Module {
 
 
 final class DynamicDependenciesTests: XCTestCase {
+    @MainActor
     func testDynamicDependencies() throws {
         for dynamicDependenciesTestCase in DynamicDependenciesTestCase.allCases {
             let modules: [any Module] = [
