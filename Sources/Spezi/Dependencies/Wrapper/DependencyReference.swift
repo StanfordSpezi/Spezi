@@ -7,13 +7,6 @@
 //
 
 
-@MainActor
-struct MainActorCapturedDependency<Dependency: AnyObject>: Sendable {
-    let module: DynamicReference<Dependency>
-    let reference: DependencyReference
-}
-
-
 struct DependencyReference: Hashable, Sendable {
     let reference: ModuleReference
     private let typeId: ObjectIdentifier

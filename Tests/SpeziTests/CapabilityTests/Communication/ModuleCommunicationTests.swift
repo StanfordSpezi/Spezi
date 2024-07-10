@@ -50,15 +50,17 @@ final class ModuleCommunicationTests: XCTestCase {
         }
     }
 
-    private static var provideModule = ProvideModule1()
-    private static var collectModule = CollectModule()
+    @MainActor private static var provideModule = ProvideModule1()
+    @MainActor private static var collectModule = CollectModule()
 
 
+    @MainActor
     override func setUp() {
         Self.provideModule = ProvideModule1()
         Self.collectModule = CollectModule()
     }
 
+    @MainActor
     func testSimpleCommunication() throws {
         let delegate = TestApplicationDelegate()
         _ = delegate.spezi // ensure init
@@ -68,6 +70,7 @@ final class ModuleCommunicationTests: XCTestCase {
         XCTAssertEqual(Self.collectModule.strings, ["Hello World"])
     }
 
+    @MainActor
     func testIllegalAccess() throws {
         let delegate = TestApplicationDelegate()
 
