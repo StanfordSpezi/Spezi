@@ -496,5 +496,3 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
         XCTAssertEqual(dut4Module.state, 4)
     }
 }
-
-// swiftlint:disable:this file_length
