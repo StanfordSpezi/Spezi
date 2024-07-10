@@ -138,28 +138,22 @@ public protocol LifecycleHandler {
 )
 extension LifecycleHandler {
 #if os(iOS) || os(visionOS) || os(tvOS)
-    // A documentation for this method exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
-    // swiftlint:disable:next missing_docs
+    /// Empty default implementation.
     public func willFinishLaunchingWithOptions(_ application: UIApplication, launchOptions: [UIApplication.LaunchOptionsKey: Any]) {}
 
-    // A documentation for this method exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
-    // swiftlint:disable:next missing_docs
+    /// Empty default implementation.
     public func sceneWillEnterForeground(_ scene: UIScene) { }
 
-    // A documentation for this method exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
-    // swiftlint:disable:next missing_docs
+    /// Empty default implementation.
     public func sceneDidBecomeActive(_ scene: UIScene) { }
 
-    // A documentation for this method exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
-    // swiftlint:disable:next missing_docs
+    /// Empty default implementation.
     public func sceneWillResignActive(_ scene: UIScene) { }
 
-    // A documentation for this method exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
-    // swiftlint:disable:next missing_docs
+    /// Empty default implementation.
     public func sceneDidEnterBackground(_ scene: UIScene) { }
 
-    // A documentation for this method exists in the `LifecycleHandler` type which SwiftLint doesn't recognize.
-    // swiftlint:disable:next missing_docs
+    /// Empty default implementation.
     public func applicationWillTerminate(_ application: UIApplication) { }
 #endif
 }
