@@ -9,6 +9,7 @@
 import SpeziFoundation
 import SwiftUI
 
+
 @_spi(Spezi)
 public struct LaunchOptionsKey: DefaultProvidingKnowledgeSource {
     public typealias Anchor = SpeziAnchor
@@ -24,8 +25,8 @@ public struct LaunchOptionsKey: DefaultProvidingKnowledgeSource {
 #endif
 
     // We inherit the type from UIKit, Any is inherently unsafe and also contains objects which might not conform to sendable.
+    // Therefore, public access to launch options (e.g., Spezi/launchOptions) is isolated to the MainActor.
     // The dictionary access itself is not unsafe and our empty default value isn't as well.
-    // So annotating it as non-isolated is fine and passing LaunchOptions Values around actor boundaries is specific to the application.
     public static nonisolated(unsafe) let defaultValue: Value = [:]
 }
 
@@ -51,11 +52,13 @@ extension Spezi {
     ///     }
     /// }
     /// ```
+    @MainActor
     public var launchOptions: [UIApplication.LaunchOptionsKey: Any] {
         storage[LaunchOptionsKey.self]
     }
 #else // os(watchOS) || os(macOS)
     /// The launch options of the application on platforms that don't support launch options.
+    @MainActor
     public var launchOptions: [Never: Any] {
         storage[LaunchOptionsKey.self]
     }

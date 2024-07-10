@@ -13,9 +13,11 @@ protocol SpeziPropertyWrapper {
     /// This call happens right before ``Module/configure()-5pa83`` is called.
     /// An empty default implementation is provided.
     /// - Parameter spezi: The global ``Spezi/Spezi`` instance.
+    @MainActor
     func inject(spezi: Spezi)
 
     /// Clear the property wrapper state before the Module is unloaded.
+    @MainActor
     func clear()
 }
 
@@ -26,12 +28,14 @@ extension SpeziPropertyWrapper {
 
 
 extension Module {
+    @MainActor
     func inject(spezi: Spezi) {
         for wrapper in retrieveProperties(ofType: SpeziPropertyWrapper.self) {
             wrapper.inject(spezi: spezi)
         }
     }
 
+    @MainActor
     func clear() {
         for wrapper in retrieveProperties(ofType: SpeziPropertyWrapper.self) {
             wrapper.clear()

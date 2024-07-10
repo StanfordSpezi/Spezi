@@ -21,7 +21,6 @@ struct SpeziViewModifier: ViewModifier {
     
     func body(content: Content) -> some View {
         spezi.viewModifiers
-            .map { $0.initializeModifier() }
             .modify(content)
     }
 }

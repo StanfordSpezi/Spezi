@@ -48,7 +48,11 @@ public class _ModifierPropertyWrapper<Modifier: ViewModifier> {
     }
 
     deinit {
-        clear()
+        // mirrors implementation of clear, however in a compiler proven, concurrency safe way (:
+        collected = false
+        Task { @MainActor [spezi, id] in
+            spezi?.handleViewModifierRemoval(for: id)
+        }
     }
 }
 
@@ -97,7 +101,7 @@ extension Module {
 
 
 extension _ModifierPropertyWrapper: ViewModifierProvider {
-    var viewModifierInitialization: (any ViewModifierInitialization)? {
+    var viewModifier: (any ViewModifier)? {
         collected = true
 
         guard let storedValue else {
@@ -105,6 +109,6 @@ extension _ModifierPropertyWrapper: ViewModifierProvider {
             return nil
         }
 
-        return WrappedViewModifier(modifier: storedValue)
+        return storedValue
     }
 }

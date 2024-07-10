@@ -62,7 +62,7 @@ public class _DependencyPropertyWrapper<Value> { // swiftlint:disable:this type_
         guard let spezi = spezi else {
             return
         }
-        uninjectDependencies(notifying: spezi)
+        nonIsolatedUninjectDependencies(notifying: spezi)
     }
 }
 
@@ -87,7 +87,7 @@ extension _DependencyPropertyWrapper: DependencyDeclaration {
     }
 
 
-    func dependencyRelation(to module: any Module) -> DependencyRelation {
+    func dependencyRelation(to module: DependencyReference) -> DependencyRelation {
         dependencies.dependencyRelation(to: module)
     }
 
@@ -101,6 +101,10 @@ extension _DependencyPropertyWrapper: DependencyDeclaration {
 
     func uninjectDependencies(notifying spezi: Spezi) {
         dependencies.uninjectDependencies(notifying: spezi)
+    }
+
+    func nonIsolatedUninjectDependencies(notifying spezi: Spezi) {
+        dependencies.nonIsolatedUninjectDependencies(notifying: spezi)
     }
 }
 

@@ -17,11 +17,12 @@ protocol AnyDependencyContext: DependencyDeclaration {
 
 
 class DependencyContext<Dependency: Module>: AnyDependencyContext {
-    private enum Storage {
+    @MainActor
+    private enum StorageReference: Sendable {
         case dependency(Dependency)
         case weakDependency(WeaklyStoredModule<Dependency>)
 
-        var value: Dependency? {
+        nonisolated var value: Dependency? {
             switch self {
             case let .dependency(module):
                 return module
@@ -32,7 +33,7 @@ class DependencyContext<Dependency: Module>: AnyDependencyContext {
     }
 
     let defaultValue: (() -> Dependency)?
-    private var injectedDependency: Storage?
+    private var injectedDependency: StorageReference?
 
 
     var isOptional: Bool {
@@ -56,10 +57,8 @@ class DependencyContext<Dependency: Module>: AnyDependencyContext {
         self.defaultValue = defaultValue
     }
 
-    func dependencyRelation(to module: any Module) -> DependencyRelation {
-        let type = type(of: module)
-
-        guard type == Dependency.self else {
+    func dependencyRelation(to module: DependencyReference) -> DependencyRelation {
+        guard module.sameType(as: Dependency.self) else {
             return .unrelated
         }
 
@@ -92,7 +91,21 @@ class DependencyContext<Dependency: Module>: AnyDependencyContext {
         injectedDependency = nil
 
         if let dependency {
-            spezi.handleDependencyUninjection(dependency)
+            spezi.handleDependencyUninjection(of: dependency)
+        }
+    }
+
+    func nonIsolatedUninjectDependencies(notifying spezi: Spezi) {
+        let injectedDependency = injectedDependency
+        self.injectedDependency = nil
+
+        if let injectedDependency {
+            Task { @MainActor in
+                guard let dependency = injectedDependency.value else {
+                    return
+                }
+                spezi.handleDependencyUninjection(of: dependency)
+            }
         }
     }
 

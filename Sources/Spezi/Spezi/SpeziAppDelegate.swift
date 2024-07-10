@@ -172,7 +172,7 @@ open class SpeziAppDelegate: NSObject, ApplicationDelegate {
 
             var result: Set<BackgroundFetchResult> = []
             while let next = await group.next() {
-                // don't ask why, but the for in or .reduce versions trigger Swift 6 concurrency warnings, this one doesn't
+                // don't ask why, but the `for in` or `reduce(into:_:)` versions trigger Swift 6 concurrency warnings, this one doesn't
                 result.insert(next)
             }
             return result

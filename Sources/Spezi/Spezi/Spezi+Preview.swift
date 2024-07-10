@@ -12,7 +12,8 @@ import XCTRuntimeAssertions
 
 
 /// Options to simulate behavior for a ``LifecycleHandler`` in cases where there is no app delegate like in Preview setups.
-public enum LifecycleSimulationOptions: @unchecked Sendable { // see discussion in `LaunchOptionsKey`
+@MainActor
+public enum LifecycleSimulationOptions {
     /// Simulation is disabled.
     case disabled
 #if os(iOS) || os(visionOS) || os(tvOS)

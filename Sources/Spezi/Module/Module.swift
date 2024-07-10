@@ -15,6 +15,7 @@ public protocol Module: AnyObject, KnowledgeSource<SpeziAnchor> {
     /// The ``Module/configure()-5pa83`` method is called on the initialization of the Spezi instance to perform a lightweight configuration of the module.
     ///
     /// It is advised that longer setup tasks are done in an asynchronous task and started during the call of the configure method.
+    @MainActor
     func configure()
 }
 
