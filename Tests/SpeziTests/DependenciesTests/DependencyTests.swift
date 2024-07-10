@@ -277,7 +277,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
     }
 
     @MainActor
-    func testSelfManagedModules() throws {
+    func testSelfManagedModules() async throws {
         let optionalModule = OptionalModuleDependency()
         let moduleX = TestModuleX(5)
         let module8 = TestModule8()
@@ -301,7 +301,8 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
         let spezi = try runModuleTests(deinitExpectation: deinitExpectation)
         _ = spezi
 
-        print(spezi.modules)
+        try await Task.sleep(for: .milliseconds(50)) // deinit need to get back to MainActor
+
         XCTAssertEqual(spezi.modules.count, 5)
 
         XCTAssertNil(module8.testModule1) // tests that optional @Dependency reference modules weakly
