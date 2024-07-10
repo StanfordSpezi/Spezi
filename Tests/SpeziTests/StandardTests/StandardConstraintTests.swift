@@ -52,15 +52,15 @@ final class StandardConstraintTests: XCTestCase {
         }
     }
     
-    
+    @MainActor
     func testStandardConstraint() async throws {
         let expectation = XCTestExpectation(description: "Module")
         expectation.assertForOverFulfill = true
         
-        let standardCTestApplicationDelegate = await StandardCTestApplicationDelegate(
+        let standardCTestApplicationDelegate = StandardCTestApplicationDelegate(
             expectation: expectation
         )
-        _ = await standardCTestApplicationDelegate.spezi
+        _ = standardCTestApplicationDelegate.spezi
         
         await fulfillment(of: [expectation], timeout: 0.01)
     }
