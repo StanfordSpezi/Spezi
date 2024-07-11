@@ -24,6 +24,15 @@ jobs:
       scheme: Spezi-Package
       resultBundle: Spezi-Package-iOS.xcresult
       artifactname: Spezi-Package-iOS.xcresult
+  buildandtest_ios_latest:
+    name: Build and Test Swift Package iOS
+    uses: StanfordSpezi/.github/.github/workflows/xcodebuild-or-fastlane.yml@v2
+    with:
+      runsonlabels: '["macOS", "self-hosted"]'
+      scheme: Spezi-Package
+      resultBundle: Spezi-Package-iOS.xcresult
+      artifactname: Spezi-Package-iOS.xcresult
+      xcodeversion: latest
   buildandtest_watchos:
     name: Build and Test Swift Package watchOS
     uses: StanfordSpezi/.github/.github/workflows/xcodebuild-or-fastlane.yml@v2
