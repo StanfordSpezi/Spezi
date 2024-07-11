@@ -26,7 +26,7 @@ public struct LaunchOptionsKey: DefaultProvidingKnowledgeSource {
 
     // Unsafe, non-isolated is fine as we have an empty dictionary.
     // We inherit the type from UIKit, Any is inherently unsafe and also contains objects which might not conform to sendable.
-    // So, dealing with launch options in a safe way is up to the implementing Module to do so. Ideally we would make
+    // Dealing with launch options in a safe way is up to the implementing Module to do so. Ideally we would make
     // `Application/launchOptions` to be isolated to the MainActor. However, we can't really do that selectively with the @Application
     // property wrapper. Most likely, you would interact with launch options in the `configure()` method which is @MainActor isolated.
     public static nonisolated(unsafe) let defaultValue: Value = [:]

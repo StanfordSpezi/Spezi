@@ -31,6 +31,7 @@ jobs:
       runsonlabels: '["macOS", "self-hosted"]'
       scheme: Spezi-Package
       xcodeversion: latest
+      swiftVersion: 6
       resultBundle: Spezi-Package-iOS-Latest.xcresult
       artifactname: Spezi-Package-iOS-Latest.xcresult
   buildandtest_watchos:
