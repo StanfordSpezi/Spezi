@@ -30,8 +30,8 @@ jobs:
     with:
       runsonlabels: '["macOS", "self-hosted"]'
       scheme: Spezi-Package
-      resultBundle: Spezi-Package-iOS.xcresult
-      artifactname: Spezi-Package-iOS.xcresult
+      resultBundle: Spezi-Package-iOS-Latest.xcresult
+      artifactname: Spezi-Package-iOS-Latest.xcresult
       xcodeversion: latest
   buildandtest_watchos:
     name: Build and Test Swift Package watchOS
