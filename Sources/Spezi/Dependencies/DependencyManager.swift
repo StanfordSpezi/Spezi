@@ -10,7 +10,8 @@ import XCTRuntimeAssertions
 
 
 /// Gather information about modules with dependencies.
-public class DependencyManager {
+@MainActor
+public class DependencyManager: Sendable {
     /// Collection of already initialized modules.
     private let existingModules: [any Module]
 

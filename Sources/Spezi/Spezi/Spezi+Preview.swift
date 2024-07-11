@@ -12,7 +12,8 @@ import XCTRuntimeAssertions
 
 
 /// Options to simulate behavior for a ``LifecycleHandler`` in cases where there is no app delegate like in Preview setups.
-public enum LifecycleSimulationOptions: @unchecked Sendable { // see discussion in `LaunchOptionsKey`
+@MainActor
+public enum LifecycleSimulationOptions {
     /// Simulation is disabled.
     case disabled
 #if os(iOS) || os(visionOS) || os(tvOS)
@@ -44,6 +45,7 @@ extension View {
     ///   - simulateLifecycle: Options to simulate behavior for ``LifecycleHandler``s. Disabled by default.
     ///   - modules: The ``Module``s used in the Spezi project.
     /// - Returns: The configured view using the Spezi framework.
+    @MainActor
     public func previewWith<S: Standard>(
         standard: S,
         simulateLifecycle: LifecycleSimulationOptions = .disabled,
@@ -84,6 +86,7 @@ extension View {
     ///   - simulateLifecycle: Options to simulate behavior for ``LifecycleHandler``s. Disabled by default.
     ///   - modules: The ``Module``s used in the Spezi project.
     /// - Returns: The configured view using the Spezi framework.
+    @MainActor
     public func previewWith(
         simulateLifecycle: LifecycleSimulationOptions = .disabled,
         @ModuleBuilder _ modules: () -> ModuleCollection

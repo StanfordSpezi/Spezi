@@ -16,6 +16,7 @@ import SpeziFoundation
 protocol StorageValueProvider: SpeziPropertyWrapper {
     /// This method is called to collect all provided values into the given ``SpeziStorage`` repository.
     /// - Parameter repository: Provides access to the ``SpeziStorage`` repository.
+    @MainActor
     func collect<Repository: SharedRepository<SpeziAnchor>>(into repository: inout Repository)
 }
 
@@ -25,6 +26,7 @@ extension Module {
         retrieveProperties(ofType: StorageValueProvider.self)
     }
 
+    @MainActor
     func collectModuleValues<Repository: SharedRepository<SpeziAnchor>>(into repository: inout Repository) {
         for provider in storageValueProviders {
             provider.collect(into: &repository)

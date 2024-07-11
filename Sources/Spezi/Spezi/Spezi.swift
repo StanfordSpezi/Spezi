@@ -8,7 +8,7 @@
 
 
 import OrderedCollections
-import os
+import OSLog
 import SpeziFoundation
 import SwiftUI
 import XCTRuntimeAssertions
@@ -119,28 +119,25 @@ struct WeaklyStoredModule<M: Module>: KnowledgeSource {
 /// - ``registerRemoteNotifications``
 /// - ``unregisterRemoteNotifications``
 @Observable
-public class Spezi {
+public final class Spezi: Sendable {
     static let logger = Logger(subsystem: "edu.stanford.spezi", category: "Spezi")
-    
+
     @TaskLocal static var moduleInitContext: ModuleDescription?
 
     let standard: any Standard
 
-    /// Recursive lock for module loading.
-    private let lock = NSRecursiveLock()
-
     /// A shared repository to store any `KnowledgeSource`s restricted to the ``SpeziAnchor``.
     ///
     /// Every `Module` automatically conforms to `KnowledgeSource` and is stored within this storage object.
-    fileprivate(set) var storage: SpeziStorage
+    fileprivate(set) nonisolated(unsafe) var storage: SpeziStorage // nonisolated, writes are all isolated to @MainActor, just reads are non-isolated
 
     /// Key is either a UUID for `@Modifier` or `@Model` property wrappers, or a `ModuleReference` for `EnvironmentAccessible` modifiers.
-    private var _viewModifiers: OrderedDictionary<AnyHashable, any ViewModifierInitialization> = [:]
+    @MainActor private var _viewModifiers: OrderedDictionary<AnyHashable, any ViewModifier> = [:]
 
     /// Array of all SwiftUI `ViewModifiers` collected using `_ModifierPropertyWrapper` from the configured ``Module``s.
     ///
     /// Any changes to this property will cause a complete re-render of the SwiftUI view hierarchy. See `SpeziViewModifier`.
-    var viewModifiers: [any ViewModifierInitialization] {
+    @MainActor var viewModifiers: [any ViewModifier] {
         _viewModifiers.reduce(into: []) { partialResult, entry in
             partialResult.append(entry.value)
         }
@@ -159,7 +156,7 @@ public class Spezi {
     public var lifecycleHandler: [LifecycleHandler] {
         storage.collect(allOf: LifecycleHandler.self)
     }
-    
+
     var notificationTokenHandler: [NotificationTokenHandler] {
         storage.collect(allOf: NotificationTokenHandler.self)
     }
@@ -173,7 +170,7 @@ public class Spezi {
             + storage.collect(allOf: (any AnyWeaklyStoredModule).self).compactMap { $0.retrievePurgingIfNil(in: &storage) }
     }
 
-    private var implicitlyCreatedModules: Set<ModuleReference> {
+    @MainActor private var implicitlyCreatedModules: Set<ModuleReference> {
         get {
             storage[ImplicitlyCreatedModulesKey.self]
         }
@@ -186,7 +183,8 @@ public class Spezi {
         }
     }
     
-    
+
+    @MainActor
     convenience init(from configuration: Configuration, storage: consuming SpeziStorage = SpeziStorage()) {
         self.init(standard: configuration.standard, modules: configuration.modules.elements, storage: storage)
     }
@@ -199,6 +197,7 @@ public class Spezi {
     ///   - modules: The collection of modules to initialize.
     ///   - storage: Optional, initial storage to inject.
     @_spi(Spezi)
+    @MainActor
     public init(
         standard: any Standard,
         modules: [any Module],
@@ -226,17 +225,14 @@ public class Spezi {
     /// ## Topics
     /// ### Ownership
     /// - ``ModuleOwnership``
+    @MainActor
     public func loadModule(_ module: any Module, ownership: ModuleOwnership = .spezi) {
         loadModules([module], ownership: ownership)
     }
-    
+
+    @MainActor
     private func loadModules(_ modules: [any Module], ownership: ModuleOwnership) {
         precondition(Self.moduleInitContext == nil, "Modules cannot be loaded within the `configure()` method.")
-
-        lock.lock()
-        defer {
-            lock.unlock()
-        }
 
         purgeWeaklyReferenced()
 
@@ -283,13 +279,9 @@ public class Spezi {
     /// Unloading a Module will recursively unload its dependencies that were not loaded explicitly.
     ///
     /// - Parameter module: The Module to unload.
+    @MainActor
     public func unloadModule(_ module: any Module) {
         precondition(Self.moduleInitContext == nil, "Modules cannot be unloaded within the `configure()` method.")
-
-        lock.lock()
-        defer {
-            lock.unlock()
-        }
 
         purgeWeaklyReferenced()
 
@@ -299,7 +291,7 @@ public class Spezi {
 
         logger.debug("Unloading module \(type(of: module)) ...")
 
-        let dependents = retrieveDependingModules(module, considerOptionals: false)
+        let dependents = retrieveDependingModules(module.dependencyReference, considerOptionals: false)
         precondition(dependents.isEmpty, "Tried to unload Module \(type(of: module)) that is still required by peer Modules: \(dependents)")
         
         module.clearModule(from: self)
@@ -321,7 +313,7 @@ public class Spezi {
         // pre-existing Modules.
         let dependencyManager = DependencyManager([], existing: modules)
         dependencyManager.resolve()
-        
+
         module.clear() // automatically removes @Provide values and recursively unloads implicitly created modules
     }
 
@@ -332,6 +324,7 @@ public class Spezi {
     /// - Parameters:
     ///   - module: The module to initialize.
     ///   - ownership: Define the type of ownership when loading the module.
+    @MainActor
     private func initModule(_ module: any Module, ownership: ModuleOwnership) {
         precondition(!module.isLoaded(in: self), "Tried to initialize Module \(type(of: module)) that was already loaded!")
 
@@ -362,7 +355,7 @@ public class Spezi {
             if let observable = module as? EnvironmentAccessible {
                 // we can't guarantee weak references for EnvironmentAccessible modules
                 precondition(ownership != .external, "Modules loaded with self-managed policy cannot conform to `EnvironmentAccessible`.")
-                _viewModifiers[ModuleReference(module)] = observable.viewModifierInitialization
+                _viewModifiers[ModuleReference(module)] = observable.viewModifier
             }
         }
     }
@@ -372,7 +365,7 @@ public class Spezi {
         keyPath == \.logger // loggers are created per Module.
     }
 
-    private func retrieveDependingModules(_ dependency: any Module, considerOptionals: Bool) -> [any Module] {
+    private func retrieveDependingModules(_ dependency: DependencyReference, considerOptionals: Bool) -> [any Module] {
         var result: [any Module] = []
 
         for module in modules {
@@ -391,30 +384,24 @@ public class Spezi {
         return result
     }
 
-    func handleDependencyUninjection<M: Module>(_ dependency: M) {
-        lock.lock()
-        defer {
-            lock.unlock()
-        }
+    @MainActor
+    func handleDependencyUninjection<M: Module>(of dependency: M) {
+        let dependencyReference = dependency.dependencyReference
 
-        guard implicitlyCreatedModules.contains(ModuleReference(dependency)) else {
+        guard implicitlyCreatedModules.contains(dependencyReference.reference) else {
             // we only recursively unload modules that have been created implicitly
             return
         }
 
-        guard retrieveDependingModules(dependency, considerOptionals: true).isEmpty else {
+        guard retrieveDependingModules(dependencyReference, considerOptionals: true).isEmpty else {
             return
         }
 
         unloadModule(dependency)
     }
 
+    @MainActor
     func handleCollectedValueRemoval<Value>(for id: UUID, of type: Value.Type) {
-        lock.lock()
-        defer {
-            lock.unlock()
-        }
-
         var entries = storage[CollectedModuleValues<Value>.self]
         let removed = entries.removeValue(forKey: id)
         guard removed != nil else {
@@ -428,12 +415,8 @@ public class Spezi {
         }
     }
 
+    @MainActor
     func handleViewModifierRemoval(for id: UUID) {
-        lock.lock()
-        defer {
-            lock.unlock()
-        }
-
         if _viewModifiers[id] != nil {
             _viewModifiers.removeValue(forKey: id)
         }
@@ -454,6 +437,7 @@ public class Spezi {
 
 
 extension Module {
+    @MainActor
     fileprivate func storeModule(into spezi: Spezi) {
         guard let value = self as? Value else {
             spezi.logger.warning("Could not store \(Self.self) in the SpeziStorage as the `Value` typealias was modified.")
@@ -462,6 +446,7 @@ extension Module {
         spezi.storage[Self.self] = value
     }
 
+    @MainActor
     fileprivate func storeWeakly(into spezi: Spezi) {
         guard self is Value else {
             spezi.logger.warning("Could not store \(Self.self) in the SpeziStorage as the `Value` typealias was modified.")
@@ -471,11 +456,13 @@ extension Module {
         spezi.storage[WeaklyStoredModule<Self>.self] = WeaklyStoredModule(self)
     }
 
+    @MainActor
     fileprivate func isLoaded(in spezi: Spezi) -> Bool {
         spezi.storage[Self.self] != nil
             || spezi.storage[WeaklyStoredModule<Self>.self]?.retrievePurgingIfNil(in: &spezi.storage) != nil
     }
 
+    @MainActor
     fileprivate func clearModule(from spezi: Spezi) {
         spezi.storage[Self.self] = nil
         spezi.storage[WeaklyStoredModule<Self>.self] = nil

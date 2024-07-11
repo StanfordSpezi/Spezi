@@ -9,6 +9,7 @@
 import OrderedCollections
 import SwiftUI
 
+
 enum ModifierPlacement: Int, Comparable {
     case regular
     case outermost
@@ -28,7 +29,7 @@ protocol ViewModifierProvider {
     /// The view modifier instance that should be injected into the SwiftUI view hierarchy.
     ///
     /// Does nothing if `nil` is provided.
-    var viewModifierInitialization: (any ViewModifierInitialization)? { get }
+    @MainActor var viewModifier: (any ViewModifier)? { get }
 
     /// Defines the placement order of this view modifier.
     ///
@@ -48,13 +49,14 @@ extension ViewModifierProvider {
 
 extension Module {
     /// All SwiftUI `ViewModifier` the module wants to modify the global view hierarchy with.
-    var viewModifierEntires: [(UUID, any ViewModifierInitialization)] {
+    @MainActor
+    var viewModifierEntires: [(UUID, any ViewModifier)] {
         retrieveProperties(ofType: ViewModifierProvider.self)
             .sorted { lhs, rhs in
                 lhs.placement < rhs.placement
             }
             .compactMap { provider in
-                guard let modifier = provider.viewModifierInitialization else {
+                guard let modifier = provider.viewModifier else {
                     return nil
                 }
                 return (provider.id, modifier)

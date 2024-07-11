@@ -50,7 +50,11 @@ public class _ModelPropertyWrapper<Model: Observable & AnyObject> {
 
 
     deinit {
-        clear()
+        // mirrors implementation of clear, however in a compiler proven, concurrency safe way (:
+        collected = false
+        Task { @MainActor [spezi, id] in
+            spezi?.handleViewModifierRemoval(for: id)
+        }
     }
 }
 
@@ -60,6 +64,7 @@ extension _ModelPropertyWrapper: SpeziPropertyWrapper {
         collected = false
         spezi?.handleViewModifierRemoval(for: id)
     }
+
 
     func inject(spezi: Spezi) {
         self.spezi = spezi
@@ -97,7 +102,7 @@ extension Module {
 
 
 extension _ModelPropertyWrapper: ViewModifierProvider {
-    var viewModifierInitialization: (any ViewModifierInitialization)? {
+    var viewModifier: (any ViewModifier)? {
         collected = true
 
         guard let storedValue else {
@@ -105,7 +110,7 @@ extension _ModelPropertyWrapper: ViewModifierProvider {
             return nil
         }
 
-        return ModelModifierInitialization(model: storedValue)
+        return ModelModifier(model: storedValue)
     }
 
     var placement: ModifierPlacement {

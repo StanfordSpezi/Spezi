@@ -38,12 +38,19 @@ private struct MyModifier: ViewModifier {
 
 
 class ModuleWithModel: Module, EnvironmentAccessible {
+    @Application(\.launchOptions) private var launchOptions
+
     @Model var model = MyModel2(message: "Hello World")
 
     // ensure reordering happens, ViewModifier must be able to access the model from environment
-    @Modifier fileprivate var modifier = MyModifier()
+    @Modifier fileprivate var modifier: MyModifier
 
     let message: String = "MODEL"
+
+    @MainActor
+    init() {
+        modifier = MyModifier() // @MainActor isolated default values for property wrappers must currently be specified explicitly via isolated init
+    }
 }
 
 

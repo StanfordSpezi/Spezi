@@ -31,5 +31,10 @@ private struct MyModifier: ViewModifier {
 
 
 class ModuleWithModifier: Module {
-    @Modifier fileprivate var modelModifier = MyModifier(model: MyModel(message: "Hello World"))
+    @Modifier fileprivate var modelModifier: MyModifier
+
+    @MainActor
+    init() {
+        modelModifier = MyModifier(model: MyModel(message: "Hello World"))
+    }
 }

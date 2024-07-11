@@ -84,21 +84,6 @@ private final class TestModule7: Module {
     @Dependency var testModule1 = TestModule1()
 }
 
-// Swift 6 compiler doesn't allow circular references (even when there is a property wrapper in between)
-// Review this in future versions.
-#if compiler(<6)
-private final class TestModuleCircle1: Module {
-    @Dependency var testModuleCircle2 = TestModuleCircle2()
-}
-private final class TestModuleCircle2: Module {
-    @Dependency var testModuleCircle1 = TestModuleCircle1()
-}
-
-private final class TestModuleItself: Module {
-    @Dependency var testModuleItself = TestModuleItself()
-}
-#endif
-
 
 private final class OptionalModuleDependency: Module {
     @Dependency var testModule3: TestModule3?
@@ -143,6 +128,7 @@ private final class TestModule8: Module {
 
 
 final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_length
+    @MainActor
     func testLoadingAdditionalDependency() throws {
         let spezi = Spezi(standard: DefaultStandard(), modules: [OptionalModuleDependency()])
 
@@ -191,6 +177,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
         XCTAssert(optionalModuleDependency.testModule3 === testModule3)
     }
 
+    @MainActor
     func testImpossibleUnloading() throws {
         let module3 = TestModule3()
         let spezi = Spezi(standard: DefaultStandard(), modules: [TestModule1(), module3])
@@ -201,6 +188,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
         }
     }
 
+    @MainActor
     func testMultiLoading() throws {
         let module = AllPropertiesModule()
         let spezi = Spezi(standard: DefaultStandard(), modules: [module])
@@ -210,6 +198,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
         spezi.unloadModule(module)
     }
 
+    @MainActor
     func testUnloadingDependencies() throws {
         func runUnloadingTests(deinitExpectation1: XCTestExpectation, deinitExpectation3: XCTestExpectation) throws -> Spezi {
             let optionalModule = OptionalModuleDependency()
@@ -272,7 +261,8 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
         wait(for: [deinitExpectation1, deinitExpectation3])
     }
 
-    func testSelfManagedModules() throws {
+    @MainActor
+    func testSelfManagedModules() async throws {
         let optionalModule = OptionalModuleDependency()
         let moduleX = TestModuleX(5)
         let module8 = TestModule8()
@@ -296,7 +286,8 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
         let spezi = try runModuleTests(deinitExpectation: deinitExpectation)
         _ = spezi
 
-        print(spezi.modules)
+        try await Task.sleep(for: .milliseconds(50)) // deinit need to get back to MainActor
+
         XCTAssertEqual(spezi.modules.count, 5)
 
         XCTAssertNil(module8.testModule1) // tests that optional @Dependency reference modules weakly
@@ -310,6 +301,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
         wait(for: [deinitExpectation])
     }
 
+    @MainActor
     func testModuleDependencyChain() throws {
         let modules: [any Module] = [
             TestModule6(),
@@ -338,6 +330,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
         XCTAssert(testModuleMock1.testModule2.testModule4.testModule5 === testModuleMock5)
     }
 
+    @MainActor
     func testAlreadyInDependableModules() throws {
         let modules: [any Module] = [
             TestModule2(),
@@ -358,6 +351,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
         XCTAssert(testModule2.testModule3 === testModule3)
     }
 
+    @MainActor
     func testModuleDependencyMultipleTimes() throws {
         let modules: [any Module] = [
             TestModule5(),
@@ -378,6 +372,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
         XCTAssert(testModule41.testModule5 === testModule5)
     }
 
+    @MainActor
     func testModuleDependencyChainMultipleTimes() throws {
         let modules: [any Module] = [
             TestModule2(),
@@ -409,6 +404,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
     }
 
 
+    @MainActor
     func testModuleNoDependency() throws {
         let modules: [any Module] = [TestModule5()]
         let initializedModules = DependencyManager.resolve(modules)
@@ -418,6 +414,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
         _ = try XCTUnwrap(initializedModules[0] as? TestModule5)
     }
 
+    @MainActor
     func testModuleNoDependencyMultipleTimes() throws {
         let modules: [any Module] = [
             TestModule5(),
@@ -433,18 +430,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
         _ = try XCTUnwrap(initializedModules[2] as? TestModule5)
     }
 
-#if compiler(<6)
-    func testModuleCycle() throws {
-        let modules: [any Module] = [
-            TestModuleCircle1()
-        ]
-
-        try XCTRuntimePrecondition {
-            _ = DependencyManager.resolve(modules)
-        }
-    }
-#endif
-
+    @MainActor
     func testOptionalDependenceNonPresent() throws {
         let nonPresent: [any Module] = [
             OptionalModuleDependency()
@@ -458,6 +444,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
         XCTAssertNil(module.testModule3)
     }
 
+    @MainActor
     func testOptionalDependencePresent() throws {
         let nonPresent: [any Module] = [
             OptionalModuleDependency(),
@@ -473,6 +460,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
         XCTAssert(module.testModule3 === module3)
     }
 
+    @MainActor
     func testOptionalDependencyWithDynamicRuntimeDefaultValue() throws {
         let nonPresent = DependencyManager.resolve([
             OptionalDependencyWithRuntimeDefault(defaultValue: nil) // stays optional
@@ -508,5 +496,3 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
         XCTAssertEqual(dut4Module.state, 4)
     }
 }
-
-// swiftlint:disable:this file_length

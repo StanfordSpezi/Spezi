@@ -16,7 +16,7 @@ import XCTRuntimeAssertions
 protocol CollectionBasedProvideProperty {
     func collectArrayElements<Repository: SharedRepository<SpeziAnchor>>(into repository: inout Repository)
 
-    func clearValues()
+    func clearValues(isolated: Bool)
 }
 
 
@@ -24,7 +24,7 @@ protocol CollectionBasedProvideProperty {
 protocol OptionalBasedProvideProperty {
     func collectOptional<Repository: SharedRepository<SpeziAnchor>>(into repository: inout Repository)
 
-    func clearValues()
+    func clearValues(isolated: Bool)
 }
 
 
@@ -69,7 +69,7 @@ public class _ProvidePropertyWrapper<Value> {
 
 
     deinit {
-        clear()
+        clear(isolated: false)
     }
 }
 
@@ -143,15 +143,32 @@ extension _ProvidePropertyWrapper: StorageValueProvider {
         collected = true
     }
 
+    @MainActor
     func clear() {
+        clear(isolated: true)
+    }
+
+    private func clear(isolated: Bool) {
         collected = false
 
         if let wrapperWithOptional = self as? OptionalBasedProvideProperty {
-            wrapperWithOptional.clearValues()
+            wrapperWithOptional.clearValues(isolated: isolated)
         } else if let wrapperWithArray = self as? CollectionBasedProvideProperty {
-            wrapperWithArray.clearValues()
+            wrapperWithArray.clearValues(isolated: isolated)
         } else {
-            spezi?.handleCollectedValueRemoval(for: id, of: Value.self)
+            performClear(isolated: isolated, of: Value.self)
+        }
+    }
+
+    private func performClear<V>(isolated: Bool, of type: V.Type) {
+        if isolated {
+            MainActor.assumeIsolated { [spezi, id] in
+                spezi?.handleCollectedValueRemoval(for: id, of: type)
+            }
+        } else {
+            Task { @MainActor [spezi, id] in
+                spezi?.handleCollectedValueRemoval(for: id, of: type)
+            }
         }
     }
 }
@@ -162,8 +179,8 @@ extension _ProvidePropertyWrapper: CollectionBasedProvideProperty where Value: A
         repository.setValues(for: id, storedValue.unwrappedArray)
     }
 
-    func clearValues() {
-        spezi?.handleCollectedValueRemoval(for: id, of: Value.Element.self)
+    func clearValues(isolated: Bool) {
+        performClear(isolated: isolated, of: Value.Element.self)
     }
 }
 
@@ -175,8 +192,8 @@ extension _ProvidePropertyWrapper: OptionalBasedProvideProperty where Value: Any
         }
     }
 
-    func clearValues() {
-        spezi?.handleCollectedValueRemoval(for: id, of: Value.Wrapped.self)
+    func clearValues(isolated: Bool) {
+        performClear(isolated: isolated, of: Value.Wrapped.self)
     }
 }
 

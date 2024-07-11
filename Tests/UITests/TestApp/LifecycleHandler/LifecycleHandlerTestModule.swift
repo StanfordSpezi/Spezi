@@ -48,6 +48,7 @@ final class LifecycleHandlerTestModule: Module, LifecycleHandler {
 
     @Modifier var modifier: LifecycleHandlerModifier
 
+    @MainActor
     init() {
         let model = LifecycleHandlerModel()
         self.model = model

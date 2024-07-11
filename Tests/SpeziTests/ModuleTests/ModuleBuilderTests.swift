@@ -77,7 +77,8 @@ final class ModuleBuilderTests: XCTestCase {
         return modules
     }
     
-    
+
+    @MainActor
     func testModuleBuilderIf() throws {
         let expectations = Expectations(xctestCase: self)
         expectations.loopTestExpectation.expectedFulfillmentCount = 5
@@ -97,7 +98,8 @@ final class ModuleBuilderTests: XCTestCase {
 
         try expectations.wait()
     }
-    
+
+    @MainActor
     func testModuleBuilderElse() throws {
         let expectations = Expectations(xctestCase: self)
         expectations.conditionalTestExpectation.isInverted = true

@@ -50,7 +50,7 @@ public struct DependencyCollection: DependencyDeclaration {
     }
 
 
-    func dependencyRelation(to module: any Module) -> DependencyRelation {
+    func dependencyRelation(to module: DependencyReference) -> DependencyRelation {
         let relations = entries.map { $0.dependencyRelation(to: module) }
 
         if relations.contains(.dependent) {
@@ -78,6 +78,12 @@ public struct DependencyCollection: DependencyDeclaration {
     func uninjectDependencies(notifying spezi: Spezi) {
         for entry in entries {
             entry.uninjectDependencies(notifying: spezi)
+        }
+    }
+
+    func nonIsolatedUninjectDependencies(notifying spezi: Spezi) {
+        for entry in entries {
+            entry.nonIsolatedUninjectDependencies(notifying: spezi)
         }
     }
 

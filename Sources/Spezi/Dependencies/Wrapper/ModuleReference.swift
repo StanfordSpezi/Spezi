@@ -7,10 +7,17 @@
 //
 
 
-struct ModuleReference: Hashable {
+struct ModuleReference: Hashable, Sendable {
     private let id: ObjectIdentifier
 
     init(_ module: any Module) {
         self.id = ObjectIdentifier(module)
+    }
+}
+
+
+extension Module {
+    var reference: ModuleReference {
+        ModuleReference(self)
     }
 }

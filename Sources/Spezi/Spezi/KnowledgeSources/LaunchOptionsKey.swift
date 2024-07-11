@@ -9,6 +9,7 @@
 import SpeziFoundation
 import SwiftUI
 
+
 @_spi(Spezi)
 public struct LaunchOptionsKey: DefaultProvidingKnowledgeSource {
     public typealias Anchor = SpeziAnchor
@@ -23,9 +24,11 @@ public struct LaunchOptionsKey: DefaultProvidingKnowledgeSource {
     public typealias Value = [Never: Any]
 #endif
 
+    // Unsafe, non-isolated is fine as we have an empty dictionary.
     // We inherit the type from UIKit, Any is inherently unsafe and also contains objects which might not conform to sendable.
-    // The dictionary access itself is not unsafe and our empty default value isn't as well.
-    // So annotating it as non-isolated is fine and passing LaunchOptions Values around actor boundaries is specific to the application.
+    // Dealing with launch options in a safe way is up to the implementing Module to do so. Ideally we would make
+    // `Application/launchOptions` to be isolated to the MainActor. However, we can't really do that selectively with the @Application
+    // property wrapper. Most likely, you would interact with launch options in the `configure()` method which is @MainActor isolated.
     public static nonisolated(unsafe) let defaultValue: Value = [:]
 }
 

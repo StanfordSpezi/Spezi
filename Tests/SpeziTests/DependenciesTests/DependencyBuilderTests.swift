@@ -34,6 +34,7 @@ class ExampleDependencyModule: Module {
 
 
 final class DependencyBuilderTests: XCTestCase {
+    @MainActor
     func testDependencyBuilder() throws {
         let module = ExampleDependencyModule {
             ExampleDependentModule()
