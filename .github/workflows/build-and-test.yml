@@ -18,7 +18,7 @@ on:
 jobs:
   buildandtest_ios:
     name: Build and Test Swift Package iOS
-    uses: StanfordSpezi/.github/.github/workflows/xcodebuild-or-fastlane.yml@v2
+    uses: StanfordSpezi/.github/.github/workflows/xcodebuild-or-fastlane.yml@feature/specify-swift-version
     with:
       runsonlabels: '["macOS", "self-hosted"]'
       scheme: Spezi-Package
