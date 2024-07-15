@@ -74,7 +74,8 @@ final class ModuleTests: XCTestCase {
 
     @MainActor
     func testPreviewModifierOnlyWithinPreview() throws {
-        try XCTRuntimePrecondition {
+        try XCTRuntimePrecondition { @MainActor in
+            try? await Task.sleep(for: .milliseconds(0))
             _ = Text("Spezi")
                 .previewWith {
                     TestModule()

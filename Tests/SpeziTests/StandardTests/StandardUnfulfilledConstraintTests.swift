@@ -42,7 +42,7 @@ final class StandardUnfulfilledConstraintTests: XCTestCase {
     func testStandardUnfulfilledConstraint() throws {
         let standardCUTestApplicationDelegate = StandardUCTestApplicationDelegate()
         try XCTRuntimePrecondition(timeout: 0.5) {
-            _ = standardCUTestApplicationDelegate.spezi
+            _ = await standardCUTestApplicationDelegate.spezi
         }
     }
 }
