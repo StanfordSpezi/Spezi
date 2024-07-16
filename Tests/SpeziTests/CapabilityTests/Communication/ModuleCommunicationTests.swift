@@ -74,15 +74,13 @@ final class ModuleCommunicationTests: XCTestCase {
     func testIllegalAccess() throws {
         let delegate = TestApplicationDelegate()
 
-        try XCTRuntimePrecondition { @MainActor in
-            try? await Task.sleep(for: .milliseconds(0))
+        try XCTRuntimePrecondition {
             _ = Self.collectModule.strings
         }
 
         _ = delegate.spezi // ensure init
 
-        try XCTRuntimePrecondition { @MainActor in
-            try? await Task.sleep(for: .milliseconds(0))
+        try XCTRuntimePrecondition {
             Self.provideModule.numMaybe2 = 12
         }
     }

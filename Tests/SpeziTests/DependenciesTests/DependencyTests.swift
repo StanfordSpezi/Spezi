@@ -182,8 +182,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
         let module3 = TestModule3()
         let spezi = Spezi(standard: DefaultStandard(), modules: [TestModule1(), module3])
 
-        try XCTRuntimePrecondition { @MainActor in
-            try? await Task.sleep(for: .seconds(0))
+        try XCTRuntimePrecondition {
             // cannot unload module that other modules still depend on
             spezi.unloadModule(module3)
         }

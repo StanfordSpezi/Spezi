@@ -37,12 +37,12 @@ final class StandardUnfulfilledConstraintTests: XCTestCase {
         }
     }
     
-    
+
     @MainActor
     func testStandardUnfulfilledConstraint() throws {
         let standardCUTestApplicationDelegate = StandardUCTestApplicationDelegate()
         try XCTRuntimePrecondition(timeout: 0.5) {
-            _ = await standardCUTestApplicationDelegate.spezi
+            _ = standardCUTestApplicationDelegate.spezi
         }
     }
 }
