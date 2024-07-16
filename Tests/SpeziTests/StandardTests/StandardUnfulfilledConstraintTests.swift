@@ -37,7 +37,7 @@ final class StandardUnfulfilledConstraintTests: XCTestCase {
         }
     }
     
-    
+
     @MainActor
     func testStandardUnfulfilledConstraint() throws {
         let standardCUTestApplicationDelegate = StandardUCTestApplicationDelegate()

@@ -21,3 +21,6 @@ public enum ModuleOwnership {
     /// The module is managed and strongly referenced by Spezi.
     case spezi
 }
+
+
+extension ModuleOwnership: Sendable, Hashable {}
