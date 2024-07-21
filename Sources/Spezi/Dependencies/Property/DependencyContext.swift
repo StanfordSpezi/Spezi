@@ -17,23 +17,8 @@ protocol AnyDependencyContext: DependencyDeclaration {
 
 
 class DependencyContext<Dependency: Module>: AnyDependencyContext {
-    @MainActor
-    private enum StorageReference: Sendable {
-        case dependency(Dependency)
-        case weakDependency(WeaklyStoredModule<Dependency>)
-
-        nonisolated var value: Dependency? {
-            switch self {
-            case let .dependency(module):
-                return module
-            case let .weakDependency(reference):
-                return reference.module
-            }
-        }
-    }
-
     let defaultValue: (() -> Dependency)?
-    private var injectedDependency: StorageReference?
+    private var injectedDependency: DynamicReference<Dependency>?
 
 
     var isOptional: Bool {
@@ -45,7 +30,8 @@ class DependencyContext<Dependency: Module>: AnyDependencyContext {
             return []
         }
 
-        guard let module = injectedDependency.value else {
+        guard let module = injectedDependency.element else {
+            // TODO: is there any way to re-inject the next one?
             self.injectedDependency = nil // clear the left over storage
             return []
         }
@@ -80,14 +66,14 @@ class DependencyContext<Dependency: Module>: AnyDependencyContext {
         }
 
         if isOptional {
-            injectedDependency = .weakDependency(WeaklyStoredModule(dependency))
+            injectedDependency = .weakElement(dependency)
         } else {
-            injectedDependency = .dependency(dependency)
+            injectedDependency = .element(dependency)
         }
     }
 
     func uninjectDependencies(notifying spezi: Spezi) {
-        let dependency = injectedDependency?.value
+        let dependency = injectedDependency?.element
         injectedDependency = nil
 
         if let dependency {
@@ -101,7 +87,7 @@ class DependencyContext<Dependency: Module>: AnyDependencyContext {
 
         if let injectedDependency {
             Task { @MainActor in
-                guard let dependency = injectedDependency.value else {
+                guard let dependency = injectedDependency.element else {
                     return
                 }
                 spezi.handleDependencyUninjection(of: dependency)
@@ -118,14 +104,14 @@ class DependencyContext<Dependency: Module>: AnyDependencyContext {
                 """
             )
         }
-        guard let dependency = injectedDependency.value as? M else {
+        guard let dependency = injectedDependency.element as? M else {
             preconditionFailure("A injected dependency of type \(type(of: injectedDependency)) didn't match the expected type \(M.self)!")
         }
         return dependency
     }
 
     func retrieveOptional<M>(dependency: M.Type) -> M? {
-        guard let dependency = injectedDependency?.value as? M? else {
+        guard let dependency = injectedDependency?.element as? M? else {
             preconditionFailure("A injected dependency of type \(type(of: injectedDependency)) didn't match the expected type \(M?.self)!")
         }
         return dependency

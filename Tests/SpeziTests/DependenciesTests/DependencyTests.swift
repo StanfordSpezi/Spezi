@@ -495,4 +495,11 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
         let dut4Module = try XCTUnwrap(dut4.testModule3)
         XCTAssertEqual(dut4Module.state, 4)
     }
+
+    @MainActor
+    func testMultipleDependenciesOfSameType() throws {
+        // TODO: test that it is possible
+        // TODO: test that @Dependency only ever takes the first!
+        // TODO: check that @Dependency automatically takes the next one of the first one was unloaded (weak storage!)
+    }
 }
