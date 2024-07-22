@@ -18,6 +18,7 @@ protocol AnyDependencyContext: DependencyDeclaration {
 
 class DependencyContext<Dependency: Module>: AnyDependencyContext {
     let defaultValue: (() -> Dependency)?
+    private weak var spezi: Spezi?
     private var injectedDependency: DynamicReference<Dependency>?
 
 
@@ -25,18 +26,25 @@ class DependencyContext<Dependency: Module>: AnyDependencyContext {
         defaultValue == nil
     }
 
-    var injectedDependencies: [any Module] {
+    private var dependency: Dependency? {
         guard let injectedDependency else {
-            return []
+            return nil
         }
 
-        guard let module = injectedDependency.element else {
-            // TODO: is there any way to re-inject the next one?
-            self.injectedDependency = nil // clear the left over storage
-            return []
+        if let module = injectedDependency.element {
+            return module
         }
 
-        return [module]
+        // Otherwise, we have a weakly injected module that was de-initialized.
+        // See, if there are multiple modules of the same type and inject the "next" one.
+        if let replacement = spezi?.retrieveDependencyReplacement(for: Dependency.self) {
+            self.injectedDependency = .weakElement(replacement) // update injected dependency
+            return replacement
+        }
+
+        // clear the left over storage
+        self.injectedDependency = nil
+        return nil
     }
 
     init(for type: Dependency.Type = Dependency.self, defaultValue: (() -> Dependency)? = nil) {
@@ -72,6 +80,10 @@ class DependencyContext<Dependency: Module>: AnyDependencyContext {
         }
     }
 
+    func inject(spezi: Spezi) {
+        self.spezi = spezi
+    }
+
     func uninjectDependencies(notifying spezi: Spezi) {
         let dependency = injectedDependency?.element
         injectedDependency = nil
@@ -95,8 +107,8 @@ class DependencyContext<Dependency: Module>: AnyDependencyContext {
         }
     }
 
-    func retrieve<M>(dependency: M.Type) -> M {
-        guard let injectedDependency else {
+    func retrieve<M>(dependency dependencyType: M.Type) -> M {
+        guard let dependency else {
             preconditionFailure(
                 """
                 A `@Dependency` was accessed before the dependency was activated. \
@@ -104,14 +116,14 @@ class DependencyContext<Dependency: Module>: AnyDependencyContext {
                 """
             )
         }
-        guard let dependency = injectedDependency.element as? M else {
+        guard let dependencyM = dependency as? M else {
             preconditionFailure("A injected dependency of type \(type(of: injectedDependency)) didn't match the expected type \(M.self)!")
         }
-        return dependency
+        return dependencyM
     }
 
     func retrieveOptional<M>(dependency: M.Type) -> M? {
-        guard let dependency = injectedDependency?.element as? M? else {
+        guard let dependency = self.dependency as? M? else {
             preconditionFailure("A injected dependency of type \(type(of: injectedDependency)) didn't match the expected type \(M?.self)!")
         }
         return dependency

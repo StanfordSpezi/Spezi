@@ -11,12 +11,6 @@
 public struct DependencyCollection: DependencyDeclaration {
     let entries: [AnyDependencyContext]
 
-    var injectedDependencies: [any Module] {
-        entries.reduce(into: []) { result, dependencies in
-            result.append(contentsOf: dependencies.injectedDependencies)
-        }
-    }
-
     init(_ entries: [AnyDependencyContext]) {
         self.entries = entries
     }
@@ -96,6 +90,12 @@ public struct DependencyCollection: DependencyDeclaration {
     func inject(from dependencyManager: DependencyManager) {
         for entry in entries {
             entry.inject(from: dependencyManager)
+        }
+    }
+
+    func inject(spezi: Spezi) {
+        for entry in entries {
+            entry.inject(spezi: spezi)
         }
     }
 

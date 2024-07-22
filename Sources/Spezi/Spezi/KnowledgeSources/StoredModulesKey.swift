@@ -35,6 +35,16 @@ struct StoredModulesKey<M: Module>: KnowledgeSource {
         modules[key] != nil
     }
 
+    func retrieveFirstAvailable() -> M? {
+        for (_, value) in modules {
+            guard let element = value.element else {
+                continue
+            }
+            return element
+        }
+        return nil
+    }
+
     @discardableResult
     mutating func updateValue(_ module: DynamicReference<M>, forKey key: ModuleReference) -> DynamicReference<M>? {
         modules.updateValue(module, forKey: key)

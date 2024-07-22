@@ -394,6 +394,16 @@ public final class Spezi: Sendable {
         }
     }
 
+    func retrieveDependencyReplacement<M: Module>(for type: M.Type) -> M? {
+        guard let storedModules = storage[StoredModulesKey<M>.self] else {
+            return nil
+        }
+
+        let replacement = storedModules.retrieveFirstAvailable()
+        storedModules.removeNilReferences(in: &storage) // if we ask for a replacement, there is opportunity to clean up weak reference objects
+        return replacement
+    }
+
     /// Iterates through weakly referenced modules and purges any nil references.
     ///
     /// These references are purged lazily. This is generally no problem because the overall overhead will be linear.

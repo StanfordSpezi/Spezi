@@ -70,6 +70,7 @@ public class _DependencyPropertyWrapper<Value> { // swiftlint:disable:this type_
 extension _DependencyPropertyWrapper: SpeziPropertyWrapper {
     func inject(spezi: Spezi) {
         self.spezi = spezi
+        dependencies.inject(spezi: spezi)
     }
 
     func clear() {
@@ -82,11 +83,6 @@ extension _DependencyPropertyWrapper: SpeziPropertyWrapper {
 
 
 extension _DependencyPropertyWrapper: DependencyDeclaration {
-    var injectedDependencies: [any Module] {
-        dependencies.injectedDependencies
-    }
-
-
     func dependencyRelation(to module: DependencyReference) -> DependencyRelation {
         dependencies.dependencyRelation(to: module)
     }
