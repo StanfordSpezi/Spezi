@@ -10,10 +10,6 @@ SPDX-License-Identifier: MIT
              
 -->
 
-@Metadata {
-    @DocumentationExtension(mergeBehavior: append)
-}
-
 ## Overview
 
 A ``Module``'s initializer can be used to configure its behavior as a subsystem in Spezi-based software.
