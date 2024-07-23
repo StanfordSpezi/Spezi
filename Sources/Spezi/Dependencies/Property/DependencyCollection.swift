@@ -11,12 +11,6 @@
 public struct DependencyCollection: DependencyDeclaration {
     let entries: [AnyDependencyContext]
 
-    var injectedDependencies: [any Module] {
-        entries.reduce(into: []) { result, dependencies in
-            result.append(contentsOf: dependencies.injectedDependencies)
-        }
-    }
-
     init(_ entries: [AnyDependencyContext]) {
         self.entries = entries
     }
@@ -33,7 +27,7 @@ public struct DependencyCollection: DependencyDeclaration {
     /// ### Usage
     ///
     /// The `SomeCustomDependencyBuilder` enforces certain type constraints (e.g., `SomeTypeConstraint`, more specific than ``Module``) during aggregation of ``Module/Dependency``s (``Module``s)  via a result builder.
-    /// The individual dependency expressions within the result builder conforming to `SomeTypeConstraint` are then transformed to a ``DependencyCollection`` via ``DependencyCollection/init(for:singleEntry:)``.
+    /// The individual dependency expressions within the result builder conforming to `SomeTypeConstraint` are then transformed to a ``DependencyCollection`` via ``DependencyCollection/init(for:singleEntry:)-6ihsh``.
     ///
     /// ```swift
     /// @resultBuilder
@@ -47,6 +41,30 @@ public struct DependencyCollection: DependencyDeclaration {
     /// See `_DependencyPropertyWrapper/init(using:)` for a continued example regarding the usage of the implemented result builder.
     public init<Dependency: Module>(for type: Dependency.Type = Dependency.self, singleEntry: @escaping (() -> Dependency)) {
         self.init(DependencyContext(for: type, defaultValue: singleEntry))
+    }
+
+    /// Creates a ``DependencyCollection`` from a closure resulting in a single generic type conforming to the Spezi  ``Module``.
+    /// - Parameters:
+    ///   - type: The generic type resulting from the passed closure, has to conform to ``Module``.
+    ///   - singleEntry: Closure returning a dependency conforming to ``Module``, stored within the ``DependencyCollection``.
+    ///
+    /// ### Usage
+    ///
+    /// The `SomeCustomDependencyBuilder` enforces certain type constraints (e.g., `SomeTypeConstraint`, more specific than ``Module``) during aggregation of ``Module/Dependency``s (``Module``s)  via a result builder.
+    /// The individual dependency expressions within the result builder conforming to `SomeTypeConstraint` are then transformed to a ``DependencyCollection`` via ``DependencyCollection/init(for:singleEntry:)-6nzui``.
+    ///
+    /// ```swift
+    /// @resultBuilder
+    /// public enum SomeCustomDependencyBuilder: DependencyCollectionBuilder {
+    ///     public static func buildExpression<T: SomeTypeConstraint>(_ expression: @escaping @autoclosure () -> T) -> DependencyCollection {
+    ///         DependencyCollection(singleEntry: expression)
+    ///     }
+    /// }
+    /// ```
+    ///
+    /// See `_DependencyPropertyWrapper/init(using:)` for a continued example regarding the usage of the implemented result builder.
+    public init<Dependency: Module>(for type: Dependency.Type = Dependency.self, singleEntry: @escaping @autoclosure (() -> Dependency)) {
+        self.init(singleEntry: singleEntry)
     }
 
 
@@ -72,6 +90,12 @@ public struct DependencyCollection: DependencyDeclaration {
     func inject(from dependencyManager: DependencyManager) {
         for entry in entries {
             entry.inject(from: dependencyManager)
+        }
+    }
+
+    func inject(spezi: Spezi) {
+        for entry in entries {
+            entry.inject(spezi: spezi)
         }
     }
 

@@ -126,6 +126,10 @@ private final class TestModule8: Module {
     init() {}
 }
 
+private final class SimpleOptionalModuleDependency: Module {
+    @Dependency var testModule6: TestModule6?
+}
+
 
 final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_length
     @MainActor
@@ -495,4 +499,69 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
         let dut4Module = try XCTUnwrap(dut4.testModule3)
         XCTAssertEqual(dut4Module.state, 4)
     }
+
+    @MainActor
+    func testMultipleDependenciesOfSameType() throws {
+        let first = TestModule5()
+        let second = TestModule5()
+
+        let spezi = Spezi(standard: DefaultStandard(), modules: [first, second, TestModule4()])
+
+        let modules = spezi.modules
+        func getModule<M: Module>(_ module: M.Type = M.self) throws -> M {
+            try XCTUnwrap(modules.first(where: { $0 is M }) as? M)
+        }
+
+        XCTAssertEqual(modules.count, 4) // 3 modules + standard
+        _ = try getModule(DefaultStandard.self)
+
+        let testModule4 = try getModule(TestModule4.self)
+
+        XCTAssertTrue(testModule4.testModule5 === first)
+    }
+
+    @MainActor
+    func testUnloadingWeakDependencyOfSameType() async throws {
+        let spezi = Spezi(standard: DefaultStandard(), modules: [SimpleOptionalModuleDependency()])
+
+        let modules = spezi.modules
+        func getModule<M: Module>(_ module: M.Type = M.self) throws -> M {
+            try XCTUnwrap(modules.first(where: { $0 is M }) as? M)
+        }
+
+        XCTAssertEqual(modules.count, 2)
+        _ = try getModule(DefaultStandard.self)
+        let module = try getModule(SimpleOptionalModuleDependency.self)
+
+        XCTAssertNil(module.testModule6)
+
+        let dynamicModule6 = TestModule6()
+        let baseModule6 = TestModule6()
+
+        let scope = {
+            let weakModule6 = TestModule6()
+
+            spezi.loadModule(weakModule6, ownership: .external)
+            spezi.loadModule(dynamicModule6)
+            spezi.loadModule(baseModule6)
+
+            // should contain the first loaded dependency
+            XCTAssertNotNil(module.testModule6)
+            XCTAssertTrue(module.testModule6 === weakModule6)
+        }
+
+        scope()
+
+        // after externally managed dependency goes out of scope it should automatically switch to next dependency
+        XCTAssertNotNil(module.testModule6)
+        XCTAssertTrue(module.testModule6 === dynamicModule6)
+
+        spezi.unloadModule(dynamicModule6)
+
+        // after manual unload it should take the next available
+        XCTAssertNotNil(module.testModule6)
+        XCTAssertTrue(module.testModule6 === baseModule6)
+    }
 }
+
+// swiftlint:disable:this file_length

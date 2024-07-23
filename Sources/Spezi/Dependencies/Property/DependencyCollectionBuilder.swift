@@ -16,7 +16,7 @@
 /// static func buildExpression<M: Module>(_ expression: @escaping @autoclosure () -> M) -> DependencyCollection
 /// ```
 ///
-/// See ``DependencyCollection/init(for:singleEntry:)`` for an example conformance implementation of the ``DependencyCollectionBuilder``.
+/// See ``DependencyCollection/init(for:singleEntry:)-6nzui`` for an example conformance implementation of the ``DependencyCollectionBuilder``.
 public protocol DependencyCollectionBuilder {}
 
 

@@ -14,42 +14,6 @@ import SwiftUI
 import XCTRuntimeAssertions
 
 
-/// A ``SharedRepository`` implementation that is anchored to ``SpeziAnchor``.
-///
-/// This represents the central ``Spezi/Spezi`` storage module.
-@_documentation(visibility: internal)
-public typealias SpeziStorage = ValueRepository<SpeziAnchor>
-
-
-private struct ImplicitlyCreatedModulesKey: DefaultProvidingKnowledgeSource {
-    typealias Value = Set<ModuleReference>
-    typealias Anchor = SpeziAnchor
-
-    static let defaultValue: Value = []
-}
-
-
-private protocol AnyWeaklyStoredModule {
-    var anyModule: (any Module)? { get }
-
-    @discardableResult
-    func retrievePurgingIfNil<Repository: SharedRepository<SpeziAnchor>>(in storage: inout Repository) -> (any Module)?
-}
-
-
-struct WeaklyStoredModule<M: Module>: KnowledgeSource {
-    typealias Anchor = SpeziAnchor
-    typealias Value = Self
-
-    weak var module: M?
-
-
-    init(_ module: M) {
-        self.module = module
-    }
-}
-
-
 /// Open-source framework for rapid development of modern, interoperable digital health applications.
 ///
 /// Set up the Spezi framework in your `App` instance of your SwiftUI application using the ``SpeziAppDelegate`` and the `@ApplicationDelegateAdaptor` property wrapper.
@@ -154,20 +118,28 @@ public final class Spezi: Sendable {
     )
     @_spi(Spezi)
     public var lifecycleHandler: [LifecycleHandler] {
-        storage.collect(allOf: LifecycleHandler.self)
+        modules.compactMap { module in
+            module as? LifecycleHandler
+        }
     }
 
     var notificationTokenHandler: [NotificationTokenHandler] {
-        storage.collect(allOf: NotificationTokenHandler.self)
+        modules.compactMap { module in
+            module as? NotificationTokenHandler
+        }
     }
     
     var notificationHandler: [NotificationHandler] {
-        storage.collect(allOf: NotificationHandler.self)
+        modules.compactMap { module in
+            module as? NotificationHandler
+        }
     }
     
     var modules: [any Module] {
-        storage.collect(allOf: (any Module).self)
-            + storage.collect(allOf: (any AnyWeaklyStoredModule).self).compactMap { $0.retrievePurgingIfNil(in: &storage) }
+        storage.collect(allOf: (any AnyStoredModules).self)
+            .reduce(into: []) { partialResult, modules in
+                partialResult.append(contentsOf: modules.anyModules)
+            }
     }
 
     @MainActor private var implicitlyCreatedModules: Set<ModuleReference> {
@@ -422,16 +394,27 @@ public final class Spezi: Sendable {
         }
     }
 
+    func retrieveDependencyReplacement<M: Module>(for type: M.Type) -> M? {
+        guard let storedModules = storage[StoredModulesKey<M>.self] else {
+            return nil
+        }
+
+        let replacement = storedModules.retrieveFirstAvailable()
+        storedModules.removeNilReferences(in: &storage) // if we ask for a replacement, there is opportunity to clean up weak reference objects
+        return replacement
+    }
+
     /// Iterates through weakly referenced modules and purges any nil references.
     ///
     /// These references are purged lazily. This is generally no problem because the overall overhead will be linear.
     /// If you load `n` modules with self-managed storage policy and then all `n` modules will eventually be deallocated, there might be `n` weak references still stored
     /// till the next module interaction is performed (e.g., new module is loaded or unloaded).
     private func purgeWeaklyReferenced() {
-        let elements = storage.collect(allOf: (any AnyWeaklyStoredModule).self)
-        for reference in elements {
-            reference.retrievePurgingIfNil(in: &storage)
-        }
+        storage
+            .collect(allOf: (any AnyStoredModules).self)
+            .forEach { storedModules in
+                storedModules.removeNilReferences(in: &storage)
+            }
     }
 }
 
@@ -439,48 +422,43 @@ public final class Spezi: Sendable {
 extension Module {
     @MainActor
     fileprivate func storeModule(into spezi: Spezi) {
-        guard let value = self as? Value else {
-            spezi.logger.warning("Could not store \(Self.self) in the SpeziStorage as the `Value` typealias was modified.")
-            return
-        }
-        spezi.storage[Self.self] = value
+        storeDynamicReference(.element(self), into: spezi)
     }
 
     @MainActor
     fileprivate func storeWeakly(into spezi: Spezi) {
-        guard self is Value else {
-            spezi.logger.warning("Could not store \(Self.self) in the SpeziStorage as the `Value` typealias was modified.")
-            return
-        }
+        storeDynamicReference(.weakElement(self), into: spezi)
+    }
 
-        spezi.storage[WeaklyStoredModule<Self>.self] = WeaklyStoredModule(self)
+    @MainActor
+    fileprivate func storeDynamicReference(_ module: DynamicReference<Self>, into spezi: Spezi) {
+        if spezi.storage.contains(StoredModulesKey<Self>.self) {
+            // swiftlint:disable:next force_unwrapping
+            spezi.storage[StoredModulesKey<Self>.self]!.updateValue(module, forKey: self.reference)
+        } else {
+            spezi.storage[StoredModulesKey<Self>.self] = StoredModulesKey(module, forKey: reference)
+        }
     }
 
     @MainActor
     fileprivate func isLoaded(in spezi: Spezi) -> Bool {
-        spezi.storage[Self.self] != nil
-            || spezi.storage[WeaklyStoredModule<Self>.self]?.retrievePurgingIfNil(in: &spezi.storage) != nil
+        guard let storedModules = spezi.storage[StoredModulesKey<Self>.self] else {
+            return false
+        }
+        return storedModules.contains(reference)
     }
 
     @MainActor
     fileprivate func clearModule(from spezi: Spezi) {
-        spezi.storage[Self.self] = nil
-        spezi.storage[WeaklyStoredModule<Self>.self] = nil
-    }
-}
-
-
-extension WeaklyStoredModule: AnyWeaklyStoredModule {
-    var anyModule: (any Module)? {
-        module
-    }
-
-
-    func retrievePurgingIfNil<Repository: SharedRepository<SpeziAnchor>>(in storage: inout Repository) -> (any Module)? {
-        guard let module else {
-            storage[Self.self] = nil
-            return nil
+        guard var storedModules = spezi.storage[StoredModulesKey<Self>.self] else {
+            return
         }
-        return module
+        storedModules.removeValue(forKey: reference)
+
+        if storedModules.isEmpty {
+            spezi.storage[StoredModulesKey<Self>.self] = nil
+        } else {
+            spezi.storage[StoredModulesKey<Self>.self] = storedModules
+        }
     }
 }

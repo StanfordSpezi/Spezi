@@ -143,8 +143,9 @@ public class DependencyManager: Sendable {
     ///   - optional: Flag indicating if it is a optional return.
     /// - Returns: Returns the Module instance. Only optional, if `optional` is set to `true` and no Module was found.
     func retrieve<M: Module>(module: M.Type = M.self, optional: Bool = false) -> M? {
-        guard let candidate = initializedModules.first(where: { type(of: $0) == M.self }) ?? existingModules.first(where: { type(of: $0) == M.self }),
-            let module = candidate as? M else {
+        guard let candidate = existingModules.first(where: { type(of: $0) == M.self })
+                ?? initializedModules.first(where: { type(of: $0) == M.self }),
+              let module = candidate as? M else {
             precondition(optional, "Could not located dependency of type \(M.self)!")
             return nil
         }

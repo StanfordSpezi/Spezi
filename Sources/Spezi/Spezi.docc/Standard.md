@@ -10,10 +10,6 @@ SPDX-License-Identifier: MIT
 
 -->
 
-@Metadata {
-    @DocumentationExtension(mergeBehavior: append)
-}
-
 Modules can use the constraint mechanism to enforce a set of requirements to the ``Standard`` used in the Spezi-based software where the module is used.
 This mechanism follows a two-step process detailed in the module documentation: ``Module``.
 
