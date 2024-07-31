@@ -86,7 +86,7 @@ private final class TestModule7: Module {
 
 
 private final class OptionalModuleDependency: Module {
-    @Dependency var testModule3: TestModule3?
+    @Dependency(TestModule3.self) var testModule3: TestModule3?
 
     @Collect var nums: [Int]
 }
@@ -111,7 +111,7 @@ private final class AllPropertiesModule: Module {
 }
 
 private final class OptionalDependencyWithRuntimeDefault: Module {
-    @Dependency var testModule3: TestModule3?
+    @Dependency(TestModule3.self) var testModule3: TestModule3?
 
     init(defaultValue: Int?) {
         if let defaultValue {
@@ -121,12 +121,19 @@ private final class OptionalDependencyWithRuntimeDefault: Module {
 }
 
 private final class TestModule8: Module {
-    @Dependency var testModule1: TestModule1?
+    @Dependency(TestModule1.self) var testModule1: TestModule1?
 
     init() {}
 }
 
 private final class SimpleOptionalModuleDependency: Module {
+    @Dependency(TestModule6.self) var testModule6: TestModule6?
+}
+
+
+// Test that deprecated declaration still compile as expected
+@available(*, deprecated, message: "Propagate deprecation warning")
+private final class DeprecatedDeclarations: Module {
     @Dependency var testModule6: TestModule6?
 }
 

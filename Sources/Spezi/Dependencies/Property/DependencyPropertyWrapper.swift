@@ -52,8 +52,44 @@ public class _DependencyPropertyWrapper<Value> { // swiftlint:disable:this type_
         self.dependencies = dependencies
     }
 
+    fileprivate convenience init<T>(_ context: DependencyContext<T>) {
+        self.init(DependencyCollection(context))
+    }
+
+    /// Create an optional dependency.
+    /// - Parameter dependencyType: The wrapped type of the optional dependency.
+    public convenience init<T>(_ dependencyType: T.Type) where Value == T?, T: Module {
+        self.init(DependencyCollection(DependencyContext(for: T.self, type: .optional)))
+    }
+
+    /// Create an optional dependency with a default value.
+    /// - Parameters:
+    ///   - dependencyType: The wrapped type of the optional dependency.
+    ///   - defaultValue: The default value that is used if no instance was supplied otherwise.
+    public convenience init<T>(_ dependencyType: T.Type, wrappedValue defaultValue: @escaping @autoclosure () -> T) where Value == T?, T: Module {
+        // TODO: default value might depend on init order!
+        self.init(DependencyContext(for: T.self, type: .optional, defaultValue: defaultValue))
+    }
+
+    public convenience init(_ dependencyType: Value.Type) where Value: Module {
+        self.init(DependencyContext(for: Value.self, type: .required))
+    }
+
+    /// Create a required dependency with a default value.
+    /// - Parameters:
+    ///   - dependencyType: The wrapped type of the dependency.
+    ///   - defaultValue: The default value that is used if no instance was supplied otherwise.
+    public convenience init(_ dependencyType: Value.Type, wrappedValue defaultValue: @escaping @autoclosure () -> Value) where Value: Module {
+        self.init(DependencyContext(for: Value.self, type: .required, defaultValue: defaultValue))
+    }
+
+    public convenience init(_ dependencyType: Value.Type = Value.self, load dependency: Value) where Value: Module {
+        // TODO: allow to loadModule within the init?
+        self.init(DependencyContext(for: Value.self, type: .load, defaultValue: { dependency }))
+    }
+
     /// Declare a dependency to a module that can provide a default value on its own.
-    public convenience init() where Value: Module & DefaultInitializable {
+    public convenience init() where Value: Module & DefaultInitializable { // TODO: deprecate?, manually specify default value! or keep it somehow?
         // this init is placed here directly, otherwise Swift has problems resolving this init
         self.init(wrappedValue: Value())
     }
@@ -108,12 +144,13 @@ extension _DependencyPropertyWrapper: DependencyDeclaration {
 extension _DependencyPropertyWrapper: SingleModuleDependency where Value: Module {
     /// Create a dependency and supply a default value.
     /// - Parameter defaultValue: The default value to be used if there is no other instance configured.
+    @available(*, deprecated, renamed: "init(_:wrappedValue:)", message: "Please specify the Value type of your dependency as the first argument.")
     public convenience init(wrappedValue defaultValue: @escaping @autoclosure () -> Value) {
-        self.init(DependencyCollection(DependencyContext(defaultValue: defaultValue)))
+        self.init(DependencyContext(for: Value.self, type: .required, defaultValue: defaultValue))
     }
 
 
-    func wrappedValue<WrappedValue>(as value: WrappedValue.Type) -> WrappedValue {
+    fileprivate func wrappedValue<WrappedValue>(as value: WrappedValue.Type) -> WrappedValue {
         dependencies.singleDependencyRetrieval()
     }
 }
@@ -121,8 +158,9 @@ extension _DependencyPropertyWrapper: SingleModuleDependency where Value: Module
 
 extension _DependencyPropertyWrapper: OptionalModuleDependency where Value: AnyOptional, Value.Wrapped: Module {
     /// Create a empty, optional dependency.
+    @available(*, deprecated, renamed: "init(_:)", message: "Please specify the Wrapped type of your optional dependency as the first argument.")
     public convenience init() {
-        self.init(DependencyCollection(DependencyContext(for: Value.Wrapped.self)))
+        self.init(DependencyCollection(DependencyContext(for: Value.Wrapped.self, type: .optional)))
     }
 
     /// Create a optional dependency but supplying a default value.
@@ -130,12 +168,16 @@ extension _DependencyPropertyWrapper: OptionalModuleDependency where Value: AnyO
     /// This allows to dynamically build the dependency tree on runtime.
     /// For example, you might only declare a dependency to a Module if a given runtime check succeeds.
     /// - Parameter defaultValue: The default value to be used if declared.
+    @available(
+        *, deprecated, renamed: "init(_:wrappedValue:)",
+        message: "Please specify the Wrapped type of your optional dependency as the first argument."
+    )
     public convenience init(wrappedValue defaultValue: @escaping @autoclosure () -> Value.Wrapped) {
-        self.init(DependencyCollection(DependencyContext(defaultValue: defaultValue)))
+        self.init(DependencyContext(for: Value.Wrapped.self, type: .optional, defaultValue: defaultValue))
     }
 
 
-    func wrappedValue<WrappedValue>(as value: WrappedValue.Type) -> WrappedValue {
+    fileprivate func wrappedValue<WrappedValue>(as value: WrappedValue.Type) -> WrappedValue {
         guard let value = dependencies.singleOptionalDependencyRetrieval(for: Value.Wrapped.self) as? WrappedValue else {
             preconditionFailure("Failed to convert from Optional<\(Value.Wrapped.self)> to \(WrappedValue.self)")
         }
@@ -184,7 +226,7 @@ extension _DependencyPropertyWrapper: ModuleArrayDependency where Value == [any 
     }
     
 
-    func wrappedValue<WrappedValue>(as value: WrappedValue.Type) -> WrappedValue {
+    fileprivate func wrappedValue<WrappedValue>(as value: WrappedValue.Type) -> WrappedValue {
         guard let modules = dependencies.retrieveModules() as? WrappedValue else {
             preconditionFailure("\(WrappedValue.self) doesn't match expected type \(Value.self)")
         }

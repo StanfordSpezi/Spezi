@@ -12,6 +12,6 @@
 public enum DependencyBuilder: DependencyCollectionBuilder {
     /// An auto-closure expression, providing the default dependency value, building the ``DependencyCollection``.
     public static func buildExpression<M: Module>(_ expression: @escaping @autoclosure () -> M) -> DependencyCollection {
-        DependencyCollection(DependencyContext(defaultValue: expression))
+        DependencyCollection(DependencyContext(for: M.self, type: .load, defaultValue: expression)) // TODO: review how to treat those here?
     }
 }

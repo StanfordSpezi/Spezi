@@ -40,7 +40,7 @@ public struct DependencyCollection: DependencyDeclaration {
     ///
     /// See `_DependencyPropertyWrapper/init(using:)` for a continued example regarding the usage of the implemented result builder.
     public init<Dependency: Module>(for type: Dependency.Type = Dependency.self, singleEntry: @escaping (() -> Dependency)) {
-        self.init(DependencyContext(for: type, defaultValue: singleEntry))
+        self.init(DependencyContext(for: type, type: .load, defaultValue: singleEntry)) // TODO: update these?
     }
 
     /// Creates a ``DependencyCollection`` from a closure resulting in a single generic type conforming to the Spezi  ``Module``.
