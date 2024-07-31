@@ -7,16 +7,33 @@
 //
 
 
-/// A protocol enabling the implementation of a result builder to build a ``DependencyCollection``.
-/// Enables the simple construction of a result builder accepting ``Module``s with additional type constraints (useful for DSL implementations).
+/// Implement a custom result builder to build a `DependencyCollection`.
 ///
-/// Upon conformance, developers are required to implement a single result builder function transforming an arbitrary ``Module`` type constraint (M in the example below) to a ``DependencyCollection``.
-/// All other result builder functions for constructing a ``DependencyCollection`` are provided as a default protocol implementation.
+/// A ``DependencyCollection`` is a collection of dependencies that can be passed to the ``Module/Dependency`` property wrapper of a `Module`.
+/// This protocol allows you to easily implement a result builder with custom expression, building a ``DependencyCollection`` component.
+///
+/// To create your own result builder, just add adopt the `DependencyCollectionBuilder` protocol and add your custom expressions.
+/// The code example below shows the implementation of a `SpecialModuleBuilder` that only allows to build modules of type `SpecialModule`.
+///
 /// ```swift
-/// static func buildExpression<M: Module>(_ expression: @escaping @autoclosure () -> M) -> DependencyCollection
+/// @resultBuilder
+/// enum SpecialModuleBuilder: DependencyCollectionBuilder {
+///     static func buildExpression<M: SpecialModule & Module>(_ expression: M) -> DependencyCollection {
+///         DependencyCollection(expression)
+///     }
+/// }
 /// ```
 ///
-/// See ``DependencyCollection/init(for:singleEntry:)-6nzui`` for an example conformance implementation of the ``DependencyCollectionBuilder``.
+/// You could then use this result builder to accept only `SpecialModule` conforming modules in, e.g., the initializer of your Spezi module.
+/// ```swift
+/// final class MyModule: Module {
+///     @Dependency private var specials: [any Module]
+///
+///     init(@SpecialModuleBuilder modules: () -> DependencyCollection) {
+///         _specials = Dependency(using: modules())
+///     }
+/// }
+/// ```
 public protocol DependencyCollectionBuilder {}
 
 
@@ -49,8 +66,8 @@ extension DependencyCollectionBuilder {
 
     /// Build an array of ``DependencyCollection`` components.
     public static func buildArray(_ components: [DependencyCollection]) -> DependencyCollection {
-        DependencyCollection(components.reduce(into: []) { result, component in
-            result.append(contentsOf: component.entries)
-        })
+        components.reduce(into: DependencyCollection()) { partialResult, collection in
+            partialResult.append(contentsOf: collection)
+        }
     }
 }

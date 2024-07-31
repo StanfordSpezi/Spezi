@@ -28,8 +28,11 @@ public class DependencyManager: Sendable {
 
     /// Collection of all modules with dependencies that are not yet processed.
     private var modulesWithDependencies: [any Module]
-    /// Recursive search stack to keep track of potential circular dependencies.
-    private var searchStack: [any Module] = []
+
+
+    /// The current search stack for the module being pushed.
+    private var currentPushedModule: ModuleReference?
+    private var searchStacks: [ModuleReference: [any Module.Type]] = [:]
 
 
     /// A ``DependencyManager`` in Spezi is used to gather information about modules with dependencies.
@@ -49,14 +52,15 @@ public class DependencyManager: Sendable {
 
     /// Resolves the dependency order.
     ///
-    /// After calling `resolve` you can safely access `initializedModules`.
+    /// After calling `resolve()` you can safely access `initializedModules`.
     func resolve() {
-        // Start the dependency resolution on the first module.
         while let nextModule = modulesWithDependencies.first {
             push(nextModule)
         }
 
         injectDependencies()
+        assert(searchStacks.isEmpty, "`searchStacks` are not getting cleaned up!")
+        assert(currentPushedModule == nil, "`currentPushedModule` is never reset!")
     }
 
     private func injectDependencies() {
@@ -64,17 +68,23 @@ public class DependencyManager: Sendable {
         // that wasn't previously injected.
         for module in initializedModules + existingModules {
             for dependency in module.dependencyDeclarations {
-                dependency.inject(from: self)
+                dependency.inject(from: self, for: module)
             }
         }
     }
 
     /// Push a module on the search stack and resolve dependency information.
     private func push(_ module: any Module) {
-        searchStack.append(module)
+        assert(currentPushedModule == nil, "Module already pushed. Did the algorithm turn into an recursive one by accident?")
+
+        currentPushedModule = ModuleReference(module)
+        searchStacks[ModuleReference(module), default: []]
+            .append(type(of: module))
+
         for dependency in module.dependencyDeclarations {
             dependency.collect(into: self) // leads to calls to `require(_:defaultValue:)`
         }
+
         finishSearch(for: module)
     }
 
@@ -83,6 +93,9 @@ public class DependencyManager: Sendable {
     ///   - dependency: The type of the dependency that should be resolved.
     ///   - defaultValue: A default instance of the dependency that is used when the `dependencyType` is not present in the `initializedModules` or `modulesWithDependencies`.
     func require<M: Module>(_ dependency: M.Type, type dependencyType: DependencyType, defaultValue: (() -> M)?) {
+        testForSearchStackCycles(M.self)
+
+        // 1. Check if it is actively requested to load this module.
         if case .load = dependencyType {
             guard let defaultValue else {
                 return // doesn't make sense, just ignore that
@@ -92,28 +105,18 @@ public class DependencyManager: Sendable {
             return
         }
 
-        // 1. Return if the depending module is found in the `initializedModules` collection.
+        // 2. Return if the depending module is already initialized or being initialized.
         if initializedModules.contains(where: { type(of: $0) == M.self })
-            || existingModules.contains(where: { type(of: $0) == M.self }) {
+            || existingModules.contains(where: { type(of: $0) == M.self })
+            || modulesWithDependencies.contains(where: { type(of: $0) == M.self }) {
             return
         }
 
 
-        // 2. Search for the required module is found in the `dependingModules` collection.
-        // If not, use the default value calling the `defaultValue` auto-closure.
-        guard let foundInModulesWithDependencies = modulesWithDependencies.first(where: { type(of: $0) == M.self }) else {
-            // TODO: postpone that? we might have a required dependency in the chain that injects itself?
-            guard let defaultValue else {
-                // TODO: this might be required?
-                // optional dependency. The user didn't supply anything. So we can't deliver anything.
-                return
-            }
-
+        // 3. Otherwise, check if there is a default value we can implicitly load
+        if let defaultValue {
             implicitlyCreate(defaultValue)
-            return
         }
-        
-        testForSearchStackCycles(M.self)
     }
 
     /// Retrieve a resolved dependency for a given type.
@@ -122,11 +125,18 @@ public class DependencyManager: Sendable {
     ///   - module: The ``Module`` type to return.
     ///   - optional: Flag indicating if it is a optional return.
     /// - Returns: Returns the Module instance. Only optional, if `optional` is set to `true` and no Module was found.
-    func retrieve<M: Module>(module: M.Type = M.self, type dependencyType: DependencyType) -> M? {
+    func retrieve<M: Module>(module: M.Type, type dependencyType: DependencyType, for owner: any Module) -> M? {
         guard let candidate = existingModules.first(where: { type(of: $0) == M.self })
                 ?? initializedModules.first(where: { type(of: $0) == M.self }),
               let module = candidate as? M else {
-            precondition(dependencyType.isOptional, "Could not located dependency of type \(M.self)!")
+            precondition(
+                dependencyType.isOptional,
+                """
+                '\(type(of: owner)) requires dependency of type '\(M.self)' which wasn't configured.
+                Please make sure this module is configured by including it in the configuration of your `SpeziAppDelegate` or following \
+                Module-specific instructions.
+                """
+            )
             return nil
         }
 
@@ -140,48 +150,45 @@ public class DependencyManager: Sendable {
 
         if newModule.dependencyDeclarations.isEmpty {
             initializedModules.append(newModule)
-            return
         } else {
-            modulesWithDependencies.insert(newModule, at: 0)
-            push(newModule)
+            saveSearchStack(for: newModule)
+
+            modulesWithDependencies.append(newModule) // appending for BFS
         }
     }
 
     private func finishSearch(for dependingModule: any Module) {
-        guard !searchStack.isEmpty else {
-            preconditionFailure("Internal logic error in the `DependencyManager`. Search Stack is empty.")
-        }
-        let module = searchStack.removeLast()
-
-        guard module === dependingModule else {
-            preconditionFailure("Internal logic error in the `DependencyManager`. Search Stack element was not the one we are resolving for.")
-        }
+        currentPushedModule = nil
+        searchStacks.removeValue(forKey: ModuleReference(dependingModule))
 
 
         let dependingModulesCount = modulesWithDependencies.count
         modulesWithDependencies.removeAll(where: { $0 === dependingModule })
-        precondition(
-            dependingModulesCount - 1 == modulesWithDependencies.count,
-            "Unexpected reduction of modules."
-        )
+        precondition(dependingModulesCount - 1 == modulesWithDependencies.count, "Unexpected reduction of modules.")
 
         initializedModules.append(dependingModule)
     }
 
-    private func testForSearchStackCycles<M>(_ module: M.Type) {
-        // Detect circles in the `recursiveSearch` collection.
-        if searchStack.contains(where: { type(of: $0) == M.self }) {
-            let dependencyChain = searchStack
-                .map { String(describing: type(of: $0)) }
-                .joined(separator: ", ")
+    private func saveSearchStack<M: Module>(for module: M) {
+        guard let currentPushedModule,
+              let searchStack = searchStacks[currentPushedModule] else {
+            return
+        }
+        
+        // propagate the search stack such that we have it available when we call push for this module
+        searchStacks[ModuleReference(module)] = searchStack
+    }
 
-            // The last element must exist as we entered the statement using a successful `contains` statement.
-            // There is not chance to recover here: If there is a crash here, we would fail in the precondition statement in the next line anyways
-            let lastElement = searchStack.last! // swiftlint:disable:this force_unwrapping
-            preconditionFailure(
+    private func testForSearchStackCycles<M>(_ module: M.Type) {
+        if let currentPushedModule {
+            let searchStack = searchStacks[currentPushedModule, default: []]
+
+            precondition(
+                !searchStack.contains(where: { $0 == M.self }),
                 """
                 The `DependencyManager` has detected a dependency cycle of your Spezi modules.
-                The current dependency chain is: \(dependencyChain). The \(String(describing: type(of: lastElement))) required a type already present in the dependency chain.
+                The current dependency chain is: \(searchStack.map { String(describing: $0) }.joined(separator: ", ")). \
+                The module '\(searchStack.last.unsafelyUnwrapped)' required '\(M.self)' which is contained in its own dependency chain.
                 
                 Please ensure that the modules you use or develop can not trigger a dependency cycle.
                 """

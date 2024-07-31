@@ -92,8 +92,8 @@ class DependencyContext<Dependency: Module>: AnyDependencyContext {
         dependencyManager.require(Dependency.self, type: type, defaultValue: defaultValue)
     }
 
-    func inject(from dependencyManager: DependencyManager) {
-        guard let dependency = dependencyManager.retrieve(module: Dependency.self, type: type) else {
+    func inject(from dependencyManager: DependencyManager, for module: any Module) {
+        guard let dependency = dependencyManager.retrieve(module: Dependency.self, type: type, for: module) else {
             injectedDependency = nil
             return
         }

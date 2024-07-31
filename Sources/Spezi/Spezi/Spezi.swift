@@ -177,8 +177,10 @@ public final class Spezi: Sendable {
     ) {
         self.standard = standard
         self.storage = consume storage
-        
-        self.loadModules([self.standard] + modules, ownership: .spezi)
+
+        self.loadModules(modules, ownership: .spezi)
+        // load standard separately, such that all module loading takes precedence
+        self.loadModule(standard, ownership: .spezi)
     }
     
     /// Load a new Module.

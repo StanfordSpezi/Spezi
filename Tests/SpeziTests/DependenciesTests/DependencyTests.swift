@@ -16,7 +16,7 @@ private final class TestModule1: Module {
     let deinitExpectation: XCTestExpectation
 
     @Dependency var testModule2 = TestModule2()
-    @Dependency var testModule3: TestModule3
+    @Dependency var testModule3 = TestModule3()
 
     @Provide var num: Int = 1
     @Provide var nums: [Int] = [9, 10]
@@ -42,7 +42,7 @@ private final class TestModuleX: Module {
 private final class TestModule2: Module {
     @Dependency var testModule4 = TestModule4()
     @Dependency var testModule5 = TestModule5()
-    @Dependency var testModule3: TestModule3
+    @Dependency var testModule3 = TestModule3()
 
     @Provide var num: Int = 2
 }
@@ -100,7 +100,7 @@ private final class AllPropertiesModule: Module {
         }
     }
 
-    @Dependency var testModule3: TestModule3
+    @Dependency var testModule3 = TestModule3()
     @Application(\.logger) var logger
     @Application(\.spezi) var spezi
     @Collect var nums: [Int]
@@ -131,10 +131,76 @@ private final class SimpleOptionalModuleDependency: Module {
 }
 
 
+private final class ModuleWithRequiredDependency: Module {
+    final class NestedX: Module, DefaultInitializable {
+        @Dependency var testModuleX = TestModuleX(12)
+
+        @Dependency var testModule6 = TestModule6()
+
+        init() {}
+    }
+
+    @Dependency(TestModule6.self) var testModule6 // either specified from the outside, or it takes the default value from the NestedX
+
+    @Dependency var nestedX = NestedX()
+    @Dependency(TestModuleX.self) var testModuleX: TestModuleX // see in init!
+
+
+    init() {
+        // test that we are searching breadth first
+        _testModuleX = Dependency(load: TestModuleX(42))
+    }
+}
+
+
+private final class InjectionOfOptionalDefaultValue: Module {
+    final class NestedX: Module {
+        @Dependency var testModuleX = TestModuleX(23)
+    }
+    @Dependency(TestModuleX.self) var testModuleX: TestModuleX? // make sure optional dependencies get injected with the default value!
+    @Dependency var nested = NestedX()
+
+    init() {}
+}
+
+
+/*
+private final class TestModuleCircle11: Module {
+    @Dependency var testModuleCircle2 = TestModuleCircle22()
+}
+
+private final class TestModuleCircle22: Module {
+    @Dependency var testModuleCircle1 = TestModuleCircle11()
+}*/
+
+private final class TestModuleCircle1: Module {
+    @Dependency var modules: [any Module]
+
+    init() {}
+
+    init<M: Module>(module: M) {
+        self._modules = Dependency {
+            module
+        }
+    }
+}
+
+private final class TestModuleCircle2: Module {
+    @Dependency var module = TestModuleCircle1()
+}
+
+
 // Test that deprecated declaration still compile as expected
 @available(*, deprecated, message: "Propagate deprecation warning")
 private final class DeprecatedDeclarations: Module {
+    @Dependency var testModule3: TestModule3
     @Dependency var testModule6: TestModule6?
+}
+
+
+func getModule<M: Module>(_ module: M.Type = M.self, in modules: [any Module], file: StaticString = #filePath, line: UInt = #line) throws -> M {
+    // swiftlint:disable:previous function_default_parameter_at_end
+    try XCTUnwrap(modules.first(where: { $0 is M }) as? M, "Could not find module \(M.self) loaded. Available: \(modules)", file: file, line: line)
 }
 
 
@@ -144,13 +210,9 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
         let spezi = Spezi(standard: DefaultStandard(), modules: [OptionalModuleDependency()])
 
         var modules = spezi.modules
-        func getModule<M: Module>(_ module: M.Type = M.self) throws -> M {
-            try XCTUnwrap(modules.first(where: { $0 is M }) as? M)
-        }
-
         XCTAssertEqual(modules.count, 2)
-        _ = try getModule(DefaultStandard.self)
-        var optionalModuleDependency: OptionalModuleDependency = try getModule()
+        _ = try getModule(DefaultStandard.self, in: modules)
+        var optionalModuleDependency: OptionalModuleDependency = try getModule(in: modules)
 
         XCTAssertNil(optionalModuleDependency.testModule3)
 
@@ -158,9 +220,9 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
         
         modules = spezi.modules
         XCTAssertEqual(modules.count, 3)
-        _ = try getModule(DefaultStandard.self)
-        optionalModuleDependency = try getModule()
-        var testModule3: TestModule3 = try getModule()
+        _ = try getModule(DefaultStandard.self, in: modules)
+        optionalModuleDependency = try getModule(in: modules)
+        var testModule3: TestModule3 = try getModule(in: modules)
 
         XCTAssert(optionalModuleDependency.testModule3 === testModule3)
 
@@ -169,13 +231,13 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
         modules = spezi.modules
         XCTAssertEqual(modules.count, 7)
 
-        _ = try getModule(DefaultStandard.self)
-        let testModule1: TestModule1 = try getModule()
-        let testModule2: TestModule2 = try getModule()
-        testModule3 = try getModule()
-        let testModule4: TestModule4 = try getModule()
-        let testModule5: TestModule5 = try getModule()
-        optionalModuleDependency = try getModule()
+        _ = try getModule(DefaultStandard.self, in: modules)
+        let testModule1: TestModule1 = try getModule(in: modules)
+        let testModule2: TestModule2 = try getModule(in: modules)
+        testModule3 = try getModule(in: modules)
+        let testModule4: TestModule4 = try getModule(in: modules)
+        let testModule5: TestModule5 = try getModule(in: modules)
+        optionalModuleDependency = try getModule(in: modules)
 
         XCTAssert(testModule4.testModule5 === testModule5)
         XCTAssert(testModule2.testModule5 === testModule5)
@@ -225,7 +287,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
             XCTAssertEqual(optionalModule.nums, [3])
 
             spezi.loadModule(module1)
-            XCTAssertEqual(optionalModule.nums, [3, 5, 4, 2, 1, 9, 10, 11])
+            XCTAssertEqual(Set(optionalModule.nums), Set([3, 5, 4, 2, 1, 9, 10, 11]))
 
             XCTAssertEqual(spezi.modules.count, 7)
 
@@ -233,12 +295,8 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
             XCTAssertEqual(optionalModule.nums, [3])
 
             var modules = spezi.modules
-            func getModule<M: Module>(_ module: M.Type = M.self) throws -> M {
-                try XCTUnwrap(modules.first(where: { $0 is M }) as? M)
-            }
-
-            let optionalModuleLoaded: OptionalModuleDependency = try getModule()
-            let module3Loaded: TestModule3 = try getModule()
+            let optionalModuleLoaded: OptionalModuleDependency = try getModule(in: modules)
+            let module3Loaded: TestModule3 = try getModule(in: modules)
 
             XCTAssertNil(modules.first(where: { $0 is TestModule1 }))
             XCTAssertNil(modules.first(where: { $0 is TestModule2 }))
@@ -258,7 +316,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
             XCTAssertNil(modules.first(where: { $0 is TestModule4 }))
             XCTAssertNil(modules.first(where: { $0 is TestModule5 }))
 
-            XCTAssertNil(try getModule(OptionalModuleDependency.self).testModule3)
+            XCTAssertNil(try getModule(OptionalModuleDependency.self, in: modules).testModule3)
             return spezi
         }
 
@@ -284,7 +342,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
             let spezi = Spezi(standard: DefaultStandard(), modules: [optionalModule, moduleX, module8])
 
             spezi.loadModule(module1, ownership: .external) // LOAD AS EXTERNAL
-            XCTAssertEqual(optionalModule.nums, [5, 5, 4, 3, 2, 1, 9, 10, 11])
+            XCTAssertEqual(Set(optionalModule.nums), Set([5, 5, 4, 3, 2, 1, 9, 10, 11]))
 
             // leaving this scope causes the module1 to deallocate and should automatically unload it from Spezi!
             XCTAssertEqual(spezi.modules.count, 9)
@@ -324,12 +382,12 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
         XCTAssertEqual(initializedModules.count, 7)
         
         _ = try XCTUnwrap(initializedModules[0] as? TestModule6)
-        let testModuleMock5 = try XCTUnwrap(initializedModules[1] as? TestModule5)
-        let testModuleMock4 = try XCTUnwrap(initializedModules[2] as? TestModule4)
-        let testModuleMock3 = try XCTUnwrap(initializedModules[3] as? TestModule3)
-        let testModuleMock2 = try XCTUnwrap(initializedModules[4] as? TestModule2)
-        let testModuleMock1 = try XCTUnwrap(initializedModules[5] as? TestModule1)
-        _ = try XCTUnwrap(initializedModules[6] as? TestModule7)
+        let testModuleMock5: TestModule5 = try getModule(in: initializedModules)
+        let testModuleMock4: TestModule4 = try getModule(in: initializedModules)
+        let testModuleMock3: TestModule3 = try getModule(in: initializedModules)
+        let testModuleMock2: TestModule2 = try getModule(in: initializedModules)
+        let testModuleMock1: TestModule1 = try getModule(in: initializedModules)
+        _ = try getModule(TestModule7.self, in: initializedModules)
         
         XCTAssert(testModuleMock4.testModule5 === testModuleMock5)
         XCTAssert(testModuleMock2.testModule5 === testModuleMock5)
@@ -351,11 +409,11 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
 
         XCTAssertEqual(initializedModules.count, 4)
         
-        let testModule5 = try XCTUnwrap(initializedModules[0] as? TestModule5)
-        let testModule4 = try XCTUnwrap(initializedModules[1] as? TestModule4)
-        let testModule3 = try XCTUnwrap(initializedModules[2] as? TestModule3)
-        let testModule2 = try XCTUnwrap(initializedModules[3] as? TestModule2)
-        
+        let testModule5: TestModule5 = try getModule(in: initializedModules)
+        let testModule4: TestModule4 = try getModule(in: initializedModules)
+        let testModule3: TestModule3 = try getModule(in: initializedModules)
+        let testModule2: TestModule2 = try getModule(in: initializedModules)
+
         XCTAssert(testModule4.testModule5 === testModule5)
         XCTAssert(testModule2.testModule5 === testModule5)
         XCTAssert(testModule2.testModule4 === testModule4)
@@ -373,10 +431,10 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
 
         XCTAssertEqual(initializedModules.count, 3)
 
-        let testModule5 = try XCTUnwrap(initializedModules[0] as? TestModule5)
-        let testModule40 = try XCTUnwrap(initializedModules[1] as? TestModule4)
-        let testModule41 = try XCTUnwrap(initializedModules[2] as? TestModule4)
-        
+        let testModule5: TestModule5 = try getModule(in: initializedModules)
+        let testModule40 = try XCTUnwrap(initializedModules.compactMap { $0 as? TestModule4 }.first)
+        let testModule41 = try XCTUnwrap(initializedModules.compactMap { $0 as? TestModule4 }.last)
+
         XCTAssert(testModule40 !== testModule41)
         
         XCTAssert(testModule40.testModule5 === testModule5)
@@ -393,12 +451,12 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
 
         XCTAssertEqual(initializedModules.count, 5)
 
-        let testModule5 = try XCTUnwrap(initializedModules[0] as? TestModule5)
-        let testModule4 = try XCTUnwrap(initializedModules[1] as? TestModule4)
-        let testModule3 = try XCTUnwrap(initializedModules[2] as? TestModule3)
-        let testModule20 = try XCTUnwrap(initializedModules[3] as? TestModule2)
-        let testModule21 = try XCTUnwrap(initializedModules[4] as? TestModule2)
-        
+        let testModule5: TestModule5 = try getModule(in: initializedModules)
+        let testModule4: TestModule4 = try getModule(in: initializedModules)
+        let testModule3: TestModule3 = try getModule(in: initializedModules)
+        let testModule20 = try XCTUnwrap(initializedModules.compactMap { $0 as? TestModule2 }.first)
+        let testModule21 = try XCTUnwrap(initializedModules.compactMap { $0 as? TestModule2 }.last)
+
         XCTAssert(testModule4.testModule5 === testModule5)
         
         XCTAssert(testModule20 !== testModule21)
@@ -515,14 +573,11 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
         let spezi = Spezi(standard: DefaultStandard(), modules: [first, second, TestModule4()])
 
         let modules = spezi.modules
-        func getModule<M: Module>(_ module: M.Type = M.self) throws -> M {
-            try XCTUnwrap(modules.first(where: { $0 is M }) as? M)
-        }
 
         XCTAssertEqual(modules.count, 4) // 3 modules + standard
-        _ = try getModule(DefaultStandard.self)
+        _ = try getModule(DefaultStandard.self, in: modules)
 
-        let testModule4 = try getModule(TestModule4.self)
+        let testModule4 = try getModule(TestModule4.self, in: modules)
 
         XCTAssertTrue(testModule4.testModule5 === first)
     }
@@ -532,13 +587,10 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
         let spezi = Spezi(standard: DefaultStandard(), modules: [SimpleOptionalModuleDependency()])
 
         let modules = spezi.modules
-        func getModule<M: Module>(_ module: M.Type = M.self) throws -> M {
-            try XCTUnwrap(modules.first(where: { $0 is M }) as? M)
-        }
 
         XCTAssertEqual(modules.count, 2)
-        _ = try getModule(DefaultStandard.self)
-        let module = try getModule(SimpleOptionalModuleDependency.self)
+        _ = try getModule(DefaultStandard.self, in: modules)
+        let module = try getModule(SimpleOptionalModuleDependency.self, in: modules)
 
         XCTAssertNil(module.testModule6)
 
@@ -568,6 +620,44 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
         // after manual unload it should take the next available
         XCTAssertNotNil(module.testModule6)
         XCTAssertTrue(module.testModule6 === baseModule6)
+    }
+
+    @MainActor
+    func testModuleLoadingOrderAndRequiredModulesBehavior() throws {
+        let spezi = Spezi(standard: DefaultStandard(), modules: [ModuleWithRequiredDependency()])
+
+        let modules = spezi.modules
+
+        let module: ModuleWithRequiredDependency = try getModule(in: modules)
+
+        // This tests that dependencies declared on the "outside" take precedence. We test that we are doing a BFS.
+        XCTAssertEqual(module.testModuleX.numX, 42)
+
+        // ensures that we are able to retrieve the required module (that the inner default value was injected)
+        _ = try getModule(TestModule6.self, in: modules)
+        _ = module.testModule6
+    }
+
+    @MainActor
+    func testInjectionOfOptionalDependencyWithDefaultValue() throws {
+        let spezi = Spezi(standard: DefaultStandard(), modules: [InjectionOfOptionalDefaultValue()])
+
+        let modules = spezi.modules
+
+        let module: InjectionOfOptionalDefaultValue = try getModule(in: modules)
+
+        let testX = try XCTUnwrap(module.testModuleX)
+        XCTAssertEqual(testX.numX, 23)
+    }
+
+    @MainActor
+    func testModuleCircle1() throws {
+        let module2 = TestModuleCircle2()
+        let module1 = TestModuleCircle1(module: module2)
+
+        try XCTRuntimePrecondition {
+            _ = DependencyManager.resolve([module1])
+        }
     }
 }
 

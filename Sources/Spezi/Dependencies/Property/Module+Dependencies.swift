@@ -25,7 +25,7 @@ extension Module {
     /// Some modules do not need a default value assigned to the property if they provide a default configuration and conform to ``DefaultInitializable``.
     /// ```swift
     /// class ExampleModule: Module {
-    ///     @Dependency var exampleDependency: ExampleModuleDependency
+    ///     @Dependency(ExampleModuleDependency.self) var exampleDependency
     /// }
     /// ```
     ///
@@ -36,7 +36,7 @@ extension Module {
     ///
     /// ```swift
     /// class ExampleModule: Module {
-    ///     @Dependency var exampleDependency: ExampleModuleDependency?
+    ///     @Dependency(ExampleModuleDependency.self) var exampleDependency: ExampleModuleDependency?
     ///
     ///     func configure() {
     ///         if let exampleDependency {
