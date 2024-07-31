@@ -62,6 +62,17 @@ public class _DependencyPropertyWrapper<Value> { // swiftlint:disable:this type_
         self.init(DependencyCollection(DependencyContext(for: T.self, type: .optional)))
     }
 
+    /// Create an optional dependency with a default value.
+    /// - Parameters:
+    ///   - dependencyType: The wrapped type of the optional dependency.
+    ///   - defaultValue: The default value that is used if no instance was supplied otherwise.
+    public convenience init<T>(
+        wrappedValue defaultValue: @escaping @autoclosure () -> T,
+        _ dependencyType: T.Type = T.self
+    ) where Value == T?, T: Module {
+        self.init(DependencyContext(for: T.self, type: .optional, defaultValue: defaultValue))
+    }
+
     /// Declare a dependency to a module that can provide a default value on its own.
     @available(
         *, deprecated, renamed: "init(wrappedValue:_:)",
