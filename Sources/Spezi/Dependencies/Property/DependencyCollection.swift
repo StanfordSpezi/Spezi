@@ -10,6 +10,19 @@
 /// A collection of dependencies.
 ///
 /// This collection contains a collection of Modules that are meant to be declared as the dependencies of another module.
+///
+/// The code example below demonstrates how you can easily create your collection of dependencies from multiple different types of ``Module``s.
+///
+/// - Tip: You can also use ``append(contentsOf:)`` to combine two collections.
+///
+/// ```swift
+/// var collection = DependencyCollection(ModuleA(), ModuleB(), ModuleC())
+///
+/// collection.append(ModuleD())
+/// ```
+///
+/// - Note: Use the ``DependencyCollectionBuilder`` if you want to create your own result builder that can build a ``DependencyCollection`` component
+///     out of multiple `Module` expressions.
 public struct DependencyCollection {
     private var entries: [AnyDependencyContext]
 

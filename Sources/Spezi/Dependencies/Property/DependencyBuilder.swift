@@ -7,10 +7,12 @@
 //
 
 
-/// A result builder to build a ``DependencyCollection``.
+/// A result builder to build a `DependencyCollection`.
+///
+/// For more information refer to ``DependencyCollection``.
 @resultBuilder
 public enum DependencyBuilder: DependencyCollectionBuilder {
-    /// An auto-closure expression, providing the default dependency value, building the ``DependencyCollection``.
+    /// An auto-closure expression, providing the default dependency value, building the `DependencyCollection`.
     public static func buildExpression<M: Module>(_ expression: M) -> DependencyCollection {
         DependencyCollection(expression)
     }
