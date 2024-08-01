@@ -78,7 +78,7 @@ public class _DependencyPropertyWrapper<Value> { // swiftlint:disable:this type_
         *, deprecated, renamed: "init(wrappedValue:_:)",
          message: "Please explicitly specify the default value for 'DefaultInitializable' modules"
     )
-    public convenience init(_ dependencyType: Value.Type = Value.self) where Value: DefaultInitializable & Module {
+    public convenience init() where Value: DefaultInitializable & Module {
         // we probably want to remove this init in the next major release
 
         // this init is placed here directly, otherwise Swift has problems resolving this init
