@@ -163,16 +163,6 @@ private final class InjectionOfOptionalDefaultValue: Module {
     init() {}
 }
 
-
-/*
-private final class TestModuleCircle11: Module {
-    @Dependency var testModuleCircle2 = TestModuleCircle22()
-}
-
-private final class TestModuleCircle22: Module {
-    @Dependency var testModuleCircle1 = TestModuleCircle11()
-}*/
-
 private final class TestModuleCircle1: Module {
     @Dependency var modules: [any Module]
 
@@ -658,6 +648,31 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
         try XCTRuntimePrecondition {
             _ = DependencyManager.resolve([module1])
         }
+    }
+
+    @MainActor
+    func testMissingRequiredModule() throws {
+        class Module1: Module {
+            @Dependency(TestModuleX.self) var module
+        }
+
+        try XCTRuntimePrecondition {
+            _ = DependencyManager.resolve([Module1()])
+        }
+    }
+
+    @available(*, deprecated, message: "Propagate deprecation warning")
+    @MainActor
+    func testDeprecatedInits() throws {
+        let spezi = Spezi(standard: DefaultStandard(), modules: [DeprecatedDeclarations()])
+
+        let modules = spezi.modules
+
+        let module: DeprecatedDeclarations = try getModule(in: modules)
+
+        XCTAssertNil(module.testModule6)
+        XCTAssertEqual(module.testModule3.state, 0)
+        XCTAssertEqual(module.testModule3.num, 3)
     }
 }
 

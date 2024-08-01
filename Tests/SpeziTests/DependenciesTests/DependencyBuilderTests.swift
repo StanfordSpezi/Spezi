@@ -43,6 +43,18 @@ final class DependencyBuilderTests: XCTestCase {
         XCTAssertEqual(collection.count, 2)
     }
 
+    @available(*, deprecated, message: "Propagate deprecation warning.")
+    @MainActor
+    func testDeprecatedInits() {
+        let collection1 = DependencyCollection(singleEntry: ExampleDependentModule())
+        let collection2 = DependencyCollection(singleEntry: {
+            ExampleDependentModule()
+        })
+
+        XCTAssertEqual(collection1.count, 1)
+        XCTAssertEqual(collection2.count, 1)
+    }
+
 
     @MainActor
     func testDependencyBuilder() throws {
