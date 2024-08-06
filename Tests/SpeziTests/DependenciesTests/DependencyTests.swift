@@ -16,7 +16,7 @@ private final class TestModule1: Module {
     let deinitExpectation: XCTestExpectation
 
     @Dependency var testModule2 = TestModule2()
-    @Dependency var testModule3 = TestModule3()
+    @Dependency(TestModule3.self) var testModule3
 
     @Provide var num: Int = 1
     @Provide var nums: [Int] = [9, 10]
@@ -42,7 +42,7 @@ private final class TestModuleX: Module {
 private final class TestModule2: Module {
     @Dependency var testModule4 = TestModule4()
     @Dependency var testModule5 = TestModule5()
-    @Dependency var testModule3 = TestModule3()
+    @Dependency(TestModule3.self) var testModule3
 
     @Provide var num: Int = 2
 }
@@ -100,7 +100,7 @@ private final class AllPropertiesModule: Module {
         }
     }
 
-    @Dependency var testModule3 = TestModule3()
+    @Dependency(TestModule3.self) var testModule3
     @Application(\.logger) var logger
     @Application(\.spezi) var spezi
     @Collect var nums: [Int]
@@ -142,7 +142,7 @@ private final class ModuleWithRequiredDependency: Module {
 
     @Dependency(TestModule6.self) var testModule6 // either specified from the outside, or it takes the default value from the NestedX
 
-    @Dependency var nestedX = NestedX()
+    @Dependency(NestedX.self) var nestedX
     @Dependency(TestModuleX.self) var testModuleX: TestModuleX // see in init!
 
 

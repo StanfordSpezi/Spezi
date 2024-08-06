@@ -75,8 +75,8 @@ public class _DependencyPropertyWrapper<Value> { // swiftlint:disable:this type_
 
     /// Declare a dependency to a module that can provide a default value on its own.
     @available(
-        *, deprecated, renamed: "init(wrappedValue:_:)",
-         message: "Please explicitly specify the default value for 'DefaultInitializable' modules"
+        *, deprecated, renamed: "init(_:)",
+         message: "Please explicitly specify the Module type."
     )
     public convenience init() where Value: DefaultInitializable & Module {
         // we probably want to remove this init in the next major release
@@ -133,6 +133,10 @@ extension _DependencyPropertyWrapper: DependencyDeclaration {
 
 
 extension _DependencyPropertyWrapper: SingleModuleDependency where Value: Module {
+    /// Create a required dependency.
+    ///
+    /// If the dependency conforms to ``DefaultInitializable`` a default value is automatically supplied, if the module is not found to be configured.
+    /// - Parameter dependencyType: The wrapped type of the dependency.
     public convenience init(_ dependencyType: Value.Type) {
         self.init(DependencyContext(for: Value.self, type: .required))
     }
@@ -176,6 +180,8 @@ extension _DependencyPropertyWrapper: OptionalModuleDependency where Value: AnyO
 
 
 extension _DependencyPropertyWrapper: ModuleArrayDependency where Value == [any Module] {
+    /// Initialize an empty collection of dependencies.
+    @_disfavoredOverload
     public convenience init() {
         self.init(DependencyCollection())
     }
