@@ -7,7 +7,7 @@
 //
 
 
-/// A function builder used to aggregate multiple ``Module``s
+/// A function builder used to aggregate multiple `Modul``s
 @resultBuilder
 public enum ModuleBuilder {
     /// If declared, provides contextual type information for statement expressions to translate them into partial results.

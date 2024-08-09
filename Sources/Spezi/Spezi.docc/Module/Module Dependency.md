@@ -21,6 +21,9 @@ to ensure functionality of a dependency is available at configuration.
 
 > Note: Declaring a cyclic dependency will result in a runtime error. 
 
+Below is a example of declaring a dependence on the `ExampleModuleDependency` and additionally providing a default value that is used
+in the case that the module wasn't already configured by the user (for more information, see section below).
+
 ```swift
 class ExampleModule: Module {
     @Dependency var exampleModuleDependency = ExampleModuleDependency()
@@ -36,7 +39,8 @@ section.
 If you declare a dependency to a `Module` that is not configured by the users (e.g., some underlying configuration `Module`s might not event be
 publicly accessible), is initialized with the instance that was passed to the ``Module/Dependency`` property wrapper.
 
-- Tip: `Module`s can easily provide a default configuration by adopting the ``DefaultInitializable`` protocol.
+- Tip: `Module`s can adopt the ``DefaultInitializable`` protocol to opt into being default configurable. This mandates the presence of a
+    default initializer.
 
 Below is a short code example.
 ```swift
@@ -48,7 +52,8 @@ class ExampleModuleDependency: Module, DefaultInitializable {
 
 
 class ExampleModule: Module {
-    @Dependency var exampleModuleDependency: ExampleModuleDependency
+    // dependency that uses the default init, if module is not externally configured.
+    @Dependency var exampleModuleDependency = ExampleModuleDependency()
 }
 ```
 

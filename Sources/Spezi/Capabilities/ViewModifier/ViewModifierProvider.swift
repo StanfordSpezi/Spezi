@@ -11,7 +11,9 @@ import SwiftUI
 
 
 enum ModifierPlacement: Int, Comparable {
+    /// No specific order requirement.
     case regular
+    /// Outermost placement (e.g., @Model-based property wrappers).
     case outermost
 
     static func < (lhs: ModifierPlacement, rhs: ModifierPlacement) -> Bool {

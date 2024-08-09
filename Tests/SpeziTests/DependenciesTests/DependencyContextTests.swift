@@ -14,7 +14,7 @@ private final class ExampleModule: Module {}
 final class DependencyContextTests: XCTestCase {
     func testInjectionPreconditionDependencyPropertyWrapper() throws {
         try XCTRuntimePrecondition {
-            _ = _DependencyPropertyWrapper<TestModule>(wrappedValue: TestModule()).wrappedValue
+            _ = _DependencyPropertyWrapper<TestModule>(wrappedValue: TestModule(), TestModule.self).wrappedValue
         }
     }
     

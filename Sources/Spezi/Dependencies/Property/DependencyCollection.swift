@@ -7,9 +7,34 @@
 //
 
 
-/// A collection of dependency declarations.
-public struct DependencyCollection: DependencyDeclaration {
-    let entries: [AnyDependencyContext]
+/// A collection of dependencies.
+///
+/// This collection contains a collection of Modules that are meant to be declared as the dependencies of another module.
+///
+/// The code example below demonstrates how you can easily create your collection of dependencies from multiple different types of ``Module``s.
+///
+/// - Tip: You can also use ``append(contentsOf:)`` to combine two collections.
+///
+/// ```swift
+/// var collection = DependencyCollection(ModuleA(), ModuleB(), ModuleC())
+///
+/// collection.append(ModuleD())
+/// ```
+///
+/// - Note: Use the ``DependencyCollectionBuilder`` if you want to create your own result builder that can build a ``DependencyCollection`` component
+///     out of multiple `Module` expressions.
+public struct DependencyCollection {
+    private var entries: [AnyDependencyContext]
+
+    /// Determine if the collection is empty.
+    public var isEmpty: Bool {
+        entries.isEmpty
+    }
+
+    /// The count of entries.
+    public var count: Int {
+        entries.count
+    }
 
     init(_ entries: [AnyDependencyContext]) {
         self.entries = entries
@@ -18,56 +43,77 @@ public struct DependencyCollection: DependencyDeclaration {
     init(_ entries: AnyDependencyContext...) {
         self.init(entries)
     }
-    
-    /// Creates a ``DependencyCollection`` from a closure resulting in a single generic type conforming to the Spezi  ``Module``.
+
+    /// Create an empty collection.
+    public init() {
+        self.entries = []
+    }
+
+
+    /// Create a collection with entries
+    ///
+    /// - Note: You can create your own result builders that build a `DependencyCollection` using the ``DependencyCollectionBuilder``.
+    ///
+    /// - Parameter entry: The parameter pack of modules.
+    public init<each M: Module>(_ entry: repeat each M) {
+        self.init()
+        repeat append(each entry)
+    }
+
+    /// Create a collection from a single entry closure.
+    ///
+    /// - Note: You can create your own result builders that build a `DependencyCollection` using the ``DependencyCollectionBuilder``.
+    ///
     /// - Parameters:
     ///   - type: The generic type resulting from the passed closure, has to conform to ``Module``.
     ///   - singleEntry: Closure returning a dependency conforming to ``Module``, stored within the ``DependencyCollection``.
-    ///
-    /// ### Usage
-    ///
-    /// The `SomeCustomDependencyBuilder` enforces certain type constraints (e.g., `SomeTypeConstraint`, more specific than ``Module``) during aggregation of ``Module/Dependency``s (``Module``s)  via a result builder.
-    /// The individual dependency expressions within the result builder conforming to `SomeTypeConstraint` are then transformed to a ``DependencyCollection`` via ``DependencyCollection/init(for:singleEntry:)-6ihsh``.
-    ///
-    /// ```swift
-    /// @resultBuilder
-    /// public enum SomeCustomDependencyBuilder: DependencyCollectionBuilder {
-    ///     public static func buildExpression<T: SomeTypeConstraint>(_ expression: @escaping @autoclosure () -> T) -> DependencyCollection {
-    ///         DependencyCollection(singleEntry: expression)
-    ///     }
-    /// }
-    /// ```
-    ///
-    /// See `_DependencyPropertyWrapper/init(using:)` for a continued example regarding the usage of the implemented result builder.
+    @available(
+        *, deprecated, renamed: "init(_:)",
+        message: "DependencyCollection entries are now always an explicit request to load and do not require a closure anymore."
+    )
     public init<Dependency: Module>(for type: Dependency.Type = Dependency.self, singleEntry: @escaping (() -> Dependency)) {
-        self.init(DependencyContext(for: type, defaultValue: singleEntry))
+        self.init(singleEntry())
     }
 
-    /// Creates a ``DependencyCollection`` from a closure resulting in a single generic type conforming to the Spezi  ``Module``.
+    /// Create a collection from a single entry closure.
+    ///
+    /// - Note: You can create your own result builders that build a `DependencyCollection` using the ``DependencyCollectionBuilder``.
+    ///
     /// - Parameters:
     ///   - type: The generic type resulting from the passed closure, has to conform to ``Module``.
     ///   - singleEntry: Closure returning a dependency conforming to ``Module``, stored within the ``DependencyCollection``.
-    ///
-    /// ### Usage
-    ///
-    /// The `SomeCustomDependencyBuilder` enforces certain type constraints (e.g., `SomeTypeConstraint`, more specific than ``Module``) during aggregation of ``Module/Dependency``s (``Module``s)  via a result builder.
-    /// The individual dependency expressions within the result builder conforming to `SomeTypeConstraint` are then transformed to a ``DependencyCollection`` via ``DependencyCollection/init(for:singleEntry:)-6nzui``.
-    ///
-    /// ```swift
-    /// @resultBuilder
-    /// public enum SomeCustomDependencyBuilder: DependencyCollectionBuilder {
-    ///     public static func buildExpression<T: SomeTypeConstraint>(_ expression: @escaping @autoclosure () -> T) -> DependencyCollection {
-    ///         DependencyCollection(singleEntry: expression)
-    ///     }
-    /// }
-    /// ```
-    ///
-    /// See `_DependencyPropertyWrapper/init(using:)` for a continued example regarding the usage of the implemented result builder.
+    @available(
+        *, deprecated, renamed: "init(_:)",
+         message: "DependencyCollection entries are now always an explicit request to load and do not require a closure anymore."
+    )
     public init<Dependency: Module>(for type: Dependency.Type = Dependency.self, singleEntry: @escaping @autoclosure (() -> Dependency)) {
-        self.init(singleEntry: singleEntry)
+        self.init(singleEntry())
     }
 
 
+    /// Append a collection.
+    /// - Parameter collection: The dependency collection to append to this one.
+    public mutating func append(contentsOf collection: DependencyCollection) {
+        entries.append(contentsOf: collection.entries)
+    }
+
+
+    /// Append a module.
+    /// - Parameter module: The ``Module`` to append to the collection.
+    public mutating func append<M: Module>(_ module: M) {
+        // we always treat modules passed to a Dependency collection as an explicit request to load them, therefore .load
+        entries.append(DependencyContext(for: M.self, type: .load, defaultValue: { module }))
+    }
+}
+
+
+extension DependencyCollection: DependencyDeclaration {
+    var unsafeInjectedModules: [any Module] {
+        entries.flatMap { entry in
+            entry.unsafeInjectedModules
+        }
+    }
+    
     func dependencyRelation(to module: DependencyReference) -> DependencyRelation {
         let relations = entries.map { $0.dependencyRelation(to: module) }
 
@@ -87,9 +133,9 @@ public struct DependencyCollection: DependencyDeclaration {
         }
     }
 
-    func inject(from dependencyManager: DependencyManager) {
+    func inject(from dependencyManager: DependencyManager, for module: any Module) {
         for entry in entries {
-            entry.inject(from: dependencyManager)
+            entry.inject(from: dependencyManager, for: module)
         }
     }
 

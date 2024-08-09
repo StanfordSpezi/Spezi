@@ -39,8 +39,10 @@ private enum DynamicDependenciesTestCase: CaseIterable {
     
     var expectedNumberOfModules: Int {
         switch self {
-        case .twoDependencies, .duplicatedDependencies:
+        case .twoDependencies:
             return 3
+        case .duplicatedDependencies:
+            return 4
         case .noDependencies:
             return 1
         }
