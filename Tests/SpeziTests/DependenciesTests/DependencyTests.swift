@@ -662,7 +662,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
     }
 
     @MainActor
-    func testConfigureCallOrder() throws {
+    func testConfigureCallOrder() throws { // swiftlint:disable:this function_body_length
         class Order: Module, DefaultInitializable {
             @MainActor
             var order: [Int] = []

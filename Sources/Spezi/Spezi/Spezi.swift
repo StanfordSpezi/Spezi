@@ -102,9 +102,15 @@ public final class Spezi: Sendable {
     ///
     /// Any changes to this property will cause a complete re-render of the SwiftUI view hierarchy. See `SpeziViewModifier`.
     @MainActor var viewModifiers: [any ViewModifier] {
-        _viewModifiers.reduce(into: []) { partialResult, entry in
-            partialResult.append(entry.value)
-        }
+        _viewModifiers
+            // View modifiers of inner-most modules are added first due to the dependency order.
+            // However, we want view modifiers of dependencies to be available for inside view modifiers of the parent
+            // (e.g., ViewModifier should be able to require the @Environment(...) value of the @Dependency).
+            // This is why we need to reverse the order here.
+            .reversed()
+            .reduce(into: []) { partialResult, entry in
+                partialResult.append(entry.value)
+            }
     }
 
     /// A collection of ``Spezi/Spezi`` `LifecycleHandler`s.
@@ -230,7 +236,7 @@ public final class Spezi: Sendable {
         
         for module in dependencyManager.initializedModules {
             if requestedModules.contains(ModuleReference(module)) {
-                // the policy only applies to the request modules, all other are always managed and owned by Spezi
+                // the policy only applies to the requested modules, all other are always managed and owned by Spezi
                 self.initModule(module, ownership: ownership)
             } else {
                 self.initModule(module, ownership: .spezi)
@@ -317,19 +323,19 @@ public final class Spezi: Sendable {
                 module.storeWeakly(into: self)
             }
 
-            let modifierEntires = module.viewModifierEntires
-            // this check is important. Change to viewModifiers re-renders the whole SwiftUI view hierarchy. So avoid to do it unnecessarily
-            if !modifierEntires.isEmpty {
-                _viewModifiers.merge(modifierEntires) { _, rhs in
-                    rhs
-                }
-            }
-
             // If a module is @Observable, we automatically inject it view the `ModelModifier` into the environment.
             if let observable = module as? EnvironmentAccessible {
                 // we can't guarantee weak references for EnvironmentAccessible modules
                 precondition(ownership != .external, "Modules loaded with self-managed policy cannot conform to `EnvironmentAccessible`.")
                 _viewModifiers[ModuleReference(module)] = observable.viewModifier
+            }
+
+            let modifierEntires: [(id: UUID, modifier: any ViewModifier)] = module.viewModifierEntires
+            // this check is important. Change to viewModifiers re-renders the whole SwiftUI view hierarchy. So avoid to do it unnecessarily
+            if !modifierEntires.isEmpty {
+                for entry in modifierEntires.reversed() { // reversed, as we re-reverse things in the `viewModifier` getter
+                    _viewModifiers.updateValue(entry.modifier, forKey: entry.id)
+                }
             }
         }
     }

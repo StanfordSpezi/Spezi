@@ -18,7 +18,8 @@ final class ViewModifierTests: XCTestCase {
         XCTAssertTrue(app.wait(for: .runningForeground, timeout: 2.0))
 
         app.buttons["ViewModifier"].tap()
-        
+
+        XCTAssertFalse(app.alerts["Test Failed"].waitForExistence(timeout: 1))
         XCTAssert(app.staticTexts["Passed"].waitForExistence(timeout: 1))
     }
 }
