@@ -661,6 +661,75 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
         }
     }
 
+    @MainActor
+    func testConfigureCallOrder() throws {
+        class Order: Module, DefaultInitializable {
+            @MainActor
+            var order: [Int] = []
+
+            required init() {}
+        }
+
+        class ModuleA: Module {
+            @Dependency(Order.self)
+            private var order
+
+            func configure() {
+                order.order.append(1)
+            }
+        }
+
+        class ModuleB: Module {
+            @Dependency(Order.self)
+            private var order
+
+            @Dependency(ModuleA.self)
+            private var module = ModuleA()
+
+            func configure() {
+                order.order.append(2)
+            }
+        }
+
+        class ModuleC: Module {
+            @Dependency(Order.self)
+            private var order
+
+            @Dependency(ModuleA.self)
+            private var moduleA
+            @Dependency(ModuleB.self)
+            private var moduleB
+
+            func configure() {
+                order.order.append(3)
+            }
+        }
+
+        class ModuleD: Module {
+            @Dependency(Order.self)
+            private var order
+
+            @Dependency(ModuleC.self)
+            private var module
+
+            func configure() {
+                order.order.append(4)
+            }
+        }
+
+        let spezi = Spezi(standard: DefaultStandard(), modules: [
+            ModuleC(),
+            ModuleB(),
+            ModuleD(),
+            ModuleD()
+        ])
+
+        let modules = spezi.modules
+        let order: Order = try getModule(in: modules)
+
+        XCTAssertEqual(order.order, [1, 2, 3, 4, 4])
+    }
+
     @available(*, deprecated, message: "Propagate deprecation warning")
     @MainActor
     func testDeprecatedInits() throws {

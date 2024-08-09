@@ -70,6 +70,10 @@ class DependencyContext<Dependency: Module>: AnyDependencyContext {
         return nil
     }
 
+    var unsafeInjectedModules: [any Module] {
+        injectedDependency?.element.map { [$0] } ?? []
+    }
+
     init(for dependency: Dependency.Type, type: DependencyType, defaultValue: (() -> Dependency)? = nil) {
         self.type = type
         self.defaultValue = defaultValue

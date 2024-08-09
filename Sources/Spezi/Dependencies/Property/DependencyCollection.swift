@@ -108,6 +108,12 @@ public struct DependencyCollection {
 
 
 extension DependencyCollection: DependencyDeclaration {
+    var unsafeInjectedModules: [any Module] {
+        entries.flatMap { entry in
+            entry.unsafeInjectedModules
+        }
+    }
+    
     func dependencyRelation(to module: DependencyReference) -> DependencyRelation {
         let relations = entries.map { $0.dependencyRelation(to: module) }
 

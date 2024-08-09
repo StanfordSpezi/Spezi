@@ -110,6 +110,10 @@ extension _DependencyPropertyWrapper: SpeziPropertyWrapper {
 
 
 extension _DependencyPropertyWrapper: DependencyDeclaration {
+    var unsafeInjectedModules: [any Module] {
+        dependencies.unsafeInjectedModules
+    }
+    
     func dependencyRelation(to module: DependencyReference) -> DependencyRelation {
         dependencies.dependencyRelation(to: module)
     }

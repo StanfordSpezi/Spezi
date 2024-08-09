@@ -14,6 +14,8 @@ import XCTRuntimeAssertions
 public class DependencyManager: Sendable {
     /// Collection of already initialized modules.
     private let existingModules: [any Module]
+    /// We track the top level module instances to resolve the order for initialization.
+    private let originalModules: [any Module]
 
     /// Collection of initialized Modules.
     ///
@@ -34,6 +36,9 @@ public class DependencyManager: Sendable {
     private var currentPushedModule: ModuleReference?
     private var searchStacks: [ModuleReference: [any Module.Type]] = [:]
 
+    private var nextTypeOrderIndex: UInt64 = 0
+    private var moduleTypeOrder: [ObjectIdentifier: UInt64] = [:]
+
 
     /// A ``DependencyManager`` in Spezi is used to gather information about modules with dependencies.
     ///
@@ -46,6 +51,7 @@ public class DependencyManager: Sendable {
 
         self.modulesWithDependencies = modules.filter { !$0.dependencyDeclarations.isEmpty }
 
+        self.originalModules = modules
         self.existingModules = existingModules
     }
 
@@ -61,6 +67,46 @@ public class DependencyManager: Sendable {
         injectDependencies()
         assert(searchStacks.isEmpty, "`searchStacks` are not getting cleaned up!")
         assert(currentPushedModule == nil, "`currentPushedModule` is never reset!")
+        assert(modulesWithDependencies.isEmpty, "modulesWithDependencies has remaining entries \(modulesWithDependencies)")
+
+        buildTypeOrder()
+
+        initializedModules.sort { lhs, rhs in
+            retrieveTypeOrder(for: lhs) < retrieveTypeOrder(for: rhs)
+        }
+    }
+
+    private func buildTypeOrder() {
+        // when this method is called, we already know there is no cycle
+
+        func nextEntry(for module: any Module.Type) {
+            let id = ObjectIdentifier(module)
+            guard moduleTypeOrder[id] == nil else {
+                return // already tracked
+            }
+            moduleTypeOrder[id] = nextTypeOrderIndex
+            nextTypeOrderIndex += 1
+        }
+
+        func depthFirstSearch(for module: any Module) {
+            for declaration in module.dependencyDeclarations {
+                for dependency in declaration.unsafeInjectedModules {
+                    depthFirstSearch(for: dependency)
+                }
+            }
+            nextEntry(for: type(of: module))
+        }
+
+        for module in originalModules {
+            depthFirstSearch(for: module)
+        }
+    }
+
+    private func retrieveTypeOrder(for module: any Module) -> UInt64 {
+        guard let order = moduleTypeOrder[ObjectIdentifier(type(of: module))] else {
+            preconditionFailure("Failed to retrieve module order index for module of type \(type(of: module))")
+        }
+        return order
     }
 
     private func injectDependencies() {
