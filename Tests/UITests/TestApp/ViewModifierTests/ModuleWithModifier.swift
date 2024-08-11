@@ -36,7 +36,7 @@ struct MyModifier: ViewModifier {
 
     @State private var state = ModifierState()
 
-    private var alertBinding: Binding<Bool> {
+    @MainActor private var alertBinding: Binding<Bool> {
         Binding {
             module == nil && state.appeared
         } set: { _ in
