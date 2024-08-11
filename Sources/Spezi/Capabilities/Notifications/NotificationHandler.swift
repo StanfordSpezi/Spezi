@@ -65,6 +65,7 @@ public protocol NotificationHandler {
     /// [`application(_:didReceiveRemoteNotification:)`](https://developer.apple.com/documentation/appkit/nsapplicationdelegate/1428430-application).
     ///
     /// - Parameter remoteNotification: The data of the notification payload.
+    @MainActor
     func receiveRemoteNotification(_ remoteNotification: [AnyHashable: Any])
 #endif
 }
