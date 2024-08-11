@@ -204,7 +204,7 @@ extension _DependencyPropertyWrapper: ModuleArrayDependency where Value == [any 
     /// class ExampleModule: Module {
     ///     @Dependency var dependentModules: [any Module]
     ///
-    ///     init(@SomeCustomDependencyBuilder _ dependencies: @Sendable () -> DependencyCollection) {
+    ///     init(@SomeCustomDependencyBuilder _ dependencies: () -> DependencyCollection) {
     ///         self._dependentModules = Dependency(using: dependencies())
     ///     }
     /// }

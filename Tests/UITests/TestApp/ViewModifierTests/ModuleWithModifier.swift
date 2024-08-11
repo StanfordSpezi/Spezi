@@ -51,7 +51,6 @@ struct MyModifier: ViewModifier {
             } message: {
                 Text(verbatim: "ModuleB dependency was not available in the environment of the modifier of the parent!")
             }
-
     }
 }
 

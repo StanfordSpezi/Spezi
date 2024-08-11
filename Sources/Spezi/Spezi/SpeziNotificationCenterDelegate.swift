@@ -42,7 +42,7 @@ class SpeziNotificationCenterDelegate: NSObject, UNUserNotificationCenterDelegat
             }
 
             for handler in delegate.spezi.notificationHandler {
-                group.addTask { @MainActor in
+                group.addTask { @Sendable @MainActor in
                     await handler.receiveIncomingNotification(notification)
                 }
             }
@@ -50,13 +50,12 @@ class SpeziNotificationCenterDelegate: NSObject, UNUserNotificationCenterDelegat
             var hasSpecified = false
 
             var unionOptions: UNNotificationPresentationOptions = []
-            while let options = await group.next() {
+            for await options in group {
                 guard let options else {
                     continue
                 }
-
-                hasSpecified = true
                 unionOptions.formUnion(options)
+                hasSpecified = true
             }
 
             if hasSpecified {

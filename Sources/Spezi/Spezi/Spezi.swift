@@ -123,25 +123,25 @@ public final class Spezi: Sendable {
              """
     )
     @_spi(Spezi)
-    public var lifecycleHandler: [LifecycleHandler] {
+    @MainActor public var lifecycleHandler: [LifecycleHandler] {
         modules.compactMap { module in
             module as? LifecycleHandler
         }
     }
 
-    var notificationTokenHandler: [NotificationTokenHandler] {
+    @MainActor var notificationTokenHandler: [NotificationTokenHandler] {
         modules.compactMap { module in
             module as? NotificationTokenHandler
         }
     }
-    
-    var notificationHandler: [NotificationHandler] {
+
+    @MainActor var notificationHandler: [NotificationHandler] {
         modules.compactMap { module in
             module as? NotificationHandler
         }
     }
     
-    var modules: [any Module] {
+    @MainActor var modules: [any Module] {
         storage.collect(allOf: (any AnyStoredModules).self)
             .reduce(into: []) { partialResult, modules in
                 partialResult.append(contentsOf: modules.anyModules)
@@ -345,6 +345,7 @@ public final class Spezi: Sendable {
         keyPath == \.logger // loggers are created per Module.
     }
 
+    @MainActor
     private func retrieveDependingModules(_ dependency: DependencyReference, considerOptionals: Bool) -> [any Module] {
         var result: [any Module] = []
 
