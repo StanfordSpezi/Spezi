@@ -9,7 +9,7 @@
 import UserNotifications
 
 
-class SpeziNotificationCenterDelegate: NSObject, @preconcurrency UNUserNotificationCenterDelegate {
+class SpeziNotificationCenterDelegate: NSObject {
 #if !os(tvOS)
     @MainActor
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) async {
@@ -75,6 +75,13 @@ class SpeziNotificationCenterDelegate: NSObject, @preconcurrency UNUserNotificat
         }
     }
 }
+
+
+#if compiler(<6)
+extension SpeziNotificationCenterDelegate: UNUserNotificationCenterDelegate {}
+#else
+extension SpeziNotificationCenterDelegate: @preconcurrency UNUserNotificationCenterDelegate {}
+#endif
 
 
 extension SpeziAppDelegate {
