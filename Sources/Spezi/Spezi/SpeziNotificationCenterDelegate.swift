@@ -13,6 +13,13 @@ class SpeziNotificationCenterDelegate: NSObject, @preconcurrency UNUserNotificat
 #if !os(tvOS)
     @MainActor
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) async {
+        // This method HAS to run on the Main Actor.
+        // This method is generated through Objective-C interoperability, and is originally defined with a completion handler.
+        // The completion handler MUST be called from the main thread (as this method is called on the main thread).
+        // However, if you do not annotate with @MainActor, an async method will be executed on the background thread.
+        // The completion handler would also be called on a background thread which results in a crash.
+        // Declaring the method as @MainActor requires a @preconcurrency inheritance from the delegate to silence Sendable warnings.
+
         await withTaskGroup(of: Void.self) { @MainActor group in
             // Moving this inside here (@MainActor isolated task group body) helps us avoid making the whole delegate method @MainActor.
             // Apparently having the non-Sendable `UNNotificationResponse` as a parameter to a @MainActor annotated method doesn't suppress
