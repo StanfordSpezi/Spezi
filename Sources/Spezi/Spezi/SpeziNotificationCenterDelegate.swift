@@ -6,11 +6,12 @@
 // SPDX-License-Identifier: MIT
 //
 
-@preconcurrency import UserNotifications
+import UserNotifications
 
 
-class SpeziNotificationCenterDelegate: NSObject, UNUserNotificationCenterDelegate {
+class SpeziNotificationCenterDelegate: NSObject, @preconcurrency UNUserNotificationCenterDelegate {
 #if !os(tvOS)
+    @MainActor
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) async {
         await withTaskGroup(of: Void.self) { @MainActor group in
             // Moving this inside here (@MainActor isolated task group body) helps us avoid making the whole delegate method @MainActor.
@@ -31,6 +32,7 @@ class SpeziNotificationCenterDelegate: NSObject, UNUserNotificationCenterDelegat
     }
 #endif
 
+    @MainActor
     func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         willPresent notification: UNNotification
