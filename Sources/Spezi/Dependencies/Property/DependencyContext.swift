@@ -16,15 +16,38 @@ protocol AnyDependencyContext: DependencyDeclaration {
 }
 
 
-class DependencyContext<Dependency: Module>: AnyDependencyContext {
-    let defaultValue: (() -> Dependency)?
-    private weak var spezi: Spezi?
-    private var injectedDependency: DynamicReference<Dependency>?
+/// The type of dependency declaration.
+enum DependencyType {
+    /// The dependency was declared as being required.
+    case required
+    /// The dependency was declared as being optional.
+    case optional
+    /// The dependency was declared to be loaded.
+    ///
+    /// This is a required dependency were the `defaultValue` should always be loaded.
+    case load
 
+
+    var isRequired: Bool {
+        switch self {
+        case .required, .load:
+            true
+        case .optional:
+            false
+        }
+    }
 
     var isOptional: Bool {
-        defaultValue == nil
+        !isRequired
     }
+}
+
+
+class DependencyContext<Dependency: Module>: AnyDependencyContext {
+    private let type: DependencyType
+    private let defaultValue: (() -> Dependency)?
+    private weak var spezi: Spezi?
+    private var injectedDependency: DynamicReference<Dependency>?
 
     private var dependency: Dependency? {
         guard let injectedDependency else {
@@ -47,7 +70,12 @@ class DependencyContext<Dependency: Module>: AnyDependencyContext {
         return nil
     }
 
-    init(for type: Dependency.Type = Dependency.self, defaultValue: (() -> Dependency)? = nil) {
+    var unsafeInjectedModules: [any Module] {
+        injectedDependency?.element.map { [$0] } ?? []
+    }
+
+    init(for dependency: Dependency.Type, type: DependencyType, defaultValue: (() -> Dependency)? = nil) {
+        self.type = type
         self.defaultValue = defaultValue
     }
 
@@ -56,7 +84,8 @@ class DependencyContext<Dependency: Module>: AnyDependencyContext {
             return .unrelated
         }
 
-        if isOptional {
+
+        if type.isOptional {
             return .optional
         } else {
             return .dependent
@@ -64,16 +93,16 @@ class DependencyContext<Dependency: Module>: AnyDependencyContext {
     }
 
     func collect(into dependencyManager: DependencyManager) {
-        dependencyManager.require(Dependency.self, defaultValue: defaultValue)
+        dependencyManager.require(Dependency.self, type: type, defaultValue: defaultValue)
     }
 
-    func inject(from dependencyManager: DependencyManager) {
-        guard let dependency = dependencyManager.retrieve(module: Dependency.self, optional: isOptional) else {
+    func inject(from dependencyManager: DependencyManager, for module: any Module) {
+        guard let dependency = dependencyManager.retrieve(module: Dependency.self, type: type, for: module) else {
             injectedDependency = nil
             return
         }
 
-        if isOptional {
+        if type.isOptional {
             injectedDependency = .weakElement(dependency)
         } else {
             injectedDependency = .element(dependency)
@@ -117,14 +146,14 @@ class DependencyContext<Dependency: Module>: AnyDependencyContext {
             )
         }
         guard let dependencyM = dependency as? M else {
-            preconditionFailure("A injected dependency of type \(type(of: injectedDependency)) didn't match the expected type \(M.self)!")
+            preconditionFailure("A injected dependency of type \(Swift.type(of: injectedDependency)) didn't match the expected type \(M.self)!")
         }
         return dependencyM
     }
 
     func retrieveOptional<M>(dependency: M.Type) -> M? {
         guard let dependency = self.dependency as? M? else {
-            preconditionFailure("A injected dependency of type \(type(of: injectedDependency)) didn't match the expected type \(M?.self)!")
+            preconditionFailure("A injected dependency of type \(Swift.type(of: injectedDependency)) didn't match the expected type \(M?.self)!")
         }
         return dependency
     }

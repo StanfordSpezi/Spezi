@@ -21,6 +21,8 @@ final class LifecycleHandlerTests: XCTestCase {
         app.launchArguments = ["--lifecycleTests"]
         app.launch()
 
+        XCTAssertTrue(app.wait(for: .runningForeground, timeout: 2.0))
+
         app.buttons["LifecycleHandler"].tap()
 
         XCTAssert(app.staticTexts["WillFinishLaunchingWithOptions: 1"].waitForExistence(timeout: 2))
@@ -43,9 +45,11 @@ final class LifecycleHandlerTests: XCTestCase {
         app.activate()
         #endif
 
+        XCTAssertTrue(app.wait(for: .runningForeground, timeout: 2.0))
+
         XCTAssert(app.staticTexts["WillFinishLaunchingWithOptions: 1"].waitForExistence(timeout: 2))
-        XCTAssert(app.staticTexts["SceneWillEnterForeground: 2"].exists)
-        XCTAssert(app.staticTexts["SceneDidBecomeActive: 2"].exists)
+        XCTAssert(app.staticTexts["SceneWillEnterForeground: 2"].waitForExistence(timeout: 2))
+        XCTAssert(app.staticTexts["SceneDidBecomeActive: 2"].waitForExistence(timeout: 2))
         XCTAssert(app.staticTexts["SceneWillResignActive: 1"].exists)
         XCTAssert(app.staticTexts["SceneDidEnterBackground: 1"].exists)
         XCTAssert(app.staticTexts["ApplicationWillTerminate: 0"].exists)

@@ -21,12 +21,20 @@ enum DependencyRelation: Hashable {
 ///
 /// This protocol allows to communicate dependency requirements of a ``Module`` to the ``DependencyManager``.
 protocol DependencyDeclaration {
+    /// Directly access the injected dependency of the dependency declaration.
+    ///
+    /// Unsafe, as there are not extra checks made to guarantee a safe value.
+    var unsafeInjectedModules: [any Module] { get }
+
     /// Request from the ``DependencyManager`` to collect all dependencies. Mark required by calling `DependencyManager/require(_:defaultValue:)`.
     @MainActor
     func collect(into dependencyManager: DependencyManager)
     /// Inject the dependency instance from the ``DependencyManager``. Use `DependencyManager/retrieve(module:)`.
+    /// - Parameters:
+    ///   - dependencyManager: The dependency manager to inject the dependencies from.
+    ///   - module: The module where the dependency declaration is located at.
     @MainActor
-    func inject(from dependencyManager: DependencyManager)
+    func inject(from dependencyManager: DependencyManager, for module: any Module)
 
     @MainActor
     func inject(spezi: Spezi)

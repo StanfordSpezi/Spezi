@@ -24,11 +24,13 @@ class MyModel2 {
 }
 
 
-private struct MyModifier: ViewModifier {
+private struct MyModifier2: ViewModifier {
     @Environment(MyModel2.self)
     var model
     @Environment(ModuleWithModel.self)
     var module
+
+    nonisolated init() {}
 
     func body(content: Content) -> some View {
         content
@@ -43,14 +45,9 @@ class ModuleWithModel: Module, EnvironmentAccessible {
     @Model var model = MyModel2(message: "Hello World")
 
     // ensure reordering happens, ViewModifier must be able to access the model from environment
-    @Modifier fileprivate var modifier: MyModifier
+    @Modifier fileprivate var modifier = MyModifier2()
 
     let message: String = "MODEL"
-
-    @MainActor
-    init() {
-        modifier = MyModifier() // @MainActor isolated default values for property wrappers must currently be specified explicitly via isolated init
-    }
 }
 
 

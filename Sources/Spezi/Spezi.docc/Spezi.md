@@ -82,10 +82,7 @@ You can learn more about the ``Standard`` protocol and when it is advised to cre
 A ``Module`` defines a software subsystem providing distinct and reusable functionality.
 Modules can use the constraint mechanism to enforce a set of requirements to the standard used in the Spezi-based software where the module is used.
 Modules also define dependencies on each other to reuse functionality and can communicate with other modules by offering and collecting information.
-They can also conform to different protocols to provide additional access to Spezi features, such as lifecycle management and triggering view updates in SwiftUI using the observable mechanisms in Swift.
 You can learn more about modules in the <doc:Module> documentation.
-
-To simplify the creation of modules, a common set of functionalities typically used by modules is summarized in the ``Module`` protocol, making it an easy one-stop solution to support all these different functionalities and build a capable Spezi module.
 
 
 ## Topics

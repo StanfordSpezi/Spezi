@@ -164,7 +164,7 @@ open class SpeziAppDelegate: NSObject, ApplicationDelegate, Sendable {
             return .noData
         }
 
-        let result: Set<BackgroundFetchResult> = await withTaskGroup(of: BackgroundFetchResult.self) { group in
+        let result: Set<BackgroundFetchResult> = await withTaskGroup(of: BackgroundFetchResult.self) { @MainActor group in
             for handler in handlers {
                 group.addTask { @MainActor in
                     await handler.receiveRemoteNotification(userInfo)
@@ -172,9 +172,9 @@ open class SpeziAppDelegate: NSObject, ApplicationDelegate, Sendable {
             }
 
             var result: Set<BackgroundFetchResult> = []
-            while let next = await group.next() {
+            for await fetchResult in group {
                 // don't ask why, but the `for in` or `reduce(into:_:)` versions trigger Swift 6 concurrency warnings, this one doesn't
-                result.insert(next)
+                result.insert(fetchResult)
             }
             return result
         }
