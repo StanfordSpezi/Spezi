@@ -29,7 +29,7 @@ class SpeziNotificationCenterDelegate: NSObject {
             }
 
             for handler in delegate.spezi.notificationHandler {
-                group.addTask { @MainActor in
+                group.addTask { @Sendable @MainActor in
                     await handler.handleNotificationAction(response)
                 }
             }

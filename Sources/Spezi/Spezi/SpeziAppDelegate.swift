@@ -166,7 +166,7 @@ open class SpeziAppDelegate: NSObject, ApplicationDelegate, Sendable {
 
         let result: Set<BackgroundFetchResult> = await withTaskGroup(of: BackgroundFetchResult.self) { @MainActor group in
             for handler in handlers {
-                group.addTask { @MainActor in
+                group.addTask { @Sendable @MainActor in
                     await handler.receiveRemoteNotification(userInfo)
                 }
             }
