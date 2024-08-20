@@ -10,15 +10,25 @@ import SpeziFoundation
 import SwiftUI
 
 
-private final class RemoteNotificationContinuation: DefaultProvidingKnowledgeSource, Sendable {
+@MainActor
+private final class RemoteNotificationContinuation: KnowledgeSource, Sendable {
     typealias Anchor = SpeziAnchor
 
-    static let defaultValue = RemoteNotificationContinuation()
+    fileprivate(set) var continuation: CheckedContinuation<Data, Error>?
+    fileprivate(set) var access = AsyncSemaphore()
 
-    @MainActor
-    var continuation: CheckedContinuation<Data, Error>?
 
     init() {}
+
+
+    @MainActor
+    func resume(with result: Result<Data, Error>) {
+        if let continuation {
+            self.continuation = nil
+            access.signal()
+            continuation.resume(with: result)
+        }
+    }
 }
 
 
@@ -45,12 +55,6 @@ private final class RemoteNotificationContinuation: DefaultProvidingKnowledgeSou
 /// }
 /// ```
 public struct RegisterRemoteNotificationsAction {
-    /// Errors occurring when registering for remote notifications.
-    public enum ActionError: Error {
-        /// The action was called while we were still waiting to receive a response from the previous one.
-        case concurrentAccess
-    }
-
     private weak var spezi: Spezi?
 
     init(_ spezi: Spezi) {
@@ -68,28 +72,55 @@ public struct RegisterRemoteNotificationsAction {
     ///     if your app is not properly configured for remote notifications. It might also throw in the
     ///     rare circumstance where you make a call to this method while another one is still ongoing.
     ///     Try again to register at a later point in time.
-    @MainActor
     @discardableResult
+#if targetEnvironment(simulator)
+    @available(*, unavailable,
+        message: """
+                 Simulator devices cannot interact with APNS services. Please skip this call on simulator devices and test APNS registration \
+                 on a real device.
+                 Refer to the Spezi documentation: https://swiftpackageindex.com/stanfordspezi/spezi/documentation/spezi/spezi/registerremotenotifications
+                 """
+    )
+#endif
+    @MainActor
     public func callAsFunction() async throws -> Data {
         guard let spezi else {
             preconditionFailure("RegisterRemoteNotificationsAction was used in a scope where Spezi was not available anymore!")
         }
 
+#if !targetEnvironment(simulator)
+
 #if os(watchOS)
         let application = _Application.shared()
 #else
         let application = _Application.shared
-#endif
+#endif // os(watchOS)
 
-        let registration = spezi.storage[RemoteNotificationContinuation.self]
-        if registration.continuation != nil {
-            throw ActionError.concurrentAccess
+        let registration: RemoteNotificationContinuation
+        if let existing = spezi.storage[RemoteNotificationContinuation.self] {
+            registration = existing
+        } else {
+            registration = RemoteNotificationContinuation()
+            spezi.storage[RemoteNotificationContinuation.self] = registration
         }
 
-        return try await withCheckedThrowingContinuation { continuation in
-            registration.continuation = continuation
-            application.registerForRemoteNotifications()
+        try await registration.access.waitCheckingCancellation()
+
+        return try await withTaskCancellationHandler {
+            try Task.checkCancellation()
+            return try await withCheckedThrowingContinuation { continuation in
+                assert(registration.continuation == nil, "continuation wasn't nil")
+                registration.continuation = continuation
+                application.registerForRemoteNotifications()
+            }
+        } onCancel: {
+            Task { @MainActor in
+                registration.resume(with: .failure(CancellationError()))
+            }
         }
+#else
+        preconditionFailure("\(Self.self) is not available on simulator devices.")
+#endif // !targetEnvironment(simulator)
     }
 }
 
@@ -100,6 +131,8 @@ extension Spezi {
     /// For more information refer to the [`registerForRemoteNotifications()`](https://developer.apple.com/documentation/uikit/uiapplication/1623078-registerforremotenotifications)
     /// documentation for `UIApplication` or for the respective equivalent for your current platform.
     ///
+    /// - Warning: Simulator devices cannot interact with APNS services. Please skip this call on simulator devices and test APNS registration on a real device.
+    ///
     /// Below is a short code example on how to use this action within your ``Module``.
     ///
     /// ```swift
@@ -107,16 +140,34 @@ extension Spezi {
     ///     @Application(\.registerRemoteNotifications)
     ///     var registerRemoteNotifications
     ///
-    ///     func handleNotificationsAllowed() async throws {
+    ///     func handleNotificationsPermissions() async throws {
+    ///         // Make sure to request notifications permissions before registering for remote notifications
+    ///         try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound])
+    ///
+    ///
+    /// #if !targetEnvironment(simulator) // Device token is not available on simulator devices
     ///         let deviceToken = try await registerRemoteNotifications()
     ///         // .. send the device token to your remote server that generates push notifications
+    /// #endif
     ///     }
     /// }
     /// ```
     ///
+    /// - Note: Make sure to request authorization by calling [`requestAuthorization(options:completionHandler:)`](https://developer.apple.com/documentation/usernotifications/unusernotificationcenter/requestauthorization(options:completionhandler:))
+    /// to have your remote notifications be able to display alerts, badges or use sound. Otherwise, all remote notifications will be delivered silently.
+    ///
     /// ## Topics
     /// ### Action
     /// - ``RegisterRemoteNotificationsAction``
+#if targetEnvironment(simulator)
+    @available(*, unavailable,
+                message: """
+                 Simulator devices cannot interact with APNS services. Please skip this call on simulator devices and test APNS registration \
+                 on a real device.
+                 Refer to the Spezi documentation: https://swiftpackageindex.com/stanfordspezi/spezi/documentation/spezi/spezi/registerremotenotifications
+                 """
+    )
+#endif
     public var registerRemoteNotifications: RegisterRemoteNotificationsAction {
         RegisterRemoteNotificationsAction(self)
     }
@@ -126,24 +177,26 @@ extension Spezi {
 extension RegisterRemoteNotificationsAction {
     @MainActor
     static func handleDeviceTokenUpdate(_ spezi: Spezi, _ deviceToken: Data) {
-        let registration = spezi.storage[RemoteNotificationContinuation.self]
-        guard let continuation = registration.continuation else {
-            // might also be called if, e.g., app is restored from backup and is automatically registered for remote notifications.
-            // This can be handled through the `NotificationHandler` protocol.
+        guard let registration = spezi.storage[RemoteNotificationContinuation.self] else {
             return
         }
-        registration.continuation = nil
-        continuation.resume(returning: deviceToken)
+
+        // might also be called if, e.g., app is restored from backup and is automatically registered for remote notifications.
+        // This can be handled through the `NotificationHandler` protocol.
+
+        registration.resume(with: .success(deviceToken))
     }
 
     @MainActor
     static func handleFailedRegistration(_ spezi: Spezi, _ error: Error) {
-        let registration = spezi.storage[RemoteNotificationContinuation.self]
-        guard let continuation = registration.continuation else {
-            spezi.logger.warning("Received a call to \(#function) while we were not waiting for a notifications registration request.")
+        guard let registration = spezi.storage[RemoteNotificationContinuation.self] else {
             return
         }
-        registration.continuation = nil
-        continuation.resume(throwing: error)
+
+        if registration.continuation == nil {
+            spezi.logger.warning("Received a call to \(#function) while we were not waiting for a notifications registration request.")
+        }
+
+        registration.resume(with: .failure(error))
     }
 }

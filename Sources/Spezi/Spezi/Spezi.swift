@@ -79,9 +79,13 @@ import XCTRuntimeAssertions
 /// - ``launchOptions``
 /// - ``spezi``
 ///
-/// ### Actions
+/// ### Remote Notifications
 /// - ``registerRemoteNotifications``
 /// - ``unregisterRemoteNotifications``
+///
+/// ### Dynamically Loading Modules
+/// - ``loadModule(_:ownership:)``
+/// - ``unloadModule(_:)``
 @Observable
 public final class Spezi: Sendable {
     static let logger = Logger(subsystem: "edu.stanford.spezi", category: "Spezi")
@@ -93,7 +97,7 @@ public final class Spezi: Sendable {
     /// A shared repository to store any `KnowledgeSource`s restricted to the ``SpeziAnchor``.
     ///
     /// Every `Module` automatically conforms to `KnowledgeSource` and is stored within this storage object.
-    fileprivate(set) nonisolated(unsafe) var storage: SpeziStorage // nonisolated, writes are all isolated to @MainActor, just reads are non-isolated
+    nonisolated(unsafe) var storage: SpeziStorage // nonisolated, writes are all isolated to @MainActor, just reads are non-isolated
 
     /// Key is either a UUID for `@Modifier` or `@Model` property wrappers, or a `ModuleReference` for `EnvironmentAccessible` modifiers.
     @MainActor private var _viewModifiers: OrderedDictionary<AnyHashable, any ViewModifier> = [:]
