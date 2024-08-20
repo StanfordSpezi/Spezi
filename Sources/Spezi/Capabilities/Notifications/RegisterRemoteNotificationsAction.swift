@@ -103,17 +103,10 @@ public struct RegisterRemoteNotificationsAction: Sendable {
 
         try await registration.access.waitCheckingCancellation()
 
-        return try await withTaskCancellationHandler {
-            try Task.checkCancellation()
-            return try await withCheckedThrowingContinuation { continuation in
-                assert(registration.continuation == nil, "continuation wasn't nil")
-                registration.continuation = continuation
-                application.registerForRemoteNotifications()
-            }
-        } onCancel: {
-            Task { @MainActor in
-                registration.resume(with: .failure(CancellationError()))
-            }
+        return try await withCheckedThrowingContinuation { continuation in
+            assert(registration.continuation == nil, "continuation wasn't nil")
+            registration.continuation = continuation
+            application.registerForRemoteNotifications()
         }
     }
 }
