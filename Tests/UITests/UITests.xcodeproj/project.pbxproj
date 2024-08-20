@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -20,6 +20,7 @@
 		2FFDAD092A4AAEF400488F42 /* FeatureFlags.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFDAD082A4AAEF400488F42 /* FeatureFlags.swift */; };
 		2FFDAD0B2A4AAF3700488F42 /* LifecycleHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFDAD0A2A4AAF3600488F42 /* LifecycleHandlerTests.swift */; };
 		2FFDAD0D2A4AB0CE00488F42 /* XCTestExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 2FFDAD0C2A4AB0CE00488F42 /* XCTestExtensions */; };
+		A9AD5FF92C74860E00F3FBA8 /* RemoteNotificationsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AD5FF82C74860A00F3FBA8 /* RemoteNotificationsTests.swift */; };
 		A9F2ECD42AF0B85C0057C7DD /* ModuleWithModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F2ECD32AF0B85C0057C7DD /* ModuleWithModifier.swift */; };
 		A9F2ECD62AF0BA500057C7DD /* ViewModifierTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F2ECD52AF0BA500057C7DD /* ViewModifierTestView.swift */; };
 		A9F2ECD92AF198510057C7DD /* ModuleWithModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F2ECD82AF198510057C7DD /* ModuleWithModel.swift */; };
@@ -53,12 +54,29 @@
 		2FFDAD062A4AAA2E00488F42 /* LifecycleHandlerTestModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleHandlerTestModule.swift; sourceTree = "<group>"; };
 		2FFDAD082A4AAEF400488F42 /* FeatureFlags.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlags.swift; sourceTree = "<group>"; };
 		2FFDAD0A2A4AAF3600488F42 /* LifecycleHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleHandlerTests.swift; sourceTree = "<group>"; };
+		A9AD5FF12C74827600F3FBA8 /* TestApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TestApp.entitlements; sourceTree = "<group>"; };
+		A9AD5FF82C74860A00F3FBA8 /* RemoteNotificationsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteNotificationsTests.swift; sourceTree = "<group>"; };
 		A9F2ECD32AF0B85C0057C7DD /* ModuleWithModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModuleWithModifier.swift; sourceTree = "<group>"; };
 		A9F2ECD52AF0BA500057C7DD /* ViewModifierTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModifierTestView.swift; sourceTree = "<group>"; };
 		A9F2ECD82AF198510057C7DD /* ModuleWithModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModuleWithModel.swift; sourceTree = "<group>"; };
 		A9F2ECDA2AF198590057C7DD /* ModelTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelTestView.swift; sourceTree = "<group>"; };
 		A9F2ECDC2AF198690057C7DD /* ModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		A9AD5FF52C7483B300F3FBA8 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				NotificationModule.swift,
+				RemoteNotificationsTestView.swift,
+			);
+			target = 2F6D139128F5F384007C25D6 /* TestApp */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		A9AD5FF42C7483AE00F3FBA8 /* RemoteNotifications */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (A9AD5FF52C7483B300F3FBA8 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = RemoteNotifications; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		2F6D138F28F5F384007C25D6 /* Frameworks */ = {
@@ -106,14 +124,16 @@
 		2F6D139428F5F384007C25D6 /* TestApp */ = {
 			isa = PBXGroup;
 			children = (
-				2FA7382B290ADFAA007ACEB9 /* TestApp.swift */,
-				2F5FA4CD29E0A3BA0047A644 /* SpeziTests.swift */,
-				2FFDAD032A4AA99800488F42 /* LifecycleHandler */,
-				A9F2ECD72AF198330057C7DD /* ModelTests */,
-				2F9F07ED29090AF500CDC598 /* Shared */,
-				A9F2ECD22AF0B8460057C7DD /* ViewModifierTests */,
 				2F6D139928F5F386007C25D6 /* Assets.xcassets */,
 				2F01E8CE291493560089C46B /* Info.plist */,
+				2FFDAD032A4AA99800488F42 /* LifecycleHandler */,
+				A9F2ECD72AF198330057C7DD /* ModelTests */,
+				A9AD5FF42C7483AE00F3FBA8 /* RemoteNotifications */,
+				2F9F07ED29090AF500CDC598 /* Shared */,
+				2F5FA4CD29E0A3BA0047A644 /* SpeziTests.swift */,
+				A9AD5FF12C74827600F3FBA8 /* TestApp.entitlements */,
+				2FA7382B290ADFAA007ACEB9 /* TestApp.swift */,
+				A9F2ECD22AF0B8460057C7DD /* ViewModifierTests */,
 			);
 			path = TestApp;
 			sourceTree = "<group>";
@@ -122,9 +142,10 @@
 			isa = PBXGroup;
 			children = (
 				2FB926E42974B0FC008E7B03 /* Info.plist */,
-				2F9F07F429090BA900CDC598 /* ViewModifierTests.swift */,
 				2FFDAD0A2A4AAF3600488F42 /* LifecycleHandlerTests.swift */,
 				A9F2ECDC2AF198690057C7DD /* ModelTests.swift */,
+				A9AD5FF82C74860A00F3FBA8 /* RemoteNotificationsTests.swift */,
+				2F9F07F429090BA900CDC598 /* ViewModifierTests.swift */,
 			);
 			path = TestAppUITests;
 			sourceTree = "<group>";
@@ -301,6 +322,7 @@
 			files = (
 				A9F2ECDD2AF198690057C7DD /* ModelTests.swift in Sources */,
 				2FFDAD0B2A4AAF3700488F42 /* LifecycleHandlerTests.swift in Sources */,
+				A9AD5FF92C74860E00F3FBA8 /* RemoteNotificationsTests.swift in Sources */,
 				2F9F07F529090BA900CDC598 /* ViewModifierTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -449,6 +471,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = TestApp/TestApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
@@ -485,6 +508,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = TestApp/TestApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
@@ -603,8 +627,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/StanfordSpezi/XCTestExtensions";
 			requirement = {
-				kind = upToNextMinorVersion;
-				minimumVersion = 0.4.9;
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

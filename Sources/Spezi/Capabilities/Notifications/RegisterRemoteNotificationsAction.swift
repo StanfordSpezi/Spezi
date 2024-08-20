@@ -48,13 +48,20 @@ private final class RemoteNotificationContinuation: KnowledgeSource, Sendable {
 ///     @Application(\.registerRemoteNotifications)
 ///     var registerRemoteNotifications
 ///
-///     func handleNotificationsAllowed() async throws {
+///     func handleNotificationsPermissions() async throws {
+///         // Make sure to request notifications permissions before registering for remote notifications
+///         try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound])
+///
+///
 ///         let deviceToken = try await registerRemoteNotifications()
 ///         // .. send the device token to your remote server that generates push notifications
 ///     }
 /// }
 /// ```
-public struct RegisterRemoteNotificationsAction {
+///
+/// > Tip: Make sure to request authorization by calling [`requestAuthorization(options:completionHandler:)`](https://developer.apple.com/documentation/usernotifications/unusernotificationcenter/requestauthorization(options:completionhandler:))
+///     to have your remote notifications be able to display alerts, badges or use sound. Otherwise, all remote notifications will be delivered silently.
+public struct RegisterRemoteNotificationsAction: Sendable {
     private weak var spezi: Spezi?
 
     init(_ spezi: Spezi) {
@@ -73,22 +80,12 @@ public struct RegisterRemoteNotificationsAction {
     ///     rare circumstance where you make a call to this method while another one is still ongoing.
     ///     Try again to register at a later point in time.
     @discardableResult
-#if targetEnvironment(simulator)
-    @available(*, unavailable,
-        message: """
-                 Simulator devices cannot interact with APNS. Please skip this call on simulator devices and test APNS registration \
-                 on a real device.
-                 Refer to the Spezi documentation: https://swiftpackageindex.com/stanfordspezi/spezi/documentation/spezi/spezi/registerremotenotifications
-                 """
-    )
-#endif
     @MainActor
     public func callAsFunction() async throws -> Data {
         guard let spezi else {
             preconditionFailure("RegisterRemoteNotificationsAction was used in a scope where Spezi was not available anymore!")
         }
 
-#if !targetEnvironment(simulator)
 
 #if os(watchOS)
         let application = _Application.shared()
@@ -118,9 +115,6 @@ public struct RegisterRemoteNotificationsAction {
                 registration.resume(with: .failure(CancellationError()))
             }
         }
-#else
-        preconditionFailure("\(Self.self) is not available on simulator devices.")
-#endif // !targetEnvironment(simulator)
     }
 }
 
@@ -130,8 +124,6 @@ extension Spezi {
     ///
     /// For more information refer to the [`registerForRemoteNotifications()`](https://developer.apple.com/documentation/uikit/uiapplication/1623078-registerforremotenotifications)
     /// documentation for `UIApplication` or for the respective equivalent for your current platform.
-    ///
-    /// - Important: Simulator devices cannot interact with APNS. Please skip this call on simulator devices and test APNS registration on a real device.
     ///
     /// Below is a short code example on how to use this action within your ``Module``.
     ///
@@ -145,29 +137,18 @@ extension Spezi {
     ///         try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound])
     ///
     ///
-    /// #if !targetEnvironment(simulator) // Device token is not available on simulator devices
     ///         let deviceToken = try await registerRemoteNotifications()
     ///         // .. send the device token to your remote server that generates push notifications
-    /// #endif
     ///     }
     /// }
     /// ```
     ///
-    /// - Note: Make sure to request authorization by calling [`requestAuthorization(options:completionHandler:)`](https://developer.apple.com/documentation/usernotifications/unusernotificationcenter/requestauthorization(options:completionhandler:))
-    /// to have your remote notifications be able to display alerts, badges or use sound. Otherwise, all remote notifications will be delivered silently.
+    /// > Tip: Make sure to request authorization by calling [`requestAuthorization(options:completionHandler:)`](https://developer.apple.com/documentation/usernotifications/unusernotificationcenter/requestauthorization(options:completionhandler:))
+    ///     to have your remote notifications be able to display alerts, badges or use sound. Otherwise, all remote notifications will be delivered silently.
     ///
     /// ## Topics
     /// ### Action
     /// - ``RegisterRemoteNotificationsAction``
-#if targetEnvironment(simulator)
-    @available(*, unavailable,
-                message: """
-                 Simulator devices cannot interact with APNS. Please skip this call on simulator devices and test APNS registration \
-                 on a real device.
-                 Refer to the Spezi documentation: https://swiftpackageindex.com/stanfordspezi/spezi/documentation/spezi/spezi/registerremotenotifications
-                 """
-    )
-#endif
     public var registerRemoteNotifications: RegisterRemoteNotificationsAction {
         RegisterRemoteNotificationsAction(self)
     }
