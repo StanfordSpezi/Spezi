@@ -14,6 +14,8 @@ import SwiftUI
 /// For more information refer to the [`unregisterForRemoteNotifications()`](https://developer.apple.com/documentation/uikit/uiapplication/1623093-unregisterforremotenotifications)
 /// documentation for `UIApplication` or for the respective equivalent for your current platform.
 ///
+/// - Important: Simulator devices cannot interact with APNS. Please skip this call on simulator devices and test APNS registration on a real device.
+///
 /// Below is a short code example on how to use this action within your ``Module``.
 ///
 /// ```swift
@@ -22,8 +24,10 @@ import SwiftUI
 ///     var unregisterRemoteNotifications
 ///
 ///     func onAccountLogout() {
+/// #if !targetEnvironment(simulator) // APNS interactions are unavailable on simulator devices
 ///         // handling your cleanup ...
 ///         unregisterRemoteNotifications()
+/// #endif
 ///     }
 /// }
 /// ```
@@ -32,8 +36,18 @@ public struct UnregisterRemoteNotificationsAction {
 
 
     /// Unregisters for all remote notifications received through Apple Push Notification service.
+#if targetEnvironment(simulator)
+    @available(*, unavailable,
+                message: """
+                 Simulator devices cannot interact with APNS. Please skip this call on simulator devices and test APNS registration \
+                 on a real device.
+                 Refer to the Spezi documentation: https://swiftpackageindex.com/stanfordspezi/spezi/1.7.2/documentation/spezi/spezi/unregisterremotenotifications
+                 """
+    )
+#endif
     @MainActor
     public func callAsFunction() {
+#if !targetEnvironment(simulator)
 #if os(watchOS)
         let application = _Application.shared()
 #else
@@ -41,6 +55,9 @@ public struct UnregisterRemoteNotificationsAction {
 #endif
         
         application.unregisterForRemoteNotifications()
+#else
+        preconditionFailure("\(Self.self) is not available on simulator devices.")
+#endif
     }
 }
 
@@ -68,6 +85,15 @@ extension Spezi {
     /// ## Topics
     /// ### Action
     /// - ``UnregisterRemoteNotificationsAction``
+#if targetEnvironment(simulator)
+    @available(*, unavailable,
+                message: """
+                 Simulator devices cannot interact with APNS services. Please skip this call on simulator devices and test APNS registration \
+                 on a real device.
+                 Refer to the Spezi documentation: https://swiftpackageindex.com/stanfordspezi/spezi/1.7.2/documentation/spezi/spezi/unregisterremotenotifications
+                 """
+    )
+#endif
     public var unregisterRemoteNotifications: UnregisterRemoteNotificationsAction {
         UnregisterRemoteNotificationsAction()
     }

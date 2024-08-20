@@ -76,7 +76,7 @@ public struct RegisterRemoteNotificationsAction {
 #if targetEnvironment(simulator)
     @available(*, unavailable,
         message: """
-                 Simulator devices cannot interact with APNS services. Please skip this call on simulator devices and test APNS registration \
+                 Simulator devices cannot interact with APNS. Please skip this call on simulator devices and test APNS registration \
                  on a real device.
                  Refer to the Spezi documentation: https://swiftpackageindex.com/stanfordspezi/spezi/documentation/spezi/spezi/registerremotenotifications
                  """
@@ -131,7 +131,7 @@ extension Spezi {
     /// For more information refer to the [`registerForRemoteNotifications()`](https://developer.apple.com/documentation/uikit/uiapplication/1623078-registerforremotenotifications)
     /// documentation for `UIApplication` or for the respective equivalent for your current platform.
     ///
-    /// - Warning: Simulator devices cannot interact with APNS services. Please skip this call on simulator devices and test APNS registration on a real device.
+    /// - Important: Simulator devices cannot interact with APNS. Please skip this call on simulator devices and test APNS registration on a real device.
     ///
     /// Below is a short code example on how to use this action within your ``Module``.
     ///
@@ -162,7 +162,7 @@ extension Spezi {
 #if targetEnvironment(simulator)
     @available(*, unavailable,
                 message: """
-                 Simulator devices cannot interact with APNS services. Please skip this call on simulator devices and test APNS registration \
+                 Simulator devices cannot interact with APNS. Please skip this call on simulator devices and test APNS registration \
                  on a real device.
                  Refer to the Spezi documentation: https://swiftpackageindex.com/stanfordspezi/spezi/documentation/spezi/spezi/registerremotenotifications
                  """
