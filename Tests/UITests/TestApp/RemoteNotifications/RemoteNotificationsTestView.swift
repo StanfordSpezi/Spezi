@@ -19,7 +19,7 @@ struct RemoteNotificationsTestView: View {
     @State private var task: Task<Void, Never>?
 
     var body: some View {
-        List {
+        List { // swiftlint:disable:this closure_body_length
             Section("Token") {
                 HStack {
                     Text(verbatim: "Token")

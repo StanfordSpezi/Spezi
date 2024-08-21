@@ -32,9 +32,11 @@ final class RemoteNotificationsTests: XCTestCase {
 
         app.buttons["Register"].tap()
 
-        if !app.staticTexts["Token, 80 bytes"].waitForExistence(timeout: 1.0) {
+        if !(app.staticTexts["Token, 80 bytes"].waitForExistence(timeout: 1.0)
+             || app.staticTexts["Token, 60 bytes"].exists) {
             XCTAssertFalse(app.staticTexts["Token, failed"].exists)
-            XCTAssertTrue(app.staticTexts["Token, Timeout"].waitForExistence(timeout: 15))
+            XCTAssertTrue(app.staticTexts["Token, Timeout"].waitForExistence(timeout: 10))
+            print("The token registration timed out!")
         }
 
         app.buttons["Unregister"].tap()

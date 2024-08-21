@@ -104,7 +104,7 @@ public struct RegisterRemoteNotificationsAction: Sendable {
         try await registration.access.waitCheckingCancellation()
 
 #if targetEnvironment(simulator)
-        async let _ = withTimeout(of: .seconds(10)) { @MainActor in
+        async let _ = withTimeout(of: .seconds(5)) { @MainActor in
             spezi.storage[RemoteNotificationContinuation.self]?.resume(with: .failure(TimeoutError()))
         }
 #endif
