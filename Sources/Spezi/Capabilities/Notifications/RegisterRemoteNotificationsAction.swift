@@ -103,6 +103,12 @@ public struct RegisterRemoteNotificationsAction: Sendable {
 
         try await registration.access.waitCheckingCancellation()
 
+#if targetEnvironment(simulator)
+        async let _ = withTimeout(of: .seconds(10)) { @MainActor in
+            spezi.storage[RemoteNotificationContinuation.self]?.resume(with: .failure(TimeoutError()))
+        }
+#endif
+
         return try await withCheckedThrowingContinuation { continuation in
             assert(registration.continuation == nil, "continuation wasn't nil")
             registration.continuation = continuation

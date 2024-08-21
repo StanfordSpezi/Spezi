@@ -11,6 +11,11 @@ import XCTest
 
 final class RemoteNotificationsTests: XCTestCase {
     @MainActor
+    override func setUp() async throws {
+        continueAfterFailure = false
+    }
+
+    @MainActor
     func testRegistrationOnSimulator() throws {
         let app = XCUIApplication()
         app.launch()
@@ -26,7 +31,11 @@ final class RemoteNotificationsTests: XCTestCase {
         XCTAssertTrue(app.buttons["Unregister"].exists)
 
         app.buttons["Register"].tap()
-        XCTAssertTrue(app.staticTexts["Token, 80 bytes"].waitForExistence(timeout: 1.0))
+
+        if !app.staticTexts["Token, 80 bytes"].waitForExistence(timeout: 1.0) {
+            XCTAssertFalse(app.staticTexts["Token, failed"].exists)
+            XCTAssertTrue(app.staticTexts["Token, Timeout"].waitForExistence(timeout: 15))
+        }
 
         app.buttons["Unregister"].tap()
         XCTAssertTrue(app.staticTexts["Token, none"].waitForExistence(timeout: 1.0))

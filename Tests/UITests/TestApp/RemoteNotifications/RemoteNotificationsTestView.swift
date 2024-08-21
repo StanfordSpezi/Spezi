@@ -27,6 +27,10 @@ struct RemoteNotificationsTestView: View {
                     if let token {
                         Text(token.description)
                             .foregroundStyle(.green)
+                    } else if let error = error as? LocalizedError,
+                              let description = error.errorDescription ?? error.failureReason {
+                        Text(verbatim: description)
+                            .foregroundStyle(.red)
                     } else if error != nil {
                         Text(verbatim: "failed")
                             .foregroundStyle(.red)
