@@ -43,7 +43,13 @@ private final class RemoteNotificationContinuation: KnowledgeSource, Sendable {
 ///
 /// Below is a short code example on how to use this action within your ``Module``.
 ///
+/// - Warning: Registering for Remote Notifications on Simulator devices might not be possible if your are not signed into an Apple ID on the host machine.
+///     The method might throw a [`TimeoutError`](https://swiftpackageindex.com/stanfordspezi/spezifoundation/documentation/spezifoundation/timeouterror)
+///     in such a case.
+///
 /// ```swift
+/// import SpeziFoundation
+///
 /// class ExampleModule: Module {
 ///     @Application(\.registerRemoteNotifications)
 ///     var registerRemoteNotifications
@@ -53,7 +59,16 @@ private final class RemoteNotificationContinuation: KnowledgeSource, Sendable {
 ///         try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound])
 ///
 ///
-///         let deviceToken = try await registerRemoteNotifications()
+///         do {
+///             let deviceToken = try await registerRemoteNotifications()
+///         } catch let error as TimeoutError {
+/// #if targetEnvironment(simulator)
+///             return // override logic when running within a simulator
+/// #else
+///             throw error
+/// #endif
+///         }
+///
 ///         // .. send the device token to your remote server that generates push notifications
 ///     }
 /// }
@@ -76,9 +91,8 @@ public struct RegisterRemoteNotificationsAction: Sendable {
     ///     For more information refer to the documentation of
     ///     [`application(_:didRegisterForRemoteNotificationsWithDeviceToken:)`](https://developer.apple.com/documentation/uikit/uiapplicationdelegate/1622958-application).
     /// - Throws: Registration might fail if the user's device isn't connected to the network or
-    ///     if your app is not properly configured for remote notifications. It might also throw in the
-    ///     rare circumstance where you make a call to this method while another one is still ongoing.
-    ///     Try again to register at a later point in time.
+    ///     if your app is not properly configured for remote notifications. It might also throw a `TimeoutError` when running on a simulator device running on a host
+    ///     that is not connected to an Apple ID.
     @discardableResult
     @MainActor
     public func callAsFunction() async throws -> Data {
@@ -105,6 +119,7 @@ public struct RegisterRemoteNotificationsAction: Sendable {
 
 #if targetEnvironment(simulator)
         async let _ = withTimeout(of: .seconds(5)) { @MainActor in
+            spezi.logger.warning("Registering for remote notifications seems to be not possible on this simulator device. Timing out ...")
             spezi.storage[RemoteNotificationContinuation.self]?.resume(with: .failure(TimeoutError()))
         }
 #endif
@@ -124,9 +139,19 @@ extension Spezi {
     /// For more information refer to the [`registerForRemoteNotifications()`](https://developer.apple.com/documentation/uikit/uiapplication/1623078-registerforremotenotifications)
     /// documentation for `UIApplication` or for the respective equivalent for your current platform.
     ///
+    /// - Note: For more information on the general topic on how to register your app with APNs,
+    ///     refer to the [Registering your app with APNs](https://developer.apple.com/documentation/usernotifications/registering-your-app-with-apns)
+    ///     article.
+    ///
     /// Below is a short code example on how to use this action within your ``Module``.
     ///
+    /// - Warning: Registering for Remote Notifications on Simulator devices might not be possible if your are not signed into an Apple ID on the host machine.
+    ///     The method might throw a [`TimeoutError`](https://swiftpackageindex.com/stanfordspezi/spezifoundation/documentation/spezifoundation/timeouterror)
+    ///     in such a case.
+    ///
     /// ```swift
+    /// import SpeziFoundation
+    ///
     /// class ExampleModule: Module {
     ///     @Application(\.registerRemoteNotifications)
     ///     var registerRemoteNotifications
@@ -136,7 +161,16 @@ extension Spezi {
     ///         try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound])
     ///
     ///
-    ///         let deviceToken = try await registerRemoteNotifications()
+    ///         do {
+    ///             let deviceToken = try await registerRemoteNotifications()
+    ///         } catch let error as TimeoutError {
+    /// #if targetEnvironment(simulator)
+    ///             return // override logic when running within a simulator
+    /// #else
+    ///             throw error
+    /// #endif
+    ///         }
+    ///
     ///         // .. send the device token to your remote server that generates push notifications
     ///     }
     /// }

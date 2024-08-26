@@ -36,8 +36,10 @@ final class RemoteNotificationsTests: XCTestCase {
              || app.staticTexts["Token, 60 bytes"].exists) {
             XCTAssertFalse(app.staticTexts["Token, failed"].exists)
             XCTAssertTrue(app.staticTexts["Token, Timeout"].waitForExistence(timeout: 10))
-            print("The token registration timed out!")
         }
+
+        // the unit test accepts both success and failure states. Therefore, print the content of the field to have it visible in the logs
+        print("Read token field as: \(app.staticTexts.matching(identifier: "token-field").firstMatch.debugDescription)")
 
         app.buttons["Unregister"].tap()
         XCTAssertTrue(app.staticTexts["Token, none"].waitForExistence(timeout: 1.0))

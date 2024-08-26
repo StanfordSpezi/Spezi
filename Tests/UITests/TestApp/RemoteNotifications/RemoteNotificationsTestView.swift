@@ -40,6 +40,7 @@ struct RemoteNotificationsTestView: View {
                     }
                 }
                     .accessibilityElement(children: .combine)
+                    .accessibilityIdentifier("token-field")
             }
 
             Section("Actions") {
