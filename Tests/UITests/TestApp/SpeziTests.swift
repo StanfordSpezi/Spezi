@@ -14,7 +14,8 @@ enum SpeziTests: String, TestAppTests {
     case viewModifier = "ViewModifier"
     case lifecycleHandler = "LifecycleHandler"
     case model = "Model"
-    
+    case notifications = "Remote Notifications"
+
     
     func view(withNavigationPath path: Binding<NavigationPath>) -> some View {
         switch self {
@@ -24,6 +25,8 @@ enum SpeziTests: String, TestAppTests {
             LifecycleHandlerTestsView()
         case .model:
             ModelTestView()
+        case .notifications:
+            RemoteNotificationsTestView()
         }
     }
 }

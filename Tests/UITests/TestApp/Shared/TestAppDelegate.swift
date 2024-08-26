@@ -19,6 +19,7 @@ class TestAppDelegate: SpeziAppDelegate {
             }
             ModuleWithModifier()
             ModuleWithModel()
+            NotificationModule()
         }
     }
 }

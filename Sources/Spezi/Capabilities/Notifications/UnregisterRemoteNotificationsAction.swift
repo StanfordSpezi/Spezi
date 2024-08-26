@@ -27,7 +27,7 @@ import SwiftUI
 ///     }
 /// }
 /// ```
-public struct UnregisterRemoteNotificationsAction {
+public struct UnregisterRemoteNotificationsAction: Sendable {
     init() {}
 
 

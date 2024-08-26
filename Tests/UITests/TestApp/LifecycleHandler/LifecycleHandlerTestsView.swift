@@ -14,7 +14,7 @@ import XCTSpezi
 struct LifecycleHandlerTestsView: View {
     @Environment(LifecycleHandlerModel.self)
     var model
-    
+
     
     var body: some View {
         VStack {
