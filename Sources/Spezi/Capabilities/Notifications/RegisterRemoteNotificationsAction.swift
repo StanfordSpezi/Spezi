@@ -127,19 +127,20 @@ public struct RegisterRemoteNotificationsAction: Sendable {
 
                 This issue can occur for several reasons:
 
-                - Your application delegate, which is a subclass of `SpeziAppDelegate`, overrides some notification-related application delegate functions.
+                - Your application delegate (subclass of `SpeziAppDelegate`) overrides some notification-related application delegate functions.
                   Solution: Ensure that you correctly call the overridden method using `super` to pass all relevant information to Spezi.
                 
                 - Your application does not have the correct entitlements and configuration in place to allow registering for remote notifications.
                   Solution: Follow the Apple Documentation at https://developer.apple.com/documentation/usernotifications/registering-your-app-with-apns.
 
                 - Your code or a dependency uses method swizzling, preventing the relevant methods in the application delegate from being called.
-                  Solution: Remove your method swizzling code or configure your dependency to disable this behavior. 
+                  Solution: Remove your method swizzling code or configure your dependency to disable this behavior.
                             For example, to disable method swizzling in the iOS Firebase SDK, follow their guidelines at
                             https://firebase.google.com/docs/cloud-messaging/ios/client#method_swizzling_in.
 
                 - The application is running in the iOS simulator on a Mac that is not signed into an Apple account (e.g., on a CI environment).
-                  Solution: Sign in with an Apple account on your Mac and Xcode. For CI environments, use a special flag or compilation directive to catch the `TimeoutError`.
+                  Solution: Sign in with an Apple account on your Mac and Xcode.
+                            For CI environments, use a special flag or compilation directive to catch the `TimeoutError`.
                 """
             )
             spezi.storage[RemoteNotificationContinuation.self]?.resume(with: .failure(TimeoutError()))
