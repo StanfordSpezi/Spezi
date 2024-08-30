@@ -40,16 +40,11 @@ private final class RemoteNotificationContinuation: KnowledgeSource, Sendable {
 /// - Note: For more information on the general topic on how to register your app with APNs,
 ///     refer to the [Registering your app with APNs](https://developer.apple.com/documentation/usernotifications/registering-your-app-with-apns)
 ///     article.
+/// > Tip: Make sure to request authorization by calling [`requestAuthorization(options:completionHandler:)`](https://developer.apple.com/documentation/usernotifications/unusernotificationcenter/requestauthorization(options:completionhandler:))
+///     to have your remote notifications be able to display alerts, badges or use sound. Otherwise, all remote notifications will be delivered silently.
 ///
 /// Below is a short code example on how to use this action within your ``Module``.
-///
-/// - Warning: Registering for Remote Notifications on Simulator devices might not be possible if your are not signed into an Apple ID on the host machine.
-///     The method might throw a [`TimeoutError`](https://swiftpackageindex.com/stanfordspezi/spezifoundation/documentation/spezifoundation/timeouterror)
-///     in such a case.
-///
 /// ```swift
-/// import SpeziFoundation
-///
 /// class ExampleModule: Module {
 ///     @Application(\.registerRemoteNotifications)
 ///     var registerRemoteNotifications
@@ -57,25 +52,33 @@ private final class RemoteNotificationContinuation: KnowledgeSource, Sendable {
 ///     func handleNotificationsPermissions() async throws {
 ///         // Make sure to request notifications permissions before registering for remote notifications
 ///         try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound])
+///         let deviceToken = try await registerRemoteNotifications()
 ///
-///
-///         do {
-///             let deviceToken = try await registerRemoteNotifications()
-///         } catch let error as TimeoutError {
-/// #if targetEnvironment(simulator)
-///             return // override logic when running within a simulator
-/// #else
-///             throw error
-/// #endif
-///         }
-///
-///         // .. send the device token to your remote server that generates push notifications
+///         // ... send the device token to your remote server that generates push notifications
 ///     }
 /// }
 /// ```
 ///
-/// > Tip: Make sure to request authorization by calling [`requestAuthorization(options:completionHandler:)`](https://developer.apple.com/documentation/usernotifications/unusernotificationcenter/requestauthorization(options:completionhandler:))
-///     to have your remote notifications be able to display alerts, badges or use sound. Otherwise, all remote notifications will be delivered silently.
+/// > Warning: The method might throw a [`TimeoutError`](https://swiftpackageindex.com/stanfordspezi/spezifoundation/documentation/spezifoundation/timeouterror)
+/// if registering for remote notifications is not possible.
+///
+/// Registering for Remote Notifications on Simulator devices might not be possible due to multiple reasons.
+///
+/// #### Your application delegate, which is a subclass of SpeziAppDelegate, overrides some notification-related application delegate functions.
+///
+/// **Solution:** Ensure that you correctly call the overridden method using super to pass all relevant information to Spezi.
+///
+/// #### Your application does not have the correct entitlements and configuration in place to allow registering for remote notifications.
+///
+/// **Solution:** Follow the [Apple Documentation](https://developer.apple.com/documentation/usernotifications/registering-your-app-with-apns).
+///
+/// #### Your code or a dependency uses method swizzling, preventing the relevant methods in the application delegate from being called.
+///
+/// **Solution:** Remove your method swizzling code or configure your dependency to disable this behavior.
+/// For example, to [disable method swizzling in the iOS Firebase SDK](https://firebase.google.com/docs/cloud-messaging/ios/client#method_swizzling_in).
+///
+/// #### The application is running in the iOS simulator on a Mac that is not signed into an Apple account (e.g., on a CI environment).
+/// **Solution:** Sign in with an Apple account on your Mac and Xcode. For CI environments, use a special flag or compilation directive to catch the `TimeoutError`.
 public struct RegisterRemoteNotificationsAction: Sendable {
     private weak var spezi: Spezi?
 
@@ -117,12 +120,31 @@ public struct RegisterRemoteNotificationsAction: Sendable {
 
         try await registration.access.waitCheckingCancellation()
 
-#if targetEnvironment(simulator)
         async let _ = withTimeout(of: .seconds(5)) { @MainActor in
-            spezi.logger.warning("Registering for remote notifications seems to be not possible on this simulator device. Timing out ...")
+            spezi.logger.warning(
+                """
+                Registering for Remote Notifications Timed Out
+
+                This issue can occur for several reasons:
+
+                - Your application delegate (subclass of `SpeziAppDelegate`) overrides some notification-related application delegate functions.
+                  Solution: Ensure that you correctly call the overridden method using `super` to pass all relevant information to Spezi.
+                
+                - Your application does not have the correct entitlements and configuration in place to allow registering for remote notifications.
+                  Solution: Follow the Apple Documentation at https://developer.apple.com/documentation/usernotifications/registering-your-app-with-apns.
+
+                - Your code or a dependency uses method swizzling, preventing the relevant methods in the application delegate from being called.
+                  Solution: Remove your method swizzling code or configure your dependency to disable this behavior.
+                            For example, to disable method swizzling in the iOS Firebase SDK, follow their guidelines at
+                            https://firebase.google.com/docs/cloud-messaging/ios/client#method_swizzling_in.
+
+                - The application is running in the iOS simulator on a Mac that is not signed into an Apple account (e.g., on a CI environment).
+                  Solution: Sign in with an Apple account on your Mac and Xcode.
+                            For CI environments, use a special flag or compilation directive to catch the `TimeoutError`.
+                """
+            )
             spezi.storage[RemoteNotificationContinuation.self]?.resume(with: .failure(TimeoutError()))
         }
-#endif
 
         return try await withCheckedThrowingContinuation { continuation in
             assert(registration.continuation == nil, "continuation wasn't nil")
@@ -142,16 +164,11 @@ extension Spezi {
     /// - Note: For more information on the general topic on how to register your app with APNs,
     ///     refer to the [Registering your app with APNs](https://developer.apple.com/documentation/usernotifications/registering-your-app-with-apns)
     ///     article.
+    /// > Tip: Make sure to request authorization by calling [`requestAuthorization(options:completionHandler:)`](https://developer.apple.com/documentation/usernotifications/unusernotificationcenter/requestauthorization(options:completionhandler:))
+    ///     to have your remote notifications be able to display alerts, badges or use sound. Otherwise, all remote notifications will be delivered silently.
     ///
     /// Below is a short code example on how to use this action within your ``Module``.
-    ///
-    /// - Warning: Registering for Remote Notifications on Simulator devices might not be possible if your are not signed into an Apple ID on the host machine.
-    ///     The method might throw a [`TimeoutError`](https://swiftpackageindex.com/stanfordspezi/spezifoundation/documentation/spezifoundation/timeouterror)
-    ///     in such a case.
-    ///
     /// ```swift
-    /// import SpeziFoundation
-    ///
     /// class ExampleModule: Module {
     ///     @Application(\.registerRemoteNotifications)
     ///     var registerRemoteNotifications
@@ -159,25 +176,34 @@ extension Spezi {
     ///     func handleNotificationsPermissions() async throws {
     ///         // Make sure to request notifications permissions before registering for remote notifications
     ///         try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound])
+    ///         let deviceToken = try await registerRemoteNotifications()
     ///
-    ///
-    ///         do {
-    ///             let deviceToken = try await registerRemoteNotifications()
-    ///         } catch let error as TimeoutError {
-    /// #if targetEnvironment(simulator)
-    ///             return // override logic when running within a simulator
-    /// #else
-    ///             throw error
-    /// #endif
-    ///         }
-    ///
-    ///         // .. send the device token to your remote server that generates push notifications
+    ///         // ... send the device token to your remote server that generates push notifications
     ///     }
     /// }
     /// ```
     ///
-    /// > Tip: Make sure to request authorization by calling [`requestAuthorization(options:completionHandler:)`](https://developer.apple.com/documentation/usernotifications/unusernotificationcenter/requestauthorization(options:completionhandler:))
-    ///     to have your remote notifications be able to display alerts, badges or use sound. Otherwise, all remote notifications will be delivered silently.
+    /// > Warning: The method might throw a [`TimeoutError`](https://swiftpackageindex.com/stanfordspezi/spezifoundation/documentation/spezifoundation/timeouterror)
+    /// if registering for remote notifications is not possible.
+    ///
+    /// Registering for Remote Notifications on Simulator devices might not be possible due to multiple reasons.
+    ///
+    /// #### Your application delegate, which is a subclass of SpeziAppDelegate, overrides some notification-related application delegate functions.
+    ///
+    /// **Solution:** Ensure that you correctly call the overridden method using super to pass all relevant information to Spezi.
+    ///
+    /// #### Your application does not have the correct entitlements and configuration in place to allow registering for remote notifications.
+    ///
+    /// **Solution:** Follow the [Apple Documentation](https://developer.apple.com/documentation/usernotifications/registering-your-app-with-apns).
+    ///
+    /// #### Your code or a dependency uses method swizzling, preventing the relevant methods in the application delegate from being called.
+    ///
+    /// **Solution:** Remove your method swizzling code or configure your dependency to disable this behavior.
+    /// For example, to [disable method swizzling in the iOS Firebase SDK](https://firebase.google.com/docs/cloud-messaging/ios/client#method_swizzling_in).
+    ///
+    /// #### The application is running in the iOS simulator on a Mac that is not signed into an Apple account (e.g., on a CI environment).
+    /// **Solution:** Sign in with an Apple account on your Mac and Xcode. For CI environments, use a special flag or compilation directive to catch the `TimeoutError`.
+    ///
     ///
     /// ## Topics
     /// ### Action
