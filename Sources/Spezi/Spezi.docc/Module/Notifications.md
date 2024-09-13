@@ -14,7 +14,7 @@ SPDX-License-Identifier: MIT
 
 ## Overview
 
-Spezi provides platform-agnostic mechanisms to manage and respond to User Notifications within your ``Module`` or ``Standard``.
+Spezi provides platform-agnostic mechanisms to manage and respond to User Notifications within your ``Module``, ``Standard`` or SwiftUI `View`.
 
 ### Handling Notifications
 
@@ -26,8 +26,10 @@ respectively for more details.
 
 ### Remote Notifications
 
-To register for remote notifications, you can use the ``Module/Application`` property and the corresponding ``Spezi/registerRemoteNotifications`` action.
+To register for remote notifications, you can use the ``Application`` property and the corresponding ``Spezi/registerRemoteNotifications`` action.
 Below is a short code example on how to use this action.
+
+- Note: You can also use the `@Application` property wrapper in your SwiftUI `View` directly.
 
 ```swift
 class ExampleModule: Module {
@@ -58,11 +60,15 @@ implement the ``NotificationHandler/receiveRemoteNotification(_:)`` method.
 ## Topics
 
 ### Notifications
-
-- ``NotificationHandler``
-- ``NotificationTokenHandler``
+- ``Spezi/notificationSettings``
+- ``Spezi/requestNotificationAuthorization``
 
 ### Remote Notification Registration
 
 - ``Spezi/registerRemoteNotifications``
 - ``Spezi/unregisterRemoteNotifications``
+
+### Apple Push Notification Service
+
+- ``NotificationHandler``
+- ``NotificationTokenHandler``

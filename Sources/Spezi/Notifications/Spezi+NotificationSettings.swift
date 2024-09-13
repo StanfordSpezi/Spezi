@@ -39,6 +39,10 @@ extension Spezi {
     ///     }
     /// }
     /// ```
+    ///
+    /// ## Topics
+    /// ### Action
+    /// - ``NotificationSettingsAction``
     public var notificationSettings: NotificationSettingsAction {
         NotificationSettingsAction()
     }

@@ -15,8 +15,8 @@ SPDX-License-Identifier: MIT
 ## Overview
 
 Spezi provides platform-agnostic mechanisms to interact with your application instance.
-To access application properties or actions you can use the ``Module/Application`` property wrapper within your
-``Module`` or ``Standard``.
+To access application properties or actions you can use the ``Application`` property wrapper within your
+``Module``, ``Standard`` or SwiftUI `View`.
 
 > Tip: The <doc:Notifications> articles illustrates how you can easily manage user notifications within your Spezi application. 
 
@@ -24,17 +24,19 @@ To access application properties or actions you can use the ``Module/Application
 
 ### Application Interaction
 
-- ``Module/Application``
+- ``Application``
 
 ### Properties
 
 - ``Spezi/logger``
 - ``Spezi/launchOptions``
 
-### Actions
+### Notifications
 
 - ``Spezi/registerRemoteNotifications``
 - ``Spezi/unregisterRemoteNotifications``
+- ``Spezi/notificationSettings``
+- ``Spezi/requestNotificationAuthorization``
 
 ### Platform-agnostic type-aliases
 

@@ -99,6 +99,7 @@ You can learn more about modules in the <doc:Module> documentation.
 - ``Spezi/Spezi``
 - ``Standard``
 - ``Module``
+- <doc:Interactions-with-Application>
 
 ### Previews
 

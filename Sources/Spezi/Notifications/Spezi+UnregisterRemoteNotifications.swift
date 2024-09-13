@@ -11,41 +11,33 @@ import SwiftUI
 
 /// Unregisters for all remote notifications received through Apple Push Notification service.
 ///
-/// For more information refer to the [`unregisterForRemoteNotifications()`](https://developer.apple.com/documentation/uikit/uiapplication/1623093-unregisterforremotenotifications)
-/// documentation for `UIApplication` or for the respective equivalent for your current platform.
-///
-/// Below is a short code example on how to use this action within your ``Module``.
-///
-/// ```swift
-/// class ExampleModule: Module {
-///     @Application(\.unregisterRemoteNotifications)
-///     var unregisterRemoteNotifications
-///
-///     func onAccountLogout() {
-///         // handling your cleanup ...
-///         unregisterRemoteNotifications()
-///     }
-/// }
-/// ```
-public struct UnregisterRemoteNotificationsAction: Sendable {
-    init() {}
-
-
-    /// Unregisters for all remote notifications received through Apple Push Notification service.
-    @MainActor
-    public func callAsFunction() {
-#if os(watchOS)
-        let application = _Application.shared()
-#else
-        let application = _Application.shared
-#endif
-        
-        application.unregisterForRemoteNotifications()
-    }
-}
+/// Refer to the documentation of ``Spezi/unregisterRemoteNotifications``.
+@_documentation(visibility: internal)
+@available(*, deprecated, renamed: "Spezi.UnregisterRemoteNotificationsAction", message: "Please use Spezi.UnregisterRemoteNotificationsAction")
+public typealias UnregisterRemoteNotificationsAction = Spezi.RequestNotificationAuthorizationAction
 
 
 extension Spezi {
+    /// Unregisters for all remote notifications received through Apple Push Notification service.
+    ///
+    /// Refer to the documentation of ``Spezi/unregisterRemoteNotifications``.
+    public struct UnregisterRemoteNotificationsAction: Sendable {
+        init() {}
+
+
+        /// Unregisters for all remote notifications received through Apple Push Notification service.
+        @MainActor
+        public func callAsFunction() {
+#if os(watchOS)
+            let application = _Application.shared()
+#else
+            let application = _Application.shared
+#endif
+
+            application.unregisterForRemoteNotifications()
+        }
+    }
+
     /// Unregisters for all remote notifications received through Apple Push Notification service.
     ///
     /// For more information refer to the [`unregisterForRemoteNotifications()`](https://developer.apple.com/documentation/uikit/uiapplication/1623093-unregisterforremotenotifications)

@@ -142,7 +142,7 @@ open class SpeziAppDelegate: NSObject, ApplicationDelegate, Sendable {
 
     open func application(_ application: _Application, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         MainActor.assumeIsolated { // on macOS there is a missing MainActor annotation
-            RegisterRemoteNotificationsAction.handleDeviceTokenUpdate(spezi, deviceToken)
+            Spezi.RegisterRemoteNotificationsAction.handleDeviceTokenUpdate(spezi, deviceToken)
 
             // notify all notification handlers of an updated token
             for handler in spezi.notificationTokenHandler {
@@ -153,7 +153,7 @@ open class SpeziAppDelegate: NSObject, ApplicationDelegate, Sendable {
 
     open func application(_ application: _Application, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         MainActor.assumeIsolated { // on macOS there is a missing MainActor annotation
-            RegisterRemoteNotificationsAction.handleFailedRegistration(spezi, error)
+            Spezi.RegisterRemoteNotificationsAction.handleFailedRegistration(spezi, error)
         }
     }
 
