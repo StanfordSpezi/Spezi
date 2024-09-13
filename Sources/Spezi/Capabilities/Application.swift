@@ -94,6 +94,7 @@ extension Application: DynamicProperty {}
 #endif
 
 extension Application {
+    /// Update the SwiftUI property state.
     @MainActor
     public func update() {
         guard state.spezi == nil else {
