@@ -53,7 +53,7 @@ open class SpeziAppDelegate: NSObject, ApplicationDelegate, Sendable {
     private(set) static weak var appDelegate: SpeziAppDelegate?
     static var notificationDelegate: SpeziNotificationCenterDelegate? // swiftlint:disable:this weak_delegate
 
-    private var _spezi: Spezi?
+    private(set) var _spezi: Spezi? // swiftlint:disable:this identifier_name
 
     var spezi: Spezi {
         guard let spezi = _spezi else {
