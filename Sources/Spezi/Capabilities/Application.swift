@@ -87,7 +87,13 @@ public struct Application<Value> {
 }
 
 
-extension Application: @preconcurrency DynamicProperty {
+#if compiler(>=6)
+extension Application: @preconcurrency DynamicProperty {}
+#else
+extension Application: DynamicProperty {}
+#endif
+
+extension Application {
     @MainActor
     public func update() {
         guard state.spezi == nil else {
