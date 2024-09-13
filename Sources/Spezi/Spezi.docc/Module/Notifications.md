@@ -60,6 +60,7 @@ implement the ``NotificationHandler/receiveRemoteNotification(_:)`` method.
 ## Topics
 
 ### Notifications
+- ``LocalNotifications``
 - ``Spezi/notificationSettings``
 - ``Spezi/requestNotificationAuthorization``
 

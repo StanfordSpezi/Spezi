@@ -33,6 +33,10 @@ extension Spezi {
     ///     }
     /// }
     /// ```
+    ///
+    /// ## Topics
+    /// ### Action
+    /// - ``RequestNotificationAuthorizationAction``
     public var requestNotificationAuthorization: RequestNotificationAuthorizationAction {
         RequestNotificationAuthorizationAction()
     }
