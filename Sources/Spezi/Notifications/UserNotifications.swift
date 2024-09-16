@@ -18,15 +18,22 @@
 /// ### Configuration
 /// - ``init()``
 ///
+/// ### Badge Count
+/// - ``setBadgeCount(_:)``
+///
 /// ### Add a Notification Request
-/// - ``add(isolation:request:)``
+/// - ``add(request:)``
 ///
 /// ### Notification Limits
 /// - ``pendingNotificationsLimit``
-/// - ``remainingNotificationLimit(isolation:)``
+/// - ``remainingNotificationLimit()``
+///
+/// ### Fetching Notifications
+/// - ``pendingNotificationRequests()``
+/// - ``deliveredNotifications()``
 ///
 /// ### Categories
-/// - ``add(isolation:categories:)``
+/// - ``add(categories:)``
 public final class LocalNotifications: Module, DefaultInitializable, EnvironmentAccessible {
     /// The total limit of simultaneously scheduled notifications.
     ///
@@ -35,6 +42,23 @@ public final class LocalNotifications: Module, DefaultInitializable, Environment
 
     /// Configure the local notifications module.
     public init() {}
+
+#if compiler(>=6)
+    /// Updates the badge count for your app’s icon.
+    /// - Parameters:
+    ///   - isolation: Inherits the current isolation.
+    ///   - badgeCount: The new badge count to display.
+    public func setBadgeCount( // swiftlint:disable:this function_default_parameter_at_end
+        isolation: isolated (any Actor)? = #isolation,
+        _ badgeCount: Int
+    ) async throws {
+        try await UNUserNotificationCenter.current().setBadgeCount(badgeCount)
+    }
+#else
+    public func setBadgeCount(_ badgeCount: Int) async throws {
+        try await UNUserNotificationCenter.current().setBadgeCount(badgeCount)
+    }
+#endif
 
 #if compiler(>=6)
     /// Schedule a new notification request.
@@ -77,6 +101,36 @@ public final class LocalNotifications: Module, DefaultInitializable, Environment
     public func remainingNotificationLimit() async -> Int {
         let pendingRequests = await UNUserNotificationCenter.current().pendingNotificationRequests()
         return max(0, Self.pendingNotificationsLimit - pendingRequests.count)
+    }
+#endif
+
+#if compiler(>=6)
+    /// Fetch all notification requests that are pending delivery.
+    /// - Parameter isolation: Inherits the current isolation.
+    /// - Returns: The array of pending notifications requests.
+    public func pendingNotificationRequests(isolation: isolated (any Actor)? = #isolation) async -> sending [UNNotificationRequest] {
+        await UNUserNotificationCenter.current().pendingNotificationRequests()
+    }
+#else
+    /// Fetch all notification requests that are pending delivery.
+    /// - Returns: The array of pending notifications requests.
+    public func pendingNotificationRequests() async -> [UNNotificationRequest] {
+        await UNUserNotificationCenter.current().pendingNotificationRequests()
+    }
+#endif
+
+#if compiler(>=6)
+    /// Fetch all delivered notifications that are still shown in the notification center.
+    /// - Parameter isolation: Inherits the current isolation.
+    /// - Returns: The array of local and remote notifications that have been delivered and are still show in the notification center.
+    public func deliveredNotifications(isolation: isolated (any Actor)? = #isolation) async -> sending [UNNotification] {
+        await UNUserNotificationCenter.current().deliveredNotifications()
+    }
+#else
+    /// Fetch all delivered notifications that are still shown in the notification center.
+    /// - Returns: The array of local and remote notifications that have been delivered and are still show in the notification center.
+    public func deliveredNotifications() async -> [UNNotification] {
+        await UNUserNotificationCenter.current().deliveredNotifications()
     }
 #endif
 
