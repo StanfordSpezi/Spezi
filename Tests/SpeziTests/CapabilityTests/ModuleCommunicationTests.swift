@@ -55,7 +55,7 @@ final class ModuleCommunicationTests: XCTestCase {
 
 
     @MainActor
-    override func setUp() {
+    override func setUp() async throws {
         Self.provideModule = ProvideModule1()
         Self.collectModule = CollectModule()
     }
