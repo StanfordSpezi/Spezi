@@ -42,6 +42,7 @@ public enum LifecycleSimulationOptions {
 }
 
 
+#if os(iOS) || os(visionOS) || os(tvOS)
 @_spi(Internal)
 extension Spezi: DeprecatedLaunchOptionsCall {
     @available(*, deprecated, message: "Propagate deprecation warning.")
@@ -49,6 +50,7 @@ extension Spezi: DeprecatedLaunchOptionsCall {
         lifecycleHandler.willFinishLaunchingWithOptions(application, launchOptions: launchOptions)
     }
 }
+#endif
 
 
 extension View {
