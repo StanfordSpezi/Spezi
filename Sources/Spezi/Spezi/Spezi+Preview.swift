@@ -11,6 +11,7 @@ import SwiftUI
 import XCTRuntimeAssertions
 
 
+#if os(iOS) || os(visionOS) || os(tvOS)
 /// Protocol used to silence deprecation warnings.
 @_spi(Internal)
 public protocol DeprecatedLaunchOptionsCall {
@@ -18,6 +19,7 @@ public protocol DeprecatedLaunchOptionsCall {
     @MainActor
     func callWillFinishLaunching(_ application: UIApplication, launchOptions: [UIApplication.LaunchOptionsKey: Any])
 }
+#endif
 
 
 /// Options to simulate behavior for a ``LifecycleHandler`` in cases where there is no app delegate like in Preview setups.

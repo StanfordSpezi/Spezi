@@ -123,12 +123,14 @@ public final class LocalNotifications: Module, DefaultInitializable, Environment
     /// Fetch all delivered notifications that are still shown in the notification center.
     /// - Parameter isolation: Inherits the current isolation.
     /// - Returns: The array of local and remote notifications that have been delivered and are still show in the notification center.
+    @available(tvOS, unavailable)
     public func deliveredNotifications(isolation: isolated (any Actor)? = #isolation) async -> sending [UNNotification] {
         await UNUserNotificationCenter.current().deliveredNotifications()
     }
 #else
     /// Fetch all delivered notifications that are still shown in the notification center.
     /// - Returns: The array of local and remote notifications that have been delivered and are still show in the notification center.
+    @available(tvOS, unavailable)
     public func deliveredNotifications() async -> [UNNotification] {
         await UNUserNotificationCenter.current().deliveredNotifications()
     }
@@ -148,6 +150,7 @@ public final class LocalNotifications: Module, DefaultInitializable, Environment
     /// - Parameters:
     ///   - isolation: Inherits the current isolation.
     ///   - categories: The notification categories you support.
+    @available(tvOS, unavailable)
     public func add( // swiftlint:disable:this function_default_parameter_at_end
         isolation: isolated (any Actor)? = #isolation,
         categories: Set<UNNotificationCategory>
@@ -167,6 +170,7 @@ public final class LocalNotifications: Module, DefaultInitializable, Environment
     /// - Note: Aim to only call this method once at startup.
     ///
     /// - Parameter categories: The notification categories you support.
+    @available(tvOS, unavailable)
     public func add(categories: Set<UNNotificationCategory>) async {
         let previousCategories = await UNUserNotificationCenter.current().notificationCategories()
         UNUserNotificationCenter.current().setNotificationCategories(categories.union(previousCategories))
