@@ -48,6 +48,7 @@ public final class LocalNotifications: Module, DefaultInitializable, Environment
     /// - Parameters:
     ///   - isolation: Inherits the current isolation.
     ///   - badgeCount: The new badge count to display.
+    @available(watchOS, unavailable)
     public func setBadgeCount( // swiftlint:disable:this function_default_parameter_at_end
         isolation: isolated (any Actor)? = #isolation,
         _ badgeCount: Int
@@ -55,6 +56,7 @@ public final class LocalNotifications: Module, DefaultInitializable, Environment
         try await UNUserNotificationCenter.current().setBadgeCount(badgeCount)
     }
 #else
+    @available(watchOS, unavailable)
     public func setBadgeCount(_ badgeCount: Int) async throws {
         try await UNUserNotificationCenter.current().setBadgeCount(badgeCount)
     }
@@ -67,7 +69,7 @@ public final class LocalNotifications: Module, DefaultInitializable, Environment
     ///   - request: The notification request.
     public func add( // swiftlint:disable:this function_default_parameter_at_end
         isolation: isolated (any Actor)? = #isolation,
-        request: sending UNNotificationRequest
+        request: UNNotificationRequest
     ) async throws {
         try await UNUserNotificationCenter.current().add(request)
     }
