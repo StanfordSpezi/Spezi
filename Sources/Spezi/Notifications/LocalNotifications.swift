@@ -40,6 +40,12 @@ public final class LocalNotifications: Module, DefaultInitializable, Environment
     /// The limit is `64`.
     public static let pendingNotificationsLimit = 64
 
+    @Application(\.notificationSettings)
+    public var notificationSettings
+
+    @Application(\.requestNotificationAuthorization)
+    public var requestNotificationAuthorization
+
     /// Configure the local notifications module.
     public init() {}
 

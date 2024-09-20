@@ -63,6 +63,9 @@ public struct Application<Value> {
         var shadowCopy: Value?
     }
 
+    @Environment(\.spezi)
+    private var environmentSpezi // only used when application is used in SwiftUI views
+
     private let keyPath: KeyPath<Spezi, Value>
     private let state = State()
 
@@ -101,7 +104,7 @@ extension Application {
             return // already initialized
         }
 
-        guard let delegate = _Application.shared.delegate as? SpeziAppDelegate else {
+        guard let spezi = environmentSpezi else {
             preconditionFailure(
                     """
                     '@Application' can only be used with Spezi-based apps. Make sure to declare your 'SpeziAppDelegate' \
@@ -113,9 +116,7 @@ extension Application {
             )
         }
 
-        assert(delegate._spezi == nil, "@Application would have caused initialization of Spezi instance.")
-
-        inject(spezi: delegate.spezi)
+        inject(spezi: spezi)
     }
 }
 
