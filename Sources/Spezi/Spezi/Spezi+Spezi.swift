@@ -10,7 +10,7 @@
 extension Spezi {
     /// Access the global Spezi instance.
     ///
-    /// Access the global Spezi instance using the ``Application`` property wrapper inside your ``Module``.
+    /// Access the global Spezi instance using the ``Module/Application`` property wrapper inside your ``Module``.
     ///
     /// Below is a short code example on how to access the Spezi instance.
     ///

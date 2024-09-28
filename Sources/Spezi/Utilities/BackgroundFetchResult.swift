@@ -8,6 +8,8 @@
 
 import SwiftUI
 
+// TODO: move them to the SpeziNotifications package (deprecate here?)
+
 
 #if os(iOS) || os(visionOS) || os(tvOS)
 /// Platform-agnostic `BackgroundFetchResult`.

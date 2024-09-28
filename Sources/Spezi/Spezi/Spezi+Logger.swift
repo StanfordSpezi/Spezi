@@ -13,7 +13,7 @@ import SpeziFoundation
 extension Spezi {
     /// Access the application logger.
     ///
-    /// Access the global Spezi Logger. If used with ``Application`` property wrapper you can create and access your module-specific `Logger`.
+    /// Access the global Spezi Logger. If used with ``Module/Application`` property wrapper you can create and access your module-specific `Logger`.
     ///
     /// Below is a short code example on how to create and access your module-specific `Logger`.
     ///

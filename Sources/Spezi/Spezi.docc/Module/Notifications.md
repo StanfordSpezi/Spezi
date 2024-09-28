@@ -26,7 +26,7 @@ respectively for more details.
 
 ### Remote Notifications
 
-To register for remote notifications, you can use the ``Application`` property and the corresponding ``Spezi/registerRemoteNotifications`` action.
+To register for remote notifications, you can use the ``Module/Application`` property and the corresponding ``Spezi/registerRemoteNotifications`` action.
 Below is a short code example on how to use this action.
 
 - Note: You can also use the `@Application` property wrapper in your SwiftUI `View` directly.
@@ -58,11 +58,6 @@ If you need to fetch additional content from the remote server when receiving a 
 implement the ``NotificationHandler/receiveRemoteNotification(_:)`` method.
 
 ## Topics
-
-### Notifications
-- ``LocalNotifications``
-- ``Spezi/notificationSettings``
-- ``Spezi/requestNotificationAuthorization``
 
 ### Remote Notification Registration
 
