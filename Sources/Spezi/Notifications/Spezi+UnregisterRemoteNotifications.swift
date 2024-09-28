@@ -14,7 +14,7 @@ import SwiftUI
 /// Refer to the documentation of ``Spezi/unregisterRemoteNotifications``.
 @_documentation(visibility: internal)
 @available(*, deprecated, renamed: "Spezi.UnregisterRemoteNotificationsAction", message: "Please use Spezi.UnregisterRemoteNotificationsAction")
-public typealias UnregisterRemoteNotificationsAction = Spezi.RequestNotificationAuthorizationAction
+public typealias UnregisterRemoteNotificationsAction = Spezi.UnregisterRemoteNotificationsAction
 
 
 extension Spezi {

@@ -10,28 +10,6 @@ import SpeziFoundation
 import SwiftUI
 
 
-@MainActor
-private final class RemoteNotificationContinuation: KnowledgeSource, Sendable {
-    typealias Anchor = SpeziAnchor
-
-    fileprivate(set) var continuation: CheckedContinuation<Data, Error>?
-    fileprivate(set) var access = AsyncSemaphore()
-
-
-    init() {}
-
-
-    @MainActor
-    func resume(with result: Result<Data, Error>) {
-        if let continuation {
-            self.continuation = nil
-            access.signal()
-            continuation.resume(with: result)
-        }
-    }
-}
-
-
 /// Registers to receive remote notifications through Apple Push Notification service.
 ///
 /// Refer to the documentation of ``Spezi/registerRemoteNotifications``.
@@ -157,7 +135,7 @@ extension Spezi {
 extension Spezi.RegisterRemoteNotificationsAction {
     @MainActor
     static func handleDeviceTokenUpdate(_ spezi: Spezi, _ deviceToken: Data) {
-        guard let registration = spezi.storage[RemoteNotificationContinuation.self] else {
+        guard let registration = spezi.storage[Spezi.RemoteNotificationContinuation.self] else {
             return
         }
 
@@ -169,7 +147,7 @@ extension Spezi.RegisterRemoteNotificationsAction {
 
     @MainActor
     static func handleFailedRegistration(_ spezi: Spezi, _ error: Error) {
-        guard let registration = spezi.storage[RemoteNotificationContinuation.self] else {
+        guard let registration = spezi.storage[Spezi.RemoteNotificationContinuation.self] else {
             return
         }
 
@@ -178,5 +156,29 @@ extension Spezi.RegisterRemoteNotificationsAction {
         }
 
         registration.resume(with: .failure(error))
+    }
+}
+
+
+extension Spezi {
+    @MainActor
+    private final class RemoteNotificationContinuation: KnowledgeSource, Sendable {
+        typealias Anchor = SpeziAnchor
+
+        fileprivate(set) var continuation: CheckedContinuation<Data, Error>?
+        fileprivate(set) var access = AsyncSemaphore()
+
+
+        init() {}
+
+
+        @MainActor
+        func resume(with result: Result<Data, Error>) {
+            if let continuation {
+                self.continuation = nil
+                access.signal()
+                continuation.resume(with: result)
+            }
+        }
     }
 }
