@@ -238,4 +238,3 @@ open class SpeziAppDelegate: NSObject, ApplicationDelegate, Sendable {
     }
 #endif
 }
-

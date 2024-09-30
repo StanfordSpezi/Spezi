@@ -55,7 +55,7 @@ extension Spezi {
     /// ## Topics
     /// ### Action
     /// - ``UnregisterRemoteNotificationsAction``
-    @_disfavoredOverload // TODO: is this cross module?
+    @_disfavoredOverload
     @available(*, deprecated, message: "Please migrate to the new SpeziNotifications package.")
     public var unregisterRemoteNotifications: UnregisterRemoteNotificationsAction {
         UnregisterRemoteNotificationsAction()
