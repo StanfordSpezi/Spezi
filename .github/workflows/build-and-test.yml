@@ -24,16 +24,6 @@ jobs:
       scheme: Spezi-Package
       resultBundle: Spezi-Package-iOS.xcresult
       artifactname: Spezi-Package-iOS.xcresult
-  buildandtest_ios_latest:
-    name: Build and Test Swift Package iOS Latest
-    uses: StanfordSpezi/.github/.github/workflows/xcodebuild-or-fastlane.yml@v2
-    with:
-      runsonlabels: '["macOS", "self-hosted"]'
-      scheme: Spezi-Package
-      xcodeversion: latest
-      swiftVersion: 6
-      resultBundle: Spezi-Package-iOS-Latest.xcresult
-      artifactname: Spezi-Package-iOS-Latest.xcresult
   buildandtest_watchos:
     name: Build and Test Swift Package watchOS
     uses: StanfordSpezi/.github/.github/workflows/xcodebuild-or-fastlane.yml@v2
@@ -79,17 +69,6 @@ jobs:
       scheme: TestApp
       resultBundle: TestApp-iOS.xcresult
       artifactname: TestApp-iOS.xcresult
-  buildandtestuitests_ios_latest:
-    name: Build and Test UI Tests iOS Latest
-    uses: StanfordSpezi/.github/.github/workflows/xcodebuild-or-fastlane.yml@v2
-    with:
-      runsonlabels: '["macOS", "self-hosted"]'
-      path: Tests/UITests
-      scheme: TestApp
-      xcodeversion: latest
-      swiftVersion: 6
-      resultBundle: TestApp-iOS-Latest.xcresult
-      artifactname: TestApp-iOS-Latest.xcresult
   buildandtestuitests_visionos:
     name: Build and Test UI Tests visionOS
     uses: StanfordSpezi/.github/.github/workflows/xcodebuild-or-fastlane.yml@v2

@@ -6,7 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
-@_spi(Spezi) import Spezi
+@_spi(Spezi) @_spi(Internal) import Spezi
 import SwiftUI
 
 
@@ -34,7 +34,8 @@ public func withDependencyResolution<S: Standard>(
 #if os(iOS) || os(visionOS) || os(tvOS)
     if case let .launchWithOptions(options) = simulateLifecycle {
         // maintain backwards compatibility
-        spezi.lifecycleHandler.willFinishLaunchingWithOptions(UIApplication.shared, launchOptions: options)
+        (spezi as DeprecatedLaunchOptionsCall)
+            .callWillFinishLaunching(UIApplication.shared, launchOptions: options)
     }
 #endif
 }

@@ -11,6 +11,17 @@ import SwiftUI
 import XCTRuntimeAssertions
 
 
+#if os(iOS) || os(visionOS) || os(tvOS)
+/// Protocol used to silence deprecation warnings.
+@_spi(Internal)
+public protocol DeprecatedLaunchOptionsCall {
+    /// Forward to legacy lifecycle handlers.
+    @MainActor
+    func callWillFinishLaunching(_ application: UIApplication, launchOptions: [UIApplication.LaunchOptionsKey: Any])
+}
+#endif
+
+
 /// Options to simulate behavior for a ``LifecycleHandler`` in cases where there is no app delegate like in Preview setups.
 @MainActor
 public enum LifecycleSimulationOptions {
@@ -29,6 +40,17 @@ public enum LifecycleSimulationOptions {
 
     static let launchWithOptions: LifecycleSimulationOptions = .launchWithOptions([:])
 }
+
+
+#if os(iOS) || os(visionOS) || os(tvOS)
+@_spi(Internal)
+extension Spezi: DeprecatedLaunchOptionsCall {
+    @available(*, deprecated, message: "Propagate deprecation warning.")
+    public func callWillFinishLaunching(_ application: UIApplication, launchOptions: [UIApplication.LaunchOptionsKey: Any]) {
+        lifecycleHandler.willFinishLaunchingWithOptions(application, launchOptions: launchOptions)
+    }
+}
+#endif
 
 
 extension View {
@@ -62,13 +84,13 @@ extension View {
         }
 
         let spezi = Spezi(standard: standard, modules: modules().elements, storage: storage)
-        let lifecycleHandlers = spezi.lifecycleHandler
 
         return modifier(SpeziViewModifier(spezi))
 #if os(iOS) || os(visionOS) || os(tvOS)
             .task { @MainActor in
                 if case let .launchWithOptions(options) = simulateLifecycle {
-                    lifecycleHandlers.willFinishLaunchingWithOptions(UIApplication.shared, launchOptions: options)
+                    (spezi as DeprecatedLaunchOptionsCall)
+                        .callWillFinishLaunching(UIApplication.shared, launchOptions: options)
                 }
             }
 #endif

@@ -43,7 +43,7 @@ struct LifecycleHandlerModifier: ViewModifier {
 }
 
 
-final class LifecycleHandlerTestModule: Module, LifecycleHandler {
+final class LifecycleHandlerTestModule: Module {
     private let model: LifecycleHandlerModel
 
     @Modifier var modifier: LifecycleHandlerModifier
@@ -99,3 +99,7 @@ final class LifecycleHandlerTestModule: Module, LifecycleHandler {
     }
 #endif
 }
+
+
+@available(*, deprecated, message: "Propagate deprecation warning.")
+extension LifecycleHandlerTestModule: LifecycleHandler {}

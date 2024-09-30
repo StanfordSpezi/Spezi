@@ -12,6 +12,7 @@ import UserNotifications
 import XCTest
 
 
+@available(*, deprecated, message: "Forward decpreation warnings.")
 private final class TestNotificationHandler: Module, NotificationHandler, NotificationTokenHandler {
     @Application(\.registerRemoteNotifications)
     var registerRemoteNotifications
@@ -75,6 +76,7 @@ private final class TestNotificationHandler: Module, NotificationHandler, Notifi
 private final class EmptyNotificationHandler: Module, NotificationHandler {}
 
 
+@available(*, deprecated, message: "Forward depcreation warnings")
 private class TestNotificationApplicationDelegate: SpeziAppDelegate {
     private let injectedModule: TestNotificationHandler
 
@@ -91,6 +93,7 @@ private class TestNotificationApplicationDelegate: SpeziAppDelegate {
 }
 
 
+@available(*, deprecated, message: "Forward depcreation warnings")
 final class NotificationsTests: XCTestCase {
     @MainActor
     func testRegisterNotificationsSuccessful() async throws {

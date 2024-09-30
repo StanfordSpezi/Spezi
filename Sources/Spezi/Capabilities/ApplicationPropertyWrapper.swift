@@ -6,24 +6,29 @@
 // SPDX-License-Identifier: MIT
 //
 
+import SwiftUI
 
-/// Refer to the documentation of ``Module/Application``.
+
+/// Access a property or action of the Spezi application.
 @propertyWrapper
-public class _ApplicationPropertyWrapper<Value> { // swiftlint:disable:this type_name
-    private let keyPath: KeyPath<Spezi, Value>
+public struct _ApplicationPropertyWrapper<Value> { // swiftlint:disable:this type_name
+    private final class State {
+        weak var spezi: Spezi?
+        /// Some KeyPaths are declared to copy the value upon injection and not query them every time.
+        var shadowCopy: Value?
+    }
 
-    private weak var spezi: Spezi?
-    /// Some KeyPaths are declared to copy the value upon injection and not query them every time.
-    private var shadowCopy: Value?
+    private let keyPath: KeyPath<Spezi, Value>
+    private let state = State()
 
 
     /// Access the application property.
     public var wrappedValue: Value {
-        if let shadowCopy {
+        if let shadowCopy = state.shadowCopy {
             return shadowCopy
         }
 
-        guard let spezi else {
+        guard let spezi = state.spezi else {
             preconditionFailure("Underlying Spezi instance was not yet injected. @Application cannot be accessed within the initializer!")
         }
         return spezi[keyPath: keyPath]
@@ -39,15 +44,15 @@ public class _ApplicationPropertyWrapper<Value> { // swiftlint:disable:this type
 
 extension _ApplicationPropertyWrapper: SpeziPropertyWrapper {
     func inject(spezi: Spezi) {
-        self.spezi = spezi
+        state.spezi = spezi
         if spezi.createsCopy(keyPath) {
-            self.shadowCopy = spezi[keyPath: keyPath]
+            state.shadowCopy = spezi[keyPath: keyPath]
         }
     }
 
     func clear() {
-        spezi = nil
-        shadowCopy = nil
+        state.spezi = nil
+        state.shadowCopy = nil
     }
 }
 

@@ -53,7 +53,17 @@ open class SpeziAppDelegate: NSObject, ApplicationDelegate, Sendable {
     private(set) static weak var appDelegate: SpeziAppDelegate?
     static var notificationDelegate: SpeziNotificationCenterDelegate? // swiftlint:disable:this weak_delegate
 
-    private var _spezi: Spezi?
+    /// Access the Spezi instance.
+    ///
+    /// Use this property as a basis for creating your own APIs (e.g., providing SwiftUI Environment values that use information from Spezi).
+    /// To not make it directly available to the user.
+    @_spi(APISupport)
+    public static var spezi: Spezi? {
+        SpeziAppDelegate.appDelegate?._spezi
+    }
+
+    private(set) var _spezi: Spezi? // swiftlint:disable:this identifier_name
+
 
     var spezi: Spezi {
         guard let spezi = _spezi else {
@@ -63,8 +73,8 @@ open class SpeziAppDelegate: NSObject, ApplicationDelegate, Sendable {
         }
         return spezi
     }
-    
-    
+
+
     /// Register your different ``Module``s (or more sophisticated ``Module``s) using the ``SpeziAppDelegate/configuration`` property,.
     ///
     /// The ``Standard`` acts as a central message broker in the application.
@@ -142,7 +152,7 @@ open class SpeziAppDelegate: NSObject, ApplicationDelegate, Sendable {
 
     open func application(_ application: _Application, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         MainActor.assumeIsolated { // on macOS there is a missing MainActor annotation
-            RegisterRemoteNotificationsAction.handleDeviceTokenUpdate(spezi, deviceToken)
+            spezi.remoteNotificationRegistrationSupport.handleDeviceTokenUpdate(deviceToken)
 
             // notify all notification handlers of an updated token
             for handler in spezi.notificationTokenHandler {
@@ -153,7 +163,7 @@ open class SpeziAppDelegate: NSObject, ApplicationDelegate, Sendable {
 
     open func application(_ application: _Application, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         MainActor.assumeIsolated { // on macOS there is a missing MainActor annotation
-            RegisterRemoteNotificationsAction.handleFailedRegistration(spezi, error)
+            spezi.remoteNotificationRegistrationSupport.handleFailedRegistration(error)
         }
     }
 
