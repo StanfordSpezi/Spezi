@@ -53,14 +53,19 @@ open class SpeziAppDelegate: NSObject, ApplicationDelegate, Sendable {
     private(set) static weak var appDelegate: SpeziAppDelegate?
     static var notificationDelegate: SpeziNotificationCenterDelegate? // swiftlint:disable:this weak_delegate
 
-    private(set) var _spezi: Spezi? // swiftlint:disable:this identifier_name
-
     /// Access the Spezi instance.
     ///
     /// Use this property as a basis for creating your own APIs (e.g., providing SwiftUI Environment values that use information from Spezi).
     /// To not make it directly available to the user.
     @_spi(APISupport)
-    public var spezi: Spezi {
+    public static var spezi: Spezi? {
+        SpeziAppDelegate.appDelegate?._spezi
+    }
+
+    private(set) var _spezi: Spezi? // swiftlint:disable:this identifier_name
+
+
+    var spezi: Spezi {
         guard let spezi = _spezi else {
             let spezi = Spezi(from: configuration)
             self._spezi = spezi
@@ -68,8 +73,8 @@ open class SpeziAppDelegate: NSObject, ApplicationDelegate, Sendable {
         }
         return spezi
     }
-    
-    
+
+
     /// Register your different ``Module``s (or more sophisticated ``Module``s) using the ``SpeziAppDelegate/configuration`` property,.
     ///
     /// The ``Standard`` acts as a central message broker in the application.
@@ -233,3 +238,4 @@ open class SpeziAppDelegate: NSObject, ApplicationDelegate, Sendable {
     }
 #endif
 }
+
