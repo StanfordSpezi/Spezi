@@ -25,7 +25,7 @@ extension Spezi {
     public struct RegisterRemoteNotificationsAction: Sendable {
         private weak var spezi: Spezi?
 
-        init(_ spezi: Spezi) {
+        fileprivate init(_ spezi: Spezi) {
             self.spezi = spezi
         }
 
@@ -43,38 +43,10 @@ extension Spezi {
         @MainActor
         public func callAsFunction() async throws -> Data {
             guard let spezi else {
-                preconditionFailure("RegisterRemoteNotificationsAction was used in a scope where Spezi was not available anymore!")
+                preconditionFailure("\(Self.self) was used in a scope where Spezi was not available anymore!")
             }
 
-
-#if os(watchOS)
-            let application = _Application.shared()
-#else
-            let application = _Application.shared
-#endif // os(watchOS)
-
-            let registration: RemoteNotificationContinuation
-            if let existing = spezi.storage[RemoteNotificationContinuation.self] {
-                registration = existing
-            } else {
-                registration = RemoteNotificationContinuation()
-                spezi.storage[RemoteNotificationContinuation.self] = registration
-            }
-
-            try await registration.access.waitCheckingCancellation()
-
-#if targetEnvironment(simulator)
-            async let _ = withTimeout(of: .seconds(5)) { @MainActor in
-                spezi.logger.warning("Registering for remote notifications seems to be not possible on this simulator device. Timing out ...")
-                spezi.storage[RemoteNotificationContinuation.self]?.resume(with: .failure(TimeoutError()))
-            }
-#endif
-
-            return try await withCheckedThrowingContinuation { continuation in
-                assert(registration.continuation == nil, "continuation wasn't nil")
-                registration.continuation = continuation
-                application.registerForRemoteNotifications()
-            }
+            return try await spezi.remoteNotificationRegistrationSupport()
         }
     }
 
@@ -126,59 +98,9 @@ extension Spezi {
     /// ## Topics
     /// ### Action
     /// - ``RegisterRemoteNotificationsAction``
+    @_disfavoredOverload
+    @available(*, deprecated, message: "Please migrate to the new SpeziNotifications package.")
     public var registerRemoteNotifications: RegisterRemoteNotificationsAction {
         RegisterRemoteNotificationsAction(self)
-    }
-}
-
-
-extension Spezi.RegisterRemoteNotificationsAction {
-    @MainActor
-    static func handleDeviceTokenUpdate(_ spezi: Spezi, _ deviceToken: Data) {
-        guard let registration = spezi.storage[Spezi.RemoteNotificationContinuation.self] else {
-            return
-        }
-
-        // might also be called if, e.g., app is restored from backup and is automatically registered for remote notifications.
-        // This can be handled through the `NotificationHandler` protocol.
-
-        registration.resume(with: .success(deviceToken))
-    }
-
-    @MainActor
-    static func handleFailedRegistration(_ spezi: Spezi, _ error: Error) {
-        guard let registration = spezi.storage[Spezi.RemoteNotificationContinuation.self] else {
-            return
-        }
-
-        if registration.continuation == nil {
-            spezi.logger.warning("Received a call to \(#function) while we were not waiting for a notifications registration request.")
-        }
-
-        registration.resume(with: .failure(error))
-    }
-}
-
-
-extension Spezi {
-    @MainActor
-    private final class RemoteNotificationContinuation: KnowledgeSource, Sendable {
-        typealias Anchor = SpeziAnchor
-
-        fileprivate(set) var continuation: CheckedContinuation<Data, Error>?
-        fileprivate(set) var access = AsyncSemaphore()
-
-
-        init() {}
-
-
-        @MainActor
-        func resume(with result: Result<Data, Error>) {
-            if let continuation {
-                self.continuation = nil
-                access.signal()
-                continuation.resume(with: result)
-            }
-        }
     }
 }

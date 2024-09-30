@@ -21,20 +21,15 @@ extension Spezi {
     /// Unregisters for all remote notifications received through Apple Push Notification service.
     ///
     /// Refer to the documentation of ``Spezi/unregisterRemoteNotifications``.
+    @available(*, deprecated, message: "Please migrate to the new SpeziNotifications package.")
     public struct UnregisterRemoteNotificationsAction: Sendable {
-        init() {}
+        fileprivate init() {}
 
 
         /// Unregisters for all remote notifications received through Apple Push Notification service.
         @MainActor
         public func callAsFunction() {
-#if os(watchOS)
-            let application = _Application.shared()
-#else
-            let application = _Application.shared
-#endif
-
-            application.unregisterForRemoteNotifications()
+            _Application.shared.unregisterForRemoteNotifications()
         }
     }
 
@@ -60,6 +55,8 @@ extension Spezi {
     /// ## Topics
     /// ### Action
     /// - ``UnregisterRemoteNotificationsAction``
+    @_disfavoredOverload // TODO: is this cross module?
+    @available(*, deprecated, message: "Please migrate to the new SpeziNotifications package.")
     public var unregisterRemoteNotifications: UnregisterRemoteNotificationsAction {
         UnregisterRemoteNotificationsAction()
     }

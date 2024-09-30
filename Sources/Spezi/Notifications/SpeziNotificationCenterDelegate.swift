@@ -20,10 +20,7 @@ class SpeziNotificationCenterDelegate: NSObject {
         // The completion handler would also be called on a background thread which results in a crash.
         // Declaring the method as @MainActor requires a @preconcurrency inheritance from the delegate to silence Sendable warnings.
 
-        await withTaskGroup(of: Void.self) { @MainActor group in
-            // Moving this inside here (@MainActor isolated task group body) helps us avoid making the whole delegate method @MainActor.
-            // Apparently having the non-Sendable `UNNotificationResponse` as a parameter to a @MainActor annotated method doesn't suppress
-            // the warning with @preconcurrency, but capturing `response` in a @MainActor isolated closure does.
+        await withTaskGroup(of: Void.self) { group in
             guard let delegate = SpeziAppDelegate.appDelegate else {
                 return
             }
@@ -44,8 +41,7 @@ class SpeziNotificationCenterDelegate: NSObject {
         _ center: UNUserNotificationCenter,
         willPresent notification: UNNotification
     ) async -> UNNotificationPresentationOptions {
-        await withTaskGroup(of: UNNotificationPresentationOptions?.self) { @MainActor group in
-            // See comment in method above.
+        await withTaskGroup(of: UNNotificationPresentationOptions?.self) { group in
             guard let delegate = SpeziAppDelegate.appDelegate else {
                 return []
             }

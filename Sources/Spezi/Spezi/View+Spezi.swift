@@ -22,7 +22,6 @@ struct SpeziViewModifier: ViewModifier {
     func body(content: Content) -> some View {
         spezi.viewModifiers
             .modify(content)
-            .environment(\.spezi, spezi)
     }
 }
 
