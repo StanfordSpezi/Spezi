@@ -10,8 +10,6 @@ import Spezi
 import SwiftUI
 import XCTestApp
 
-// TODO: test @Application somewhere! (maybe just use @Environment???)
-
 
 @main
 struct UITestsApp: App {

@@ -64,6 +64,7 @@ class ExampleModule: Module {
 
 ### Capabilities
 - <doc:Interactions-with-SwiftUI>
+- <doc:Interactions-with-Application>
 - <doc:Module-Dependency>
 - <doc:Module-Communication>
 - <doc:Notifications>
