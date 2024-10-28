@@ -245,10 +245,16 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
         let module3 = TestModule3()
         let spezi = Spezi(standard: DefaultStandard(), modules: [TestModule1(), module3])
 
-        throw XCTSkip("Skipped for now!") // TODO: what the fuck?
-        try XCTRuntimePrecondition {
-            // cannot unload module that other modules still depend on
-            spezi.unloadModule(module3)
+        // cannot unload module that other modules still depend on
+        XCTAssertThrowsError(try spezi._unloadModule(module3)) { error in
+            guard let moduleError = error as? SpeziModuleError,
+                  case let .moduleStillRequired(module, dependents) = moduleError else {
+                XCTFail("Received unexpected error: \(error)")
+                return
+            }
+
+            XCTAssertEqual(module, "TestModule3")
+            XCTAssertEqual(Set(dependents), ["TestModule2", "TestModule1"])
         }
     }
 

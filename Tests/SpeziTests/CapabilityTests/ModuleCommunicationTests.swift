@@ -69,20 +69,4 @@ final class ModuleCommunicationTests: XCTestCase {
         XCTAssertTrue(Self.collectModule.nothingProvided.isEmpty)
         XCTAssertEqual(Self.collectModule.strings, ["Hello World"])
     }
-
-    @MainActor
-    func testIllegalAccess() throws {
-        let delegate = TestApplicationDelegate()
-
-        throw XCTSkip("Skipped for now!") // TODO: what the fuck?
-        try XCTRuntimePrecondition {
-            _ = Self.collectModule.strings
-        }
-
-        _ = delegate.spezi // ensure init
-
-        try XCTRuntimePrecondition {
-            Self.provideModule.numMaybe2 = 12
-        }
-    }
 }
