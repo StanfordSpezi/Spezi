@@ -99,7 +99,7 @@ extension Spezi {
     /// ### Action
     /// - ``RegisterRemoteNotificationsAction``
     @_disfavoredOverload
-    @available(*, deprecated, message: "Please migrate to the new SpeziNotifications package.")
+    @available(*, deprecated, message: "Please migrate to the new SpeziNotifications package: https://github.com/StanfordSpezi/SpeziNotifications")
     public var registerRemoteNotifications: RegisterRemoteNotificationsAction {
         RegisterRemoteNotificationsAction(self)
     }

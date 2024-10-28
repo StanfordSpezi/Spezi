@@ -21,7 +21,7 @@ extension Spezi {
     /// Unregisters for all remote notifications received through Apple Push Notification service.
     ///
     /// Refer to the documentation of ``Spezi/unregisterRemoteNotifications``.
-    @available(*, deprecated, message: "Please migrate to the new SpeziNotifications package.")
+    @available(*, deprecated, message: "Please migrate to the new SpeziNotifications package: https://github.com/StanfordSpezi/SpeziNotifications")
     public struct UnregisterRemoteNotificationsAction: Sendable {
         fileprivate init() {}
 
@@ -56,7 +56,7 @@ extension Spezi {
     /// ### Action
     /// - ``UnregisterRemoteNotificationsAction``
     @_disfavoredOverload
-    @available(*, deprecated, message: "Please migrate to the new SpeziNotifications package.")
+    @available(*, deprecated, message: "Please migrate to the new SpeziNotifications package: https://github.com/StanfordSpezi/SpeziNotifications")
     public var unregisterRemoteNotifications: UnregisterRemoteNotificationsAction {
         UnregisterRemoteNotificationsAction()
     }
