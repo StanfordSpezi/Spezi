@@ -127,15 +127,15 @@ extension DependencyCollection: DependencyDeclaration {
     }
 
 
-    func collect(into dependencyManager: DependencyManager) {
+    func collect(into dependencyManager: DependencyManager) throws(DependencyManagerError) {
         for entry in entries {
-            entry.collect(into: dependencyManager)
+            try entry.collect(into: dependencyManager)
         }
     }
 
-    func inject(from dependencyManager: DependencyManager, for module: any Module) {
+    func inject(from dependencyManager: DependencyManager, for module: any Module) throws(DependencyManagerError) {
         for entry in entries {
-            entry.inject(from: dependencyManager, for: module)
+            try entry.inject(from: dependencyManager, for: module)
         }
     }
 

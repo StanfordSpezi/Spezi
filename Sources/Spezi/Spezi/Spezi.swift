@@ -227,7 +227,11 @@ public final class Spezi: Sendable {
         let existingModules = self.modules
 
         let dependencyManager = DependencyManager(modules, existing: existingModules)
-        dependencyManager.resolve()
+        do {
+            try dependencyManager.resolve()
+        } catch {
+            preconditionFailure(error.description)
+        }
 
         implicitlyCreatedModules.formUnion(dependencyManager.implicitlyCreatedModules)
         
@@ -296,7 +300,11 @@ public final class Spezi: Sendable {
         // re-injecting all dependencies ensures that the unloaded module is cleared from optional Dependencies from
         // pre-existing Modules.
         let dependencyManager = DependencyManager([], existing: modules)
-        dependencyManager.resolve()
+        do {
+            try dependencyManager.resolve()
+        } catch {
+            preconditionFailure("Internal inconsistency. Repeated dependency resolve resulted in error: \(error)")
+        }
 
         module.clear() // automatically removes @Provide values and recursively unloads implicitly created modules
     }

@@ -41,6 +41,7 @@ extension _StandardPropertyWrapper: SpeziPropertyWrapper {
     func inject(spezi: Spezi) {
         guard let standard = spezi.standard as? Constraint else {
             let standardType = type(of: spezi.standard)
+            // TODO: allow this to get throwing!
             preconditionFailure(
                 """
                 The `Standard` defined in the `Configuration` does not conform to \(String(describing: Constraint.self)).

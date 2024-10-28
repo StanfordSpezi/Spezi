@@ -92,12 +92,12 @@ class DependencyContext<Dependency: Module>: AnyDependencyContext {
         }
     }
 
-    func collect(into dependencyManager: DependencyManager) {
-        dependencyManager.require(Dependency.self, type: type, defaultValue: defaultValue)
+    func collect(into dependencyManager: DependencyManager) throws(DependencyManagerError) {
+        try dependencyManager.require(Dependency.self, type: type, defaultValue: defaultValue)
     }
 
-    func inject(from dependencyManager: DependencyManager, for module: any Module) {
-        guard let dependency = dependencyManager.retrieve(module: Dependency.self, type: type, for: module) else {
+    func inject(from dependencyManager: DependencyManager, for module: any Module) throws(DependencyManagerError) {
+        guard let dependency = try dependencyManager.retrieve(module: Dependency.self, type: type, for: module) else {
             injectedDependency = nil
             return
         }

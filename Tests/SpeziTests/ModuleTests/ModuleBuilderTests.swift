@@ -90,9 +90,7 @@ final class ModuleBuilderTests: XCTestCase {
             expectations: expectations
         )
 
-        let dependencyManager = DependencyManager(modules.elements)
-        dependencyManager.resolve()
-        for module in dependencyManager.initializedModules {
+        for module in DependencyManager.resolveWithoutErrors(modules.elements) {
             module.configure()
         }
 
@@ -111,10 +109,8 @@ final class ModuleBuilderTests: XCTestCase {
             condition: false,
             expectations: expectations
         )
-        
-        let dependencyManager = DependencyManager(modules.elements)
-        dependencyManager.resolve()
-        for module in dependencyManager.initializedModules {
+
+        for module in DependencyManager.resolveWithoutErrors(modules.elements) {
             module.configure()
         }
 

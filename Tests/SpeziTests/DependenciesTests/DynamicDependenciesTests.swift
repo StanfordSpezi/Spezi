@@ -96,7 +96,7 @@ final class DynamicDependenciesTests: XCTestCase {
                 TestModule1(dynamicDependenciesTestCase)
             ]
 
-            let initializedModules = DependencyManager.resolve(modules)
+            let initializedModules = DependencyManager.resolveWithoutErrors(modules)
             XCTAssertEqual(initializedModules.count, dynamicDependenciesTestCase.expectedNumberOfModules)
             
             try initializedModules.moduleOfType(TestModule1.self).evaluateExpectations()
