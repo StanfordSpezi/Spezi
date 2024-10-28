@@ -11,6 +11,7 @@ builder:
   configs:
     - platform: ios
       scheme: Spezi
+      swift_version: 6
       documentation_targets:
       - Spezi
       - XCTSpezi

@@ -90,8 +90,6 @@ import XCTRuntimeAssertions
 public final class Spezi: Sendable {
     static let logger = Logger(subsystem: "edu.stanford.spezi", category: "Spezi")
 
-    @TaskLocal static var moduleInitContext: ModuleDescription?
-
     let standard: any Standard
 
     /// A shared repository to store any `KnowledgeSource`s restricted to the ``SpeziAnchor``.
@@ -188,9 +186,13 @@ public final class Spezi: Sendable {
         self.standard = standard
         self.storage = consume storage
 
-        self.loadModules(modules, ownership: .spezi)
-        // load standard separately, such that all module loading takes precedence
-        self.loadModule(standard, ownership: .spezi)
+        do {
+            try self.loadModules(modules, ownership: .spezi)
+            // load standard separately, such that all module loading takes precedence
+            try self.loadModules([standard], ownership: .spezi)
+        } catch {
+            preconditionFailure(error.description)
+        }
     }
     
     /// Load a new Module.
@@ -211,11 +213,15 @@ public final class Spezi: Sendable {
     /// - ``ModuleOwnership``
     @MainActor
     public func loadModule(_ module: any Module, ownership: ModuleOwnership = .spezi) {
-        loadModules([module], ownership: ownership)
+        do {
+            try loadModules([module], ownership: ownership)
+        } catch {
+            preconditionFailure(error.description)
+        }
     }
 
     @MainActor
-    private func loadModules(_ modules: [any Module], ownership: ModuleOwnership) {
+    func loadModules(_ modules: [any Module], ownership: ModuleOwnership) throws(SpeziModuleError) {
         precondition(Self.moduleInitContext == nil, "Modules cannot be loaded within the `configure()` method.")
 
         purgeWeaklyReferenced()
@@ -227,13 +233,17 @@ public final class Spezi: Sendable {
         let existingModules = self.modules
 
         let dependencyManager = DependencyManager(modules, existing: existingModules)
-        dependencyManager.resolve()
+        do {
+            try dependencyManager.resolve()
+        } catch {
+            throw .dependency(error)
+        }
 
         implicitlyCreatedModules.formUnion(dependencyManager.implicitlyCreatedModules)
         
         // we pass through the whole list of modules once to collect all @Provide values
         for module in dependencyManager.initializedModules {
-            Self.$moduleInitContext.withValue(module.moduleDescription) {
+            withModuleInitContext(module.moduleDescription) {
                 module.collectModuleValues(into: &storage)
             }
         }
@@ -241,9 +251,9 @@ public final class Spezi: Sendable {
         for module in dependencyManager.initializedModules {
             if requestedModules.contains(ModuleReference(module)) {
                 // the policy only applies to the requested modules, all other are always managed and owned by Spezi
-                self.initModule(module, ownership: ownership)
+                try self.initModule(module, ownership: ownership)
             } else {
-                self.initModule(module, ownership: .spezi)
+                try self.initModule(module, ownership: .spezi)
             }
         }
         
@@ -265,6 +275,15 @@ public final class Spezi: Sendable {
     /// - Parameter module: The Module to unload.
     @MainActor
     public func unloadModule(_ module: any Module) {
+        do {
+            try _unloadModule(module)
+        } catch {
+            preconditionFailure(error.description)
+        }
+    }
+
+    @MainActor
+    func _unloadModule(_ module: any Module) throws(SpeziModuleError) { // swiftlint:disable:this identifier_name
         precondition(Self.moduleInitContext == nil, "Modules cannot be unloaded within the `configure()` method.")
 
         purgeWeaklyReferenced()
@@ -276,7 +295,9 @@ public final class Spezi: Sendable {
         logger.debug("Unloading module \(type(of: module)) ...")
 
         let dependents = retrieveDependingModules(module.dependencyReference, considerOptionals: false)
-        precondition(dependents.isEmpty, "Tried to unload Module \(type(of: module)) that is still required by peer Modules: \(dependents)")
+        if !dependents.isEmpty {
+            throw SpeziModuleError.moduleStillRequired(module: "\(type(of: module))", dependents: dependents.map { "\(type(of: $0))" })
+        }
         
         module.clearModule(from: self)
         
@@ -296,7 +317,11 @@ public final class Spezi: Sendable {
         // re-injecting all dependencies ensures that the unloaded module is cleared from optional Dependencies from
         // pre-existing Modules.
         let dependencyManager = DependencyManager([], existing: modules)
-        dependencyManager.resolve()
+        do {
+            try dependencyManager.resolve()
+        } catch {
+            preconditionFailure("Internal inconsistency. Repeated dependency resolve resulted in error: \(error)")
+        }
 
         module.clear() // automatically removes @Provide values and recursively unloads implicitly created modules
     }
@@ -309,38 +334,42 @@ public final class Spezi: Sendable {
     ///   - module: The module to initialize.
     ///   - ownership: Define the type of ownership when loading the module.
     @MainActor
-    private func initModule(_ module: any Module, ownership: ModuleOwnership) {
+    private func initModule(_ module: any Module, ownership: ModuleOwnership) throws(SpeziModuleError) {
         precondition(!module.isLoaded(in: self), "Tried to initialize Module \(type(of: module)) that was already loaded!")
 
-        Self.$moduleInitContext.withValue(module.moduleDescription) {
-            module.inject(spezi: self)
+        do {
+            try withModuleInitContext(module.moduleDescription) { () throws(SpeziPropertyError) in
+                try module.inject(spezi: self)
 
-            // supply modules values to all @Collect
-            module.injectModuleValues(from: storage)
+                // supply modules values to all @Collect
+                module.injectModuleValues(from: storage)
 
-            module.configure()
+                module.configure()
 
-            switch ownership {
-            case .spezi:
-                module.storeModule(into: self)
-            case .external:
-                module.storeWeakly(into: self)
-            }
+                switch ownership {
+                case .spezi:
+                    module.storeModule(into: self)
+                case .external:
+                    module.storeWeakly(into: self)
+                }
 
-            // If a module is @Observable, we automatically inject it view the `ModelModifier` into the environment.
-            if let observable = module as? EnvironmentAccessible {
-                // we can't guarantee weak references for EnvironmentAccessible modules
-                precondition(ownership != .external, "Modules loaded with self-managed policy cannot conform to `EnvironmentAccessible`.")
-                _viewModifiers[ModuleReference(module)] = observable.viewModifier
-            }
+                // If a module is @Observable, we automatically inject it view the `ModelModifier` into the environment.
+                if let observable = module as? EnvironmentAccessible {
+                    // we can't guarantee weak references for EnvironmentAccessible modules
+                    precondition(ownership != .external, "Modules loaded with self-managed policy cannot conform to `EnvironmentAccessible`.")
+                    _viewModifiers[ModuleReference(module)] = observable.viewModifier
+                }
 
-            let modifierEntires: [(id: UUID, modifier: any ViewModifier)] = module.viewModifierEntires
-            // this check is important. Change to viewModifiers re-renders the whole SwiftUI view hierarchy. So avoid to do it unnecessarily
-            if !modifierEntires.isEmpty {
-                for entry in modifierEntires.reversed() { // reversed, as we re-reverse things in the `viewModifier` getter
-                    _viewModifiers.updateValue(entry.modifier, forKey: entry.id)
+                let modifierEntires: [(id: UUID, modifier: any ViewModifier)] = module.viewModifierEntires
+                // this check is important. Change to viewModifiers re-renders the whole SwiftUI view hierarchy. So avoid to do it unnecessarily
+                if !modifierEntires.isEmpty {
+                    for entry in modifierEntires.reversed() { // reversed, as we re-reverse things in the `viewModifier` getter
+                        _viewModifiers.updateValue(entry.modifier, forKey: entry.id)
+                    }
                 }
             }
+        } catch {
+            throw .property(error)
         }
     }
 
@@ -475,3 +504,34 @@ extension Module {
         }
     }
 }
+
+
+extension Spezi {
+    private static let initContextLock = NSLock()
+    private static nonisolated(unsafe) var _moduleInitContext: ModuleDescription?
+
+    private(set) static var moduleInitContext: ModuleDescription? {
+        get {
+            initContextLock.withLock {
+                _moduleInitContext
+            }
+        }
+        set {
+            initContextLock.withLock {
+                _moduleInitContext = newValue
+            }
+        }
+    }
+
+    @MainActor
+    func withModuleInitContext<E: Error>(_ context: ModuleDescription, perform action: () throws(E) -> Void) throws(E) {
+        Self.moduleInitContext = context
+        defer {
+            Self.moduleInitContext = nil
+        }
+
+        try action()
+    }
+}
+
+// swiftlint:disable:this file_length

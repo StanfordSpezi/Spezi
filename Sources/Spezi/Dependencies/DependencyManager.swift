@@ -59,12 +59,12 @@ public class DependencyManager: Sendable {
     /// Resolves the dependency order.
     ///
     /// After calling `resolve()` you can safely access `initializedModules`.
-    func resolve() {
+    func resolve() throws(DependencyManagerError) {
         while let nextModule = modulesWithDependencies.first {
-            push(nextModule)
+            try push(nextModule)
         }
 
-        injectDependencies()
+        try injectDependencies()
         assert(searchStacks.isEmpty, "`searchStacks` are not getting cleaned up!")
         assert(currentPushedModule == nil, "`currentPushedModule` is never reset!")
         assert(modulesWithDependencies.isEmpty, "modulesWithDependencies has remaining entries \(modulesWithDependencies)")
@@ -109,18 +109,18 @@ public class DependencyManager: Sendable {
         return order
     }
 
-    private func injectDependencies() {
+    private func injectDependencies() throws(DependencyManagerError) {
         // We inject dependencies into existingModules as well as a new dependency might be an optional dependency from a existing module
         // that wasn't previously injected.
         for module in initializedModules + existingModules {
             for dependency in module.dependencyDeclarations {
-                dependency.inject(from: self, for: module)
+                try dependency.inject(from: self, for: module)
             }
         }
     }
 
     /// Push a module on the search stack and resolve dependency information.
-    private func push(_ module: any Module) {
+    private func push(_ module: any Module) throws(DependencyManagerError) {
         assert(currentPushedModule == nil, "Module already pushed. Did the algorithm turn into an recursive one by accident?")
 
         currentPushedModule = ModuleReference(module)
@@ -128,7 +128,7 @@ public class DependencyManager: Sendable {
             .append(type(of: module))
 
         for dependency in module.dependencyDeclarations {
-            dependency.collect(into: self) // leads to calls to `require(_:defaultValue:)`
+            try dependency.collect(into: self) // leads to calls to `require(_:defaultValue:)`
         }
 
         finishSearch(for: module)
@@ -138,8 +138,8 @@ public class DependencyManager: Sendable {
     /// - Parameters:
     ///   - dependency: The type of the dependency that should be resolved.
     ///   - defaultValue: A default instance of the dependency that is used when the `dependencyType` is not present in the `initializedModules` or `modulesWithDependencies`.
-    func require<M: Module>(_ dependency: M.Type, type dependencyType: DependencyType, defaultValue: (() -> M)?) {
-        testForSearchStackCycles(M.self)
+    func require<M: Module>(_ dependency: M.Type, type dependencyType: DependencyType, defaultValue: (() -> M)?) throws(DependencyManagerError) {
+        try testForSearchStackCycles(M.self)
 
         // 1. Check if it is actively requested to load this module.
         if case .load = dependencyType {
@@ -177,18 +177,13 @@ public class DependencyManager: Sendable {
     ///   - module: The ``Module`` type to return.
     ///   - optional: Flag indicating if it is a optional return.
     /// - Returns: Returns the Module instance. Only optional, if `optional` is set to `true` and no Module was found.
-    func retrieve<M: Module>(module: M.Type, type dependencyType: DependencyType, for owner: any Module) -> M? {
+    func retrieve<M: Module>(module: M.Type, type dependencyType: DependencyType, for owner: any Module) throws(DependencyManagerError) -> M? {
         guard let candidate = existingModules.first(where: { type(of: $0) == M.self })
                 ?? initializedModules.first(where: { type(of: $0) == M.self }),
               let module = candidate as? M else {
-            precondition(
-                dependencyType.isOptional,
-                """
-                '\(type(of: owner)) requires dependency of type '\(M.self)' which wasn't configured.
-                Please make sure this module is configured by including it in the configuration of your `SpeziAppDelegate` or following \
-                Module-specific instructions.
-                """
-            )
+            if !dependencyType.isOptional {
+                throw DependencyManagerError.missingRequiredModule(module: "\(type(of: owner))", requiredModule: "\(M.self)")
+            }
             return nil
         }
 
@@ -231,20 +226,16 @@ public class DependencyManager: Sendable {
         searchStacks[ModuleReference(module)] = searchStack
     }
 
-    private func testForSearchStackCycles<M>(_ module: M.Type) {
+    private func testForSearchStackCycles<M>(_ module: M.Type) throws(DependencyManagerError) {
         if let currentPushedModule {
             let searchStack = searchStacks[currentPushedModule, default: []]
 
-            precondition(
-                !searchStack.contains(where: { $0 == M.self }),
-                """
-                The `DependencyManager` has detected a dependency cycle of your Spezi modules.
-                The current dependency chain is: \(searchStack.map { String(describing: $0) }.joined(separator: ", ")). \
-                The module '\(searchStack.last.unsafelyUnwrapped)' required '\(M.self)' which is contained in its own dependency chain.
-                
-                Please ensure that the modules you use or develop can not trigger a dependency cycle.
-                """
-            )
+            if searchStack.contains(where: { $0 == M.self }) {
+                let module = "\(searchStack.last.unsafelyUnwrapped)"
+                let dependencyChain = searchStack
+                    .map { String(describing: $0) }
+                throw DependencyManagerError.searchStackCycle(module: module, requestedModule: "\(M.self)", dependencyChain: dependencyChain)
+            }
         }
     }
 }

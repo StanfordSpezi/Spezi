@@ -28,13 +28,13 @@ protocol DependencyDeclaration {
 
     /// Request from the ``DependencyManager`` to collect all dependencies. Mark required by calling `DependencyManager/require(_:defaultValue:)`.
     @MainActor
-    func collect(into dependencyManager: DependencyManager)
+    func collect(into dependencyManager: DependencyManager) throws(DependencyManagerError)
     /// Inject the dependency instance from the ``DependencyManager``. Use `DependencyManager/retrieve(module:)`.
     /// - Parameters:
     ///   - dependencyManager: The dependency manager to inject the dependencies from.
     ///   - module: The module where the dependency declaration is located at.
     @MainActor
-    func inject(from dependencyManager: DependencyManager, for module: any Module)
+    func inject(from dependencyManager: DependencyManager, for module: any Module) throws(DependencyManagerError)
 
     @MainActor
     func inject(spezi: Spezi)

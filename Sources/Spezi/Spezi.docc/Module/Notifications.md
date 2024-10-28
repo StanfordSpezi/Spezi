@@ -60,9 +60,10 @@ implement the ``NotificationHandler/receiveRemoteNotification(_:)`` method.
 ### Notifications
 
 - ``NotificationHandler``
+
+### Apple Push Notification Service
+
 - ``NotificationTokenHandler``
-
-### Remote Notification Registration
-
 - ``Spezi/registerRemoteNotifications``
 - ``Spezi/unregisterRemoteNotifications``
+

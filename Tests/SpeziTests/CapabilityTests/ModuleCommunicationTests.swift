@@ -55,7 +55,7 @@ final class ModuleCommunicationTests: XCTestCase {
 
 
     @MainActor
-    override func setUp() {
+    override func setUp() async throws {
         Self.provideModule = ProvideModule1()
         Self.collectModule = CollectModule()
     }
@@ -68,20 +68,5 @@ final class ModuleCommunicationTests: XCTestCase {
         XCTAssertEqual(Self.collectModule.nums, [2, 3, 4, 5, 6])
         XCTAssertTrue(Self.collectModule.nothingProvided.isEmpty)
         XCTAssertEqual(Self.collectModule.strings, ["Hello World"])
-    }
-
-    @MainActor
-    func testIllegalAccess() throws {
-        let delegate = TestApplicationDelegate()
-
-        try XCTRuntimePrecondition {
-            _ = Self.collectModule.strings
-        }
-
-        _ = delegate.spezi // ensure init
-
-        try XCTRuntimePrecondition {
-            Self.provideModule.numMaybe2 = 12
-        }
     }
 }

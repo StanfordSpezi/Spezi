@@ -92,7 +92,7 @@ You can learn more about modules in the <doc:Module> documentation.
 - <doc:Initial-Setup>
 - ``SpeziAppDelegate``
 - ``Configuration``
-- ``SwiftUI/View/spezi(_:)-3bn89``
+- ``SwiftUICore/View/spezi(_:)-3bn89``
 
 ### Essential Concepts
 
@@ -102,8 +102,8 @@ You can learn more about modules in the <doc:Module> documentation.
 
 ### Previews
 
-- ``SwiftUI/View/previewWith(standard:simulateLifecycle:_:)``
-- ``SwiftUI/View/previewWith(simulateLifecycle:_:)``
+- ``SwiftUICore/View/previewWith(standard:simulateLifecycle:_:)``
+- ``SwiftUICore/View/previewWith(simulateLifecycle:_:)``
 - ``Foundation/ProcessInfo/isPreviewSimulator``
 - ``LifecycleSimulationOptions``
 

@@ -1,4 +1,4 @@
-// swift-tools-version:5.9
+// swift-tools-version:6.0
 
 //
 // This source file is part of the Stanford Spezi open-source project
@@ -10,12 +10,6 @@
 
 import class Foundation.ProcessInfo
 import PackageDescription
-
-#if swift(<6)
-let swiftConcurrency: SwiftSetting = .enableExperimentalFeature("StrictConcurrency")
-#else
-let swiftConcurrency: SwiftSetting = .enableUpcomingFeature("StrictConcurrency")
-#endif
 
 
 let package = Package(
@@ -33,8 +27,8 @@ let package = Package(
         .library(name: "XCTSpezi", targets: ["XCTSpezi"])
     ],
     dependencies: [
-        .package(url: "https://github.com/StanfordSpezi/SpeziFoundation", from: "2.0.0-beta.1"),
-        .package(url: "https://github.com/StanfordBDHG/XCTRuntimeAssertions", from: "1.1.1"),
+        .package(url: "https://github.com/StanfordSpezi/SpeziFoundation.git", from: "2.0.0"),
+        .package(url: "https://github.com/StanfordBDHG/XCTRuntimeAssertions.git", from: "1.1.1"),
         .package(url: "https://github.com/apple/swift-collections.git", from: "1.1.1")
     ] + swiftLintPackage(),
     targets: [
@@ -45,18 +39,12 @@ let package = Package(
                 .product(name: "XCTRuntimeAssertions", package: "XCTRuntimeAssertions"),
                 .product(name: "OrderedCollections", package: "swift-collections")
             ],
-            swiftSettings: [
-                swiftConcurrency
-            ],
             plugins: [] + swiftLintPlugin()
         ),
         .target(
             name: "XCTSpezi",
             dependencies: [
                 .target(name: "Spezi")
-            ],
-            swiftSettings: [
-                swiftConcurrency
             ],
             plugins: [] + swiftLintPlugin()
         ),
@@ -66,9 +54,6 @@ let package = Package(
                 .target(name: "Spezi"),
                 .target(name: "XCTSpezi"),
                 .product(name: "XCTRuntimeAssertions", package: "XCTRuntimeAssertions")
-            ],
-            swiftSettings: [
-                swiftConcurrency
             ],
             plugins: [] + swiftLintPlugin()
         )

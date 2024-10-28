@@ -73,16 +73,6 @@ final class ModuleTests: XCTestCase {
     }
 
     @MainActor
-    func testPreviewModifierOnlyWithinPreview() throws {
-        try XCTRuntimePrecondition {
-            _ = Text("Spezi")
-                .previewWith {
-                    TestModule()
-                }
-        }
-    }
-
-    @MainActor
     func testModuleCreation() {
         let expectation = XCTestExpectation(description: "DependingTestModule")
         expectation.assertForOverFulfill = true

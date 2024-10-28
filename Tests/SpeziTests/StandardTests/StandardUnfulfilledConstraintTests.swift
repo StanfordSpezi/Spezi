@@ -29,20 +29,21 @@ final class StandardUnfulfilledConstraintTests: XCTestCase {
         }
     }
     
-    class StandardUCTestApplicationDelegate: SpeziAppDelegate {
-        override var configuration: Configuration {
-            Configuration(standard: MockStandard()) {
-                StandardUCTestModule()
-            }
-        }
-    }
-    
 
     @MainActor
     func testStandardUnfulfilledConstraint() throws {
-        let standardCUTestApplicationDelegate = StandardUCTestApplicationDelegate()
-        try XCTRuntimePrecondition(timeout: 0.5) {
-            _ = standardCUTestApplicationDelegate.spezi
+        let configuration = Configuration(standard: MockStandard()) {}
+        let spezi = Spezi(from: configuration)
+
+        XCTAssertThrowsError(try spezi.loadModules([StandardUCTestModule()], ownership: .spezi)) { error in
+            guard let moduleError = error as? SpeziModuleError,
+                  case let .property(propertyError) = moduleError,
+                  case let .unsatisfiedStandardConstraint(constraint, standard) = propertyError else {
+                XCTFail("Encountered unexpected error: \(error)")
+                return
+            }
+            XCTAssertEqual(constraint, "UnfulfilledExampleConstraint")
+            XCTAssertEqual(standard, "MockStandard")
         }
     }
 }

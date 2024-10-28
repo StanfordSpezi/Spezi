@@ -118,12 +118,12 @@ extension _DependencyPropertyWrapper: DependencyDeclaration {
         dependencies.dependencyRelation(to: module)
     }
 
-    func collect(into dependencyManager: DependencyManager) {
-        dependencies.collect(into: dependencyManager)
+    func collect(into dependencyManager: DependencyManager) throws(DependencyManagerError) {
+        try dependencies.collect(into: dependencyManager)
     }
 
-    func inject(from dependencyManager: DependencyManager, for module: any Module) {
-        dependencies.inject(from: dependencyManager, for: module)
+    func inject(from dependencyManager: DependencyManager, for module: any Module) throws(DependencyManagerError) {
+        try dependencies.inject(from: dependencyManager, for: module)
     }
 
     func uninjectDependencies(notifying spezi: Spezi) {

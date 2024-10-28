@@ -245,9 +245,16 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
         let module3 = TestModule3()
         let spezi = Spezi(standard: DefaultStandard(), modules: [TestModule1(), module3])
 
-        try XCTRuntimePrecondition {
-            // cannot unload module that other modules still depend on
-            spezi.unloadModule(module3)
+        // cannot unload module that other modules still depend on
+        XCTAssertThrowsError(try spezi._unloadModule(module3)) { error in
+            guard let moduleError = error as? SpeziModuleError,
+                  case let .moduleStillRequired(module, dependents) = moduleError else {
+                XCTFail("Received unexpected error: \(error)")
+                return
+            }
+
+            XCTAssertEqual(module, "TestModule3")
+            XCTAssertEqual(Set(dependents), ["TestModule2", "TestModule1"])
         }
     }
 
@@ -367,7 +374,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
             TestModule1(),
             TestModule7()
         ]
-        let initializedModules = DependencyManager.resolve(modules)
+        let initializedModules = DependencyManager.resolveWithoutErrors(modules)
 
         XCTAssertEqual(initializedModules.count, 7)
         
@@ -395,7 +402,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
             TestModule2(),
             TestModule5()
         ]
-        let initializedModules = DependencyManager.resolve(modules)
+        let initializedModules = DependencyManager.resolveWithoutErrors(modules)
 
         XCTAssertEqual(initializedModules.count, 4)
         
@@ -417,7 +424,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
             TestModule4(),
             TestModule4()
         ]
-        let initializedModules = DependencyManager.resolve(modules)
+        let initializedModules = DependencyManager.resolveWithoutErrors(modules)
 
         XCTAssertEqual(initializedModules.count, 3)
 
@@ -437,7 +444,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
             TestModule2(),
             TestModule2()
         ]
-        let initializedModules = DependencyManager.resolve(modules)
+        let initializedModules = DependencyManager.resolveWithoutErrors(modules)
 
         XCTAssertEqual(initializedModules.count, 5)
 
@@ -466,7 +473,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
     @MainActor
     func testModuleNoDependency() throws {
         let modules: [any Module] = [TestModule5()]
-        let initializedModules = DependencyManager.resolve(modules)
+        let initializedModules = DependencyManager.resolveWithoutErrors(modules)
 
         XCTAssertEqual(initializedModules.count, 1)
 
@@ -480,7 +487,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
             TestModule5(),
             TestModule5()
         ]
-        let initializedModules = DependencyManager.resolve(modules)
+        let initializedModules = DependencyManager.resolveWithoutErrors(modules)
 
         XCTAssertEqual(initializedModules.count, 3)
 
@@ -495,7 +502,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
             OptionalModuleDependency()
         ]
 
-        let modules = DependencyManager.resolve(nonPresent)
+        let modules = DependencyManager.resolveWithoutErrors(nonPresent)
 
         XCTAssertEqual(modules.count, 1)
 
@@ -510,7 +517,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
             TestModule3()
         ]
 
-        let modules = DependencyManager.resolve(nonPresent)
+        let modules = DependencyManager.resolveWithoutErrors(nonPresent)
 
         XCTAssertEqual(modules.count, 2)
 
@@ -521,14 +528,14 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
 
     @MainActor
     func testOptionalDependencyWithDynamicRuntimeDefaultValue() throws {
-        let nonPresent = DependencyManager.resolve([
+        let nonPresent = DependencyManager.resolveWithoutErrors([
             OptionalDependencyWithRuntimeDefault(defaultValue: nil) // stays optional
         ])
 
         let dut1 = try XCTUnwrap(nonPresent[0] as? OptionalDependencyWithRuntimeDefault)
         XCTAssertNil(dut1.testModule3)
 
-        let configured = DependencyManager.resolve([
+        let configured = DependencyManager.resolveWithoutErrors([
             TestModule3(state: 1),
             OptionalDependencyWithRuntimeDefault(defaultValue: nil)
         ])
@@ -537,7 +544,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
         let dut2Module = try XCTUnwrap(dut2.testModule3)
         XCTAssertEqual(dut2Module.state, 1)
 
-        let defaulted = DependencyManager.resolve([
+        let defaulted = DependencyManager.resolveWithoutErrors([
             OptionalDependencyWithRuntimeDefault(defaultValue: 2)
         ])
 
@@ -545,7 +552,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
         let dut3Module = try XCTUnwrap(dut3.testModule3)
         XCTAssertEqual(dut3Module.state, 2)
 
-        let configuredAndDefaulted = DependencyManager.resolve([
+        let configuredAndDefaulted = DependencyManager.resolveWithoutErrors([
             TestModule3(state: 4),
             OptionalDependencyWithRuntimeDefault(defaultValue: 3)
         ])
@@ -645,8 +652,16 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
         let module2 = TestModuleCircle2()
         let module1 = TestModuleCircle1(module: module2)
 
-        try XCTRuntimePrecondition {
-            _ = DependencyManager.resolve([module1])
+        XCTAssertThrowsError(try DependencyManager.resolve([module1])) { error in
+            guard let dependencyError = error as? DependencyManagerError,
+                  case let .searchStackCycle(module, requestedModule, dependencyChain) = dependencyError else {
+                XCTFail("Received unexpected error: \(error)")
+                return
+            }
+
+            XCTAssertEqual(module, "TestModuleCircle2")
+            XCTAssertEqual(requestedModule, "TestModuleCircle1")
+            XCTAssertEqual(dependencyChain, ["TestModuleCircle1", "TestModuleCircle2"])
         }
     }
 
@@ -656,8 +671,16 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
             @Dependency(TestModuleX.self) var module
         }
 
-        try XCTRuntimePrecondition {
-            _ = DependencyManager.resolve([Module1()])
+        XCTAssertThrowsError(try DependencyManager.resolve([Module1()])) { error in
+            guard let dependencyError = error as? DependencyManagerError,
+                  case let .missingRequiredModule(module, requiredModule) = dependencyError else {
+                XCTFail("Received unexpected error: \(error)")
+                return
+            }
+
+            print(error)
+            XCTAssertEqual(module, "Module1")
+            XCTAssertEqual(requiredModule, "TestModuleX")
         }
     }
 

@@ -38,30 +38,12 @@ public class _StandardPropertyWrapper<Constraint> {
 
 
 extension _StandardPropertyWrapper: SpeziPropertyWrapper {
-    func inject(spezi: Spezi) {
+    func inject(spezi: Spezi) throws(SpeziPropertyError) {
         guard let standard = spezi.standard as? Constraint else {
             let standardType = type(of: spezi.standard)
-            preconditionFailure(
-                """
-                The `Standard` defined in the `Configuration` does not conform to \(String(describing: Constraint.self)).
-
-                Ensure that you define an appropriate standard in your configuration in your `SpeziAppDelegate` subclass ...
-                ```
-                var configuration: Configuration {
-                    Configuration(standard: \(String(describing: standardType))()) {
-                        // ...
-                    }
-                }
-                ```
-
-                ... and that your standard conforms to \(String(describing: Constraint.self)):
-
-                ```swift
-                actor \(String(describing: standardType)): Standard, \(String(describing: Constraint.self)) {
-                    // ...
-                }
-                ```
-                """
+            throw SpeziPropertyError.unsatisfiedStandardConstraint(
+                constraint: String(describing: Constraint.self),
+                standard: String(describing: standardType)
             )
         }
 

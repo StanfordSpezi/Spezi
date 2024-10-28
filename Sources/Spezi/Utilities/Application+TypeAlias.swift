@@ -24,4 +24,12 @@ public typealias _Application = NSApplication // swiftlint:disable:this type_nam
 ///
 /// Type-alias for the `WKApplication`.
 public typealias _Application = WKApplication // swiftlint:disable:this type_name
+
+extension WKApplication {
+    /// Allow the same access pattern for WKApplication. Bridges to the `shared()` method.
+    @_documentation(visibility: internal)
+    public static var shared: WKApplication {
+        shared()
+    }
+}
 #endif
