@@ -24,9 +24,13 @@ Unfortunately, DocC currently does not support dark mode images: https://github.
 -->
 @Row {
     @Column {
-        @Image(source: "https://raw.githubusercontent.com/StanfordSpezi/SpeziOnboarding/main/Sources/SpeziOnboarding/SpeziOnboarding.docc/Resources/ConsentView.png", alt: "Screenshot displaying the UI of the onboarding module.") {
+        @Image(source: "https://raw.githubusercontent.com/StanfordSpezi/SpeziOnboarding/main/Sources/SpeziOnboarding/SpeziOnboardistong.docc/Resources/ConsentView.png", alt: "Screenshot displaying the UI of the onboarding module.") {
             [The Spezi Onboarding Module](https://github.com/StanfordSpezi/SpeziOnboarding)
         }
+        
+        
+        
+        
     }
     @Column {
         @Image(source: "https://raw.githubusercontent.com/StanfordSpezi/SpeziContact/main/Sources/SpeziContact/SpeziContact.docc/Resources/Overview.png", alt: "Screenshot displaying the UI of the contact module.") {
@@ -86,6 +90,9 @@ You can learn more about modules in the <doc:Module> documentation.
 
 
 ## Topics
+
+### Ecosystem Overview
+- <doc:Spezi_Ecosystem>
 
 ### Configuration
 
