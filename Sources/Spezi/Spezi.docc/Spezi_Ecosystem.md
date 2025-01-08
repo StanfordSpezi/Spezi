@@ -58,7 +58,7 @@ Some of the following modules can be tested and interact with using the Template
 
 ### Cloud Systems
 - **[SpeziFirebase](https://github.com/StanfordSpezi/SpeziFirebase)**
-    - [SpeziOnboarding Documentation](https://swiftpackageindex.com/StanfordSpezi/SpeziFirebase/main/documentation/spezifirebaseaccount) 
+    - [SpeziFirebase Documentation](https://swiftpackageindex.com/StanfordSpezi/SpeziFirebase/main/documentation/spezifirebaseaccount) 
     - Use Case: This module enables Google Firebase integration for backend authentication and data storage.
     - Features:
         - Firebase authentication integration
@@ -83,7 +83,7 @@ This includes three submodules:
     - Features:
         - Chat interface creation
         - Message history management
-        - Integration with AI for natural language processing /////////////////////// 
+        - Integration with AI for natural language processing 
 
 - **[SpeziSpeech](https://github.com/StanfordSpezi/SpeziSpeech)**
     - [SpeziSpeech Documentation](https://swiftpackageindex.com/StanfordSpezi/SpeziSpeech/1.1.1/documentation/spezispeechrecognizer) 
@@ -111,12 +111,13 @@ This includes three submodules:
     - This module is included and demonstrated in the Template Application.
 
 ### Mobile Health Data 
-- **[SpeziAccount](https://github.com/StanfordSpezi/SpeziAccount)**
-    - [SpeziAccount Documentation](https://swiftpackageindex.com/StanfordSpezi/SpeziAccount/main/documentation/speziaccount) 
-    - Use Case: This module extends account management for health applications.
+- **[SpeziHealthKit](https://github.com/StanfordSpezi/SpeziHealthKit)**
+    - [SpeziHealthKit Documentation](https://swiftpackageindex.com/StanfordSpezi/SpeziHealthKit/0.6.0/documentation/spezihealthkit) 
+    - Use Case: This module simplifies access to HealthKit samples, supporting single, anchored, and background queries.
     - Features:
-        - Mobile health account synchronization
-        - User-friendly access and security for health-related data
+        - Simplified retrieval of HealthKit data samples
+        - Support for anchored and background queries to monitor health data changes
+        - Customizable data collection parameters 
     - This module is included and demonstrated in the Template Application.
 
 ### Spezi Questionnaire
@@ -139,25 +140,41 @@ This includes three submodules:
         - Integration with other modules for seamless user experience
     - This module is included and demonstrated in the Template Application.
 
----- 
-### SpeziAccessGuard
-
+### Spezi AccessGuard
+- **[SpeziAccessGuard](https://github.com/StanfordSpezi/SpeziAccessGuard)**
+    - [SpeziAccessGuard Documentation](https://swiftpackageindex.com/StanfordSpezi/SpeziAccessGuard/0.3.2/documentation/speziaccessguard) 
+    - Use Case: This module allows developers to easily guard a SwiftUI view with an access code or biometrics.
+    - Features:
+        - 4-digit numeric access code protection
+        - Biometric authentication support (e.g., Face ID, Touch ID) with access code fallback
+        - Customizable timeout settings for automatic locking
+        - Functionality to set, reset, and manage access codes
+    
 ### Spezi Contact
-
-### Spezi HealthKit
+- **[SpeziContact](https://github.com/StanfordSpezi/SpeziContact)**
+    - [SpeziContact Documentation](https://swiftpackageindex.com/StanfordSpezi/SpeziContact/1.0.2/documentation/spezicontact) 
+    - Use Case: This module facilitates the display of contact information within applications.
+    - Features:
+        - Presentation of contact details, including names, phone numbers, and email addresses
+        - Customization options for contact information display
+    - This module is included and demonstrated in the Template Application.
 
 ### Spezi Medication 
+- **[SpeziMedication](https://github.com/StanfordSpezi/SpeziMedication)**
+    - [SpeziMedication Documentation](https://swiftpackageindex.com/StanfordSpezi/SpeziMedication/0.4.2/documentation/spezimedication) 
+    - Use Case: This module helps with the display, editing, and management of medications, including dosages and schedules.
+    - Features:
+        - Display of current medications with detailed information
+        - Editing capabilities for medication details, dosages, and schedules
+        - Management of medication lists, including addition and removal of medications
+
+### Spezi Notifications
+- **[SpeziNotifications](https://github.com/StanfordSpezi/SpeziNotifications)**
+    - [SpeziNotifications Documentation](https://swiftpackageindex.com/StanfordSpezi/SpeziNotifications/main/documentation/spezinotifications) 
+    - Use Case: This module simplifies the implementation of user notifications in Spezi-based applications.
+    - Features:
+        - Scheduling of local notifications 
+        - Customization of notification content, including titles, messages, and triggers
+        - Management of notification permissions and settings
 
 
-
-## Topics
-
-### Essential Reading
-- <doc:Understanding-Spezi>
-- <doc:Initial-Setup>
-- <doc:Contributing-Guide>
-
-### Module Development
-- <doc:Spezi-Guide>
-- <doc:Documentation-Guide>
-- ``Module``
