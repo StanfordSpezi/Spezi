@@ -45,8 +45,8 @@ Some of the following modules can be tested and interact with using the Template
         - Seamless integration with SpeziBluetooth module
     Note: SpeziDevices focuses on managing device connections via Bluetooth capabilities. SpeziBluetooth provides the infrastructure for the communication between devices.
 
-### Spezi Bluetooth // seems to be the "core module" and ###connected devices rather a supporter of this module // unsicher
-- **[SpeziBluetooth](https://github.com/StanfordSpezi/SpeziBluetooth)** // unsicher
+### Spezi Bluetooth 
+- **[SpeziBluetooth](https://github.com/StanfordSpezi/SpeziBluetooth)** 
     - [SpeziBluetooth Documentation](https://swiftpackageindex.com/StanfordSpezi/SpeziBluetooth/main/documentation/spezibluetooth) 
     - Use Case: This module provides the infrastructure for Bluetooth-based device communication.
     - Features:
