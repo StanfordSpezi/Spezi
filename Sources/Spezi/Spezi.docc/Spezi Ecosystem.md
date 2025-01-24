@@ -169,12 +169,10 @@ This module is included and demonstrated in the **[Spezi Template Application](h
     }
 }
 
-
 ### Tasks and Reminders
 - The **[SpeziScheduler](https://github.com/StanfordSpezi/SpeziScheduler)** module provides comprehensive task scheduling and reminder functionality, enabling task creation, notification management, and seamless integration with other Spezi modules. 
 
-This module is included and demonstrated in the **[Spezi Template Application](https://github.com/StanfordSpezi/
-SpeziTemplateApplication)**.
+This module is included and demonstrated in the **[Spezi Template Application](https://github.com/StanfordSpezi/SpeziTemplateApplication)**.
 
 > Tip: Check out the [SpeziScheduler Documentation](https://swiftpackageindex.com/StanfordSpezi/SpeziScheduler/documentation/spezischeduler) for implementation details.
 
@@ -182,15 +180,12 @@ SpeziTemplateApplication)**.
 ### Spezi AccessGuard
 - The **[SpeziAccessGuard](https://github.com/StanfordSpezi/SpeziAccessGuard)** module provides robust security features for SwiftUI views, including numeric access code protection, biometric authentication support, and customizable timeout settings for automatic locking.
 
-@Row{
+@Row {
     @Column {
-        ![Screenshot showing access code entry](IMAGE_PLACEHOLDER_1)
+        ![Screenshot showing access code entry](https://raw.githubusercontent.com/StanfordSpezi/SpeziAccessGuard/main/Docs/AccessCode.png)
     }
     @Column {
-        ![Screenshot showing biometric auth](IMAGE_PLACEHOLDER_2)
-    }
-    @Column {
-        ![Screenshot showing security settings](IMAGE_PLACEHOLDER_3)
+        ![Screenshot showing biometric auth](https://raw.githubusercontent.com/StanfordSpezi/SpeziAccessGuard/main/Docs/BiometricAuth.png)
     }
 }
 
@@ -203,14 +198,8 @@ SpeziTemplateApplication)**.
 This module is included and demonstrated in the **[Spezi Template Application](https://github.com/StanfordSpezi/SpeziTemplateApplication)**.
 
 @Row{
-    @Column {
-        ![Screenshot showing contact display](IMAGE_PLACEHOLDER_1)
-    }
-    @Column {
-        ![Screenshot showing contact management](IMAGE_PLACEHOLDER_2)
-    }
-    @Column {
-        ![Screenshot showing customization options](IMAGE_PLACEHOLDER_3)
+  @Column {
+        ![Screenshot showing contact display](https://raw.githubusercontent.com/StanfordSpezi/SpeziContact/main/Docs/ContactExample.png)
     }
 }
 
@@ -220,35 +209,11 @@ This module is included and demonstrated in the **[Spezi Template Application](h
 ### Spezi Medication 
 - The **[SpeziMedication](https://github.com/StanfordSpezi/SpeziMedication)** module provides comprehensive medication management capabilities, enabling the display and editing of medication details, dosages, and schedules, along with complete medication list management functionality.
 
-@Row{
-    @Column {
-        ![Screenshot showing medication list](IMAGE_PLACEHOLDER_1)
-    }
-    @Column {
-        ![Screenshot showing medication details](IMAGE_PLACEHOLDER_2)
-    }
-    @Column {
-        ![Screenshot showing schedule management](IMAGE_PLACEHOLDER_3)
-    }
-}
-
 > Tip: Check out the [SpeziMedication Documentation](https://swiftpackageindex.com/StanfordSpezi/SpeziMedication/documentation/spezimedication) for implementation details.
 
 
 ### Spezi Notifications
 - The **[SpeziNotifications](https://github.com/StanfordSpezi/SpeziNotifications)** module simplifies the implementation of user notifications, providing features for scheduling local notifications, customizing notification content, and managing notification permissions and settings.
-
-@Row{
-    @Column {
-        ![Screenshot showing notification setup](IMAGE_PLACEHOLDER_1)
-    }
-    @Column {
-        ![Screenshot showing notification content](IMAGE_PLACEHOLDER_2)
-    }
-    @Column {
-        ![Screenshot showing permission management](IMAGE_PLACEHOLDER_3)
-    }
-}
 
 > Tip: Check out the [SpeziNotifications Documentation](https://swiftpackageindex.com/StanfordSpezi/SpeziNotifications/documentation/spezinotifications) for implementation details.
 
