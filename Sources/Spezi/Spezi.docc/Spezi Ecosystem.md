@@ -59,7 +59,7 @@ This module is included and demonstrated in the **[Spezi Template Application](h
 ### Connected Devices
 - The **[SpeziDevices](https://github.com/StanfordSpezi/SpeziDevices)** module streamlines the integration of Bluetooth-connected devices, handling device discovery, connection management, and data exchange through a unified interface that works seamlessly with the SpeziBluetooth infrastructure.
 
-> Note: SpeziDevices focuses on managing device connections via Bluetooth capabilities. SpeziBluetooth provides the infrastructure for the communication between devices.
+> Note: SpeziDevices is a higher-level module that depends on the core Bluetooth connectivity offered by SpeziBluetooth module (see below). Together, they enable seamless interaction with Bluetooth devices.
 
 @Row{
     @Column {
@@ -78,8 +78,6 @@ This module is included and demonstrated in the **[Spezi Template Application](h
 
 ### Spezi Bluetooth 
 - The **[SpeziBluetooth](https://github.com/StanfordSpezi/SpeziBluetooth)** module provides the foundational infrastructure for Bluetooth communication, offering robust device discovery, configuration management, and reliable data transmission capabilities for healthcare and research applications.
-
-> Note: SpeziDevices is a higher-level module that depends on the core Bluetooth connectivity offered by SpeziBluetooth. Together, they enable seamless interaction with Bluetooth devices.
 
 > Tip: Check out the [SpeziBluetooth Documentation](https://swiftpackageindex.com/StanfordSpezi/SpeziBluetooth/documentation/spezibluetooth) for implementation details.
 
@@ -115,11 +113,7 @@ This module includes three submodules:
     }
 }
 
-> Tip: Check out the [SpeziChat Documentation](https://swiftpackageindex.com/StanfordSpezi/SpeziChat/documentation/spezichat) for implementation details.
-
 - The **[SpeziSpeech](https://github.com/StanfordSpezi/SpeziSpeech)** module delivers comprehensive voice interaction capabilities, offering both speech synthesis and recognition features along with robust session management for voice input and output.
-
-> Tip: Check out the [SpeziSpeech Documentation](https://swiftpackageindex.com/StanfordSpezi/SpeziSpeech/1.1.1/documentation/spezispeechrecognizer) for implementation details.
 
 - The **[SpeziLLM](https://github.com/StanfordSpezi/SpeziLLM)** module integrates large language models to provide AI-driven functionalities, enabling sophisticated text generation and contextual understanding for complex queries.
 
@@ -135,7 +129,9 @@ This module includes three submodules:
     }
 }
 
-> Tip: Check out the [SpeziLLM Documentation](https://swiftpackageindex.com/StanfordSpezi/SpeziLLM/documentation/spezillm) for implementation details.
+> Tip: 
+Check out [SpeziChat Documentation](https://swiftpackageindex.com/StanfordSpezi/SpeziChat/documentation/spezichat), [SpeziSpeech Documentation](https://swiftpackageindex.com/StanfordSpezi/SpeziSpeech/1.1.1/documentation/spezispeechrecognizer) for implementation details.
+and [SpeziLLM Documentation](https://swiftpackageindex.com/StanfordSpezi/SpeziLLM/documentation/spezillm) for implementation details.
 
 
 ### Local Data Storage
@@ -160,14 +156,12 @@ This module is included and demonstrated in the **[Spezi Template Application](h
 This module is included and demonstrated in the **[Spezi Template Application](https://github.com/StanfordSpezi/SpeziTemplateApplication)**.
 
 @Row {
-    @Column(width: 0.5) {
-        <img src="https://raw.githubusercontent.com/StanfordSpezi/SpeziQuestionnaire/main/Sources/SpeziQuestionnaire/SpeziQuestionnaire.docc/Resources/Overview.png" alt="Screenshot showing a Questionnaire rendered using the Spezi Questionnaire module." style="width:200px;" />
-    }
-    
-    @Column(width: 0.5) {
-        > Tip: Check out the [SpeziQuestionnaire Documentation](https://swiftpackageindex.com/StanfordSpezi/SpeziQuestionnaire/documentation/speziquestionnaire) for implementation details.
+    @Column {
+        ![Screenshot showing questionaire view](https://swiftpackageindex.com/stanfordspezi/speziaccessguard/0.3.2/images/spi-builder-workspace.SpeziAccessGuard/AccessGuarded.png)
     }
 }
+
+> Tip: Check out the [SpeziQuestionnaire Documentation](https://swiftpackageindex.com/StanfordSpezi/SpeziQuestionnaire/documentation/speziquestionnaire) for implementation details.
 
 ### Tasks and Reminders
 - The **[SpeziScheduler](https://github.com/StanfordSpezi/SpeziScheduler)** module provides comprehensive task scheduling and reminder functionality, enabling task creation, notification management, and seamless integration with other Spezi modules. 
@@ -182,10 +176,10 @@ This module is included and demonstrated in the **[Spezi Template Application](h
 
 @Row {
     @Column {
-        ![Screenshot showing access code entry](https://raw.githubusercontent.com/StanfordSpezi/SpeziAccessGuard/main/Docs/AccessCode.png)
+        ![Screenshot showing access code entry](https://swiftpackageindex.com/stanfordspezi/speziaccessguard/0.3.2/images/spi-builder-workspace.SpeziAccessGuard/AccessGuarded.png)
     }
     @Column {
-        ![Screenshot showing biometric auth](https://raw.githubusercontent.com/StanfordSpezi/SpeziAccessGuard/main/Docs/BiometricAuth.png)
+        ![Screenshot showing biometric auth](https://swiftpackageindex.com/stanfordspezi/speziaccessguard/0.3.2/images/spi-builder-workspace.SpeziAccessGuard/AccessGuarded-Biometrics.png)
     }
 }
 
@@ -199,7 +193,7 @@ This module is included and demonstrated in the **[Spezi Template Application](h
 
 @Row{
   @Column {
-        ![Screenshot showing contact display](https://raw.githubusercontent.com/StanfordSpezi/SpeziContact/main/Docs/ContactExample.png)
+        ![Screenshot showing contact display](https://github.com/StanfordSpezi/SpeziContact/raw/main/Sources/SpeziContact/SpeziContact.docc/Resources/Overview~dark.png#gh-dark-mode-only)
     }
 }
 
