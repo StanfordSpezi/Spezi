@@ -28,26 +28,23 @@ Once you have a basic understanding of Spezi, it's beneficial to test the framew
 
 2. Continue with the **Setup Instructions**:
    - Start by **forking the repository**.
-   @Row{
-      @Column {
-         ![Screenshot displaying where how to fork.](Resources/Fork.png)
-      }
-   }
-   
+
    - Use the terminal on your Mac to **clone the forked repository locally**. Navigate to the directory where you want to store the template application.
+
    - Follow the setup and run instructions provided here: [Setup Guide](https://spezi.health/SpeziTemplateApplication/documentation/templateapplication/setup)
 
-> **Note**: You may need to update packages. 
-// tbd: screenshots hinzufügen
+> You may need to update packages, this is how it works best in XCode:  
+> 1. Navigate to the "Template Application" button at the top of the folder structure on the left side.  
+> 2. From there, go to the "Package Dependencies" tab.  
+> 3. Here you can visit the linked GitHub pages of the packages you want to update and check for the latest version numbers.  
+> 4. After checking you can update them in this same view.
 
 ### Third Step: Independent Exploration
-- **Self-Directed Tasks**: Refer to the tasks section for guidance on independent exploration.
-- **Team Collaboration**: If interested, feel free to reach out to the team to discuss any questions or ideas.
+Now that you have completed the first two steps, you should be well-equipped to delve deeper into the project. Here are two suggestions for your next steps:
 
-## Additional Resources
-Here is a collection of further links and a brief description of their use cases, if not already covered above:
+- You can explore the current tickets in the [Project Planning Dashboard](https://github.com/orgs/StanfordSpezi/projects/1/views/1) to gain an initial impression of the project's scope.
 
-- **Spezi Ecosystem Documentation**
-- **Documentation Guide**
-- **Contribution Guide**
-- **Initial Setup Instructions**
+- If you're ready to work on your first ticket, we recommend checking out the [tickets labeled as "good first issue"](https://github.com/StanfordSpezi/Spezi/issues?q=state%3Aopen%20label%3A%22good%20first%20issue%22), which are specifically designed as starter tasks.
+
+- Of course, we encourage you to reach out to us directly to discuss potential collaboration opportunities.
+
