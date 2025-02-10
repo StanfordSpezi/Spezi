@@ -8,6 +8,26 @@ SPDX-License-Identifier: MIT
 
 Discover the core modules of the Spezi ecosystem and understand how you can use them to build your healthcare and research applications.
 
+
+## Module Overview
+This document outlines the modules specifically tailored to various use cases. 
+
+- [Spezi Onboarding](#spezi-onboarding) for user onboarding with welcome screens and more. 
+- [User Management](#user-management) for login account creation and customization flows.
+- [Spezi Contact](#spezi-contact) for managing and displaying contact information.
+- [Spezi AccessGuard](#spezi-accessguard) for login access codes and biometrics.
+- [Connected Devices and Spezi Bluetooth](#connected-devices-and-spezi-bluetooth) for supporting Bluetooth-connected devices.
+- [Cloud Systems](#cloud-systems) for Google Firebase integration and data synchronization.
+- [Local Data Storage](#local-data-storage) for efficient data persistence and retrieval.
+- [Electronic Health Integration](#electronic-health-integration) for managing FHIR data and data interoperability.
+- [Mobile Health Data](#mobile-health-data) for accessing HealthKit data.
+- [LLMs and AI Integration](#llms-and-ai-integration) for AI-driven functionalities.
+- [Spezi Questionnaire](#spezi-questionnaire) for customizable forms.
+- [Spezi Medication](#spezi-medication) for managing medication details, dosages, and more.
+- [Tasks and Reminders](#tasks-and-reminders) for task scheduling and notification management.
+- [Spezi Notifications](#spezi-notifications) for implementing user notifications and related.
+
+
 ## Overview of the Core Modules
 
 The Spezi ecosystem provides a collection of interoperable modules designed to accelerate healthcare and research application development. Each module is built to work independently or in combination with others, allowing you to choose the components that best fit your needs.
@@ -56,8 +76,44 @@ This module is included and demonstrated in the **[Spezi Template Application](h
 > Tip: Check out the [SpeziAccount Documentation](https://swiftpackageindex.com/stanfordspezi/speziaccount/documentation/speziaccount) for implementation details.
 
 
-### Connected Devices
+### Spezi Contact
+- The **[SpeziContact](https://github.com/StanfordSpezi/SpeziContact)** module facilitates the presentation and management of contact information, offering customizable display options for contact details including names, phone numbers, and email addresses. 
+
+This module is included and demonstrated in the **[Spezi Template Application](https://github.com/StanfordSpezi/SpeziTemplateApplication)**.
+
+@Row{
+    @Column {
+       ![Screenshot showing contact display](https://raw.githubusercontent.com/StanfordSpezi/SpeziContact/refs/heads/main/Sources/SpeziContact/SpeziContact.docc/Resources/Overview.png)
+    }
+    @Column {
+       > Tip: Check out the [SpeziContact Documentation](https://swiftpackageindex.com/StanfordSpezi/SpeziContact/documentation/spezicontact) for implementation details.
+    }   
+    @Column {
+       ![ ]()
+    }  
+}
+
+
+### Spezi AccessGuard
+- The **[SpeziAccessGuard](https://github.com/StanfordSpezi/SpeziAccessGuard)** module provides robust security features for SwiftUI views, including numeric access code protection, biometric authentication support, and customizable timeout settings for automatic locking.
+
+@Row {
+    @Column {
+        ![Screenshot showing access code entry](https://raw.githubusercontent.com/StanfordSpezi/SpeziAccessGuard/refs/heads/main/Sources/SpeziAccessGuard/SpeziAccessGuard.docc/Resources/AccessGuarded.png)
+    }
+    @Column {
+        ![Screenshot showing biometric auth](https://raw.githubusercontent.com/StanfordSpezi/SpeziAccessGuard/refs/heads/main/Sources/SpeziAccessGuard/SpeziAccessGuard.docc/Resources/AccessGuarded-Biometrics.png)
+    }
+    @Column {
+      > Tip: Check out the [SpeziAccessGuard Documentation](https://swiftpackageindex.com/StanfordSpezi/SpeziAccessGuard/documentation/speziaccessguard) for implementation details.
+    }  
+}
+
+
+### Connected Devices and Spezi Bluetooth
 - The **[SpeziDevices](https://github.com/StanfordSpezi/SpeziDevices)** module streamlines the integration of Bluetooth-connected devices, handling device discovery, connection management, and data exchange through a unified interface that works seamlessly with the SpeziBluetooth infrastructure.
+
+- The **[SpeziBluetooth](https://github.com/StanfordSpezi/SpeziBluetooth)** module provides the foundational infrastructure for Bluetooth communication, offering robust device discovery, configuration management, and reliable data transmission capabilities for healthcare and research applications.
 
 > Note: SpeziDevices is a higher-level module that depends on the core Bluetooth connectivity offered by SpeziBluetooth module (see below). Together, they enable seamless interaction with Bluetooth devices.
 
@@ -73,13 +129,7 @@ This module is included and demonstrated in the **[Spezi Template Application](h
     }
 }
 
-> Tip: Check out the [SpeziDevices Documentation](https://swiftpackageindex.com/StanfordSpezi/SpeziDevices/documentation/spezidevices) for implementation details.
-
-
-### Spezi Bluetooth 
-- The **[SpeziBluetooth](https://github.com/StanfordSpezi/SpeziBluetooth)** module provides the foundational infrastructure for Bluetooth communication, offering robust device discovery, configuration management, and reliable data transmission capabilities for healthcare and research applications.
-
-> Tip: Check out the [SpeziBluetooth Documentation](https://swiftpackageindex.com/StanfordSpezi/SpeziBluetooth/documentation/spezibluetooth) for implementation details.
+> Tip: Check out the [SpeziDevices Documentation](https://swiftpackageindex.com/StanfordSpezi/SpeziDevices/documentation/spezidevices) and [SpeziBluetooth Documentation](https://swiftpackageindex.com/StanfordSpezi/SpeziBluetooth/documentation/spezibluetooth) for implementation details.
 
 
 ### Cloud Systems
@@ -88,6 +138,38 @@ This module is included and demonstrated in the **[Spezi Template Application](h
 This module is included and demonstrated in the **[Spezi Template Application](https://github.com/StanfordSpezi/SpeziTemplateApplication)**
 
 > Tip: Check out the [SpeziFirebase Documentation](https://swiftpackageindex.com/StanfordSpezi/SpeziFirebase/documentation/spezifirebaseaccount) for implementation details.
+
+
+### Local Data Storage
+- The **[SpeziStorage](https://github.com/StanfordSpezi/SpeziStorage)** module provides robust local storage capabilities, offering efficient data persistence, retrieval management, and seamless integration with other Spezi modules. 
+
+This module is included and demonstrated in the **[Spezi Template Application](https://github.com/StanfordSpezi/SpeziTemplateApplication)**.
+
+> Tip: Check out the [SpeziStorage Documentation](https://swiftpackageindex.com/StanfordSpezi/SpeziStorage/documentation/spezilocalstorage) for implementation details.
+
+
+### Electronic Health Integration
+- The **[SpeziFHIR](https://github.com/StanfordSpezi/SpeziFHIR)** module provides comprehensive support for managing and processing FHIR (Fast Healthcare Interoperability Resources), enabling storage and management of FHIR resources, automatic healthcare data categorization, and seamless interoperability with healthcare systems.
+
+> Tip: Check out the [SpeziFHIR Documentation](https://swiftpackageindex.com/StanfordSpezi/SpeziFHIR/documentation/spezifhir) for implementation details.
+
+
+### Mobile Health Data 
+- The **[SpeziHealthKit](https://github.com/StanfordSpezi/SpeziHealthKit)** module simplifies access to HealthKit data, providing streamlined retrieval of health samples and supporting various query types including single, anchored, and background queries for comprehensive health data monitoring. 
+
+This module is included and demonstrated in the **[Spezi Template Application](https://github.com/StanfordSpezi/SpeziTemplateApplication)**.
+
+@Row{
+    @Column {
+        ![Screenshot showing Health Kit Access Screen.](https://raw.githubusercontent.com/StanfordSpezi/SpeziTemplateApplication/refs/heads/main/TemplateApplication/Supporting%20Files/TemplateApplication.docc/Resources/Onboarding/HealthKitAccess.png)
+    }
+    @Column {
+        ![Displaying the device view of a Health Kit Access.](https://raw.githubusercontent.com/StanfordSpezi/SpeziTemplateApplication/refs/heads/main/TemplateApplication/Supporting%20Files/TemplateApplication.docc/Resources/Onboarding/HealthKitSheet.png)
+    }
+    @Column {
+       > Tip: Check out the [SpeziHealthKit Documentation](https://swiftpackageindex.com/StanfordSpezi/SpeziHealthKit/documentation/spezihealthkit) for implementation details.
+    } 
+}
 
 
 ### Electronic Health Integration
@@ -134,22 +216,6 @@ Check out [SpeziChat Documentation](https://swiftpackageindex.com/StanfordSpezi/
 and [SpeziLLM Documentation](https://swiftpackageindex.com/StanfordSpezi/SpeziLLM/documentation/spezillm) for implementation details.
 
 
-### Local Data Storage
-- The **[SpeziStorage](https://github.com/StanfordSpezi/SpeziStorage)** module provides robust local storage capabilities, offering efficient data persistence, retrieval management, and seamless integration with other Spezi modules. 
-
-This module is included and demonstrated in the **[Spezi Template Application](https://github.com/StanfordSpezi/SpeziTemplateApplication)**.
-
-> Tip: Check out the [SpeziStorage Documentation](https://swiftpackageindex.com/StanfordSpezi/SpeziStorage/documentation/spezilocalstorage) for implementation details.
-
-
-### Mobile Health Data 
-- The **[SpeziHealthKit](https://github.com/StanfordSpezi/SpeziHealthKit)** module simplifies access to HealthKit data, providing streamlined retrieval of health samples and supporting various query types including single, anchored, and background queries for comprehensive health data monitoring. 
-
-This module is included and demonstrated in the **[Spezi Template Application](https://github.com/StanfordSpezi/SpeziTemplateApplication)**.
-
-> Tip: Check out the [SpeziHealthKit Documentation](https://swiftpackageindex.com/StanfordSpezi/SpeziHealthKit/documentation/spezihealthkit) for implementation details.
-
-
 ### Spezi Questionnaire
 - The **[SpeziQuestionnaire](https://github.com/StanfordSpezi/SpeziQuestionnaire)** module implements comprehensive questionnaire features, providing customizable forms for data capture and seamless integration with health or research applications. 
 
@@ -157,53 +223,41 @@ This module is included and demonstrated in the **[Spezi Template Application](h
 
 @Row {
     @Column {
-        ![Screenshot showing questionaire view](https://swiftpackageindex.com/stanfordspezi/speziaccessguard/0.3.2/images/spi-builder-workspace.SpeziAccessGuard/AccessGuarded.png)
-    }
-}
-
-> Tip: Check out the [SpeziQuestionnaire Documentation](https://swiftpackageindex.com/StanfordSpezi/SpeziQuestionnaire/documentation/speziquestionnaire) for implementation details.
-
-### Tasks and Reminders
-- The **[SpeziScheduler](https://github.com/StanfordSpezi/SpeziScheduler)** module provides comprehensive task scheduling and reminder functionality, enabling task creation, notification management, and seamless integration with other Spezi modules. 
-
-This module is included and demonstrated in the **[Spezi Template Application](https://github.com/StanfordSpezi/SpeziTemplateApplication)**.
-
-> Tip: Check out the [SpeziScheduler Documentation](https://swiftpackageindex.com/StanfordSpezi/SpeziScheduler/documentation/spezischeduler) for implementation details.
-
-
-### Spezi AccessGuard
-- The **[SpeziAccessGuard](https://github.com/StanfordSpezi/SpeziAccessGuard)** module provides robust security features for SwiftUI views, including numeric access code protection, biometric authentication support, and customizable timeout settings for automatic locking.
-
-@Row {
-    @Column {
-        ![Screenshot showing access code entry](https://swiftpackageindex.com/stanfordspezi/speziaccessguard/0.3.2/images/spi-builder-workspace.SpeziAccessGuard/AccessGuarded.png)
+        ![Screenshot showing questionaire view](https://raw.githubusercontent.com/StanfordSpezi/SpeziTemplateApplication/refs/heads/main/TemplateApplication/Supporting%20Files/TemplateApplication.docc/Resources/Schedule/Questionnaire.png)
     }
     @Column {
-        ![Screenshot showing biometric auth](https://swiftpackageindex.com/stanfordspezi/speziaccessguard/0.3.2/images/spi-builder-workspace.SpeziAccessGuard/AccessGuarded-Biometrics.png)
-    }
+       > Tip: Check out the [SpeziQuestionnaire Documentation](https://swiftpackageindex.com/StanfordSpezi/SpeziQuestionnaire/documentation/speziquestionnaire) for implementation details.
+    } 
+    @Column {
+       ![ ]()
+    } 
 }
-
-> Tip: Check out the [SpeziAccessGuard Documentation](https://swiftpackageindex.com/StanfordSpezi/SpeziAccessGuard/documentation/speziaccessguard) for implementation details.
-
-
-### Spezi Contact
-- The **[SpeziContact](https://github.com/StanfordSpezi/SpeziContact)** module facilitates the presentation and management of contact information, offering customizable display options for contact details including names, phone numbers, and email addresses. 
-
-This module is included and demonstrated in the **[Spezi Template Application](https://github.com/StanfordSpezi/SpeziTemplateApplication)**.
-
-@Row{
-  @Column {
-        ![Screenshot showing contact display](https://github.com/StanfordSpezi/SpeziContact/raw/main/Sources/SpeziContact/SpeziContact.docc/Resources/Overview~dark.png#gh-dark-mode-only)
-    }
-}
-
-> Tip: Check out the [SpeziContact Documentation](https://swiftpackageindex.com/StanfordSpezi/SpeziContact/documentation/spezicontact) for implementation details.
 
 
 ### Spezi Medication 
 - The **[SpeziMedication](https://github.com/StanfordSpezi/SpeziMedication)** module provides comprehensive medication management capabilities, enabling the display and editing of medication details, dosages, and schedules, along with complete medication list management functionality.
 
 > Tip: Check out the [SpeziMedication Documentation](https://swiftpackageindex.com/StanfordSpezi/SpeziMedication/documentation/spezimedication) for implementation details.
+
+
+### Tasks and Reminders
+- The **[SpeziScheduler](https://github.com/StanfordSpezi/SpeziScheduler)** module provides comprehensive task scheduling and reminder functionality, enabling task creation, notification management, and seamless integration with other Spezi modules. 
+
+This module is included and demonstrated in the **[Spezi Template Application](https://github.com/StanfordSpezi/SpeziTemplateApplication)**.
+
+@Row {
+    @Column {
+        ![Screenshot showing SpeziScheduler view](https://raw.githubusercontent.com/StanfordSpezi/SpeziScheduler/refs/heads/main/Sources/SpeziSchedulerUI/SpeziSchedulerUI.docc/Resources/Schedule-Date.png)
+    }
+    @Column {
+       ![Screenshot showing SpeziScheduler view](https://raw.githubusercontent.com/StanfordSpezi/SpeziScheduler/refs/heads/main/Sources/SpeziSchedulerUI/SpeziSchedulerUI.docc/Resources/Schedule-Today-Center.png) 
+    } 
+    @Column {
+       ![Screenshot showing SpeziScheduler view](https://raw.githubusercontent.com/StanfordSpezi/SpeziScheduler/refs/heads/main/Sources/SpeziSchedulerUI/SpeziSchedulerUI.docc/Resources/Schedule-Tomorrow.png) 
+    } 
+}
+
+> Tip: Check out the [SpeziScheduler Documentation](https://swiftpackageindex.com/StanfordSpezi/SpeziScheduler/documentation/spezischeduler) for implementation details.
 
 
 ### Spezi Notifications
