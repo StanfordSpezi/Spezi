@@ -30,7 +30,7 @@ Unfortunately, DocC currently does not support dark mode images: https://github.
     }
     @Column {
         @Image(source: "https://raw.githubusercontent.com/StanfordSpezi/SpeziDevices/main/Sources/SpeziDevicesUI/SpeziDevicesUI.docc/Resources/PairedDevices.png", alt: "Screenshot displaying Spezi Devices and Bluetooth pairing user interface.") {
-            The[Spezi Bluetooth](https://github.com/StanfordSpezi/SpeziBluetooth) and [Spezi Devices](https://github.com/StanfordSpezi/SpeziDevices) modules
+            The [Spezi Bluetooth](https://github.com/StanfordSpezi/SpeziBluetooth) and [Spezi Devices](https://github.com/StanfordSpezi/SpeziDevices) modules
         }
     }
     @Column {
