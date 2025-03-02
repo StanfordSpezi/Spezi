@@ -25,39 +25,40 @@ Unfortunately, DocC currently does not support dark mode images: https://github.
 @Row {
     @Column {
         @Image(source: "https://raw.githubusercontent.com/StanfordSpezi/SpeziOnboarding/main/Sources/SpeziOnboarding/SpeziOnboarding.docc/Resources/ConsentView.png", alt: "Screenshot displaying the UI of the onboarding module.") {
-            [The Spezi Onboarding Module](https://github.com/StanfordSpezi/SpeziOnboarding)
+            The [Spezi Onboarding](https://github.com/StanfordSpezi/SpeziOnboarding) module.
         }
     }
     @Column {
-        @Image(source: "https://raw.githubusercontent.com/StanfordSpezi/SpeziContact/main/Sources/SpeziContact/SpeziContact.docc/Resources/Overview.png", alt: "Screenshot displaying the UI of the contact module.") {
-            [The Spezi Contract Module](https://github.com/StanfordSpezi/SpeziContact)
+        @Image(source: "https://raw.githubusercontent.com/StanfordSpezi/SpeziDevices/main/Sources/SpeziDevicesUI/SpeziDevicesUI.docc/Resources/PairedDevices.png", alt: "Screenshot displaying Spezi Devices and Bluetooth pairing user interface.") {
+            The [Spezi Bluetooth](https://github.com/StanfordSpezi/SpeziBluetooth) and [Spezi Devices](https://github.com/StanfordSpezi/SpeziDevices) modules.
         }
     }
     @Column {
         @Image(source: "https://raw.githubusercontent.com/StanfordSpezi/SpeziQuestionnaire/main/Sources/SpeziQuestionnaire/SpeziQuestionnaire.docc/Resources/Overview.png", alt: "Screenshot displaying the UI of the questionnaire module.") {
-            [The Spezi Questionnaire Module](https://github.com/StanfordSpezi/SpeziQuestionnaire)
+            The [Spezi Questionnaire](https://github.com/StanfordSpezi/SpeziQuestionnaire) module.
         }
     }
 }
 @Row {
     @Column {
         @Image(source: "https://raw.githubusercontent.com/StanfordSpezi/SpeziAccount/main/Sources/SpeziAccount/SpeziAccount.docc/Resources/AccountSetup.png", alt: "Screenshot displaying the account setup view with an email and password prompt and a Sign In with Apple button using the Spezi Account module.") {
-            [The Spezi Account Module](https://github.com/StanfordSpezi/SpeziAccount)
+            The [Spezi Account](https://github.com/StanfordSpezi/SpeziAccount) module.
         }
     }
     @Column {
         @Image(source: "https://raw.githubusercontent.com/StanfordSpezi/SpeziViews/main/Sources/SpeziValidation/SpeziValidation.docc/Resources/Validation.png", alt: "Three different kinds of text fields showing validation errors in red text using Spezi Validation package.") {
-            The `SpeziValidation` package of the [Spezi Views Module](https://github.com/StanfordSpezi/SpeziViews).
+            The [Spezi Views](https://github.com/StanfordSpezi/SpeziViews) module, including the [SpeziValidation](https://swiftpackageindex.com/StanfordSpezi/SpeziViews/documentation/spezivalidation) target.
         }
     }
     @Column {
         @Image(source: "https://raw.githubusercontent.com/StanfordSpezi/SpeziLLM/main/Sources/SpeziLLMLocal/SpeziLLMLocal.docc/Resources/ChatView.png", alt: "A Chat View of a locally executed LLM using the Spezi LLM module.") {
-            [The Spezi LLM Module](https://github.com/StanfordSpezi/SpeziLLM)
+            The [Spezi LLM](https://github.com/StanfordSpezi/SpeziLLM) module.
         }
     }
 }
 
-The best way to get started and explore the functionality of Spezi is by taking a look at the [Spezi Template Application](https://github.com/StanfordSpezi/SpeziTemplateApplication). The application incorporates a wide variety of sophisticated modules and demonstrates the usage of these modules in a simple-to-use and easy-to-extend application.
+The best way to get started and explore the functionality of Spezi is by taking a look at the [Spezi Template Application](https://github.com/StanfordSpezi/SpeziTemplateApplication).
+The application incorporates a wide variety of sophisticated modules and demonstrates the usage of these modules in a simple-to-use and easy-to-extend application.
 
 
 ### An Ecosystem of Modules
@@ -70,6 +71,8 @@ Learn more about Spezi at [spezi.stanford.edu](https://spezi.stanford.edu).
 Reach out to us on social media and use the [Stanford Spezi Discussion Forum](https://github.com/orgs/StanfordSpezi/discussions) to ask any Spezi-related questions or share the projects you built with Spezi.
 
 Check out the [Stanford Biodesign Digital Health GitHub organization](https://github.com/StanfordBDHG) and [Stanford Biodesign Digital Health website at bdh.stanford.edu](https://bdh.stanford.edu), for example, applications built with Spezi and some of our related open-source and research projects.
+
+> Tip: You can find a complete list of the Swift-based Spezi modules on the [Spezi Swift Package Index](https://swiftpackageindex.com/StanfordSpezi) page.
 
 
 ### The Spezi Building Blocks
