@@ -47,7 +47,8 @@ final class ModuleBuilderTests: XCTestCase {
                     availableConditionalTestExpectation,
                     ifTestExpectation,
                     elseTestExpectation
-                ]
+                ],
+                timeout: 1.0
             )
         }
     }

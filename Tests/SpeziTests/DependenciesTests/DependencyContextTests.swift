@@ -7,6 +7,7 @@
 //
 
 import Spezi
+import XCTest
 import XCTRuntimeAssertions
 
 private final class ExampleModule: Module {}

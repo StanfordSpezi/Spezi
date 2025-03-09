@@ -7,6 +7,7 @@
 //
 
 import Spezi
+import XCTest
 
 
 extension Array where Element == any Module {

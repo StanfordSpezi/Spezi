@@ -14,4 +14,4 @@ builder:
       swift_version: 6
       documentation_targets:
       - Spezi
-      - XCTSpezi
+      - SpeziTesting

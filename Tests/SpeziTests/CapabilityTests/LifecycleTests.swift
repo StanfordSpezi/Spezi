@@ -7,37 +7,31 @@
 //
 
 @testable import Spezi
-import XCTest
-import XCTRuntimeAssertions
+import SwiftUI
+import Testing
 
 
 @available(*, deprecated, message: "Propagate deprecation warning")
 private final class TestLifecycleHandler: Module, LifecycleHandler {
-    let expectationWillFinishLaunchingWithOption: XCTestExpectation
-    let expectationApplicationWillTerminate: XCTestExpectation
+    var willFinishLaunchingWithOptionConfirmation: Confirmation? // swiftlint:disable:this identifier_name
+    var willTerminateConfirmation: Confirmation?
 
     @Application(\.launchOptions)
     var launchOptions
 
     
-    init(
-        expectationWillFinishLaunchingWithOption: XCTestExpectation,
-        expectationApplicationWillTerminate: XCTestExpectation
-    ) {
-        self.expectationWillFinishLaunchingWithOption = expectationWillFinishLaunchingWithOption
-        self.expectationApplicationWillTerminate = expectationApplicationWillTerminate
-    }
+    init() {}
     
 #if os(iOS) || os(visionOS) || os(tvOS)
     func willFinishLaunchingWithOptions(
         _ application: UIApplication,
         launchOptions: [UIApplication.LaunchOptionsKey: Any]
     ) {
-        expectationWillFinishLaunchingWithOption.fulfill()
+        willFinishLaunchingWithOptionConfirmation?()
     }
     
     func applicationWillTerminate(_ application: UIApplication) {
-        expectationApplicationWillTerminate.fulfill()
+        willTerminateConfirmation?()
     }
 #endif
 }
@@ -64,44 +58,47 @@ private class TestLifecycleHandlerApplicationDelegate: SpeziAppDelegate {
 }
 
 
-final class LifecycleTests: XCTestCase {
+@Suite("Lifecycle")
+struct LifecycleTests {
     @MainActor
     @available(*, deprecated, message: "Propagate deprecation warning")
+    @Test("UIApplication Lifecycle Methods")
     func testUIApplicationLifecycleMethods() async throws {
-        let expectationWillFinishLaunchingWithOption = XCTestExpectation(description: "WillFinishLaunchingWithOptions")
-        let expectationApplicationWillTerminate = XCTestExpectation(description: "ApplicationWillTerminate")
-
-        let module = TestLifecycleHandler(
-            expectationWillFinishLaunchingWithOption: expectationWillFinishLaunchingWithOption,
-            expectationApplicationWillTerminate: expectationApplicationWillTerminate
-        )
+        let module = TestLifecycleHandler()
         let testApplicationDelegate = TestLifecycleHandlerApplicationDelegate(injectedModule: module)
 
 
         #if os(iOS) || os(visionOS) || os(tvOS)
-        let launchOptions = try [UIApplication.LaunchOptionsKey.url: XCTUnwrap(URL(string: "spezi.stanford.edu"))]
-        let willFinishLaunchingWithOptions = testApplicationDelegate.application(
-            UIApplication.shared,
-            willFinishLaunchingWithOptions: launchOptions
-        )
-        XCTAssertTrue(willFinishLaunchingWithOptions)
-        wait(for: [expectationWillFinishLaunchingWithOption])
+        let launchOptions = try [UIApplication.LaunchOptionsKey.url: #require(URL(string: "spezi.stanford.edu"))]
+        await confirmation { confirmation in
+            module.willFinishLaunchingWithOptionConfirmation = confirmation
 
-        XCTAssertTrue(module.launchOptions.keys.allSatisfy { launchOptions[$0] != nil })
+            let willFinishLaunchingWithOptions = testApplicationDelegate.application(
+                UIApplication.shared,
+                willFinishLaunchingWithOptions: launchOptions
+            )
+            #expect(willFinishLaunchingWithOptions)
+            module.willFinishLaunchingWithOptionConfirmation = nil
+        }
+
+        #expect(module.launchOptions.keys.allSatisfy { launchOptions[$0] != nil })
         #elseif os(macOS)
         let launchOptions: [AnyHashable: Any] = [UUID(): "Some value"]
         testApplicationDelegate.applicationWillFinishLaunching(
             Notification(name: NSApplication.willFinishLaunchingNotification, userInfo: launchOptions)
         )
 
-        XCTAssertTrue(module.launchOptions.keys.allSatisfy { launchOptions[$0] != nil })
+        #expect(module.launchOptions.keys.allSatisfy { launchOptions[$0] != nil })
         #elseif os(watchOS)
         testApplicationDelegate.applicationDidFinishLaunching()
         #endif
 
         #if os(iOS) || os(visionOS) || os(tvOS)
-        testApplicationDelegate.applicationWillTerminate(UIApplication.shared)
-        wait(for: [expectationApplicationWillTerminate])
+        await confirmation { confirmation in
+            module.willTerminateConfirmation = confirmation
+            testApplicationDelegate.applicationWillTerminate(UIApplication.shared)
+            module.willTerminateConfirmation = nil
+        }
         #endif
     }
 }

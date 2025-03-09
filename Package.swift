@@ -27,7 +27,7 @@ let package = Package(
         .library(name: "XCTSpezi", targets: ["XCTSpezi"])
     ],
     dependencies: [
-        .package(url: "https://github.com/StanfordSpezi/SpeziFoundation.git", from: "2.0.0"),
+        .package(url: "https://github.com/StanfordSpezi/SpeziFoundation.git", from: "2.1.1"),
         .package(url: "https://github.com/StanfordBDHG/XCTRuntimeAssertions.git", from: "1.1.1"),
         .package(url: "https://github.com/apple/swift-collections.git", from: "1.1.1")
     ] + swiftLintPackage(),
@@ -42,9 +42,17 @@ let package = Package(
             plugins: [] + swiftLintPlugin()
         ),
         .target(
-            name: "XCTSpezi",
+            name: "SpeziTesting",
             dependencies: [
                 .target(name: "Spezi")
+            ],
+            plugins: [] + swiftLintPlugin()
+        ),
+        .target(
+            name: "XCTSpezi",
+            dependencies: [
+                .target(name: "Spezi"),
+                .target(name: "SpeziTesting")
             ],
             plugins: [] + swiftLintPlugin()
         ),
@@ -52,7 +60,7 @@ let package = Package(
             name: "SpeziTests",
             dependencies: [
                 .target(name: "Spezi"),
-                .target(name: "XCTSpezi"),
+                .target(name: "SpeziTesting"),
                 .product(name: "XCTRuntimeAssertions", package: "XCTRuntimeAssertions")
             ],
             plugins: [] + swiftLintPlugin()

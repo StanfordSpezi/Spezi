@@ -6,10 +6,10 @@
 // SPDX-License-Identifier: MIT
 //
 
+import Foundation
 @testable import Spezi
-import XCTest
-import XCTRuntimeAssertions
-import XCTSpezi
+import SpeziTesting
+import Testing
 
 
 private final class ProvideModule1: Module {
@@ -40,7 +40,8 @@ private final class CollectModule: Module {
 }
 
 
-final class ModuleCommunicationTests: XCTestCase {
+@Suite("Module Communication", .serialized)
+struct ModuleCommunicationTests {
     private class TestApplicationDelegate: SpeziAppDelegate {
         override var configuration: Configuration {
             Configuration {
@@ -55,18 +56,19 @@ final class ModuleCommunicationTests: XCTestCase {
 
 
     @MainActor
-    override func setUp() async throws {
+    init() async throws {
         Self.provideModule = ProvideModule1()
         Self.collectModule = CollectModule()
     }
 
     @MainActor
+    @Test("Simple Communication")
     func testSimpleCommunication() throws {
         let delegate = TestApplicationDelegate()
         _ = delegate.spezi // ensure init
 
-        XCTAssertEqual(Self.collectModule.nums, [2, 3, 4, 5, 6])
-        XCTAssertTrue(Self.collectModule.nothingProvided.isEmpty)
-        XCTAssertEqual(Self.collectModule.strings, ["Hello World"])
+        #expect(Self.collectModule.nums == [2, 3, 4, 5, 6])
+        #expect(Self.collectModule.nothingProvided.isEmpty)
+        #expect(Self.collectModule.strings == ["Hello World"])
     }
 }

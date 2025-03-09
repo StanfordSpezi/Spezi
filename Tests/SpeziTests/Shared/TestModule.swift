@@ -8,7 +8,9 @@
 
 import Spezi
 import SwiftUI
-@_exported import XCTest
+import Testing
+import XCTest
+
 
 struct TestViewModifier: ViewModifier {
     let message: String
@@ -18,19 +20,23 @@ struct TestViewModifier: ViewModifier {
     }
 }
 
+
 public final class TestModule: Module {
+    let confirmation: Confirmation?
     let expectation: XCTestExpectation
 
     @Modifier var modifier1 = TestViewModifier(message: "Hello")
     @Modifier var modifier2 = TestViewModifier(message: "World")
 
     
-    public init(expectation: XCTestExpectation = XCTestExpectation()) {
+    public init(confirmation: Confirmation? = nil, expectation: XCTestExpectation = XCTestExpectation()) {
+        self.confirmation = confirmation
         self.expectation = expectation
     }
     
     
     public func configure() {
         expectation.fulfill()
+        confirmation?()
     }
 }

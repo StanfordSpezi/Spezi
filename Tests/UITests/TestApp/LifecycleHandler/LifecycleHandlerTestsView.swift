@@ -8,7 +8,6 @@
 
 import SwiftUI
 import XCTestApp
-import XCTSpezi
 
 
 struct LifecycleHandlerTestsView: View {

@@ -7,6 +7,7 @@
 //
 
 import Spezi
+import XCTest
 
 
 actor MockStandard: Standard {

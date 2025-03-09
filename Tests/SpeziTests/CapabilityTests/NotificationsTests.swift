@@ -8,8 +8,8 @@
 
 @testable import Spezi
 import SwiftUI
+import Testing
 import UserNotifications
-import XCTest
 
 
 @available(*, deprecated, message: "Forward decpreation warnings.")
@@ -19,9 +19,9 @@ private final class TestNotificationHandler: Module, NotificationHandler, Notifi
     @Application(\.unregisterRemoteNotifications)
     var unregisterRemoteNotifications
 
-    private let actionExpectation: XCTestExpectation
-    private let incomingNotificationExpectation: XCTestExpectation
-    private let remoteNotificationExpectation: XCTestExpectation
+    private let actionConfirmation: Confirmation?
+    private let incomingNotificationConfirmation: Confirmation?
+    private let remoteNotificationConfirmation: Confirmation?
 #if !os(macOS)
     private var backgroundFetchResult: BackgroundFetchResult = .noData
 #endif
@@ -29,13 +29,13 @@ private final class TestNotificationHandler: Module, NotificationHandler, Notifi
     var lastDeviceToken: Data?
 
     init(
-        actionExpectation: XCTestExpectation = .init(),
-        incomingNotificationExpectation: XCTestExpectation = .init(),
-        remoteNotificationExpectation: XCTestExpectation = .init()
+        actionConfirmation: Confirmation? = nil,
+        incomingNotificationConfirmation: Confirmation? = nil,
+        remoteNotificationConfirmation: Confirmation? = nil
     ) {
-        self.actionExpectation = actionExpectation
-        self.incomingNotificationExpectation = incomingNotificationExpectation
-        self.remoteNotificationExpectation = remoteNotificationExpectation
+        self.actionConfirmation = actionConfirmation
+        self.incomingNotificationConfirmation = incomingNotificationConfirmation
+        self.remoteNotificationConfirmation = remoteNotificationConfirmation
     }
 
 #if !os(macOS)
@@ -51,23 +51,23 @@ private final class TestNotificationHandler: Module, NotificationHandler, Notifi
 
 #if !os(tvOS)
     func handleNotificationAction(_ response: UNNotificationResponse) async {
-        actionExpectation.fulfill()
+        actionConfirmation?()
     }
 #endif
 
     func receiveIncomingNotification(_ notification: UNNotification) async -> UNNotificationPresentationOptions? {
-        incomingNotificationExpectation.fulfill()
+        incomingNotificationConfirmation?()
         return [.badge, .banner]
     }
 
 #if !os(macOS)
     func receiveRemoteNotification(_ remoteNotification: [AnyHashable: Any]) async -> BackgroundFetchResult {
-        remoteNotificationExpectation.fulfill()
+        remoteNotificationConfirmation?()
         return backgroundFetchResult
     }
 #else
     func receiveRemoteNotification(_ remoteNotification: [AnyHashable: Any]) {
-        remoteNotificationExpectation.fulfill()
+        remoteNotificationExpectation?()
     }
 #endif
 }
@@ -93,31 +93,22 @@ private class TestNotificationApplicationDelegate: SpeziAppDelegate {
 }
 
 
-@available(*, deprecated, message: "Forward depcreation warnings")
-final class NotificationsTests: XCTestCase {
+@Suite("Notifications")
+struct NotificationsTests {
     @MainActor
+    @Test("Register Notifications Successfully")
+    @available(*, deprecated, message: "Forward deprecation warnings")
     func testRegisterNotificationsSuccessful() async throws {
         let module = TestNotificationHandler()
         let delegate = TestNotificationApplicationDelegate(module)
         _ = delegate.spezi // init spezi
 
         let action = module.registerRemoteNotifications
-        
-        let expectation = XCTestExpectation(description: "RegisterRemoteNotifications")
-        var caught: Error?
 
-        Task { // this task also runs on main actor
-            do {
-                try await action()
-            } catch {
-                caught = error
-            }
-            expectation.fulfill()
-        }
+        async let registration = action()
+        try await Task.sleep(for: .milliseconds(50)) // allow dispatch of Task above
 
-        try await Task.sleep(for: .milliseconds(500)) // allow dispatch of Task above
-
-        let data = try XCTUnwrap("Hello World".data(using: .utf8))
+        let data = try #require("Hello World".data(using: .utf8))
 
 #if os(iOS) || os(visionOS) || os(tvOS)
         delegate.application(UIApplication.shared, didRegisterForRemoteNotificationsWithDeviceToken: data)
@@ -127,14 +118,15 @@ final class NotificationsTests: XCTestCase {
         delegate.application(NSApplication.shared, didRegisterForRemoteNotificationsWithDeviceToken: data)
 #endif
 
-        try await Task.sleep(for: .milliseconds(500)) // allow dispatch of Task above
+        try await Task.sleep(for: .milliseconds(50)) // allow dispatch of Task above
 
-        wait(for: [expectation])
-        XCTAssertNil(caught)
-        XCTAssertEqual(module.lastDeviceToken, data)
+        _ = try await registration
+        #expect(module.lastDeviceToken == data)
     }
 
     @MainActor
+    @Test("Register Notifications Erroneous")
+    @available(*, deprecated, message: "Forward deprecation warnings")
     func testRegisterNotificationsErroneous() async throws {
         enum TestError: Error, Equatable {
             case testError
@@ -146,19 +138,9 @@ final class NotificationsTests: XCTestCase {
 
         let action = module.registerRemoteNotifications
 
-        let expectation = XCTestExpectation(description: "RegisterRemoteNotifications")
-        var caught: Error?
+        async let registration = action()
 
-        Task { // this task also runs on main actor
-            do {
-                try await action()
-            } catch {
-                caught = error
-            }
-            expectation.fulfill()
-        }
-
-        try await Task.sleep(for: .milliseconds(500)) // allow dispatch of Task above
+        try await Task.sleep(for: .milliseconds(50)) // allow dispatch of Task above
 
 #if os(iOS) || os(visionOS) || os(tvOS)
         delegate.application(UIApplication.shared, didFailToRegisterForRemoteNotificationsWithError: TestError.testError)
@@ -168,15 +150,21 @@ final class NotificationsTests: XCTestCase {
         delegate.application(NSApplication.shared, didFailToRegisterForRemoteNotificationsWithError: TestError.testError)
 #endif
 
-        try await Task.sleep(for: .milliseconds(500)) // allow dispatch of Task above
+        try await Task.sleep(for: .milliseconds(50)) // allow dispatch of Task above
 
-        wait(for: [expectation])
-        XCTAssertNil(module.lastDeviceToken)
-        let receivedError = try XCTUnwrap(caught as? TestError)
-        XCTAssertEqual(receivedError, TestError.testError)
+        do {
+            _ = try await registration
+            Issue.record("Registration was successful")
+        } catch {
+            #expect(module.lastDeviceToken == nil)
+            let receivedError = try #require(error as? TestError)
+            #expect(receivedError == TestError.testError)
+        }
     }
 
     @MainActor
+    @Test("Unregister Notifications")
+    @available(*, deprecated, message: "Forward deprecation warnings")
     func testUnregisterNotifications() async throws {
         let module = TestNotificationHandler()
         let delegate = TestNotificationApplicationDelegate(module)
@@ -187,76 +175,79 @@ final class NotificationsTests: XCTestCase {
     }
 
     @MainActor
-    func testRemoteNotificationDeliveryNoData() async throws {
-        let expectation = XCTestExpectation(description: "RemoteNotification")
-
-        let module = TestNotificationHandler(remoteNotificationExpectation: expectation)
-        let delegate = TestNotificationApplicationDelegate(module)
-        _ = delegate.spezi
+    @Test("Remote Notification delivers no Data")
+    @available(*, deprecated, message: "Forward deprecation warnings")
+    func testRemoteNotificationDeliveryNoData() async {
+        await confirmation { confirmation in
+            let module = TestNotificationHandler(remoteNotificationConfirmation: confirmation)
+            let delegate = TestNotificationApplicationDelegate(module)
+            _ = delegate.spezi
 
 #if os(iOS) || os(visionOS) || os(tvOS)
-        let result = await delegate.application(UIApplication.shared, didReceiveRemoteNotification: [:])
+            let result = await delegate.application(UIApplication.shared, didReceiveRemoteNotification: [:])
 #elseif os(watchOS)
-        let result = await delegate.didReceiveRemoteNotification([:])
+            let result = await delegate.didReceiveRemoteNotification([:])
 #elseif os(macOS)
-        delegate.application(NSApplication.shared, didReceiveRemoteNotification: [:])
+            delegate.application(NSApplication.shared, didReceiveRemoteNotification: [:])
 #endif
 
-        wait(for: [expectation])
 #if !os(macOS)
-        XCTAssertEqual(result, .noData)
+            #expect(result == .noData)
 #endif
+        }
     }
 
     @MainActor
+    @Test("Remote Notifications delivers Data")
+    @available(*, deprecated, message: "Forward deprecation warnings")
     func testRemoteNotificationDeliveryNewData() async throws {
-        let expectation = XCTestExpectation(description: "RemoteNotification")
-
-        let module = TestNotificationHandler(remoteNotificationExpectation: expectation)
+        await confirmation { confirmation in
+            let module = TestNotificationHandler(remoteNotificationConfirmation: confirmation)
 #if !os(macOS)
-        module.setFetchResult(.newData)
+            module.setFetchResult(.newData)
 #endif
 
-        let delegate = TestNotificationApplicationDelegate(module)
-        _ = delegate.spezi
+            let delegate = TestNotificationApplicationDelegate(module)
+            _ = delegate.spezi
 
 #if os(iOS) || os(visionOS) || os(tvOS)
-        let result = await delegate.application(UIApplication.shared, didReceiveRemoteNotification: [:])
+            let result = await delegate.application(UIApplication.shared, didReceiveRemoteNotification: [:])
 #elseif os(watchOS)
-        let result = await delegate.didReceiveRemoteNotification([:])
+            let result = await delegate.didReceiveRemoteNotification([:])
 #elseif os(macOS)
-        delegate.application(NSApplication.shared, didReceiveRemoteNotification: [:])
+            delegate.application(NSApplication.shared, didReceiveRemoteNotification: [:])
 #endif
 
-        wait(for: [expectation])
 #if !os(macOS)
-        XCTAssertEqual(result, .newData)
+            #expect(result == .newData)
 #endif
+        }
     }
 
     @MainActor
-    func testRemoteNotificationDeliveryFailed() async throws {
-        let expectation = XCTestExpectation(description: "RemoteNotification")
-
-        let module = TestNotificationHandler(remoteNotificationExpectation: expectation)
+    @Test("Remote Notifications Delivery Failed")
+    @available(*, deprecated, message: "Forward deprecation warnings")
+    func testRemoteNotificationDeliveryFailed() async {
+        await confirmation { confirmation in
+            let module = TestNotificationHandler(remoteNotificationConfirmation: confirmation)
 #if !os(macOS)
-        module.setFetchResult(.failed)
+            module.setFetchResult(.failed)
 #endif
 
-        let delegate = TestNotificationApplicationDelegate(module)
-        _ = delegate.spezi
+            let delegate = TestNotificationApplicationDelegate(module)
+            _ = delegate.spezi
 
 #if os(iOS) || os(visionOS) || os(tvOS)
-        let result = await delegate.application(UIApplication.shared, didReceiveRemoteNotification: [:])
+            let result = await delegate.application(UIApplication.shared, didReceiveRemoteNotification: [:])
 #elseif os(watchOS)
-        let result = await delegate.didReceiveRemoteNotification([:])
+            let result = await delegate.didReceiveRemoteNotification([:])
 #elseif os(macOS)
-        delegate.application(NSApplication.shared, didReceiveRemoteNotification: [:])
+            delegate.application(NSApplication.shared, didReceiveRemoteNotification: [:])
 #endif
 
-        wait(for: [expectation])
 #if !os(macOS)
-        XCTAssertEqual(result, .failed)
+            #expect(result == .failed)
 #endif
+        }
     }
 }

@@ -8,7 +8,6 @@
 
 import Spezi
 import SwiftUI
-import XCTSpezi
 
 
 class TestAppDelegate: SpeziAppDelegate {

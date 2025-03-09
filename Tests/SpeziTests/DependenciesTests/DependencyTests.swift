@@ -364,7 +364,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
 
         XCTAssertEqual(optionalModule.nums, [5, 3])
 
-        wait(for: [deinitExpectation])
+        await fulfillment(of: [deinitExpectation])
     }
 
     @MainActor

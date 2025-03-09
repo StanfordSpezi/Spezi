@@ -7,6 +7,7 @@
 //
 
 import Spezi
+import XCTest
 import XCTRuntimeAssertions
 
 private protocol ExampleTypeConstraint: Module {}

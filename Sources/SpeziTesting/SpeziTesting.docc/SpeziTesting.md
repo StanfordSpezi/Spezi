@@ -1,4 +1,4 @@
-# ``XCTSpezi``
+# ``SpeziTesting``
 
 <!--
 
@@ -26,7 +26,7 @@ To do so, you can use ``withDependencyResolution(standard:simulateLifecycle:_:)`
 Below is a short code example that demonstrates this functionality.
 
 ```swift
-import XCTSpezi
+import SpeziTesting
 
 let module = ModuleUnderTest()
 

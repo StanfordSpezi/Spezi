@@ -8,31 +8,31 @@
 
 @testable import Spezi
 import SwiftUI
-import XCTest
-import XCTRuntimeAssertions
+import Testing
 
 
-final class ViewModifierTests: XCTestCase {
+@Suite("ViewModifier")
+struct ViewModifierTests {
     @MainActor
-    func testViewModifierRetrieval() throws {
-        let expectation = XCTestExpectation(description: "Module")
-        expectation.assertForOverFulfill = true
+    @Test("ViewModifier Retrieval")
+    func testViewModifierRetrieval() async {
+        await confirmation { confirmation in
+            let testApplicationDelegate = TestApplicationDelegate(confirmation: confirmation)
 
-        let testApplicationDelegate = TestApplicationDelegate(expectation: expectation)
+            let modifiers = testApplicationDelegate.spezi.viewModifiers
+            #expect(modifiers.count == 2)
 
-        let modifiers = testApplicationDelegate.spezi.viewModifiers
-        XCTAssertEqual(modifiers.count, 2)
-
-        let message = modifiers
-            .compactMap { $0 as? TestViewModifier }
-            .map { $0.message }
-            .joined(separator: " ")
-        XCTAssertEqual(message, "Hello World")
+            let message = modifiers
+                .compactMap { $0 as? TestViewModifier }
+                .map { $0.message }
+                .joined(separator: " ")
+            #expect(message == "Hello World")
+        }
     }
 
     @MainActor
     func testEmptyRetrieval() {
         let speziAppDelegate = SpeziAppDelegate()
-        XCTAssert(speziAppDelegate.spezi.viewModifiers.isEmpty)
+        #expect(speziAppDelegate.spezi.viewModifiers.isEmpty)
     }
 }
