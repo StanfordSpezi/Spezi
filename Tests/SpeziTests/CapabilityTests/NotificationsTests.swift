@@ -67,7 +67,7 @@ private final class TestNotificationHandler: Module, NotificationHandler, Notifi
     }
 #else
     func receiveRemoteNotification(_ remoteNotification: [AnyHashable: Any]) {
-        remoteNotificationExpectation?()
+        remoteNotificationConfirmation?()
     }
 #endif
 }
