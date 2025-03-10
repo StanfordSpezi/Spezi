@@ -7,86 +7,83 @@
 //
 
 @_spi(Spezi) @testable import Spezi
+import SpeziTesting
 import SwiftUI
-import XCTest
-import XCTRuntimeAssertions
-import XCTSpezi
+import Testing
 
 
 private final class DependingTestModule: Module {
-    let expectation: XCTestExpectation
+    let confirmation: Confirmation?
     @Dependency var module = TestModule()
 
 
-    init(expectation: XCTestExpectation = XCTestExpectation(), dependencyExpectation: XCTestExpectation = XCTestExpectation()) {
-        self.expectation = expectation
-        self._module = Dependency(wrappedValue: TestModule(expectation: dependencyExpectation))
+    init(confirmation: Confirmation? = nil, dependencyConfirmation: Confirmation? = nil) {
+        self.confirmation = confirmation
+        self._module = Dependency(wrappedValue: TestModule(confirmation: dependencyConfirmation))
     }
 
 
     func configure() {
-        self.expectation.fulfill()
+        self.confirmation?()
     }
 }
 
 
-final class ModuleTests: XCTestCase {
+@Suite("Module")
+struct ModuleTests {
     @MainActor
-    func testModuleFlow() throws {
-        let expectation = XCTestExpectation(description: "Module")
-        expectation.assertForOverFulfill = true
-
-        _ = Text("Spezi")
-            .spezi(TestApplicationDelegate(expectation: expectation))
-
-        wait(for: [expectation])
+    @Test("Module Flow")
+    func testModuleFlow() async {
+        await confirmation { confirmation in
+            _ = Text("Spezi")
+                .spezi(TestApplicationDelegate(confirmation: confirmation))
+        }
     }
 
     @MainActor
+    @Test("Spezi")
     func testSpezi() throws {
         let spezi = Spezi(standard: DefaultStandard(), modules: [DependingTestModule()])
 
         let modules = spezi.modules
-        XCTAssertEqual(modules.count, 3)
-        XCTAssert(modules.contains(where: { $0 is DefaultStandard }))
-        XCTAssert(modules.contains(where: { $0 is DependingTestModule }))
-        XCTAssert(modules.contains(where: { $0 is TestModule }))
+        #expect(modules.count == 3)
+        #expect(modules.contains(where: { $0 is DefaultStandard }))
+        #expect(modules.contains(where: { $0 is DependingTestModule }))
+        #expect(modules.contains(where: { $0 is TestModule }))
     }
 
     @MainActor
-    func testPreviewModifier() throws {
-        let expectation = XCTestExpectation(description: "Preview Module")
-        expectation.assertForOverFulfill = true
-
+    @Test("Preview Modifier")
+    func testPreviewModifier() async throws {
         // manually patch environment variable for running within Xcode preview window
         setenv(ProcessInfo.xcodeRunningForPreviewKey, "1", 1)
 
-        _ = try XCTUnwrap(
-            Text("Spezi")
-                .previewWith {
-                    TestModule(expectation: expectation)
-                }
-        )
-        wait(for: [expectation])
+        try await confirmation { confirmation in
+            _ = try #require(
+                Text("Spezi")
+                    .previewWith {
+                        TestModule(confirmation: confirmation)
+                    }
+            )
+        }
 
         unsetenv(ProcessInfo.xcodeRunningForPreviewKey)
     }
 
     @MainActor
-    func testModuleCreation() {
-        let expectation = XCTestExpectation(description: "DependingTestModule")
-        expectation.assertForOverFulfill = true
-        let dependencyExpectation = XCTestExpectation(description: "TestModule")
-        dependencyExpectation.assertForOverFulfill = true
+    @Test("Module Creation")
+    func testModuleCreation() async {
+        await confirmation { moduleConfirmation in
+            await confirmation { dependencyConfirmation in
+                let module = DependingTestModule(confirmation: moduleConfirmation, dependencyConfirmation: dependencyConfirmation)
 
-        let module = DependingTestModule(expectation: expectation, dependencyExpectation: dependencyExpectation)
+                withDependencyResolution {
+                    module
+                }
 
-        withDependencyResolution {
-            module
+
+                _ = module.module
+            }
         }
-
-        wait(for: [expectation, dependencyExpectation])
-
-        _ = module.module
     }
 }

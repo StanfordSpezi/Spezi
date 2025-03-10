@@ -13,8 +13,7 @@ import XCTRuntimeAssertions
 
 #if os(iOS) || os(visionOS) || os(tvOS)
 /// Protocol used to silence deprecation warnings.
-@_spi(Internal)
-public protocol DeprecatedLaunchOptionsCall {
+package protocol DeprecatedLaunchOptionsCall {
     /// Forward to legacy lifecycle handlers.
     @MainActor
     func callWillFinishLaunching(_ application: UIApplication, launchOptions: [UIApplication.LaunchOptionsKey: Any])
@@ -43,10 +42,9 @@ public enum LifecycleSimulationOptions {
 
 
 #if os(iOS) || os(visionOS) || os(tvOS)
-@_spi(Internal)
 extension Spezi: DeprecatedLaunchOptionsCall {
     @available(*, deprecated, message: "Propagate deprecation warning.")
-    public func callWillFinishLaunching(_ application: UIApplication, launchOptions: [UIApplication.LaunchOptionsKey: Any]) {
+    package func callWillFinishLaunching(_ application: UIApplication, launchOptions: [UIApplication.LaunchOptionsKey: Any]) {
         lifecycleHandler.willFinishLaunchingWithOptions(application, launchOptions: launchOptions)
     }
 }

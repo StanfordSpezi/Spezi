@@ -9,7 +9,6 @@
 import Spezi
 import SwiftUI
 import XCTestApp
-import XCTSpezi
 
 
 class MyModelTestCase: TestAppTestCase {
