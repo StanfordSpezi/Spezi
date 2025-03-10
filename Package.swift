@@ -24,6 +24,7 @@ let package = Package(
     ],
     products: [
         .library(name: "Spezi", targets: ["Spezi"]),
+        .library(name: "SpeziTesting", targets: ["SpeziTesting"]),
         .library(name: "XCTSpezi", targets: ["XCTSpezi"])
     ],
     dependencies: [
