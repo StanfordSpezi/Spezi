@@ -132,9 +132,9 @@ extension Module {
 
 extension _ProvidePropertyWrapper: StorageValueProvider {
     public func collect<Repository: SharedRepository<SpeziAnchor>>(into repository: inout Repository) {
-        if let wrapperWithOptional = self as? OptionalBasedProvideProperty {
+        if let wrapperWithOptional = self as? any OptionalBasedProvideProperty {
             wrapperWithOptional.collectOptional(into: &repository)
-        } else if let wrapperWithArray = self as? CollectionBasedProvideProperty {
+        } else if let wrapperWithArray = self as? any CollectionBasedProvideProperty {
             wrapperWithArray.collectArrayElements(into: &repository)
         } else {
             repository.setValues(for: id, [storedValue])
@@ -151,9 +151,9 @@ extension _ProvidePropertyWrapper: StorageValueProvider {
     private func clear(isolated: Bool) {
         collected = false
 
-        if let wrapperWithOptional = self as? OptionalBasedProvideProperty {
+        if let wrapperWithOptional = self as? any OptionalBasedProvideProperty {
             wrapperWithOptional.clearValues(isolated: isolated)
-        } else if let wrapperWithArray = self as? CollectionBasedProvideProperty {
+        } else if let wrapperWithArray = self as? any CollectionBasedProvideProperty {
             wrapperWithArray.clearValues(isolated: isolated)
         } else {
             performClear(isolated: isolated, of: Value.self)

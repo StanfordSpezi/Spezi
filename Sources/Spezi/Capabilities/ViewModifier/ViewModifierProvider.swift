@@ -53,7 +53,7 @@ extension Module {
     /// All SwiftUI `ViewModifier` the module wants to modify the global view hierarchy with.
     @MainActor
     var viewModifierEntires: [(UUID, any ViewModifier)] {
-        retrieveProperties(ofType: ViewModifierProvider.self)
+        retrieveProperties(ofType: (any ViewModifierProvider).self)
             .sorted { lhs, rhs in
                 lhs.placement < rhs.placement
             }

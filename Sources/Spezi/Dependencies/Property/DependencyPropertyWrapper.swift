@@ -36,11 +36,11 @@ public class _DependencyPropertyWrapper<Value> { // swiftlint:disable:this type_
 
     /// The dependency value.
     public var wrappedValue: Value {
-        if let singleModule = self as? SingleModuleDependency {
+        if let singleModule = self as? any SingleModuleDependency {
             return singleModule.wrappedValue(as: Value.self)
-        } else if let moduleArray = self as? ModuleArrayDependency {
+        } else if let moduleArray = self as? any ModuleArrayDependency {
             return moduleArray.wrappedValue(as: Value.self)
-        } else if let optionalModule = self as? OptionalModuleDependency {
+        } else if let optionalModule = self as? any OptionalModuleDependency {
             return optionalModule.wrappedValue(as: Value.self)
         }
 

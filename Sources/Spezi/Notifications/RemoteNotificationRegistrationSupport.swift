@@ -18,7 +18,7 @@ public final class RemoteNotificationRegistrationSupport: KnowledgeSource, Senda
 
     private let logger = Logger(subsystem: "edu.stanford.spezi", category: "RemoteNotificationRegistrationSupport")
 
-    fileprivate(set) var continuation: CheckedContinuation<Data, Error>?
+    fileprivate(set) var continuation: CheckedContinuation<Data, any Error>?
     fileprivate(set) var access = AsyncSemaphore()
 
 
@@ -32,7 +32,7 @@ public final class RemoteNotificationRegistrationSupport: KnowledgeSource, Senda
         resume(with: .success(deviceToken))
     }
 
-    func handleFailedRegistration(_ error: Error) {
+    func handleFailedRegistration(_ error: any Error) {
         let resumed = resume(with: .failure(error))
 
         if !resumed {
@@ -42,7 +42,7 @@ public final class RemoteNotificationRegistrationSupport: KnowledgeSource, Senda
 
 
     @discardableResult
-    private func resume(with result: Result<Data, Error>) -> Bool {
+    private func resume(with result: Result<Data, any Error>) -> Bool {
         if let continuation {
             self.continuation = nil
             access.signal()

@@ -163,7 +163,7 @@ public class DependencyManager: Sendable {
         if let defaultValue {
             implicitlyCreate(defaultValue)
         } else if case .required = dependencyType,
-                  let defaultInit = dependency as? DefaultInitializable.Type,
+                  let defaultInit = dependency as? any DefaultInitializable.Type,
                   let module = defaultInit.init() as? M {
             implicitlyCreate {
                 module

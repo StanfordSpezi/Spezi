@@ -34,7 +34,7 @@ public func withDependencyResolution<S: Standard>(
 #if os(iOS) || os(visionOS) || os(tvOS)
     if case let .launchWithOptions(options) = simulateLifecycle {
         // maintain backwards compatibility
-        (spezi as DeprecatedLaunchOptionsCall)
+        (spezi as any DeprecatedLaunchOptionsCall)
             .callWillFinishLaunching(UIApplication.shared, launchOptions: options)
     }
 #endif
