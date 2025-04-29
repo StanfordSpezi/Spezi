@@ -22,8 +22,8 @@ protocol StorageValueProvider: SpeziPropertyWrapper {
 
 
 extension Module {
-    var storageValueProviders: [StorageValueProvider] {
-        retrieveProperties(ofType: StorageValueProvider.self)
+    var storageValueProviders: [any StorageValueProvider] {
+        retrieveProperties(ofType: (any StorageValueProvider).self)
     }
 
     @MainActor

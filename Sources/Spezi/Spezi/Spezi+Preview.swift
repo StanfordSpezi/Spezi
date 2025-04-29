@@ -87,7 +87,7 @@ extension View {
 #if os(iOS) || os(visionOS) || os(tvOS)
             .task { @MainActor in
                 if case let .launchWithOptions(options) = simulateLifecycle {
-                    (spezi as DeprecatedLaunchOptionsCall)
+                    (spezi as any DeprecatedLaunchOptionsCall)
                         .callWillFinishLaunching(UIApplication.shared, launchOptions: options)
                 }
             }

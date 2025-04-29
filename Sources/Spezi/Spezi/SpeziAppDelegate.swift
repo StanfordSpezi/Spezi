@@ -161,7 +161,7 @@ open class SpeziAppDelegate: NSObject, ApplicationDelegate, Sendable {
         }
     }
 
-    open func application(_ application: _Application, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+    open func application(_ application: _Application, didFailToRegisterForRemoteNotificationsWithError error: any Error) {
         MainActor.assumeIsolated { // on macOS there is a missing MainActor annotation
             spezi.remoteNotificationRegistrationSupport.handleFailedRegistration(error)
         }

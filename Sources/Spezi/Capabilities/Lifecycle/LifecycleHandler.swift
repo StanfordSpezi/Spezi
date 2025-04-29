@@ -173,7 +173,7 @@ extension LifecycleHandler {
               Otherwise use the SwiftUI onReceive(_:perform:) for UI related notifications.
               """
 )
-extension Array: LifecycleHandler where Element == LifecycleHandler {
+extension Array: LifecycleHandler where Element == any LifecycleHandler {
 #if os(iOS) || os(visionOS) || os(tvOS)
     @available(
         *,

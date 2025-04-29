@@ -24,7 +24,7 @@
 /// - Note: Use the ``DependencyCollectionBuilder`` if you want to create your own result builder that can build a ``DependencyCollection`` component
 ///     out of multiple `Module` expressions.
 public struct DependencyCollection {
-    private var entries: [AnyDependencyContext]
+    private var entries: [any AnyDependencyContext]
 
     /// Determine if the collection is empty.
     public var isEmpty: Bool {
@@ -36,11 +36,11 @@ public struct DependencyCollection {
         entries.count
     }
 
-    init(_ entries: [AnyDependencyContext]) {
+    init(_ entries: [any AnyDependencyContext]) {
         self.entries = entries
     }
 
-    init(_ entries: AnyDependencyContext...) {
+    init(_ entries: any AnyDependencyContext...) {
         self.init(entries)
     }
 
@@ -157,7 +157,7 @@ extension DependencyCollection: DependencyDeclaration {
         }
     }
 
-    private func singleDependencyContext() -> AnyDependencyContext {
+    private func singleDependencyContext() -> any AnyDependencyContext {
         guard let dependency = entries.first else {
             preconditionFailure("DependencyCollection unexpectedly empty!")
         }

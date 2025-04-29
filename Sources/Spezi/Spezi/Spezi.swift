@@ -125,21 +125,21 @@ public final class Spezi: Sendable {
              """
     )
     @_spi(Spezi)
-    @MainActor public var lifecycleHandler: [LifecycleHandler] {
+    @MainActor public var lifecycleHandler: [any LifecycleHandler] {
         modules.compactMap { module in
-            module as? LifecycleHandler
+            module as? any LifecycleHandler
         }
     }
 
-    @MainActor var notificationTokenHandler: [NotificationTokenHandler] {
+    @MainActor var notificationTokenHandler: [any NotificationTokenHandler] {
         modules.compactMap { module in
-            module as? NotificationTokenHandler
+            module as? any NotificationTokenHandler
         }
     }
 
-    @MainActor var notificationHandler: [NotificationHandler] {
+    @MainActor var notificationHandler: [any NotificationHandler] {
         modules.compactMap { module in
-            module as? NotificationHandler
+            module as? any NotificationHandler
         }
     }
     
@@ -354,7 +354,7 @@ public final class Spezi: Sendable {
                 }
 
                 // If a module is @Observable, we automatically inject it view the `ModelModifier` into the environment.
-                if let observable = module as? EnvironmentAccessible {
+                if let observable = module as? any EnvironmentAccessible {
                     // we can't guarantee weak references for EnvironmentAccessible modules
                     precondition(ownership != .external, "Modules loaded with self-managed policy cannot conform to `EnvironmentAccessible`.")
                     _viewModifiers[ModuleReference(module)] = observable.viewModifier

@@ -54,7 +54,7 @@ protocol DependencyDeclaration {
 
 
 extension Module {
-    var dependencyDeclarations: [DependencyDeclaration] {
-        retrieveProperties(ofType: DependencyDeclaration.self)
+    var dependencyDeclarations: [any DependencyDeclaration] {
+        retrieveProperties(ofType: (any DependencyDeclaration).self)
     }
 }
