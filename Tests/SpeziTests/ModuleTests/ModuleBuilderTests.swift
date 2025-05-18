@@ -8,7 +8,6 @@
 
 @testable @_spi(Spezi) import Spezi
 import XCTest
-import XCTRuntimeAssertions
 
 
 final class ModuleBuilderTests: XCTestCase {

@@ -6,8 +6,8 @@
 // SPDX-License-Identifier: MIT
 //
 
+import RuntimeAssertions
 import SpeziFoundation
-import XCTRuntimeAssertions
 
 
 /// Refer to the documentation of ``Module/Collect``.

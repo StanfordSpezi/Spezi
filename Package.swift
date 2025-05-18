@@ -28,8 +28,8 @@ let package = Package(
         .library(name: "XCTSpezi", targets: ["XCTSpezi"])
     ],
     dependencies: [
-        .package(url: "https://github.com/StanfordSpezi/SpeziFoundation.git", from: "2.1.1"),
-        .package(url: "https://github.com/StanfordBDHG/XCTRuntimeAssertions.git", from: "1.1.1"),
+        .package(url: "https://github.com/StanfordSpezi/SpeziFoundation.git", branch: "lukas/orderedarray-unsafe-operations"),
+        .package(url: "https://github.com/StanfordBDHG/XCTRuntimeAssertions.git", branch: "lukas/fix"),
         .package(url: "https://github.com/apple/swift-collections.git", from: "1.1.1")
     ] + swiftLintPackage(),
     targets: [
@@ -37,7 +37,7 @@ let package = Package(
             name: "Spezi",
             dependencies: [
                 .product(name: "SpeziFoundation", package: "SpeziFoundation"),
-                .product(name: "XCTRuntimeAssertions", package: "XCTRuntimeAssertions"),
+                .product(name: "RuntimeAssertions", package: "XCTRuntimeAssertions"),
                 .product(name: "OrderedCollections", package: "swift-collections")
             ],
             swiftSettings: [.enableUpcomingFeature("ExistentialAny")],
@@ -65,7 +65,7 @@ let package = Package(
             dependencies: [
                 .target(name: "Spezi"),
                 .target(name: "SpeziTesting"),
-                .product(name: "XCTRuntimeAssertions", package: "XCTRuntimeAssertions")
+                .product(name: "RuntimeAssertionsTesting", package: "XCTRuntimeAssertions")
             ],
             swiftSettings: [.enableUpcomingFeature("ExistentialAny")],
             plugins: [] + swiftLintPlugin()

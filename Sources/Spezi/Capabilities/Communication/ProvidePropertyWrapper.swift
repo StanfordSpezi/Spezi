@@ -8,8 +8,8 @@
 
 
 import Foundation
+import RuntimeAssertions
 import SpeziFoundation
-import XCTRuntimeAssertions
 
 
 /// A protocol that identifies a ``_ProvidePropertyWrapper`` which `Value` type is a `Collection`.
