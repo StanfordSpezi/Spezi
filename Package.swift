@@ -65,7 +65,8 @@ let package = Package(
             dependencies: [
                 .target(name: "Spezi"),
                 .target(name: "SpeziTesting"),
-                .product(name: "RuntimeAssertionsTesting", package: "XCTRuntimeAssertions")
+                .product(name: "RuntimeAssertionsTesting", package: "XCTRuntimeAssertions"),
+                .product(name: "XCTRuntimeAssertions", package: "XCTRuntimeAssertions")
             ],
             swiftSettings: [.enableUpcomingFeature("ExistentialAny")],
             plugins: [] + swiftLintPlugin()
