@@ -7,8 +7,8 @@
 //
 
 import Foundation
+import RuntimeAssertions
 import SwiftUI
-import XCTRuntimeAssertions
 
 
 #if os(iOS) || os(visionOS) || os(tvOS)

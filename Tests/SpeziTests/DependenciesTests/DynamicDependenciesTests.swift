@@ -9,15 +9,13 @@
 
 @testable import Spezi
 import SwiftUI
-import XCTest
-import XCTRuntimeAssertions
+import Testing
 
 
 private enum DynamicDependenciesTestCase: CaseIterable {
     case twoDependencies
     case duplicatedDependencies
     case noDependencies
-
     
     var dynamicDependencies: _DependencyPropertyWrapper<[any Module]> {
         switch self {
@@ -52,31 +50,30 @@ private enum DynamicDependenciesTestCase: CaseIterable {
     func evaluateExpectations(modules: [any Module]) throws {
         switch self {
         case .twoDependencies:
-            XCTAssertEqual(modules.count, 2)
+            #expect(modules.count == 2)
             let testModule2 = try modules.moduleOfType(TestModule2.self)
             let testModule3 = try modules.moduleOfType(TestModule3.self)
-            XCTAssert(testModule2 !== testModule3)
+            #expect(testModule2 !== testModule3)
         case .duplicatedDependencies:
-            XCTAssertEqual(modules.count, 3)
+            #expect(modules.count == 3)
             let testModule2 = try modules.moduleOfType(TestModule2.self)
             let testModule3 = try modules.moduleOfType(TestModule3.self, expectedNumber: 2)
-            XCTAssert(testModule2 !== testModule3)
+            #expect(testModule2 !== testModule3)
         case .noDependencies:
-            XCTAssertEqual(modules.count, 0)
+            #expect(modules.isEmpty)
         }
     }
 }
+
 
 private final class TestModule1: Module {
     @Dependency var dynamicDependencies: [any Module]
     let testCase: DynamicDependenciesTestCase
     
-    
     init(_ testCase: DynamicDependenciesTestCase) {
         self._dynamicDependencies = testCase.dynamicDependencies
         self.testCase = testCase
     }
-    
     
     func evaluateExpectations() throws {
         try testCase.evaluateExpectations(modules: dynamicDependencies)
@@ -88,16 +85,17 @@ private final class TestModule2: Module {}
 private final class TestModule3: Module {}
 
 
-final class DynamicDependenciesTests: XCTestCase {
+struct DynamicDependenciesTests {
+    @Test
     @MainActor
-    func testDynamicDependencies() throws {
+    func dynamicDependencies() throws {
         for dynamicDependenciesTestCase in DynamicDependenciesTestCase.allCases {
             let modules: [any Module] = [
                 TestModule1(dynamicDependenciesTestCase)
             ]
 
             let initializedModules = DependencyManager.resolveWithoutErrors(modules)
-            XCTAssertEqual(initializedModules.count, dynamicDependenciesTestCase.expectedNumberOfModules)
+            #expect(initializedModules.count == dynamicDependenciesTestCase.expectedNumberOfModules)
             
             try initializedModules.moduleOfType(TestModule1.self).evaluateExpectations()
         }

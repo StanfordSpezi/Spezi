@@ -352,7 +352,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
         let spezi = try runModuleTests(deinitExpectation: deinitExpectation)
         _ = spezi
 
-        try await Task.sleep(for: .milliseconds(50)) // deinit need to get back to MainActor
+        try await Task.sleep(for: .milliseconds(250)) // deinit need to get back to MainActor
 
         XCTAssertEqual(spezi.modules.count, 5)
 

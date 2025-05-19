@@ -8,8 +8,7 @@
 
 @testable import Spezi
 import SwiftUI
-import XCTest
-import XCTRuntimeAssertions
+import Testing
 
 
 private protocol UnfulfilledExampleConstraint: Standard {
@@ -17,10 +16,9 @@ private protocol UnfulfilledExampleConstraint: Standard {
 }
 
 
-final class StandardUnfulfilledConstraintTests: XCTestCase {
+struct StandardUnfulfilledConstraintTests {
     final class StandardUCTestModule: Module {
         @StandardActor private var standard: any UnfulfilledExampleConstraint
-        
         
         func configure() {
             Task {
@@ -29,21 +27,23 @@ final class StandardUnfulfilledConstraintTests: XCTestCase {
         }
     }
     
-
+    @Test
     @MainActor
-    func testStandardUnfulfilledConstraint() throws {
+    func standardUnfulfilledConstraint() throws {
         let configuration = Configuration(standard: MockStandard()) {}
         let spezi = Spezi(from: configuration)
-
-        XCTAssertThrowsError(try spezi.loadModules([StandardUCTestModule()], ownership: .spezi)) { error in
+        #expect {
+            try spezi.loadModules([StandardUCTestModule()], ownership: .spezi)
+        } throws: { error in
             guard let moduleError = error as? SpeziModuleError,
                   case let .property(propertyError) = moduleError,
                   case let .unsatisfiedStandardConstraint(constraint, standard) = propertyError else {
-                XCTFail("Encountered unexpected error: \(error)")
-                return
+                Issue.record("Encountered unexpected error: \(error)")
+                return false
             }
-            XCTAssertEqual(constraint, "UnfulfilledExampleConstraint")
-            XCTAssertEqual(standard, "MockStandard")
+            #expect(constraint == "UnfulfilledExampleConstraint")
+            #expect(standard == "MockStandard")
+            return true
         }
     }
 }

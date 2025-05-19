@@ -6,25 +6,27 @@
 // SPDX-License-Identifier: MIT
 //
 
+import RuntimeAssertionsTesting
 import Spezi
-import XCTest
-import XCTRuntimeAssertions
+import Testing
 
 private final class ExampleModule: Module {}
 
-final class DependencyContextTests: XCTestCase {
-    func testInjectionPreconditionDependencyPropertyWrapper() throws {
-        try XCTRuntimePrecondition {
+@Suite
+struct DependencyContextTests {
+    @Test
+    func injectionPreconditionDependencyPropertyWrapper() throws {
+        expectRuntimePrecondition {
             _ = _DependencyPropertyWrapper<TestModule>(wrappedValue: TestModule(), TestModule.self).wrappedValue
         }
     }
     
-    func testInjectionPreconditionDynamicDependenciesPropertyWrapper() throws {
-        try XCTRuntimePrecondition {
+    @Test
+    func injectionPreconditionDynamicDependenciesPropertyWrapper() throws {
+        expectRuntimePrecondition {
             _ = _DependencyPropertyWrapper {
                 ExampleModule()
-            }
-                .wrappedValue
+            }.wrappedValue
         }
     }
 }

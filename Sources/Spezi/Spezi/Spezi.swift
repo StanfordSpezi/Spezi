@@ -9,9 +9,9 @@
 
 import OrderedCollections
 import OSLog
+import RuntimeAssertions
 import SpeziFoundation
 import SwiftUI
-import XCTRuntimeAssertions
 
 
 /// Open-source framework for rapid development of modern, interoperable digital health applications.

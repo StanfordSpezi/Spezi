@@ -6,7 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
-import XCTRuntimeAssertions
+import RuntimeAssertions
 
 
 /// Gather information about modules with dependencies.

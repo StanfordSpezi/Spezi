@@ -7,8 +7,7 @@
 //
 
 import Spezi
-import XCTest
-import XCTRuntimeAssertions
+import Testing
 
 private protocol ExampleTypeConstraint: Module {}
 
@@ -31,40 +30,41 @@ class ExampleDependencyModule: Module {
     }
 }
 
-
-final class DependencyBuilderTests: XCTestCase {
+@Suite
+struct DependencyBuilderTests {
+    @Test
     @MainActor
-    func testDependencyCollection() {
+    func dependencyCollection() {
         var collection = DependencyCollection(ExampleDependentModule())
-        XCTAssertEqual(collection.count, 1)
-        XCTAssertFalse(collection.isEmpty)
-
+        #expect(collection.count == 1)
+        #expect(!collection.isEmpty)
         collection.append(ExampleDependentModule())
-
-        XCTAssertEqual(collection.count, 2)
+        #expect(collection.count == 2)
     }
 
+    
+    @Test
     @available(*, deprecated, message: "Propagate deprecation warning.")
     @MainActor
-    func testDeprecatedInits() {
+    func deprecatedInits() {
         let collection1 = DependencyCollection(singleEntry: ExampleDependentModule())
         let collection2 = DependencyCollection(singleEntry: {
             ExampleDependentModule()
         })
-
-        XCTAssertEqual(collection1.count, 1)
-        XCTAssertEqual(collection2.count, 1)
+        #expect(collection1.count == 1)
+        #expect(collection2.count == 1)
     }
 
 
+    @Test
     @MainActor
-    func testDependencyBuilder() throws {
+    func dependencyBuilder() throws {
         let module = ExampleDependencyModule {
             ExampleDependentModule()
         }
         let initializedModules = DependencyManager.resolveWithoutErrors([module])
-        XCTAssertEqual(initializedModules.count, 2)
-        _ = try XCTUnwrap(initializedModules[0] as? ExampleDependentModule)
-        _ = try XCTUnwrap(initializedModules[1] as? ExampleDependencyModule)
+        #expect(initializedModules.count == 2)
+        _ = try #require(initializedModules[0] as? ExampleDependentModule)
+        _ = try #require(initializedModules[1] as? ExampleDependencyModule)
     }
 }

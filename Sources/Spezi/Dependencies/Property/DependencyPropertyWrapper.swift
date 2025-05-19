@@ -6,8 +6,8 @@
 // SPDX-License-Identifier: MIT
 //
 
+import RuntimeAssertions
 import SpeziFoundation
-import XCTRuntimeAssertions
 
 
 /// A `@Dependency` for a single, typed ``Module``.
