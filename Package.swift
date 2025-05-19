@@ -28,8 +28,8 @@ let package = Package(
         .library(name: "XCTSpezi", targets: ["XCTSpezi"])
     ],
     dependencies: [
-        .package(url: "https://github.com/StanfordSpezi/SpeziFoundation.git", branch: "lukas/orderedarray-unsafe-operations"),
-        .package(url: "https://github.com/StanfordBDHG/XCTRuntimeAssertions.git", branch: "lukas/fix"),
+        .package(url: "https://github.com/StanfordSpezi/SpeziFoundation.git", from: "2.1.7"),
+        .package(url: "https://github.com/StanfordBDHG/XCTRuntimeAssertions.git", from: "2.0.0"),
         .package(url: "https://github.com/apple/swift-collections.git", from: "1.1.1")
     ] + swiftLintPackage(),
     targets: [
