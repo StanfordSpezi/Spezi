@@ -14,6 +14,58 @@ import SpeziFoundation
 import SwiftUI
 
 
+struct ServiceModuleGroup {
+    private enum Input {
+        case run(service: any ServiceModule) // TODO: support unloading?
+    }
+
+    private let input: (stream: AsyncStream<Input>, continuation: AsyncStream<Input>.Continuation)
+
+    init() {
+        self.input = AsyncStream.makeStream()
+    }
+
+    func run() async {
+        let stream = input.stream
+        await withDiscardingTaskGroup { group in
+            // TODO: keep track of tasks with cancellable child tasks?
+            for await input in stream {
+                switch input {
+                case let .run(module):
+                    group.addTask {
+                        // TODO: make the task cancellable, some of the dependency un-injection must be moved to when the module finished unloading?
+                        do {
+                            try await module.run()
+                        } catch {
+                             // TODO: log? mus tbe cancellation error!
+                        }
+                    }
+                }
+            }
+
+            group.cancelAll() // TODO: not necessary
+        }
+    }
+}
+
+
+struct ConcurrencyLifecycleExecutor {
+    private let task: Task<Void, any Error>
+    private let group: ServiceModuleGroup // TODO: we need to keep this here?
+
+    init(_ group: ServiceModuleGroup) {
+        self.group = group
+        task = Task.detached {
+            await group.run()
+        }
+    }
+
+    func cancel() {
+        task.cancel()
+    }
+}
+
+
 /// Open-source framework for rapid development of modern, interoperable digital health applications.
 ///
 /// Set up the Spezi framework in your `App` instance of your SwiftUI application using the ``SpeziAppDelegate`` and the `@ApplicationDelegateAdaptor` property wrapper.
