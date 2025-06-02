@@ -46,13 +46,14 @@ extension _ApplicationPropertyWrapper: SpeziPropertyWrapper {
     func inject(spezi: Spezi) {
         state.spezi = spezi
         if spezi.createsCopy(keyPath) {
+            // TODO: store more things as a shadow copy?
             state.shadowCopy = spezi[keyPath: keyPath]
         }
     }
 
     func clear() {
         state.spezi = nil
-        state.shadowCopy = nil
+        // we do not clear the shadow copy to make sure the property wrapper stays accessible in cleanup scenarios
     }
 }
 

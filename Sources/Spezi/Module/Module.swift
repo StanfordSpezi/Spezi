@@ -7,12 +7,6 @@
 //
 
 
-/// A Module that hooks into the structured concurrency service lifecycle of the application.
-public protocol ServiceModule: Module, Sendable {
-    func run() async throws(CancellationError) // TODO: can it throw a general error?
-}
-
-
 // note: detailed documentation is provided as an article extension in the DocC bundle
 /// A `Module` defines a software subsystem that can be configured as part of the ``SpeziAppDelegate/configuration``.
 public protocol Module: AnyObject {

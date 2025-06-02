@@ -14,58 +14,6 @@ import SpeziFoundation
 import SwiftUI
 
 
-struct ServiceModuleGroup {
-    private enum Input {
-        case run(service: any ServiceModule) // TODO: support unloading?
-    }
-
-    private let input: (stream: AsyncStream<Input>, continuation: AsyncStream<Input>.Continuation)
-
-    init() {
-        self.input = AsyncStream.makeStream()
-    }
-
-    func run() async {
-        let stream = input.stream
-        await withDiscardingTaskGroup { group in
-            // TODO: keep track of tasks with cancellable child tasks?
-            for await input in stream {
-                switch input {
-                case let .run(module):
-                    group.addTask {
-                        // TODO: make the task cancellable, some of the dependency un-injection must be moved to when the module finished unloading?
-                        do {
-                            try await module.run()
-                        } catch {
-                             // TODO: log? mus tbe cancellation error!
-                        }
-                    }
-                }
-            }
-
-            group.cancelAll() // TODO: not necessary
-        }
-    }
-}
-
-
-struct ConcurrencyLifecycleExecutor {
-    private let task: Task<Void, any Error>
-    private let group: ServiceModuleGroup // TODO: we need to keep this here?
-
-    init(_ group: ServiceModuleGroup) {
-        self.group = group
-        task = Task.detached {
-            await group.run()
-        }
-    }
-
-    func cancel() {
-        task.cancel()
-    }
-}
-
-
 /// Open-source framework for rapid development of modern, interoperable digital health applications.
 ///
 /// Set up the Spezi framework in your `App` instance of your SwiftUI application using the ``SpeziAppDelegate`` and the `@ApplicationDelegateAdaptor` property wrapper.
@@ -143,6 +91,8 @@ public final class Spezi: Sendable {
     static let logger = Logger(subsystem: "edu.stanford.spezi", category: "Spezi")
 
     let standard: any Standard
+
+    private let serviceGroup = ServiceModuleGroup()
 
     /// A shared repository to store any `KnowledgeSource`s restricted to the ``SpeziAnchor``.
     ///
@@ -239,6 +189,7 @@ public final class Spezi: Sendable {
         self.storage = consume storage
 
         do {
+            // TODO: load module must call into the service lifecycle if its a ServiceModule!
             try self.loadModules(modules, ownership: .spezi)
             // load standard separately, such that all module loading takes precedence
             try self.loadModules([standard], ownership: .spezi)
@@ -247,6 +198,13 @@ public final class Spezi: Sendable {
         }
     }
     
+    /// Run the Spezi service lifecycle.
+    func run() async {
+        logger.debug("Starting the Spezi Service.")
+        await serviceGroup.run()
+        logger.debug("Shutting down Spezi.")
+    }
+
     /// Load a new Module.
     ///
     /// Loads a new Spezi ``Module`` resolving all dependencies.
@@ -352,7 +310,12 @@ public final class Spezi: Sendable {
         }
         
         module.clearModule(from: self)
-        
+
+        // TODO: this opens up a box of race conditions when unloading multiple modules!
+        if let service = module as? any ServiceModule {
+            serviceGroup.cancel(service: service)
+        }
+
         implicitlyCreatedModules.remove(ModuleReference(module))
 
         // this check is important. Change to viewModifiers re-renders the whole SwiftUI view hierarchy. So avoid to do it unnecessarily
@@ -375,6 +338,7 @@ public final class Spezi: Sendable {
             preconditionFailure("Internal inconsistency. Repeated dependency resolve resulted in error: \(error)")
         }
 
+        // TODO: this is the issue! clear() is now racing with the task cancel!
         module.clear() // automatically removes @Provide values and recursively unloads implicitly created modules
     }
 
@@ -401,8 +365,12 @@ public final class Spezi: Sendable {
                 switch ownership {
                 case .spezi:
                     module.storeModule(into: self)
+                    if let service = module as? any ServiceModule {
+                        serviceGroup.run(service: service)
+                    }
                 case .external:
                     module.storeWeakly(into: self)
+                    // TODO: service group does not work here???
                 }
 
                 // If a module is @Observable, we automatically inject it view the `ModelModifier` into the environment.

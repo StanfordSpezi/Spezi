@@ -22,6 +22,7 @@ struct SpeziViewModifier: ViewModifier {
     func body(content: Content) -> some View {
         spezi.viewModifiers
             .modify(content)
+            .task(spezi.run) // service lifecycle
     }
 }
 
