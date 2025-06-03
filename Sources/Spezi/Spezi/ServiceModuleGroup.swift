@@ -1,15 +1,19 @@
+import OSLog
 import SpeziFoundation
 
 struct ServiceModuleGroup {
     private enum Input {
-        case run(any ServiceModule) // TODO: support unloading?
+        case run(any ServiceModule)
         case cancel(any ServiceModule)
+        case clearIdentity(ObjectIdentifier, UUID)
     }
 
+    private let logger: Logger
     private let input: (stream: AsyncStream<Input>, continuation: AsyncStream<Input>.Continuation)
 
-    init() {
+    init(logger: Logger) {
         self.input = AsyncStream.makeStream()
+        self.logger = logger
     }
 
     func run(service: some ServiceModule) {
@@ -17,31 +21,44 @@ struct ServiceModuleGroup {
     }
 
     func cancel(service: some ServiceModule) {
-        input.continuation.yield(.cancel(service)) // TODO: allow to await the cancellation somehow?
+        input.continuation.yield(.cancel(service))
     }
 
     nonisolated func run() async {
-        let stream = input.stream
-        await withDiscardingTaskGroup { group in
-            var taskHandles: [ObjectIdentifier: CancelableTaskHandle] = [:]
+        let input = input
 
-            // TODO: keep track of tasks with cancellable child tasks?
-            for await input in stream {
-                switch input {
+        await withDiscardingTaskGroup { group in
+            // all the running tasks
+            var taskHandles: [ObjectIdentifier: (handle: CancelableTaskHandle, id: UUID)] = [:]
+
+            for await event in input.stream {
+                switch event {
                 case let .run(module):
                     guard taskHandles[module.moduleId] == nil else {
-                        continue // TODO: log that, how to handle? just replace it?
+                        logger.warning("Tried to run module \(type(of: module)) twice. Ignoring second request.")
+                        continue
                     }
+
+                    let id = UUID()
 
                     let handle = group.addCancelableTask {
-                        // TODO: make the task cancellable, some of the dependency un-injection must be moved to when the module finished unloading?
                         await module.run()
+
+                        // clear in a way that doesn't race and doesn't extend the lifetime of the module.
+                        input.continuation.yield(.clearIdentity(module.moduleId, id))
                     }
 
-                    taskHandles[module.moduleId] = handle
+                    taskHandles[module.moduleId] = (handle, id)
                 case let .cancel(module):
-                    let handle = taskHandles.removeValue(forKey: module.moduleId)
-                    handle?.cancel()
+                    let entry = taskHandles.removeValue(forKey: module.moduleId)
+                    entry?.handle.cancel()
+                case let .clearIdentity(key, id):
+                    guard let handle = taskHandles[key],
+                          handle.id == id else {
+                        continue
+                    }
+                    taskHandles.removeValue(forKey: key)
+                    handle.handle.cancel()
                 }
             }
         }

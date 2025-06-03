@@ -87,12 +87,12 @@ import SwiftUI
 /// - ``loadModule(_:ownership:)``
 /// - ``unloadModule(_:)``
 @Observable
-public final class Spezi: Sendable {
+public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
     static let logger = Logger(subsystem: "edu.stanford.spezi", category: "Spezi")
 
     let standard: any Standard
 
-    private let serviceGroup = ServiceModuleGroup()
+    private let serviceGroup = ServiceModuleGroup(logger: Spezi.logger)
 
     /// A shared repository to store any `KnowledgeSource`s restricted to the ``SpeziAnchor``.
     ///
@@ -189,7 +189,6 @@ public final class Spezi: Sendable {
         self.storage = consume storage
 
         do {
-            // TODO: load module must call into the service lifecycle if its a ServiceModule!
             try self.loadModules(modules, ownership: .spezi)
             // load standard separately, such that all module loading takes precedence
             try self.loadModules([standard], ownership: .spezi)
@@ -226,7 +225,7 @@ public final class Spezi: Sendable {
         do {
             try loadModules([module], ownership: ownership)
         } catch {
-            preconditionFailure(error.description)
+            fatalError(error.description)
         }
     }
 
@@ -311,8 +310,8 @@ public final class Spezi: Sendable {
         
         module.clearModule(from: self)
 
-        // TODO: this opens up a box of race conditions when unloading multiple modules!
         if let service = module as? any ServiceModule {
+            // note that most of the spezi property wrapper are racy upon de-initialization as soon as we un-inject (e.g., in the deinit as well)
             serviceGroup.cancel(service: service)
         }
 
@@ -338,7 +337,6 @@ public final class Spezi: Sendable {
             preconditionFailure("Internal inconsistency. Repeated dependency resolve resulted in error: \(error)")
         }
 
-        // TODO: this is the issue! clear() is now racing with the task cancel!
         module.clear() // automatically removes @Provide values and recursively unloads implicitly created modules
     }
 
@@ -365,12 +363,13 @@ public final class Spezi: Sendable {
                 switch ownership {
                 case .spezi:
                     module.storeModule(into: self)
-                    if let service = module as? any ServiceModule {
-                        serviceGroup.run(service: service)
-                    }
                 case .external:
                     module.storeWeakly(into: self)
-                    // TODO: service group does not work here???
+                }
+
+                if let service = module as? any ServiceModule {
+                    // Note: we still load modules with external ownership here.
+                    serviceGroup.run(service: service)
                 }
 
                 // If a module is @Observable, we automatically inject it view the `ModelModifier` into the environment.
@@ -396,6 +395,7 @@ public final class Spezi: Sendable {
     /// Determine if a application property is stored as a copy in a `@Application` property wrapper.
     func createsCopy<Value>(_ keyPath: KeyPath<Spezi, Value>) -> Bool {
         keyPath == \.logger // loggers are created per Module.
+            || keyPath == \.launchOptions
     }
 
     @MainActor

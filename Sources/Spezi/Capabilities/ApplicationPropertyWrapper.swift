@@ -46,7 +46,6 @@ extension _ApplicationPropertyWrapper: SpeziPropertyWrapper {
     func inject(spezi: Spezi) {
         state.spezi = spezi
         if spezi.createsCopy(keyPath) {
-            // TODO: store more things as a shadow copy?
             state.shadowCopy = spezi[keyPath: keyPath]
         }
     }

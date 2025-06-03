@@ -84,6 +84,7 @@ extension View {
         let spezi = Spezi(standard: standard, modules: modules().elements, storage: storage)
 
         return modifier(SpeziViewModifier(spezi))
+            .task(spezi.run)
 #if os(iOS) || os(visionOS) || os(tvOS)
             .task { @MainActor in
                 if case let .launchWithOptions(options) = simulateLifecycle {
