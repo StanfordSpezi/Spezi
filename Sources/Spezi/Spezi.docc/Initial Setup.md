@@ -48,7 +48,7 @@ you must add them to your custom type conforming to ``Standard`` and passed to t
 Use ``Configuration/init(_:)`` to use default empty standard instance only conforming to ``Standard`` if you do not use any ``Module`` requiring custom protocol conformances.
 
 
-The following example demonstrates the usage of an `ExampleStandard` standard and the reusable Spezi module `SpeziHealthKit`
+The following example demonstrates the usage of an `ExampleStandard` standard and the reusable Spezi module `SpeziHealthKit`.
 ```swift
 import HealthKit
 import Spezi
