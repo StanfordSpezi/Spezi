@@ -21,9 +21,11 @@ struct ModuleWithServiceView: View {
 
 
 @Observable
+@MainActor
 final class ModuleWithService: ServiceModule, EnvironmentAccessible {
-    enum State: CustomStringConvertible {
+    enum State: String, CustomStringConvertible {
         case uninitialized
+        case configured
         case loaded
         case finished
 
@@ -31,6 +33,8 @@ final class ModuleWithService: ServiceModule, EnvironmentAccessible {
             switch self {
             case .uninitialized:
                 "Module is not running."
+            case .configured:
+                "Module is configured."
             case .loaded:
                 "Module is running."
             case .finished:
@@ -39,15 +43,18 @@ final class ModuleWithService: ServiceModule, EnvironmentAccessible {
         }
     }
 
-    @MainActor var state: State = .uninitialized
+    var state: State = .uninitialized
 
     nonisolated init() {}
 
-    @MainActor
+    func configure() {
+        state = .configured
+    }
+
     func run() async {
         let input = AsyncStream<Void>.makeStream()
 
-        if state == .uninitialized {
+        if state == .configured {
             state = .loaded
         }
 
