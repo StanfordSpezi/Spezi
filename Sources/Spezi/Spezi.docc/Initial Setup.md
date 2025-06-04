@@ -74,6 +74,7 @@ For example, the Spezi HealthKit module requires that your  ``Standard`` instanc
 import Spezi
 import SpeziHealthKit
 
+
 actor ExampleStandard: Standard, HealthKitConstraint {
     // Add the newly collected HealthKit samples to your application.
     func handleNewSamples<Sample>(
