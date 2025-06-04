@@ -48,7 +48,7 @@ you must add them to your custom type conforming to ``Standard`` and passed to t
 Use ``Configuration/init(_:)`` to use default empty standard instance only conforming to ``Standard`` if you do not use any ``Module`` requiring custom protocol conformances.
 
 
-The following example demonstrates the usage of an `ExampleStandard` standard and the reusable Spezi module `SpeziHealthKit`.
+The following example demonstrates the usage of an `ExampleStandard` standard and [Spezi HealthKit module](https://github.com/StanfordSpezi/SpeziHealthKit).
 ```swift
 import HealthKit
 import Spezi
@@ -69,7 +69,9 @@ class ExampleAppDelegate: SpeziAppDelegate {
 }
 ```
 
-Before you configure the ``HealthKit-class`` module, make sure your `Standard` in your Spezi Application conforms to the ``HealthKitConstraint`` protocol to receive HealthKit data.
+Different Spezi Modules can enforce ``Constraint``s on the Spezi ``Standard`` in your application that needs to be implemented, allowing modules to push data to a ``Standard`` for further processing and transformation.
+
+For example, the Spezi HealthKit module requires that your  ``Standard`` instance in your Spezi application conforms to the [`HealthKitConstraint`](https://swiftpackageindex.com/stanfordspezi/spezihealthkit/documentation/spezihealthkit/healthkitconstraint) protocol to receive HealthKit data:
 
 ```swift
 import Spezi
