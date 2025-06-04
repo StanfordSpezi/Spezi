@@ -17,9 +17,7 @@ The Spezi framework can be integrated into any iOS application. You can define w
 Set up the Spezi framework in your `App` instance of your SwiftUI application using the ``SpeziAppDelegate`` and the `@ApplicationDelegateAdaptor` property wrapper.
 Use the `View.spezi(_: SpeziAppDelegate)` view modifier to apply your Spezi configuration to the main view in your SwiftUI `Scene`:
 ```swift
-import HealthKit
 import Spezi
-import SpeziHealthKit
 import SwiftUI
 
 
@@ -53,7 +51,6 @@ The following example demonstrates the usage of an `ExampleStandard` standard an
 import HealthKit
 import Spezi
 import SpeziHealthKit
-import SwiftUI
 
 
 class ExampleAppDelegate: SpeziAppDelegate {
