@@ -23,8 +23,7 @@ import SwiftUI
 
 @main
 struct ExampleApp: App {
-    @ApplicationDelegateAdaptor(SpeziAppDelegate.self) var appDelegate
-
+    @ApplicationDelegateAdaptor(ExampleAppDelegate.self) var appDelegate
 
     var body: some Scene {
         WindowGroup {
@@ -46,13 +45,11 @@ you must add them to your custom type conforming to ``Standard`` and passed to t
 Use ``Configuration/init(_:)`` to use default empty standard instance only conforming to ``Standard`` if you do not use any ``Module`` requiring custom protocol conformances.
 
 
-The following example demonstrates the usage of an `ExampleStandard` standard and reusable Spezi modules, including the `HealthKit` and `QuestionnaireDataSource` modules:
+The following example demonstrates the usage of an `ExampleStandard` standard and [Spezi HealthKit module](https://github.com/StanfordSpezi/SpeziHealthKit).
 ```swift
-import Spezi
 import HealthKit
-import HealthKitDataSource
-import Questionnaires
-import SwiftUI
+import Spezi
+import SpeziHealthKit
 
 
 class ExampleAppDelegate: SpeziAppDelegate {
@@ -60,14 +57,38 @@ class ExampleAppDelegate: SpeziAppDelegate {
         Configuration(standard: ExampleStandard()) {
             if HKHealthStore.isHealthDataAvailable() {
                 HealthKit {
-                    CollectSample(
-                        HKQuantityType(.stepCount),
-                        deliverySetting: .background(.afterAuthorizationAndApplicationWillLaunch)
-                    )
+                    CollectSample(.stepCount, continueInBackground: true)
                 }
             }
-            QuestionnaireDataSource()
         }
+    }
+}
+```
+
+Different Spezi Modules can enforce ``Constraint``s on the Spezi ``Standard`` in your application that needs to be implemented, allowing modules to push data to a ``Standard`` for further processing and transformation.
+
+For example, the Spezi HealthKit module requires that your  ``Standard`` instance in your Spezi application conforms to the [`HealthKitConstraint`](https://swiftpackageindex.com/stanfordspezi/spezihealthkit/documentation/spezihealthkit/healthkitconstraint) protocol to receive HealthKit data:
+
+```swift
+import Spezi
+import SpeziHealthKit
+
+
+actor ExampleStandard: Standard, HealthKitConstraint {
+    // Add the newly collected HealthKit samples to your application.
+    func handleNewSamples<Sample>(
+        _ addedSamples: some Collection<Sample>,
+        ofType sampleType: SampleType<Sample>
+    ) async {
+        // ...
+    }
+
+    // Remove the deleted HealthKit objects from your application.
+    func handleDeletedObjects<Sample>(
+        _ deletedObjects: some Collection<HKDeletedObject>,
+        ofType sampleType: SampleType<Sample>
+    ) async {
+        // ...
     }
 }
 ```
