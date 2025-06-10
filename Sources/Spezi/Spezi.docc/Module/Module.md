@@ -18,6 +18,9 @@ A `Module` is placed into the ``Configuration`` section of your App to enable an
 The ``Module/configure()-5pa83`` method is called on the initialization of the Spezi instance to perform a lightweight configuration of the module.
 It is advised that longer setup tasks are done in an asynchronous task and started during the call of the configure method.
 
+> Tip: Conform to the ``ServiceModule`` protocol and implement the ``ServiceModule/run()`` method to participate in the structure concurrency
+    lifecycle of the SwiftUI app.
+
 ### Module Constraints
 
 A ``Standard`` is the key module that orchestrates the data flow within the application and is provided upon App configuration.
@@ -61,6 +64,10 @@ class ExampleModule: Module {
 ### Configuration
 
 - ``configure()-5pa83``
+
+### Structured Concurrency
+
+- ``ServiceModule``
 
 ### Capabilities
 - <doc:Interactions-with-SwiftUI>

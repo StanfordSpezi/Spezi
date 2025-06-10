@@ -54,4 +54,41 @@ final class LifecycleHandlerTests: XCTestCase {
         XCTAssert(app.staticTexts["SceneDidEnterBackground: 1"].exists)
         XCTAssert(app.staticTexts["ApplicationWillTerminate: 0"].exists)
     }
+
+    @MainActor
+    func testServiceModule() throws {
+        let app = XCUIApplication()
+        app.launchArguments = ["--lifecycleTests"]
+        app.launch()
+
+        XCTAssertTrue(app.wait(for: .runningForeground, timeout: 2.0))
+
+        XCTAssertTrue(app.staticTexts["Module is running."].exists)
+
+        let springboard = XCUIApplication(bundleIdentifier: XCUIApplication.homeScreenBundle)
+#if os(visionOS)
+        springboard.launch() // springboard is in `runningBackgroundSuspended` state on visionOS. So we need to launch it not just activate
+#else
+        springboard.activate()
+#endif
+
+        XCTAssertTrue(springboard.wait(for: .runningForeground, timeout: 2.0))
+
+        app.activate()
+
+        XCTAssertTrue(app.wait(for: .runningForeground, timeout: 2.0))
+        XCTAssertTrue(app.staticTexts["Module is running."].exists)
+
+#if os(visionOS)
+        springboard.launch() // springboard is in `runningBackgroundSuspended` state on visionOS. So we need to launch it not just activate
+#else
+        springboard.activate()
+#endif
+        XCTAssertTrue(springboard.wait(for: .runningForeground, timeout: 2.0))
+
+        app.launch()
+
+        XCTAssertTrue(app.wait(for: .runningForeground, timeout: 2.0))
+        XCTAssertTrue(app.staticTexts["Module is running."].exists)
+    }
 }

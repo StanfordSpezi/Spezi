@@ -87,10 +87,12 @@ import SwiftUI
 /// - ``loadModule(_:ownership:)``
 /// - ``unloadModule(_:)``
 @Observable
-public final class Spezi: Sendable {
+public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
     static let logger = Logger(subsystem: "edu.stanford.spezi", category: "Spezi")
 
     let standard: any Standard
+
+    private let serviceGroup = ServiceModuleGroup(logger: Spezi.logger)
 
     /// A shared repository to store any `KnowledgeSource`s restricted to the ``SpeziAnchor``.
     ///
@@ -195,6 +197,11 @@ public final class Spezi: Sendable {
         }
     }
     
+    /// Run the Spezi service lifecycle.
+    func run() async {
+        await serviceGroup.run()
+    }
+
     /// Load a new Module.
     ///
     /// Loads a new Spezi ``Module`` resolving all dependencies.
@@ -216,7 +223,7 @@ public final class Spezi: Sendable {
         do {
             try loadModules([module], ownership: ownership)
         } catch {
-            preconditionFailure(error.description)
+            fatalError(error.description)
         }
     }
 
@@ -300,7 +307,12 @@ public final class Spezi: Sendable {
         }
         
         module.clearModule(from: self)
-        
+
+        if let service = module as? any ServiceModule {
+            // note that most of the spezi property wrapper are racy upon de-initialization as soon as we un-inject (e.g., in the deinit as well)
+            serviceGroup.cancel(service: service)
+        }
+
         implicitlyCreatedModules.remove(ModuleReference(module))
 
         // this check is important. Change to viewModifiers re-renders the whole SwiftUI view hierarchy. So avoid to do it unnecessarily
@@ -353,6 +365,11 @@ public final class Spezi: Sendable {
                     module.storeWeakly(into: self)
                 }
 
+                if let service = module as? any ServiceModule {
+                    // Note: we still load modules with external ownership here.
+                    serviceGroup.run(service: service)
+                }
+
                 // If a module is @Observable, we automatically inject it view the `ModelModifier` into the environment.
                 if let observable = module as? any EnvironmentAccessible {
                     // we can't guarantee weak references for EnvironmentAccessible modules
@@ -376,6 +393,7 @@ public final class Spezi: Sendable {
     /// Determine if a application property is stored as a copy in a `@Application` property wrapper.
     func createsCopy<Value>(_ keyPath: KeyPath<Spezi, Value>) -> Bool {
         keyPath == \.logger // loggers are created per Module.
+            || keyPath == \.launchOptions
     }
 
     @MainActor

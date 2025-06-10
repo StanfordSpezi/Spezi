@@ -15,10 +15,14 @@ import XCTestApp
 struct UITestsApp: App {
     @ApplicationDelegateAdaptor(TestAppDelegate.self) var appDelegate
 
-    
     var body: some Scene {
         WindowGroup {
             TestAppTestsView<SpeziTests>()
+                .toolbar {
+                    ToolbarItem(placement: .bottomBar) {
+                        ModuleWithServiceView()
+                    }
+                }
                 .spezi(appDelegate)
         }
     }
