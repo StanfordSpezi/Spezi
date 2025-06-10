@@ -199,9 +199,7 @@ public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
     
     /// Run the Spezi service lifecycle.
     func run() async {
-        logger.debug("Starting the Spezi Service.")
         await serviceGroup.run()
-        logger.debug("Shutting down Spezi.")
     }
 
     /// Load a new Module.

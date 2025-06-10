@@ -10,19 +10,28 @@ import OSLog
 import SpeziFoundation
 
 
-struct ServiceModuleGroup {
+final class ServiceModuleGroup: Sendable {
     private enum Input {
         case run(any ServiceModule)
         case cancel(any ServiceModule)
         case clearIdentity(ObjectIdentifier, UUID)
     }
 
+    private enum State: Sendable {
+        case idle
+        case running
+    }
+
     private let logger: Logger
     private let input: (stream: AsyncStream<Input>, continuation: AsyncStream<Input>.Continuation)
+
+    private nonisolated(unsafe) var state: State
+    private let lock = NSLock()
 
     init(logger: Logger) {
         self.input = AsyncStream.makeStream()
         self.logger = logger
+        self.state = .idle
     }
 
     func run(service: some ServiceModule) {
@@ -34,6 +43,31 @@ struct ServiceModuleGroup {
     }
 
     nonisolated func run() async {
+        let run = lock.withLock {
+            switch state {
+            case .idle:
+                self.state = .running
+                return true
+            case .running:
+                return false
+            }
+        }
+
+        guard run else {
+            logger.warning("Spezi service group is already running. Make sure to only use the `spezi` view modifier once in your view hierarchy.")
+            return
+        }
+
+        logger.debug("Starting the Spezi Service.")
+
+        defer {
+            logger.debug("Shutting down Spezi.")
+
+            lock.withLock {
+                state = .idle
+            }
+        }
+
         let input = input
 
         await withDiscardingTaskGroup { group in
