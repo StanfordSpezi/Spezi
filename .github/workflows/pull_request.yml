@@ -21,8 +21,9 @@ jobs:
     uses: StanfordSpezi/.github/.github/workflows/swiftlint.yml@v2
   markdown_link_check:
     name: Markdown Link Check
-    uses: StanfordSpezi/.github/.github/workflows/markdown-link-check.yml@v2
+    uses: StanfordBDHG/.github/.github/workflows/markdown-link-check.yml@v2
   breaking_changes:
     uses: StanfordSpezi/.github/.github/workflows/breaking-changes.yml@feature/api-break
     with:
+      runsonlabels: '["macOS", "self-hosted"]'
       branch: 'main'
