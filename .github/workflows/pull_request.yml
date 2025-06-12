@@ -26,4 +26,3 @@ jobs:
     uses: StanfordSpezi/.github/.github/workflows/breaking-changes.yml@feature/api-break
     with:
       runsonlabels: '["macOS", "self-hosted"]'
-      branch: 'main'
