@@ -23,6 +23,7 @@ jobs:
     name: Markdown Link Check
     uses: StanfordBDHG/.github/.github/workflows/markdown-link-check.yml@v2
   breaking_changes:
+    name: Diagnose Breaking Changes
     uses: StanfordSpezi/.github/.github/workflows/breaking-changes.yml@feature/api-break
     with:
       runsonlabels: '["macOS", "self-hosted"]'
