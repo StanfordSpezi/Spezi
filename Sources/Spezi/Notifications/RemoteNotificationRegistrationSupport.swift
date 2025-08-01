@@ -58,7 +58,7 @@ public final class RemoteNotificationRegistrationSupport: KnowledgeSource, Senda
 #if targetEnvironment(simulator)
         async let _ = withTimeout(of: .seconds(5)) { @MainActor in
             logger.warning("Registering for remote notifications seems to be not possible on this simulator device. Timing out ...")
-            self.continuation?.resume(with: .failure(TimeoutError()))
+            resume(with: .failure(TimeoutError()))
         }
 #endif
 
