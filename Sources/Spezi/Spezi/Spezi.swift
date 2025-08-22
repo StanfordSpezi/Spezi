@@ -146,7 +146,8 @@ public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
         }
     }
     
-    @MainActor var modules: [any Module] {
+    @_spi(APISupport)
+    @MainActor public var modules: [any Module] {
         storage.collect(allOf: (any AnyStoredModules).self)
             .reduce(into: []) { partialResult, modules in
                 partialResult.append(contentsOf: modules.anyModules)
