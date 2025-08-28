@@ -6,7 +6,6 @@
 // SPDX-License-Identifier: MIT
 //
 
-#if DEBUG
 import Spezi
 import SwiftUI
 import Testing
@@ -37,4 +36,3 @@ public final class TestApplicationDelegate: SpeziAppDelegate {
         super.init()
     }
 }
-#endif
