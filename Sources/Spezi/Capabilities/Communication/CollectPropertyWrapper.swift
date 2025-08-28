@@ -7,7 +7,7 @@
 //
 
 import RuntimeAssertions
-import SpeziFoundation
+public import SpeziFoundation
 
 
 /// Refer to the documentation of ``Module/Collect``.

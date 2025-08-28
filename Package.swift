@@ -40,7 +40,10 @@ let package = Package(
                 .product(name: "RuntimeAssertions", package: "XCTRuntimeAssertions"),
                 .product(name: "OrderedCollections", package: "swift-collections")
             ],
-            swiftSettings: [.enableUpcomingFeature("ExistentialAny")],
+            swiftSettings: [
+                .enableUpcomingFeature("ExistentialAny"),
+                .enableUpcomingFeature("InternalImportsByDefault")
+            ],
             plugins: [] + swiftLintPlugin()
         ),
         .target(
@@ -48,7 +51,10 @@ let package = Package(
             dependencies: [
                 .target(name: "Spezi")
             ],
-            swiftSettings: [.enableUpcomingFeature("ExistentialAny")],
+            swiftSettings: [
+                .enableUpcomingFeature("ExistentialAny"),
+                .enableUpcomingFeature("InternalImportsByDefault")
+            ],
             plugins: [] + swiftLintPlugin()
         ),
         .target(
@@ -57,7 +63,10 @@ let package = Package(
                 .target(name: "Spezi"),
                 .target(name: "SpeziTesting")
             ],
-            swiftSettings: [.enableUpcomingFeature("ExistentialAny")],
+            swiftSettings: [
+                .enableUpcomingFeature("ExistentialAny"),
+                .enableUpcomingFeature("InternalImportsByDefault")
+            ],
             plugins: [] + swiftLintPlugin()
         ),
         .testTarget(

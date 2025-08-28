@@ -6,8 +6,8 @@
 // SPDX-License-Identifier: MIT
 //
 
-import SpeziFoundation
-import SwiftUI
+public import SpeziFoundation
+public import SwiftUI
 
 
 @_spi(Spezi)

@@ -7,7 +7,7 @@
 //
 
 import RuntimeAssertions
-import SpeziFoundation
+public import SpeziFoundation
 
 
 /// A `@Dependency` for a single, typed ``Module``.

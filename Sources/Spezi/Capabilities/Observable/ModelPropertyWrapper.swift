@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
+public import  Observation
 import SwiftUI
 
 

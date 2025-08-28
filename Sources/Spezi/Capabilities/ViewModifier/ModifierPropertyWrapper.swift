@@ -6,7 +6,8 @@
 // SPDX-License-Identifier: MIT
 //
 
-import SwiftUI
+import Foundation
+public import protocol SwiftUI.ViewModifier
 
 
 /// Refer to the documentation of ``Module/Modifier``.

@@ -9,7 +9,7 @@
 
 import Foundation
 import RuntimeAssertions
-import SpeziFoundation
+public import SpeziFoundation
 
 
 /// A protocol that identifies a ``_ProvidePropertyWrapper`` which `Value` type is a `Collection`.

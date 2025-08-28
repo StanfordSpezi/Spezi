@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import SwiftUI
+public import SwiftUI
 
 
 struct SpeziViewModifier: ViewModifier {
