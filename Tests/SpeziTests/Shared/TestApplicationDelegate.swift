@@ -16,13 +16,11 @@ public final class TestApplicationDelegate: SpeziAppDelegate {
     let confirmation: Confirmation?
     let expectation: XCTestExpectation
     
-    
     override public var configuration: Configuration {
         Configuration {
             TestModule(confirmation: confirmation, expectation: expectation)
         }
     }
-
 
     public init(expectation: XCTestExpectation) {
         self.confirmation = nil

@@ -9,7 +9,6 @@
 @_spi(Spezi) @_spi(APISupport) @testable import Spezi
 import SwiftUI
 import XCTest
-import XCTRuntimeAssertions
 
 
 private final class TestModule1: Module {

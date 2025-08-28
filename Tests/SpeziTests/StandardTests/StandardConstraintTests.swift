@@ -9,7 +9,6 @@
 @testable import Spezi
 import SwiftUI
 import XCTest
-import XCTRuntimeAssertions
 
 
 private protocol ExampleConstraint: Standard {
