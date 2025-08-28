@@ -7,7 +7,6 @@
 //
 
 
-
 #if os(iOS) || os(visionOS) || os(tvOS)
 public import class UIKit.UIApplication
 /// Platform agnostic Application.
@@ -15,7 +14,7 @@ public import class UIKit.UIApplication
 /// Type-alias for the `UIApplication`.
 public typealias _Application = UIApplication // swiftlint:disable:this type_name
 #elseif os(macOS)
-public import class AppKit.UIApplication
+public import class AppKit.NSApplication
 /// Platform agnostic Application.
 ///
 /// Type-alias for the `NSApplication`.
