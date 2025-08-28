@@ -77,7 +77,7 @@ private final class EmptyNotificationHandler: Module, NotificationHandler {}
 
 
 @available(*, deprecated, message: "Forward depcreation warnings")
-private class TestNotificationApplicationDelegate: SpeziAppDelegate {
+private final class TestNotificationApplicationDelegate: SpeziAppDelegate {
     private let injectedModule: TestNotificationHandler
 
     override var configuration: Configuration {

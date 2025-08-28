@@ -21,9 +21,8 @@ private enum ExampleDependencyBuilder: DependencyCollectionBuilder {
     }
 }
 
-class ExampleDependencyModule: Module {
+final class ExampleDependencyModule: Module {
     @Dependency var dependencies: [any Module]
-    
     
     init(@ExampleDependencyBuilder _ dependencies: () -> DependencyCollection) {
         self._dependencies = Dependency(using: dependencies())

@@ -15,7 +15,7 @@ struct CustomKey: EnvironmentKey {
 }
 
 @Observable
-class MyModel2 {
+final class MyModel2 {
     var message: String
 
     init(message: String) {
@@ -39,7 +39,7 @@ private struct MyModifier2: ViewModifier {
 }
 
 
-class ModuleWithModel: Module, EnvironmentAccessible {
+final class ModuleWithModel: Module, EnvironmentAccessible {
     @Application(\.launchOptions) private var launchOptions
 
     @Model var model = MyModel2(message: "Hello World")

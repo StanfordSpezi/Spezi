@@ -11,7 +11,7 @@ import SwiftUI
 import XCTestApp
 
 
-class MyModelTestCase: TestAppTestCase {
+final class MyModelTestCase: TestAppTestCase {
     let model: MyModel
 
     init(model: MyModel) {

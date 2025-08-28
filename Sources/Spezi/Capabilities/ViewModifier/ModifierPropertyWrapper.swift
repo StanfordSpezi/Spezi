@@ -11,7 +11,7 @@ import SwiftUI
 
 /// Refer to the documentation of ``Module/Modifier``.
 @propertyWrapper
-public class _ModifierPropertyWrapper<Modifier: ViewModifier> {
+public final class _ModifierPropertyWrapper<Modifier: ViewModifier> {
     // swiftlint:disable:previous type_name
     // We want the type to be hidden from autocompletion and documentation generation
 

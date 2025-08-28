@@ -26,7 +26,7 @@
 ///
 /// You could then use this result builder to accept only `SpecialModule` conforming modules in, e.g., the initializer of your Spezi module.
 /// ```swift
-/// final class MyModule: Module {
+/// class MyModule: Module {
 ///     @Dependency private var specials: [any Module]
 ///
 ///     init(@SpecialModuleBuilder modules: () -> DependencyCollection) {

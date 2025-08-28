@@ -30,7 +30,7 @@ protocol OptionalBasedProvideProperty {
 
 /// Refer to the documentation of ``Module/Provide``.
 @propertyWrapper
-public class _ProvidePropertyWrapper<Value> {
+public final class _ProvidePropertyWrapper<Value> {
     // swiftlint:disable:previous type_name
     // We want the type to be hidden from autocompletion and documentation generation
 

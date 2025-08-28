@@ -11,7 +11,7 @@ import RuntimeAssertions
 
 /// Refer to ``Module/StandardActor`` for information on how to use the `@StandardActor` property wrapper. Do not use the `_StandardPropertyWrapper` directly.
 @propertyWrapper
-public class _StandardPropertyWrapper<Constraint> {
+public final class _StandardPropertyWrapper<Constraint> {
     // swiftlint:disable:previous type_name
     // We want the _StandardPropertyWrapper type to be hidden from autocompletion and document generation.
     

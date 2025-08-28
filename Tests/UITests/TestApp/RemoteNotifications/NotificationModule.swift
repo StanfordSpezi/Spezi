@@ -10,7 +10,7 @@ import Spezi
 
 
 @MainActor
-class NotificationModule: Module, EnvironmentAccessible {
+final class NotificationModule: Module, EnvironmentAccessible {
     @Application(\.registerRemoteNotifications)
     var registerRemoteNotifications
 

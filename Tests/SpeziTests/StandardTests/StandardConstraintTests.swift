@@ -36,7 +36,7 @@ final class StandardConstraintTests: XCTestCase {
         }
     }
     
-    class StandardCTestApplicationDelegate: SpeziAppDelegate {
+    final class StandardCTestApplicationDelegate: SpeziAppDelegate {
         let expectation: XCTestExpectation
         
         

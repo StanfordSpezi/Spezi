@@ -31,7 +31,7 @@ final class StandardInjectionTests: XCTestCase {
         }
     }
     
-    class StandardInjectionTestApplicationDelegate: SpeziAppDelegate {
+    final class StandardInjectionTestApplicationDelegate: SpeziAppDelegate {
         let expectation: XCTestExpectation
         
         

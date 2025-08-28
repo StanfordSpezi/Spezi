@@ -13,7 +13,7 @@ import Testing
 import XCTest
 
 
-public class TestApplicationDelegate: SpeziAppDelegate {
+public final class TestApplicationDelegate: SpeziAppDelegate {
     let confirmation: Confirmation?
     let expectation: XCTestExpectation
     

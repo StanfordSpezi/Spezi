@@ -93,7 +93,7 @@ private final class OptionalModuleDependency: Module {
 
 private final class AllPropertiesModule: Module {
     @Observable
-    class MyModel {}
+    final class MyModel {}
     struct MyViewModifier: ViewModifier {
         func body(content: Content) -> some View {
             content
@@ -686,14 +686,14 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
 
     @MainActor
     func testConfigureCallOrder() throws {
-        class Order: Module, DefaultInitializable {
+        final class Order: Module, DefaultInitializable {
             @MainActor
             var order: [Int] = []
 
             required init() {}
         }
 
-        class ModuleA: Module {
+        final class ModuleA: Module {
             @Dependency(Order.self)
             private var order
 
@@ -702,7 +702,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
             }
         }
 
-        class ModuleB: Module {
+        final class ModuleB: Module {
             @Dependency(Order.self)
             private var order
 
@@ -714,7 +714,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
             }
         }
 
-        class ModuleC: Module {
+        final class ModuleC: Module {
             @Dependency(Order.self)
             private var order
 
@@ -728,7 +728,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
             }
         }
 
-        class ModuleD: Module {
+        final class ModuleD: Module {
             @Dependency(Order.self)
             private var order
 
