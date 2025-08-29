@@ -126,8 +126,8 @@ public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
              Otherwise use the SwiftUI onReceive(_:perform:) for UI related notifications.
              """
     )
-    @_spi(Spezi)
-    @MainActor public var lifecycleHandler: [any LifecycleHandler] {
+    
+    @MainActor package var lifecycleHandler: [any LifecycleHandler] {
         modules.compactMap { module in
             module as? any LifecycleHandler
         }
@@ -178,9 +178,8 @@ public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
     ///   - standard: The standard to use.
     ///   - modules: The collection of modules to initialize.
     ///   - storage: Optional, initial storage to inject.
-    @_spi(Spezi)
     @MainActor
-    public init(
+    package init(
         standard: any Standard,
         modules: [any Module],
         storage: consuming SpeziStorage = SpeziStorage()
