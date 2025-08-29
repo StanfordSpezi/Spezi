@@ -195,9 +195,7 @@ public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
             // load standard separately, such that all module loading takes precedence
             try self.loadModules([standard], ownership: .spezi)
         } catch {
-            print("Error initializing Spezi: \(error.description)")
-            fflush(stdout)
-            preconditionFailure()
+            preconditionFailure(error.description)
         }
     }
     
