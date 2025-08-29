@@ -19,6 +19,7 @@ let package = Package(
         .iOS(.v17),
         .visionOS(.v1),
         .macOS(.v14),
+        .macCatalyst(.v17),
         .tvOS(.v17),
         .watchOS(.v10)
     ],
@@ -42,7 +43,7 @@ let package = Package(
             ],
             swiftSettings: [
                 .enableUpcomingFeature("ExistentialAny"),
-                .enableUpcomingFeature("InternalImportsByDefault")
+                .enableUpcomingFeature("InternalImportsByDefault"), .unsafeFlags(["-enable-testing"])
             ],
             plugins: [] + swiftLintPlugin()
         ),
@@ -53,7 +54,7 @@ let package = Package(
             ],
             swiftSettings: [
                 .enableUpcomingFeature("ExistentialAny"),
-                .enableUpcomingFeature("InternalImportsByDefault")
+                .enableUpcomingFeature("InternalImportsByDefault"), .unsafeFlags(["-enable-testing"])
             ],
             plugins: [] + swiftLintPlugin()
         ),
@@ -65,7 +66,7 @@ let package = Package(
             ],
             swiftSettings: [
                 .enableUpcomingFeature("ExistentialAny"),
-                .enableUpcomingFeature("InternalImportsByDefault")
+                .enableUpcomingFeature("InternalImportsByDefault"), .unsafeFlags(["-enable-testing"])
             ],
             plugins: [] + swiftLintPlugin()
         ),
@@ -77,7 +78,7 @@ let package = Package(
                 .product(name: "RuntimeAssertionsTesting", package: "XCTRuntimeAssertions"),
                 .product(name: "XCTRuntimeAssertions", package: "XCTRuntimeAssertions")
             ],
-            swiftSettings: [.enableUpcomingFeature("ExistentialAny")],
+            swiftSettings: [.enableUpcomingFeature("ExistentialAny"), .unsafeFlags(["-enable-testing"])],
             plugins: [] + swiftLintPlugin()
         )
     ]
