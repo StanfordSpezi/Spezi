@@ -9,6 +9,7 @@
 @_spi(Spezi) @_spi(APISupport) @testable import Spezi
 import SwiftUI
 import XCTest
+import XCTRuntimeAssertions
 
 
 private final class TestModule1: Module {
@@ -92,7 +93,7 @@ private final class OptionalModuleDependency: Module {
 
 private final class AllPropertiesModule: Module {
     @Observable
-    final class MyModel {}
+    class MyModel {}
     struct MyViewModifier: ViewModifier {
         func body(content: Content) -> some View {
             content
@@ -525,11 +526,13 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
         XCTAssert(module.testModule3 === module3)
     }
 
+    
     @MainActor
     func testOptionalDependencyWithDynamicRuntimeDefaultValue() throws {
         let nonPresent = DependencyManager.resolveWithoutErrors([
             OptionalDependencyWithRuntimeDefault(defaultValue: nil) // stays optional
         ])
+        XCTAssertEqual(nonPresent.count, 1)
 
         let dut1 = try XCTUnwrap(nonPresent[0] as? OptionalDependencyWithRuntimeDefault)
         XCTAssertNil(dut1.testModule3)
@@ -538,6 +541,8 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
             TestModule3(state: 1),
             OptionalDependencyWithRuntimeDefault(defaultValue: nil)
         ])
+        XCTAssertEqual(configured.count, 2)
+        print(configured)
 
         let dut2 = try XCTUnwrap(configured[1] as? OptionalDependencyWithRuntimeDefault)
         let dut2Module = try XCTUnwrap(dut2.testModule3)
@@ -561,6 +566,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
         XCTAssertEqual(dut4Module.state, 4)
     }
 
+    
     @MainActor
     func testMultipleDependenciesOfSameType() throws {
         let first = TestModule5()
@@ -685,14 +691,14 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
 
     @MainActor
     func testConfigureCallOrder() throws {
-        final class Order: Module, DefaultInitializable {
+        class Order: Module, DefaultInitializable {
             @MainActor
             var order: [Int] = []
 
             required init() {}
         }
 
-        final class ModuleA: Module {
+        class ModuleA: Module {
             @Dependency(Order.self)
             private var order
 
@@ -701,7 +707,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
             }
         }
 
-        final class ModuleB: Module {
+        class ModuleB: Module {
             @Dependency(Order.self)
             private var order
 
@@ -713,7 +719,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
             }
         }
 
-        final class ModuleC: Module {
+        class ModuleC: Module {
             @Dependency(Order.self)
             private var order
 
@@ -727,7 +733,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
             }
         }
 
-        final class ModuleD: Module {
+        class ModuleD: Module {
             @Dependency(Order.self)
             private var order
 
