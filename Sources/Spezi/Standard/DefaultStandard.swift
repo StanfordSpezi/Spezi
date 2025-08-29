@@ -7,6 +7,7 @@
 //
 
 
-package actor DefaultStandard: Standard {
-    package init() {}
+@_spi(Spezi)
+public actor DefaultStandard: Standard {
+    public init() {}
 }
