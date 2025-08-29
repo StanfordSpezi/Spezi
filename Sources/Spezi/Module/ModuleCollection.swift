@@ -12,8 +12,10 @@
 /// You can not create a ``ModuleCollection`` yourself. Please use the ``ModuleBuilder`` to create a ``ModuleCollection``.
 public final class ModuleCollection {
     /// The elements of the collection.
-    package let elements: [any Module]
+    @_spi(Spezi)
+    public let elements: [any Module]
 
+    
     init(elements: [any Module]) {
         self.elements = elements
     }
