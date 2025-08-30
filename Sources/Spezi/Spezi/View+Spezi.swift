@@ -10,16 +10,17 @@ import Foundation
 public import SwiftUI
 
 
-struct SpeziViewModifier: ViewModifier {
+@_spi(APISupport)
+public struct SpeziViewModifier: ViewModifier {
     @State private var spezi: Spezi
     
     
-    init(_ spezi: Spezi) {
+    public init(_ spezi: Spezi) {
         self.spezi = spezi
     }
     
     
-    func body(content: Content) -> some View {
+    public func body(content: Content) -> some View {
         spezi.viewModifiers
             .modify(content)
             .task(spezi.run) // service lifecycle
