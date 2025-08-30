@@ -105,7 +105,7 @@ public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
     /// Array of all SwiftUI `ViewModifiers` collected using `_ModifierPropertyWrapper` from the configured ``Module``s.
     ///
     /// Any changes to this property will cause a complete re-render of the SwiftUI view hierarchy. See `SpeziViewModifier`.
-    @MainActor package var viewModifiers: [any ViewModifier] {
+    @MainActor var viewModifiers: [any ViewModifier] {
         _viewModifiers
             // View modifiers of inner-most modules are added first due to the dependency order.
             // However, we want view modifiers of dependencies to be available for inside view modifiers of the parent
