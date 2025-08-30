@@ -22,7 +22,7 @@ concurrency:
 jobs:
   package_tests:
     name: Build and Test Swift Package ${{ matrix.platform.name }} (${{ matrix.config }})
-    uses: StanfordBDHG/.github/.github/workflows/xcodebuild-or-fastlane.yml@lukas/mac-catalyst
+    uses: StanfordBDHG/.github/.github/workflows/xcodebuild-or-fastlane.yml@v2
     strategy:
       matrix:
         config: [Debug, Release]
@@ -49,7 +49,7 @@ jobs:
       artifactname: ${{ format('Spezi-Package-{0}-{1}.xcresult', matrix.platform.name, matrix.config) }}
   ui_tests:
     name: Build and Test UI Tests ${{ matrix.platform.name }} (${{ matrix.config }})
-    uses: StanfordBDHG/.github/.github/workflows/xcodebuild-or-fastlane.yml@lukas/mac-catalyst
+    uses: StanfordBDHG/.github/.github/workflows/xcodebuild-or-fastlane.yml@v2
     strategy:
       matrix:
         config: [Debug, Release]
@@ -71,7 +71,7 @@ jobs:
   uploadcoveragereport:
     name: Upload Coverage Report
     needs: [package_tests, ui_tests]
-    uses: StanfordBDHG/.github/.github/workflows/create-and-upload-coverage-report.yml@lukas/mac-catalyst
+    uses: StanfordBDHG/.github/.github/workflows/create-and-upload-coverage-report.yml@v2
     with:
       coveragereports: Spezi-Package-*.xcresult TestApp-*.xcresult
     secrets:
