@@ -51,9 +51,6 @@ final class StandardInjectionTests: XCTestCase {
     }
     
     func testInjectionPrecondition() throws {
-        guard !ProcessInfo.isReleaseTest else {
-            throw XCTSkip()
-        }
         try XCTRuntimePrecondition {
             _ = _StandardPropertyWrapper<MockStandard>().wrappedValue
         }
