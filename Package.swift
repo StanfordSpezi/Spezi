@@ -19,6 +19,7 @@ let package = Package(
         .iOS(.v17),
         .visionOS(.v1),
         .macOS(.v14),
+        .macCatalyst(.v17),
         .tvOS(.v17),
         .watchOS(.v10)
     ],
@@ -29,7 +30,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/StanfordSpezi/SpeziFoundation.git", from: "2.1.8"),
-        .package(url: "https://github.com/StanfordBDHG/XCTRuntimeAssertions.git", from: "2.0.0"),
+        .package(url: "https://github.com/StanfordBDHG/XCTRuntimeAssertions.git", from: "2.2.0"),
         .package(url: "https://github.com/apple/swift-collections.git", from: "1.1.1")
     ] + swiftLintPackage(),
     targets: [
@@ -40,7 +41,10 @@ let package = Package(
                 .product(name: "RuntimeAssertions", package: "XCTRuntimeAssertions"),
                 .product(name: "OrderedCollections", package: "swift-collections")
             ],
-            swiftSettings: [.enableUpcomingFeature("ExistentialAny")],
+            swiftSettings: [
+                .enableUpcomingFeature("ExistentialAny"),
+                .enableUpcomingFeature("InternalImportsByDefault"), .unsafeFlags(["-enable-testing"])
+            ],
             plugins: [] + swiftLintPlugin()
         ),
         .target(
@@ -48,7 +52,10 @@ let package = Package(
             dependencies: [
                 .target(name: "Spezi")
             ],
-            swiftSettings: [.enableUpcomingFeature("ExistentialAny")],
+            swiftSettings: [
+                .enableUpcomingFeature("ExistentialAny"),
+                .enableUpcomingFeature("InternalImportsByDefault"), .unsafeFlags(["-enable-testing"])
+            ],
             plugins: [] + swiftLintPlugin()
         ),
         .target(
@@ -57,7 +64,10 @@ let package = Package(
                 .target(name: "Spezi"),
                 .target(name: "SpeziTesting")
             ],
-            swiftSettings: [.enableUpcomingFeature("ExistentialAny")],
+            swiftSettings: [
+                .enableUpcomingFeature("ExistentialAny"),
+                .enableUpcomingFeature("InternalImportsByDefault"), .unsafeFlags(["-enable-testing"])
+            ],
             plugins: [] + swiftLintPlugin()
         ),
         .testTarget(
@@ -68,7 +78,7 @@ let package = Package(
                 .product(name: "RuntimeAssertionsTesting", package: "XCTRuntimeAssertions"),
                 .product(name: "XCTRuntimeAssertions", package: "XCTRuntimeAssertions")
             ],
-            swiftSettings: [.enableUpcomingFeature("ExistentialAny")],
+            swiftSettings: [.enableUpcomingFeature("ExistentialAny"), .unsafeFlags(["-enable-testing"])],
             plugins: [] + swiftLintPlugin()
         )
     ]

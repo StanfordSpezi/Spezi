@@ -214,7 +214,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
         optionalModuleDependency = try getModule(in: modules)
         var testModule3: TestModule3 = try getModule(in: modules)
 
-        XCTAssert(optionalModuleDependency.testModule3 === testModule3)
+        XCTAssertIdentical(optionalModuleDependency.testModule3, testModule3)
 
         spezi.loadModule(TestModule1())
 
@@ -229,15 +229,15 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
         let testModule5: TestModule5 = try getModule(in: modules)
         optionalModuleDependency = try getModule(in: modules)
 
-        XCTAssert(testModule4.testModule5 === testModule5)
-        XCTAssert(testModule2.testModule5 === testModule5)
-        XCTAssert(testModule2.testModule4 === testModule4)
-        XCTAssert(testModule2.testModule3 === testModule3)
-        XCTAssert(testModule1.testModule2 === testModule2)
-        XCTAssert(testModule1.testModule3 === testModule3)
-        XCTAssert(testModule1.testModule2.testModule3 === testModule3)
-        XCTAssert(testModule1.testModule2.testModule4.testModule5 === testModule5)
-        XCTAssert(optionalModuleDependency.testModule3 === testModule3)
+        XCTAssertIdentical(testModule4.testModule5, testModule5)
+        XCTAssertIdentical(testModule2.testModule5, testModule5)
+        XCTAssertIdentical(testModule2.testModule4, testModule4)
+        XCTAssertIdentical(testModule2.testModule3, testModule3)
+        XCTAssertIdentical(testModule1.testModule2, testModule2)
+        XCTAssertIdentical(testModule1.testModule3, testModule3)
+        XCTAssertIdentical(testModule1.testModule2.testModule3, testModule3)
+        XCTAssertIdentical(testModule1.testModule2.testModule4.testModule5, testModule5)
+        XCTAssertIdentical(optionalModuleDependency.testModule3, testModule3)
     }
 
     @MainActor
@@ -300,7 +300,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
             XCTAssertNil(modules.first(where: { $0 is TestModule4 }))
             XCTAssertNil(modules.first(where: { $0 is TestModule5 }))
 
-            XCTAssert(optionalModuleLoaded.testModule3 === module3Loaded)
+            XCTAssertIdentical(optionalModuleLoaded.testModule3, module3Loaded)
 
             spezi.unloadModule(module3)
             XCTAssertEqual(optionalModule.nums, [])
@@ -386,14 +386,14 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
         let testModuleMock1: TestModule1 = try getModule(in: initializedModules)
         _ = try getModule(TestModule7.self, in: initializedModules)
         
-        XCTAssert(testModuleMock4.testModule5 === testModuleMock5)
-        XCTAssert(testModuleMock2.testModule5 === testModuleMock5)
-        XCTAssert(testModuleMock2.testModule4 === testModuleMock4)
-        XCTAssert(testModuleMock2.testModule3 === testModuleMock3)
-        XCTAssert(testModuleMock1.testModule2 === testModuleMock2)
-        XCTAssert(testModuleMock1.testModule3 === testModuleMock3)
-        XCTAssert(testModuleMock1.testModule2.testModule3 === testModuleMock3)
-        XCTAssert(testModuleMock1.testModule2.testModule4.testModule5 === testModuleMock5)
+        XCTAssertIdentical(testModuleMock4.testModule5, testModuleMock5)
+        XCTAssertIdentical(testModuleMock2.testModule5, testModuleMock5)
+        XCTAssertIdentical(testModuleMock2.testModule4, testModuleMock4)
+        XCTAssertIdentical(testModuleMock2.testModule3, testModuleMock3)
+        XCTAssertIdentical(testModuleMock1.testModule2, testModuleMock2)
+        XCTAssertIdentical(testModuleMock1.testModule3, testModuleMock3)
+        XCTAssertIdentical(testModuleMock1.testModule2.testModule3, testModuleMock3)
+        XCTAssertIdentical(testModuleMock1.testModule2.testModule4.testModule5, testModuleMock5)
     }
 
     @MainActor
@@ -411,10 +411,10 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
         let testModule3: TestModule3 = try getModule(in: initializedModules)
         let testModule2: TestModule2 = try getModule(in: initializedModules)
 
-        XCTAssert(testModule4.testModule5 === testModule5)
-        XCTAssert(testModule2.testModule5 === testModule5)
-        XCTAssert(testModule2.testModule4 === testModule4)
-        XCTAssert(testModule2.testModule3 === testModule3)
+        XCTAssertIdentical(testModule4.testModule5, testModule5)
+        XCTAssertIdentical(testModule2.testModule5, testModule5)
+        XCTAssertIdentical(testModule2.testModule4, testModule4)
+        XCTAssertIdentical(testModule2.testModule3, testModule3)
     }
 
     @MainActor
@@ -432,10 +432,10 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
         let testModule40 = try XCTUnwrap(initializedModules.compactMap { $0 as? TestModule4 }.first)
         let testModule41 = try XCTUnwrap(initializedModules.compactMap { $0 as? TestModule4 }.last)
 
-        XCTAssert(testModule40 !== testModule41)
+        XCTAssertNotIdentical(testModule40, testModule41)
         
-        XCTAssert(testModule40.testModule5 === testModule5)
-        XCTAssert(testModule41.testModule5 === testModule5)
+        XCTAssertIdentical(testModule40.testModule5, testModule5)
+        XCTAssertIdentical(testModule41.testModule5, testModule5)
     }
 
     @MainActor
@@ -454,19 +454,19 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
         let testModule20 = try XCTUnwrap(initializedModules.compactMap { $0 as? TestModule2 }.first)
         let testModule21 = try XCTUnwrap(initializedModules.compactMap { $0 as? TestModule2 }.last)
 
-        XCTAssert(testModule4.testModule5 === testModule5)
+        XCTAssertIdentical(testModule4.testModule5, testModule5)
         
-        XCTAssert(testModule20 !== testModule21)
+        XCTAssertNotIdentical(testModule20, testModule21)
         
-        XCTAssert(testModule20.testModule3 === testModule3)
-        XCTAssert(testModule21.testModule3 === testModule3)
-        XCTAssert(testModule20.testModule4 === testModule4)
-        XCTAssert(testModule21.testModule4 === testModule4)
-        XCTAssert(testModule20.testModule5 === testModule5)
-        XCTAssert(testModule21.testModule5 === testModule5)
+        XCTAssertIdentical(testModule20.testModule3, testModule3)
+        XCTAssertIdentical(testModule21.testModule3, testModule3)
+        XCTAssertIdentical(testModule20.testModule4, testModule4)
+        XCTAssertIdentical(testModule21.testModule4, testModule4)
+        XCTAssertIdentical(testModule20.testModule5, testModule5)
+        XCTAssertIdentical(testModule21.testModule5, testModule5)
         
-        XCTAssert(testModule20.testModule4.testModule5 === testModule5)
-        XCTAssert(testModule21.testModule4.testModule5 === testModule5)
+        XCTAssertIdentical(testModule20.testModule4.testModule5, testModule5)
+        XCTAssertIdentical(testModule21.testModule4.testModule5, testModule5)
     }
 
 
@@ -523,14 +523,16 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
 
         let module3 = try XCTUnwrap(modules[0] as? TestModule3)
         let module = try XCTUnwrap(modules[1] as? OptionalModuleDependency)
-        XCTAssert(module.testModule3 === module3)
+        XCTAssertIdentical(module.testModule3, module3)
     }
 
+    
     @MainActor
     func testOptionalDependencyWithDynamicRuntimeDefaultValue() throws {
         let nonPresent = DependencyManager.resolveWithoutErrors([
             OptionalDependencyWithRuntimeDefault(defaultValue: nil) // stays optional
         ])
+        XCTAssertEqual(nonPresent.count, 1)
 
         let dut1 = try XCTUnwrap(nonPresent[0] as? OptionalDependencyWithRuntimeDefault)
         XCTAssertNil(dut1.testModule3)
@@ -539,6 +541,8 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
             TestModule3(state: 1),
             OptionalDependencyWithRuntimeDefault(defaultValue: nil)
         ])
+        XCTAssertEqual(configured.count, 2)
+        print(configured)
 
         let dut2 = try XCTUnwrap(configured[1] as? OptionalDependencyWithRuntimeDefault)
         let dut2Module = try XCTUnwrap(dut2.testModule3)
@@ -562,6 +566,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
         XCTAssertEqual(dut4Module.state, 4)
     }
 
+    
     @MainActor
     func testMultipleDependenciesOfSameType() throws {
         let first = TestModule5()
@@ -576,7 +581,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
 
         let testModule4 = try getModule(TestModule4.self, in: modules)
 
-        XCTAssertTrue(testModule4.testModule5 === first)
+        XCTAssertIdentical(testModule4.testModule5, first)
     }
 
     @MainActor
@@ -603,20 +608,20 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
 
             // should contain the first loaded dependency
             XCTAssertNotNil(module.testModule6)
-            XCTAssertTrue(module.testModule6 === weakModule6)
+            XCTAssertIdentical(module.testModule6, weakModule6)
         }
 
         scope()
 
         // after externally managed dependency goes out of scope it should automatically switch to next dependency
         XCTAssertNotNil(module.testModule6)
-        XCTAssertTrue(module.testModule6 === dynamicModule6)
+        XCTAssertIdentical(module.testModule6, dynamicModule6)
 
         spezi.unloadModule(dynamicModule6)
 
         // after manual unload it should take the next available
         XCTAssertNotNil(module.testModule6)
-        XCTAssertTrue(module.testModule6 === baseModule6)
+        XCTAssertIdentical(module.testModule6, baseModule6)
     }
 
     @MainActor

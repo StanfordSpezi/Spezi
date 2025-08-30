@@ -6,7 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
-import SpeziFoundation
+public import SpeziFoundation
 
 
 /// A ``SharedRepository`` implementation that is anchored to ``SpeziAnchor``.

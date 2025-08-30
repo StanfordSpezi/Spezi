@@ -6,20 +6,21 @@
 // SPDX-License-Identifier: MIT
 //
 
-import SwiftUI
-
 
 #if os(iOS) || os(visionOS) || os(tvOS)
+public import class UIKit.UIApplication
 /// Platform agnostic Application.
 ///
 /// Type-alias for the `UIApplication`.
 public typealias _Application = UIApplication // swiftlint:disable:this type_name
 #elseif os(macOS)
+public import class AppKit.NSApplication
 /// Platform agnostic Application.
 ///
 /// Type-alias for the `NSApplication`.
 public typealias _Application = NSApplication // swiftlint:disable:this type_name
 #elseif os(watchOS)
+public import class WatchKit.WKApplication
 /// Platform agnostic Application.
 ///
 /// Type-alias for the `WKApplication`.

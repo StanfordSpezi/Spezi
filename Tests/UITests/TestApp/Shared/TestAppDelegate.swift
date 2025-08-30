@@ -10,7 +10,7 @@ import Spezi
 import SwiftUI
 
 
-class TestAppDelegate: SpeziAppDelegate {
+final class TestAppDelegate: SpeziAppDelegate {
     override var configuration: Configuration {
         Configuration {
             if FeatureFlags.lifecycleTests {

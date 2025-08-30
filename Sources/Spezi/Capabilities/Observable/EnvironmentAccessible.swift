@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
+public import Observation
 import SwiftUI
 
 
@@ -15,7 +16,7 @@ import SwiftUI
 /// and how to access it within SwiftUI, if it is configured in your ``Configuration``.
 ///
 /// ```swift
-/// public class ExampleModule: Module, EnvironmentAccessible {
+/// public final class ExampleModule: Module, EnvironmentAccessible {
 ///     // ... implement your functionality
 /// }
 ///

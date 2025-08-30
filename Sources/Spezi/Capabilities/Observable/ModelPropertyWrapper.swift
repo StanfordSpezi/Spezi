@@ -6,12 +6,13 @@
 // SPDX-License-Identifier: MIT
 //
 
+public import  Observation
 import SwiftUI
 
 
 /// Refer to the documentation of ``Module/Model``.
 @propertyWrapper
-public class _ModelPropertyWrapper<Model: Observable & AnyObject> {
+public final class _ModelPropertyWrapper<Model: Observable & AnyObject> {
     // swiftlint:disable:previous type_name
     // We want the type to be hidden from autocompletion and documentation generation
 

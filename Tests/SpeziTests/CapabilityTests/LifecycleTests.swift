@@ -41,7 +41,7 @@ private final class TestLifecycleHandler: Module, LifecycleHandler {
 private final class EmptyLifecycleHandler: Module, LifecycleHandler { }
 
 @available(*, deprecated, message: "Propagate deprecation warning")
-private class TestLifecycleHandlerApplicationDelegate: SpeziAppDelegate {
+private final class TestLifecycleHandlerApplicationDelegate: SpeziAppDelegate {
     private let injectedModule: TestLifecycleHandler
     
     

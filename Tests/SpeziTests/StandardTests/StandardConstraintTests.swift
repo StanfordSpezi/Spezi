@@ -9,7 +9,6 @@
 @testable import Spezi
 import SwiftUI
 import XCTest
-import XCTRuntimeAssertions
 
 
 private protocol ExampleConstraint: Standard {
@@ -36,7 +35,7 @@ final class StandardConstraintTests: XCTestCase {
         }
     }
     
-    class StandardCTestApplicationDelegate: SpeziAppDelegate {
+    final class StandardCTestApplicationDelegate: SpeziAppDelegate {
         let expectation: XCTestExpectation
         
         

@@ -6,8 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
-import os
-import SpeziFoundation
+public import os
 
 
 extension Spezi {

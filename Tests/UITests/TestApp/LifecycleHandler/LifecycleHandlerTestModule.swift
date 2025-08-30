@@ -11,7 +11,7 @@ import SwiftUI
 
 
 @Observable
-class LifecycleHandlerModel {
+final class LifecycleHandlerModel {
     var willFinishLaunchingWithOptions: Int = 0
     var sceneWillEnterForeground: Int = 0
     var sceneDidBecomeActive: Int = 0

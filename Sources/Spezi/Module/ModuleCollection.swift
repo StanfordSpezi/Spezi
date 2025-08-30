@@ -10,7 +10,7 @@
 /// A ``ModuleCollection`` defines a collection of ``Module``s .
 ///
 /// You can not create a ``ModuleCollection`` yourself. Please use the ``ModuleBuilder`` to create a ``ModuleCollection``.
-public class ModuleCollection {
+public final class ModuleCollection {
     /// The elements of the collection.
     package let elements: [any Module]
     

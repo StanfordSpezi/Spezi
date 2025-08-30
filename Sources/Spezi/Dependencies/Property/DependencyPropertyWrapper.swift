@@ -7,7 +7,7 @@
 //
 
 import RuntimeAssertions
-import SpeziFoundation
+public import SpeziFoundation
 
 
 /// A `@Dependency` for a single, typed ``Module``.
@@ -30,7 +30,7 @@ private protocol ModuleArrayDependency {
 
 /// Refer to the documentation of ``Module/Dependency`` for information on how to use the `@Dependency` property wrapper.
 @propertyWrapper
-public class _DependencyPropertyWrapper<Value> { // swiftlint:disable:this type_name
+public final class _DependencyPropertyWrapper<Value> { // swiftlint:disable:this type_name
     private weak var spezi: Spezi?
     private let dependencies: DependencyCollection
 

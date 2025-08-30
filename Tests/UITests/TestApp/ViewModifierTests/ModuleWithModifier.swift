@@ -11,7 +11,7 @@ import SwiftUI
 
 
 @Observable
-class MyModel {
+final class MyModel {
     var message: String
 
     init(message: String) {
@@ -22,7 +22,7 @@ class MyModel {
 
 struct MyModifier: ViewModifier {
     @Observable
-    class ModifierState {
+    final class ModifierState {
         @MainActor var appeared: Bool = false
 
         init() {}
@@ -54,18 +54,18 @@ struct MyModifier: ViewModifier {
     }
 }
 
-private class ModuleA: Module, DefaultInitializable {
+private final class ModuleA: Module, DefaultInitializable {
     required init() {}
 }
 
-private class ModuleB: Module, EnvironmentAccessible {
+private final class ModuleB: Module, EnvironmentAccessible {
     @Dependency(ModuleA.self) private var module
 
     init() {}
 }
 
 
-class ModuleWithModifier: Module {
+final class ModuleWithModifier: Module {
     @Dependency(ModuleB.self) private var moduleB = ModuleB()
 
     @Modifier fileprivate var modelModifier: MyModifier

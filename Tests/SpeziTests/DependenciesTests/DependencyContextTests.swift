@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
+import Foundation
 import RuntimeAssertionsTesting
 import Spezi
 import Testing
@@ -14,14 +15,14 @@ private final class ExampleModule: Module {}
 
 @Suite
 struct DependencyContextTests {
-    @Test
+    @Test(.disabled(if: ProcessInfo.isReleaseTest))
     func injectionPreconditionDependencyPropertyWrapper() throws {
         expectRuntimePrecondition {
             _ = _DependencyPropertyWrapper<TestModule>(wrappedValue: TestModule(), TestModule.self).wrappedValue
         }
     }
     
-    @Test
+    @Test(.disabled(if: ProcessInfo.isReleaseTest))
     func injectionPreconditionDynamicDependenciesPropertyWrapper() throws {
         expectRuntimePrecondition {
             _ = _DependencyPropertyWrapper {

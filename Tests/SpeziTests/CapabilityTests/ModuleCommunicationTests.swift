@@ -42,7 +42,7 @@ private final class CollectModule: Module {
 
 @Suite("Module Communication", .serialized)
 struct ModuleCommunicationTests {
-    private class TestApplicationDelegate: SpeziAppDelegate {
+    private final class TestApplicationDelegate: SpeziAppDelegate {
         override var configuration: Configuration {
             Configuration {
                 provideModule

@@ -11,7 +11,7 @@ import SwiftUI
 import XCTestApp
 
 
-class MyModel2TestCase: TestAppTestCase {
+final class MyModel2TestCase: TestAppTestCase {
     let model: MyModel2
     let flag: Bool
 
