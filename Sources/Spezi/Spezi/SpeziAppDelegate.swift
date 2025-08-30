@@ -122,6 +122,7 @@ open class SpeziAppDelegate: NSObject, ApplicationDelegate, Sendable {
         var storage = SpeziStorage()
         storage[LaunchOptionsKey.self] = launchOptions
         self._spezi = Spezi(from: configuration, storage: storage)
+        Self.appDelegate = self
 
         // backwards compatibility
         spezi.lifecycleHandler.willFinishLaunchingWithOptions(application, launchOptions: launchOptions ?? [:])
@@ -227,7 +228,6 @@ open class SpeziAppDelegate: NSObject, ApplicationDelegate, Sendable {
         options: UIScene.ConnectionOptions
     ) -> UISceneConfiguration {
         let sceneConfig = UISceneConfiguration(name: nil, sessionRole: connectingSceneSession.role)
-        Self.appDelegate = self
         sceneConfig.delegateClass = SpeziSceneDelegate.self
         return sceneConfig
     }
