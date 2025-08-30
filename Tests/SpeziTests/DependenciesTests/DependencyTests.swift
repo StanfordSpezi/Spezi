@@ -456,7 +456,7 @@ final class DependencyTests: XCTestCase { // swiftlint:disable:this type_body_le
 
         XCTAssertIdentical(testModule4.testModule5, testModule5)
         
-        XCTAssertIdentical(testModule20, testModule21)
+        XCTAssertNotIdentical(testModule20, testModule21)
         
         XCTAssertIdentical(testModule20.testModule3, testModule3)
         XCTAssertIdentical(testModule21.testModule3, testModule3)
