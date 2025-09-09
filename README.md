@@ -17,37 +17,101 @@ SPDX-License-Identifier: MIT
 [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2FStanfordSpezi%2FSpezi%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/StanfordSpezi/Spezi)
 
 
-Open-source framework for rapid development of modern, interoperable digital health applications.
+Open-source framework for the rapid development of modern, interoperable digital health applications.
 
 ## Overview
 
 > [!NOTE] 
-> Refer to the [Initial Setup](https://swiftpackageindex.com/stanfordspezi/spezi/documentation/spezi/initial-setup) instructions on how to integrate Spezi into your application!
+> Refer to the [Initial Setup](https://swiftpackageindex.com/stanfordspezi/spezi/documentation/spezi/initial-setup) instructions to integrate Spezi into your application.
 
-Spezi introduces a standards-based modular approach to building digital health applications. 
+Spezi introduces a module-based approach to building digital health applications. 
 
+<table style="width: 80%">
+  <tr>
+    <td align="center" width="33.33333%">
+      <img src="https://raw.githubusercontent.com/StanfordSpezi/SpeziOnboarding/main/Sources/SpeziOnboarding/SpeziOnboarding.docc/Resources/OnboardingView.png#gh-light-mode-only" alt="Screenshot displaying the UI of the onboarding module" width="80%"/>
+      <img src="https://raw.githubusercontent.com/StanfordSpezi/SpeziOnboarding/main/Sources/SpeziOnboarding/SpeziOnboarding.docc/Resources/OnboardingView~dark.png#gh-dark-mode-only" alt="Screenshot displaying the UI of the onboarding module" width="80%"/>
+    </td>
+    <td align="center" width="33.33333%">
+      <img src="https://raw.githubusercontent.com/StanfordSpezi/SpeziDevices/main/Sources/SpeziDevicesUI/SpeziDevicesUI.docc/Resources/PairedDevices.png#gh-light-mode-only" alt="Screenshot displaying Spezi Devices and Bluetooth pairing user interface" width="80%"/>
+      <img src="https://raw.githubusercontent.com/StanfordSpezi/SpeziDevices/main/Sources/SpeziDevicesUI/SpeziDevicesUI.docc/Resources/PairedDevices~dark.png#gh-dark-mode-only" alt="Screenshot displaying Spezi Devices and Bluetooth pairing user interface" width="80%"/>
+    </td>
+    <td align="center" width="33.33333%">
+      <img src="https://raw.githubusercontent.com/StanfordSpezi/SpeziQuestionnaire/main/Sources/SpeziQuestionnaire/SpeziQuestionnaire.docc/Resources/Overview.png#gh-light-mode-only" alt="Screenshot displaying the UI of the questionnaire module" width="80%"/>
+      <img src="https://raw.githubusercontent.com/StanfordSpezi/SpeziQuestionnaire/main/Sources/SpeziQuestionnaire/SpeziQuestionnaire.docc/Resources/Overview~dark.png#gh-dark-mode-only" alt="Screenshot displaying the UI of the questionnaire module" width="80%"/>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/StanfordSpezi/SpeziOnboarding">
+        <code>Spezi Onboarding</code>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/StanfordSpezi/SpeziBluetooth">
+        <code>Spezi Bluetooth</code>
+      </a> and
+      <a href="https://github.com/StanfordSpezi/SpeziDevices">
+        <code>Spezi Devices</code>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/StanfordSpezi/SpeziQuestionnaire">
+        <code>Spezi Questionnaire</code>
+      </a>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="https://raw.githubusercontent.com/StanfordSpezi/SpeziAccount/main/Sources/SpeziAccount/SpeziAccount.docc/Resources/AccountSetup.png#gh-light-mode-only" alt="Screenshot displaying the account setup view with email and password prompt and Sign In with Apple button" width="80%"/>
+      <img src="https://raw.githubusercontent.com/StanfordSpezi/SpeziAccount/main/Sources/SpeziAccount/SpeziAccount.docc/Resources/AccountSetup~dark.png#gh-dark-mode-only" alt="Screenshot displaying the account setup view with email and password prompt and Sign In with Apple button" width="80%"/>
+    </td>
+    <td align="center">
+      <img src="https://raw.githubusercontent.com/StanfordSpezi/SpeziViews/main/Sources/SpeziValidation/SpeziValidation.docc/Resources/Validation.png#gh-light-mode-only" alt="Three different text fields showing validation errors with Spezi Validation" width="80%"/>
+      <img src="https://raw.githubusercontent.com/StanfordSpezi/SpeziViews/main/Sources/SpeziValidation/SpeziValidation.docc/Resources/Validation~dark.png#gh-dark-mode-only" alt="Three different text fields showing validation errors with Spezi Validation" width="80%"/>
+    </td>
+    <td align="center">
+      <img src="https://raw.githubusercontent.com/StanfordSpezi/SpeziLLM/main/Sources/SpeziLLMLocal/SpeziLLMLocal.docc/Resources/ChatView.png#gh-light-mode-only" alt="Chat view of a locally executed LLM using the Spezi LLM module" width="80%"/>
+      <img src="https://raw.githubusercontent.com/StanfordSpezi/SpeziLLM/main/Sources/SpeziLLMLocal/SpeziLLMLocal.docc/Resources/ChatView~dark.png#gh-dark-mode-only" alt="Chat view of a locally executed LLM using the Spezi LLM module" width="80%"/>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/StanfordSpezi/SpeziAccount">
+        <code>Spezi Account</code>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/StanfordSpezi/SpeziViews">
+        <code>Spezi Views</code>
+      </a>, including
+      <a href="https://swiftpackageindex.com/StanfordSpezi/SpeziViews/documentation/spezivalidation">
+        <code>SpeziValidation</code>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/StanfordSpezi/SpeziLLM">
+        <code>Spezi LLM</code>
+      </a>
+    </td>
+  </tr>
+</table>
 
-|![Screenshot displaying the UI of the onboarding module.](https://raw.githubusercontent.com/StanfordSpezi/SpeziOnboarding/main/Sources/SpeziOnboarding/SpeziOnboarding.docc/Resources/ConsentView.png#gh-light-mode-only) ![Screenshot displaying the UI of the onboarding module.](https://raw.githubusercontent.com/StanfordSpezi/SpeziOnboarding/main/Sources/SpeziOnboarding/SpeziOnboarding.docc/Resources/ConsentView~dark.png#gh-dark-mode-only)|![Screenshot displaying Spezi Devices and Bluetooth pairing user interface.](https://raw.githubusercontent.com/StanfordSpezi/SpeziDevices/main/Sources/SpeziDevicesUI/SpeziDevicesUI.docc/Resources/PairedDevices.png#gh-light-mode-only) ![Screenshot displaying Spezi Devices and Bluetooth pairing user interface.](https://raw.githubusercontent.com/StanfordSpezi/SpeziDevices/main/Sources/SpeziDevicesUI/SpeziDevicesUI.docc/Resources/PairedDevices~dark.png#gh-dark-mode-only)|![Screenshot displaying the UI of the questionnaire module.](https://raw.githubusercontent.com/StanfordSpezi/SpeziQuestionnaire/main/Sources/SpeziQuestionnaire/SpeziQuestionnaire.docc/Resources/Overview.png#gh-light-mode-only) ![Screenshot displaying the UI of the questionnaire module.](https://raw.githubusercontent.com/StanfordSpezi/SpeziQuestionnaire/main/Sources/SpeziQuestionnaire/SpeziQuestionnaire.docc/Resources/Overview~dark.png#gh-dark-mode-only)|
-|:--:|:--:|:--:|
-|The [Spezi Onboarding](https://github.com/StanfordSpezi/SpeziOnboarding) module.|The [Spezi Bluetooth](https://github.com/StanfordSpezi/SpeziBluetooth) and [Spezi Devices](https://github.com/StanfordSpezi/SpeziDevices) modules.|The [Spezi Questionnaire](https://github.com/StanfordSpezi/SpeziQuestionnaire) module.|
-|![Screenshot displaying the account setup view with an email and password prompt and a Sign In with Apple button using the Spezi Account module.](https://raw.githubusercontent.com/StanfordSpezi/SpeziAccount/main/Sources/SpeziAccount/SpeziAccount.docc/Resources/AccountSetup.png#gh-light-mode-only) ![Screenshot displaying the account setup view with an email and password prompt and a Sign In with Apple button using the Spezi Account module.](https://raw.githubusercontent.com/StanfordSpezi/SpeziAccount/main/Sources/SpeziAccount/SpeziAccount.docc/Resources/AccountSetup~dark.png#gh-dark-mode-only)|![Three different kinds of text fields showing validation errors in red text using Spezi Validation package.](https://raw.githubusercontent.com/StanfordSpezi/SpeziViews/main/Sources/SpeziValidation/SpeziValidation.docc/Resources/Validation.png#gh-light-mode-only) ![Three different kinds of text fields showing validation errors in red text using Spezi Validation package.](https://raw.githubusercontent.com/StanfordSpezi/SpeziViews/main/Sources/SpeziValidation/SpeziValidation.docc/Resources/Validation~dark.png#gh-dark-mode-only)|![A Chat View of a locally executed LLM using the Spezi LLM module.](https://raw.githubusercontent.com/StanfordSpezi/SpeziLLM/main/Sources/SpeziLLMLocal/SpeziLLMLocal.docc/Resources/ChatView.png#gh-light-mode-only) ![A Chat View of a locally executed LLM using the Spezi LLM module.](https://raw.githubusercontent.com/StanfordSpezi/SpeziLLM/main/Sources/SpeziLLMLocal/SpeziLLMLocal.docc/Resources/ChatView~dark.png#gh-dark-mode-only)|
-|The [Spezi Account](https://github.com/StanfordSpezi/SpeziAccount) module.|The [Spezi Views](https://github.com/StanfordSpezi/SpeziViews) module, including the [SpeziValidation](https://swiftpackageindex.com/StanfordSpezi/SpeziViews/documentation/spezivalidation) target.|The [Spezi LLM](https://github.com/StanfordSpezi/SpeziLLM) module.|
-
-The best way to get started and explore the functionality of Spezi is by taking a look at the [Spezi Template Application](https://github.com/StanfordSpezi/SpeziTemplateApplication).
-The application incorporates a wide variety of sophisticated modules and demonstrates the usage of these modules in a simple-to-use and easy-to-extend application.
+The best way to get started and explore Spezi’s functionality is by using the [Spezi Template Application](https://github.com/StanfordSpezi/SpeziTemplateApplication).
+The application incorporates a wide range of modules and demonstrates their usage in a simple-to-use and easy-to-extend application.
 
 
 ### An Ecosystem of Modules
 
-You can find a list of modules and reusable Swift Packages offered by the Spezi team at Stanford at [the Swift Package Index Stanford Spezi page](https://swiftpackageindex.com/StanfordSpezi).
+You can find a list of modules and reusable Swift packages offered by the Spezi team at Stanford on the [Swift Package Index Stanford Spezi page](https://swiftpackageindex.com/StanfordSpezi).
 
 > [!NOTE] 
-> Spezi relies on an ecosystem of modules. Think about what modules you want to build and contribute to the open-source community! Refer to the [Spezi Guide](https://swiftpackageindex.com/stanfordspezi/spezi/documentation/spezi/spezi-guide) and [Documentation Guide](https://swiftpackageindex.com/stanfordspezi/spezi/documentation/spezi/documentation-guide) about the requirements for Spezi-based software and the ``Module`` documentation to learn more about building your modules.
+> Spezi relies on an ecosystem of modules. Consider what modules you want to build and contribute to the open-source community. Refer to the [Spezi Guide](https://swiftpackageindex.com/stanfordspezi/spezi/documentation/spezi/spezi-guide) and [Documentation Guide](https://swiftpackageindex.com/stanfordspezi/spezi/documentation/spezi/documentation-guide) for requirements for Spezi-based software, and see the ``Module`` documentation to learn more about building your modules.
 
 Learn more about Spezi at [spezi.stanford.edu](https://spezi.stanford.edu).
-Reach out to us on social media and use the [Stanford Spezi Discussion Forum](https://github.com/orgs/StanfordSpezi/discussions) to ask any Spezi-related questions or share the projects you built with Spezi.
+Connect with us on social media, and use the [Stanford Spezi Discussion Forum](https://github.com/orgs/StanfordSpezi/discussions) to ask questions or share projects you have built with Spezi.
 
-Check out the [Stanford Biodesign Digital Health GitHub organization](https://github.com/StanfordBDHG) and [Stanford Biodesign Digital Health website at bdh.stanford.edu](https://bdh.stanford.edu), for example, applications built with Spezi and some of our related open-source and research projects.
+Check out the [Stanford Biodesign Digital Health GitHub organization](https://github.com/StanfordBDHG) and the [Stanford Biodesign Digital Health website](https://bdh.stanford.edu) for applications built with Spezi and related open-source and research projects.
 
 > [!NOTE]  
 > You can find a complete list of the Swift-based Spezi modules on the [Spezi Swift Package Index](https://swiftpackageindex.com/StanfordSpezi) page.
@@ -56,19 +120,19 @@ Check out the [Stanford Biodesign Digital Health GitHub organization](https://gi
 ### The Spezi Building Blocks
 
 > [!NOTE]
-> The [Spezi Guide](https://swiftpackageindex.com/stanfordspezi/spezi/documentation/spezi/spezi-guide) and [Documentation Guide](https://swiftpackageindex.com/stanfordspezi/spezi/documentation/spezi/documentation-guide) guides define the requirements for Spezi-based modules, including terminology, hints, and examples on structuring your Spezi module, Swift Package, and surrounding repository.
+> The [Spezi Guide](https://swiftpackageindex.com/stanfordspezi/spezi/documentation/spezi/spezi-guide) and [Documentation Guide](https://swiftpackageindex.com/stanfordspezi/spezi/documentation/spezi/documentation-guide) outline the requirements for Spezi-based modules, including terminology, guidance, and examples on structuring a Spezi module, Swift package, and repository.
 
-A ``Standard`` defines the key coordinator that orchestrates the data flow in the application by meeting requirements defined by modules.
-You can learn more about the ``Standard`` protocol and when it is advised to create your own standard in your application in the [`Standard`](https://swiftpackageindex.com/stanfordspezi/spezi/documentation/spezi/standard) documentation.
+A ``Standard`` defines the key coordinator that orchestrates data flow in an application by meeting requirements defined by modules.
+You can learn more about the ``Standard`` protocol and when it is advised to create your own standard in the [`Standard`](https://swiftpackageindex.com/stanfordspezi/spezi/documentation/spezi/standard) documentation.
 
-A ``Module`` defines a software subsystem providing distinct and reusable functionality.
-Modules can use the constraint mechanism to enforce a set of requirements to the standard used in the Spezi-based software where the module is used.
-Modules also define dependencies on each other to reuse functionality and can communicate with other modules by offering and collecting information.
-They can also conform to different protocols to provide additional access to Spezi features, such as lifecycle management and triggering view updates in SwiftUI using the observable mechanisms in Swift.
+A ``Module`` defines a software subsystem that provides distinct and reusable functionality.
+Modules can use the constraint mechanism to enforce a set of requirements for the standard used in Spezi-based software.
+They can also define dependencies on each other to reuse functionality and can communicate with other modules by offering and collecting information.
+Modules may conform to different protocols to access additional Spezi features, such as lifecycle management and triggering view updates in SwiftUI using Swift’s observable mechanisms.
 You can learn more about modules in the [`Module`](https://swiftpackageindex.com/stanfordspezi/spezi/documentation/spezi/module) documentation.
 
 
-For more information, please refer to the [API documentation](https://swiftpackageindex.com/StanfordSpezi/Spezi/documentation).
+For more information, see the [API documentation](https://swiftpackageindex.com/StanfordSpezi/Spezi/documentation).
 
 
 ## Contributing
