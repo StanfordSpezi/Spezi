@@ -24,7 +24,7 @@ Unfortunately, DocC currently does not support dark mode images: https://github.
 @Row {
     @Column {
         @Image(source: "https://raw.githubusercontent.com/StanfordSpezi/SpeziConsent/main/Sources/SpeziConsent/SpeziConsent.docc/Resources/Consent1.png", alt: "Screenshot displaying the UI of the consent module.") {
-            The [Spezi Consent](https://github.com/StanfordSpezi/SpeziConsent) module.
+            The [Spezi Onboarding](https://github.com/StanfordSpezi/SpeziOnboarding) and [Spezi Consent](https://github.com/StanfordSpezi/SpeziConsent) modules.
         }
     }
     @Column {
