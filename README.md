@@ -29,8 +29,8 @@ Spezi introduces a module-based approach to building digital health applications
 <table style="width: 80%">
   <tr>
     <td align="center" width="33.33333%">
-      <img src="https://raw.githubusercontent.com/StanfordSpezi/SpeziOnboarding/main/Sources/SpeziOnboarding/SpeziOnboarding.docc/Resources/OnboardingView.png#gh-light-mode-only" alt="Screenshot displaying the UI of the onboarding module" width="80%"/>
-      <img src="https://raw.githubusercontent.com/StanfordSpezi/SpeziOnboarding/main/Sources/SpeziOnboarding/SpeziOnboarding.docc/Resources/OnboardingView~dark.png#gh-dark-mode-only" alt="Screenshot displaying the UI of the onboarding module" width="80%"/>
+      <img src="https://raw.githubusercontent.com/StanfordSpezi/SpeziConsent/main/Sources/SpeziConsent/SpeziConsent.docc/Resources/Consent1.png#gh-light-mode-only" alt="Screenshot displaying the UI of the consent module" width="80%"/>
+      <img src="https://raw.githubusercontent.com/StanfordSpezi/SpeziConsent/main/Sources/SpeziConsent/SpeziConsent.docc/Resources/Consent1~dark.png#gh-dark-mode-only" alt="Screenshot displaying the UI of the consent module" width="80%"/>
     </td>
     <td align="center" width="33.33333%">
       <img src="https://raw.githubusercontent.com/StanfordSpezi/SpeziDevices/main/Sources/SpeziDevicesUI/SpeziDevicesUI.docc/Resources/PairedDevices.png#gh-light-mode-only" alt="Screenshot displaying Spezi Devices and Bluetooth pairing user interface" width="80%"/>
@@ -45,6 +45,9 @@ Spezi introduces a module-based approach to building digital health applications
     <td align="center">
       <a href="https://github.com/StanfordSpezi/SpeziOnboarding">
         <code>Spezi Onboarding</code>
+      </a> and
+      <a href="https://github.com/StanfordSpezi/SpeziConsent">
+        <code>Spezi Consent</code>
       </a>
     </td>
     <td align="center">
