@@ -67,9 +67,7 @@ struct RemoteNotificationsTestView: View {
 }
 
 
-#if DEBUG
 #Preview {
     RemoteNotificationsTestView()
         .environment(NotificationModule())
 }
-#endif
