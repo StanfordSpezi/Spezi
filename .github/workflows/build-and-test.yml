@@ -25,7 +25,7 @@ jobs:
     uses: StanfordBDHG/.github/.github/workflows/xcodebuild-or-fastlane.yml@v2
     strategy:
       matrix:
-        config: [Debug]
+        config: [Debug, Release]
         platform:
           - name: iOS
             destination: 'platform=iOS Simulator,name=iPhone 17 Pro'
@@ -50,7 +50,7 @@ jobs:
     uses: StanfordBDHG/.github/.github/workflows/xcodebuild-or-fastlane.yml@v2
     strategy:
       matrix:
-        config: [Debug]
+        config: [Debug, Release]
         platform:
           - name: iOS
             destination: 'platform=iOS Simulator,name=iPhone 17 Pro'
