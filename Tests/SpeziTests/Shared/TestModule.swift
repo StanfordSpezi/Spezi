@@ -21,7 +21,7 @@ struct TestViewModifier: ViewModifier {
 }
 
 
-public final class TestModule: Module {
+final class TestModule: Module {
     let confirmation: Confirmation?
     let expectation: XCTestExpectation
 
@@ -29,13 +29,13 @@ public final class TestModule: Module {
     @Modifier var modifier2 = TestViewModifier(message: "World")
 
     
-    public init(confirmation: Confirmation? = nil, expectation: XCTestExpectation = XCTestExpectation()) {
+    init(confirmation: Confirmation? = nil, expectation: XCTestExpectation = XCTestExpectation()) {
         self.confirmation = confirmation
         self.expectation = expectation
     }
     
     
-    public func configure() {
+    func configure() {
         expectation.fulfill()
         confirmation?()
     }

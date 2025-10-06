@@ -14,6 +14,8 @@ final class ModuleBuilderTests: XCTestCase {
     private struct Expectations {
         weak var xctestCase: XCTestCase?
         var firstTestExpectation = Expectations.expectation(named: "FirstTestModule")
+        var nestedTestModuleOne = Expectations.expectation(named: "NestedTestModuleOne")
+        var nestedTestModuleTwo = Expectations.expectation(named: "NestedTestModuleTwo")
         var loopTestExpectation = Expectations.expectation(named: "LoopTestModule")
         var conditionalTestExpectation = Expectations.expectation(named: "ConditionalTestModule")
         var availableConditionalTestExpectation = Expectations.expectation(named: "AvailableConditionalTestExpection")
@@ -41,6 +43,8 @@ final class ModuleBuilderTests: XCTestCase {
             xctestCase.wait(
                 for: [
                     firstTestExpectation,
+                    nestedTestModuleOne,
+                    nestedTestModuleTwo,
                     loopTestExpectation,
                     conditionalTestExpectation,
                     availableConditionalTestExpectation,
@@ -55,8 +59,15 @@ final class ModuleBuilderTests: XCTestCase {
     
     private func modules(loopLimit: Int, condition: Bool, expectations: Expectations) -> ModuleCollection {
         @ModuleBuilder
+        var nestedModules: ModuleCollection {
+            TestModule(expectation: expectations.nestedTestModuleOne)
+            TestModule(expectation: expectations.nestedTestModuleTwo)
+        }
+        
+        @ModuleBuilder
         var modules: ModuleCollection {
             TestModule(expectation: expectations.firstTestExpectation)
+            nestedModules
             for _ in 0..<loopLimit {
                 TestModule(expectation: expectations.loopTestExpectation)
             }

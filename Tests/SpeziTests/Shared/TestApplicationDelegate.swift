@@ -6,35 +6,33 @@
 // SPDX-License-Identifier: MIT
 //
 
-#if DEBUG
 import Spezi
 import SwiftUI
 import Testing
 import XCTest
 
 
-public class TestApplicationDelegate: SpeziAppDelegate {
+class TestApplicationDelegate: SpeziAppDelegate {
     let confirmation: Confirmation?
     let expectation: XCTestExpectation
     
     
-    override public var configuration: Configuration {
+    override var configuration: Configuration {
         Configuration {
             TestModule(confirmation: confirmation, expectation: expectation)
         }
     }
 
 
-    public init(expectation: XCTestExpectation) {
+    init(expectation: XCTestExpectation) {
         self.confirmation = nil
         self.expectation = expectation
         super.init()
     }
 
-    public init(confirmation: Confirmation) {
+    init(confirmation: Confirmation) {
         self.confirmation = confirmation
         self.expectation = .init()
         super.init()
     }
 }
-#endif

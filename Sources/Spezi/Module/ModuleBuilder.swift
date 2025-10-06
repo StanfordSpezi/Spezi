@@ -15,6 +15,11 @@ public enum ModuleBuilder {
         [expression]
     }
     
+    /// If declared, provides contextual type information for statement expressions to translate them into partial results.
+    public static func buildExpression(_ expression: ModuleCollection) -> [any Module] {
+        expression.elements
+    }
+    
     /// Required by every result builder to build combined results from statement blocks.
     public static func buildBlock(_ modules: [any Module]...) -> [any Module] {
         modules.flatMap { $0 }

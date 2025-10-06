@@ -1,16 +1,23 @@
 #
 # This source file is part of the Stanford Spezi open-source project
 #
-# SPDX-FileCopyrightText: 2022 Stanford University and the project authors (see CONTRIBUTORS.md)
+# SPDX-FileCopyrightText: 2025 Stanford University and the project authors (see CONTRIBUTORS.md)
 #
 # SPDX-License-Identifier: MIT
 #
 
-name: Pull Request
+name: Static Analysis
 
 on:
+  push:
+    branches:
+      - main
   pull_request:
   workflow_dispatch:
+
+concurrency:
+  group: Static-Analysis-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   reuse_action:
@@ -25,5 +32,6 @@ jobs:
   breaking_changes:
     name: Diagnose Breaking Changes
     uses: StanfordSpezi/.github/.github/workflows/breaking-changes.yml@v2
+    if: ${{ github.ref_name != 'main' }}
     with:
       runsonlabels: '["macOS", "self-hosted"]'
