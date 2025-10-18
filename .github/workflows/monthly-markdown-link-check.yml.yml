@@ -16,4 +16,6 @@ on:
 jobs:
   markdown_link_check:
     name: Markdown Link Check
-    uses: StanfordBDHG/.github/.github/workflows/markdown-link-check.yml@v2
+    uses: StanfordBDHG/.github/.github/workflows/markdown-link-check.yml@linkspectorAddRunsOnLabels
+    with:
+      runsonlabels: '["Linux", "self-hosted"]'
