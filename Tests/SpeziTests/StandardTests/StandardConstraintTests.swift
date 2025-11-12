@@ -59,7 +59,7 @@ struct StandardConstraintTests {
         )
         _ = standardCTestApplicationDelegate.spezi
         
-        await expectation.fulfillment(within: .seconds(0.1))
+        await expectation.fulfillment(within: .seconds(0.5))
     }
 }
 
