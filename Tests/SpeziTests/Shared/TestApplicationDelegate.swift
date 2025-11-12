@@ -9,12 +9,11 @@
 import Spezi
 import SwiftUI
 import Testing
-import XCTest
 
 
 class TestApplicationDelegate: SpeziAppDelegate {
     let confirmation: Confirmation?
-    let expectation: XCTestExpectation
+    let expectation: TestExpectation?
     
     
     override var configuration: Configuration {
@@ -24,7 +23,7 @@ class TestApplicationDelegate: SpeziAppDelegate {
     }
 
 
-    init(expectation: XCTestExpectation) {
+    init(expectation: TestExpectation) {
         self.confirmation = nil
         self.expectation = expectation
         super.init()
@@ -32,7 +31,7 @@ class TestApplicationDelegate: SpeziAppDelegate {
 
     init(confirmation: Confirmation) {
         self.confirmation = confirmation
-        self.expectation = .init()
+        self.expectation = nil
         super.init()
     }
 }

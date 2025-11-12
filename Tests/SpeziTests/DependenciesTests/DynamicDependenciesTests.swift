@@ -85,9 +85,10 @@ private final class TestModule2: Module {}
 private final class TestModule3: Module {}
 
 
+@Suite
 struct DynamicDependenciesTests {
-    @Test
     @MainActor
+    @Test
     func dynamicDependencies() throws {
         for dynamicDependenciesTestCase in DynamicDependenciesTestCase.allCases {
             let modules: [any Module] = [

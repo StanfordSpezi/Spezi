@@ -7,124 +7,127 @@
 //
 
 @testable import Spezi
-import XCTest
+import Testing
 
-
-final class ModuleBuilderTests: XCTestCase {
-    private struct Expectations {
-        weak var xctestCase: XCTestCase?
-        var firstTestExpectation = Expectations.expectation(named: "FirstTestModule")
-        var nestedTestModuleOne = Expectations.expectation(named: "NestedTestModuleOne")
-        var nestedTestModuleTwo = Expectations.expectation(named: "NestedTestModuleTwo")
-        var loopTestExpectation = Expectations.expectation(named: "LoopTestModule")
-        var conditionalTestExpectation = Expectations.expectation(named: "ConditionalTestModule")
-        var availableConditionalTestExpectation = Expectations.expectation(named: "AvailableConditionalTestExpection")
-        var ifTestExpectation = Expectations.expectation(named: "IfTestModule")
-        var elseTestExpectation = Expectations.expectation(named: "FirstTestModule")
+@MainActor
+@Suite
+struct ModuleBuilderTests {
+    private struct ModuleBuilderExpectations {
+        let firstTestExpectation: TestExpectation
+        let nestedTestModuleOne: TestExpectation
+        let nestedTestModuleTwo: TestExpectation
+        let loopTestExpectation: TestExpectation
+        let conditionalTestExpectation: TestExpectation
+        let availableConditionalTestExpectation: TestExpectation
+        let ifTestExpectation: TestExpectation
+        let elseTestExpectation: TestExpectation
         
-        
-        init(xctestCase: XCTestCase) {
-            self.xctestCase = xctestCase
+        init(
+            firstTestExpectation: TestExpectation = TestExpectation(),
+            nestedTestModuleOne: TestExpectation = TestExpectation(),
+            nestedTestModuleTwo: TestExpectation = TestExpectation(),
+            loopTestExpectation: TestExpectation = TestExpectation(),
+            conditionalTestExpectation: TestExpectation = TestExpectation(),
+            availableConditionalTestExpectation: TestExpectation = TestExpectation(),
+            ifTestExpectation: TestExpectation = TestExpectation(),
+            elseTestExpectation: TestExpectation = TestExpectation(),
+        ) {
+            self.firstTestExpectation = firstTestExpectation
+            self.nestedTestModuleOne = nestedTestModuleOne
+            self.nestedTestModuleTwo = nestedTestModuleTwo
+            self.loopTestExpectation = loopTestExpectation
+            self.conditionalTestExpectation = conditionalTestExpectation
+            self.availableConditionalTestExpectation = availableConditionalTestExpectation
+            self.ifTestExpectation = ifTestExpectation
+            self.elseTestExpectation = elseTestExpectation
         }
         
-        
-        private static func expectation(named: String) -> XCTestExpectation {
-            let expectation = XCTestExpectation(description: "FirstTestModule")
-            expectation.assertForOverFulfill = true
-            return expectation
-        }
-        
-        func wait() throws {
-            guard let xctestCase else {
-                XCTFail("Weak reference to `XCTestCase` was disassembled.")
-                return
-            }
-            
-            xctestCase.wait(
-                for: [
-                    firstTestExpectation,
-                    nestedTestModuleOne,
-                    nestedTestModuleTwo,
-                    loopTestExpectation,
-                    conditionalTestExpectation,
-                    availableConditionalTestExpectation,
-                    ifTestExpectation,
-                    elseTestExpectation
-                ],
-                timeout: 1.0
+        func fulfillment() async {
+            await TestExpectations(
+                firstTestExpectation,
+                nestedTestModuleOne,
+                nestedTestModuleTwo,
+                loopTestExpectation,
+                conditionalTestExpectation,
+                availableConditionalTestExpectation,
+                ifTestExpectation,
+                elseTestExpectation
             )
+            .fulfillment(within: .seconds(5))
         }
     }
     
     
-    private func modules(loopLimit: Int, condition: Bool, expectations: Expectations) -> ModuleCollection {
+    private func modules(loopLimit: Int, condition: Bool, moduleBuilderExpectations: ModuleBuilderExpectations) -> ModuleCollection {
         @ModuleBuilder
         var nestedModules: ModuleCollection {
-            TestModule(expectation: expectations.nestedTestModuleOne)
-            TestModule(expectation: expectations.nestedTestModuleTwo)
+            TestModule(expectation: moduleBuilderExpectations.nestedTestModuleOne)
+            TestModule(expectation: moduleBuilderExpectations.nestedTestModuleTwo)
         }
         
         @ModuleBuilder
         var modules: ModuleCollection {
-            TestModule(expectation: expectations.firstTestExpectation)
+            TestModule(expectation: moduleBuilderExpectations.firstTestExpectation)
             nestedModules
             for _ in 0..<loopLimit {
-                TestModule(expectation: expectations.loopTestExpectation)
+                TestModule(expectation: moduleBuilderExpectations.loopTestExpectation)
             }
             if condition {
-                TestModule(expectation: expectations.conditionalTestExpectation)
+                TestModule(expectation: moduleBuilderExpectations.conditionalTestExpectation)
             }
             // The `#available(iOS 16, *)` mark is used to test `#available` in a result builder.
             // The availability check is not part of any part of the Spezi API.
             if #available(iOS 16, *) { // swiftlint:disable:this deployment_target
-                TestModule(expectation: expectations.availableConditionalTestExpectation)
+                TestModule(expectation: moduleBuilderExpectations.availableConditionalTestExpectation)
             }
             if condition {
-                TestModule(expectation: expectations.ifTestExpectation)
+                TestModule(expectation: moduleBuilderExpectations.ifTestExpectation)
             } else {
-                TestModule(expectation: expectations.elseTestExpectation)
+                TestModule(expectation: moduleBuilderExpectations.elseTestExpectation)
             }
         }
         return modules
     }
     
-
-    @MainActor
-    func testModuleBuilderIf() throws {
-        let expectations = Expectations(xctestCase: self)
-        expectations.loopTestExpectation.expectedFulfillmentCount = 5
-        expectations.elseTestExpectation.isInverted = true
+    
+    @Test
+    func moduleBuilderIf() async {
+        let moduleBuilderExpectations = ModuleBuilderExpectations(
+            loopTestExpectation: TestExpectation(expectedCount: 5),
+            elseTestExpectation: TestExpectation(expectedCount: 0)
+        )
         
         let modules = modules(
             loopLimit: 5,
             condition: true,
-            expectations: expectations
+            moduleBuilderExpectations: moduleBuilderExpectations
         )
-
+        
         for module in DependencyManager.resolveWithoutErrors(modules.elements) {
             module.configure()
         }
-
-        try expectations.wait()
+        
+        await moduleBuilderExpectations.fulfillment()
     }
-
-    @MainActor
-    func testModuleBuilderElse() throws {
-        let expectations = Expectations(xctestCase: self)
-        expectations.conditionalTestExpectation.isInverted = true
-        expectations.loopTestExpectation.expectedFulfillmentCount = 3
-        expectations.ifTestExpectation.isInverted = true
+    
+    @Test
+    func moduleBuilderElse() async {
+        let moduleBuilderExpectations = ModuleBuilderExpectations(
+            loopTestExpectation: TestExpectation(expectedCount: 3),
+            conditionalTestExpectation: TestExpectation(expectedCount: 0),
+            ifTestExpectation: TestExpectation(expectedCount: 0)
+        )
         
         let modules = modules(
             loopLimit: 3,
             condition: false,
-            expectations: expectations
+            moduleBuilderExpectations: moduleBuilderExpectations
         )
-
+        
         for module in DependencyManager.resolveWithoutErrors(modules.elements) {
             module.configure()
         }
-
-        try expectations.wait()
+        
+        await moduleBuilderExpectations.fulfillment()
     }
 }
