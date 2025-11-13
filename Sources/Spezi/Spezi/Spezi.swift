@@ -175,9 +175,9 @@ public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
         }
     }
     
-
+    @_spi(APISupport)
     @MainActor
-    convenience init(from configuration: Configuration, storage: consuming SpeziStorage = SpeziStorage()) {
+    public convenience init(from configuration: Configuration, storage: consuming SpeziStorage = SpeziStorage()) {
         self.init(standard: configuration.standard, modules: configuration.modules.elements, storage: storage)
     }
     
