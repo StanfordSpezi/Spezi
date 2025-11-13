@@ -6,20 +6,20 @@
 // SPDX-License-Identifier: MIT
 //
 
+import RuntimeAssertionsTesting
 @testable import Spezi
 import SwiftUI
-import XCTest
-import XCTRuntimeAssertions
+import Testing
 
-
-final class StandardInjectionTests: XCTestCase {
+@Suite
+struct StandardInjectionTests {
     final class StandardInjectionTestModule: Module {
         @StandardActor var standard: MockStandard
         
-        let expectation: XCTestExpectation
+        let expectation: TestExpectation
         
         
-        init(expectation: XCTestExpectation) {
+        init(expectation: TestExpectation) {
             self.expectation = expectation
         }
         
@@ -32,7 +32,7 @@ final class StandardInjectionTests: XCTestCase {
     }
     
     class StandardInjectionTestApplicationDelegate: SpeziAppDelegate {
-        let expectation: XCTestExpectation
+        let expectation: TestExpectation
         
         
         override var configuration: Configuration {
@@ -42,26 +42,26 @@ final class StandardInjectionTests: XCTestCase {
         }
         
         
-        init(expectation: XCTestExpectation) {
+        init(expectation: TestExpectation) {
             self.expectation = expectation
         }
     }
     
-    
-    func testModuleFlow() async throws {
-        let expectation = XCTestExpectation(description: "Module")
-        expectation.assertForOverFulfill = true
+    @Test
+    func moduleFlow() async throws {
+        let expectation = TestExpectation()
         
         let standardInjectionTestApplicationDelegate = await StandardInjectionTestApplicationDelegate(
             expectation: expectation
         )
         _ = await standardInjectionTestApplicationDelegate.spezi
         
-        await fulfillment(of: [expectation], timeout: 0.01)
+        await expectation.fulfillment(within: .seconds(0.5))
     }
     
-    func testInjectionPrecondition() throws {
-        try XCTRuntimePrecondition {
+    @Test
+    func injectionPrecondition() throws {
+        expectRuntimePrecondition {
             _ = _StandardPropertyWrapper<MockStandard>().wrappedValue
         }
     }

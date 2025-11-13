@@ -9,7 +9,6 @@
 import Spezi
 import SwiftUI
 import Testing
-import XCTest
 
 
 struct TestViewModifier: ViewModifier {
@@ -23,20 +22,20 @@ struct TestViewModifier: ViewModifier {
 
 final class TestModule: Module {
     let confirmation: Confirmation?
-    let expectation: XCTestExpectation
+    let expectation: TestExpectation?
 
     @Modifier var modifier1 = TestViewModifier(message: "Hello")
     @Modifier var modifier2 = TestViewModifier(message: "World")
 
     
-    init(confirmation: Confirmation? = nil, expectation: XCTestExpectation = XCTestExpectation()) {
+    init(confirmation: Confirmation? = nil, expectation: TestExpectation? = nil) {
         self.confirmation = confirmation
         self.expectation = expectation
     }
     
     
     func configure() {
-        expectation.fulfill()
+        expectation?.fulfill()
         confirmation?()
     }
 }

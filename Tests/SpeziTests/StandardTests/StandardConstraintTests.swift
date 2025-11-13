@@ -7,24 +7,22 @@
 //
 
 @testable import Spezi
-import SwiftUI
-import XCTest
-import XCTRuntimeAssertions
-
+import Testing
 
 private protocol ExampleConstraint: Standard {
-    func betterFulfill(expectation: XCTestExpectation)
+    func betterFulfill(expectation: TestExpectation)
 }
 
-
-final class StandardConstraintTests: XCTestCase {
+@MainActor
+@Suite
+struct StandardConstraintTests {
     final class StandardCTestModule: Module {
         @StandardActor private var standard: any ExampleConstraint
         
-        let expectation: XCTestExpectation
+        let expectation: TestExpectation
         
         
-        init(expectation: XCTestExpectation) {
+        init(expectation: TestExpectation) {
             self.expectation = expectation
         }
         
@@ -37,7 +35,7 @@ final class StandardConstraintTests: XCTestCase {
     }
     
     class StandardCTestApplicationDelegate: SpeziAppDelegate {
-        let expectation: XCTestExpectation
+        let expectation: TestExpectation
         
         
         override var configuration: Configuration {
@@ -47,28 +45,27 @@ final class StandardConstraintTests: XCTestCase {
         }
         
         
-        init(expectation: XCTestExpectation) {
+        init(expectation: TestExpectation) {
             self.expectation = expectation
         }
     }
     
-    @MainActor
-    func testStandardConstraint() async throws {
-        let expectation = XCTestExpectation(description: "Module")
-        expectation.assertForOverFulfill = true
+    @Test
+    func standardConstraint() async {
+        let expectation = TestExpectation()
         
         let standardCTestApplicationDelegate = StandardCTestApplicationDelegate(
             expectation: expectation
         )
         _ = standardCTestApplicationDelegate.spezi
         
-        await fulfillment(of: [expectation], timeout: 0.01)
+        await expectation.fulfillment(within: .seconds(0.5))
     }
 }
 
 
 extension MockStandard: ExampleConstraint {
-    func betterFulfill(expectation: XCTestExpectation) {
+    func betterFulfill(expectation: TestExpectation) {
         fulfill(expectation: expectation)
     }
 }

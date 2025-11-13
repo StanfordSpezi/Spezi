@@ -526,7 +526,7 @@ extension Module {
 
 extension Spezi {
     private static let initContextLock = NSLock()
-    private static nonisolated(unsafe) var _moduleInitContext: ModuleDescription?
+    nonisolated(unsafe) private static var _moduleInitContext: ModuleDescription?
 
     private(set) static var moduleInitContext: ModuleDescription? {
         get {

@@ -7,13 +7,13 @@
 //
 
 import Spezi
-import XCTest
+import Testing
 
 
 extension Array where Element == any Module {
     func moduleOfType<M: Module>(_ moduleType: M.Type = M.self, expectedNumber: Int = 1) throws -> M {
         let typedModules = compactMap { $0 as? M }
-        XCTAssertEqual(typedModules.count, expectedNumber)
-        return try XCTUnwrap(typedModules.first)
+        #expect(typedModules.count == expectedNumber)
+        return try #require(typedModules.first)
     }
 }

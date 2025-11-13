@@ -7,11 +7,9 @@
 //
 
 import Spezi
-import XCTest
-
 
 actor MockStandard: Standard {
-    func fulfill(expectation: XCTestExpectation) {
+    func fulfill(expectation: TestExpectation) {
         expectation.fulfill()
     }
 }

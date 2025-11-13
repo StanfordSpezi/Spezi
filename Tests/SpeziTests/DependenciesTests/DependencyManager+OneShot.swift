@@ -7,7 +7,7 @@
 //
 
 @testable import Spezi
-import XCTest
+import Testing
 
 
 extension DependencyManager {
@@ -19,7 +19,7 @@ extension DependencyManager {
 
     static func resolveWithoutErrors(_ modules: [any Module], file: StaticString = #filePath, line: UInt = #line) -> [any Module] {
         let dependencyManager = DependencyManager(modules)
-        XCTAssertNoThrow(try dependencyManager.resolve(), file: file, line: line)
+        #expect(throws: Never.self) { try dependencyManager.resolve() }
         return dependencyManager.initializedModules
     }
 }

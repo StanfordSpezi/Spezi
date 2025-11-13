@@ -25,7 +25,7 @@ final class ServiceModuleGroup: Sendable {
     private let logger: Logger
     private let input: (stream: AsyncStream<Input>, continuation: AsyncStream<Input>.Continuation)
 
-    private nonisolated(unsafe) var state: State
+    nonisolated(unsafe) private var state: State
     private let lock = NSLock()
 
     init(logger: Logger) {
