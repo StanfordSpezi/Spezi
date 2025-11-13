@@ -106,7 +106,7 @@ struct NotificationsTests {
         let action = module.registerRemoteNotifications
 
         async let registration = action()
-        try await Task.sleep(for: .milliseconds(250)) // allow dispatch of Task above
+        try await Task.sleep(for: .milliseconds(500)) // allow dispatch of Task above
 
         let data = try #require("Hello World".data(using: .utf8))
 
@@ -118,7 +118,7 @@ struct NotificationsTests {
         delegate.application(NSApplication.shared, didRegisterForRemoteNotificationsWithDeviceToken: data)
 #endif
 
-        try await Task.sleep(for: .milliseconds(250)) // allow dispatch of Task above
+        try await Task.sleep(for: .milliseconds(500)) // allow dispatch of Task above
 
         _ = try await registration
         #expect(module.lastDeviceToken == data)
