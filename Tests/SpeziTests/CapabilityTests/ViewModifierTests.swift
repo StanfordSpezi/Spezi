@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
+#if canImport(SwiftUI)
 @testable import Spezi
 import SwiftUI
 import Testing
@@ -15,7 +16,7 @@ import Testing
 struct ViewModifierTests {
     @MainActor
     @Test("ViewModifier Retrieval")
-    func testViewModifierRetrieval() async {
+    func viewModifierRetrieval() async {
         await confirmation { confirmation in
             let testApplicationDelegate = TestApplicationDelegate(confirmation: confirmation)
 
@@ -31,8 +32,9 @@ struct ViewModifierTests {
     }
 
     @MainActor
-    func testEmptyRetrieval() {
+    func emptyRetrieval() {
         let speziAppDelegate = SpeziAppDelegate()
         #expect(speziAppDelegate.spezi.viewModifiers.isEmpty)
     }
 }
+#endif

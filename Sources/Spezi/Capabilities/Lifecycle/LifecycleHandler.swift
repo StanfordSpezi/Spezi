@@ -6,8 +6,10 @@
 // SPDX-License-Identifier: MIT
 //
 
-import os
+
+#if canImport(SwiftUI)
 import SwiftUI
+#endif
 
 
 /// Delegate methods are related to the  `UIApplication` and ``Spezi/Spezi`` lifecycle.

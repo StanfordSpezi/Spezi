@@ -6,7 +6,8 @@
 // SPDX-License-Identifier: MIT
 //
 
-import OSLog
+import Logging
+import Foundation
 import SpeziFoundation
 
 
@@ -25,7 +26,7 @@ final class ServiceModuleGroup: Sendable {
     private let logger: Logger
     private let input: (stream: AsyncStream<Input>, continuation: AsyncStream<Input>.Continuation)
 
-    nonisolated(unsafe) private var state: State
+    private nonisolated(unsafe) var state: State
     private let lock = NSLock()
 
     init(logger: Logger) {

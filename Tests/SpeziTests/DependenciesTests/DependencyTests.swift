@@ -7,7 +7,9 @@
 //
 
 @_spi(APISupport) @testable import Spezi
+#if canImport(SwiftUI)
 import SwiftUI
+#endif
 import Testing
 
 private final class TestModule1: Module {
@@ -45,14 +47,14 @@ private final class TestModule2: Module {
     @Provide var num: Int = 2
 }
 
-private final class TestModule3: Module, DefaultInitializable, EnvironmentAccessible {
+private class TestModule3: Module, DefaultInitializable {
     // EnvironmentAccessible conformance tests that `ModelModifier(model: self)` are removed and no memory leaks occur in Module unloading
     let state: Int
     let deinitExpectation: TestExpectation?
     
     @Provide var num: Int = 3
     
-    convenience init() {
+    required convenience init() {
         self.init(state: 0)
     }
     
@@ -65,6 +67,10 @@ private final class TestModule3: Module, DefaultInitializable, EnvironmentAccess
         deinitExpectation?.fulfill()
     }
 }
+
+#if canImport(SwiftUI)
+extension TestModule3: EnvironmentAccessible {}
+#endif
 
 private final class TestModule4: Module {
     @Dependency var testModule5 = TestModule5()
@@ -89,6 +95,7 @@ private final class OptionalModuleDependency: Module {
     @Collect var nums: [Int]
 }
 
+#if canImport(SwiftUI)
 private final class AllPropertiesModule: Module {
     @Observable
     class MyModel {}
@@ -107,6 +114,7 @@ private final class AllPropertiesModule: Module {
     @Modifier var modifier = MyViewModifier()
     @StandardActor var defaultStandard: any Standard
 }
+#endif
 
 private final class OptionalDependencyWithRuntimeDefault: Module {
     @Dependency(TestModule3.self) var testModule3: TestModule3?
@@ -258,6 +266,7 @@ struct DependencyTests { // swiftlint:disable:this type_body_length
         #expect(Set(dependents) == ["TestModule2", "TestModule1"])
     }
     
+#if canImport(SwiftUI)
     @Test
     func multiLoading() throws {
         let module = AllPropertiesModule()
@@ -267,6 +276,7 @@ struct DependencyTests { // swiftlint:disable:this type_body_length
         spezi.loadModule(module)
         spezi.unloadModule(module)
     }
+#endif
     
     @Test
     func unloadingDependencies() async throws {

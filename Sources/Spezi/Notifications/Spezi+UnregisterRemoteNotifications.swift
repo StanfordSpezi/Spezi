@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
+#if canImport(SwiftUI)
 import SwiftUI
 
 
@@ -61,3 +62,4 @@ extension Spezi {
         UnregisterRemoteNotificationsAction()
     }
 }
+#endif

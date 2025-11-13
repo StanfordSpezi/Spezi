@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
+#if canImport(SwiftUI)
 import SwiftUI
 
 
@@ -15,4 +16,5 @@ typealias ApplicationDelegate = UIApplicationDelegate // swiftlint:disable:this 
 typealias ApplicationDelegate = NSApplicationDelegate
 #elseif os(watchOS)
 typealias ApplicationDelegate = WKApplicationDelegate
+#endif
 #endif

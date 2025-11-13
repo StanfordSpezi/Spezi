@@ -8,7 +8,9 @@
 
 @_spi(APISupport) @testable import Spezi
 import SpeziTesting
+#if canImport(SwiftUI)
 import SwiftUI
+#endif
 import Testing
 
 
@@ -29,9 +31,10 @@ private final class DependingTestModule: Module {
 }
 
 
+@MainActor
 @Suite("Module")
 struct ModuleTests {
-    @MainActor
+#if canImport(SwiftUI)
     @Test("Module Flow")
     func testModuleFlow() async {
         await confirmation { confirmation in
@@ -39,8 +42,8 @@ struct ModuleTests {
                 .spezi(TestApplicationDelegate(confirmation: confirmation))
         }
     }
+#endif
 
-    @MainActor
     @Test("Spezi")
     func testSpezi() throws {
         let spezi = Spezi(standard: DefaultStandard(), modules: [DependingTestModule()])
@@ -52,7 +55,7 @@ struct ModuleTests {
         #expect(modules.contains(where: { $0 is TestModule }))
     }
 
-    @MainActor
+#if canImport(SwiftUI)
     @Test("Preview Modifier")
     func testPreviewModifier() async throws {
         // manually patch environment variable for running within Xcode preview window
@@ -69,8 +72,8 @@ struct ModuleTests {
 
         unsetenv(ProcessInfo.xcodeRunningForPreviewKey)
     }
+#endif
 
-    @MainActor
     @Test("Module Creation")
     func testModuleCreation() async {
         await confirmation { moduleConfirmation in

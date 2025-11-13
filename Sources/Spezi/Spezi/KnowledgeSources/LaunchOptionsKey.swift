@@ -7,7 +7,9 @@
 //
 
 import SpeziFoundation
+#if canImport(SwiftUI)
 import SwiftUI
+#endif
 
 
 package struct LaunchOptionsKey: DefaultProvidingKnowledgeSource {
@@ -28,7 +30,7 @@ package struct LaunchOptionsKey: DefaultProvidingKnowledgeSource {
     // Dealing with launch options in a safe way is up to the implementing Module to do so. Ideally we would make
     // `Application/launchOptions` to be isolated to the MainActor. However, we can't really do that selectively with the @Application
     // property wrapper. Most likely, you would interact with launch options in the `configure()` method which is @MainActor isolated.
-    package nonisolated(unsafe) static let defaultValue: Value = [:]
+    package static nonisolated(unsafe) let defaultValue: Value = [:]
 }
 
 

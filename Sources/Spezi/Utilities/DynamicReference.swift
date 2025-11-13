@@ -23,7 +23,7 @@ enum DynamicReference<Element: AnyObject>: Sendable {
     }
 
 
-    nonisolated static func weakElement(_ element: Element) -> DynamicReference<Element> {
+    static nonisolated func weakElement(_ element: Element) -> DynamicReference<Element> {
         .weakElement(WeaklyStoredElement(element))
     }
 }
@@ -31,7 +31,7 @@ enum DynamicReference<Element: AnyObject>: Sendable {
 
 extension DynamicReference {
     struct WeaklyStoredElement {
-        nonisolated(unsafe) private(set) weak var element: Element?
+        private(set) nonisolated(unsafe) weak var element: Element?
 
         init(_ element: Element? = nil) {
             self.element = element

@@ -6,10 +6,10 @@
 // SPDX-License-Identifier: MIT
 //
 
+#if os(iOS) || os(visionOS) || os(tvOS)
 import SwiftUI
 
 
-#if os(iOS) || os(visionOS) || os(tvOS)
 class SpeziSceneDelegate: NSObject, UISceneDelegate {
     @available(*, deprecated, message: "Propagate deprecation warning.")
     func sceneWillEnterForeground(_ scene: UIScene) {

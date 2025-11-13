@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
+#if canImport(SwiftUI) && canImport(UserNotifications)
 @testable import Spezi
 import SwiftUI
 import Testing
@@ -251,3 +252,4 @@ struct NotificationsTests {
         }
     }
 }
+#endif

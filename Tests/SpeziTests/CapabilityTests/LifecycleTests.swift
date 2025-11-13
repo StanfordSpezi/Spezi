@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
+#if canImport(SwiftUI)
 @testable import Spezi
 import SwiftUI
 import Testing
@@ -102,3 +103,4 @@ struct LifecycleTests {
         #endif
     }
 }
+#endif
