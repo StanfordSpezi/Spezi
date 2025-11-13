@@ -200,7 +200,7 @@ func getModule<M: Module>(_ module: M.Type = M.self, in modules: [any Module]) t
 }
 
 @MainActor
-@Suite("Dependency Tests")
+@Suite("Dependency Tests", .serialized)
 struct DependencyTests { // swiftlint:disable:this type_body_length
     @Test
     func loadingAdditionalDependency() throws {

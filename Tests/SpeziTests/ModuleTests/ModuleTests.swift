@@ -32,7 +32,7 @@ private final class DependingTestModule: Module {
 
 
 @MainActor
-@Suite("Module")
+@Suite("Module", .serialized)
 struct ModuleTests {
 #if canImport(SwiftUI)
     @Test("Module Flow")

@@ -12,7 +12,7 @@ import Testing
 
 private final class ExampleModule: Module {}
 
-@Suite
+@Suite(.serialized)
 struct DependencyContextTests {
     @Test
     func injectionPreconditionDependencyPropertyWrapper() throws {

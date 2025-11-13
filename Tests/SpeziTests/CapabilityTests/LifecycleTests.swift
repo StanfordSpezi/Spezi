@@ -59,7 +59,7 @@ private class TestLifecycleHandlerApplicationDelegate: SpeziAppDelegate {
 }
 
 
-@Suite("Lifecycle")
+@Suite("Lifecycle", .serialized)
 struct LifecycleTests {
     @MainActor
     @available(*, deprecated, message: "Propagate deprecation warning")
