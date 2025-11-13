@@ -7,6 +7,7 @@
 //
 
 import Spezi
+#if canImport(SwiftUI)
 import SwiftUI
 
 
@@ -53,4 +54,13 @@ public func withDependencyResolution(
     @ModuleBuilder _ modules: () -> ModuleCollection
 ) {
     withDependencyResolution(standard: DefaultStandard(), simulateLifecycle: simulateLifecycle, modules)
+}
+#endif
+
+@MainActor
+public func withDependencyResolution(
+    @ModuleBuilder _ modules: () -> ModuleCollection
+) {
+    let storage = SpeziStorage()
+    let spezi = Spezi(standard: DefaultStandard(), modules: modules().elements, storage: storage)
 }

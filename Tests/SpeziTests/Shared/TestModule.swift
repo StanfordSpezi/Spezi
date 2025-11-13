@@ -7,10 +7,13 @@
 //
 
 import Spezi
+#if canImport(SwiftUI)
 import SwiftUI
+#endif
 import Testing
 
 
+#if canImport(SwiftUI)
 struct TestViewModifier: ViewModifier {
     let message: String
 
@@ -18,15 +21,17 @@ struct TestViewModifier: ViewModifier {
         content
     }
 }
+#endif
 
 
 final class TestModule: Module {
     let confirmation: Confirmation?
     let expectation: TestExpectation?
-
+    
+#if canImport(SwiftUI)
     @Modifier var modifier1 = TestViewModifier(message: "Hello")
     @Modifier var modifier2 = TestViewModifier(message: "World")
-
+#endif
     
     init(confirmation: Confirmation? = nil, expectation: TestExpectation? = nil) {
         self.confirmation = confirmation

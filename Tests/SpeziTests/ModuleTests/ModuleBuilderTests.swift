@@ -10,7 +10,7 @@
 import Testing
 
 @MainActor
-@Suite
+@Suite(.serialized)
 struct ModuleBuilderTests {
     private struct ModuleBuilderExpectations {
         let firstTestExpectation: TestExpectation

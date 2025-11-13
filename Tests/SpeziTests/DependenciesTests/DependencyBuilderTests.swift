@@ -30,7 +30,7 @@ class ExampleDependencyModule: Module {
     }
 }
 
-@Suite
+@Suite(.serialized)
 struct DependencyBuilderTests {
     @Test
     @MainActor

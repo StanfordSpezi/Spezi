@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
+#if canImport(UserNotifications)
 import UserNotifications
 
 
@@ -93,3 +94,4 @@ extension SpeziAppDelegate {
         center.delegate = delegate
     }
 }
+#endif

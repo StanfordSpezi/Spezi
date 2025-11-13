@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
+#if canImport(SwiftUI)
 @testable import Spezi
 import SwiftUI
 import Testing
@@ -58,7 +59,7 @@ private class TestLifecycleHandlerApplicationDelegate: SpeziAppDelegate {
 }
 
 
-@Suite("Lifecycle")
+@Suite("Lifecycle", .serialized)
 struct LifecycleTests {
     @MainActor
     @available(*, deprecated, message: "Propagate deprecation warning")
@@ -102,3 +103,4 @@ struct LifecycleTests {
         #endif
     }
 }
+#endif

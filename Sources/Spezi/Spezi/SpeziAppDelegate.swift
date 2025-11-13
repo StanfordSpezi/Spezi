@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
+#if canImport(SwiftUI)
 import SwiftUI
 
 
@@ -52,7 +53,6 @@ import SwiftUI
 open class SpeziAppDelegate: NSObject, ApplicationDelegate, Sendable {
     private(set) static weak var appDelegate: SpeziAppDelegate?
     static var notificationDelegate: SpeziNotificationCenterDelegate? // swiftlint:disable:this weak_delegate
-
     /// Access the Spezi instance.
     ///
     /// Use this property as a basis for creating your own APIs (e.g., providing SwiftUI Environment values that use information from Spezi).
@@ -151,6 +151,7 @@ open class SpeziAppDelegate: NSObject, ApplicationDelegate, Sendable {
 
     // MARK: - Notifications
 
+#if canImport(UserNotifications)
     open func application(_ application: _Application, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         MainActor.assumeIsolated { // on macOS there is a missing MainActor annotation
             spezi.remoteNotificationRegistrationSupport.handleDeviceTokenUpdate(deviceToken)
@@ -167,6 +168,7 @@ open class SpeziAppDelegate: NSObject, ApplicationDelegate, Sendable {
             spezi.remoteNotificationRegistrationSupport.handleFailedRegistration(error)
         }
     }
+#endif
 
 #if !os(macOS)
     private func handleReceiveRemoteNotification(_ userInfo: [AnyHashable: Any]) async -> BackgroundFetchResult {
@@ -238,3 +240,4 @@ open class SpeziAppDelegate: NSObject, ApplicationDelegate, Sendable {
     }
 #endif
 }
+#endif

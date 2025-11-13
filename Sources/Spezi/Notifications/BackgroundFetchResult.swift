@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
+#if canImport(SwiftUI)
 import SwiftUI
 
 
@@ -19,4 +20,5 @@ public typealias BackgroundFetchResult = UIBackgroundFetchResult // swiftlint:di
 ///
 /// Refer to [`WKBackgroundFetchResult`](https://developer.apple.com/documentation/watchkit/wkbackgroundfetchresult).
 public typealias BackgroundFetchResult = WKBackgroundFetchResult
+#endif
 #endif

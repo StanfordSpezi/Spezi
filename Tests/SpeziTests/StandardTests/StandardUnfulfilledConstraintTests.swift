@@ -7,7 +7,6 @@
 //
 
 @testable import Spezi
-import SwiftUI
 import Testing
 
 
@@ -16,6 +15,7 @@ private protocol UnfulfilledExampleConstraint: Standard {
 }
 
 
+@Suite
 struct StandardUnfulfilledConstraintTests {
     final class StandardUCTestModule: Module {
         @StandardActor private var standard: any UnfulfilledExampleConstraint

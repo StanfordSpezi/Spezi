@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
+#if canImport(SwiftUI)
 import SwiftUI
 
 
@@ -80,3 +81,4 @@ extension Module {
     /// ```
     public typealias Application<Value> = _ApplicationPropertyWrapper<Value>
 }
+#endif

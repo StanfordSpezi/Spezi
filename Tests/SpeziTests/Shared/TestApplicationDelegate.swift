@@ -6,8 +6,8 @@
 // SPDX-License-Identifier: MIT
 //
 
+#if canImport(SwiftUI)
 import Spezi
-import SwiftUI
 import Testing
 
 
@@ -35,3 +35,4 @@ class TestApplicationDelegate: SpeziAppDelegate {
         super.init()
     }
 }
+#endif

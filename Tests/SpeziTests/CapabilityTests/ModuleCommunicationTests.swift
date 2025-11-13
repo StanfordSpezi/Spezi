@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
+#if canImport(SwiftUI)
 import Foundation
 @testable import Spezi
 import SpeziTesting
@@ -72,3 +73,4 @@ struct ModuleCommunicationTests {
         #expect(Self.collectModule.strings == ["Hello World"])
     }
 }
+#endif

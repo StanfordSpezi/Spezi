@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
+#if canImport(SwiftUI)
 import SwiftUI
 
 
@@ -24,4 +25,5 @@ public typealias ApplicationDelegateAdaptor = NSApplicationDelegateAdaptor
 ///
 /// Type-alias for the `WKApplicationDelegateAdaptor`.
 public typealias ApplicationDelegateAdaptor = WKApplicationDelegateAdaptor
+#endif
 #endif

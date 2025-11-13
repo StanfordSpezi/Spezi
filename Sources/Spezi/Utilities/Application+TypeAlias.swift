@@ -6,8 +6,9 @@
 // SPDX-License-Identifier: MIT
 //
 
-import SwiftUI
 
+#if canImport(SwiftUI)
+import SwiftUI
 
 #if os(iOS) || os(visionOS) || os(tvOS)
 /// Platform agnostic Application.
@@ -32,4 +33,5 @@ extension WKApplication {
         shared()
     }
 }
+#endif
 #endif
