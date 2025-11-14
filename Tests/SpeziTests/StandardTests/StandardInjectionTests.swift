@@ -7,7 +7,8 @@
 //
 
 import RuntimeAssertionsTesting
-@testable import Spezi
+import Spezi
+@_spi(APISupport) @testable import SpeziCore
 import SwiftUI
 import Testing
 

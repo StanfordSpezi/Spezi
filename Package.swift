@@ -23,6 +23,7 @@ let package = Package(
         .watchOS(.v10)
     ],
     products: [
+        .library(name: "SpeziCore", targets: ["SpeziCore"]),
         .library(name: "Spezi", targets: ["Spezi"]),
         .library(name: "SpeziTesting", targets: ["SpeziTesting"]),
         .library(name: "XCTSpezi", targets: ["XCTSpezi"])
@@ -35,8 +36,19 @@ let package = Package(
     ] + swiftLintPackage(),
     targets: [
         .target(
+            name: "SpeziCore",
+            dependencies: [
+                .product(name: "SpeziFoundation", package: "SpeziFoundation"),
+                .product(name: "RuntimeAssertions", package: "XCTRuntimeAssertions"),
+                .product(name: "OrderedCollections", package: "swift-collections")
+            ],
+            swiftSettings: [.enableUpcomingFeature("ExistentialAny")],
+            plugins: [] + swiftLintPlugin()
+        ),
+        .target(
             name: "Spezi",
             dependencies: [
+                .target(name: "SpeziCore"),
                 .product(name: "SpeziFoundation", package: "SpeziFoundation"),
                 .product(name: "RuntimeAssertions", package: "XCTRuntimeAssertions"),
                 .product(name: "OrderedCollections", package: "swift-collections")
