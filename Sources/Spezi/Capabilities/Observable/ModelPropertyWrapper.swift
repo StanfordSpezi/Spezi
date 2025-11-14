@@ -7,7 +7,7 @@
 //
 
 import SwiftUI
-
+import SpeziCore
 
 /// Refer to the documentation of ``Module/Model``.
 @propertyWrapper

@@ -6,19 +6,20 @@
 // SPDX-License-Identifier: MIT
 //
 
-
+#if canImport(SwiftUI)
 import SwiftUI
 
 
-struct ModelModifier<Model: Observable & AnyObject>: ViewModifier {
+public struct ModelModifier<Model: Observable & AnyObject>: ViewModifier {
     @State private var model: Model
 
     init(model: Model) {
         self.model = model
     }
 
-    func body(content: Content) -> some View {
+    public func body(content: Content) -> some View {
         content
             .environment(model)
     }
 }
+#endif

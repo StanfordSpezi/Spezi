@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
+#if canImport(SwiftUI)
 import SwiftUI
 
 
@@ -36,3 +37,4 @@ extension EnvironmentAccessible {
         ModelModifier(model: self)
     }
 }
+#endif

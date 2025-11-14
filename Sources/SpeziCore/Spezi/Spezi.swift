@@ -11,7 +11,9 @@ import OrderedCollections
 import OSLog
 import RuntimeAssertions
 import SpeziFoundation
+#if canImport(SwiftUI)
 import SwiftUI
+#endif
 
 
 /// Open-source framework for rapid development of modern, interoperable digital health applications.
@@ -99,8 +101,9 @@ public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
     /// Every `Module` automatically conforms to `KnowledgeSource` and is stored within this storage object.
     nonisolated(unsafe) var storage: SpeziStorage // nonisolated, writes are all isolated to @MainActor, just reads are non-isolated
 
+#if canImport(SwiftUI)
     /// Key is either a UUID for `@Modifier` or `@Model` property wrappers, or a `ModuleReference` for `EnvironmentAccessible` modifiers.
-    @MainActor private var _viewModifiers: OrderedDictionary<AnyHashable, any ViewModifier> = [:]
+    @MainActor package var _viewModifiers: OrderedDictionary<AnyHashable, any ViewModifier> = [:]
 
     /// Array of all SwiftUI `ViewModifiers` collected using `_ModifierPropertyWrapper` from the configured ``Module``s.
     ///
@@ -116,6 +119,7 @@ public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
                 partialResult.append(entry.value)
             }
     }
+#endif
 
     /// A collection of ``Spezi/Spezi`` `LifecycleHandler`s.
     @available(
@@ -126,24 +130,6 @@ public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
              Otherwise use the SwiftUI onReceive(_:perform:) for UI related notifications.
              """
     )
-    
-    @MainActor package var lifecycleHandler: [any LifecycleHandler] {
-        modules.compactMap { module in
-            module as? any LifecycleHandler
-        }
-    }
-
-    @MainActor var notificationTokenHandler: [any NotificationTokenHandler] {
-        modules.compactMap { module in
-            module as? any NotificationTokenHandler
-        }
-    }
-
-    @MainActor var notificationHandler: [any NotificationHandler] {
-        modules.compactMap { module in
-            module as? any NotificationHandler
-        }
-    }
     
     @_spi(APISupport)
     @MainActor public var modules: [any Module] {
@@ -315,6 +301,7 @@ public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
 
         implicitlyCreatedModules.remove(ModuleReference(module))
 
+#if canImport(SwiftUI)
         // this check is important. Change to viewModifiers re-renders the whole SwiftUI view hierarchy. So avoid to do it unnecessarily
         if _viewModifiers[ModuleReference(module)] != nil {
             var keys: Set<AnyHashable> = [ModuleReference(module)]
@@ -325,6 +312,7 @@ public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
                 keys.contains(entry.key)
             }
         }
+#endif
 
         // re-injecting all dependencies ensures that the unloaded module is cleared from optional Dependencies from
         // pre-existing Modules.
@@ -370,6 +358,7 @@ public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
                     serviceGroup.run(service: service)
                 }
 
+#if canImport(SwiftUI)
                 // If a module is @Observable, we automatically inject it view the `ModelModifier` into the environment.
                 if let observable = module as? any EnvironmentAccessible {
                     // we can't guarantee weak references for EnvironmentAccessible modules
@@ -384,6 +373,7 @@ public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
                         _viewModifiers.updateValue(entry.modifier, forKey: entry.id)
                     }
                 }
+#endif
             }
         } catch {
             throw .property(error)
@@ -444,13 +434,6 @@ public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
 
         for module in modules {
             module.injectModuleValues(from: storage)
-        }
-    }
-
-    @MainActor
-    func handleViewModifierRemoval(for id: UUID) {
-        if _viewModifiers[id] != nil {
-            _viewModifiers.removeValue(forKey: id)
         }
     }
 
