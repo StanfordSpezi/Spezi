@@ -88,7 +88,9 @@ import SwiftUI
 /// ### Dynamically Loading Modules
 /// - ``loadModule(_:ownership:)``
 /// - ``unloadModule(_:)``
+#if canImport(SwiftUI)
 @Observable
+#endif
 public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
     static let logger = Logger(subsystem: "edu.stanford.spezi", category: "Spezi")
 
