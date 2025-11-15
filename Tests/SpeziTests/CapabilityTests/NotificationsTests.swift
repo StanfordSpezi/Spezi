@@ -93,12 +93,12 @@ private class TestNotificationApplicationDelegate: SpeziAppDelegate {
 }
 
 
-@Suite("Notifications")
+@MainActor
+@Suite("Notifications", .serialized)
 struct NotificationsTests {
-    @MainActor
     @Test("Register Notifications Successfully")
     @available(*, deprecated, message: "Forward deprecation warnings")
-    func testRegisterNotificationsSuccessful() async throws {
+    func registerNotificationsSuccessful() async throws {
         let module = TestNotificationHandler()
         let delegate = TestNotificationApplicationDelegate(module)
         _ = delegate.spezi // init spezi
@@ -124,10 +124,9 @@ struct NotificationsTests {
         #expect(module.lastDeviceToken == data)
     }
 
-    @MainActor
     @Test("Register Notifications Erroneous")
     @available(*, deprecated, message: "Forward deprecation warnings")
-    func testRegisterNotificationsErroneous() async throws {
+    func registerNotificationsErroneous() async throws {
         enum TestError: Error, Equatable {
             case testError
         }
@@ -140,7 +139,7 @@ struct NotificationsTests {
 
         async let registration = action()
 
-        try await Task.sleep(for: .milliseconds(250)) // allow dispatch of Task above
+        try await Task.sleep(for: .milliseconds(750)) // allow dispatch of Task above
 
 #if os(iOS) || os(visionOS) || os(tvOS)
         delegate.application(UIApplication.shared, didFailToRegisterForRemoteNotificationsWithError: TestError.testError)
@@ -150,7 +149,7 @@ struct NotificationsTests {
         delegate.application(NSApplication.shared, didFailToRegisterForRemoteNotificationsWithError: TestError.testError)
 #endif
 
-        try await Task.sleep(for: .milliseconds(250)) // allow dispatch of Task above
+        try await Task.sleep(for: .milliseconds(750)) // allow dispatch of Task above
 
         do {
             _ = try await registration
@@ -162,10 +161,9 @@ struct NotificationsTests {
         }
     }
 
-    @MainActor
     @Test("Unregister Notifications")
     @available(*, deprecated, message: "Forward deprecation warnings")
-    func testUnregisterNotifications() async throws {
+    func unregisterNotifications() async throws {
         let module = TestNotificationHandler()
         let delegate = TestNotificationApplicationDelegate(module)
         _ = delegate.spezi // init spezi
@@ -174,10 +172,9 @@ struct NotificationsTests {
         action()
     }
 
-    @MainActor
     @Test("Remote Notification delivers no Data")
     @available(*, deprecated, message: "Forward deprecation warnings")
-    func testRemoteNotificationDeliveryNoData() async {
+    func remoteNotificationDeliveryNoData() async {
         await confirmation { confirmation in
             let module = TestNotificationHandler(remoteNotificationConfirmation: confirmation)
             let delegate = TestNotificationApplicationDelegate(module)
@@ -197,10 +194,9 @@ struct NotificationsTests {
         }
     }
 
-    @MainActor
     @Test("Remote Notifications delivers Data")
     @available(*, deprecated, message: "Forward deprecation warnings")
-    func testRemoteNotificationDeliveryNewData() async throws {
+    func remoteNotificationDeliveryNewData() async throws {
         await confirmation { confirmation in
             let module = TestNotificationHandler(remoteNotificationConfirmation: confirmation)
 #if !os(macOS)
@@ -224,10 +220,9 @@ struct NotificationsTests {
         }
     }
 
-    @MainActor
     @Test("Remote Notifications Delivery Failed")
     @available(*, deprecated, message: "Forward deprecation warnings")
-    func testRemoteNotificationDeliveryFailed() async {
+    func remoteNotificationDeliveryFailed() async {
         await confirmation { confirmation in
             let module = TestNotificationHandler(remoteNotificationConfirmation: confirmation)
 #if !os(macOS)
