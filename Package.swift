@@ -23,6 +23,7 @@ let package = Package(
         .watchOS(.v10)
     ],
     products: [
+        .library(name: "SpeziCore", targets: ["SpeziCore"]),
         .library(name: "Spezi", targets: ["Spezi"]),
         .library(name: "SpeziTesting", targets: ["SpeziTesting"]),
         .library(name: "XCTSpezi", targets: ["XCTSpezi"])
@@ -31,15 +32,29 @@ let package = Package(
         .package(url: "https://github.com/StanfordSpezi/SpeziFoundation.git", from: "2.1.8"),
         .package(url: "https://github.com/StanfordBDHG/XCTRuntimeAssertions.git", from: "2.0.0"),
         .package(url: "https://github.com/apple/swift-collections.git", from: "1.1.1"),
-        .package(url: "https://github.com/dfed/swift-testing-expectation", .upToNextMinor(from: "0.1.4"))
+        .package(url: "https://github.com/dfed/swift-testing-expectation", .upToNextMinor(from: "0.1.4")),
+        .package(url: "https://github.com/apple/swift-log", from: "1.6.0")
     ] + swiftLintPackage(),
     targets: [
         .target(
-            name: "Spezi",
+            name: "SpeziCore",
             dependencies: [
                 .product(name: "SpeziFoundation", package: "SpeziFoundation"),
                 .product(name: "RuntimeAssertions", package: "XCTRuntimeAssertions"),
-                .product(name: "OrderedCollections", package: "swift-collections")
+                .product(name: "OrderedCollections", package: "swift-collections"),
+                .product(name: "Logging", package: "swift-log")
+            ],
+            swiftSettings: [.enableUpcomingFeature("ExistentialAny")],
+            plugins: [] + swiftLintPlugin()
+        ),
+        .target(
+            name: "Spezi",
+            dependencies: [
+                .target(name: "SpeziCore"),
+                .product(name: "SpeziFoundation", package: "SpeziFoundation"),
+                .product(name: "RuntimeAssertions", package: "XCTRuntimeAssertions"),
+                .product(name: "OrderedCollections", package: "swift-collections"),
+                .product(name: "Logging", package: "swift-log")
             ],
             swiftSettings: [.enableUpcomingFeature("ExistentialAny")],
             plugins: [] + swiftLintPlugin()

@@ -7,7 +7,7 @@
 //
 
 import SwiftUI
-
+@_spi(APISupport) import SpeziCore
 
 /// Configure the Spezi-based application using the ``SpeziAppDelegate/configuration`` property.
 ///

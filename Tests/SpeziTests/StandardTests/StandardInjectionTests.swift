@@ -8,6 +8,7 @@
 
 import RuntimeAssertionsTesting
 @testable import Spezi
+@_spi(APISupport) import SpeziCore
 import SwiftUI
 import Testing
 

@@ -8,7 +8,7 @@
 
 import Foundation
 import SwiftUI
-
+@_spi(APISupport) import SpeziCore
 
 @_spi(APISupport)
 public struct SpeziViewModifier: ViewModifier {

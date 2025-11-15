@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
+@_spi(APISupport) import SpeziCore
 @testable import Spezi
 import Testing
 

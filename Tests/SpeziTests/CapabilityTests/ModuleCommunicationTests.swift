@@ -8,6 +8,7 @@
 
 import Foundation
 @testable import Spezi
+@testable import SpeziCore
 import SpeziTesting
 import Testing
 

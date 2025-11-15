@@ -7,6 +7,7 @@
 //
 
 @testable import Spezi
+@testable import SpeziCore
 import SwiftUI
 import Testing
 import UserNotifications

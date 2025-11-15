@@ -6,17 +6,18 @@
 // SPDX-License-Identifier: MIT
 //
 
+#if canImport(SwiftUI)
 import OrderedCollections
 import SwiftUI
 
 
-enum ModifierPlacement: Int, Comparable {
+public enum ModifierPlacement: Int, Comparable {
     /// No specific order requirement.
     case regular
     /// Outermost placement (e.g., @Model-based property wrappers).
     case outermost
 
-    static func < (lhs: ModifierPlacement, rhs: ModifierPlacement) -> Bool {
+    public static func < (lhs: ModifierPlacement, rhs: ModifierPlacement) -> Bool {
         lhs == .regular && rhs == .outermost
     }
 }
@@ -24,7 +25,7 @@ enum ModifierPlacement: Int, Comparable {
 
 /// An adopter of this protocol is a property of a ``Module`` that provides a SwiftUI
 /// [`ViewModifier`](https://developer.apple.com/documentation/swiftui/viewmodifier) to be injected into the global view hierarchy.
-protocol ViewModifierProvider {
+public protocol ViewModifierProvider {
     /// The persistent identifier for the view modifier provider.
     var id: UUID { get }
 
@@ -43,7 +44,7 @@ protocol ViewModifierProvider {
 
 
 extension ViewModifierProvider {
-    var placement: ModifierPlacement {
+    public var placement: ModifierPlacement {
         .regular
     }
 }
@@ -65,3 +66,4 @@ extension Module {
             }
     }
 }
+#endif

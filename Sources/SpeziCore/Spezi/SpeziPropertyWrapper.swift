@@ -7,12 +7,12 @@
 //
 
 
-enum SpeziPropertyError: Error {
+public enum SpeziPropertyError: Error {
     case unsatisfiedStandardConstraint(constraint: String, standard: String)
 }
 
 
-protocol SpeziPropertyWrapper {
+public protocol SpeziPropertyWrapper {
     /// Inject the global Spezi instance.
     ///
     /// This call happens right before ``Module/configure()-5pa83`` is called.
@@ -28,7 +28,7 @@ protocol SpeziPropertyWrapper {
 
 
 extension SpeziPropertyWrapper {
-    func inject(spezi: Spezi) {}
+    public func inject(spezi: Spezi) {}
 }
 
 
@@ -50,7 +50,7 @@ extension Module {
 
 
 extension SpeziPropertyError: CustomStringConvertible {
-    var description: String {
+    public var description: String {
         switch self {
         case let .unsatisfiedStandardConstraint(constraint, standard):
                 """

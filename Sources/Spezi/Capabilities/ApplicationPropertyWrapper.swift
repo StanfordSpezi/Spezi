@@ -7,7 +7,7 @@
 //
 
 import SwiftUI
-
+@_spi(APISupport) import SpeziCore
 
 /// Access a property or action of the Spezi application.
 @propertyWrapper
@@ -43,14 +43,14 @@ public struct _ApplicationPropertyWrapper<Value> { // swiftlint:disable:this typ
 
 
 extension _ApplicationPropertyWrapper: SpeziPropertyWrapper {
-    func inject(spezi: Spezi) {
+    public func inject(spezi: Spezi) {
         state.spezi = spezi
         if spezi.createsCopy(keyPath) {
             state.shadowCopy = spezi[keyPath: keyPath]
         }
     }
 
-    func clear() {
+    public func clear() {
         state.spezi = nil
         // we do not clear the shadow copy to make sure the property wrapper stays accessible in cleanup scenarios
     }
