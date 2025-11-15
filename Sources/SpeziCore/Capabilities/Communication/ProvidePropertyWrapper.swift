@@ -63,7 +63,7 @@ public class _ProvidePropertyWrapper<Value> {
         self.storedValue = value
     }
 
-    func inject(spezi: Spezi) {
+    public func inject(spezi: Spezi) {
         self.spezi = spezi
     }
 
@@ -144,7 +144,7 @@ extension _ProvidePropertyWrapper: StorageValueProvider {
     }
 
     @MainActor
-    func clear() {
+    public func clear() {
         clear(isolated: true)
     }
 

@@ -9,6 +9,7 @@
 import OSLog
 import SpeziFoundation
 import SwiftUI
+@_spi(APISupport) import SpeziCore
 
 
 @MainActor

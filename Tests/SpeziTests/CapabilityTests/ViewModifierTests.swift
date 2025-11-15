@@ -7,7 +7,7 @@
 //
 
 @testable import Spezi
-@testable import SpeziCore
+@_spi(APISupport) import SpeziCore
 import SwiftUI
 import Testing
 

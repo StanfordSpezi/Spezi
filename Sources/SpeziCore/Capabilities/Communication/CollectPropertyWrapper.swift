@@ -45,7 +45,7 @@ extension _CollectPropertyWrapper: StorageValueCollector {
         }
     }
 
-    func clear() {
+    public func clear() {
         injectedValues = nil
     }
 }

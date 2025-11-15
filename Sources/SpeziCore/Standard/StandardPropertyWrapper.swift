@@ -38,7 +38,7 @@ public class _StandardPropertyWrapper<Constraint> {
 
 
 extension _StandardPropertyWrapper: SpeziPropertyWrapper {
-    func inject(spezi: Spezi) throws(SpeziPropertyError) {
+    public func inject(spezi: Spezi) throws(SpeziPropertyError) {
         guard let standard = spezi.standard as? Constraint else {
             let standardType = type(of: spezi.standard)
             throw SpeziPropertyError.unsatisfiedStandardConstraint(
@@ -50,7 +50,7 @@ extension _StandardPropertyWrapper: SpeziPropertyWrapper {
         self.standard = standard
     }
 
-    func clear() {
+    public func clear() {
         standard = nil
     }
 }

@@ -95,12 +95,12 @@ public class _DependencyPropertyWrapper<Value> { // swiftlint:disable:this type_
 
 
 extension _DependencyPropertyWrapper: SpeziPropertyWrapper {
-    func inject(spezi: Spezi) {
+    public func inject(spezi: Spezi) {
         self.spezi = spezi
         dependencies.inject(spezi: spezi)
     }
 
-    func clear() {
+    public func clear() {
         guard let spezi else {
             preconditionFailure("\(Self.self) was clear without a Spezi instance available")
         }

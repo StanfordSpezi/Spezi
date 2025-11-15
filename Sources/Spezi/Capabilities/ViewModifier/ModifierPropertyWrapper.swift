@@ -15,7 +15,7 @@ public class _ModifierPropertyWrapper<Modifier: ViewModifier> {
     // swiftlint:disable:previous type_name
     // We want the type to be hidden from autocompletion and documentation generation
 
-    let id = UUID()
+    public let id = UUID()
     private var storedValue: Modifier?
     private var collected = false
 
@@ -58,12 +58,12 @@ public class _ModifierPropertyWrapper<Modifier: ViewModifier> {
 
 
 extension _ModifierPropertyWrapper: SpeziPropertyWrapper {
-    func clear() {
+    public func clear() {
         collected = false
         spezi?.handleViewModifierRemoval(for: id)
     }
 
-    func inject(spezi: Spezi) {
+    public func inject(spezi: Spezi) {
         self.spezi = spezi
     }
 }
@@ -101,7 +101,7 @@ extension Module {
 
 
 extension _ModifierPropertyWrapper: ViewModifierProvider {
-    var viewModifier: (any ViewModifier)? {
+    public var viewModifier: (any ViewModifier)? {
         collected = true
 
         guard let storedValue else {

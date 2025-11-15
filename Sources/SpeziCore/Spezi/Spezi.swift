@@ -99,7 +99,7 @@ public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
     /// A shared repository to store any `KnowledgeSource`s restricted to the ``SpeziAnchor``.
     ///
     /// Every `Module` automatically conforms to `KnowledgeSource` and is stored within this storage object.
-    nonisolated(unsafe) var storage: SpeziStorage // nonisolated, writes are all isolated to @MainActor, just reads are non-isolated
+    nonisolated(unsafe) public var storage: SpeziStorage // nonisolated, writes are all isolated to @MainActor, just reads are non-isolated
 
 #if canImport(SwiftUI)
     /// Key is either a UUID for `@Modifier` or `@Model` property wrappers, or a `ModuleReference` for `EnvironmentAccessible` modifiers.
@@ -108,7 +108,7 @@ public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
     /// Array of all SwiftUI `ViewModifiers` collected using `_ModifierPropertyWrapper` from the configured ``Module``s.
     ///
     /// Any changes to this property will cause a complete re-render of the SwiftUI view hierarchy. See `SpeziViewModifier`.
-    @MainActor var viewModifiers: [any ViewModifier] {
+    @MainActor @_spi(APISupport) public var viewModifiers: [any ViewModifier] {
         _viewModifiers
             // View modifiers of inner-most modules are added first due to the dependency order.
             // However, we want view modifiers of dependencies to be available for inside view modifiers of the parent
@@ -154,7 +154,7 @@ public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
     
 
     @MainActor
-    convenience init(from configuration: Configuration, storage: consuming SpeziStorage = SpeziStorage()) {
+    @_spi(APISupport) public convenience init(from configuration: Configuration, storage: consuming SpeziStorage = SpeziStorage()) {
         self.init(standard: configuration.standard, modules: configuration.modules.elements, storage: storage)
     }
     
@@ -184,7 +184,7 @@ public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
     }
     
     /// Run the Spezi service lifecycle.
-    func run() async {
+    @_spi(APISupport) public func run() async {
         await serviceGroup.run()
     }
 
@@ -381,7 +381,8 @@ public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
     }
 
     /// Determine if a application property is stored as a copy in a `@Application` property wrapper.
-    func createsCopy<Value>(_ keyPath: KeyPath<Spezi, Value>) -> Bool {
+    @_spi(APISupport)
+    public func createsCopy<Value>(_ keyPath: KeyPath<Spezi, Value>) -> Bool {
         keyPath == \.logger // loggers are created per Module.
             || keyPath == \.launchOptions
     }

@@ -6,8 +6,8 @@
 // SPDX-License-Identifier: MIT
 //
 
-@testable import SpeziCore
-import Spezi
+@_spi(APISupport) import SpeziCore
+@testable import Spezi
 import Testing
 
 private protocol ExampleConstraint: Standard {

@@ -13,7 +13,7 @@ import SwiftUI
 public struct ModelModifier<Model: Observable & AnyObject>: ViewModifier {
     @State private var model: Model
 
-    init(model: Model) {
+    public init(model: Model) {
         self.model = model
     }
 

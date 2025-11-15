@@ -9,7 +9,7 @@
 import Foundation
 import RuntimeAssertions
 import SwiftUI
-
+@_spi(APISupport) import SpeziCore
 
 #if os(iOS) || os(visionOS) || os(tvOS)
 /// Protocol used to silence deprecation warnings.
