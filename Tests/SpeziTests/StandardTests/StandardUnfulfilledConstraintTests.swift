@@ -16,6 +16,8 @@ private protocol UnfulfilledExampleConstraint: Standard {
 }
 
 
+@MainActor
+@Suite(.serialized)
 struct StandardUnfulfilledConstraintTests {
     final class StandardUCTestModule: Module {
         @StandardActor private var standard: any UnfulfilledExampleConstraint
@@ -28,7 +30,6 @@ struct StandardUnfulfilledConstraintTests {
     }
     
     @Test
-    @MainActor
     func standardUnfulfilledConstraint() throws {
         let configuration = Configuration(standard: MockStandard()) {}
         let spezi = Spezi(from: configuration)

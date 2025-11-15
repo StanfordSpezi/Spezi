@@ -14,7 +14,7 @@ private protocol ExampleConstraint: Standard {
 }
 
 @MainActor
-@Suite
+@Suite(.serialized)
 struct StandardConstraintTests {
     final class StandardCTestModule: Module {
         @StandardActor private var standard: any ExampleConstraint

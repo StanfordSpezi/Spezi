@@ -30,10 +30,10 @@ class ExampleDependencyModule: Module {
     }
 }
 
-@Suite
+@MainActor
+@Suite(.serialized)
 struct DependencyBuilderTests {
     @Test
-    @MainActor
     func dependencyCollection() {
         var collection = DependencyCollection(ExampleDependentModule())
         #expect(collection.count == 1)
@@ -45,7 +45,6 @@ struct DependencyBuilderTests {
     
     @Test
     @available(*, deprecated, message: "Propagate deprecation warning.")
-    @MainActor
     func deprecatedInits() {
         let collection1 = DependencyCollection(singleEntry: ExampleDependentModule())
         let collection2 = DependencyCollection(singleEntry: {
@@ -57,7 +56,6 @@ struct DependencyBuilderTests {
 
 
     @Test
-    @MainActor
     func dependencyBuilder() throws {
         let module = ExampleDependencyModule {
             ExampleDependentModule()
