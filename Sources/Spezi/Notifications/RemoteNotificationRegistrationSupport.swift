@@ -6,7 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
-import OSLog
+import Logging
 import SpeziFoundation
 import SwiftUI
 @_spi(APISupport) import SpeziCore

@@ -6,8 +6,8 @@
 // SPDX-License-Identifier: MIT
 //
 
-import os
 import SpeziFoundation
+import Logging
 
 
 extension Spezi {
@@ -32,5 +32,13 @@ extension Spezi {
             return Logger(subsystem: "edu.stanford.spezi.modules", category: module.loggerCategory)
         }
         return Spezi.logger
+    }
+}
+
+// TODO: Move to Spezi Foundation?
+extension Logger {
+    public init(subsystem: String, category: String) {
+        self.init(label: subsystem)
+        self[metadataKey: "category"] = "\(category)"
     }
 }

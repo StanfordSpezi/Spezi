@@ -8,7 +8,8 @@
 
 
 import OrderedCollections
-import OSLog
+import Logging
+import Foundation
 import RuntimeAssertions
 import SpeziFoundation
 #if canImport(SwiftUI)
