@@ -11,7 +11,7 @@ import RuntimeAssertionsTesting
 import SwiftUI
 import Testing
 
-@Suite
+@Suite(.serialized)
 struct StandardInjectionTests {
     final class StandardInjectionTestModule: Module {
         @StandardActor var standard: MockStandard

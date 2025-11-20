@@ -85,9 +85,9 @@ private final class TestModule2: Module {}
 private final class TestModule3: Module {}
 
 
-@Suite
+@MainActor
+@Suite(.serialized)
 struct DynamicDependenciesTests {
-    @MainActor
     @Test
     func dynamicDependencies() throws {
         for dynamicDependenciesTestCase in DynamicDependenciesTestCase.allCases {

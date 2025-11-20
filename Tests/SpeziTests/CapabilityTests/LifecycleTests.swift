@@ -58,12 +58,12 @@ private class TestLifecycleHandlerApplicationDelegate: SpeziAppDelegate {
 }
 
 
-@Suite("Lifecycle")
+@MainActor
+@Suite("Lifecycle", .serialized)
 struct LifecycleTests {
-    @MainActor
     @available(*, deprecated, message: "Propagate deprecation warning")
     @Test("UIApplication Lifecycle Methods")
-    func testUIApplicationLifecycleMethods() async throws {
+    func uiApplicationLifecycleMethods() async throws {
         let module = TestLifecycleHandler()
         let testApplicationDelegate = TestLifecycleHandlerApplicationDelegate(injectedModule: module)
 

@@ -29,20 +29,19 @@ private final class DependingTestModule: Module {
 }
 
 
-@Suite("Module")
+@MainActor
+@Suite("Module", .serialized)
 struct ModuleTests {
-    @MainActor
     @Test("Module Flow")
-    func testModuleFlow() async {
+    func moduleFlow() async {
         await confirmation { confirmation in
             _ = Text("Spezi")
                 .spezi(TestApplicationDelegate(confirmation: confirmation))
         }
     }
 
-    @MainActor
     @Test("Spezi")
-    func testSpezi() throws {
+    func spezi() throws {
         let spezi = Spezi(standard: DefaultStandard(), modules: [DependingTestModule()])
 
         let modules = spezi.modules
@@ -52,9 +51,8 @@ struct ModuleTests {
         #expect(modules.contains(where: { $0 is TestModule }))
     }
 
-    @MainActor
     @Test("Preview Modifier")
-    func testPreviewModifier() async throws {
+    func previewModifier() async throws {
         // manually patch environment variable for running within Xcode preview window
         setenv(ProcessInfo.xcodeRunningForPreviewKey, "1", 1)
 
@@ -70,9 +68,8 @@ struct ModuleTests {
         unsetenv(ProcessInfo.xcodeRunningForPreviewKey)
     }
 
-    @MainActor
     @Test("Module Creation")
-    func testModuleCreation() async {
+    func moduleCreation() async {
         await confirmation { moduleConfirmation in
             await confirmation { dependencyConfirmation in
                 let module = DependingTestModule(confirmation: moduleConfirmation, dependencyConfirmation: dependencyConfirmation)
