@@ -63,6 +63,7 @@ jobs:
       destination: ${{ matrix.platform.destination }}
       resultBundle: ${{ format('TestApp-{0}-{1}.xcresult', matrix.platform.name, matrix.config) }}
       artifactname: ${{ format('TestApp-{0}-{1}.xcresult', matrix.platform.name, matrix.config) }}
+      xcodeversion: '26.0.1'
   uploadcoveragereport:
     name: Upload Coverage Report
     needs: [package_tests, ui_tests]
