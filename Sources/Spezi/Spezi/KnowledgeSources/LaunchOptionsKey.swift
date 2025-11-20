@@ -7,8 +7,9 @@
 //
 
 import SpeziFoundation
+#if canImport(SwiftUI)
 import SwiftUI
-
+#endif
 
 package struct LaunchOptionsKey: DefaultProvidingKnowledgeSource {
     package typealias Anchor = SpeziAnchor
