@@ -6,8 +6,8 @@
 // SPDX-License-Identifier: MIT
 //
 
-import Logging
 import Foundation
+import Logging
 import SpeziFoundation
 
 

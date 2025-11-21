@@ -7,12 +7,12 @@
 //
 
 
-import OrderedCollections
-import Logging
-import RuntimeAssertions
 import Foundation
-import SpeziFoundation
+import Logging
 import Observation
+import OrderedCollections
+import RuntimeAssertions
+import SpeziFoundation
 #if canImport(SwiftUI)
 import SwiftUI
 #endif
