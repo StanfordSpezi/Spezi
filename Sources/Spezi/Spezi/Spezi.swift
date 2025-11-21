@@ -151,7 +151,7 @@ public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
 #endif
     
     @_spi(APISupport)
-    @MainActor public var modules: [any Module] {
+    public var modules: [any Module] {
         storage.collect(allOf: (any AnyStoredModules).self)
             .reduce(into: []) { partialResult, modules in
                 partialResult.append(contentsOf: modules.anyModules)
@@ -172,8 +172,9 @@ public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
     }
     
 
+    @_spi(APISupport)
     @MainActor
-    convenience init(from configuration: Configuration, storage: consuming SpeziStorage = SpeziStorage()) {
+    public convenience init(from configuration: Configuration, storage: consuming SpeziStorage = SpeziStorage()) {
         self.init(standard: configuration.standard, modules: configuration.modules.elements, storage: storage)
     }
     
