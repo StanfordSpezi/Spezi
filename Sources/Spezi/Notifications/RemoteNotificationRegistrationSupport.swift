@@ -7,7 +7,7 @@
 //
 
 #if canImport(SwiftUI)
-import Logging
+import OSLog
 import SpeziFoundation
 import SwiftUI
 

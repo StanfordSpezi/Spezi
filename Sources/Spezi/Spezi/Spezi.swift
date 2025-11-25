@@ -8,13 +8,17 @@
 
 
 import Foundation
-import Logging
 import Observation
 import OrderedCollections
 import RuntimeAssertions
 import SpeziFoundation
 #if canImport(SwiftUI)
 import SwiftUI
+#endif
+#if canImport(OSLog)
+import OSLog
+#else
+import Logging
 #endif
 
 /// Open-source framework for rapid development of modern, interoperable digital health applications.

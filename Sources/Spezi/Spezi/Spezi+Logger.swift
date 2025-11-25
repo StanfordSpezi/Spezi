@@ -6,7 +6,12 @@
 // SPDX-License-Identifier: MIT
 //
 
+#if canImport(OSLog)
+import OSLog
+#else
 import Logging
+#endif
+
 import SpeziFoundation
 
 
@@ -36,10 +41,11 @@ extension Spezi {
 }
 
 
-// TODO: Move to Spezi Foundation?
+#if !canImport(OSLog)
 extension Logger {
     public init(subsystem: String, category: String) {
         self.init(label: subsystem)
         self[metadataKey: "category"] = "\(category)"
     }
 }
+#endif

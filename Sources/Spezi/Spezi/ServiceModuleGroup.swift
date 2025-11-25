@@ -7,8 +7,12 @@
 //
 
 import Foundation
-import Logging
 import SpeziFoundation
+#if canImport(OSLog)
+import OSLog
+#else
+import Logging
+#endif
 
 
 final class ServiceModuleGroup: Sendable {
