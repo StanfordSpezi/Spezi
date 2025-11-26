@@ -68,10 +68,6 @@ private final class TestModule3: Module, DefaultInitializable {
     }
 }
 
-#if canImport(SwiftUI)
-extension TestModule3: EnvironmentAccessible {}
-#endif
-
 private final class TestModule4: Module {
     @Dependency var testModule5 = TestModule5()
     
@@ -778,5 +774,9 @@ struct DependencyTests { // swiftlint:disable:this type_body_length
         #expect(module.testModule3.num == 3)
     }
 }
+
+#if canImport(SwiftUI)
+extension TestModule3: EnvironmentAccessible {}
+#endif
 
 // swiftlint:disable:this file_length

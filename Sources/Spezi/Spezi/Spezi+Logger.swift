@@ -43,7 +43,7 @@ extension Spezi {
 
 #if !canImport(OSLog)
 extension Logger {
-    public init(subsystem: String, category: String) {
+    init(subsystem: String, category: String) {
         self.init(label: subsystem)
         self[metadataKey: "category"] = "\(category)"
     }

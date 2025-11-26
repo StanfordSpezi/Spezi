@@ -55,12 +55,18 @@ public func withDependencyResolution(
 ) {
     withDependencyResolution(standard: DefaultStandard(), simulateLifecycle: simulateLifecycle, modules)
 }
-#endif
-
+#else
+/// Configure and resolve the dependency tree for a collection of [`Module`](https://swiftpackageindex.com/stanfordspezi/spezi/documentation/spezi/module)s.
+///
+/// This method can be used in unit test to resolve dependencies and properly initialize a set of Spezi `Module`s on non-Apple platforms.
+///
+/// - Parameters:
+///   - modules: The collection of Modules that are configured.
 @MainActor
 public func withDependencyResolution(
     @ModuleBuilder _ modules: () -> ModuleCollection
 ) {
     let storage = SpeziStorage()
-    let spezi = Spezi(standard: DefaultStandard(), modules: modules().elements, storage: storage)
+    _ = Spezi(standard: DefaultStandard(), modules: modules().elements, storage: storage)
 }
+#endif

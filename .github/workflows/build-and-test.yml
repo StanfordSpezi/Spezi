@@ -63,7 +63,7 @@ jobs:
       destination: ${{ matrix.platform.destination }}
       resultBundle: ${{ format('TestApp-{0}-{1}.xcresult', matrix.platform.name, matrix.config) }}
       artifactname: ${{ format('TestApp-{0}-{1}.xcresult', matrix.platform.name, matrix.config) }}
-  buildandtest_linux:
+  package_tests_linux:
     name: Build and Test Swift Package Linux
     uses: StanfordBDHG/.github/.github/workflows/swift-test.yml@v2
     strategy:
@@ -73,7 +73,7 @@ jobs:
       artifact_name: ${{ format('SpeziFoundation-Package-Linux-{0}.lcov', matrix.config) }}
   uploadcoveragereport:
     name: Upload Coverage Report
-    needs: [package_tests, ui_tests, buildandtest_linux]
+    needs: [package_tests, ui_tests, package_tests_linux]
     uses: StanfordBDHG/.github/.github/workflows/create-and-upload-coverage-report.yml@v2
     with:
       coveragereports: Spezi-*.xcresult TestApp-*.xcresult
