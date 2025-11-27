@@ -70,13 +70,13 @@ jobs:
       matrix:
         config: [Debug, Release]
     with:
-      artifact_name: ${{ format('SpeziFoundation-Package-Linux-{0}.lcov', matrix.config) }}
+      artifact_name: ${{ format('Spezi-Package-Linux-{0}.lcov', matrix.config) }}
   uploadcoveragereport:
     name: Upload Coverage Report
     needs: [package_tests, ui_tests, package_tests_linux]
     uses: StanfordBDHG/.github/.github/workflows/create-and-upload-coverage-report.yml@v2
     with:
       coveragereports: Spezi-*.xcresult TestApp-*.xcresult
-      coveragereports_lcov: SpeziFoundation-Package-Linux-*.lcov
+      coveragereports_lcov: Spezi-Package-Linux-*.lcov
     secrets:
       token: ${{ secrets.CODECOV_TOKEN }}
