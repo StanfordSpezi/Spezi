@@ -6,8 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
-@testable import Spezi
-import SwiftUI
+@_spi(APISupport) @testable import Spezi
 import Testing
 
 

@@ -6,11 +6,11 @@
 // SPDX-License-Identifier: MIT
 //
 
+#if canImport(SwiftUI)
 import Foundation
 @testable import Spezi
 import SpeziTesting
 import Testing
-
 
 private final class ProvideModule1: Module {
     @Provide var num: Int = 2
@@ -72,3 +72,4 @@ struct ModuleCommunicationTests {
         #expect(Self.collectModule.strings == ["Hello World"])
     }
 }
+#endif

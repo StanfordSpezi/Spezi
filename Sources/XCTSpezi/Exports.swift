@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
+#if canImport(SwiftUI)
 import Spezi
 import SpeziTesting
 
@@ -30,3 +31,4 @@ public func withDependencyResolution(
 ) {
     SpeziTesting.withDependencyResolution(simulateLifecycle: simulateLifecycle, modules)
 }
+#endif

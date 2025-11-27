@@ -6,7 +6,12 @@
 // SPDX-License-Identifier: MIT
 //
 
-import os
+#if canImport(OSLog)
+import OSLog
+#else
+import Logging
+#endif
+
 import SpeziFoundation
 
 
@@ -34,3 +39,13 @@ extension Spezi {
         return Spezi.logger
     }
 }
+
+
+#if !canImport(OSLog)
+extension Logger {
+    init(subsystem: String, category: String) {
+        self.init(label: subsystem)
+        self[metadataKey: "category"] = "\(category)"
+    }
+}
+#endif

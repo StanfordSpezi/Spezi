@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
+#if canImport(SwiftUI)
 import SwiftUI
 
 
@@ -32,4 +33,5 @@ extension WKApplication {
         shared()
     }
 }
+#endif
 #endif

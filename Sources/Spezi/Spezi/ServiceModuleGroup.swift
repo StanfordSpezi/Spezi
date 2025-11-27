@@ -6,8 +6,13 @@
 // SPDX-License-Identifier: MIT
 //
 
-import OSLog
+import Foundation
 import SpeziFoundation
+#if canImport(OSLog)
+import OSLog
+#else
+import Logging
+#endif
 
 
 final class ServiceModuleGroup: Sendable {

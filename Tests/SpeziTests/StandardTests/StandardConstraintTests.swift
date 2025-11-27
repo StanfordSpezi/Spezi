@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
+#if canImport(SwiftUI)
 @testable import Spezi
 import Testing
 
@@ -69,3 +70,4 @@ extension MockStandard: ExampleConstraint {
         fulfill(expectation: expectation)
     }
 }
+#endif

@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
+#if canImport(SwiftUI)
 import SwiftUI
 
 
@@ -238,3 +239,4 @@ open class SpeziAppDelegate: NSObject, ApplicationDelegate, Sendable {
     }
 #endif
 }
+#endif
