@@ -157,6 +157,11 @@ public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
     
     @_spi(APISupport)
     @MainActor public var modules: [any Module] {
+        _modules
+    }
+    
+    @_spi(APISupport)
+    public var _modules: [any Module] { // swiftlint:disable:this identifier_name
         storage.collect(allOf: (any AnyStoredModules).self)
             .reduce(into: []) { partialResult, modules in
                 partialResult.append(contentsOf: modules.anyModules)
@@ -498,7 +503,13 @@ public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
     @inlinable
     @MainActor
     public func module<M: Module>(_ moduleType: M.Type = M.self) -> M? {
-        modules.first { type(of: $0) == moduleType.self } as? M
+        _module(moduleType)
+    }
+    
+    @_spi(APISupport)
+    @inlinable
+    public func _module<M: Module>(_ moduleType: M.Type = M.self) -> M? { // swiftlint:disable:this identifier_name
+        _modules.first { type(of: $0) == moduleType.self } as? M
     }
 }
 
