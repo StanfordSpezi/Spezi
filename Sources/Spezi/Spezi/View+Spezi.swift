@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
+#if canImport(SwiftUI)
 import Foundation
 import SwiftUI
 
@@ -56,3 +57,4 @@ extension ViewModifier {
         AnyView(view.modifier(self))
     }
 }
+#endif

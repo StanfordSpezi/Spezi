@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
+#if canImport(SwiftUI)
 import Foundation
 import RuntimeAssertions
 import SwiftUI
@@ -115,3 +116,4 @@ extension View {
         previewWith(standard: DefaultStandard(), simulateLifecycle: simulateLifecycle, modules)
     }
 }
+#endif

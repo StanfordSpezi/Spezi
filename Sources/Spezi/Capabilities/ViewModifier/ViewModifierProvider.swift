@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
+#if canImport(SwiftUI)
 import OrderedCollections
 import SwiftUI
 
@@ -65,3 +66,4 @@ extension Module {
             }
     }
 }
+#endif

@@ -8,7 +8,9 @@
 
 @_spi(APISupport) @testable import Spezi
 import SpeziTesting
+#if canImport(SwiftUI)
 import SwiftUI
+#endif
 import Testing
 
 
@@ -31,6 +33,7 @@ private final class DependingTestModule: Module {
 
 @Suite("Module")
 struct ModuleTests {
+#if canImport(SwiftUI)
     @MainActor
     @Test("Module Flow")
     func testModuleFlow() async {
@@ -39,6 +42,7 @@ struct ModuleTests {
                 .spezi(TestApplicationDelegate(confirmation: confirmation))
         }
     }
+#endif
 
     @MainActor
     @Test("Spezi")
@@ -52,6 +56,7 @@ struct ModuleTests {
         #expect(modules.contains(where: { $0 is TestModule }))
     }
 
+#if canImport(SwiftUI)
     @MainActor
     @Test("Preview Modifier")
     func testPreviewModifier() async throws {
@@ -69,6 +74,7 @@ struct ModuleTests {
 
         unsetenv(ProcessInfo.xcodeRunningForPreviewKey)
     }
+#endif
 
     @MainActor
     @Test("Module Creation")

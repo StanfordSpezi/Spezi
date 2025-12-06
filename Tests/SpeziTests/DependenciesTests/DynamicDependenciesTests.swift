@@ -8,7 +8,6 @@
 
 
 @testable import Spezi
-import SwiftUI
 import Testing
 
 

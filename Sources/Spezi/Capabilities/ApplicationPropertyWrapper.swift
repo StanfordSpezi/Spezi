@@ -6,8 +6,6 @@
 // SPDX-License-Identifier: MIT
 //
 
-import SwiftUI
-
 
 /// Access a property or action of the Spezi application.
 @propertyWrapper

@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
+#if canImport(SwiftUI)
 import SwiftUI
 
 
@@ -117,3 +118,4 @@ extension _ModelPropertyWrapper: ViewModifierProvider {
         .outermost
     }
 }
+#endif

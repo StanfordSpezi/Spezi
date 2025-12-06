@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
+#if canImport(UserNotifications)
 import UserNotifications
 
 
@@ -96,3 +97,4 @@ extension NotificationHandler {
     public func receiveRemoteNotification(_ remoteNotification: [AnyHashable: Any]) {}
 #endif
 }
+#endif
