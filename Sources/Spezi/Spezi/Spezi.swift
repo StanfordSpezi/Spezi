@@ -214,7 +214,8 @@ public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
     }
     
     /// Run the Spezi service lifecycle.
-    func run() async {
+    @_spi(APISupport)
+    public func run() async {
         await serviceGroup.run()
     }
 
