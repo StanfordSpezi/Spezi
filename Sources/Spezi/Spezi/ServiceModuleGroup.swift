@@ -6,9 +6,8 @@
 // SPDX-License-Identifier: MIT
 //
 
-import OSLog
+import Foundation
 import SpeziFoundation
-
 
 final class ServiceModuleGroup: Sendable {
     private enum Input {

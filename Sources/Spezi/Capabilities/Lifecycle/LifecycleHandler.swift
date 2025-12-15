@@ -6,7 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
-import os
+#if canImport(SwiftUI)
 import SwiftUI
 
 
@@ -265,3 +265,4 @@ extension Array: LifecycleHandler where Element == any LifecycleHandler {
     }
 #endif
 }
+#endif

@@ -7,12 +7,13 @@
 //
 
 
+import Foundation
 import OrderedCollections
-import OSLog
 import RuntimeAssertions
 import SpeziFoundation
+#if canImport(SwiftUI)
 import SwiftUI
-
+#endif
 
 /// Open-source framework for rapid development of modern, interoperable digital health applications.
 ///
@@ -86,7 +87,9 @@ import SwiftUI
 /// ### Dynamically Loading Modules
 /// - ``loadModule(_:ownership:)``
 /// - ``unloadModule(_:)``
+#if canImport(SwiftUI)
 @Observable
+#endif
 public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
     static let logger = Logger(subsystem: "edu.stanford.spezi", category: "Spezi")
 
@@ -99,6 +102,7 @@ public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
     /// Every `Module` automatically conforms to `KnowledgeSource` and is stored within this storage object.
     nonisolated(unsafe) var storage: SpeziStorage // nonisolated, writes are all isolated to @MainActor, just reads are non-isolated
 
+#if canImport(SwiftUI)
     /// Key is either a UUID for `@Modifier` or `@Model` property wrappers, or a `ModuleReference` for `EnvironmentAccessible` modifiers.
     @MainActor private var _viewModifiers: OrderedDictionary<AnyHashable, any ViewModifier> = [:]
 
@@ -144,9 +148,15 @@ public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
             module as? any NotificationHandler
         }
     }
+#endif
     
     @_spi(APISupport)
     @MainActor public var modules: [any Module] {
+        _modules
+    }
+    
+    @_spi(APISupport)
+    public var _modules: [any Module] { // swiftlint:disable:this identifier_name
         storage.collect(allOf: (any AnyStoredModules).self)
             .reduce(into: []) { partialResult, modules in
                 partialResult.append(contentsOf: modules.anyModules)
@@ -167,8 +177,9 @@ public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
     }
     
 
+    @_spi(APISupport)
     @MainActor
-    convenience init(from configuration: Configuration, storage: consuming SpeziStorage = SpeziStorage()) {
+    public convenience init(from configuration: Configuration, storage: consuming SpeziStorage = SpeziStorage()) {
         self.init(standard: configuration.standard, modules: configuration.modules.elements, storage: storage)
     }
     
@@ -198,7 +209,8 @@ public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
     }
     
     /// Run the Spezi service lifecycle.
-    func run() async {
+    @_spi(APISupport)
+    public func run() async {
         await serviceGroup.run()
     }
 
@@ -315,6 +327,7 @@ public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
 
         implicitlyCreatedModules.remove(ModuleReference(module))
 
+#if canImport(SwiftUI)
         // this check is important. Change to viewModifiers re-renders the whole SwiftUI view hierarchy. So avoid to do it unnecessarily
         if _viewModifiers[ModuleReference(module)] != nil {
             var keys: Set<AnyHashable> = [ModuleReference(module)]
@@ -325,7 +338,8 @@ public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
                 keys.contains(entry.key)
             }
         }
-
+#endif
+        
         // re-injecting all dependencies ensures that the unloaded module is cleared from optional Dependencies from
         // pre-existing Modules.
         let dependencyManager = DependencyManager([], existing: modules)
@@ -370,6 +384,7 @@ public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
                     serviceGroup.run(service: service)
                 }
 
+#if canImport(SwiftUI)
                 // If a module is @Observable, we automatically inject it view the `ModelModifier` into the environment.
                 if let observable = module as? any EnvironmentAccessible {
                     // we can't guarantee weak references for EnvironmentAccessible modules
@@ -384,6 +399,7 @@ public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
                         _viewModifiers.updateValue(entry.modifier, forKey: entry.id)
                     }
                 }
+#endif
             }
         } catch {
             throw .property(error)
@@ -447,12 +463,14 @@ public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
         }
     }
 
+#if canImport(SwiftUI)
     @MainActor
     func handleViewModifierRemoval(for id: UUID) {
         if _viewModifiers[id] != nil {
             _viewModifiers.removeValue(forKey: id)
         }
     }
+#endif
 
     func retrieveDependencyReplacement<M: Module>(for type: M.Type) -> M? {
         guard let storedModules = storage[StoredModulesKey<M>.self] else {
@@ -475,6 +493,19 @@ public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
             .forEach { storedModules in
                 storedModules.removeNilReferences(in: &storage)
             }
+    }
+    
+    @_spi(APISupport)
+    @inlinable
+    @MainActor
+    public func module<M: Module>(_ moduleType: M.Type = M.self) -> M? {
+        _module(moduleType)
+    }
+    
+    @_spi(APISupport)
+    @inlinable
+    public func _module<M: Module>(_ moduleType: M.Type = M.self) -> M? { // swiftlint:disable:this identifier_name
+        _modules.first { type(of: $0) == moduleType.self } as? M
     }
 }
 

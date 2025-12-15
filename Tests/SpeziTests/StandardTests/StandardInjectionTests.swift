@@ -8,7 +8,6 @@
 
 import RuntimeAssertionsTesting
 @testable import Spezi
-import SwiftUI
 import Testing
 
 @Suite
@@ -31,6 +30,7 @@ struct StandardInjectionTests {
         }
     }
     
+#if canImport(SwiftUI)
     class StandardInjectionTestApplicationDelegate: SpeziAppDelegate {
         let expectation: TestExpectation
         
@@ -58,6 +58,7 @@ struct StandardInjectionTests {
         
         await expectation.fulfillment(within: .seconds(0.5))
     }
+#endif
     
     @Test
     func injectionPrecondition() throws {

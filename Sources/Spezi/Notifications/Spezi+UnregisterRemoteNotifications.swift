@@ -6,9 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
-import SwiftUI
-
-
+#if canImport(UserNotifications)
 /// Unregisters for all remote notifications received through Apple Push Notification service.
 ///
 /// Refer to the documentation of ``Spezi/unregisterRemoteNotifications``.
@@ -61,3 +59,4 @@ extension Spezi {
         UnregisterRemoteNotificationsAction()
     }
 }
+#endif

@@ -6,7 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
-import OSLog
+#if canImport(SwiftUI)
 import SpeziFoundation
 import SwiftUI
 
@@ -88,3 +88,4 @@ extension Spezi {
         return support
     }
 }
+#endif

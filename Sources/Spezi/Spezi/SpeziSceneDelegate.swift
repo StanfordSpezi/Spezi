@@ -6,6 +6,7 @@
 // SPDX-License-Identifier: MIT
 //
 
+#if canImport(SwiftUI)
 import SwiftUI
 
 
@@ -43,4 +44,5 @@ class SpeziSceneDelegate: NSObject, UISceneDelegate {
         delegate.spezi.lifecycleHandler.sceneDidEnterBackground(scene)
     }
 }
+#endif
 #endif
