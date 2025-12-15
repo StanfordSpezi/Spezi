@@ -39,8 +39,7 @@ let package = Package(
             dependencies: [
                 .product(name: "SpeziFoundation", package: "SpeziFoundation"),
                 .product(name: "RuntimeAssertions", package: "XCTRuntimeAssertions"),
-                .product(name: "OrderedCollections", package: "swift-collections"),
-                .product(name: "Logging", package: "swift-log")
+                .product(name: "OrderedCollections", package: "swift-collections")
             ],
             swiftSettings: [.enableUpcomingFeature("ExistentialAny")],
             plugins: [] + swiftLintPlugin()
