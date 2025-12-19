@@ -70,7 +70,6 @@ public class _StandardPropertyWrapper<Constraint> {
 
 extension _StandardPropertyWrapper: SpeziPropertyWrapper {
     func inject(spezi: Spezi) throws(SpeziPropertyError) {
-        // (lldb) po Constraint.self is any AnyOptional.Type
         switch load(spezi.standard) {
         case .success(let standard):
             self.standard = standard
