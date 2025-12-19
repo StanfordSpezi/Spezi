@@ -18,6 +18,15 @@ extension Module {
     /// ```swift
     /// class ExampleModule: Module {
     ///     @StandardActor var standard: ExampleStandard
+    ///
+    ///     // You can omit the type to get an `any Standard`:
+    ///     @StandardActor var standard
+    ///
+    ///     // You also can specify a protocol to cast the standard to a constraint:
+    ///     @StandardActor var standard: any HealthKitConstraint
+    ///
+    ///     // And you can make the type optional if the app isn't required to conform its standard to the protocol:
+    ///     @StandardActor var standard: (any HealthKitConstraint)?
     /// }
     /// ```
     public typealias StandardActor = _StandardPropertyWrapper
