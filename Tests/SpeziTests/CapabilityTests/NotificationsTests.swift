@@ -141,7 +141,7 @@ struct NotificationsTests {
 
         async let registration = action()
 
-        try await Task.sleep(for: .milliseconds(250)) // allow dispatch of Task above
+        try await Task.sleep(for: .milliseconds(500)) // allow dispatch of Task above
 
 #if os(iOS) || os(visionOS) || os(tvOS)
         delegate.application(UIApplication.shared, didFailToRegisterForRemoteNotificationsWithError: TestError.testError)
@@ -151,7 +151,7 @@ struct NotificationsTests {
         delegate.application(NSApplication.shared, didFailToRegisterForRemoteNotificationsWithError: TestError.testError)
 #endif
 
-        try await Task.sleep(for: .milliseconds(250)) // allow dispatch of Task above
+        try await Task.sleep(for: .milliseconds(500)) // allow dispatch of Task above
 
         do {
             _ = try await registration
