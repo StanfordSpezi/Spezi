@@ -6,68 +6,88 @@
 // SPDX-License-Identifier: MIT
 //
 
+// swiftlint:disable file_types_order
+
 #if canImport(SwiftUI)
+@_spi(APISupport)
 @testable import Spezi
+import SpeziTesting
 import Testing
 
-private protocol ExampleConstraint: Standard {
-    func betterFulfill(expectation: TestExpectation)
-}
 
 @MainActor
 @Suite
 struct StandardConstraintTests {
-    final class StandardCTestModule: Module {
-        @StandardActor private var standard: any ExampleConstraint
-        
-        let expectation: TestExpectation
-        
-        
-        init(expectation: TestExpectation) {
-            self.expectation = expectation
+    @Test
+    func unconstrainedStandardInjection() async throws {
+        let standard = TestStandardNoConstraint()
+        let appDelegate = TestAppDelegate(standard: standard) {
+            TestModule0()
         }
-        
-        
-        func configure() {
-            Task {
-                await standard.betterFulfill(expectation: expectation)
-            }
-        }
+        let spezi = appDelegate.spezi
+        let module = try #require(spezi.module(TestModule0.self))
+        #expect(module.standardExplicitType === standard)
+        #expect(module.standardNoType === standard)
     }
     
-    class StandardCTestApplicationDelegate: SpeziAppDelegate {
-        let expectation: TestExpectation
-        
-        
-        override var configuration: Configuration {
-            Configuration(standard: MockStandard()) {
-                StandardCTestModule(expectation: expectation)
-            }
+    
+    @Test
+    func constrainedStandardInjectionConstraintPresent() async throws {
+        let standard = TestStandardWithConstraint()
+        let appDelegate = TestAppDelegate(standard: standard) {
+            TestModule1()
         }
-        
-        
-        init(expectation: TestExpectation) {
-            self.expectation = expectation
-        }
+        let spezi = appDelegate.spezi
+        let module = try #require(spezi.module(TestModule1.self))
+        #expect(module.standard === standard)
     }
     
     @Test
-    func standardConstraint() async {
-        let expectation = TestExpectation()
-        
-        let standardCTestApplicationDelegate = StandardCTestApplicationDelegate(
-            expectation: expectation
-        )
-        _ = standardCTestApplicationDelegate.spezi
-        
-        await expectation.fulfillment(within: .seconds(0.5))
+    func constrainedStandardInjectionConstraintNotPresent() async throws {
+        let standard = TestStandardNoConstraint()
+        let appDelegate = TestAppDelegate(standard: standard) {
+            TestModule1()
+        }
+        let spezi = appDelegate.spezi
+        let module = try #require(spezi.module(TestModule1.self))
+        #expect(module.standard === nil)
     }
 }
 
 
-extension MockStandard: ExampleConstraint {
-    func betterFulfill(expectation: TestExpectation) {
-        fulfill(expectation: expectation)
+// MARK: Supporting Spezi Components
+
+private protocol ExampleConstraint: Standard {}
+
+private actor TestStandardNoConstraint: Standard {}
+private actor TestStandardWithConstraint: Standard, ExampleConstraint {}
+
+
+private final class TestModule0: Module {
+    @StandardActor var standardExplicitType: any Standard
+    @StandardActor var standardNoType
+}
+
+
+private final class TestModule1: Module {
+    @StandardActor var standard: (any ExampleConstraint)?
+}
+
+
+private final class TestAppDelegate<S: Standard>: SpeziAppDelegate {
+    private let standard: S
+    private let modules: ModuleCollection
+    
+    override var configuration: Configuration {
+        Configuration(standard: standard) {
+            modules
+        }
+    }
+    
+    init(standard: S, @ModuleBuilder modules: () -> ModuleCollection) {
+        self.standard = standard
+        self.modules = modules()
     }
 }
+
 #endif
