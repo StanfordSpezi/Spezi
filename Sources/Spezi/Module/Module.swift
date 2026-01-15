@@ -9,7 +9,7 @@
 
 // note: detailed documentation is provided as an article extension in the DocC bundle
 /// A `Module` defines a software subsystem that can be configured as part of the ``SpeziAppDelegate/configuration``.
-public protocol Module: AnyObject {
+public protocol Module: AnyObject, SendableMetatype {
     /// Called on the initialization of the Spezi instance to perform a lightweight configuration of the module.
     ///
     /// It is advised that longer setup tasks are done in an asynchronous task and started during the call of the configure method.
