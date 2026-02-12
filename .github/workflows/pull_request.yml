@@ -12,7 +12,7 @@ on:
   push:
     branches:
       - main
-      - feature/linkspector
+      - test1
   pull_request:
   workflow_dispatch:
 
