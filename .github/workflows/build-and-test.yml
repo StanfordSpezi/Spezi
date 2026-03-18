@@ -70,8 +70,9 @@ jobs:
       matrix:
         config: [Debug, Release]
     with:
+      runs_on_labels: '["blacksmith-4vcpu-ubuntu-2404"]'
       build_configuration: ${{ matrix.config }}
-      no_parallel: true
+      test_flags: '--no-parallel'
       artifact_name: ${{ format('Spezi-Package-Linux-{0}.lcov', matrix.config) }}
   uploadcoveragereport:
     name: Upload Coverage Report
