@@ -65,12 +65,14 @@ jobs:
       artifactname: ${{ format('TestApp-{0}-{1}.xcresult', matrix.platform.name, matrix.config) }}
   package_tests_linux:
     name: Build and Test Swift Package Linux
-    uses: StanfordBDHG/.github/.github/workflows/swift-test.yml@v2
+    uses: StanfordBDHG/.github/.github/workflows/swift-test.yml@test-flag-for-swift-test
     strategy:
       matrix:
         config: [Debug, Release]
     with:
+      runs_on_labels: '["blacksmith-4vcpu-ubuntu-2404"]'
       build_configuration: ${{ matrix.config }}
+      test_flags: '--no-parallel'
       artifact_name: ${{ format('Spezi-Package-Linux-{0}.lcov', matrix.config) }}
   uploadcoveragereport:
     name: Upload Coverage Report
