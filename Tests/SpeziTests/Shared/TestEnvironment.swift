@@ -10,12 +10,8 @@
 ///
 /// On Linux Release builds, XCTRuntimeAssertions cannot intercept `preconditionFailure()` because
 /// Swift Testing doesn't load XCTest, causing a real crash instead of a caught assertion.
-let isLinuxRelease: Bool = {
-    #if !os(Linux)
-    return false
-    #else
-    var isDebug = false
-    assert({ isDebug = true; return true }())
-    return !isDebug
-    #endif
-}()
+#if os(Linux) && RELEASE
+let isLinuxRelease = true
+#else
+let isLinuxRelease = false
+#endif

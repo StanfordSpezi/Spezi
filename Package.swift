@@ -69,7 +69,10 @@ let package = Package(
                 .product(name: "RuntimeAssertionsTesting", package: "XCTRuntimeAssertions"),
                 .product(name: "TestingExpectation", package: "swift-testing-expectation")
             ],
-            swiftSettings: [.enableUpcomingFeature("ExistentialAny")],
+            swiftSettings: [
+                .enableUpcomingFeature("ExistentialAny"),
+                .define("RELEASE", .when(configuration: .release))
+            ],
             plugins: [] + swiftLintPlugin()
         )
     ]

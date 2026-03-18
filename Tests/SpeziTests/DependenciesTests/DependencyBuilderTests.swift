@@ -41,7 +41,6 @@ struct DependencyBuilderTests {
         collection.append(ExampleDependentModule())
         #expect(collection.count == 2)
     }
-
     
     @Test
     @available(*, deprecated, message: "Propagate deprecation warning.")
@@ -54,8 +53,7 @@ struct DependencyBuilderTests {
         #expect(collection1.count == 1)
         #expect(collection2.count == 1)
     }
-
-
+    
     @Test
     @MainActor
     func dependencyBuilder() throws {
