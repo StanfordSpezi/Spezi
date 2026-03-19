@@ -60,10 +60,12 @@ struct StandardInjectionTests {
     }
 #endif
     
-    @Test(.disabled(if: isLinuxRelease, "expectRuntimePrecondition crashes on Linux Release (XCTRuntimeAssertions #...)"))
+#if DEBUG || canImport(Darwin)
+    @Test
     func injectionPrecondition() throws {
         expectRuntimePrecondition {
             _ = _StandardPropertyWrapper<MockStandard>().wrappedValue
         }
     }
+#endif
 }

@@ -567,7 +567,7 @@ struct DependencyTests { // swiftlint:disable:this type_body_length
         let dut4Module = try #require(dut4.testModule3)
         #expect(dut4Module.state == 4)
         
-#if os(Linux) && RELEASE
+#if os(Linux) && !DEBUG
         // Optional dependencies use weak references. On Linux Release builds the optimizer may
         // shorten variable lifetimes, freeing the arrays (and the modules they strongly hold)
         // before the weak references are accessed. This keeps them alive through all assertions.

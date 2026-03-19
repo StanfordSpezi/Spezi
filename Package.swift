@@ -71,7 +71,7 @@ let package = Package(
             ],
             swiftSettings: [
                 .enableUpcomingFeature("ExistentialAny"),
-                .define("RELEASE", .when(configuration: .release))
+                .define("DEBUG", .when(configuration: .debug))
             ],
             plugins: [] + swiftLintPlugin()
         )

@@ -12,16 +12,17 @@ import Testing
 
 private final class ExampleModule: Module {}
 
+#if DEBUG || canImport(Darwin)
 @Suite
 struct DependencyContextTests {
-    @Test(.disabled(if: isLinuxRelease, "expectRuntimePrecondition crashes on Linux Release (XCTRuntimeAssertions #...)"))
+    @Test
     func injectionPreconditionDependencyPropertyWrapper() throws {
         expectRuntimePrecondition {
             _ = _DependencyPropertyWrapper<TestModule>(wrappedValue: TestModule(), TestModule.self).wrappedValue
         }
     }
 
-    @Test(.disabled(if: isLinuxRelease, "expectRuntimePrecondition crashes on Linux Release (XCTRuntimeAssertions #...)"))
+    @Test
     func injectionPreconditionDynamicDependenciesPropertyWrapper() throws {
         expectRuntimePrecondition {
             _ = _DependencyPropertyWrapper {
@@ -30,3 +31,4 @@ struct DependencyContextTests {
         }
     }
 }
+#endif
