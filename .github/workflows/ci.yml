@@ -1,5 +1,5 @@
 #
-# This source file is part of the Stanford Biodesign Digital Health Group Swift Template Package open source project
+# This source file is part of the Stanford Spezi open source project
 #
 # SPDX-FileCopyrightText: 2026 Stanford University and the project authors (see CONTRIBUTORS.md)
 #
@@ -26,7 +26,7 @@ concurrency:
 jobs:
   ci:
     name: CI
-    uses: StanfordBDHG/.github/.github/workflows/swift-package-ci.yml@feature/swift-package-workflow
+    uses: StanfordBDHG/.github/.github/workflows/swift-package-ci.yml@v2
     with:
       linux_run_tests: true
     secrets: inherit
