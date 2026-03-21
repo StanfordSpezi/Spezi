@@ -20,7 +20,8 @@ let package = Package(
         .visionOS(.v1),
         .macOS(.v14),
         .tvOS(.v17),
-        .watchOS(.v10)
+        .watchOS(.v10),
+        .macCatalyst(.v17)
     ],
     products: [
         .library(name: "Spezi", targets: ["Spezi"]),
@@ -69,7 +70,10 @@ let package = Package(
                 .product(name: "RuntimeAssertionsTesting", package: "XCTRuntimeAssertions"),
                 .product(name: "TestingExpectation", package: "swift-testing-expectation")
             ],
-            swiftSettings: [.enableUpcomingFeature("ExistentialAny")],
+            swiftSettings: [
+                .enableUpcomingFeature("ExistentialAny"),
+                .define("DEBUG", .when(configuration: .debug))
+            ],
             plugins: [] + swiftLintPlugin()
         )
     ]

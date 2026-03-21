@@ -566,6 +566,13 @@ struct DependencyTests { // swiftlint:disable:this type_body_length
         let dut4 = try #require(configuredAndDefaulted[1] as? OptionalDependencyWithRuntimeDefault)
         let dut4Module = try #require(dut4.testModule3)
         #expect(dut4Module.state == 4)
+        
+#if !DEBUG
+        // Optional dependencies use weak references. On Release builds the optimizer may
+        // shorten variable lifetimes, freeing the arrays (and the modules they strongly hold)
+        // before the weak references are accessed. This keeps them alive through all assertions.
+        withExtendedLifetime((configured, defaulted, configuredAndDefaulted)) {}
+#endif
     }
     
     @Test

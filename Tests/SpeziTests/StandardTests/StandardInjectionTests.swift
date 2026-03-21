@@ -60,10 +60,12 @@ struct StandardInjectionTests {
     }
 #endif
     
+#if DEBUG || canImport(Darwin)
     @Test
     func injectionPrecondition() throws {
         expectRuntimePrecondition {
             _ = _StandardPropertyWrapper<MockStandard>().wrappedValue
         }
     }
+#endif
 }

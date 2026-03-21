@@ -12,6 +12,7 @@ import Testing
 
 private final class ExampleModule: Module {}
 
+#if DEBUG || canImport(Darwin)
 @Suite
 struct DependencyContextTests {
     @Test
@@ -20,7 +21,7 @@ struct DependencyContextTests {
             _ = _DependencyPropertyWrapper<TestModule>(wrappedValue: TestModule(), TestModule.self).wrappedValue
         }
     }
-    
+
     @Test
     func injectionPreconditionDynamicDependenciesPropertyWrapper() throws {
         expectRuntimePrecondition {
@@ -30,3 +31,4 @@ struct DependencyContextTests {
         }
     }
 }
+#endif
