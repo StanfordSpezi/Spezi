@@ -26,7 +26,7 @@ concurrency:
 jobs:
   ci:
     name: CI
-    uses: StanfordBDHG/.github/.github/workflows/swift-package-ci.yml@4b2859618d73bcecccff8f4d98b5bcb95b787937
+    uses: StanfordBDHG/.github/.github/workflows/swift-package-ci.yml@feature/ci-workflow-inputs
     with:
       linux_run_tests: true
     secrets: inherit
