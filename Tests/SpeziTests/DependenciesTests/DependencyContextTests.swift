@@ -13,7 +13,7 @@ import Testing
 private final class ExampleModule: Module {}
 
 #if DEBUG || canImport(Darwin)
-@Suite
+@Suite(.serialized)
 struct DependencyContextTests {
     @Test
     func injectionPreconditionDependencyPropertyWrapper() throws {

@@ -15,19 +15,20 @@ private protocol UnfulfilledExampleConstraint: Standard {
 }
 
 
+@MainActor
+@Suite(.serialized)
 struct StandardUnfulfilledConstraintTests {
     final class StandardUCTestModule: Module {
         @StandardActor private var standard: any UnfulfilledExampleConstraint
-        
+
         func configure() {
             Task {
                 await standard.thisFunctionWouldBeNice()
             }
         }
     }
-    
+
     @Test
-    @MainActor
     func standardUnfulfilledConstraint() throws {
         let configuration = Configuration(standard: MockStandard()) {}
         let spezi = Spezi(from: configuration)
