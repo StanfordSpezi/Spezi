@@ -58,7 +58,7 @@ final class LifecycleHandlerTests: XCTestCase {
     @MainActor
     func testServiceModule() throws {
         #if os(visionOS)
-        throw XCTSkip("Skipping on visionOS: springboard-based background/foreground cycling is unreliable on the visionOS simulator. The same code path is covered by iOS tests.")
+        throw XCTSkip("Skipping on visionOS: springboard interaction is unreliable on the simulator.")
         #endif
 
         let app = XCUIApplication()
