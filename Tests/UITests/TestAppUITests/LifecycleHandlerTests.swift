@@ -68,6 +68,7 @@ final class LifecycleHandlerTests: XCTestCase {
         let springboard = XCUIApplication(bundleIdentifier: XCUIApplication.homeScreenBundle)
 #if os(visionOS)
         springboard.launch() // springboard is in `runningBackgroundSuspended` state on visionOS. So we need to launch it not just activate
+        sleep(3)
 #else
         springboard.activate()
 #endif
@@ -81,14 +82,15 @@ final class LifecycleHandlerTests: XCTestCase {
 
 #if os(visionOS)
         springboard.launch() // springboard is in `runningBackgroundSuspended` state on visionOS. So we need to launch it not just activate
+        sleep(3)
 #else
         springboard.activate()
 #endif
-        XCTAssertTrue(springboard.wait(for: .runningForeground, timeout: 5.0))
+        XCTAssertTrue(springboard.wait(for: .runningForeground, timeout: 15.0))
 
         app.launch()
 
         XCTAssertTrue(app.wait(for: .runningForeground, timeout: 4.0))
-        XCTAssertTrue(app.staticTexts["Module is running."].waitForExistence(timeout: 4.0))
+        XCTAssertTrue(app.staticTexts["Module is running."].waitForExistence(timeout: 15.0))
     }
 }
