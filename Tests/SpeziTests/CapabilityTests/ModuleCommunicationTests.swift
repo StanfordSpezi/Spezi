@@ -40,6 +40,7 @@ private final class CollectModule: Module {
 }
 
 
+@MainActor
 @Suite("Module Communication", .serialized)
 struct ModuleCommunicationTests {
     private class TestApplicationDelegate: SpeziAppDelegate {
@@ -51,19 +52,18 @@ struct ModuleCommunicationTests {
         }
     }
 
-    @MainActor private static var provideModule = ProvideModule1()
-    @MainActor private static var collectModule = CollectModule()
+    private static var provideModule = ProvideModule1()
+    private static var collectModule = CollectModule()
 
 
-    @MainActor
     init() async throws {
         Self.provideModule = ProvideModule1()
         Self.collectModule = CollectModule()
     }
 
-    @MainActor
+
     @Test("Simple Communication")
-    func testSimpleCommunication() throws {
+    func simpleCommunication() throws {
         let delegate = TestApplicationDelegate()
         _ = delegate.spezi // ensure init
 

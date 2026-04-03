@@ -12,11 +12,11 @@ import SwiftUI
 import Testing
 
 
-@Suite("ViewModifier")
+@MainActor
+@Suite("ViewModifier", .serialized)
 struct ViewModifierTests {
-    @MainActor
     @Test("ViewModifier Retrieval")
-    func testViewModifierRetrieval() async {
+    func viewModifierRetrieval() async {
         await confirmation { confirmation in
             let testApplicationDelegate = TestApplicationDelegate(confirmation: confirmation)
 
@@ -31,8 +31,8 @@ struct ViewModifierTests {
         }
     }
 
-    @MainActor
-    func testEmptyRetrieval() {
+    @Test
+    func emptyRetrieval() {
         let speziAppDelegate = SpeziAppDelegate()
         #expect(speziAppDelegate.spezi.viewModifiers.isEmpty)
     }

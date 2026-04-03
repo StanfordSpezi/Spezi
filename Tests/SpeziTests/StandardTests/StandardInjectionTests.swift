@@ -10,7 +10,7 @@ import RuntimeAssertionsTesting
 @testable import Spezi
 import Testing
 
-@Suite
+@Suite(.serialized)
 struct StandardInjectionTests {
     final class StandardInjectionTestModule: Module {
         @StandardActor var standard: MockStandard

@@ -16,7 +16,7 @@ import Testing
 
 
 @MainActor
-@Suite
+@Suite(.serialized)
 struct StandardConstraintTests {
     @Test
     func unconstrainedStandardInjection() async throws {
