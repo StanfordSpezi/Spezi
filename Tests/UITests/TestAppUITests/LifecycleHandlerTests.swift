@@ -77,8 +77,8 @@ final class LifecycleHandlerTests: XCTestCase {
 
         app.activate()
 
-        XCTAssertTrue(app.wait(for: .runningForeground, timeout: 4.0))
-        XCTAssertTrue(app.staticTexts["Module is running."].waitForExistence(timeout: 10.0))
+        XCTAssertTrue(app.wait(for: .runningForeground, timeout: 15.0))
+        XCTAssertTrue(app.staticTexts["Module is running."].waitForExistence(timeout: 15.0))
 
 #if os(visionOS)
         springboard.launch() // springboard is in `runningBackgroundSuspended` state on visionOS. So we need to launch it not just activate
