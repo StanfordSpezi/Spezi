@@ -81,21 +81,18 @@ extension View {
             storage[LaunchOptionsKey.self] = options
         }
         let spezi = Spezi(standard: standard, modules: modules().elements, storage: storage)
-        var view: AnyView = self
+        return self
             .modifier(SpeziViewModifier(spezi))
             .task(spezi.run)
-            .intoAnyView()
 #if os(iOS) || os(visionOS) || os(tvOS)
-        view = view
             .task { @MainActor in
                 if case let .launchWithOptions(options) = simulateLifecycle {
                     (spezi as any DeprecatedLaunchOptionsCall)
                         .callWillFinishLaunching(UIApplication.shared, launchOptions: options)
                 }
             }
-            .intoAnyView()
 #endif
-        return view
+            .intoAnyView()
     }
 
     /// Configure Spezi for your previews using a collection of Modules.
