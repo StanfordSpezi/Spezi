@@ -71,20 +71,18 @@ extension View {
         standard: S,
         simulateLifecycle: LifecycleSimulationOptions = .disabled,
         @ModuleBuilder _ modules: () -> ModuleCollection
-    ) -> some View {
+    ) -> AnyView {
         precondition(
             ProcessInfo.processInfo.isPreviewSimulator,
             "The Spezi previewWith(standard:_:) modifier can only used within Xcode preview processes."
         )
-
         var storage = SpeziStorage()
         if case let .launchWithOptions(options) = simulateLifecycle {
             storage[LaunchOptionsKey.self] = options
         }
-
         let spezi = Spezi(standard: standard, modules: modules().elements, storage: storage)
-
-        return modifier(SpeziViewModifier(spezi))
+        return self
+            .modifier(SpeziViewModifier(spezi))
             .task(spezi.run)
 #if os(iOS) || os(visionOS) || os(tvOS)
             .task { @MainActor in
@@ -94,6 +92,7 @@ extension View {
                 }
             }
 #endif
+            .intoAnyView()
     }
 
     /// Configure Spezi for your previews using a collection of Modules.
@@ -114,6 +113,11 @@ extension View {
         @ModuleBuilder _ modules: () -> ModuleCollection
     ) -> some View {
         previewWith(standard: DefaultStandard(), simulateLifecycle: simulateLifecycle, modules)
+    }
+    
+    
+    private func intoAnyView() -> AnyView {
+        AnyView(self)
     }
 }
 #endif
