@@ -102,4 +102,4 @@ The [Stanford BDHG Test Using Xcodebuild or Run Fastlane reusable workflow](http
 The repository and all code making up the module and Swift Package MUST conform to the <doc:Documentation-Guide>.
 The documentation MUST be hosted and accessible based on the content of the repository.
 It is RECOMMENDED using the [Swift Package Index](https://swiftpackageindex.com).
-It is RECOMMENDED to use a `.spi.yml` file at the root of the repo to [configure the Swift Package Index setup](https://blog.swiftpackageindex.com/posts/the-swift-package-index-metadata-file-first-steps/) e.g., [shown in the Spezi repository](https://github.com/StanfordSpezi/Spezi/blob/main/.spi.yml).
+It is RECOMMENDED to use a `.spi.yml` file at the root of the repo to [configure the Swift Package Index setup](https://swiftpackageindex.com/blog/the-swift-package-index-metadata-file-first-steps) e.g., [shown in the Spezi repository](https://github.com/StanfordSpezi/Spezi/blob/main/.spi.yml).
