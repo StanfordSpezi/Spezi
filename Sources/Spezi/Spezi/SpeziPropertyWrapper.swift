@@ -35,14 +35,14 @@ extension SpeziPropertyWrapper {
 extension Module {
     @MainActor
     func inject(spezi: Spezi) throws(SpeziPropertyError) {
-        for wrapper in retrieveProperties(ofType: SpeziPropertyWrapper.self) {
+        for wrapper in retrieveProperties(ofType: (any SpeziPropertyWrapper).self) {
             try wrapper.inject(spezi: spezi)
         }
     }
 
     @MainActor
     func clear() {
-        for wrapper in retrieveProperties(ofType: SpeziPropertyWrapper.self) {
+        for wrapper in retrieveProperties(ofType: (any SpeziPropertyWrapper).self) {
             wrapper.clear()
         }
     }
