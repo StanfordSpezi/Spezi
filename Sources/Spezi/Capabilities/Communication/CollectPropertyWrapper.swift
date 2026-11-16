@@ -12,7 +12,7 @@ import SpeziFoundation
 
 /// Refer to the documentation of ``Module/Collect``.
 @propertyWrapper
-public class _CollectPropertyWrapper<Value> {
+public final class _CollectPropertyWrapper<Value> {
     // swiftlint:disable:previous type_name
     // We want the type to be hidden from autocompletion and documentation generation
 

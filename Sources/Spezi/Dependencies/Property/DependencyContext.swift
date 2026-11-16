@@ -43,7 +43,7 @@ enum DependencyType {
 }
 
 
-class DependencyContext<Dependency: Module>: AnyDependencyContext {
+final class DependencyContext<Dependency: Module>: AnyDependencyContext {
     private let type: DependencyType
     private let defaultValue: (() -> Dependency)?
     private weak var spezi: Spezi?
