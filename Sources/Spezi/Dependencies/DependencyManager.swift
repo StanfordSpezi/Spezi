@@ -11,7 +11,7 @@ import RuntimeAssertions
 
 /// Gather information about modules with dependencies.
 @MainActor
-public class DependencyManager: Sendable {
+public final class DependencyManager: Sendable {
     /// Collection of already initialized modules.
     private let existingModules: [any Module]
     /// We track the top level module instances to resolve the order for initialization.
