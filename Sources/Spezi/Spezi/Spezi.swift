@@ -97,10 +97,25 @@ public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
 
     private let serviceGroup = ServiceModuleGroup(logger: Spezi.logger)
 
+    /// Synchronizes access to ``repository``.
+    ///
+    /// Reads happen from arbitrary threads, and not all writes happen on the `@MainActor` (e.g., accessing a `@Dependency` whose
+    /// weakly referenced module was deallocated purges stale references from whatever thread performs the access).
+    /// The lock is recursive so that a thread holding the write lock may still read ``storage``.
+    private let repositoryLock = RecursiveRWLock()
+
+    /// The backing value of ``storage``. Only ever access it while holding ``repositoryLock``.
+    nonisolated(unsafe) private var repository: SpeziStorage
+
     /// A shared repository to store any `KnowledgeSource`s restricted to the ``SpeziAnchor``.
     ///
     /// Every `Module` automatically conforms to `KnowledgeSource` and is stored within this storage object.
-    nonisolated(unsafe) var storage: SpeziStorage // nonisolated, writes are all isolated to @MainActor, just reads are non-isolated
+    /// Reading returns a consistent snapshot and is safe from any thread. Use ``mutateStorage(_:)`` to make changes.
+    var storage: SpeziStorage {
+        repositoryLock.withReadLock {
+            repository
+        }
+    }
 
 #if canImport(SwiftUI)
     /// Key is either a UUID for `@Modifier` or `@Model` property wrappers, or a `ModuleReference` for `EnvironmentAccessible` modifiers.
@@ -168,10 +183,8 @@ public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
             storage[ImplicitlyCreatedModulesKey.self]
         }
         set {
-            if newValue.isEmpty {
-                storage[ImplicitlyCreatedModulesKey.self] = nil
-            } else {
-                storage[ImplicitlyCreatedModulesKey.self] = newValue
+            mutateStorage { storage in
+                storage[ImplicitlyCreatedModulesKey.self] = newValue.isEmpty ? nil : newValue
             }
         }
     }
@@ -197,7 +210,7 @@ public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
         storage: consuming SpeziStorage = SpeziStorage()
     ) {
         self.standard = standard
-        self.storage = consume storage
+        self.repository = consume storage
 
         do {
             try self.loadModules(modules, ownership: .spezi)
@@ -263,7 +276,9 @@ public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
         // we pass through the whole list of modules once to collect all @Provide values
         for module in dependencyManager.initializedModules {
             withModuleInitContext(module.moduleDescription) {
-                module.collectModuleValues(into: &storage)
+                mutateStorage { storage in
+                    module.collectModuleValues(into: &storage)
+                }
             }
         }
         
@@ -450,13 +465,17 @@ public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
 
     @MainActor
     func handleCollectedValueRemoval<Value>(for id: UUID, of type: Value.Type) {
-        var entries = storage[CollectedModuleValues<Value>.self]
-        let removed = entries.removeValue(forKey: id)
-        guard removed != nil else {
+        let removed = mutateStorage { storage in
+            var entries = storage[CollectedModuleValues<Value>.self]
+            guard entries.removeValue(forKey: id) != nil else {
+                return false
+            }
+            storage[CollectedModuleValues<Value>.self] = entries
+            return true
+        }
+        guard removed else {
             return
         }
-
-        storage[CollectedModuleValues<Value>.self] = entries
 
         for module in modules {
             module.injectModuleValues(from: storage)
@@ -473,13 +492,27 @@ public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
 #endif
 
     func retrieveDependencyReplacement<M: Module>(for type: M.Type) -> M? {
-        guard let storedModules = storage[StoredModulesKey<M>.self] else {
-            return nil
-        }
+        // This may be called from any thread (whenever a `@Dependency` is accessed), so the lookup and cleanup must happen under the write lock.
+        mutateStorage { storage in
+            guard let storedModules = storage[StoredModulesKey<M>.self] else {
+                return nil
+            }
 
-        let replacement = storedModules.retrieveFirstAvailable()
-        storedModules.removeNilReferences(in: &storage) // if we ask for a replacement, there is opportunity to clean up weak reference objects
-        return replacement
+            let replacement = storedModules.retrieveFirstAvailable()
+            storedModules.removeNilReferences(in: &storage) // if we ask for a replacement, there is opportunity to clean up weak reference objects
+            return replacement
+        }
+    }
+
+    /// Mutate the ``storage`` while holding exclusive access to it.
+    ///
+    /// Perform any read-modify-write sequence within a single call so that it is applied atomically.
+    /// - Important: Do not access ``storage`` from within `body`. Read from the `inout` parameter instead.
+    @discardableResult
+    func mutateStorage<Result>(_ body: (inout SpeziStorage) throws -> Result) rethrows -> Result {
+        try repositoryLock.withWriteLock {
+            try body(&repository)
+        }
     }
 
     /// Iterates through weakly referenced modules and purges any nil references.
@@ -488,11 +521,11 @@ public final class Spezi: Sendable { // swiftlint:disable:this type_body_length
     /// If you load `n` modules with self-managed storage policy and then all `n` modules will eventually be deallocated, there might be `n` weak references still stored
     /// till the next module interaction is performed (e.g., new module is loaded or unloaded).
     private func purgeWeaklyReferenced() {
-        storage
-            .collect(allOf: (any AnyStoredModules).self)
-            .forEach { storedModules in
+        mutateStorage { storage in
+            for storedModules in storage.collect(allOf: (any AnyStoredModules).self) {
                 storedModules.removeNilReferences(in: &storage)
             }
+        }
     }
     
     @_spi(APISupport)
@@ -523,11 +556,13 @@ extension Module {
 
     @MainActor
     fileprivate func storeDynamicReference(_ module: DynamicReference<Self>, into spezi: Spezi) {
-        if spezi.storage.contains(StoredModulesKey<Self>.self) {
-            // swiftlint:disable:next force_unwrapping
-            spezi.storage[StoredModulesKey<Self>.self]!.updateValue(module, forKey: self.reference)
-        } else {
-            spezi.storage[StoredModulesKey<Self>.self] = StoredModulesKey(module, forKey: reference)
+        spezi.mutateStorage { storage in
+            if storage.contains(StoredModulesKey<Self>.self) {
+                // swiftlint:disable:next force_unwrapping
+                storage[StoredModulesKey<Self>.self]!.updateValue(module, forKey: self.reference)
+            } else {
+                storage[StoredModulesKey<Self>.self] = StoredModulesKey(module, forKey: reference)
+            }
         }
     }
 
@@ -541,15 +576,12 @@ extension Module {
 
     @MainActor
     fileprivate func clearModule(from spezi: Spezi) {
-        guard var storedModules = spezi.storage[StoredModulesKey<Self>.self] else {
-            return
-        }
-        storedModules.removeValue(forKey: reference)
-
-        if storedModules.isEmpty {
-            spezi.storage[StoredModulesKey<Self>.self] = nil
-        } else {
-            spezi.storage[StoredModulesKey<Self>.self] = storedModules
+        spezi.mutateStorage { storage in
+            guard var storedModules = storage[StoredModulesKey<Self>.self] else {
+                return
+            }
+            storedModules.removeValue(forKey: reference)
+            storage[StoredModulesKey<Self>.self] = storedModules.isEmpty ? nil : storedModules
         }
     }
 }

@@ -78,14 +78,14 @@ extension Spezi {
     @MainActor
     @_spi(APISupport)
     public var remoteNotificationRegistrationSupport: RemoteNotificationRegistrationSupport {
-        let support: RemoteNotificationRegistrationSupport
-        if let existing = spezi.storage[RemoteNotificationRegistrationSupport.self] {
-            support = existing
-        } else {
-            support = RemoteNotificationRegistrationSupport()
-            spezi.storage[RemoteNotificationRegistrationSupport.self] = support
+        spezi.mutateStorage { storage in
+            if let existing = storage[RemoteNotificationRegistrationSupport.self] {
+                return existing
+            }
+            let support = RemoteNotificationRegistrationSupport()
+            storage[RemoteNotificationRegistrationSupport.self] = support
+            return support
         }
-        return support
     }
 }
 #endif
